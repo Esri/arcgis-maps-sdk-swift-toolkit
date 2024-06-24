@@ -1,6 +1,7 @@
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+import CoreLocation
+***REMOVED***
 
 struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
@@ -30,32 +31,6 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***if locationManager.authorizationStatus == .notDetermined {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try? await locationDataSource.start()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location.
-***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDataSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location.
-***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(
-***REMOVED******REMOVED******REMOVED******REMOVED***around: initialLocation.position,
-***REMOVED******REMOVED******REMOVED******REMOVED***distance: 20,
-***REMOVED******REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
-***REMOVED******REMOVED******REMOVED******REMOVED***maxDeviation: 1,
-***REMOVED******REMOVED******REMOVED******REMOVED***curveType: .geodesic
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(
-***REMOVED******REMOVED******REMOVED******REMOVED***Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: circle,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Stop the location data source after the initial location is retrieved.
-***REMOVED******REMOVED******REMOVED***await locationDataSource.stop()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

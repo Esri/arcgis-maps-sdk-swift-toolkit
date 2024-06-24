@@ -1,6 +1,6 @@
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct WorldScaleExampleView: View {
 ***REMOVED***var body: some View {

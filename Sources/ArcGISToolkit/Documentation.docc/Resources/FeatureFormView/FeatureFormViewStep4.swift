@@ -11,22 +11,48 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var featureForm: FeatureForm?
-***REMOVED***
-***REMOVED***@State private var featureFormIsPresented = false
-***REMOVED***
-***REMOVED***@State private var identifyScreenPoint: CGPoint?
-***REMOVED***
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
-***REMOVED***@State private var submissionError: Text?
+***REMOVED***@StateObject private var model = Model()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapViewReader { proxy in
-***REMOVED******REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***NavigationStack {
+***REMOVED******REMOVED******REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+@MainActor
+class Model: ObservableObject {
+***REMOVED***enum State {
+***REMOVED******REMOVED***case applyingEdits(FeatureForm)
+***REMOVED******REMOVED***case cancellationPending(FeatureForm)
+***REMOVED******REMOVED***case editing(FeatureForm)
+***REMOVED******REMOVED***case finishingEdits(FeatureForm)
+***REMOVED******REMOVED***case generalError(FeatureForm, Text)
+***REMOVED******REMOVED***case idle
+***REMOVED******REMOVED***case validating(FeatureForm)
+***REMOVED***
+***REMOVED***
+***REMOVED***@Published var state: State = .idle {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***switch newValue {
+***REMOVED******REMOVED******REMOVED***case let .editing(featureForm):
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm.featureLayer?.selectFeature(featureForm.feature)
+***REMOVED******REMOVED******REMOVED***case .idle:
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let featureForm else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm.featureLayer?.unselectFeature(featureForm.feature)
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension FeatureForm {
+***REMOVED***var featureLayer: FeatureLayer? {
+***REMOVED******REMOVED***feature.table?.layer as? FeatureLayer
 ***REMOVED***
 ***REMOVED***
