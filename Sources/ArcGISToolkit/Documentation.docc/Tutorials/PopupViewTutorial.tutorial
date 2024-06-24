@@ -13,34 +13,34 @@
         @Steps {
             @Step {
                 Initialize data containing popups.
-                @Code(name: "PopupExampleView.swift", file: PopupViewStep1)
+                @Code(name: "PopupExampleView.swift", file: PopupViewStep1.swift)
             }
             
             @Step {
                 Track important information like the last selected screen point and the current
                 `Popup`.
-                @Code(name: "PopupExampleView.swift", file: PopupViewStep2)
+                @Code(name: "PopupExampleView.swift", file: PopupViewStep2.swift)
             }
             
             @Step {
                 Add the `MapView` with the `Popup` data.
-                @Code(name: "PopupExampleView.swift", file: PopupViewStep3)
+                @Code(name: "PopupExampleView.swift", file: PopupViewStep3.swift)
             }
             
             @Step {
                 Track any tap gestures on the `MapView`.
-                @Code(name: "PopupExampleView.swift", file: PopupViewStep4)
+                @Code(name: "PopupExampleView.swift", file: PopupViewStep4.swift)
             }
             
             @Step {
                 Perform an identify operation whenever the map is tapped and grab the `Popup` data
                 if present.
-                @Code(name: "PopupExampleView.swift", file: PopupViewStep5)
+                @Code(name: "PopupExampleView.swift", file: PopupViewStep5.swift)
             }
             
             @Step {
                 Show the `PopupView` in a `FloatingPanel`.
-                @Code(name: "PopupExampleView.swift", file: PopupViewStep6)
+                @Code(name: "PopupExampleView.swift", file: PopupViewStep6.swift)
             }
         }
     }
