@@ -20,9 +20,6 @@ struct FeatureFormExampleView: View {
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
     
-    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
-    @State private var cancelConfirmationIsPresented = false
-    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
@@ -45,16 +42,19 @@ struct FeatureFormExampleView: View {
                     attributionBarHeight = $0
                 }
                 .onSingleTapGesture { screenPoint, _ in
-                    if model.isFormPresented {
-                        cancelConfirmationIsPresented = true
-                    } else {
+                    switch model.state {
+                    case .idle:
                         identifyScreenPoint = screenPoint
+                    case let .editing(featureForm):
+                        model.state = .cancellationPending(featureForm)
+                    default:
+                        return
                     }
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
-                        model.featureForm = FeatureForm(feature: feature, definition: formDefinition)
+                        model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -62,7 +62,7 @@ struct FeatureFormExampleView: View {
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
-                    isPresented: $model.isFormPresented
+                    isPresented: model.formIsPresented
                 ) {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm)
@@ -71,43 +71,64 @@ struct FeatureFormExampleView: View {
                             .padding(.top, 16)
                     }
                 }
-                .onChange(of: model.isFormPresented) { isFormPresented in
-                    if !isFormPresented { validationErrorVisibility = .automatic }
+                .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
+                    if !formIsPresented { validationErrorVisibility = .automatic }
                 }
-                .alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
+                .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
                     Button("Discard edits", role: .destructive) {
                         model.discardEdits()
                     }
-                    Button("Continue editing", role: .cancel) { }
+                    if case let .cancellationPending(featureForm) = model.state {
+                        Button("Continue editing", role: .cancel) {
+                            model.state = .editing(featureForm)
+                        }
+                    }
                 } message: {
                     Text("Updates to this feature will be lost.")
                 }
+                // swiftlint:disable vertical_parameter_alignment_on_call
                 .alert(
                     "The form wasn't submitted",
-                    isPresented: Binding(
-                        get: { model.submissionError != nil },
-                        set: { _ in model.submissionError = nil }
-                    )
+                    isPresented: model.alertIsPresented
                 ) { } message: {
-                    if let submissionError = model.submissionError {
-                        submissionError
+                    if case let .generalError(_, errorMessage) = model.state {
+                        errorMessage
                     }
                 }
-                .navigationBarBackButtonHidden(model.isFormPresented)
+                // swiftlint:enable vertical_parameter_alignment_on_call
+                .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
+                .overlay {
+                    switch model.state {
+                    case .validating, .finishingEdits, .applyingEdits:
+                        HStack(spacing: 5) {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                            model.textForState
+                        }
+                        .padding()
+                        .background(.thinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    default:
+                        EmptyView()
+                    }
+                }
                 .toolbar {
-                    if model.isFormPresented {
+                    if model.formIsPresented.wrappedValue {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button("Cancel", role: .cancel) {
-                                cancelConfirmationIsPresented = true
+                                guard case let .editing(featureForm) = model.state else { return }
+                                model.state = .cancellationPending(featureForm)
                             }
+                            .disabled(model.formControlsAreDisabled)
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button("Submit") {
                                 validationErrorVisibility = .visible
                                 Task {
-                                    await model.submitChanges()
+                                    await model.submitEdits()
                                 }
                             }
+                            .disabled(model.formControlsAreDisabled)
                         }
                     }
                 }
@@ -147,65 +168,183 @@ private extension URL {
 /// The model class for the form example view
 @MainActor
 class Model: ObservableObject {
-    /// The feature form.
-    @Published var featureForm: FeatureForm? {
+    /// Feature form workflow states.
+    enum State {
+        /// Edits are being applied to the remote service.
+        case applyingEdits(FeatureForm)
+        /// The user has triggered potential cancellation.
+        case cancellationPending(FeatureForm)
+        /// A feature form is in use.
+        case editing(FeatureForm)
+        /// Edits are being committed to the local geodatabase.
+        case finishingEdits(FeatureForm)
+        /// There was an error in a workflow step.
+        case generalError(FeatureForm, Text)
+        /// No feature is being edited.
+        case idle
+        /// The form is being checked for validation errors.
+        case validating(FeatureForm)
+    }
+    
+    /// The current feature form workflow state.
+    @Published var state: State = .idle {
         willSet {
-            if let featureForm = newValue {
+            switch newValue {
+            case let .editing(featureForm):
                 featureForm.featureLayer?.selectFeature(featureForm.feature)
-            } else if let featureForm = self.featureForm {
+            case .idle:
+                guard let featureForm else { return }
                 featureForm.featureLayer?.unselectFeature(featureForm.feature)
+            default:
+                break
             }
         }
-        didSet {
-            isFormPresented = featureForm != nil
+    }
+    
+    // MARK: Properties
+    
+    /// A Boolean value indicating whether general form workflow errors are presented.
+    var alertIsPresented: Binding<Bool> {
+        Binding {
+            guard case .generalError = self.state else { return false }
+            return true
+        } set: { newIsErrorShowing in
+            if !newIsErrorShowing {
+                guard case let .generalError(featureForm, _) = self.state else { return }
+                self.state = .editing(featureForm)
+            }
         }
+    }
+    
+    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
+    var cancelConfirmationIsPresented: Binding<Bool> {
+        Binding {
+            guard case .cancellationPending = self.state else { return false }
+            return true
+        } set: { _ in
+        }
+    }
+    
+    /// The current feature form, derived from ``Model/state-swift.property``.
+    var featureForm: FeatureForm? {
+        switch state {
+        case .idle:
+            return nil
+        case
+            let .editing(form), let .validating(form),
+            let .finishingEdits(form), let .applyingEdits(form),
+            let .cancellationPending(form), let .generalError(form, _):
+            return form
+        }
+    }
+    
+    /// A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
+    var formControlsAreDisabled: Bool {
+        guard case .editing = state else { return true }
+        return false
     }
     
     /// A Boolean value indicating whether or not the form is displayed.
-    @Published var isFormPresented = false
+    var formIsPresented: Binding<Bool> {
+        Binding {
+            guard case .idle = self.state else { return true }
+            return false
+        } set: { _ in
+        }
+    }
     
-    /// A description of the error that prevented the form from being submitted.
-    @Published var submissionError: Text?
+    /// User facing text indicating the current form workflow state.
+    ///
+    /// This is most useful during post form processing to indicate ongoing background work.
+    var textForState: Text {
+        switch state {
+        case .validating:
+            Text("Validating")
+        case .finishingEdits:
+            Text("Finishing edits")
+        case .applyingEdits:
+            Text("Applying edits")
+        default:
+            Text("")
+        }
+    }
+    
+    // MARK: Methods
     
     /// Reverts any local edits that haven't yet been saved to service geodatabase.
     func discardEdits() {
-        featureForm?.discardEdits()
-        featureForm = nil
+        guard case let .cancellationPending(featureForm) = state else {
+            return
+        }
+        featureForm.discardEdits()
+        state = .idle
     }
     
     /// Submit the changes made to the form.
-    func submitChanges() async {
-        guard let featureForm,
-              let table = featureForm.feature.table as? ServiceFeatureTable,
-              let database = table.serviceGeodatabase else {
-            print("A precondition to submit the changes wasn't met.")
+    func submitEdits() async {
+        guard case let .editing(featureForm) = state else { return }
+        validateChanges(featureForm)
+        
+        guard case let .validating(featureForm) = state else { return }
+        await finishEditing(featureForm)
+        
+        guard case let .finishingEdits(featureForm) = state else { return }
+        await applyEdits(featureForm)
+    }
+    
+    // MARK: Private methods
+    
+    /// Applies edits to the remote service.
+    private func applyEdits(_ featureForm: FeatureForm) async {
+        state = .applyingEdits(featureForm)
+        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+            state = .generalError(featureForm, Text("Error resolving feature table."))
             return
         }
-        
-        guard table.isEditable else {
-            submissionError = Text("The feature table isn't editable.")
+        guard let database = table.serviceGeodatabase else {
+            state = .generalError(featureForm, Text("No geodatabase found."))
             return
         }
-        
-        guard featureForm.validationErrors.isEmpty else {
-            submissionError = Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true).")
-            return
-        }
-        
-        try? await table.update(featureForm.feature)
-        
         guard database.hasLocalEdits else {
-            print("No submittable changes found.")
+            state = .generalError(featureForm, Text("No database edits found."))
             return
         }
-        
-        let results = try? await database.applyEdits()
-        
-        if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
-            print("An error occurred while submitting the changes.")
+        let resultErrors: [Error]
+        do {
+            if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
+                let featureTableEditResults = try await database.applyEdits()
+                resultErrors = featureTableEditResults.flatMap { $0.editResults.errors }
+            } else {
+                let featureEditResults = try await table.applyEdits()
+                resultErrors = featureEditResults.errors
+            }
+        } catch {
+            state = .generalError(featureForm, Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)"))
+            return
         }
-        
-        self.featureForm = nil
+        if resultErrors.isEmpty {
+            state = .idle
+        } else {
+            state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
+        }
+    }
+    
+    /// Commits feature edits to the local geodatabase.
+    private func finishEditing(_ featureForm: FeatureForm) async {
+        state = .finishingEdits(featureForm)
+        do {
+            try await featureForm.finishEditing()
+        } catch {
+            state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
+        }
+    }
+    
+    /// Checks the feature form for the presence of any validation errors.
+    private func validateChanges(_ featureForm: FeatureForm) {
+        state = .validating(featureForm)
+        if !featureForm.validationErrors.isEmpty {
+            state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
+        }
     }
 }
 
@@ -213,5 +352,12 @@ private extension FeatureForm {
     /// The layer to which the feature belongs.
     var featureLayer: FeatureLayer? {
         feature.table?.layer as? FeatureLayer
+    }
+}
+
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
     }
 }
