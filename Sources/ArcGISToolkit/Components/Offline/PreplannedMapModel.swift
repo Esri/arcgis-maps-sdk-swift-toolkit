@@ -56,7 +56,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
-            self.job = foundJob
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             self.mobileMapPackage = mmpk
@@ -150,7 +149,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
                 downloadDirectory: mmpkDirectory
             )
             
-            self.job = job
             OfflineManager.shared.start(job: job)
             observeJob(job)
         } catch {
@@ -162,6 +160,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// when it's done, updates the status, removes the job from the job manager,
     /// and fires a user notification.
     private func observeJob(_ job: DownloadPreplannedOfflineMapJob) {
+        self.job = job
         status = .downloading
         Task { [weak self, job] in
             let result = await job.result
