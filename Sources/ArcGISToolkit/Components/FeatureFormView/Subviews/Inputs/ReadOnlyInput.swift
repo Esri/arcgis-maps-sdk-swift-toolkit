@@ -46,6 +46,7 @@ struct ReadOnlyInput: View {
     var textReader: some View {
         Text(formattedValue.isEmpty ? "--" : formattedValue)
             .accessibilityIdentifier("\(element.label) Read Only Input")
+            .fixedSize(horizontal: false, vertical: true)
             .lineLimit(element.isMultiline ? nil : 1)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)

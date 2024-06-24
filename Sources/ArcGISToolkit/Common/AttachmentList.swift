@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view displaying a list of attachments, with a thumbnail, title, and download button.
 struct AttachmentList: View {
@@ -59,9 +59,7 @@ struct AttachmentRow: View  {
                 AttachmentLoadButton(attachmentModel: attachmentModel)
             }
         }
-#if !targetEnvironment(macCatalyst)
         .quickLookPreview($url)
-#endif
     }
 }
 
