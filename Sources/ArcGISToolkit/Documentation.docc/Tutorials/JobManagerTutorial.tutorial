@@ -17,7 +17,7 @@
                 
                 Begin by adding a JobManager property as an observed object. Add state properties for `job`, `error`, and a boolean that you'll use to show progress when adding a job. Start the UI by adding a button to take a map offline and a progress indicator to show that the job is being added. This will be the UI before a job has been added (`job == nil`).
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep1) {
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep1.swift) {
                     @Image(source: JobManagerTakeMapOfflineButton, alt: "An Image of an iPhone app with a Take Map Offline button.")
                 }
             }
@@ -27,7 +27,7 @@
                 
                 The function makes a map from a URL, then uses a task to make the generate offline map job.
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep2, previousFile: JobManagerViewStep1)
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep2.swift, previousFile: JobManagerViewStep1.swift)
             }
             
             @Step {
@@ -35,7 +35,7 @@
                 
                 To begin, add a state variable for the job status. Just after the check to see if we have a job, add a progress view that will show the progress of the job. Next, add a button to remove the job from the job manager and start over; give it the title "Start New Job". Last add a task to keep track of the job status in the status state variable.
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep3, previousFile: JobManagerViewStep2) {
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep3.swift, previousFile: JobManagerViewStep2.swift) {
                     @Image(source: JobManagerTutorial, alt: "An Image of an iPhone app with a progress bar and Start New Job button.")
                 }
             }
@@ -69,7 +69,7 @@
                 
                 Once an API key has been added the project can be built and run. Tap the "Take Map Offline" button to add the job to the job manager and start the job. The offline map will be generated and downloaded. As long as the tutorial app is running in the foreground the job will finish and we'll get the mobile map package. However, we know that people don't use their devices like that. What we want is for people to be able to start a job, do other things on their device while the job runs and get a notification when the job finishes. In the next steps you will add the code to handle the app being backgrounded or terminated.
                 
-                @Code(name: "JobManagerTutorialApp.swift", file: JobManagerAppStep1)
+                @Code(name: "JobManagerTutorialApp.swift", file: JobManagerAppStep1.swift)
             }
             
             @Step {
@@ -93,7 +93,7 @@
                 
                 Add an init to JobManagerTutorialView. In the init, use `preferredBackgroundStatusCheckSchedule` on the job manager to set the job manager to request to be woken up every 30 seconds. This setting along with the two project settings complete the set up necessary for the job manager to check the status of jobs when the app is backgrounded.
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep4, previousFile: JobManagerViewStep3)
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep4.swift, previousFile: JobManagerViewStep3.swift)
             }
             
             @Step {
@@ -101,7 +101,7 @@
                 
                 Add a backgroundTask that responds to the URLSession that gets set up by the SDK in the ArcGISEnvironment. This is the task that will run if the URL session completes a download after the app has been terminated. In the background task, handle the background URL session events. Also, resume any jobs that have been paused; this will also recreate any URL sessions that finished while the app was in the background. Note: background operation only works on a device not connected to the debugger.
                 
-                @Code(name: "JobManagerTutorialApp.swift", file: JobManagerAppStep2, previousFile: JobManagerAppStep1)
+                @Code(name: "JobManagerTutorialApp.swift", file: JobManagerAppStep2.swift, previousFile: JobManagerAppStep1.swift)
             }
             
             @Step {
@@ -109,13 +109,13 @@
                 
                 At the end of the `body` property, add an `onAppear` modifier and in the closure request authorization to send the user notifications.
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep5, previousFile: JobManagerViewStep4)
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep5.swift, previousFile: JobManagerViewStep4.swift)
             }
             
             @Step {
                 After the `body` property add a method to construct and send a notification.
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep6, previousFile: JobManagerViewStep5)
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep6.swift, previousFile: JobManagerViewStep5.swift)
             }
             
             @Step {
@@ -123,7 +123,7 @@
                 
                 Find the task in the body property that is awaiting changes to the job status. Add the code to call `notifyJobCompleted` when the job status becomes `failed` or `succeeded`.
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep7, previousFile: JobManagerViewStep6)
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep7.swift, previousFile: JobManagerViewStep6.swift)
             }
             
             @Step {
@@ -131,7 +131,7 @@
                 
                 Add code in `onAppear` to populate the job property.
                 
-                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep8, previousFile: JobManagerViewStep7)
+                @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep8.swift, previousFile: JobManagerViewStep7.swift)
             }
         }
     }
