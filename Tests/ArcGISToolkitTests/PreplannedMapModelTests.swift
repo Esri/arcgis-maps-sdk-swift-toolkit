@@ -19,7 +19,6 @@ import Combine
 
 private extension PreplannedMapAreaProtocol {
     var mapArea: PreplannedMapArea? { nil }
-    var id: PortalItem.ID? { PortalItem.ID("012345") }
     var packagingStatus: PreplannedMapArea.PackagingStatus? { nil }
     var title: String { "Mock Preplanned Map Area" }
     var description: String { "This is the description text" }
@@ -161,7 +160,7 @@ class PreplannedMapModelTests: XCTestCase {
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
-        let areaID = try XCTUnwrap(area.id)
+        let areaID = try XCTUnwrap(area.portalItem.id)
         let mmpkDirectory = FileManager.default.preplannedDirectory(
             forPortalItemID: portalItem.id!,
             preplannedMapAreaID: areaID
@@ -202,7 +201,7 @@ class PreplannedMapModelTests: XCTestCase {
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
-        let areaID = try XCTUnwrap(area.id)
+        let areaID = try XCTUnwrap(area.portalItem.id)
         
         defer {
             // Clean up JobManager.
