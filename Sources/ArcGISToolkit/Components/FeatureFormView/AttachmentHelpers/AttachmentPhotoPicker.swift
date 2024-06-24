@@ -39,6 +39,7 @@ struct AttachmentPhotoPicker: ViewModifier {
             )
             .task(id: item) {
                 guard let item else { return }
+                self.item = nil
                 importState = .importing
                 do {
                     guard let data = try await item.loadTransferable(type: Data.self) else {
