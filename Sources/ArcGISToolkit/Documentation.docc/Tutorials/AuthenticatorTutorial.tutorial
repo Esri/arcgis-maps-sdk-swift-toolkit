@@ -15,23 +15,23 @@
                 Declare and initialize an `Authenticator` member in your app.
                 
                 For OAuth implementations use `Authenticator(oAuthUserConfigurations:)`.
-                @Code(name: "ExampleApp.swift", file: AuthenticatorStep1)
+                @Code(name: "ExampleApp.swift", file: AuthenticatorStep1.swift)
             }
             
             @Step {
                 Declare the app's body, placing the `Authenticator` into the hierarchy.
-                @Code(name: "ExampleApp.swift", file: AuthenticatorStep2)
+                @Code(name: "ExampleApp.swift", file: AuthenticatorStep2.swift)
             }
             
             @Step {
                 Set the `Authenticator` to handle challenges.
                 Set up credential persistence.
-                @Code(name: "ExampleApp.swift", file: AuthenticatorStep3)
+                @Code(name: "ExampleApp.swift", file: AuthenticatorStep3.swift)
             }
             
             @Step {
                 During sign-out, use these `AuthenticationManager` methods.
-                @Code(name: "SignOutView.swift", file: AuthenticatorStep4)
+                @Code(name: "SignOutView.swift", file: AuthenticatorStep4.swift)
             }
         }
     }

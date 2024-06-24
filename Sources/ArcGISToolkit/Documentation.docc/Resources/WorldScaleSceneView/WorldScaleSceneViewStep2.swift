@@ -1,6 +1,6 @@
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {

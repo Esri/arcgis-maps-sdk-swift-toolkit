@@ -18,19 +18,19 @@
                 physical surface. The translation factor determines how many meters the scene view
                 translates as the device moves in the AR experience. The clipping distance is the 
                 distance in meters that the ArcGIS Scene data will be clipped to.
-                @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep1)
+                @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep1.swift)
             }
             
             @Step {
                 Add a `SceneView` to the `TableTopSceneView` closure. The closure builds and overlays 
                 the scene view on top of the augmented reality video feed. Specify the `scene` state 
                 variable.
-                @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep2)
+                @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep2.swift)
             }
             
             @Step {
                 Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
-                @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep3)
+                @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep3.swift)
             }
         }
     }
