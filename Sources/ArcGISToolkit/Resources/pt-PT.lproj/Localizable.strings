@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Permitir";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Ocorreu um erro ao carregar a imagem: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Anexos";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Aviso de Fiabilidade do Certificado";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "ã_Choose From Files__________________Ç";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "ã_Choose From Library____________________Ç";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "ã_Clear___________Ç";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Limpar todos os resultados";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Perigo: o certificado fornecido por '%@' não está assinado por uma autoridade fidedigna.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "ã_Date exceeds maximum_____________________Ç";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "ã_Date less than minimum_______________________Ç";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "ã_Date must be on or after %@____________________________Ç";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "ã_Date must be on or before %@_____________________________Ç";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Eliminar";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "elevação";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Introduza %lld caracteres";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "ã_Enter %lld to ^[%lld characters](inflect: true)_________________________Ç";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Introduza entre %lld e %lld caracteres";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "ã_Enter ^[%lld characters](inflect: true)_____________________Ç";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Introduzir valor";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "ã_Enter value from %@ to %@__________________________Ç";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Erro";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "ã_Error importing attachment___________________________Ç";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "A avaliar expressões pop-up";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "ã_Exceeds maximum value______________________Ç";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "cabeçalho";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "ã_Less than minimum value________________________Ç";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "%lld caracteres no máximo";
+"Maximum ^[%lld characters](inflect: true)" = "ã_Maximum ^[%lld characters](inflect: true)______________________Ç";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "ã_Maximum character length exceeded__________________Ç";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Multimédia";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "ã_Minimum character length not met_________________Ç";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Modo";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Rede";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "ã_New name_________________Ç";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Novo rastreio";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "A avaliação de pop-up falhou: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "ã_Rename_____________Ç";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "ã_Rename attachment__________________Ç";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Pontos de Partida";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "ã_Take Photo or Video____________________Ç";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Toque numa superfície para colocar a cena";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Configuração de Terminal";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "teste";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "O mapa base não tem uma referência espacial.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "A palavra-passe era inválida.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "ã_The selected attachment could not be imported________________________Ç.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "ã_The selected attachment exceeds the %@ limit________________________Ç.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "Não foi possível aceder ao URL ou este não continha dados de imagem.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Tente Novamente";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "ã_Unknown validation error_________________________Ç";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Tipo de Ativo Sem Nome";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Valor";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "ã_Value must be %lld to ^[%lld characters](inflect: true)_____________________________Ç";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "ã_Value must be ^[%lld characters](inflect: true)_________________________Ç";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "ã_Value must be a number_______________________Ç";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "ã_Value must be a whole number_____________________________Ç";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "ã_Value must be from %@ to %@____________________________Ç";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "ã_Value must be of correct type______________________________Ç";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "ã_Value must be within domain____________________________Ç";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "ã_Value must not be empty________________________Ç";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

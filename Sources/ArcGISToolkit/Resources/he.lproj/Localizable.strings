@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "הרשה";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "אירעה שגיאה בטעינת התמונה: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "קבצים מצורפים";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "אזהרת אמון של אישור";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "כן_Choose From Files__________________ש";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "כן_Choose From Library____________________ש";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "כן_Clear___________ש";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "נקה את כל התוצאות";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "סכנה: האישור שסופק על ידי '%@' לא חתום על ידי רשות מהימנה.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "כן_Date exceeds maximum_____________________ש";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "כן_Date less than minimum_______________________ש";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "כן_Date must be on or after %@____________________________ש";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "כן_Date must be on or before %@_____________________________ש";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "מחק";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "גובה";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "הזן %lld תווים";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "כן_Enter %lld to ^[%lld characters](inflect: true)_________________________ש";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "הזן בין %lld ל-%lld תווים";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "כן_Enter ^[%lld characters](inflect: true)_____________________ש";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "הזן ערך";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "כן_Enter value from %@ to %@__________________________ש";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "שגיאה";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "כן_Error importing attachment___________________________ש";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "הערכת ביטויי חלון קופץ";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "כן_Exceeds maximum value______________________ש";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "כיוון";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "כן_Less than minimum value________________________ש";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "לכל היותר %lld תווים";
+"Maximum ^[%lld characters](inflect: true)" = "כן_Maximum ^[%lld characters](inflect: true)______________________ש";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "כן_Maximum character length exceeded__________________ש";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "מדיה";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "כן_Minimum character length not met_________________ש";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "אופן";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "רשת";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "כן_New name_________________ש";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "עקיבה חדשה";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "הערכת חלון קופץ נכשלה: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "כן_Rename_____________ש";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "כן_Rename attachment__________________ש";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "נקודות התחלה";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "כן_Take Photo or Video____________________ש";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "הקש על פני השטח כדי מקם את הסצנה";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "תצורת מסוף";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "בדיקה";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "למפת הבסיס אין ייחוס מרחבי.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "הסיסמה הייתה לא חוקית.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "כן_The selected attachment could not be imported________________________ש.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "כן_The selected attachment exceeds the %@ limit________________________ש.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "לא ניתן להגיע לכתובת ה-URL או שהכתובת לא הכילה נתוני תמונה.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "נסה שוב";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "כן_Unknown validation error_________________________ש";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "סוג נכס ללא שם";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "ערך";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "כן_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ש";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "כן_Value must be ^[%lld characters](inflect: true)_________________________ש";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "כן_Value must be a number_______________________ש";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "כן_Value must be a whole number_____________________________ש";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "כן_Value must be from %@ to %@____________________________ש";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "כן_Value must be of correct type______________________________ש";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "כן_Value must be within domain____________________________ש";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "כן_Value must not be empty________________________ש";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
