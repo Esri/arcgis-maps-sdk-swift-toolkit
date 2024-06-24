@@ -22,6 +22,7 @@ struct Tests: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("RepresentedUITextView Tests", destination: RepresentedUITextViewTestView())
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

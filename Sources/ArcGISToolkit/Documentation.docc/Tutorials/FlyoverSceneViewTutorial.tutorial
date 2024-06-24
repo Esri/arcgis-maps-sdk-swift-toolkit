@@ -14,14 +14,14 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a `FlyoverSceneView`. Specify the initial latitude, longitude, and altitude 
 ***REMOVED******REMOVED******REMOVED******REMOVED***of the scene view's camera and the translation factor. The translation factor determines
 ***REMOVED******REMOVED******REMOVED******REMOVED***how many meters the scene view translates as the device moves in the AR experience.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `SceneView` to the `FlyoverSceneView` closure. The closure builds and overlays 
 ***REMOVED******REMOVED******REMOVED******REMOVED***the scene view on top of the augmented reality video feed. Specify the `scene` state 
 ***REMOVED******REMOVED******REMOVED******REMOVED***variable.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
