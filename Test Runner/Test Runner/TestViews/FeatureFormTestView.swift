@@ -151,11 +151,13 @@ private extension FeatureFormTestView {
         .init("testCase_6_1", objectID: 1, portalID: .groupElementMapID),
         .init("testCase_6_2", objectID: 2, portalID: .groupElementMapID),
         .init("testCase_7_1", objectID: 2, portalID: .readOnlyMapID),
+        .init("testCase_8_1", objectID: 1, portalID: .attachmentMapID),
         .init("testCase_9_1", objectID: 1, portalID: .testCase9)
     ]}
 }
 
 private extension String {
+    static let attachmentMapID = "3e551c383fc949c7982ec73ba67d409b"
     static let comboBoxMapID = "ed930cf0eb724ea49c6bccd8fd3dd9af"
     static let dateMapID = "ec09090060664cbda8d814e017337837"
     static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"

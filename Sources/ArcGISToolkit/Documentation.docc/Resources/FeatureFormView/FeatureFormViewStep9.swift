@@ -127,6 +127,15 @@ class Model: ObservableObject {
         await applyEdits(featureForm)
     }
     
+    private func finishEditing(_ featureForm: FeatureForm) async {
+        state = .finishingEdits(featureForm)
+        do {
+            try await featureForm.finishEditing()
+        } catch {
+            state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
+        }
+    }
+    
     private func validateChanges(_ featureForm: FeatureForm) {
         state = .validating(featureForm)
         if !featureForm.validationErrors.isEmpty {
@@ -138,5 +147,12 @@ class Model: ObservableObject {
 private extension FeatureForm {
     var featureLayer: FeatureLayer? {
         feature.table?.layer as? FeatureLayer
+    }
+}
+
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
     }
 }

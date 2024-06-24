@@ -55,6 +55,10 @@ import SwiftUI
 /// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
 /// in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
 ///
+/// - Note: In order to capture video and photos as form attachments, your application will need
+/// `NSCameraUsageDescription` and, `NSMicrophoneUsageDescription` entries in the
+/// `Info.plist` file.
+///
 /// - Since: 200.4
 public struct FeatureFormView: View {
     /// The view model for the form.
@@ -87,6 +91,9 @@ public struct FeatureFormView: View {
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
+                        if let attachmentElement = model.featureForm.defaultAttachmentsElement {
+                            makeElement(attachmentElement)
+                        }
                     }
                 }
             }
@@ -114,6 +121,8 @@ extension FeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
+        case let attachmentsElement as AttachmentsFormElement:
+            AttachmentsFeatureElementView(featureElement: attachmentsElement)
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
@@ -126,7 +135,8 @@ extension FeatureFormView {
     /// Makes UI for a field form element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        if !(element.input is UnsupportedFormInput) {
+        if !(element.input is UnsupportedFormInput ||
+             element.input is BarcodeScannerFormInput) {
             InputWrapper(element: element)
             Divider()
         }
