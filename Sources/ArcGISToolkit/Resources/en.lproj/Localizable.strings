@@ -331,9 +331,6 @@ additional information. */
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Configuration";
 
-/* A label for development purposes only. This is not user visible. */
-"test" = "test";
-
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "The basemap does not have a spatial reference.";
 
