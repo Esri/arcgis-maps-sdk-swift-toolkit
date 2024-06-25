@@ -186,12 +186,13 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         self.job = job
         job.start()
         status = .downloading
-        Task {
+        Task { [weak self, job] in
             let result = await job.result
-            updateDownloadStatus(for: result)
-            mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
             JobManager.shared.jobs.removeAll { $0 === job }
-            if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
+            guard let self else { return }
+            self.updateDownloadStatus(for: result)
+            self.mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
+            if self.showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
                 try? await Self.notifyJobCompleted(job: job)
             }
             self.job = nil
