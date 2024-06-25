@@ -66,6 +66,11 @@
 ***REMOVED******REMOVED******REMOVED***value = "1"
 ***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
 ***REMOVED******REMOVED*** </EnvironmentVariable>
+***REMOVED******REMOVED*** <EnvironmentVariable
+***REMOVED******REMOVED******REMOVED***key = "LOGGING_FOR_OFFLINE_MANAGER"
+***REMOVED******REMOVED******REMOVED***value = "1"
+***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
+***REMOVED******REMOVED*** </EnvironmentVariable>
 ***REMOVED***  </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
