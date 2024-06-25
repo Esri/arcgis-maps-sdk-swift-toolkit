@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import OSLog
 import SwiftUI
 
 /// An object that maintains state for the offline components.
@@ -31,6 +32,8 @@ class OfflineManager {
     var jobs: [any JobProtocol] { jobManager.jobs }
     
     private init() {
+        Logger.offlineManager.debug("Initializing OfflineManager")
+        
         // Observe each job's status
         for job in jobManager.jobs {
             observeJob(job)
@@ -43,6 +46,7 @@ class OfflineManager {
     /// Starts a job that will be managed by this instance.
     /// - Parameter job: The job to start.
     func start(job: any JobProtocol) {
+        Logger.offlineManager.debug("Starting Job from offline manager")
         jobManager.jobs.append(job)
         observeJob(job)
         job.start()
@@ -51,6 +55,8 @@ class OfflineManager {
     /// Observes a job for completion.
     private func observeJob(_ job: any JobProtocol) {
         Task {
+            Logger.offlineManager.debug("Observing job completion")
+            
             // Wait for job to finish.
             _ = try? await job.output
             
@@ -85,6 +91,8 @@ public extension SwiftUI.Scene {
         preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
         jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
     ) -> some SwiftUI.Scene {
+        Logger.offlineManager.debug("Executing OfflineManager SwiftUI.Scene modifier")
+        
         // Set the background status check schedule.
         OfflineManager.shared.jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
         
@@ -93,12 +101,25 @@ public extension SwiftUI.Scene {
         
         // Support app-relaunch after background downloads.
         return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
+            Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
+            
             // Allow the `ArcGISURLSession` to handle it's background task events.
             await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
             
             // When the app is re-launched from a background url session, resume any paused jobs,
             // and check the job status.
             await OfflineManager.shared.jobManager.resumeAllPausedJobs()
+        }
+    }
+}
+
+private extension Logger {
+    /// A logger for the offline manager.
+    static var offlineManager: Logger {
+        if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_OFFLINE_MANAGER") {
+            Logger(subsystem: "com.esri.ArcGISToolkit", category: "OfflineManager")
+        } else {
+            .init(.disabled)
         }
     }
 }
