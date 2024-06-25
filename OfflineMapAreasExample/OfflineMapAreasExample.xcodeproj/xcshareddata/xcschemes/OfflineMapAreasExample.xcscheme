@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1540"
+   version = "1.7">
+   <BuildAction
+***REMOVED***  parallelizeBuildables = "YES"
+***REMOVED***  buildImplicitDependencies = "YES"
+***REMOVED***  buildArchitectures = "Automatic">
+***REMOVED***  <BuildActionEntries>
+***REMOVED******REMOVED*** <BuildActionEntry
+***REMOVED******REMOVED******REMOVED***buildForTesting = "YES"
+***REMOVED******REMOVED******REMOVED***buildForRunning = "YES"
+***REMOVED******REMOVED******REMOVED***buildForProfiling = "YES"
+***REMOVED******REMOVED******REMOVED***buildForArchiving = "YES"
+***REMOVED******REMOVED******REMOVED***buildForAnalyzing = "YES">
+***REMOVED******REMOVED******REMOVED***<BuildableReference
+***REMOVED******REMOVED******REMOVED***   BuildableIdentifier = "primary"
+***REMOVED******REMOVED******REMOVED***   BlueprintIdentifier = "1CBE20182BF2BF2B0006B55D"
+***REMOVED******REMOVED******REMOVED***   BuildableName = "OfflineMapAreasExample.app"
+***REMOVED******REMOVED******REMOVED***   BlueprintName = "OfflineMapAreasExample"
+***REMOVED******REMOVED******REMOVED***   ReferencedContainer = "container:OfflineMapAreasExample.xcodeproj">
+***REMOVED******REMOVED******REMOVED***</BuildableReference>
+***REMOVED******REMOVED*** </BuildActionEntry>
+***REMOVED***  </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+***REMOVED***  buildConfiguration = "Debug"
+***REMOVED***  selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+***REMOVED***  selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+***REMOVED***  shouldUseLaunchSchemeArgsEnv = "YES"
+***REMOVED***  shouldAutocreateTestPlan = "YES">
+   </TestAction>
+   <LaunchAction
+***REMOVED***  buildConfiguration = "Debug"
+***REMOVED***  selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+***REMOVED***  selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+***REMOVED***  launchStyle = "0"
+***REMOVED***  useCustomWorkingDirectory = "NO"
+***REMOVED***  ignoresPersistentStateOnLaunch = "NO"
+***REMOVED***  debugDocumentVersioning = "YES"
+***REMOVED***  debugServiceExtension = "internal"
+***REMOVED***  allowLocationSimulation = "YES">
+***REMOVED***  <BuildableProductRunnable
+***REMOVED******REMOVED*** runnableDebuggingMode = "0">
+***REMOVED******REMOVED*** <BuildableReference
+***REMOVED******REMOVED******REMOVED***BuildableIdentifier = "primary"
+***REMOVED******REMOVED******REMOVED***BlueprintIdentifier = "1CBE20182BF2BF2B0006B55D"
+***REMOVED******REMOVED******REMOVED***BuildableName = "OfflineMapAreasExample.app"
+***REMOVED******REMOVED******REMOVED***BlueprintName = "OfflineMapAreasExample"
+***REMOVED******REMOVED******REMOVED***ReferencedContainer = "container:OfflineMapAreasExample.xcodeproj">
+***REMOVED******REMOVED*** </BuildableReference>
+***REMOVED***  </BuildableProductRunnable>
+***REMOVED***  <EnvironmentVariables>
+***REMOVED******REMOVED*** <EnvironmentVariable
+***REMOVED******REMOVED******REMOVED***key = "LOGGING_FOR_JOB_MANAGER"
+***REMOVED******REMOVED******REMOVED***value = "1"
+***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
+***REMOVED******REMOVED*** </EnvironmentVariable>
+***REMOVED******REMOVED*** <EnvironmentVariable
+***REMOVED******REMOVED******REMOVED***key = "LOGGING_FOR_SESSION_DEMULTIPLEXER"
+***REMOVED******REMOVED******REMOVED***value = "1"
+***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
+***REMOVED******REMOVED*** </EnvironmentVariable>
+***REMOVED******REMOVED*** <EnvironmentVariable
+***REMOVED******REMOVED******REMOVED***key = "LOGGING_FOR_JOBS"
+***REMOVED******REMOVED******REMOVED***value = "1"
+***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
+***REMOVED******REMOVED*** </EnvironmentVariable>
+***REMOVED***  </EnvironmentVariables>
+   </LaunchAction>
+   <ProfileAction
+***REMOVED***  buildConfiguration = "Release"
+***REMOVED***  shouldUseLaunchSchemeArgsEnv = "YES"
+***REMOVED***  savedToolIdentifier = ""
+***REMOVED***  useCustomWorkingDirectory = "NO"
+***REMOVED***  debugDocumentVersioning = "YES">
+***REMOVED***  <BuildableProductRunnable
+***REMOVED******REMOVED*** runnableDebuggingMode = "0">
+***REMOVED******REMOVED*** <BuildableReference
+***REMOVED******REMOVED******REMOVED***BuildableIdentifier = "primary"
+***REMOVED******REMOVED******REMOVED***BlueprintIdentifier = "1CBE20182BF2BF2B0006B55D"
+***REMOVED******REMOVED******REMOVED***BuildableName = "OfflineMapAreasExample.app"
+***REMOVED******REMOVED******REMOVED***BlueprintName = "OfflineMapAreasExample"
+***REMOVED******REMOVED******REMOVED***ReferencedContainer = "container:OfflineMapAreasExample.xcodeproj">
+***REMOVED******REMOVED*** </BuildableReference>
+***REMOVED***  </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+***REMOVED***  buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+***REMOVED***  buildConfiguration = "Release"
+***REMOVED***  revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
