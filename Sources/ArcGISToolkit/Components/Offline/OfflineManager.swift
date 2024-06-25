@@ -60,6 +60,8 @@ class OfflineManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for job to finish.
 ***REMOVED******REMOVED******REMOVED***_ = try? await job.output
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Removing completed job from job manager")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Remove completed job from JobManager.
 ***REMOVED******REMOVED******REMOVED***jobManager.jobs.removeAll { $0 === job ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
