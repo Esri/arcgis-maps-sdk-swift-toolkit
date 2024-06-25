@@ -76,20 +76,20 @@ private extension Job.Status {
 }
 
 public extension SwiftUI.Scene {
-    /// Sets up the offline components for use.
+    /// Sets up the offline manager for offline toolkit components.
     /// - Parameters:
     ///   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule. See ``JobManager/preferredBackgroundStatusCheckSchedule`` for more details.
-    ///   - onJobCompletion: An action to perform when a job completes.
+    ///   - jobCompletion: An action to perform when a job completes.
     @MainActor
-    func offline(
+    func offlineManager(
         preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
-        onJobCompletion: ((any JobProtocol) -> Void)? = nil
+        jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
     ) -> some SwiftUI.Scene {
         // Set the background status check schedule.
         OfflineManager.shared.jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
         
         // Set callback for job completion.
-        OfflineManager.shared.jobCompletionAction = onJobCompletion
+        OfflineManager.shared.jobCompletionAction = jobCompletionAction
         
         // Support app-relaunch after background downloads.
         return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
