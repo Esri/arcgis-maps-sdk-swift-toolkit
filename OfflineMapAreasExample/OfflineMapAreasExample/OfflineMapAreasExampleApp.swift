@@ -24,8 +24,8 @@ struct OfflineMapAreasExampleApp: App {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***OfflineMapAreasExampleView()
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Initialize the offline component with some settings.
-***REMOVED******REMOVED***.offline(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+***REMOVED******REMOVED******REMOVED*** Setup the offline toolkit components.
+***REMOVED******REMOVED***.offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Post a local notification that the job is finished.
 ***REMOVED******REMOVED******REMOVED***Self.notifyJobCompleted(job: job)
 ***REMOVED***
