@@ -40,6 +40,7 @@ class OfflineManager {
         }
         
         // Resume all paused jobs
+        Logger.offlineManager.debug("Resuming all paused jobs")
         jobManager.resumeAllPausedJobs()
     }
     
@@ -59,10 +60,9 @@ class OfflineManager {
             
             // Wait for job to finish.
             _ = try? await job.output
-            
-            Logger.offlineManager.debug("Removing completed job from job manager")
-            
+                        
             // Remove completed job from JobManager.
+            Logger.offlineManager.debug("Removing completed job from job manager")
             jobManager.jobs.removeAll { $0 === job }
             
             // Call job completion action.
