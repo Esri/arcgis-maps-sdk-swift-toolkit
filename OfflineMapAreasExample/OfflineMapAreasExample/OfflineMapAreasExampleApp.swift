@@ -24,8 +24,8 @@ struct OfflineMapAreasExampleApp: App {
         WindowGroup {
             OfflineMapAreasExampleView()
         }
-        // Initialize the offline component with some settings.
-        .offline(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+        // Setup the offline toolkit components.
+        .offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
             // Post a local notification that the job is finished.
             Self.notifyJobCompleted(job: job)
         }
