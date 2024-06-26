@@ -17,9 +17,6 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-    /// The models for the attachments displayed in the list.
-    var attachmentModels: [AttachmentModel]
-    
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
     
@@ -34,6 +31,10 @@ struct AttachmentPreview: View {
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
+    
+    
+    /// The models for the attachments displayed in the list.
+    let attachmentModels: [AttachmentModel]
     
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     let editControlsDisabled: Bool
