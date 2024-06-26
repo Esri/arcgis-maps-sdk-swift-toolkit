@@ -316,7 +316,7 @@ extension FileManager {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns a Boolean indicating if the specified directory is empty.
+***REMOVED******REMOVED***/ Returns a Boolean value indicating if the specified directory is empty.
 ***REMOVED******REMOVED***/ - Parameter path: The path to check.
 ***REMOVED***func isDirectoryEmpty(atPath path: URL) -> Bool {
 ***REMOVED******REMOVED***(try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
