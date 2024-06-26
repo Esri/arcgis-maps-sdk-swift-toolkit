@@ -89,7 +89,7 @@ import UIKit
 @MainActor
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
-***REMOVED***public static let `shared` = JobManager()
+***REMOVED***public static let `shared` = JobManager(id: nil)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs being managed by the job manager.
 ***REMOVED***@Published
@@ -97,7 +97,11 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which state will be serialized under the user defaults.
 ***REMOVED***private var defaultsKey: String {
-***REMOVED******REMOVED***return "com.esri.ArcGISToolkit.jobManager.jobs"
+***REMOVED******REMOVED***if let id {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.\(id).jobs"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.jobs"
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The preferred schedule for performing status checks while the application is in the
@@ -114,13 +118,24 @@ public class JobManager: ObservableObject {
 ***REMOVED***public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
 ***REMOVED***
 ***REMOVED******REMOVED***/ The background task identifier for status checks.
-***REMOVED***private let statusChecksTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
+***REMOVED***private var statusChecksTaskIdentifier: String {
+***REMOVED******REMOVED***if let id {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.statusCheck"
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** A Boolean value indicating whether a background status check is scheduled.
 ***REMOVED***private var isBackgroundStatusChecksScheduled = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The id of the job manager. The shared instance does not have an id.
+***REMOVED***var id: String?
+***REMOVED***
 ***REMOVED******REMOVED***/ An initializer for the job manager.
-***REMOVED***private init() {
+***REMOVED***private init(id: String?) {
+***REMOVED******REMOVED***self.id = id
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
@@ -140,6 +155,20 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Load jobs from the saved state.
 ***REMOVED******REMOVED***loadState()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a job manager with a unique id.
+***REMOVED******REMOVED***/ This initializer allows you to create a specific instance of a job manager
+***REMOVED******REMOVED***/ for cases when you don't want to take over the shared job manager instance.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The provided ID should be unique to a specific purpose in your application.
+***REMOVED******REMOVED***/ On each successive run of the app, you must re-use the same id when you initialize
+***REMOVED******REMOVED***/ your job manager for it to be able to properly reload its state.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If you create multiple instances with the same id the behavior is undefined.
+***REMOVED******REMOVED***/ - Parameter id: The unique ID of the job manager.
+***REMOVED***public convenience init(uniqueID id: String) {
+***REMOVED******REMOVED***self.init(id: id)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Schedules a status check in the background if one is not already scheduled.
