@@ -170,7 +170,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.measuredSize.formatted(.byteCount(style: .file)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "square.and.arrow.down")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
