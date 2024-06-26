@@ -18,8 +18,6 @@ import SwiftUI
 
 @main
 struct OfflineMapAreasExampleApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
     var body: some SwiftUI.Scene {
         WindowGroup {
             OfflineMapAreasExampleView()
