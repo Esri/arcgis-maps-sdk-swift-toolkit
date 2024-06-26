@@ -123,7 +123,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
 ***REMOVED***
 ***REMOVED******REMOVED***/ The background task identifier for status checks.
-***REMOVED******REMOVED***/ - See ``preferredBackgroundStatusCheckSchedule``
+***REMOVED******REMOVED***/ - SeeAlso ``preferredBackgroundStatusCheckSchedule``
 ***REMOVED***public var statusChecksTaskIdentifier: String {
 ***REMOVED******REMOVED***if let id {
 ***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
