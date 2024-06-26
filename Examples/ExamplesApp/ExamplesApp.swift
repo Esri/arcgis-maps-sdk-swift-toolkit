@@ -32,7 +32,6 @@ struct ExamplesApp: App {
          
            Location services > Basemaps
            Location services > Geocoding
-           Location services > Routing
          
         Production deployment of applications built with the ArcGIS Runtime SDK requires you to license ArcGIS Runtime functionality. For more information see https://links.esri.com/arcgis-runtime-license-and-deploy.
          */
