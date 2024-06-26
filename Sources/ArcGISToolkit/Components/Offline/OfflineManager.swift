@@ -115,7 +115,7 @@ public extension SwiftUI.Scene {
     }
 }
 
-private extension Logger {
+extension Logger {
     /// A logger for the offline manager.
     static var offlineManager: Logger {
         if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_OFFLINE_MANAGER") {

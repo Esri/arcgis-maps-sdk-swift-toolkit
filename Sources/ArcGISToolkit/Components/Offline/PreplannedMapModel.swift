@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import OSLog
+import SwiftUI
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor
@@ -56,8 +57,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
+            Logger.offlineManager.debug("Found executing job for area \(preplannedMapAreaID.rawValue, privacy: .public)")
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
+            Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
             self.mobileMapPackage = mmpk
             self.status = .downloaded
         }
