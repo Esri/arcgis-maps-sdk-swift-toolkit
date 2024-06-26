@@ -128,7 +128,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
-        guard FileManager.default.fileExists(atPath: fileURL.relativePath) else { return nil }
+        guard FileManager.default.fileExists(atPath: fileURL.path) else { return nil }
+        guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
         return MobileMapPackage.init(fileURL: fileURL)
     }
     
@@ -311,5 +312,11 @@ extension FileManager {
                 path: preplannedMapAreaID.rawValue,
                 directoryHint: .isDirectory
             )
+    }
+    
+    /// Returns a Boolean indicating if the specified directory is empty.
+    /// - Parameter path: The path to check.
+    func isDirectoryEmpty(atPath path: URL) -> Bool {
+        (try? FileManager.default.contentsOfDirectory(atPath: path.path).isEmpty) ?? true
     }
 }
