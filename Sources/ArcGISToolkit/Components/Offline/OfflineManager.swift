@@ -26,7 +26,7 @@ class OfflineManager {
     var jobCompletionAction: ((any JobProtocol) -> Void)?
     
     /// The job manager used by the offline manager.
-    let jobManager = JobManager.shared
+    let jobManager = JobManager(uniqueID: "offlineManager")
     
     /// The jobs managed by this instance.
     var jobs: [any JobProtocol] { jobManager.jobs }
