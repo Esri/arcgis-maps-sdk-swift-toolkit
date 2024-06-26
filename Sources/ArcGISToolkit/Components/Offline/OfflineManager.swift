@@ -13,6 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import OSLog
 ***REMOVED***
 
 ***REMOVED***/ An object that maintains state for the offline components.
@@ -31,18 +32,22 @@ class OfflineManager {
 ***REMOVED***var jobs: [any JobProtocol] { jobManager.jobs ***REMOVED***
 ***REMOVED***
 ***REMOVED***private init() {
+***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Observe each job's status.
 ***REMOVED******REMOVED***for job in jobManager.jobs {
 ***REMOVED******REMOVED******REMOVED***observeJob(job)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Resume all paused jobs.
+***REMOVED******REMOVED***Logger.offlineManager.debug("Resuming all paused jobs")
 ***REMOVED******REMOVED***jobManager.resumeAllPausedJobs()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
 ***REMOVED******REMOVED***/ - Parameter job: The job to start.
 ***REMOVED***func start(job: any JobProtocol) {
+***REMOVED******REMOVED***Logger.offlineManager.debug("Starting Job from offline manager")
 ***REMOVED******REMOVED***jobManager.jobs.append(job)
 ***REMOVED******REMOVED***observeJob(job)
 ***REMOVED******REMOVED***job.start()
@@ -51,11 +56,18 @@ class OfflineManager {
 ***REMOVED******REMOVED***/ Observes a job for completion.
 ***REMOVED***private func observeJob(_ job: any JobProtocol) {
 ***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Observing job completion")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for job to finish.
 ***REMOVED******REMOVED******REMOVED***_ = try? await job.output
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Remove completed job from JobManager.
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Removing completed job from job manager")
 ***REMOVED******REMOVED******REMOVED***jobManager.jobs.removeAll { $0 === job ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** This isn't strictly required, but it helps to get the state saved as soon
+***REMOVED******REMOVED******REMOVED******REMOVED*** as possible after removing a job instead of waiting for the app to be backgrounded.
+***REMOVED******REMOVED******REMOVED***jobManager.saveState()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Call job completion action.
 ***REMOVED******REMOVED******REMOVED***jobCompletionAction?(job)
@@ -73,6 +85,8 @@ public extension SwiftUI.Scene {
 ***REMOVED******REMOVED***preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
 ***REMOVED******REMOVED***jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
 ***REMOVED***) -> some SwiftUI.Scene {
+***REMOVED******REMOVED***Logger.offlineManager.debug("Executing OfflineManager SwiftUI.Scene modifier")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the background status check schedule.
 ***REMOVED******REMOVED***OfflineManager.shared.jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
 ***REMOVED******REMOVED***
@@ -81,12 +95,25 @@ public extension SwiftUI.Scene {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Support app-relaunch after background downloads.
 ***REMOVED******REMOVED***return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Allow the `ArcGISURLSession` to handle its background task events.
 ***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** When the app is re-launched from a background url session, resume any paused jobs,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** and check the job status.
 ***REMOVED******REMOVED******REMOVED***await OfflineManager.shared.jobManager.resumeAllPausedJobs()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension Logger {
+***REMOVED******REMOVED***/ A logger for the offline manager.
+***REMOVED***static var offlineManager: Logger {
+***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_OFFLINE_MANAGER") {
+***REMOVED******REMOVED******REMOVED***Logger(subsystem: "com.esri.ArcGISToolkit", category: "OfflineManager")
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***.init(.disabled)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
