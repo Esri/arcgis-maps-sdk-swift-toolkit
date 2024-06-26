@@ -20,7 +20,7 @@ import SwiftUI
 @MainActor
 class OfflineManager {
     /// The shared offline manager.
-    static let `shared` = OfflineManager()
+    static let shared = OfflineManager()
     
     /// The action to perform when a job completes.
     var jobCompletionAction: ((any JobProtocol) -> Void)?
@@ -34,12 +34,12 @@ class OfflineManager {
     private init() {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
-        // Observe each job's status
+        // Observe each job's status.
         for job in jobManager.jobs {
             observeJob(job)
         }
         
-        // Resume all paused jobs
+        // Resume all paused jobs.
         Logger.offlineManager.debug("Resuming all paused jobs")
         jobManager.resumeAllPausedJobs()
     }
@@ -75,18 +75,6 @@ class OfflineManager {
     }
 }
 
-private extension Job.Status {
-    /// A Boolean value indicating whether the job is completed.
-    var isComplete: Bool {
-        switch self {
-        case .notStarted, .started, .paused, .canceling:
-            false
-        case .succeeded, .failed:
-            true
-        }
-    }
-}
-
 public extension SwiftUI.Scene {
     /// Sets up the offline manager for offline toolkit components.
     /// - Parameters:
@@ -109,7 +97,7 @@ public extension SwiftUI.Scene {
         return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
             Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
             
-            // Allow the `ArcGISURLSession` to handle it's background task events.
+            // Allow the `ArcGISURLSession` to handle its background task events.
             await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
             
             // When the app is re-launched from a background url session, resume any paused jobs,
