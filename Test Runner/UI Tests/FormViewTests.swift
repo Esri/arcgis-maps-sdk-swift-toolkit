@@ -568,7 +568,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase( app)
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
