@@ -15,7 +15,7 @@
 ***REMOVED***
 import Foundation
 
-extension FormAttachment : FeatureAttachment {
+extension FormAttachment: FeatureAttachment {
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***public var featureAttachmentKind: FeatureAttachmentKind {
 ***REMOVED******REMOVED***FeatureAttachmentKind(kind: kind)
