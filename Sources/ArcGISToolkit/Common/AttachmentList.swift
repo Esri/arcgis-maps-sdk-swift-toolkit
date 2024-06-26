@@ -44,7 +44,7 @@ struct AttachmentRow: View  {
                     Text(attachmentModel.attachment.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
-                    Text(attachmentModel.attachment.measuredSize.formatted(.byteCount(style: .file)))
+                    Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
