@@ -168,7 +168,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         defer {
             // Clean up JobManager.
-            JobManager.shared.jobs.removeAll()
+            OfflineManager.shared.jobManager.jobs.removeAll()
             
             // Clean up folder.
             try? FileManager.default.removeItem(at: mmpkDirectory)
@@ -177,7 +177,7 @@ class PreplannedMapModelTests: XCTestCase {
         // Add a job to the job manager so that when creating the model it finds it.
         let parameters = try await task.makeDefaultDownloadPreplannedOfflineMapParameters(preplannedMapArea: area)
         let job = task.makeDownloadPreplannedOfflineMapJob(parameters: parameters, downloadDirectory: mmpkDirectory)
-        JobManager.shared.jobs.append(job)
+        OfflineManager.shared.jobManager.jobs.append(job)
         
         let model = PreplannedMapModel(
             offlineMapTask: task,
@@ -205,7 +205,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         defer {
             // Clean up JobManager.
-            JobManager.shared.jobs.removeAll()
+            OfflineManager.shared.jobManager.jobs.removeAll()
             
             // Clean up folder.
             let directory = FileManager.default.preplannedDirectory(
