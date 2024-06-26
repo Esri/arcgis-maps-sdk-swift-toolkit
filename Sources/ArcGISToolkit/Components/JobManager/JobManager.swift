@@ -22,7 +22,7 @@ import UIKit
 ***REMOVED***/ An object that manages saving and loading jobs so that they can continue to run if the
 ***REMOVED***/ app is backgrounded or even terminated.
 ***REMOVED***/
-***REMOVED***/ The job manager is not instantiable, you must use the ``shared`` instance.
+***REMOVED***/ The job manager is instantiable, but the ``shared`` instance is suitable for most applications.
 ***REMOVED***/
 ***REMOVED***/ **Background**
 ***REMOVED***/
@@ -111,14 +111,20 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The operating system ultimately decides when to allow a background task to run.
 ***REMOVED******REMOVED***/ If you enable background status checks then you must also make sure to have enabled
 ***REMOVED******REMOVED***/ the "Background fetch" background mode in your application settings.
-***REMOVED******REMOVED***/ - Note: You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted
-***REMOVED******REMOVED***/ background task scheduler identifiers" in your application's plist file. This only works on
-***REMOVED******REMOVED***/ device and not on the simulator.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: You must also add the ``statusChecksTaskIdentifier`` to the "Permitted
+***REMOVED******REMOVED***/ background task scheduler identifiers" in your application's plist file.
+***REMOVED******REMOVED***/ The status checks task identifier will be "com.esri.ArcGISToolkit.jobManager.statusCheck" if using the shared instance.
+***REMOVED******REMOVED***/ If you are using a job manager instance that you created with a specific ID, then the
+***REMOVED******REMOVED***/ identifier will be "com.esri.ArcGISToolkit.jobManager.<id>.statusCheck".
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Background checks only work on device and not on the simulator.
 ***REMOVED******REMOVED***/ More information can be found [here](https:***REMOVED***developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
 ***REMOVED***public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
 ***REMOVED***
 ***REMOVED******REMOVED***/ The background task identifier for status checks.
-***REMOVED***private var statusChecksTaskIdentifier: String {
+***REMOVED******REMOVED***/ - See ``preferredBackgroundStatusCheckSchedule``
+***REMOVED***public var statusChecksTaskIdentifier: String {
 ***REMOVED******REMOVED***if let id {
 ***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
 ***REMOVED*** else {
