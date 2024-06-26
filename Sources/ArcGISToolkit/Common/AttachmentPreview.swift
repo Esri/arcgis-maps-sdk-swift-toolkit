@@ -170,7 +170,7 @@ struct AttachmentPreview: View {
                         .padding([.leading, .trailing], 4)
                     HStack(alignment: .bottom) {
                         Spacer()
-                        Text(attachmentModel.attachment.measuredSize.formatted(.byteCount(style: .file)))
+                        Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
                         Image(systemName: "square.and.arrow.down")
                         Spacer()
                     }
