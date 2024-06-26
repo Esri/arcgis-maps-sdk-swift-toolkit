@@ -19,7 +19,7 @@
 @MainActor
 class OfflineManager {
 ***REMOVED******REMOVED***/ The shared offline manager.
-***REMOVED***static let `shared` = OfflineManager()
+***REMOVED***static let shared = OfflineManager()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when a job completes.
 ***REMOVED***var jobCompletionAction: ((any JobProtocol) -> Void)?
@@ -31,12 +31,12 @@ class OfflineManager {
 ***REMOVED***var jobs: [any JobProtocol] { jobManager.jobs ***REMOVED***
 ***REMOVED***
 ***REMOVED***private init() {
-***REMOVED******REMOVED******REMOVED*** Observe each job's status
+***REMOVED******REMOVED******REMOVED*** Observe each job's status.
 ***REMOVED******REMOVED***for job in jobManager.jobs {
 ***REMOVED******REMOVED******REMOVED***observeJob(job)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Resume all paused jobs
+***REMOVED******REMOVED******REMOVED*** Resume all paused jobs.
 ***REMOVED******REMOVED***jobManager.resumeAllPausedJobs()
 ***REMOVED***
 ***REMOVED***
@@ -63,18 +63,6 @@ class OfflineManager {
 ***REMOVED***
 ***REMOVED***
 
-private extension Job.Status {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the job is completed.
-***REMOVED***var isComplete: Bool {
-***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .notStarted, .started, .paused, .canceling:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED***case .succeeded, .failed:
-***REMOVED******REMOVED******REMOVED***true
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 public extension SwiftUI.Scene {
 ***REMOVED******REMOVED***/ Sets up the offline manager for offline toolkit components.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -93,7 +81,7 @@ public extension SwiftUI.Scene {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Support app-relaunch after background downloads.
 ***REMOVED******REMOVED***return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Allow the `ArcGISURLSession` to handle it's background task events.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Allow the `ArcGISURLSession` to handle its background task events.
 ***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** When the app is re-launched from a background url session, resume any paused jobs,
