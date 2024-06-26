@@ -122,7 +122,7 @@ public extension SwiftUI.Scene {
 extension Logger {
 ***REMOVED******REMOVED***/ A logger for the offline manager.
 ***REMOVED***static var offlineManager: Logger {
-***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_OFFLINE_MANAGER ") {
+***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_OFFLINE_MANAGER") {
 ***REMOVED******REMOVED******REMOVED***Logger(subsystem: "com.esri.ArcGISToolkit", category: "OfflineManager")
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***.init(.disabled)
