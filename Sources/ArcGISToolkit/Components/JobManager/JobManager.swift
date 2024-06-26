@@ -123,7 +123,7 @@ public class JobManager: ObservableObject {
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
     /// The background task identifier for status checks.
-    /// - See ``preferredBackgroundStatusCheckSchedule``
+    /// - SeeAlso ``preferredBackgroundStatusCheckSchedule``
     public var statusChecksTaskIdentifier: String {
         if let id {
             "com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
