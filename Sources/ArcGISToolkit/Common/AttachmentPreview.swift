@@ -32,6 +32,8 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
+    /// <#Description#>
+    @State private var size = CGSize(width: 120, height: 120)
     
     /// The models for the attachments displayed in the list.
     let attachmentModels: [AttachmentModel]
@@ -58,10 +60,24 @@ struct AttachmentPreview: View {
     }
     
     var body: some View {
+        GeometryReader { geometryProxy in
+            innerBody
+                .onChange(of: geometryProxy.size.width) { width in
+                    if !editControlsDisabled {
+                        let count = modf(width / (120.0 + 4))
+                        let total = count.0 + 0.5
+                        let newWidth = width / total
+                        size = CGSize(width: newWidth, height: newWidth)
+                    }
+                }
+        }
+    }
+    
+    var innerBody: some View {
         ScrollView(.horizontal) {
             HStack(alignment: .top, spacing: 8) {
                 ForEach(attachmentModels) { attachmentModel in
-                    AttachmentCell(attachmentModel: attachmentModel)
+                    AttachmentCell(attachmentModel: attachmentModel, size: size)
                         .contextMenu {
                             if !editControlsDisabled {
                                 Button {
@@ -139,6 +155,9 @@ struct AttachmentPreview: View {
         /// The url of the the attachment, used to display the attachment via `QuickLook`.
         @State private var url: URL?
         
+        /// <#Description#>
+        let size: CGSize
+        
         var body: some View {
             VStack(alignment: .center) {
                 ZStack {
@@ -179,7 +198,8 @@ struct AttachmentPreview: View {
                 }
             }
             .font(.caption)
-            .frame(width: 120, height: 120)
+            .frame(width: size.width, height: 120)
+//            .frame(width: size.width, height: size.height)
             .background(Color.gray.opacity(0.2))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .onTapGesture {
@@ -192,6 +212,7 @@ struct AttachmentPreview: View {
                 }
             }
             .quickLookPreview($url)
+            .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
