@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import OSLog
 import SwiftUI
 
 /// An object that maintains state for the offline components.
@@ -31,18 +32,22 @@ class OfflineManager {
     var jobs: [any JobProtocol] { jobManager.jobs }
     
     private init() {
+        Logger.offlineManager.debug("Initializing OfflineManager")
+        
         // Observe each job's status.
         for job in jobManager.jobs {
             observeJob(job)
         }
         
         // Resume all paused jobs.
+        Logger.offlineManager.debug("Resuming all paused jobs")
         jobManager.resumeAllPausedJobs()
     }
     
     /// Starts a job that will be managed by this instance.
     /// - Parameter job: The job to start.
     func start(job: any JobProtocol) {
+        Logger.offlineManager.debug("Starting Job from offline manager")
         jobManager.jobs.append(job)
         observeJob(job)
         job.start()
@@ -51,11 +56,18 @@ class OfflineManager {
     /// Observes a job for completion.
     private func observeJob(_ job: any JobProtocol) {
         Task {
+            Logger.offlineManager.debug("Observing job completion")
+            
             // Wait for job to finish.
             _ = try? await job.output
             
             // Remove completed job from JobManager.
+            Logger.offlineManager.debug("Removing completed job from job manager")
             jobManager.jobs.removeAll { $0 === job }
+            
+            // This isn't strictly required, but it helps to get the state saved as soon
+            // as possible after removing a job instead of waiting for the app to be backgrounded.
+            jobManager.saveState()
             
             // Call job completion action.
             jobCompletionAction?(job)
@@ -73,6 +85,8 @@ public extension SwiftUI.Scene {
         preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
         jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
     ) -> some SwiftUI.Scene {
+        Logger.offlineManager.debug("Executing OfflineManager SwiftUI.Scene modifier")
+        
         // Set the background status check schedule.
         OfflineManager.shared.jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
         
@@ -81,12 +95,25 @@ public extension SwiftUI.Scene {
         
         // Support app-relaunch after background downloads.
         return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
+            Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
+            
             // Allow the `ArcGISURLSession` to handle its background task events.
             await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
             
             // When the app is re-launched from a background url session, resume any paused jobs,
             // and check the job status.
             await OfflineManager.shared.jobManager.resumeAllPausedJobs()
+        }
+    }
+}
+
+extension Logger {
+    /// A logger for the offline manager.
+    static var offlineManager: Logger {
+        if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_OFFLINE_MANAGER") {
+            Logger(subsystem: "com.esri.ArcGISToolkit", category: "OfflineManager")
+        } else {
+            .init(.disabled)
         }
     }
 }

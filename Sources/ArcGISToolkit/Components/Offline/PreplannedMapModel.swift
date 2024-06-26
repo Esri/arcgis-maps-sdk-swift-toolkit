@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import OSLog
+import SwiftUI
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor
@@ -56,8 +57,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
+            Logger.offlineManager.debug("Found executing job for area \(preplannedMapAreaID.rawValue, privacy: .public)")
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
+            Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
             self.mobileMapPackage = mmpk
             self.status = .downloaded
         }
@@ -125,7 +128,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
-        guard FileManager.default.fileExists(atPath: fileURL.relativePath) else { return nil }
+        guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil }
+        // Make sure the directory is not empty because the directory will exist as soon as the
+        // job starts, so if the job fails, it will look like the mmpk was downloaded.
+        guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
         return MobileMapPackage.init(fileURL: fileURL)
     }
     
@@ -308,5 +314,11 @@ extension FileManager {
                 path: preplannedMapAreaID.rawValue,
                 directoryHint: .isDirectory
             )
+    }
+    
+    /// Returns a Boolean value indicating if the specified directory is empty.
+    /// - Parameter path: The path to check.
+    func isDirectoryEmpty(atPath path: URL) -> Bool {
+        (try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
     }
 }
