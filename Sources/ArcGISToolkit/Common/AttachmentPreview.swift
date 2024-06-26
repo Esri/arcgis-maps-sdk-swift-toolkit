@@ -32,6 +32,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var size = CGSize(width: 120, height: 120)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
 ***REMOVED***let attachmentModels: [AttachmentModel]
@@ -58,10 +60,24 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***GeometryReader { geometryProxy in
+***REMOVED******REMOVED******REMOVED***innerBody
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size.width) { width in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let count = modf(width / (120.0 + 4))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let total = count.0 + 0.5
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newWidth = width / total
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size = CGSize(width: newWidth, height: newWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var innerBody: some View {
 ***REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: 8) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, size: size)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -139,6 +155,9 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
 ***REMOVED******REMOVED***@State private var url: URL?
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let size: CGSize
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
@@ -179,7 +198,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED***.frame(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED***.frame(width: size.width, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size.width, height: size.height)
 ***REMOVED******REMOVED******REMOVED***.background(Color.gray.opacity(0.2))
 ***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
@@ -192,6 +212,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
+***REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
