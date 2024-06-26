@@ -32,17 +32,17 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be renamed.
     @State private var renamedAttachmentModel: AttachmentModel?
     
-    /// The action to perform when the attachment is deleted.
-    let onDelete: ((AttachmentModel) -> Void)?
-    
-    /// The action to perform when the attachment is renamed.
-    let onRename: ((AttachmentModel, String) -> Void)?
-    
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     let editControlsDisabled: Bool
+    
+    /// The action to perform when the attachment is deleted.
+    let onDelete: ((AttachmentModel) -> Void)?
+    
+    /// The action to perform when the attachment is renamed.
+    let onRename: ((AttachmentModel, String) -> Void)?
     
     init(
         attachmentModels: [AttachmentModel],
