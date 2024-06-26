@@ -56,7 +56,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
-            startAndObserveJob(foundJob)
+            observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             self.mobileMapPackage = mmpk
             self.status = .downloaded
@@ -86,7 +86,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Look up the job associated with this preplanned map model.
     private func lookupDownloadJob() -> DownloadPreplannedOfflineMapJob? {
-        JobManager.shared.jobs
+        OfflineManager.shared.jobs
             .lazy
             .compactMap { $0 as? DownloadPreplannedOfflineMapJob }
             .first {
@@ -129,30 +129,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         return MobileMapPackage.init(fileURL: fileURL)
     }
     
-    /// Posts a local notification that the job completed with success or failure.
-    /// - Precondition: `job.status == .succeeded || job.status == .failed`
-    private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) async throws {
-        precondition(job.status == .succeeded || job.status == .failed)
-        guard
-            let preplannedMapArea = job.parameters.preplannedMapArea,
-            let id = preplannedMapArea.id
-        else { return }
-        
-        let content = UNMutableNotificationContent()
-        content.sound = UNNotificationSound.default
-        
-        let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
-        
-        content.title = "Download \(jobStatus)"
-        content.body = "The job for \(preplannedMapArea.title) has \(jobStatus.lowercased())."
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let identifier = id.rawValue
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        
-        try await UNUserNotificationCenter.current().add(request)
-    }
-    
     /// Downloads the preplanned map area.
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
@@ -172,8 +148,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
                 parameters: parameters,
                 downloadDirectory: mmpkDirectory
             )
-            JobManager.shared.jobs.append(job)
-            startAndObserveJob(job)
+            
+            OfflineManager.shared.start(job: job)
+            observeJob(job)
         } catch {
             status = .downloadFailure(error)
         }
@@ -182,19 +159,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// Sets the job property of this instance, starts the job, observes it, and
     /// when it's done, updates the status, removes the job from the job manager,
     /// and fires a user notification.
-    private func startAndObserveJob(_ job: DownloadPreplannedOfflineMapJob) {
+    private func observeJob(_ job: DownloadPreplannedOfflineMapJob) {
         self.job = job
-        job.start()
         status = .downloading
         Task { [weak self, job] in
             let result = await job.result
-            JobManager.shared.jobs.removeAll { $0 === job }
             guard let self else { return }
             self.updateDownloadStatus(for: result)
             self.mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
-            if self.showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
-                try? await Self.notifyJobCompleted(job: job)
-            }
             self.job = nil
         }
     }
@@ -265,7 +237,6 @@ protocol PreplannedMapAreaProtocol {
     var title: String { get }
     var description: String { get }
     var thumbnail: LoadableImage? { get }
-    var id: PortalItem.ID? { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -291,10 +262,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     
     var description: String {
         portalItem.description
-    }
-    
-    var id: PortalItem.ID? {
-        portalItem.id
     }
 }
 

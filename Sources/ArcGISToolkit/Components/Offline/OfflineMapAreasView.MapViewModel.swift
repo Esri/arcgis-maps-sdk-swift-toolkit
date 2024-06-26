@@ -42,14 +42,14 @@ extension OfflineMapAreasView {
             
             preplannedMapModels = await Result {
                 try await offlineMapTask.preplannedMapAreas
-                    .filter { $0.id != nil }
+                    .filter { $0.portalItem.id != nil }
                     .sorted(using: KeyPathComparator(\.portalItem.title))
                     .map {
                         PreplannedMapModel(
                             offlineMapTask: offlineMapTask,
                             mapArea: $0,
                             portalItemID: portalItemID,
-                            preplannedMapAreaID: $0.id!
+                            preplannedMapAreaID: $0.portalItem.id!
                         )
                     }
             }

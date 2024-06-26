@@ -568,7 +568,7 @@ final class FeatureFormViewTests: XCTestCase {
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
-        selectTestCase( app)
+        selectTestCase(app)
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(

@@ -24,12 +24,6 @@ struct OfflineMapAreasExampleView: View {
     /// A Boolean value indicating whether the offline map ares view should be presented.
     @State private var isShowingOfflineMapAreasView = false
     
-    init() {
-        // Ask the job manager to schedule background status checks for every 30 seconds.
-        // In your app, set this to a value that makes sense for the kinds of jobs that you run.
-        JobManager.shared.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
-    }
-    
     var body: some View {
         MapView(map: map)
             .toolbar {

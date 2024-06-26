@@ -24,13 +24,36 @@ struct OfflineMapAreasExampleApp: App {
         WindowGroup {
             OfflineMapAreasExampleView()
         }
-        .backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
-            // Allow the `ArcGISURLSession` to handle it's background task events.
-            await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
-            
-            // When the app is re-launched from a background url session, resume any paused jobs,
-            // and check the job status.
-            await JobManager.shared.resumeAllPausedJobs()
+        // Setup the offline toolkit components.
+        .offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+            // Post a local notification that the job is finished.
+            Self.notifyJobCompleted(job: job)
         }
+    }
+}
+
+extension OfflineMapAreasExampleApp {
+    /// Posts a local notification that the job completed with success or failure.
+    static func notifyJobCompleted(job: any JobProtocol) {
+        guard
+            job.status == .succeeded || job.status == .failed,
+            let job = job as? DownloadPreplannedOfflineMapJob,
+            let preplannedMapArea = job.parameters.preplannedMapArea,
+            let id = preplannedMapArea.portalItem.id
+        else { return }
+        
+        let content = UNMutableNotificationContent()
+        content.sound = UNNotificationSound.default
+        
+        let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
+        
+        content.title = "Download \(jobStatus)"
+        content.body = "The job for \(preplannedMapArea.portalItem.title) has \(jobStatus.lowercased())."
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let identifier = id.rawValue
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
 }
