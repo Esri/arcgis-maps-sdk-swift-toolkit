@@ -65,6 +65,10 @@ class OfflineManager {
             Logger.offlineManager.debug("Removing completed job from job manager")
             jobManager.jobs.removeAll { $0 === job }
             
+            // This isn't strictly required, but it helps to get the state saved as soon
+            // as possible after removing a job instead of waiting for the app to be backgrounded.
+            jobManager.saveState()
+            
             // Call job completion action.
             jobCompletionAction?(job)
         }
