@@ -30,9 +30,9 @@ struct ExamplesApp: App {
          1) User authentication: Allows users with an ArcGIS account to sign into an application and access secure services.
          2) API key authentication: A long-lived access token that gives your application access to secure services. Go to the [Create an API key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) tutorial to copy the API key access token. To access all services used by this application set the location services privileges to:
          
-           Location services > Basemaps > Basemaps style service
-           Location services > Geocoding > Geocode (not stored)
-           Location services > Routing > Simple routing
+           Location services > Basemaps
+           Location services > Geocoding
+           Location services > Routing
          
         Production deployment of applications built with the ArcGIS Runtime SDK requires you to license ArcGIS Runtime functionality. For more information see https://links.esri.com/arcgis-runtime-license-and-deploy.
          */
