@@ -56,7 +56,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
-***REMOVED******REMOVED******REMOVED***startAndObserveJob(foundJob)
+***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***self.status = .downloaded
@@ -86,7 +86,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Look up the job associated with this preplanned map model.
 ***REMOVED***private func lookupDownloadJob() -> DownloadPreplannedOfflineMapJob? {
-***REMOVED******REMOVED***JobManager.shared.jobs
+***REMOVED******REMOVED***OfflineManager.shared.jobs
 ***REMOVED******REMOVED******REMOVED***.lazy
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? DownloadPreplannedOfflineMapJob ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.first {
@@ -129,30 +129,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***return MobileMapPackage.init(fileURL: fileURL)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
-***REMOVED******REMOVED***/ - Precondition: `job.status == .succeeded || job.status == .failed`
-***REMOVED***private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) async throws {
-***REMOVED******REMOVED***precondition(job.status == .succeeded || job.status == .failed)
-***REMOVED******REMOVED***guard
-***REMOVED******REMOVED******REMOVED***let preplannedMapArea = job.parameters.preplannedMapArea,
-***REMOVED******REMOVED******REMOVED***let id = preplannedMapArea.id
-***REMOVED******REMOVED***else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let content = UNMutableNotificationContent()
-***REMOVED******REMOVED***content.sound = UNNotificationSound.default
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***content.title = "Download \(jobStatus)"
-***REMOVED******REMOVED***content.body = "The job for \(preplannedMapArea.title) has \(jobStatus.lowercased())."
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-***REMOVED******REMOVED***let identifier = id.rawValue
-***REMOVED******REMOVED***let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***try await UNUserNotificationCenter.current().add(request)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
@@ -172,8 +148,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***parameters: parameters,
 ***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectory
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.append(job)
-***REMOVED******REMOVED******REMOVED***startAndObserveJob(job)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job)
+***REMOVED******REMOVED******REMOVED***observeJob(job)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED***
@@ -182,19 +159,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
 ***REMOVED******REMOVED***/ when it's done, updates the status, removes the job from the job manager,
 ***REMOVED******REMOVED***/ and fires a user notification.
-***REMOVED***private func startAndObserveJob(_ job: DownloadPreplannedOfflineMapJob) {
+***REMOVED***private func observeJob(_ job: DownloadPreplannedOfflineMapJob) {
 ***REMOVED******REMOVED***self.job = job
-***REMOVED******REMOVED***job.start()
 ***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***Task { [weak self, job] in
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
-***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll { $0 === job ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.updateDownloadStatus(for: result)
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
-***REMOVED******REMOVED******REMOVED***if self.showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await Self.notifyJobCompleted(job: job)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.job = nil
 ***REMOVED***
 ***REMOVED***
@@ -265,7 +237,6 @@ protocol PreplannedMapAreaProtocol {
 ***REMOVED***var title: String { get ***REMOVED***
 ***REMOVED***var description: String { get ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { get ***REMOVED***
-***REMOVED***var id: PortalItem.ID? { get ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -291,10 +262,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***var description: String {
 ***REMOVED******REMOVED***portalItem.description
-***REMOVED***
-***REMOVED***
-***REMOVED***var id: PortalItem.ID? {
-***REMOVED******REMOVED***portalItem.id
 ***REMOVED***
 ***REMOVED***
 

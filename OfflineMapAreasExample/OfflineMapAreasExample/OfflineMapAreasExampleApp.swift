@@ -24,13 +24,36 @@ struct OfflineMapAreasExampleApp: App {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***OfflineMapAreasExampleView()
 ***REMOVED***
-***REMOVED******REMOVED***.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Allow the `ArcGISURLSession` to handle it's background task events.
-***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** When the app is re-launched from a background url session, resume any paused jobs,
-***REMOVED******REMOVED******REMOVED******REMOVED*** and check the job status.
-***REMOVED******REMOVED******REMOVED***await JobManager.shared.resumeAllPausedJobs()
+***REMOVED******REMOVED******REMOVED*** Setup the offline toolkit components.
+***REMOVED******REMOVED***.offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Post a local notification that the job is finished.
+***REMOVED******REMOVED******REMOVED***Self.notifyJobCompleted(job: job)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension OfflineMapAreasExampleApp {
+***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
+***REMOVED***static func notifyJobCompleted(job: any JobProtocol) {
+***REMOVED******REMOVED***guard
+***REMOVED******REMOVED******REMOVED***job.status == .succeeded || job.status == .failed,
+***REMOVED******REMOVED******REMOVED***let job = job as? DownloadPreplannedOfflineMapJob,
+***REMOVED******REMOVED******REMOVED***let preplannedMapArea = job.parameters.preplannedMapArea,
+***REMOVED******REMOVED******REMOVED***let id = preplannedMapArea.portalItem.id
+***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let content = UNMutableNotificationContent()
+***REMOVED******REMOVED***content.sound = UNNotificationSound.default
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***content.title = "Download \(jobStatus)"
+***REMOVED******REMOVED***content.body = "The job for \(preplannedMapArea.portalItem.title) has \(jobStatus.lowercased())."
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+***REMOVED******REMOVED***let identifier = id.rawValue
+***REMOVED******REMOVED***let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***UNUserNotificationCenter.current().add(request)
 ***REMOVED***
 ***REMOVED***

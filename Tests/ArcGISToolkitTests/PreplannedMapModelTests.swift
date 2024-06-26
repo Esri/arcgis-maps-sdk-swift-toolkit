@@ -19,7 +19,6 @@ import Combine
 
 private extension PreplannedMapAreaProtocol {
 ***REMOVED***var mapArea: PreplannedMapArea? { nil ***REMOVED***
-***REMOVED***var id: PortalItem.ID? { PortalItem.ID("012345") ***REMOVED***
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { nil ***REMOVED***
 ***REMOVED***var title: String { "Mock Preplanned Map Area" ***REMOVED***
 ***REMOVED***var description: String { "This is the description text" ***REMOVED***
@@ -161,7 +160,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
-***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.id)
+***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.portalItem.id)
 ***REMOVED******REMOVED***let mmpkDirectory = FileManager.default.preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItem.id!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
@@ -202,7 +201,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
-***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.id)
+***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.portalItem.id)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
