@@ -15,7 +15,7 @@
 import ArcGIS
 import Foundation
 
-extension FormAttachment : FeatureAttachment {
+extension FormAttachment: FeatureAttachment {
     /// The type of the attachment.
     public var featureAttachmentKind: FeatureAttachmentKind {
         FeatureAttachmentKind(kind: kind)

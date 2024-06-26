@@ -15,7 +15,7 @@
 import ArcGIS
 import Foundation
 
-extension PopupAttachment : FeatureAttachment {
+extension PopupAttachment: FeatureAttachment {
     /// The type of the attachment.
     public var featureAttachmentKind: FeatureAttachmentKind {
         FeatureAttachmentKind(kind: kind)
