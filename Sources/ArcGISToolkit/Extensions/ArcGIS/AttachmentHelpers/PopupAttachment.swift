@@ -13,10 +13,16 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Foundation
 
-extension PopupAttachment : FeatureAttachment {
+extension PopupAttachment: FeatureAttachment {
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***public var featureAttachmentKind: FeatureAttachmentKind {
 ***REMOVED******REMOVED***FeatureAttachmentKind(kind: kind)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The size of the attachment.
+***REMOVED***public var measuredSize: Measurement<UnitInformationStorage> {
+***REMOVED******REMOVED***Measurement(value: Double(size), unit: .bytes)
 ***REMOVED***
 ***REMOVED***
