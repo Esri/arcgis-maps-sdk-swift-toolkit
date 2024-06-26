@@ -13,10 +13,16 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 
 extension FormAttachment : FeatureAttachment {
     /// The type of the attachment.
     public var featureAttachmentKind: FeatureAttachmentKind {
         FeatureAttachmentKind(kind: kind)
+    }
+    
+    /// The size of the attachment.
+    public var measuredSize: Measurement<UnitInformationStorage> {
+        size
     }
 }
