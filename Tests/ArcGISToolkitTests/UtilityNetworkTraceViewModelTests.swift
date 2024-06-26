@@ -78,11 +78,9 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test initializing a `UtilityNetworkTraceViewModel` with starting points.
 ***REMOVED***@MainActor
 ***REMOVED***func testCase_2_1() async throws {
-***REMOVED******REMOVED***XCTExpectFailure("https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/780")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(3726)
@@ -124,11 +122,9 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ configuration.
 ***REMOVED***@MainActor
 ***REMOVED***func testCase_2_2() async throws {
-***REMOVED******REMOVED***XCTExpectFailure("https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/780")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(3174)
@@ -179,11 +175,9 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test modifying the fractional starting point along an edge based utility element.
 ***REMOVED***@MainActor
 ***REMOVED***func testCase_2_3() async throws {
-***REMOVED******REMOVED***XCTExpectFailure("https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/780")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(1748)
@@ -226,7 +220,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED***func testCase_3_1() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(2247)
