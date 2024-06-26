@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1C7F79BA2C1A3F7D008D8D31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */; ***REMOVED***;
 		1CBE201D2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */; ***REMOVED***;
 		1CBE201F2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CBE201E2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift */; ***REMOVED***;
 		1CBE20212BF2BF2C0006B55D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CBE20202BF2BF2C0006B55D /* Assets.xcassets */; ***REMOVED***;
@@ -16,7 +15,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; ***REMOVED***;
 		1C96FD5D2C1CC08900A1CC91 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; ***REMOVED***;
 		1CBE20192BF2BF2B0006B55D /* OfflineMapAreasExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OfflineMapAreasExample.app; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMapAreasExampleApp.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -61,7 +59,6 @@
 			isa = PBXGroup;
 			children = (
 				1C96FD5D2C1CC08900A1CC91 /* Info.plist */,
-				1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */,
 				1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */,
 				1CBE201E2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift */,
 				1CBE20202BF2BF2C0006B55D /* Assets.xcassets */,
@@ -161,7 +158,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C7F79BA2C1A3F7D008D8D31 /* AppDelegate.swift in Sources */,
 				1CBE201F2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift in Sources */,
 				1CBE201D2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift in Sources */,
 			);

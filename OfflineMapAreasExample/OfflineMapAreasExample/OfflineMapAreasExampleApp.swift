@@ -18,8 +18,6 @@
 
 ***REMOVED***
 struct OfflineMapAreasExampleApp: App {
-***REMOVED***@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***OfflineMapAreasExampleView()
