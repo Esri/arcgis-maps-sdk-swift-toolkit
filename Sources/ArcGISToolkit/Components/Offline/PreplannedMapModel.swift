@@ -316,7 +316,7 @@ extension FileManager {
             )
     }
     
-    /// Returns a Boolean indicating if the specified directory is empty.
+    /// Returns a Boolean value indicating if the specified directory is empty.
     /// - Parameter path: The path to check.
     func isDirectoryEmpty(atPath path: URL) -> Bool {
         (try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
