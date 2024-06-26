@@ -96,7 +96,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***public var jobs: [any JobProtocol] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which state will be serialized under the user defaults.
-***REMOVED***private var defaultsKey: String {
+***REMOVED***var defaultsKey: String {
 ***REMOVED******REMOVED***if let id {
 ***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.\(id).jobs"
 ***REMOVED*** else {
@@ -139,7 +139,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***var id: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An initializer for the job manager.
-***REMOVED***private init(id: String?) {
+***REMOVED***init(id: String?) {
 ***REMOVED******REMOVED***self.id = id
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
