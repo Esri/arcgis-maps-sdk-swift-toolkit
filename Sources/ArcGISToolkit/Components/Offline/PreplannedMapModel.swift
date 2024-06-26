@@ -128,7 +128,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: fileURL.relativePath) else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: fileURL.path) else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***return MobileMapPackage.init(fileURL: fileURL)
 ***REMOVED***
 ***REMOVED***
@@ -311,5 +312,11 @@ extension FileManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: preplannedMapAreaID.rawValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a Boolean indicating if the specified directory is empty.
+***REMOVED******REMOVED***/ - Parameter path: The path to check.
+***REMOVED***func isDirectoryEmpty(atPath path: URL) -> Bool {
+***REMOVED******REMOVED***(try? FileManager.default.contentsOfDirectory(atPath: path.path).isEmpty) ?? true
 ***REMOVED***
 ***REMOVED***
