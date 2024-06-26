@@ -33,7 +33,7 @@ struct ExamplesApp: App {
            Location services > Basemaps
            Location services > Geocoding
          
-        Production deployment of applications built with the ArcGIS Runtime SDK requires you to license ArcGIS Runtime functionality. For more information see https://links.esri.com/arcgis-runtime-license-and-deploy.
+        Production deployment of applications built with the ArcGIS Maps SDK for Swift requires that you license your app. For more information see https://developers.arcgis.com/swift/license-and-deployment/.
          */
         // Uncomment the following line to access ArcGIS location services using an API key.
 //         ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
