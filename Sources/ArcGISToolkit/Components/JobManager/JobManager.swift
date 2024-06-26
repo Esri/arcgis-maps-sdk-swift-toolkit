@@ -22,7 +22,7 @@ import UIKit
 /// An object that manages saving and loading jobs so that they can continue to run if the
 /// app is backgrounded or even terminated.
 ///
-/// The job manager is not instantiable, you must use the ``shared`` instance.
+/// The job manager is instantiable, but the ``shared`` instance is suitable for most applications.
 ///
 /// **Background**
 ///
@@ -111,14 +111,20 @@ public class JobManager: ObservableObject {
     /// The operating system ultimately decides when to allow a background task to run.
     /// If you enable background status checks then you must also make sure to have enabled
     /// the "Background fetch" background mode in your application settings.
-    /// - Note: You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted
-    /// background task scheduler identifiers" in your application's plist file. This only works on
-    /// device and not on the simulator.
+    ///
+    /// - Note: You must also add the ``statusChecksTaskIdentifier`` to the "Permitted
+    /// background task scheduler identifiers" in your application's plist file.
+    /// The status checks task identifier will be "com.esri.ArcGISToolkit.jobManager.statusCheck" if using the shared instance.
+    /// If you are using a job manager instance that you created with a specific ID, then the
+    /// identifier will be "com.esri.ArcGISToolkit.jobManager.<id>.statusCheck".
+    ///
+    /// Background checks only work on device and not on the simulator.
     /// More information can be found [here](https://developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
     /// The background task identifier for status checks.
-    private var statusChecksTaskIdentifier: String {
+    /// - See ``preferredBackgroundStatusCheckSchedule``
+    public var statusChecksTaskIdentifier: String {
         if let id {
             "com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
         } else {
