@@ -89,7 +89,7 @@ import UIKit
 @MainActor
 public class JobManager: ObservableObject {
     /// The shared job manager.
-    public static let `shared` = JobManager()
+    public static let `shared` = JobManager(id: nil)
     
     /// The jobs being managed by the job manager.
     @Published
@@ -97,7 +97,11 @@ public class JobManager: ObservableObject {
     
     /// The key for which state will be serialized under the user defaults.
     private var defaultsKey: String {
-        return "com.esri.ArcGISToolkit.jobManager.jobs"
+        if let id {
+            "com.esri.ArcGISToolkit.jobManager.\(id).jobs"
+        } else {
+            "com.esri.ArcGISToolkit.jobManager.jobs"
+        }
     }
     
     /// The preferred schedule for performing status checks while the application is in the
@@ -114,13 +118,24 @@ public class JobManager: ObservableObject {
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
     /// The background task identifier for status checks.
-    private let statusChecksTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
+    private var statusChecksTaskIdentifier: String {
+        if let id {
+            "com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
+        } else {
+            "com.esri.ArcGISToolkit.jobManager.statusCheck"
+        }
+    }
     
     // A Boolean value indicating whether a background status check is scheduled.
     private var isBackgroundStatusChecksScheduled = false
     
+    /// The id of the job manager. The shared instance does not have an id.
+    var id: String?
+    
     /// An initializer for the job manager.
-    private init() {
+    private init(id: String?) {
+        self.id = id
+        
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
@@ -140,6 +155,20 @@ public class JobManager: ObservableObject {
         
         // Load jobs from the saved state.
         loadState()
+    }
+    
+    /// Creates a job manager with a unique id.
+    /// This initializer allows you to create a specific instance of a job manager
+    /// for cases when you don't want to take over the shared job manager instance.
+    ///
+    /// The provided ID should be unique to a specific purpose in your application.
+    /// On each successive run of the app, you must re-use the same id when you initialize
+    /// your job manager for it to be able to properly reload its state.
+    ///
+    /// If you create multiple instances with the same id the behavior is undefined.
+    /// - Parameter id: The unique ID of the job manager.
+    public convenience init(uniqueID id: String) {
+        self.init(id: id)
     }
     
     /// Schedules a status check in the background if one is not already scheduled.
