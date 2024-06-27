@@ -83,6 +83,7 @@ struct AttachmentPreview: View {
         .frame(height: cellSize.height)
     }
     
+    @MainActor
     var innerBody: some View {
         ScrollView(.horizontal) {
             HStack(alignment: .top, spacing: cellSpacing) {
