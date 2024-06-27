@@ -221,7 +221,6 @@ struct AttachmentPreview: View {
                 }
             }
             .quickLookPreview($url)
-            .fixedSize(horizontal: false, vertical: true)
         }
     }
     
