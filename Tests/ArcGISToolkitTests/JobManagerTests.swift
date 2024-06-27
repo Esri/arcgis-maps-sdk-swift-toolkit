@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
 import XCTest
 @testable import ArcGISToolkit
 
 final class JobManagerTests: XCTestCase {
     @MainActor
     func testInit() {
-        let jobManager = JobManager(id: "test")
+        let jobManager = JobManager(uniqueID: "test")
         XCTAssertEqual(jobManager.id, "test")
         XCTAssertEqual(jobManager.defaultsKey, "com.esri.ArcGISToolkit.jobManager.test.jobs")
         XCTAssertEqual(jobManager.statusChecksTaskIdentifier, "com.esri.ArcGISToolkit.jobManager.test.statusCheck")

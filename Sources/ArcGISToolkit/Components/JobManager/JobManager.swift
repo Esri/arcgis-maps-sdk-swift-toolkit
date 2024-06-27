@@ -89,7 +89,7 @@ import UIKit
 @MainActor
 public class JobManager: ObservableObject {
     /// The shared job manager.
-    public static let `shared` = JobManager(id: nil)
+    public static let shared = JobManager(id: nil)
     
     /// The jobs being managed by the job manager.
     @Published
@@ -132,14 +132,14 @@ public class JobManager: ObservableObject {
         }
     }
     
-    // A Boolean value indicating whether a background status check is scheduled.
+    /// A Boolean value indicating whether a background status check is scheduled.
     private var isBackgroundStatusChecksScheduled = false
     
     /// The id of the job manager. The shared instance does not have an id.
     var id: String?
     
     /// An initializer for the job manager.
-    init(id: String?) {
+    private init(id: String?) {
         self.id = id
         
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
