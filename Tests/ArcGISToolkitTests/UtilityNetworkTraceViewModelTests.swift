@@ -80,7 +80,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     func testCase_2_1() async throws {
         let map = try await makeMapWithPortalItem()
         
-        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" } as? FeatureLayer)
         
         let parameters = QueryParameters()
         parameters.addObjectID(3726)
@@ -124,7 +124,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     func testCase_2_2() async throws {
         let map = try await makeMapWithPortalItem()
         
-        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" } as? FeatureLayer)
         
         let parameters = QueryParameters()
         parameters.addObjectID(3174)
@@ -177,7 +177,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     func testCase_2_3() async throws {
         let map = try await makeMapWithPortalItem()
         
-        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" } as? FeatureLayer)
         
         let parameters = QueryParameters()
         parameters.addObjectID(1748)
@@ -220,7 +220,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     func testCase_3_1() async throws {
         let map = try await makeMapWithPortalItem()
         
-        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" } as? FeatureLayer)
         
         let parameters = QueryParameters()
         parameters.addObjectID(2247)
