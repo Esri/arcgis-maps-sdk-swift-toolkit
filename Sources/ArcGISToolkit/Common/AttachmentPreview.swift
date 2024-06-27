@@ -83,6 +83,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***.frame(height: cellSize.height)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***var innerBody: some View {
 ***REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: cellSpacing) {
