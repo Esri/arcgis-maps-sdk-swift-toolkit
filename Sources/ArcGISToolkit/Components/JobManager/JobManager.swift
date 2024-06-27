@@ -22,7 +22,7 @@ import UIKit
 ***REMOVED***/ An object that manages saving and loading jobs so that they can continue to run if the
 ***REMOVED***/ app is backgrounded or even terminated.
 ***REMOVED***/
-***REMOVED***/ The job manager is not instantiable, you must use the ``shared`` instance.
+***REMOVED***/ The job manager is instantiable, but the ``shared`` instance is suitable for most applications.
 ***REMOVED***/
 ***REMOVED***/ **Background**
 ***REMOVED***/
@@ -89,15 +89,19 @@ import UIKit
 @MainActor
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
-***REMOVED***public static let `shared` = JobManager()
+***REMOVED***public static let shared = JobManager(id: nil)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs being managed by the job manager.
 ***REMOVED***@Published
 ***REMOVED***public var jobs: [any JobProtocol] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which state will be serialized under the user defaults.
-***REMOVED***private var defaultsKey: String {
-***REMOVED******REMOVED***return "com.esri.ArcGISToolkit.jobManager.jobs"
+***REMOVED***var defaultsKey: String {
+***REMOVED******REMOVED***if let id {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.\(id).jobs"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.jobs"
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The preferred schedule for performing status checks while the application is in the
@@ -107,20 +111,37 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The operating system ultimately decides when to allow a background task to run.
 ***REMOVED******REMOVED***/ If you enable background status checks then you must also make sure to have enabled
 ***REMOVED******REMOVED***/ the "Background fetch" background mode in your application settings.
-***REMOVED******REMOVED***/ - Note: You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted
-***REMOVED******REMOVED***/ background task scheduler identifiers" in your application's plist file. This only works on
-***REMOVED******REMOVED***/ device and not on the simulator.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: You must also add the ``statusChecksTaskIdentifier`` to the "Permitted
+***REMOVED******REMOVED***/ background task scheduler identifiers" in your application's plist file.
+***REMOVED******REMOVED***/ The status checks task identifier will be "com.esri.ArcGISToolkit.jobManager.statusCheck" if using the shared instance.
+***REMOVED******REMOVED***/ If you are using a job manager instance that you created with a specific ID, then the
+***REMOVED******REMOVED***/ identifier will be "com.esri.ArcGISToolkit.jobManager.<id>.statusCheck".
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Background checks only work on device and not on the simulator.
 ***REMOVED******REMOVED***/ More information can be found [here](https:***REMOVED***developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
 ***REMOVED***public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
 ***REMOVED***
 ***REMOVED******REMOVED***/ The background task identifier for status checks.
-***REMOVED***private let statusChecksTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
+***REMOVED******REMOVED***/ - SeeAlso ``preferredBackgroundStatusCheckSchedule``
+***REMOVED***public var statusChecksTaskIdentifier: String {
+***REMOVED******REMOVED***if let id {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***"com.esri.ArcGISToolkit.jobManager.statusCheck"
 ***REMOVED***
-***REMOVED******REMOVED*** A Boolean value indicating whether a background status check is scheduled.
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether a background status check is scheduled.
 ***REMOVED***private var isBackgroundStatusChecksScheduled = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The id of the job manager. The shared instance does not have an id.
+***REMOVED***var id: String?
+***REMOVED***
 ***REMOVED******REMOVED***/ An initializer for the job manager.
-***REMOVED***private init() {
+***REMOVED***private init(id: String?) {
+***REMOVED******REMOVED***self.id = id
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
@@ -140,6 +161,20 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Load jobs from the saved state.
 ***REMOVED******REMOVED***loadState()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a job manager with a unique id.
+***REMOVED******REMOVED***/ This initializer allows you to create a specific instance of a job manager
+***REMOVED******REMOVED***/ for cases when you don't want to take over the shared job manager instance.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The provided ID should be unique to a specific purpose in your application.
+***REMOVED******REMOVED***/ On each successive run of the app, you must re-use the same id when you initialize
+***REMOVED******REMOVED***/ your job manager for it to be able to properly reload its state.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If you create multiple instances with the same id the behavior is undefined.
+***REMOVED******REMOVED***/ - Parameter id: The unique ID of the job manager.
+***REMOVED***public convenience init(uniqueID id: String) {
+***REMOVED******REMOVED***self.init(id: id)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Schedules a status check in the background if one is not already scheduled.

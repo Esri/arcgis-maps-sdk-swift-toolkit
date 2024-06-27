@@ -168,7 +168,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
-***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll()
+***REMOVED******REMOVED******REMOVED***OfflineManager.shared.jobManager.jobs.removeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
 ***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectory)
@@ -177,7 +177,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Add a job to the job manager so that when creating the model it finds it.
 ***REMOVED******REMOVED***let parameters = try await task.makeDefaultDownloadPreplannedOfflineMapParameters(preplannedMapArea: area)
 ***REMOVED******REMOVED***let job = task.makeDownloadPreplannedOfflineMapJob(parameters: parameters, downloadDirectory: mmpkDirectory)
-***REMOVED******REMOVED***JobManager.shared.jobs.append(job)
+***REMOVED******REMOVED***OfflineManager.shared.jobManager.jobs.append(job)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let model = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
@@ -205,7 +205,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
-***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll()
+***REMOVED******REMOVED******REMOVED***OfflineManager.shared.jobManager.jobs.removeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
 ***REMOVED******REMOVED******REMOVED***let directory = FileManager.default.preplannedDirectory(
