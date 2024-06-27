@@ -89,7 +89,7 @@ import UIKit
 @MainActor
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
-***REMOVED***public static let `shared` = JobManager(id: nil)
+***REMOVED***public static let shared = JobManager(id: nil)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs being managed by the job manager.
 ***REMOVED***@Published
@@ -132,14 +132,14 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** A Boolean value indicating whether a background status check is scheduled.
+***REMOVED******REMOVED***/ A Boolean value indicating whether a background status check is scheduled.
 ***REMOVED***private var isBackgroundStatusChecksScheduled = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The id of the job manager. The shared instance does not have an id.
 ***REMOVED***var id: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An initializer for the job manager.
-***REMOVED***init(id: String?) {
+***REMOVED***private init(id: String?) {
 ***REMOVED******REMOVED***self.id = id
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)

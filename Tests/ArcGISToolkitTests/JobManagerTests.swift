@@ -12,14 +12,13 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
 import XCTest
 @testable ***REMOVED***Toolkit
 
 final class JobManagerTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let jobManager = JobManager(id: "test")
+***REMOVED******REMOVED***let jobManager = JobManager(uniqueID: "test")
 ***REMOVED******REMOVED***XCTAssertEqual(jobManager.id, "test")
 ***REMOVED******REMOVED***XCTAssertEqual(jobManager.defaultsKey, "com.esri.ArcGISToolkit.jobManager.test.jobs")
 ***REMOVED******REMOVED***XCTAssertEqual(jobManager.statusChecksTaskIdentifier, "com.esri.ArcGISToolkit.jobManager.test.statusCheck")
