@@ -17,6 +17,9 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+    /// The size of each cell.
+    @State private var cellSize = CGSize.zero
+    
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
     
@@ -31,9 +34,6 @@ struct AttachmentPreview: View {
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
-    
-    /// The size of each cell.
-    @State private var cellSize = CGSize.zero
     
     /// The models for the attachments displayed in the list.
     let attachmentModels: [AttachmentModel]
