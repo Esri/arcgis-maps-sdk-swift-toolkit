@@ -221,7 +221,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
-***REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
