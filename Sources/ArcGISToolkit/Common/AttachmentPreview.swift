@@ -17,6 +17,9 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+***REMOVED******REMOVED***/ The size of each cell.
+***REMOVED***@State private var cellSize = CGSize.zero
+***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
 ***REMOVED***
@@ -31,9 +34,6 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
-***REMOVED***
-***REMOVED******REMOVED***/ The size of each cell.
-***REMOVED***@State private var cellSize = CGSize.zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
 ***REMOVED***let attachmentModels: [AttachmentModel]
