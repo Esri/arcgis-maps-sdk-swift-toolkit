@@ -4,7 +4,7 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>com.esri.ArcGISToolkit.jobManager.statusCheck</string>
+		<string>com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
