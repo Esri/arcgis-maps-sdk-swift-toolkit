@@ -67,7 +67,8 @@ struct Carousel<Content: View>: View {
         .frame(height: cellSize.height)
     }
     
-//    iOS18Implementation remains commented as it contains symbols not available in Xcode 15.4.
+//    The iOS 18 implementation is commented as it contains symbols not
+//    available in Xcode 15.4.
 //    @available(iOS 18.0, *)
 //    var iOS18Implementation: some View {
 //        ScrollViewReader { scrollViewProxy in
