@@ -86,6 +86,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***HStack(spacing: cellSpacing) {
 ***REMOVED******REMOVED******REMOVED***content(cellSize, scrollViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -121,21 +122,21 @@ extension Carousel {
 ***REMOVED***
 ***REMOVED***
 
-#Preview("Custom base width") {
+#Preview("Custom smaller base width") {
 ***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellBaseWidth(75)
 ***REMOVED***
 
-#Preview("Custom spacing") {
+#Preview("Custom smaller spacing") {
 ***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellSpacing(2)
 ***REMOVED***
 
-#Preview("Custom visible portion") {
+#Preview("Custom larger visible portion (50%)") {
 ***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
