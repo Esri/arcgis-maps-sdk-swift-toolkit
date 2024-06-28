@@ -32,6 +32,9 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
+    /// The proxy to the scroll view within the Carousel.
+    @Binding var scrollViewProxy: ScrollViewProxy?
+    
     /// The models for the attachments displayed in the list.
     let attachmentModels: [AttachmentModel]
     
@@ -52,18 +55,25 @@ struct AttachmentPreview: View {
         cellSize: CGSize,
         editControlsDisabled: Bool = true,
         onRename: ((AttachmentModel, String) -> Void)? = nil,
-        onDelete: ((AttachmentModel) -> Void)? = nil
+        onDelete: ((AttachmentModel) -> Void)? = nil,
+        scrollViewProxy: Binding<ScrollViewProxy?>
     ) {
         self.attachmentModels = attachmentModels
         self.cellSize = cellSize
         self.editControlsDisabled = editControlsDisabled
         self.onRename = onRename
         self.onDelete = onDelete
+        _scrollViewProxy = scrollViewProxy
     }
     
     var body: some View {
-        Carousel { cellSize, _ in
+        Carousel { cellSize, scrollViewProxy in
+            EmptyView()
+                .id("First Element")
             carouselContent
+                .onAppear {
+                    self.scrollViewProxy = scrollViewProxy
+                }
         }
         .cellBaseWidth(cellSize.width)
     }

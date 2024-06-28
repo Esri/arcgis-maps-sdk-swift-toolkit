@@ -34,6 +34,9 @@ struct AttachmentsFeatureElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
+    /// The proxy to the scroll view within an AttachmentPreview.
+    @State private var scrollViewProxy: ScrollViewProxy?
+    
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !isPortraitOrientation
@@ -122,7 +125,8 @@ struct AttachmentsFeatureElementView: View {
                 cellSize: thumbnailSize,
                 editControlsDisabled: !isEditable,
                 onRename: onRename,
-                onDelete: onDelete
+                onDelete: onDelete,
+                scrollViewProxy: $scrollViewProxy
             )
         case .auto:
             Group {
@@ -132,7 +136,8 @@ struct AttachmentsFeatureElementView: View {
                         cellSize: thumbnailSize,
                         editControlsDisabled: !isEditable,
                         onRename: onRename,
-                        onDelete: onDelete
+                        onDelete: onDelete,
+                        scrollViewProxy: $scrollViewProxy
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
@@ -171,6 +176,7 @@ struct AttachmentsFeatureElementView: View {
         models.insert(newModel, at: 0)
         attachmentModelsState = .initialized(models)
         formViewModel.evaluateExpressions()
+        withAnimation { scrollViewProxy?.scrollTo("First Element", anchor: .leading) }
     }
     
     /// Renames the attachment associated with the given model.
