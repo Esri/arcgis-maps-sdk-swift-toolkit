@@ -32,11 +32,14 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
-    /// The proxy to the scroll view within the Carousel.
-    @Binding var scrollViewProxy: ScrollViewProxy?
+    /// An action which scrolls the Carousel to the front.
+    @Binding var scrollToFrontAction: (() -> Void)?
     
     /// The models for the attachments displayed in the list.
     let attachmentModels: [AttachmentModel]
+    
+    /// The identifier for the leading item in the Carousel.
+    let carouselFront = UUID()
     
     /// The size of each cell.
     let cellSize: CGSize
@@ -56,23 +59,27 @@ struct AttachmentPreview: View {
         editControlsDisabled: Bool = true,
         onRename: ((AttachmentModel, String) -> Void)? = nil,
         onDelete: ((AttachmentModel) -> Void)? = nil,
-        scrollViewProxy: Binding<ScrollViewProxy?>
+        scrollToFrontAction: Binding<(() -> Void)?>
     ) {
         self.attachmentModels = attachmentModels
         self.cellSize = cellSize
         self.editControlsDisabled = editControlsDisabled
         self.onRename = onRename
         self.onDelete = onDelete
-        _scrollViewProxy = scrollViewProxy
+        _scrollToFrontAction = scrollToFrontAction
     }
     
     var body: some View {
         Carousel { cellSize, scrollViewProxy in
             EmptyView()
-                .id("First Element")
+                .id(carouselFront)
             carouselContent
                 .onAppear {
-                    self.scrollViewProxy = scrollViewProxy
+                    scrollToFrontAction = {
+                        withAnimation {
+                            scrollViewProxy.scrollTo(carouselFront, anchor: .leading)
+                        }
+                    }
                 }
         }
         .cellBaseWidth(cellSize.width)
