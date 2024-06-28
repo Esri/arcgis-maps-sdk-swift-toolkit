@@ -17,6 +17,9 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+    /// The size of each attachment preview cell as computed by the Carousel.
+    @State private var computedCellSize: CGSize?
+    
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
     
@@ -41,9 +44,6 @@ struct AttachmentPreview: View {
     /// The identifier for the leading item in the Carousel.
     let carouselFront = UUID()
     
-    /// The size of each cell.
-    let cellSize: CGSize
-    
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     let editControlsDisabled: Bool
     
@@ -53,16 +53,19 @@ struct AttachmentPreview: View {
     /// The action to perform when the attachment is renamed.
     let onRename: ((AttachmentModel, String) -> Void)?
     
+    /// The proposed size of each attachment preview cell.
+    let proposedCellSize: CGSize
+    
     init(
         attachmentModels: [AttachmentModel],
-        cellSize: CGSize,
+        proposedCellSize: CGSize,
         editControlsDisabled: Bool = true,
         onRename: ((AttachmentModel, String) -> Void)? = nil,
         onDelete: ((AttachmentModel) -> Void)? = nil,
         scrollToFrontAction: Binding<(() -> Void)?>
     ) {
         self.attachmentModels = attachmentModels
-        self.cellSize = cellSize
+        self.proposedCellSize = proposedCellSize
         self.editControlsDisabled = editControlsDisabled
         self.onRename = onRename
         self.onDelete = onDelete
@@ -70,25 +73,30 @@ struct AttachmentPreview: View {
     }
     
     var body: some View {
-        Carousel { cellSize, scrollViewProxy in
-            EmptyView()
-                .id(carouselFront)
-            carouselContent
-                .onAppear {
-                    scrollToFrontAction = {
-                        withAnimation {
-                            scrollViewProxy.scrollTo(carouselFront, anchor: .leading)
-                        }
+        Carousel { computedCellSize, scrollViewProxy in
+            Group {
+                EmptyView()
+                    .id(carouselFront)
+                carouselContent
+            }
+            .onAppear {
+                scrollToFrontAction = {
+                    withAnimation {
+                        scrollViewProxy.scrollTo(carouselFront, anchor: .leading)
                     }
                 }
+            }
+            .onChange(of: computedCellSize) { newComputedCellSize in
+                self.computedCellSize = newComputedCellSize
+            }
         }
-        .cellBaseWidth(cellSize.width)
+        .cellBaseWidth(proposedCellSize.width)
     }
     
     @MainActor
     var carouselContent: some View {
         ForEach(attachmentModels) { attachmentModel in
-            AttachmentCell(attachmentModel: attachmentModel, cellSize: cellSize)
+            AttachmentCell(attachmentModel: attachmentModel, cellSize: computedCellSize ?? proposedCellSize)
                 .contextMenu {
                     if !editControlsDisabled {
                         Button {

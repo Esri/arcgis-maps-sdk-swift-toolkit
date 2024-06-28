@@ -124,7 +124,7 @@ struct AttachmentsFeatureElementView: View {
         case .preview:
             AttachmentPreview(
                 attachmentModels: attachmentModels,
-                cellSize: thumbnailSize,
+                proposedCellSize: thumbnailSize,
                 editControlsDisabled: !isEditable,
                 onRename: onRename,
                 onDelete: onDelete,
@@ -135,7 +135,7 @@ struct AttachmentsFeatureElementView: View {
                 if isRegularWidth {
                     AttachmentPreview(
                         attachmentModels: attachmentModels,
-                        cellSize: thumbnailSize,
+                        proposedCellSize: thumbnailSize,
                         editControlsDisabled: !isEditable,
                         onRename: onRename,
                         onDelete: onDelete,
