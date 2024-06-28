@@ -80,7 +80,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED***func testCase_2_1() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(3726)
@@ -124,7 +124,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED***func testCase_2_2() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(3174)
@@ -177,7 +177,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED***func testCase_2_3() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(1748)
@@ -220,7 +220,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED***func testCase_3_1() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(2247)
