@@ -17,9 +17,6 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-    /// The size of each attachment preview cell as computed by the Carousel.
-    @State private var computedCellSize: CGSize?
-    
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
     
@@ -77,7 +74,7 @@ struct AttachmentPreview: View {
             Group {
                 EmptyView()
                     .id(carouselFront)
-                carouselContent
+                makeCarouselContent(for: computedCellSize)
             }
             .onAppear {
                 scrollToFrontAction = {
@@ -86,17 +83,14 @@ struct AttachmentPreview: View {
                     }
                 }
             }
-            .onChange(of: computedCellSize) { newComputedCellSize in
-                self.computedCellSize = newComputedCellSize
-            }
         }
         .cellBaseWidth(proposedCellSize.width)
     }
     
     @MainActor
-    var carouselContent: some View {
+    func makeCarouselContent(for size: CGSize) -> some View {
         ForEach(attachmentModels) { attachmentModel in
-            AttachmentCell(attachmentModel: attachmentModel, cellSize: computedCellSize ?? proposedCellSize)
+            AttachmentCell(attachmentModel: attachmentModel, cellSize: size)
                 .contextMenu {
                     if !editControlsDisabled {
                         Button {
