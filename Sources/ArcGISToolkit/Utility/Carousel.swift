@@ -39,9 +39,10 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Note: The iOS 18 version currently uses the `legacyImplementation` as
+***REMOVED******REMOVED***/ `iOS18Implementation` contains symbols not available in Xcode 15.4.
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if #available(iOS 18.0, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED***iOS18Implementation
 ***REMOVED******REMOVED******REMOVED***legacyImplementation
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***legacyImplementation
@@ -66,6 +67,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***.frame(height: cellSize.height)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***iOS18Implementation remains commented as it contains symbols not available in Xcode 15.4.
 ***REMOVED******REMOVED***@available(iOS 18.0, *)
 ***REMOVED******REMOVED***var iOS18Implementation: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
