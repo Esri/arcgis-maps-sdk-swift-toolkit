@@ -39,9 +39,10 @@ struct Carousel<Content: View>: View {
         self.content = content
     }
     
+    /// - Note: The iOS 18 version currently uses the `legacyImplementation` as
+    /// `iOS18Implementation` contains symbols not available in Xcode 15.4.
     var body: some View {
         if #available(iOS 18.0, *) {
-//            iOS18Implementation
             legacyImplementation
         } else {
             legacyImplementation
@@ -66,6 +67,7 @@ struct Carousel<Content: View>: View {
         .frame(height: cellSize.height)
     }
     
+//    iOS18Implementation remains commented as it contains symbols not available in Xcode 15.4.
 //    @available(iOS 18.0, *)
 //    var iOS18Implementation: some View {
 //        ScrollView(.horizontal) {
