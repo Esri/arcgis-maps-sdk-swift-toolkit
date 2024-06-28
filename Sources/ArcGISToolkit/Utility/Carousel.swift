@@ -70,8 +70,10 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***iOS18Implementation remains commented as it contains symbols not available in Xcode 15.4.
 ***REMOVED******REMOVED***@available(iOS 18.0, *)
 ***REMOVED******REMOVED***var iOS18Implementation: some View {
-***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED******REMOVED***commonScrollViewContent
+***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
 ***REMOVED******REMOVED******REMOVED******REMOVED***geometry.containerSize.width
