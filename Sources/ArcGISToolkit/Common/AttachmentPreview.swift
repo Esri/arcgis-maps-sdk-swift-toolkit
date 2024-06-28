@@ -17,8 +17,8 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-    /// The models for the attachments displayed in the list.
-    var attachmentModels: [AttachmentModel]
+    /// The size of each cell.
+    @State private var cellSize = CGSize.zero
     
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
@@ -32,17 +32,31 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be renamed.
     @State private var renamedAttachmentModel: AttachmentModel?
     
+    /// A Boolean value indicating the user has requested that the attachment be renamed.
+    @State private var renameDialogueIsShowing = false
+    
+    /// The models for the attachments displayed in the list.
+    let attachmentModels: [AttachmentModel]
+    
+    /// The base width for a cell.
+    ///
+    /// This number is used to compute the final width that allows for a partially visible cell.
+    let cellBaseWidth = 120.0
+    
+    /// The horizontal spacing between each cell.
+    let cellSpacing = 8.0
+    
+    /// The fractional width of the partially visible cell.
+    let cellVisiblePortion = 0.25
+    
+    /// A Boolean value which determines if the attachment editing controls should be disabled.
+    let editControlsDisabled: Bool
+    
     /// The action to perform when the attachment is deleted.
     let onDelete: ((AttachmentModel) -> Void)?
     
     /// The action to perform when the attachment is renamed.
     let onRename: ((AttachmentModel, String) -> Void)?
-    
-    /// A Boolean value indicating the user has requested that the attachment be renamed.
-    @State private var renameDialogueIsShowing = false
-    
-    /// A Boolean value which determines if the attachment editing controls should be disabled.
-    let editControlsDisabled: Bool
     
     init(
         attachmentModels: [AttachmentModel],
@@ -57,10 +71,24 @@ struct AttachmentPreview: View {
     }
     
     var body: some View {
+        GeometryReader { geometryProxy in
+            innerBody
+                .onAppear {
+                    updateCellSizeForContainer(geometryProxy.size.width)
+                }
+                .onChange(of: geometryProxy.size.width) { width in
+                    updateCellSizeForContainer(width)
+                }
+        }
+        .frame(height: cellSize.height)
+    }
+    
+    @MainActor
+    var innerBody: some View {
         ScrollView(.horizontal) {
-            HStack(alignment: .top, spacing: 8) {
+            HStack(alignment: .top, spacing: cellSpacing) {
                 ForEach(attachmentModels) { attachmentModel in
-                    AttachmentCell(attachmentModel: attachmentModel)
+                    AttachmentCell(attachmentModel: attachmentModel, cellSize: cellSize)
                         .contextMenu {
                             if !editControlsDisabled {
                                 Button {
@@ -138,6 +166,9 @@ struct AttachmentPreview: View {
         /// The url of the the attachment, used to display the attachment via `QuickLook`.
         @State private var url: URL?
         
+        /// The size of the cell.
+        let cellSize: CGSize
+        
         var body: some View {
             VStack(alignment: .center) {
                 ZStack {
@@ -178,7 +209,7 @@ struct AttachmentPreview: View {
                 }
             }
             .font(.caption)
-            .frame(width: 120, height: 120)
+            .frame(width: cellSize.width, height: cellSize.height)
             .background(Color.gray.opacity(0.2))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .onTapGesture {
@@ -192,6 +223,17 @@ struct AttachmentPreview: View {
             }
             .quickLookPreview($url)
         }
+    }
+    
+    /// Updates `cellSize` based on the provided container width, `cellBaseWidth`,
+    /// `cellSpacing`, and `visiblePortion` such that the `cellVisiblePortion` width of
+    /// one cell is shown to indicate scrollability.
+    /// - Parameter width: The width of the container the `AttachmentPreview` is in.
+    func updateCellSizeForContainer(_ width: CGFloat) {
+        let fullyVisible = modf(width / cellBaseWidth)
+        let totalPadding = fullyVisible.0 * cellSpacing
+        let newWidth = (width - totalPadding) / (fullyVisible.0 + cellVisiblePortion)
+        cellSize = CGSize(width: newWidth, height: newWidth)
     }
 }
 
