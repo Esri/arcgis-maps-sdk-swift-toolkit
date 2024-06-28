@@ -34,8 +34,10 @@ struct AttachmentsFeatureElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
-    /// The proxy to the scroll view within an AttachmentPreview.
-    @State private var scrollViewProxy: ScrollViewProxy?
+    /// Scrolls an ``AttachmentPreview`` to the front.
+    ///
+    /// Call this action when a new attachment is added to make it visible to the user.
+    @State private var scrollToFrontAction: (() -> Void)?
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
@@ -126,7 +128,7 @@ struct AttachmentsFeatureElementView: View {
                 editControlsDisabled: !isEditable,
                 onRename: onRename,
                 onDelete: onDelete,
-                scrollViewProxy: $scrollViewProxy
+                scrollToFrontAction: $scrollToFrontAction
             )
         case .auto:
             Group {
@@ -137,7 +139,7 @@ struct AttachmentsFeatureElementView: View {
                         editControlsDisabled: !isEditable,
                         onRename: onRename,
                         onDelete: onDelete,
-                        scrollViewProxy: $scrollViewProxy
+                        scrollToFrontAction: $scrollToFrontAction
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
@@ -176,7 +178,7 @@ struct AttachmentsFeatureElementView: View {
         models.insert(newModel, at: 0)
         attachmentModelsState = .initialized(models)
         formViewModel.evaluateExpressions()
-        withAnimation { scrollViewProxy?.scrollTo("First Element", anchor: .leading) }
+        scrollToFrontAction?()
     }
     
     /// Renames the attachment associated with the given model.
