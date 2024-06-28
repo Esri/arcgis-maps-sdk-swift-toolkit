@@ -34,6 +34,9 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The proxy to the scroll view within an AttachmentPreview.
+***REMOVED***@State private var scrollViewProxy: ScrollViewProxy?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
 ***REMOVED******REMOVED***!isPortraitOrientation
@@ -122,7 +125,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***cellSize: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
-***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
+***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete,
+***REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy: $scrollViewProxy
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED***Group {
@@ -132,7 +136,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cellSize: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy: $scrollViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
@@ -171,6 +176,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
 ***REMOVED******REMOVED***attachmentModelsState = .initialized(models)
 ***REMOVED******REMOVED***formViewModel.evaluateExpressions()
+***REMOVED******REMOVED***withAnimation { scrollViewProxy?.scrollTo("First Element", anchor: .leading) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renames the attachment associated with the given model.

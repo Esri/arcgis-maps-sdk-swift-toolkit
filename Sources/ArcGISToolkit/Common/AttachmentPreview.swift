@@ -32,6 +32,9 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The proxy to the scroll view within the Carousel.
+***REMOVED***@Binding var scrollViewProxy: ScrollViewProxy?
+***REMOVED***
 ***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
 ***REMOVED***let attachmentModels: [AttachmentModel]
 ***REMOVED***
@@ -52,18 +55,25 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***cellSize: CGSize,
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***onRename: ((AttachmentModel, String) -> Void)? = nil,
-***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil
+***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil,
+***REMOVED******REMOVED***scrollViewProxy: Binding<ScrollViewProxy?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
 ***REMOVED******REMOVED***self.cellSize = cellSize
 ***REMOVED******REMOVED***self.editControlsDisabled = editControlsDisabled
 ***REMOVED******REMOVED***self.onRename = onRename
 ***REMOVED******REMOVED***self.onDelete = onDelete
+***REMOVED******REMOVED***_scrollViewProxy = scrollViewProxy
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Carousel { cellSize, _ in
+***REMOVED******REMOVED***Carousel { cellSize, scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.id("First Element")
 ***REMOVED******REMOVED******REMOVED***carouselContent
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scrollViewProxy = scrollViewProxy
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.cellBaseWidth(cellSize.width)
 ***REMOVED***
