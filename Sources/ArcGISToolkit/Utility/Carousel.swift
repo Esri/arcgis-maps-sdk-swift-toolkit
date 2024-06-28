@@ -86,6 +86,7 @@ struct Carousel<Content: View>: View {
         HStack(spacing: cellSpacing) {
             content(cellSize, scrollViewProxy)
                 .frame(width: cellSize.width, height: cellSize.height)
+                .clipped()
         }
     }
 }
@@ -121,21 +122,21 @@ extension Carousel {
     }
 }
 
-#Preview("Custom base width") {
+#Preview("Custom smaller base width") {
     Carousel { _, _ in
         PreviewContent()
     }
     .cellBaseWidth(75)
 }
 
-#Preview("Custom spacing") {
+#Preview("Custom smaller spacing") {
     Carousel { _, _ in
         PreviewContent()
     }
     .cellSpacing(2)
 }
 
-#Preview("Custom visible portion") {
+#Preview("Custom larger visible portion (50%)") {
     Carousel { _, _ in
         PreviewContent()
     }
