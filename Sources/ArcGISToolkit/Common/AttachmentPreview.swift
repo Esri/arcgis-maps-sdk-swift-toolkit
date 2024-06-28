@@ -17,6 +17,9 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+***REMOVED******REMOVED***/ The size of each attachment preview cell as computed by the Carousel.
+***REMOVED***@State private var computedCellSize: CGSize?
+***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
 ***REMOVED***
@@ -41,9 +44,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The identifier for the leading item in the Carousel.
 ***REMOVED***let carouselFront = UUID()
 ***REMOVED***
-***REMOVED******REMOVED***/ The size of each cell.
-***REMOVED***let cellSize: CGSize
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value which determines if the attachment editing controls should be disabled.
 ***REMOVED***let editControlsDisabled: Bool
 ***REMOVED***
@@ -53,16 +53,19 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
 ***REMOVED***let onRename: ((AttachmentModel, String) -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ The proposed size of each attachment preview cell.
+***REMOVED***let proposedCellSize: CGSize
+***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
-***REMOVED******REMOVED***cellSize: CGSize,
+***REMOVED******REMOVED***proposedCellSize: CGSize,
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***onRename: ((AttachmentModel, String) -> Void)? = nil,
 ***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil,
 ***REMOVED******REMOVED***scrollToFrontAction: Binding<(() -> Void)?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
-***REMOVED******REMOVED***self.cellSize = cellSize
+***REMOVED******REMOVED***self.proposedCellSize = proposedCellSize
 ***REMOVED******REMOVED***self.editControlsDisabled = editControlsDisabled
 ***REMOVED******REMOVED***self.onRename = onRename
 ***REMOVED******REMOVED***self.onDelete = onDelete
@@ -70,25 +73,30 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Carousel { cellSize, scrollViewProxy in
-***REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.id(carouselFront)
-***REMOVED******REMOVED******REMOVED***carouselContent
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollToFrontAction = {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy.scrollTo(carouselFront, anchor: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***Carousel { computedCellSize, scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(carouselFront)
+***REMOVED******REMOVED******REMOVED******REMOVED***carouselContent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***scrollToFrontAction = {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy.scrollTo(carouselFront, anchor: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: computedCellSize) { newComputedCellSize in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.computedCellSize = newComputedCellSize
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.cellBaseWidth(cellSize.width)
+***REMOVED******REMOVED***.cellBaseWidth(proposedCellSize.width)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***var carouselContent: some View {
 ***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: cellSize)
+***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: computedCellSize ?? proposedCellSize)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
