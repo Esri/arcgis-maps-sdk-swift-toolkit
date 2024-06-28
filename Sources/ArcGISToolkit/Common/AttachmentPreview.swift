@@ -17,8 +17,8 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
-***REMOVED***var attachmentModels: [AttachmentModel]
+***REMOVED******REMOVED***/ The size of each cell.
+***REMOVED***@State private var cellSize = CGSize.zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
@@ -32,17 +32,31 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The model for an attachment the user has requested be renamed.
 ***REMOVED***@State private var renamedAttachmentModel: AttachmentModel?
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
+***REMOVED***@State private var renameDialogueIsShowing = false
+***REMOVED***
+***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
+***REMOVED***let attachmentModels: [AttachmentModel]
+***REMOVED***
+***REMOVED******REMOVED***/ The base width for a cell.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This number is used to compute the final width that allows for a partially visible cell.
+***REMOVED***let cellBaseWidth = 120.0
+***REMOVED***
+***REMOVED******REMOVED***/ The horizontal spacing between each cell.
+***REMOVED***let cellSpacing = 8.0
+***REMOVED***
+***REMOVED******REMOVED***/ The fractional width of the partially visible cell.
+***REMOVED***let cellVisiblePortion = 0.25
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value which determines if the attachment editing controls should be disabled.
+***REMOVED***let editControlsDisabled: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
 ***REMOVED***let onDelete: ((AttachmentModel) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
 ***REMOVED***let onRename: ((AttachmentModel, String) -> Void)?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
-***REMOVED***@State private var renameDialogueIsShowing = false
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value which determines if the attachment editing controls should be disabled.
-***REMOVED***let editControlsDisabled: Bool
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
@@ -57,10 +71,24 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***GeometryReader { geometryProxy in
+***REMOVED******REMOVED******REMOVED***innerBody
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(geometryProxy.size.width)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size.width) { width in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(width)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.frame(height: cellSize.height)
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***var innerBody: some View {
 ***REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: 8) {
+***REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: cellSpacing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: cellSize)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -138,6 +166,9 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
 ***REMOVED******REMOVED***@State private var url: URL?
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The size of the cell.
+***REMOVED******REMOVED***let cellSize: CGSize
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
@@ -178,7 +209,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED***.frame(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
 ***REMOVED******REMOVED******REMOVED***.background(Color.gray.opacity(0.2))
 ***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
@@ -192,6 +223,17 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates `cellSize` based on the provided container width, `cellBaseWidth`,
+***REMOVED******REMOVED***/ `cellSpacing`, and `visiblePortion` such that the `cellVisiblePortion` width of
+***REMOVED******REMOVED***/ one cell is shown to indicate scrollability.
+***REMOVED******REMOVED***/ - Parameter width: The width of the container the `AttachmentPreview` is in.
+***REMOVED***func updateCellSizeForContainer(_ width: CGFloat) {
+***REMOVED******REMOVED***let fullyVisible = modf(width / cellBaseWidth)
+***REMOVED******REMOVED***let totalPadding = fullyVisible.0 * cellSpacing
+***REMOVED******REMOVED***let newWidth = (width - totalPadding) / (fullyVisible.0 + cellVisiblePortion)
+***REMOVED******REMOVED***cellSize = CGSize(width: newWidth, height: newWidth)
 ***REMOVED***
 ***REMOVED***
 
