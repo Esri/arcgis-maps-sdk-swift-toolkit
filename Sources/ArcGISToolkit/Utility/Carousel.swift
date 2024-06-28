@@ -22,7 +22,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED***@State private var cellSize = CGSize.zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the Carousel.
-***REMOVED***let content: () -> Content
+***REMOVED***let content: (_: CGSize) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ This number is used to compute the final width that allows for a partially visible cell.
 ***REMOVED***var cellBaseWidth = 120.0
@@ -35,17 +35,23 @@ struct Carousel<Content: View>: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A horizontally scrolling container to display a set of content.
 ***REMOVED******REMOVED***/ - Parameter content: A view builder that creates the content of this Carousel.
-***REMOVED***init(@ViewBuilder content: @escaping () -> Content) {
+***REMOVED***init(@ViewBuilder content: @escaping (_: CGSize) -> Content) {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***if #available(iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED***iOS18Implementation
+***REMOVED******REMOVED******REMOVED***legacyImplementation
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***legacyImplementation
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var legacyImplementation: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: cellSpacing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***commonScrollViewContent
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(geometry.size.width)
@@ -54,7 +60,27 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(width)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** When a GeometryReader is within a List, height must be specified.
 ***REMOVED******REMOVED***.frame(height: cellSize.height)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***@available(iOS 18.0, *)
+***REMOVED******REMOVED***var iOS18Implementation: some View {
+***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED***commonScrollViewContent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry.containerSize.width
+***REMOVED******REMOVED*** action: { _, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(newValue)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***var commonScrollViewContent: some View {
+***REMOVED******REMOVED***HStack(spacing: cellSpacing) {
+***REMOVED******REMOVED******REMOVED***content(cellSize)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -90,21 +116,21 @@ extension Carousel {
 ***REMOVED***
 
 #Preview("Custom base width") {
-***REMOVED***Carousel {
+***REMOVED***Carousel { _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellBaseWidth(75)
 ***REMOVED***
 
 #Preview("Custom spacing") {
-***REMOVED***Carousel {
+***REMOVED***Carousel { _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellSpacing(2)
 ***REMOVED***
 
 #Preview("Custom visible portion") {
-***REMOVED***Carousel {
+***REMOVED***Carousel { _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellVisiblePortion(0.5)
@@ -113,7 +139,7 @@ extension Carousel {
 #Preview("In a list") {
 ***REMOVED***List {
 ***REMOVED******REMOVED***Text("Hello")
-***REMOVED******REMOVED***Carousel {
+***REMOVED******REMOVED***Carousel { _ in
 ***REMOVED******REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED******REMOVED***Text("World!")
