@@ -17,9 +17,6 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-***REMOVED******REMOVED***/ The size of each cell.
-***REMOVED***@State private var cellSize = CGSize.zero
-***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
 ***REMOVED***
@@ -38,16 +35,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
 ***REMOVED***let attachmentModels: [AttachmentModel]
 ***REMOVED***
-***REMOVED******REMOVED***/ The base width for a cell.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This number is used to compute the final width that allows for a partially visible cell.
-***REMOVED***let cellBaseWidth = 120.0
-***REMOVED***
-***REMOVED******REMOVED***/ The horizontal spacing between each cell.
-***REMOVED***let cellSpacing = 8.0
-***REMOVED***
-***REMOVED******REMOVED***/ The fractional width of the partially visible cell.
-***REMOVED***let cellVisiblePortion = 0.25
+***REMOVED******REMOVED***/ The size of each cell.
+***REMOVED***let cellSize: CGSize
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value which determines if the attachment editing controls should be disabled.
 ***REMOVED***let editControlsDisabled: Bool
@@ -60,65 +49,57 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
+***REMOVED******REMOVED***cellSize: CGSize,
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***onRename: ((AttachmentModel, String) -> Void)? = nil,
 ***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
+***REMOVED******REMOVED***self.cellSize = cellSize
+***REMOVED******REMOVED***self.editControlsDisabled = editControlsDisabled
 ***REMOVED******REMOVED***self.onRename = onRename
 ***REMOVED******REMOVED***self.onDelete = onDelete
-***REMOVED******REMOVED***self.editControlsDisabled = editControlsDisabled
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***GeometryReader { geometryProxy in
-***REMOVED******REMOVED******REMOVED***innerBody
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(geometryProxy.size.width)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size.width) { width in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(width)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***Carousel { cellSize in
+***REMOVED******REMOVED******REMOVED***carouselContent
 ***REMOVED***
-***REMOVED******REMOVED***.frame(height: cellSize.height)
+***REMOVED******REMOVED***.cellBaseWidth(cellSize.width)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
-***REMOVED***var innerBody: some View {
-***REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: cellSpacing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: cellSize)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renamedAttachmentModel = attachmentModel
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = String(attachmentModel.name[..<separatorIndex])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Rename",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename an attachment."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "pencil")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletedAttachmentModel = attachmentModel
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED***var carouselContent: some View {
+***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
+***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: cellSize)
+***REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renamedAttachmentModel = attachmentModel
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Rename",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename an attachment."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "pencil")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletedAttachmentModel = attachmentModel
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED***Text(
@@ -175,9 +156,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus != .loading {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ThumbnailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel: attachmentModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: attachmentModel.usingSystemImage ?
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 36, height: 36) :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.thumbnailSize
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: attachmentModel.usingSystemImage ? CGSize(width: 36, height: 36) : cellSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
@@ -223,17 +202,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates `cellSize` based on the provided container width, `cellBaseWidth`,
-***REMOVED******REMOVED***/ `cellSpacing`, and `visiblePortion` such that the `cellVisiblePortion` width of
-***REMOVED******REMOVED***/ one cell is shown to indicate scrollability.
-***REMOVED******REMOVED***/ - Parameter width: The width of the container the `AttachmentPreview` is in.
-***REMOVED***func updateCellSizeForContainer(_ width: CGFloat) {
-***REMOVED******REMOVED***let fullyVisible = modf(width / cellBaseWidth)
-***REMOVED******REMOVED***let totalPadding = fullyVisible.0 * cellSpacing
-***REMOVED******REMOVED***let newWidth = (width - totalPadding) / (fullyVisible.0 + cellVisiblePortion)
-***REMOVED******REMOVED***cellSize = CGSize(width: newWidth, height: newWidth)
 ***REMOVED***
 ***REMOVED***
 
