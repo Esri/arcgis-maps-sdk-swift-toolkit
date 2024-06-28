@@ -17,9 +17,6 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-***REMOVED******REMOVED***/ The size of each attachment preview cell as computed by the Carousel.
-***REMOVED***@State private var computedCellSize: CGSize?
-***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
 ***REMOVED***
@@ -77,7 +74,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(carouselFront)
-***REMOVED******REMOVED******REMOVED******REMOVED***carouselContent
+***REMOVED******REMOVED******REMOVED******REMOVED***makeCarouselContent(for: computedCellSize)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***scrollToFrontAction = {
@@ -86,17 +83,14 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: computedCellSize) { newComputedCellSize in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.computedCellSize = newComputedCellSize
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.cellBaseWidth(proposedCellSize.width)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
-***REMOVED***var carouselContent: some View {
+***REMOVED***func makeCarouselContent(for size: CGSize) -> some View {
 ***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: computedCellSize ?? proposedCellSize)
+***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: size)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
