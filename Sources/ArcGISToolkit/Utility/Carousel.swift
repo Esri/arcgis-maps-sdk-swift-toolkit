@@ -22,7 +22,7 @@ struct Carousel<Content: View>: View {
     @State private var cellSize = CGSize.zero
     
     /// The content shown in the Carousel.
-    let content: (_: CGSize) -> Content
+    let content: (_: CGSize, _: ScrollViewProxy) -> Content
     
     /// This number is used to compute the final width that allows for a partially visible cell.
     var cellBaseWidth = 120.0
@@ -35,7 +35,7 @@ struct Carousel<Content: View>: View {
     
     /// A horizontally scrolling container to display a set of content.
     /// - Parameter content: A view builder that creates the content of this Carousel.
-    init(@ViewBuilder content: @escaping (_: CGSize) -> Content) {
+    init(@ViewBuilder content: @escaping (_: CGSize, _: ScrollViewProxy) -> Content) {
         self.content = content
     }
     
@@ -50,8 +50,10 @@ struct Carousel<Content: View>: View {
     
     var legacyImplementation: some View {
         GeometryReader { geometry in
-            ScrollView(.horizontal) {
-                commonScrollViewContent
+            ScrollViewReader { scrollViewProxy in
+                ScrollView(.horizontal) {
+                    makeCommonScrollViewContent(scrollViewProxy)
+                }
             }
             .onAppear {
                 updateCellSizeForContainer(geometry.size.width)
@@ -76,9 +78,9 @@ struct Carousel<Content: View>: View {
 //        }
 //    }
     
-    var commonScrollViewContent: some View {
+    func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
         HStack(spacing: cellSpacing) {
-            content(cellSize)
+            content(cellSize, scrollViewProxy)
                 .frame(width: cellSize.width, height: cellSize.height)
         }
     }
@@ -116,21 +118,21 @@ extension Carousel {
 }
 
 #Preview("Custom base width") {
-    Carousel { _ in
+    Carousel { _, _ in
         PreviewContent()
     }
     .cellBaseWidth(75)
 }
 
 #Preview("Custom spacing") {
-    Carousel { _ in
+    Carousel { _, _ in
         PreviewContent()
     }
     .cellSpacing(2)
 }
 
 #Preview("Custom visible portion") {
-    Carousel { _ in
+    Carousel { _, _ in
         PreviewContent()
     }
     .cellVisiblePortion(0.5)
@@ -139,11 +141,37 @@ extension Carousel {
 #Preview("In a list") {
     List {
         Text("Hello")
-        Carousel { _ in
+        Carousel { _, _ in
             PreviewContent()
         }
         Text("World!")
     }
+}
+
+#Preview("Using the provided ScrollViewProxy") {
+    struct ScrollDemo: View {
+        @State var scrollViewProxy: ScrollViewProxy?
+        
+        var body: some View {
+            Carousel { _, scrollViewProxy in
+                ForEach(1..<11) {
+                    Text($0.description)
+                        .id($0)
+                }
+                .onAppear {
+                    self.scrollViewProxy = scrollViewProxy
+                }
+            }
+            Button("Scroll to 1") {
+                withAnimation {
+                    scrollViewProxy?.scrollTo(1)
+                }
+                
+            }
+        }
+    }
+    
+    return ScrollDemo()
 }
 
 private struct PreviewContent: View {

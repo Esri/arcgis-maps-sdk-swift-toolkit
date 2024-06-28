@@ -62,7 +62,7 @@ struct AttachmentPreview: View {
     }
     
     var body: some View {
-        Carousel { cellSize in
+        Carousel { cellSize, _ in
             carouselContent
         }
         .cellBaseWidth(cellSize.width)
