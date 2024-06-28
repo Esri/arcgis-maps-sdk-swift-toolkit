@@ -22,7 +22,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED***@State private var cellSize = CGSize.zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the Carousel.
-***REMOVED***let content: (_: CGSize) -> Content
+***REMOVED***let content: (_: CGSize, _: ScrollViewProxy) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ This number is used to compute the final width that allows for a partially visible cell.
 ***REMOVED***var cellBaseWidth = 120.0
@@ -35,7 +35,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A horizontally scrolling container to display a set of content.
 ***REMOVED******REMOVED***/ - Parameter content: A view builder that creates the content of this Carousel.
-***REMOVED***init(@ViewBuilder content: @escaping (_: CGSize) -> Content) {
+***REMOVED***init(@ViewBuilder content: @escaping (_: CGSize, _: ScrollViewProxy) -> Content) {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
@@ -50,8 +50,10 @@ struct Carousel<Content: View>: View {
 ***REMOVED***
 ***REMOVED***var legacyImplementation: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
-***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED******REMOVED***commonScrollViewContent
+***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(geometry.size.width)
@@ -76,9 +78,9 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***var commonScrollViewContent: some View {
+***REMOVED***func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
 ***REMOVED******REMOVED***HStack(spacing: cellSpacing) {
-***REMOVED******REMOVED******REMOVED***content(cellSize)
+***REMOVED******REMOVED******REMOVED***content(cellSize, scrollViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
 ***REMOVED***
 ***REMOVED***
@@ -116,21 +118,21 @@ extension Carousel {
 ***REMOVED***
 
 #Preview("Custom base width") {
-***REMOVED***Carousel { _ in
+***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellBaseWidth(75)
 ***REMOVED***
 
 #Preview("Custom spacing") {
-***REMOVED***Carousel { _ in
+***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellSpacing(2)
 ***REMOVED***
 
 #Preview("Custom visible portion") {
-***REMOVED***Carousel { _ in
+***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellVisiblePortion(0.5)
@@ -139,11 +141,37 @@ extension Carousel {
 #Preview("In a list") {
 ***REMOVED***List {
 ***REMOVED******REMOVED***Text("Hello")
-***REMOVED******REMOVED***Carousel { _ in
+***REMOVED******REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED******REMOVED***Text("World!")
 ***REMOVED***
+***REMOVED***
+
+#Preview("Using the provided ScrollViewProxy") {
+***REMOVED***struct ScrollDemo: View {
+***REMOVED******REMOVED***@State var scrollViewProxy: ScrollViewProxy?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***Carousel { _, scrollViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(1..<11) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id($0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scrollViewProxy = scrollViewProxy
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Scroll to 1") {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy?.scrollTo(1)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***return ScrollDemo()
 ***REMOVED***
 
 private struct PreviewContent: View {

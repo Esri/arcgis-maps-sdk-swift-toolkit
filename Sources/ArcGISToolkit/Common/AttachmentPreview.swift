@@ -62,7 +62,7 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Carousel { cellSize in
+***REMOVED******REMOVED***Carousel { cellSize, _ in
 ***REMOVED******REMOVED******REMOVED***carouselContent
 ***REMOVED***
 ***REMOVED******REMOVED***.cellBaseWidth(cellSize.width)
