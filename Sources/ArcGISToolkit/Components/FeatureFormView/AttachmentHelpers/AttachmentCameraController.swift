@@ -31,7 +31,6 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        controller.allowsEditing = true
         controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
         controller.sourceType = .camera
         controller.delegate = context.coordinator
