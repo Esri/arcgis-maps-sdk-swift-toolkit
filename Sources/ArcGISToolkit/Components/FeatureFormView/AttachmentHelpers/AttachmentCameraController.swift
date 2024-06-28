@@ -31,7 +31,6 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeUIViewController(context: Context) -> some UIViewController {
-***REMOVED******REMOVED***controller.allowsEditing = true
 ***REMOVED******REMOVED***controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
 ***REMOVED******REMOVED***controller.sourceType = .camera
 ***REMOVED******REMOVED***controller.delegate = context.coordinator
