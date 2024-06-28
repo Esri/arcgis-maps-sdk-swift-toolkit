@@ -22,7 +22,7 @@ struct Carousel<Content: View>: View {
     @State private var cellSize = CGSize.zero
     
     /// The content shown in the Carousel.
-    let content: () -> Content
+    let content: (_: CGSize) -> Content
     
     /// This number is used to compute the final width that allows for a partially visible cell.
     var cellBaseWidth = 120.0
@@ -35,17 +35,23 @@ struct Carousel<Content: View>: View {
     
     /// A horizontally scrolling container to display a set of content.
     /// - Parameter content: A view builder that creates the content of this Carousel.
-    init(@ViewBuilder content: @escaping () -> Content) {
+    init(@ViewBuilder content: @escaping (_: CGSize) -> Content) {
         self.content = content
     }
     
     var body: some View {
+        if #available(iOS 18.0, *) {
+//            iOS18Implementation
+            legacyImplementation
+        } else {
+            legacyImplementation
+        }
+    }
+    
+    var legacyImplementation: some View {
         GeometryReader { geometry in
             ScrollView(.horizontal) {
-                HStack(spacing: cellSpacing) {
-                    content()
-                        .frame(width: cellSize.width, height: cellSize.height)
-                }
+                commonScrollViewContent
             }
             .onAppear {
                 updateCellSizeForContainer(geometry.size.width)
@@ -54,7 +60,27 @@ struct Carousel<Content: View>: View {
                 updateCellSizeForContainer(width)
             }
         }
+        // When a GeometryReader is within a List, height must be specified.
         .frame(height: cellSize.height)
+    }
+    
+//    @available(iOS 18.0, *)
+//    var iOS18Implementation: some View {
+//        ScrollView(.horizontal) {
+//            commonScrollViewContent
+//        }
+//        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+//            geometry.containerSize.width
+//        } action: { _, newValue in
+//            updateCellSizeForContainer(newValue)
+//        }
+//    }
+    
+    var commonScrollViewContent: some View {
+        HStack(spacing: cellSpacing) {
+            content(cellSize)
+                .frame(width: cellSize.width, height: cellSize.height)
+        }
     }
 }
 
@@ -90,21 +116,21 @@ extension Carousel {
 }
 
 #Preview("Custom base width") {
-    Carousel {
+    Carousel { _ in
         PreviewContent()
     }
     .cellBaseWidth(75)
 }
 
 #Preview("Custom spacing") {
-    Carousel {
+    Carousel { _ in
         PreviewContent()
     }
     .cellSpacing(2)
 }
 
 #Preview("Custom visible portion") {
-    Carousel {
+    Carousel { _ in
         PreviewContent()
     }
     .cellVisiblePortion(0.5)
@@ -113,7 +139,7 @@ extension Carousel {
 #Preview("In a list") {
     List {
         Text("Hello")
-        Carousel {
+        Carousel { _ in
             PreviewContent()
         }
         Text("World!")
