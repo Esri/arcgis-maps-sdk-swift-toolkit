@@ -67,7 +67,8 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***.frame(height: cellSize.height)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***iOS18Implementation remains commented as it contains symbols not available in Xcode 15.4.
+***REMOVED******REMOVED***The iOS 18 implementation is commented as it contains symbols not
+***REMOVED******REMOVED***available in Xcode 15.4.
 ***REMOVED******REMOVED***@available(iOS 18.0, *)
 ***REMOVED******REMOVED***var iOS18Implementation: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
