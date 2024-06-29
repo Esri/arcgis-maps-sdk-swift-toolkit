@@ -37,7 +37,7 @@ struct AttachmentsFeatureElementView: View {
     /// Scrolls an ``AttachmentPreview`` to the front.
     ///
     /// Call this action when a new attachment is added to make it visible to the user.
-    @State private var scrollToFrontAction: (() -> Void)?
+    @State private var scrollToNewAttachmentAction: (() -> Void)?
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
@@ -128,7 +128,7 @@ struct AttachmentsFeatureElementView: View {
                 editControlsDisabled: !isEditable,
                 onRename: onRename,
                 onDelete: onDelete,
-                scrollToFrontAction: $scrollToFrontAction
+                scrollToNewAttachmentAction: $scrollToNewAttachmentAction
             )
         case .auto:
             Group {
@@ -139,7 +139,7 @@ struct AttachmentsFeatureElementView: View {
                         editControlsDisabled: !isEditable,
                         onRename: onRename,
                         onDelete: onDelete,
-                        scrollToFrontAction: $scrollToFrontAction
+                        scrollToNewAttachmentAction: $scrollToNewAttachmentAction
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
@@ -178,7 +178,7 @@ struct AttachmentsFeatureElementView: View {
         models.insert(newModel, at: 0)
         attachmentModelsState = .initialized(models)
         formViewModel.evaluateExpressions()
-        scrollToFrontAction?()
+        scrollToNewAttachmentAction?()
     }
     
     /// Renames the attachment associated with the given model.
