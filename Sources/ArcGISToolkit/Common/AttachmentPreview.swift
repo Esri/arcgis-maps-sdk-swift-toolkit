@@ -33,13 +33,10 @@ struct AttachmentPreview: View {
     @State private var renameDialogueIsShowing = false
     
     /// An action which scrolls the Carousel to the front.
-    @Binding var scrollToFrontAction: (() -> Void)?
+    @Binding var scrollToNewAttachmentAction: (() -> Void)?
     
     /// The models for the attachments displayed in the list.
     let attachmentModels: [AttachmentModel]
-    
-    /// The identifier for the leading item in the Carousel.
-    let carouselFront = UUID()
     
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     let editControlsDisabled: Bool
@@ -59,29 +56,23 @@ struct AttachmentPreview: View {
         editControlsDisabled: Bool = true,
         onRename: ((AttachmentModel, String) -> Void)? = nil,
         onDelete: ((AttachmentModel) -> Void)? = nil,
-        scrollToFrontAction: Binding<(() -> Void)?>
+        scrollToNewAttachmentAction: Binding<(() -> Void)?>
     ) {
         self.attachmentModels = attachmentModels
         self.proposedCellSize = proposedCellSize
         self.editControlsDisabled = editControlsDisabled
         self.onRename = onRename
         self.onDelete = onDelete
-        _scrollToFrontAction = scrollToFrontAction
+        _scrollToNewAttachmentAction = scrollToNewAttachmentAction
     }
     
     var body: some View {
-        Carousel { computedCellSize, scrollViewProxy in
+        Carousel { computedCellSize, scrollToLeftAction in
             Group {
-                EmptyView()
-                    .id(carouselFront)
                 makeCarouselContent(for: computedCellSize)
             }
             .onAppear {
-                scrollToFrontAction = {
-                    withAnimation {
-                        scrollViewProxy.scrollTo(carouselFront, anchor: .leading)
-                    }
-                }
+                scrollToNewAttachmentAction = scrollToLeftAction
             }
         }
         .cellBaseWidth(proposedCellSize.width)

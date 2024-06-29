@@ -21,8 +21,11 @@ struct Carousel<Content: View>: View {
     /// The size of each cell.
     @State private var cellSize = CGSize.zero
     
+    /// The identifier for the leading item in the Carousel.
+    let carouselLeftAnchor = UUID()
+    
     /// The content shown in the Carousel.
-    let content: (_: CGSize, _: ScrollViewProxy) -> Content
+    let content: (_: CGSize, _: (() -> Void)?) -> Content
     
     /// This number is used to compute the final width that allows for a partially visible cell.
     var cellBaseWidth = 120.0
@@ -35,7 +38,7 @@ struct Carousel<Content: View>: View {
     
     /// A horizontally scrolling container to display a set of content.
     /// - Parameter content: A view builder that creates the content of this Carousel.
-    init(@ViewBuilder content: @escaping (_: CGSize, _: ScrollViewProxy) -> Content) {
+    init(@ViewBuilder content: @escaping (_: CGSize, _: (() -> Void)?) -> Content) {
         self.content = content
     }
     
@@ -85,9 +88,15 @@ struct Carousel<Content: View>: View {
     
     func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
         HStack(spacing: cellSpacing) {
-            content(cellSize, scrollViewProxy)
-                .frame(width: cellSize.width, height: cellSize.height)
-                .clipped()
+            EmptyView()
+                .id(carouselLeftAnchor)
+            content(cellSize) {
+                withAnimation {
+                    scrollViewProxy.scrollTo(carouselLeftAnchor, anchor: .leading)
+                }
+            }
+            .frame(width: cellSize.width, height: cellSize.height)
+            .clipped()
         }
     }
 }
@@ -154,23 +163,23 @@ extension Carousel {
     }
 }
 
-#Preview("Using the provided ScrollViewProxy") {
+#Preview("Scroll to left") {
     struct ScrollDemo: View {
-        @State var scrollViewProxy: ScrollViewProxy?
+        @State var scrollToLeftAction: (() -> Void)?
         
         var body: some View {
-            Carousel { _, scrollViewProxy in
+            Carousel { _, scrollToLeftAction in
                 ForEach(1..<11) {
                     Text($0.description)
                         .id($0)
                 }
                 .onAppear {
-                    self.scrollViewProxy = scrollViewProxy
+                    self.scrollToLeftAction = scrollToLeftAction
                 }
             }
             Button("Scroll to 1") {
                 withAnimation {
-                    scrollViewProxy?.scrollTo(1)
+                    scrollToLeftAction?()
                 }
                 
             }
