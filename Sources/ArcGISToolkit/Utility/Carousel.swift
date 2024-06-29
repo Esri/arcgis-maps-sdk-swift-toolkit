@@ -21,8 +21,11 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***/ The size of each cell.
 ***REMOVED***@State private var cellSize = CGSize.zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The identifier for the leading item in the Carousel.
+***REMOVED***let carouselLeftAnchor = UUID()
+***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the Carousel.
-***REMOVED***let content: (_: CGSize, _: ScrollViewProxy) -> Content
+***REMOVED***let content: (_: CGSize, _: (() -> Void)?) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ This number is used to compute the final width that allows for a partially visible cell.
 ***REMOVED***var cellBaseWidth = 120.0
@@ -35,7 +38,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A horizontally scrolling container to display a set of content.
 ***REMOVED******REMOVED***/ - Parameter content: A view builder that creates the content of this Carousel.
-***REMOVED***init(@ViewBuilder content: @escaping (_: CGSize, _: ScrollViewProxy) -> Content) {
+***REMOVED***init(@ViewBuilder content: @escaping (_: CGSize, _: (() -> Void)?) -> Content) {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
@@ -85,9 +88,15 @@ struct Carousel<Content: View>: View {
 ***REMOVED***
 ***REMOVED***func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
 ***REMOVED******REMOVED***HStack(spacing: cellSpacing) {
-***REMOVED******REMOVED******REMOVED***content(cellSize, scrollViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.id(carouselLeftAnchor)
+***REMOVED******REMOVED******REMOVED***content(cellSize) {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy.scrollTo(carouselLeftAnchor, anchor: .leading)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
+***REMOVED******REMOVED******REMOVED***.clipped()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -154,23 +163,23 @@ extension Carousel {
 ***REMOVED***
 ***REMOVED***
 
-#Preview("Using the provided ScrollViewProxy") {
+#Preview("Scroll to left") {
 ***REMOVED***struct ScrollDemo: View {
-***REMOVED******REMOVED***@State var scrollViewProxy: ScrollViewProxy?
+***REMOVED******REMOVED***@State var scrollToLeftAction: (() -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***Carousel { _, scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***Carousel { _, scrollToLeftAction in
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(1..<11) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id($0)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scrollViewProxy = scrollViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scrollToLeftAction = scrollToLeftAction
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Scroll to 1") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy?.scrollTo(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollToLeftAction?()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
