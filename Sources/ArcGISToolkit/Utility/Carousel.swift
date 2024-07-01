@@ -21,8 +21,8 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***/ The size of each cell.
 ***REMOVED***@State private var cellSize = CGSize.zero
 ***REMOVED***
-***REMOVED******REMOVED***/ The identifier for the leading item in the Carousel.
-***REMOVED***let carouselLeftAnchor = UUID()
+***REMOVED******REMOVED***/ The identifier for the Carousel content.
+***REMOVED***let contentIdentifier = UUID()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the Carousel.
 ***REMOVED***let content: (_: CGSize, _: (() -> Void)?) -> Content
@@ -88,13 +88,12 @@ struct Carousel<Content: View>: View {
 ***REMOVED***
 ***REMOVED***func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
 ***REMOVED******REMOVED***HStack(spacing: cellSpacing) {
-***REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.id(carouselLeftAnchor)
 ***REMOVED******REMOVED******REMOVED***content(cellSize) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy.scrollTo(carouselLeftAnchor, anchor: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy.scrollTo(contentIdentifier, anchor: .leading)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.id(contentIdentifier)
 ***REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
 ***REMOVED******REMOVED******REMOVED***.clipped()
 ***REMOVED***
@@ -181,7 +180,6 @@ extension Carousel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollToLeftAction?()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
