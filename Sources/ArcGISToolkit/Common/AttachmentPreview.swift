@@ -39,7 +39,7 @@ struct AttachmentPreview: View {
     private let attachmentModels: [AttachmentModel]
     
     /// A Boolean value which determines if the attachment editing controls should be disabled.
-    private  let editControlsDisabled: Bool
+    private let editControlsDisabled: Bool
     
     /// The action to perform when the attachment is deleted.
     private let onDelete: ((AttachmentModel) -> Void)?
