@@ -17,6 +17,9 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+    /// An action which scrolls the Carousel to the front.
+    @Binding var scrollToNewAttachmentAction: (() -> Void)?
+    
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
     
@@ -32,30 +35,27 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
-    /// An action which scrolls the Carousel to the front.
-    @Binding var scrollToNewAttachmentAction: (() -> Void)?
-    
     /// The models for the attachments displayed in the list.
-    let attachmentModels: [AttachmentModel]
+    private let attachmentModels: [AttachmentModel]
     
     /// A Boolean value which determines if the attachment editing controls should be disabled.
-    let editControlsDisabled: Bool
+    private  let editControlsDisabled: Bool
     
     /// The action to perform when the attachment is deleted.
-    let onDelete: ((AttachmentModel) -> Void)?
+    private let onDelete: ((AttachmentModel) -> Void)?
     
     /// The action to perform when the attachment is renamed.
-    let onRename: ((AttachmentModel, String) -> Void)?
+    private let onRename: ((AttachmentModel, String) -> Void)?
     
     /// The proposed size of each attachment preview cell.
-    let proposedCellSize: CGSize
+    private let proposedCellSize: CGSize
     
     init(
         attachmentModels: [AttachmentModel],
-        proposedCellSize: CGSize,
         editControlsDisabled: Bool = true,
         onRename: ((AttachmentModel, String) -> Void)? = nil,
         onDelete: ((AttachmentModel) -> Void)? = nil,
+        proposedCellSize: CGSize,
         scrollToNewAttachmentAction: Binding<(() -> Void)?>
     ) {
         self.attachmentModels = attachmentModels
