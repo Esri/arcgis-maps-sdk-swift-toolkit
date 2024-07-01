@@ -52,8 +52,8 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
-***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***proposedCellSize: CGSize,
+***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***onRename: ((AttachmentModel, String) -> Void)? = nil,
 ***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil,
 ***REMOVED******REMOVED***scrollToNewAttachmentAction: Binding<(() -> Void)?>
