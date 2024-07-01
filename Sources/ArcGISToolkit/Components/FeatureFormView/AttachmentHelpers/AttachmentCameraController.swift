@@ -63,7 +63,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
             if let videoData = try? Data(contentsOf: videoURL) {
-                parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileName: videoURL.lastPathComponent))
+                parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileExtension: videoURL.pathExtension))
             }
         }
         parent.endCapture()
