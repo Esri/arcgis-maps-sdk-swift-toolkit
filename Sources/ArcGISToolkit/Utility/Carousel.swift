@@ -132,28 +132,28 @@ extension Carousel {
 ***REMOVED***
 ***REMOVED***
 
-#Preview("Custom smaller base width") {
+#Preview("cellBaseWidth(_:)") {
 ***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellBaseWidth(75)
 ***REMOVED***
 
-#Preview("Custom smaller spacing") {
+#Preview("cellSpacing(_:)") {
 ***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellSpacing(2)
 ***REMOVED***
 
-#Preview("Custom larger visible portion (50%)") {
+#Preview("cellVisiblePortion(_:)") {
 ***REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
 ***REMOVED***.cellVisiblePortion(0.5)
 ***REMOVED***
 
-#Preview("In a list") {
+#Preview("In a List") {
 ***REMOVED***List {
 ***REMOVED******REMOVED***Text("Hello")
 ***REMOVED******REMOVED***Carousel { _, _ in
@@ -163,7 +163,7 @@ extension Carousel {
 ***REMOVED***
 ***REMOVED***
 
-#Preview("Scroll to left") {
+#Preview("Scroll to left action") {
 ***REMOVED***struct ScrollDemo: View {
 ***REMOVED******REMOVED***@State var scrollToLeftAction: (() -> Void)?
 ***REMOVED******REMOVED***
