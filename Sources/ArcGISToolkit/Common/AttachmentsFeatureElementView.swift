@@ -124,8 +124,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***case .preview:
 ***REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED***proposedCellSize: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
+***REMOVED******REMOVED******REMOVED******REMOVED***proposedCellSize: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete,
 ***REMOVED******REMOVED******REMOVED******REMOVED***scrollToNewAttachmentAction: $scrollToNewAttachmentAction
@@ -135,8 +135,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedCellSize: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedCellSize: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollToNewAttachmentAction: $scrollToNewAttachmentAction
