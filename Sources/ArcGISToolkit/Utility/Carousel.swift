@@ -132,28 +132,28 @@ extension Carousel {
     }
 }
 
-#Preview("Custom smaller base width") {
+#Preview("cellBaseWidth(_:)") {
     Carousel { _, _ in
         PreviewContent()
     }
     .cellBaseWidth(75)
 }
 
-#Preview("Custom smaller spacing") {
+#Preview("cellSpacing(_:)") {
     Carousel { _, _ in
         PreviewContent()
     }
     .cellSpacing(2)
 }
 
-#Preview("Custom larger visible portion (50%)") {
+#Preview("cellVisiblePortion(_:)") {
     Carousel { _, _ in
         PreviewContent()
     }
     .cellVisiblePortion(0.5)
 }
 
-#Preview("In a list") {
+#Preview("In a List") {
     List {
         Text("Hello")
         Carousel { _, _ in
@@ -163,7 +163,7 @@ extension Carousel {
     }
 }
 
-#Preview("Scroll to left") {
+#Preview("Scroll to left action") {
     struct ScrollDemo: View {
         @State var scrollToLeftAction: (() -> Void)?
         
