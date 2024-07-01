@@ -21,8 +21,8 @@ struct Carousel<Content: View>: View {
     /// The size of each cell.
     @State private var cellSize = CGSize.zero
     
-    /// The identifier for the leading item in the Carousel.
-    let carouselLeftAnchor = UUID()
+    /// The identifier for the Carousel content.
+    let contentIdentifier = UUID()
     
     /// The content shown in the Carousel.
     let content: (_: CGSize, _: (() -> Void)?) -> Content
@@ -88,13 +88,12 @@ struct Carousel<Content: View>: View {
     
     func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
         HStack(spacing: cellSpacing) {
-            EmptyView()
-                .id(carouselLeftAnchor)
             content(cellSize) {
                 withAnimation {
-                    scrollViewProxy.scrollTo(carouselLeftAnchor, anchor: .leading)
+                    scrollViewProxy.scrollTo(contentIdentifier, anchor: .leading)
                 }
             }
+            .id(contentIdentifier)
             .frame(width: cellSize.width, height: cellSize.height)
             .clipped()
         }
@@ -181,7 +180,6 @@ extension Carousel {
                 withAnimation {
                     scrollToLeftAction?()
                 }
-                
             }
         }
     }
