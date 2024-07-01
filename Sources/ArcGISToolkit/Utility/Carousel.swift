@@ -42,7 +42,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Note: The iOS 18 version currently uses the `legacyImplementation` as
+***REMOVED******REMOVED***/ - Note: The iOS 18 version currently uses `legacyImplementation` as
 ***REMOVED******REMOVED***/ `iOS18Implementation` contains symbols not available in Xcode 15.4.
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if #available(iOS 18.0, *) {
