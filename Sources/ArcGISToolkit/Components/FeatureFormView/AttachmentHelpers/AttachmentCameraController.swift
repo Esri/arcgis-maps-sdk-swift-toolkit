@@ -59,7 +59,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
         parent.importState = .importing
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             if let pngData = image.pngData() {
-                parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png"))
+                parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png", fileExtension: "png"))
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
             if let videoData = try? Data(contentsOf: videoURL) {
