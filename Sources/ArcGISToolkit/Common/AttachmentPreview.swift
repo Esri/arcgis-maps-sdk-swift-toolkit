@@ -17,6 +17,9 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+***REMOVED******REMOVED***/ An action which scrolls the Carousel to the front.
+***REMOVED***@Binding var scrollToNewAttachmentAction: (() -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
 ***REMOVED***
@@ -32,30 +35,27 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
-***REMOVED******REMOVED***/ An action which scrolls the Carousel to the front.
-***REMOVED***@Binding var scrollToNewAttachmentAction: (() -> Void)?
-***REMOVED***
 ***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
-***REMOVED***let attachmentModels: [AttachmentModel]
+***REMOVED***private let attachmentModels: [AttachmentModel]
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value which determines if the attachment editing controls should be disabled.
-***REMOVED***let editControlsDisabled: Bool
+***REMOVED***private  let editControlsDisabled: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
-***REMOVED***let onDelete: ((AttachmentModel) -> Void)?
+***REMOVED***private let onDelete: ((AttachmentModel) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
-***REMOVED***let onRename: ((AttachmentModel, String) -> Void)?
+***REMOVED***private let onRename: ((AttachmentModel, String) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proposed size of each attachment preview cell.
-***REMOVED***let proposedCellSize: CGSize
+***REMOVED***private let proposedCellSize: CGSize
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
-***REMOVED******REMOVED***proposedCellSize: CGSize,
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***onRename: ((AttachmentModel, String) -> Void)? = nil,
 ***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil,
+***REMOVED******REMOVED***proposedCellSize: CGSize,
 ***REMOVED******REMOVED***scrollToNewAttachmentAction: Binding<(() -> Void)?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
