@@ -30,9 +30,6 @@ public enum FeatureAttachmentKind {
 ***REMOVED***
 
 public protocol FeatureAttachment: Loadable {
-***REMOVED******REMOVED***/ The MIME content type of the attachment.
-***REMOVED***var contentType: String { get ***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***var featureAttachmentKind: FeatureAttachmentKind { get ***REMOVED***
 ***REMOVED***
@@ -48,8 +45,8 @@ public protocol FeatureAttachment: Loadable {
 ***REMOVED******REMOVED***/ The name of the attachment.
 ***REMOVED***var name: String { get ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The size of the attachment in bytes.
-***REMOVED***var size: Int { get ***REMOVED***
+***REMOVED******REMOVED***/ The size of the attachment.
+***REMOVED***var measuredSize: Measurement<UnitInformationStorage> { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Methods
 ***REMOVED******REMOVED***
