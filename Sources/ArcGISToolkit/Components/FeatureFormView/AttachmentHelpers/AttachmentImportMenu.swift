@@ -68,19 +68,19 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
-***REMOVED***   Button {
-***REMOVED******REMOVED***   if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
-***REMOVED******REMOVED******REMOVED***   cameraIsShowing = true
-   ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***   Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***   let granted = await AVCaptureDevice.requestAccess(for: .video)
-***REMOVED******REMOVED******REMOVED******REMOVED***   if granted {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  cameraIsShowing = true
-***REMOVED******REMOVED***   ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   cameraAccessAlertIsPresented = true
-***REMOVED******REMOVED***   ***REMOVED***
-***REMOVED***   ***REMOVED***
-   ***REMOVED***
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let granted = await AVCaptureDevice.requestAccess(for: .video)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if granted {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraAccessAlertIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
@@ -92,7 +92,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func chooseFromLibraryButton() -> Button<some View> {
-***REMOVED***   Button {
+***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***photoPickerIsPresented = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
@@ -105,7 +105,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func chooseFromFilesButton() -> Button<some View> {
-***REMOVED***   Button {
+***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***fileImporterIsShowing = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
