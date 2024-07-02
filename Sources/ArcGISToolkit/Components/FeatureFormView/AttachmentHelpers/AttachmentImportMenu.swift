@@ -68,19 +68,19 @@ struct AttachmentImportMenu: View {
     }
     
     private func takePhotoOrVideoButton() -> Button<some View> {
-       Button {
-           if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
-               cameraIsShowing = true
-           } else {
-               Task {
-                   let granted = await AVCaptureDevice.requestAccess(for: .video)
-                   if granted {
-                      cameraIsShowing = true
-                   } else {
-                       cameraAccessAlertIsPresented = true
-                   }
-               }
-           }
+        Button {
+            if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                cameraIsShowing = true
+            } else {
+                Task {
+                    let granted = await AVCaptureDevice.requestAccess(for: .video)
+                    if granted {
+                        cameraIsShowing = true
+                    } else {
+                        cameraAccessAlertIsPresented = true
+                    }
+                }
+            }
         } label: {
             Label {
                 Text(cameraButtonLabel)
@@ -92,7 +92,7 @@ struct AttachmentImportMenu: View {
     }
     
     private func chooseFromLibraryButton() -> Button<some View> {
-       Button {
+        Button {
             photoPickerIsPresented = true
         } label: {
             Label {
@@ -105,7 +105,7 @@ struct AttachmentImportMenu: View {
     }
     
     private func chooseFromFilesButton() -> Button<some View> {
-       Button {
+        Button {
             fileImporterIsShowing = true
         } label: {
             Label {
