@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import AVFoundation
 import OSLog
 import SwiftUI
 import UniformTypeIdentifiers
@@ -30,6 +31,9 @@ struct AttachmentImportMenu: View {
         self.element = element
         self.onAdd = onAdd
     }
+    
+    /// A Boolean value indicating whether the camera access alert is presented.
+    @State private var cameraAccessAlertIsPresented = false
     
     /// A Boolean value indicating whether the attachment camera controller is presented.
     @State private var cameraIsShowing = false
@@ -64,8 +68,19 @@ struct AttachmentImportMenu: View {
     }
     
     private func takePhotoOrVideoButton() -> Button<some View> {
-       Button {
-            cameraIsShowing = true
+        Button {
+            if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                cameraIsShowing = true
+            } else {
+                Task {
+                    let granted = await AVCaptureDevice.requestAccess(for: .video)
+                    if granted {
+                        cameraIsShowing = true
+                    } else {
+                        cameraAccessAlertIsPresented = true
+                    }
+                }
+            }
         } label: {
             Label {
                 Text(cameraButtonLabel)
@@ -77,7 +92,7 @@ struct AttachmentImportMenu: View {
     }
     
     private func chooseFromLibraryButton() -> Button<some View> {
-       Button {
+        Button {
             photoPickerIsPresented = true
         } label: {
             Label {
@@ -90,7 +105,7 @@ struct AttachmentImportMenu: View {
     }
     
     private func chooseFromFilesButton() -> Button<some View> {
-       Button {
+        Button {
             fileImporterIsShowing = true
         } label: {
             Label {
@@ -119,6 +134,14 @@ struct AttachmentImportMenu: View {
                 .padding(5)
         }
         .disabled(importState.importInProgress)
+        .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+            Button(String.settings) {
+                Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
+            }
+            Button(String.cancel, role: .cancel) { }
+        } message: {
+            Text(cameraAccessAlertMessage)
+        }
         .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
             Text(importFailureAlertMessage)
         }
@@ -210,6 +233,24 @@ extension URL {
 }
 
 private extension AttachmentImportMenu {
+    /// A message for an alert requesting camera access.
+    var cameraAccessAlertMessage: String {
+        .init(
+            localized: "Please enable camera access in settings.",
+            bundle: .toolkitModule,
+            comment: "A message for an alert requesting camera access."
+        )
+    }
+    
+    /// A title for an alert that camera access is disabled.
+    var cameraAccessAlertTitle: String {
+        .init(
+            localized: "Camera access is disabled",
+            bundle: .toolkitModule,
+            comment: "A title for an alert that camera access is disabled."
+        )
+    }
+    
     /// A label for a button to capture a new photo or video.
     var cameraButtonLabel: String {
         .init(

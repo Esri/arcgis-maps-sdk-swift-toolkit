@@ -31,7 +31,6 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        controller.allowsEditing = true
         controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
         controller.sourceType = .camera
         controller.delegate = context.coordinator
@@ -60,11 +59,11 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
         parent.importState = .importing
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             if let pngData = image.pngData() {
-                parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png"))
+                parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png", fileExtension: "png"))
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
             if let videoData = try? Data(contentsOf: videoURL) {
-                parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileName: videoURL.lastPathComponent))
+                parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileExtension: videoURL.pathExtension))
             }
         }
         parent.endCapture()

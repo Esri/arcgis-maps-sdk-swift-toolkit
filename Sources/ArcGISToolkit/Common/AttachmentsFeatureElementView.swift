@@ -34,6 +34,11 @@ struct AttachmentsFeatureElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
+    /// Scrolls an ``AttachmentPreview`` to the front.
+    ///
+    /// Call this action when a new attachment is added to make it visible to the user.
+    @State private var scrollToNewAttachmentAction: (() -> Void)?
+    
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !isPortraitOrientation
@@ -121,7 +126,9 @@ struct AttachmentsFeatureElementView: View {
                 attachmentModels: attachmentModels,
                 editControlsDisabled: !isEditable,
                 onRename: onRename,
-                onDelete: onDelete
+                onDelete: onDelete,
+                proposedCellSize: thumbnailSize,
+                scrollToNewAttachmentAction: $scrollToNewAttachmentAction
             )
         case .auto:
             Group {
@@ -130,7 +137,9 @@ struct AttachmentsFeatureElementView: View {
                         attachmentModels: attachmentModels,
                         editControlsDisabled: !isEditable,
                         onRename: onRename,
-                        onDelete: onDelete
+                        onDelete: onDelete,
+                        proposedCellSize: thumbnailSize,
+                        scrollToNewAttachmentAction: $scrollToNewAttachmentAction
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
@@ -169,6 +178,7 @@ struct AttachmentsFeatureElementView: View {
         models.insert(newModel, at: 0)
         attachmentModelsState = .initialized(models)
         formViewModel.evaluateExpressions()
+        scrollToNewAttachmentAction?()
     }
     
     /// Renames the attachment associated with the given model.
