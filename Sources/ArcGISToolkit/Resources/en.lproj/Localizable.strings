@@ -42,6 +42,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "Calibration";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "Camera access is disabled";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Cancel";
 
@@ -264,6 +267,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Password Required";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "Please enable camera access in settings.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Please enter a password for the chosen certificate.";
 
@@ -305,6 +311,9 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
+
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "Settings";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
