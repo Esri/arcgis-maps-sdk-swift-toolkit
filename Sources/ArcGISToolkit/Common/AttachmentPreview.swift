@@ -17,8 +17,8 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-    /// The models for the attachments displayed in the list.
-    var attachmentModels: [AttachmentModel]
+    /// An action which scrolls the Carousel to the front.
+    @Binding var scrollToNewAttachmentAction: (() -> Void)?
     
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
@@ -32,65 +32,84 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be renamed.
     @State private var renamedAttachmentModel: AttachmentModel?
     
-    /// The action to perform when the attachment is deleted.
-    let onDelete: ((AttachmentModel) -> Void)?
-    
-    /// The action to perform when the attachment is renamed.
-    let onRename: ((AttachmentModel, String) -> Void)?
-    
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
+    /// The models for the attachments displayed in the list.
+    private let attachmentModels: [AttachmentModel]
+    
     /// A Boolean value which determines if the attachment editing controls should be disabled.
-    let editControlsDisabled: Bool
+    private let editControlsDisabled: Bool
+    
+    /// The action to perform when the attachment is deleted.
+    private let onDelete: ((AttachmentModel) -> Void)?
+    
+    /// The action to perform when the attachment is renamed.
+    private let onRename: ((AttachmentModel, String) -> Void)?
+    
+    /// The proposed size of each attachment preview cell.
+    private let proposedCellSize: CGSize
     
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
         onRename: ((AttachmentModel, String) -> Void)? = nil,
-        onDelete: ((AttachmentModel) -> Void)? = nil
+        onDelete: ((AttachmentModel) -> Void)? = nil,
+        proposedCellSize: CGSize,
+        scrollToNewAttachmentAction: Binding<(() -> Void)?>
     ) {
         self.attachmentModels = attachmentModels
+        self.proposedCellSize = proposedCellSize
+        self.editControlsDisabled = editControlsDisabled
         self.onRename = onRename
         self.onDelete = onDelete
-        self.editControlsDisabled = editControlsDisabled
+        _scrollToNewAttachmentAction = scrollToNewAttachmentAction
     }
     
     var body: some View {
-        ScrollView(.horizontal) {
-            HStack(alignment: .top, spacing: 8) {
-                ForEach(attachmentModels) { attachmentModel in
-                    AttachmentCell(attachmentModel: attachmentModel)
-                        .contextMenu {
-                            if !editControlsDisabled {
-                                Button {
-                                    renamedAttachmentModel = attachmentModel
-                                    renameDialogueIsShowing = true
-                                    if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
-                                        newAttachmentName = String(attachmentModel.name[..<separatorIndex])
-                                    } else {
-                                        newAttachmentName = attachmentModel.name
-                                    }
-                                } label: {
-                                    Label {
-                                        Text(
-                                            "Rename",
-                                            bundle: .toolkitModule,
-                                            comment: "A label for a button to rename an attachment."
-                                        )
-                                    } icon: {
-                                        Image(systemName: "pencil")
-                                    }
-                                }
-                                Button(role: .destructive) {
-                                    deletedAttachmentModel = attachmentModel
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
+        Carousel { computedCellSize, scrollToLeftAction in
+            Group {
+                makeCarouselContent(for: computedCellSize)
+            }
+            .onAppear {
+                scrollToNewAttachmentAction = scrollToLeftAction
+            }
+        }
+        .cellBaseWidth(proposedCellSize.width)
+    }
+    
+    @MainActor
+    func makeCarouselContent(for size: CGSize) -> some View {
+        ForEach(attachmentModels) { attachmentModel in
+            AttachmentCell(attachmentModel: attachmentModel, cellSize: size)
+                .contextMenu {
+                    if !editControlsDisabled {
+                        Button {
+                            renamedAttachmentModel = attachmentModel
+                            renameDialogueIsShowing = true
+                            if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+                                newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+                            } else {
+                                newAttachmentName = attachmentModel.name
+                            }
+                        } label: {
+                            Label {
+                                Text(
+                                    "Rename",
+                                    bundle: .toolkitModule,
+                                    comment: "A label for a button to rename an attachment."
+                                )
+                            } icon: {
+                                Image(systemName: "pencil")
                             }
                         }
+                        Button(role: .destructive) {
+                            deletedAttachmentModel = attachmentModel
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
-            }
         }
         .alert(
             Text(
@@ -138,15 +157,16 @@ struct AttachmentPreview: View {
         /// The url of the the attachment, used to display the attachment via `QuickLook`.
         @State private var url: URL?
         
+        /// The size of the cell.
+        let cellSize: CGSize
+        
         var body: some View {
             VStack(alignment: .center) {
                 ZStack {
                     if attachmentModel.loadStatus != .loading {
                         ThumbnailView(
                             attachmentModel: attachmentModel,
-                            size: attachmentModel.usingSystemImage ?
-                            CGSize(width: 36, height: 36) :
-                                attachmentModel.thumbnailSize
+                            size: attachmentModel.usingSystemImage ? CGSize(width: 36, height: 36) : cellSize
                         )
                         if attachmentModel.loadStatus == .loaded {
                             VStack {
@@ -170,7 +190,7 @@ struct AttachmentPreview: View {
                         .padding([.leading, .trailing], 4)
                     HStack(alignment: .bottom) {
                         Spacer()
-                        Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
+                        Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
                         Image(systemName: "square.and.arrow.down")
                         Spacer()
                     }
@@ -178,7 +198,7 @@ struct AttachmentPreview: View {
                 }
             }
             .font(.caption)
-            .frame(width: 120, height: 120)
+            .frame(width: cellSize.width, height: cellSize.height)
             .background(Color.gray.opacity(0.2))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .onTapGesture {

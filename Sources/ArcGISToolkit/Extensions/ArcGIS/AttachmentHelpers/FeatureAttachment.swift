@@ -30,9 +30,6 @@ public enum FeatureAttachmentKind {
 }
 
 public protocol FeatureAttachment: Loadable {
-    /// The MIME content type of the attachment.
-    var contentType: String { get }
-    
     /// The type of the attachment.
     var featureAttachmentKind: FeatureAttachmentKind { get }
     
@@ -48,8 +45,8 @@ public protocol FeatureAttachment: Loadable {
     /// The name of the attachment.
     var name: String { get }
     
-    /// The size of the attachment in bytes.
-    var size: Int { get }
+    /// The size of the attachment.
+    var measuredSize: Measurement<UnitInformationStorage> { get }
     
     // MARK: Methods
     //

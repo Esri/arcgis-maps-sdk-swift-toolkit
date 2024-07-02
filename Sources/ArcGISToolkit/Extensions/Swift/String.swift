@@ -42,6 +42,15 @@ extension String {
         )
     }
     
+    /// A label for a button to take the user to a contextually inferred settings page.
+    static var settings: String {
+        .init(
+            localized: "Settings",
+            bundle: .toolkitModule,
+            comment: "A label for a button to take the user to a contextually inferred settings page."
+        )
+    }
+    
     /// A localized string for the word "Value".
     static var value: Self {
         .init(
