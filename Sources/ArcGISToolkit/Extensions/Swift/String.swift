@@ -42,6 +42,15 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to take the user to a contextually inferred settings page.
+***REMOVED***static var settings: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Settings",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to take the user to a contextually inferred settings page."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Value".
 ***REMOVED***static var value: Self {
 ***REMOVED******REMOVED***.init(

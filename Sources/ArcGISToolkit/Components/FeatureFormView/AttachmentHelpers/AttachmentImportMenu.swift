@@ -13,6 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import AVFoundation
 import OSLog
 ***REMOVED***
 import UniformTypeIdentifiers
@@ -30,6 +31,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the camera access alert is presented.
+***REMOVED***@State private var cameraAccessAlertIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment camera controller is presented.
 ***REMOVED***@State private var cameraIsShowing = false
@@ -65,7 +69,18 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED***   Button {
-***REMOVED******REMOVED******REMOVED***cameraIsShowing = true
+***REMOVED******REMOVED***   if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+***REMOVED******REMOVED******REMOVED***   cameraIsShowing = true
+   ***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***   Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***   let granted = await AVCaptureDevice.requestAccess(for: .video)
+***REMOVED******REMOVED******REMOVED******REMOVED***   if granted {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  cameraIsShowing = true
+***REMOVED******REMOVED***   ***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   cameraAccessAlertIsPresented = true
+***REMOVED******REMOVED***   ***REMOVED***
+***REMOVED***   ***REMOVED***
+   ***REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
@@ -119,6 +134,14 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(5)
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
+***REMOVED******REMOVED***.alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+***REMOVED******REMOVED******REMOVED***Button(String.settings) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) { ***REMOVED***
+***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text(cameraAccessAlertMessage)
+***REMOVED***
 ***REMOVED******REMOVED***.alert(importFailureAlertTitle, isPresented: errorIsPresented) { ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(importFailureAlertMessage)
 ***REMOVED***
@@ -210,6 +233,24 @@ extension URL {
 ***REMOVED***
 
 private extension AttachmentImportMenu {
+***REMOVED******REMOVED***/ A message for an alert requesting camera access.
+***REMOVED***var cameraAccessAlertMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Please enable camera access in settings.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message for an alert requesting camera access."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A title for an alert that camera access is disabled.
+***REMOVED***var cameraAccessAlertTitle: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Camera access is disabled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A title for an alert that camera access is disabled."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A label for a button to capture a new photo or video.
 ***REMOVED***var cameraButtonLabel: String {
 ***REMOVED******REMOVED***.init(
