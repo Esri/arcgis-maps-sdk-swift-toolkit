@@ -14,10 +14,12 @@
 
 import ArcGIS
 
-extension AttachmentsFormElement : AttachmentsFeatureElement {
+extension AttachmentsFormElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
+    ///
+    /// - Note: Currently, ``AttachmentsFormElement`` only supports
+    /// ``AttachmentsFeatureElementDisplayType/preview``.
     public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
-        // Currently, Attachment Form Elements only support `Preview`.
         AttachmentsFeatureElementDisplayType.preview
     }
     
