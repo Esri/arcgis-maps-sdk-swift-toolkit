@@ -117,6 +117,12 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "elevation";
 
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "Empty attachments cannot be downloaded.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "Empty files are not supported.";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
