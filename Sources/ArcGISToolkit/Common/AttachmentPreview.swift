@@ -154,6 +154,9 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***/ The model representing the attachment to display.
 ***REMOVED******REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the download alert is presented.
+***REMOVED******REMOVED***@State private var downloadAlertIsPresented = false
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
 ***REMOVED******REMOVED***@State private var url: URL?
 ***REMOVED******REMOVED***
@@ -205,12 +208,17 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
+***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.measuredSize.value.isZero {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***downloadAlertIsPresented = true
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
+***REMOVED******REMOVED******REMOVED***.alert(isPresented: $downloadAlertIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Alert(title: Text.emptyAttachmentDownloadErrorMessage)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
