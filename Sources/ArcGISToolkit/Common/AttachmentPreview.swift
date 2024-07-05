@@ -154,6 +154,9 @@ struct AttachmentPreview: View {
         /// The model representing the attachment to display.
         @ObservedObject var attachmentModel: AttachmentModel
         
+        /// A Boolean value indicating whether the download alert is presented.
+        @State private var downloadAlertIsPresented = false
+        
         /// The url of the the attachment, used to display the attachment via `QuickLook`.
         @State private var url: URL?
         
@@ -205,12 +208,17 @@ struct AttachmentPreview: View {
                 if attachmentModel.attachment.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
+                } else if attachmentModel.attachment.measuredSize.value.isZero {
+                    downloadAlertIsPresented = true
                 } else if attachmentModel.attachment.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
                     attachmentModel.load()
                 }
             }
             .quickLookPreview($url)
+            .alert(isPresented: $downloadAlertIsPresented) {
+                Alert(title: Text.emptyAttachmentDownloadErrorMessage)
+            }
         }
     }
 }
