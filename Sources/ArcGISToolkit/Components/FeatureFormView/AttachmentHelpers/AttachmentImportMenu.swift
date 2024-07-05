@@ -160,6 +160,10 @@ struct AttachmentImportMenu: View {
                 importState = .errored(.sizeLimitExceeded)
                 return
             }
+            guard attachmentSize.value > .zero else {
+                importState = .errored(.emptyFilesNotSupported)
+                return
+            }
             
             defer { importState = .none }
             let fileName: String
@@ -260,6 +264,15 @@ private extension AttachmentImportMenu {
         )
     }
     
+    /// An error message indicating the selected attachment is an empty file and not supported.
+    var emptyFilesNotSupportedAlertMessage: String {
+        .init(
+            localized: "Empty files are not supported.",
+            bundle: .toolkitModule,
+            comment: "An error message indicating the selected attachment is an empty file and not supported."
+        )
+    }
+    
     /// A label for a button to choose an file from the user's files.
     var filesButtonLabel: String {
         .init(
@@ -285,6 +298,8 @@ private extension AttachmentImportMenu {
     var importFailureAlertMessage: String {
         guard case .errored(let attachmentImportError) = importState else { return "" }
         return switch attachmentImportError {
+        case .emptyFilesNotSupported:
+            emptyFilesNotSupportedAlertMessage
         case .sizeLimitExceeded:
             sizeLimitExceededImportFailureAlertMessage
         default:
