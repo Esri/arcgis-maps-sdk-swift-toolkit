@@ -160,6 +160,10 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.sizeLimitExceeded)
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard attachmentSize.value > .zero else {
+***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.emptyFilesNotSupported)
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***defer { importState = .none ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***let fileName: String
@@ -260,6 +264,15 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ An error message indicating the selected attachment is an empty file and not supported.
+***REMOVED***var emptyFilesNotSupportedAlertMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Empty files are not supported.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message indicating the selected attachment is an empty file and not supported."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A label for a button to choose an file from the user's files.
 ***REMOVED***var filesButtonLabel: String {
 ***REMOVED******REMOVED***.init(
@@ -285,6 +298,8 @@ private extension AttachmentImportMenu {
 ***REMOVED***var importFailureAlertMessage: String {
 ***REMOVED******REMOVED***guard case .errored(let attachmentImportError) = importState else { return "" ***REMOVED***
 ***REMOVED******REMOVED***return switch attachmentImportError {
+***REMOVED******REMOVED***case .emptyFilesNotSupported:
+***REMOVED******REMOVED******REMOVED***emptyFilesNotSupportedAlertMessage
 ***REMOVED******REMOVED***case .sizeLimitExceeded:
 ***REMOVED******REMOVED******REMOVED***sizeLimitExceededImportFailureAlertMessage
 ***REMOVED******REMOVED***default:
