@@ -13,7 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
+import OSLog
 import QuickLook
 ***REMOVED***
 
@@ -86,7 +86,11 @@ import QuickLook
 ***REMOVED***func load() {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
-***REMOVED******REMOVED******REMOVED***try await attachment.load()
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await attachment.load()
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription)")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***sync()
 ***REMOVED******REMOVED******REMOVED***if loadStatus == .failed || attachment.fileURL == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
