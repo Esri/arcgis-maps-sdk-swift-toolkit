@@ -91,8 +91,12 @@ public struct FeatureFormView: View {
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
-                        if let attachmentElement = model.featureForm.defaultAttachmentsElement {
-                            makeElement(attachmentElement)
+                        if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+                            // The Toolkit currently only supports AttachmentsFormElements via the
+                            // default attachments element. Once AttachmentsFormElements can be authored
+                            // this can call makeElement(_:) instead and makeElement(_:) should have a
+                            // case added for AttachmentsFormElement.
+                            AttachmentsFeatureElementView(featureElement: attachmentsElement)
                         }
                     }
                 }
@@ -121,8 +125,6 @@ extension FeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
-        case let attachmentsElement as AttachmentsFormElement:
-            AttachmentsFeatureElementView(featureElement: attachmentsElement)
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
