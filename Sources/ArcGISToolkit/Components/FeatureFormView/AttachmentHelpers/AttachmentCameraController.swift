@@ -13,6 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import UniformTypeIdentifiers
 
 ***REMOVED***/ A UIImagePickerController wrapper to provide a native photo capture experience.
 struct AttachmentCameraController: UIViewControllerRepresentable {
@@ -59,11 +60,12 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 ***REMOVED******REMOVED***parent.importState = .importing
 ***REMOVED******REMOVED***if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
 ***REMOVED******REMOVED******REMOVED***if let pngData = image.pngData() {
-***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png", fileExtension: "png"))
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(contentType: .png, data: pngData))
 ***REMOVED******REMOVED***
 ***REMOVED*** else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-***REMOVED******REMOVED******REMOVED***if let videoData = try? Data(contentsOf: videoURL) {
-***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileExtension: videoURL.pathExtension))
+***REMOVED******REMOVED******REMOVED***if let contentType = UTType(filenameExtension: videoURL.pathExtension),
+***REMOVED******REMOVED******REMOVED***   let videoData = try? Data(contentsOf: videoURL) {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(contentType: contentType, data: videoData))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***parent.endCapture()

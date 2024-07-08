@@ -13,13 +13,12 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import OSLog
 ***REMOVED***
+import UniformTypeIdentifiers
 
 ***REMOVED***/ Data used to create the attachment.
 struct AttachmentImportData: Equatable {
+***REMOVED***let contentType: UTType
 ***REMOVED***let data: Data
-***REMOVED***let contentType: String
 ***REMOVED***var fileName: String? = nil
-***REMOVED***var fileExtension: String? = nil
 ***REMOVED***
