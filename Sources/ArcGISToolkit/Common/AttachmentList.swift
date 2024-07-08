@@ -100,8 +100,6 @@ struct AttachmentLoadButton: View  {
             .frame(width: 24, height: 24)
             .padding(.leading)
         }
-        .alert(isPresented: $downloadAlertIsPresented) {
-            Alert(title: Text.emptyAttachmentDownloadErrorMessage)
-        }
+        .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
     }
 }

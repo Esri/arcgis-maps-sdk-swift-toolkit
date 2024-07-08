@@ -216,9 +216,7 @@ struct AttachmentPreview: View {
                 }
             }
             .quickLookPreview($url)
-            .alert(isPresented: $downloadAlertIsPresented) {
-                Alert(title: Text.emptyAttachmentDownloadErrorMessage)
-            }
+            .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
         }
     }
 }
