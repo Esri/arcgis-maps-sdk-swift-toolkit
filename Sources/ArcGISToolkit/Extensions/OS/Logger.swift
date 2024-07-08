@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// The possible errors when importing an attachment.
-enum AttachmentImportError: Error, Equatable {
-    case dataInaccessible
-    case emptyFilesNotSupported
-    case sizeLimitExceeded
-    case system(String)
+import OSLog
+
+extension Logger {
+    /// A logger for the common `AttachmentsFeatureElementView` view.
+    static let attachmentsFeatureElementView: Logger = {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "AttachmentsFeatureElementView")
+    }()
 }
