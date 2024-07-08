@@ -22,7 +22,7 @@ struct Carousel<Content: View>: View {
     @State private var cellSize = CGSize.zero
     
     /// The identifier for the Carousel content.
-    let contentIdentifier = UUID()
+    @State private var contentIdentifier = UUID()
     
     /// The content shown in the Carousel.
     let content: (_: CGSize, _: (() -> Void)?) -> Content
