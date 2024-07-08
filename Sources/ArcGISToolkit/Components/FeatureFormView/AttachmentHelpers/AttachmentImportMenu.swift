@@ -149,8 +149,7 @@ struct AttachmentImportMenu: View {
         .menuStyle(.borderlessButton)
 #endif
         .task(id: importState) {
-            guard case let .finalizing(newAttachmentImportData) = importState,
-                  let attachments = try? await element.attachments else { return }
+            guard case let .finalizing(newAttachmentImportData) = importState else { return }
             
             let attachmentSize = Measurement(
                 value: Double(newAttachmentImportData.data.count),
@@ -170,17 +169,15 @@ struct AttachmentImportMenu: View {
             if let presetFileName = newAttachmentImportData.fileName {
                 fileName = presetFileName
             } else {
-                let attachmentNumber = attachments.count + 1
-                if let fileExtension = newAttachmentImportData.fileExtension {
-                    fileName = "Attachment \(attachmentNumber).\(fileExtension)"
-                } else {
-                    fileName = "Attachment \(attachmentNumber)"
+                do {
+                    fileName = try await element.makeDefaultName(contentType: newAttachmentImportData.contentType)
+                } catch {
+                    fileName = "Unnamed Attachment"
                 }
             }
             let newAttachment = element.addAttachment(
-                // Can this be better? What does legacy do?
                 name: fileName,
-                contentType: newAttachmentImportData.contentType,
+                contentType: newAttachmentImportData.contentType.preferredMIMEType ?? "application/octet-stream",
                 data: newAttachmentImportData.data
             )
             onAdd?(newAttachment)
@@ -191,14 +188,9 @@ struct AttachmentImportMenu: View {
             case .success(let url):
                 // gain access to the url resource and verify there's data.
                 if url.startAccessingSecurityScopedResource(),
+                   let contentType = url.contentType,
                    let data = FileManager.default.contents(atPath: url.path) {
-                    importState = .finalizing(
-                        AttachmentImportData(
-                            data: data,
-                            contentType: url.mimeType(),
-                            fileName: url.lastPathComponent
-                        )
-                    )
+                    importState = .finalizing(AttachmentImportData(contentType: contentType, data: data, fileName: url.lastPathComponent))
                 } else {
                     importState = .errored(.dataInaccessible)
                 }
@@ -220,19 +212,6 @@ struct AttachmentImportMenu: View {
                 photoPickerIsPresented: $photoPickerIsPresented
             )
         )
-    }
-}
-
-extension URL {
-    /// The Mime type based on the path extension.
-    /// - Returns: The Mime type string.
-    public func mimeType() -> String {
-        if let mimeType = UTType(filenameExtension: self.pathExtension)?.preferredMIMEType {
-            return mimeType
-        }
-        else {
-            return "application/octet-stream"
-        }
     }
 }
 
@@ -335,5 +314,43 @@ private extension AttachmentImportMenu {
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )
+    }
+}
+
+private extension AttachmentsFormElement {
+    /// Creates a unique name for a new attachments with a file extension.
+    /// - Parameter contentType: The kind of attachment to generate a name for.
+    /// - Returns: A unique name for an attachment.
+    func makeDefaultName(contentType: UTType) async throws -> String {
+        let currentAttachments = try await attachments
+        let root = (contentType.preferredMIMEType?.components(separatedBy: "/").first ?? "Attachment").capitalized
+        var count = currentAttachments.filter { $0.contentType == contentType }.count
+        var baseName: String
+        repeat {
+            count += 1
+            baseName = "\(root)\(count)"
+        } while( currentAttachments.filter { $0.name.removingFileExtension == baseName }.count > 0 )
+        if let fileExtension = contentType.preferredFilenameExtension {
+            return "\(baseName).\(fileExtension)"
+        } else {
+            return baseName
+        }
+    }
+}
+
+private extension String {
+    /// A filename with the extension remove.
+    ///
+    /// For example, "Photo.png" is returned as "Photo"
+    var removingFileExtension: String {
+        let index = self.lastIndex(of: ".") ?? self.endIndex
+        return String(self.prefix(upTo: index))
+    }
+}
+
+private extension URL {
+    /// The type of data at the URL.
+    var contentType: UTType? {
+        UTType(filenameExtension: self.pathExtension)
     }
 }
