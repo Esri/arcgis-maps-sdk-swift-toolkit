@@ -339,7 +339,7 @@ private extension AttachmentsFormElement {
 }
 
 private extension String {
-    /// A filename with the extension remove.
+    /// A filename with the extension removed.
     ///
     /// For example, "Photo.png" is returned as "Photo"
     var removingFileExtension: String {
