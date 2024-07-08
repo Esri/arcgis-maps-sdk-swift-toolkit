@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
+import OSLog
 import QuickLook
 import SwiftUI
 
@@ -86,7 +86,11 @@ import SwiftUI
     func load() {
         Task {
             loadStatus = .loading
-            try await attachment.load()
+            do {
+                try await attachment.load()
+            } catch {
+                Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription)")
+            }
             sync()
             if loadStatus == .failed || attachment.fileURL == nil {
                 systemImageName = "exclamationmark.circle.fill"
