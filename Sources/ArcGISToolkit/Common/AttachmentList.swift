@@ -100,8 +100,6 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED******REMOVED***.frame(width: 24, height: 24)
 ***REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED***
-***REMOVED******REMOVED***.alert(isPresented: $downloadAlertIsPresented) {
-***REMOVED******REMOVED******REMOVED***Alert(title: Text.emptyAttachmentDownloadErrorMessage)
-***REMOVED***
+***REMOVED******REMOVED***.alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
