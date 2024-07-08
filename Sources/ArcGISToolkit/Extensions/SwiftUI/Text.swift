@@ -24,6 +24,15 @@ extension Text {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
+***REMOVED***static var emptyAttachmentDownloadErrorMessage: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Empty attachments cannot be downloaded.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining attachments with empty files (0 bytes) cannot be downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Localized text for the word "Required".
 ***REMOVED***static var required: Self {
 ***REMOVED******REMOVED***Text(

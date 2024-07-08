@@ -12,10 +12,11 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***/ The possible errors when importing an attachment.
-enum AttachmentImportError: Error, Equatable {
-***REMOVED***case dataInaccessible
-***REMOVED***case emptyFilesNotSupported
-***REMOVED***case sizeLimitExceeded
-***REMOVED***case system(String)
+import OSLog
+
+extension Logger {
+***REMOVED******REMOVED***/ A logger for the common `AttachmentsFeatureElementView` view.
+***REMOVED***static let attachmentsFeatureElementView: Logger = {
+***REMOVED******REMOVED***Logger(subsystem: Bundle.toolkitIdentifier, category: "AttachmentsFeatureElementView")
+***REMOVED***()
 ***REMOVED***
