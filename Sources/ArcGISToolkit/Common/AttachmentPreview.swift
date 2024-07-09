@@ -216,9 +216,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
-***REMOVED******REMOVED******REMOVED***.alert(isPresented: $downloadAlertIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Alert(title: Text.emptyAttachmentDownloadErrorMessage)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

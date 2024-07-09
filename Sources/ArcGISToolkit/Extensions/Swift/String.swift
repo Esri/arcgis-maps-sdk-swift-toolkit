@@ -24,6 +24,15 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
+***REMOVED***static var emptyAttachmentDownloadErrorMessage: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Empty attachments cannot be downloaded.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining attachments with empty files (0 bytes) cannot be downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Field".
 ***REMOVED***static var field: Self {
 ***REMOVED******REMOVED***.init(
