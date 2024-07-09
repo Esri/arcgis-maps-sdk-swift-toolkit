@@ -176,7 +176,7 @@ struct AttachmentsFeatureElementView: View {
         )
         newModel.load()
         models.insert(newModel, at: 0)
-        attachmentModelsState = .initialized(models)
+        withAnimation { attachmentModelsState = .initialized(models) }
         formViewModel.evaluateExpressions()
         scrollToNewAttachmentAction?()
     }
@@ -189,7 +189,7 @@ struct AttachmentsFeatureElementView: View {
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
-            attachmentModel.sync()
+            withAnimation { attachmentModel.sync() }
             formViewModel.evaluateExpressions()
         }
     }
@@ -204,7 +204,7 @@ struct AttachmentsFeatureElementView: View {
             element.delete(attachment)
             guard case .initialized(var models) = attachmentModelsState else { return }
             models.removeAll { $0 == attachmentModel }
-            attachmentModelsState = .initialized(models)
+            withAnimation { attachmentModelsState = .initialized(models) }
             formViewModel.evaluateExpressions()
         }
     }
