@@ -329,7 +329,7 @@ private extension AttachmentsFormElement {
         repeat {
             count += 1
             baseName = "\(root)\(count)"
-        } while( currentAttachments.filter { $0.name.removingFileExtension == baseName }.count > 0 )
+        } while( currentAttachments.filter { $0.name.deletingPathExtension == baseName }.count > 0 )
         if let fileExtension = contentType.preferredFilenameExtension {
             return "\(baseName).\(fileExtension)"
         } else {
@@ -342,9 +342,8 @@ private extension String {
     /// A filename with the extension removed.
     ///
     /// For example, "Photo.png" is returned as "Photo"
-    var removingFileExtension: String {
-        let index = self.lastIndex(of: ".") ?? self.endIndex
-        return String(self.prefix(upTo: index))
+    var deletingPathExtension: String {
+        (self as NSString).deletingPathExtension
     }
 }
 
