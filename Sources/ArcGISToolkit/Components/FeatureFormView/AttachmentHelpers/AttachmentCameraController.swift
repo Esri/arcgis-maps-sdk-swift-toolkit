@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// A UIImagePickerController wrapper to provide a native photo capture experience.
 struct AttachmentCameraController: UIViewControllerRepresentable {
@@ -59,11 +60,12 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
         parent.importState = .importing
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             if let pngData = image.pngData() {
-                parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png", fileExtension: "png"))
+                parent.importState = .finalizing(AttachmentImportData(contentType: .png, data: pngData))
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-            if let videoData = try? Data(contentsOf: videoURL) {
-                parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileExtension: videoURL.pathExtension))
+            if let contentType = UTType(filenameExtension: videoURL.pathExtension),
+               let videoData = try? Data(contentsOf: videoURL) {
+                parent.importState = .finalizing(AttachmentImportData(contentType: contentType, data: videoData))
             }
         }
         parent.endCapture()
