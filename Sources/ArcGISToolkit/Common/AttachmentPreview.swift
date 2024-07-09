@@ -184,7 +184,6 @@ struct AttachmentPreview: View {
                     } else {
                         ProgressView()
                             .padding(8)
-                            .background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
                     }
                 }
                 if attachmentModel.attachment.loadStatus != .loaded {
