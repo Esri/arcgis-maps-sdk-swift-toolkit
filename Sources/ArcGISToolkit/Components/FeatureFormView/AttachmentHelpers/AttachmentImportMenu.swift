@@ -329,7 +329,7 @@ private extension AttachmentsFormElement {
 ***REMOVED******REMOVED***repeat {
 ***REMOVED******REMOVED******REMOVED***count += 1
 ***REMOVED******REMOVED******REMOVED***baseName = "\(root)\(count)"
-***REMOVED*** while( currentAttachments.filter { $0.name.removingFileExtension == baseName ***REMOVED***.count > 0 )
+***REMOVED*** while( currentAttachments.filter { $0.name.deletingPathExtension == baseName ***REMOVED***.count > 0 )
 ***REMOVED******REMOVED***if let fileExtension = contentType.preferredFilenameExtension {
 ***REMOVED******REMOVED******REMOVED***return "\(baseName).\(fileExtension)"
 ***REMOVED*** else {
@@ -342,9 +342,8 @@ private extension String {
 ***REMOVED******REMOVED***/ A filename with the extension removed.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ For example, "Photo.png" is returned as "Photo"
-***REMOVED***var removingFileExtension: String {
-***REMOVED******REMOVED***let index = self.lastIndex(of: ".") ?? self.endIndex
-***REMOVED******REMOVED***return String(self.prefix(upTo: index))
+***REMOVED***var deletingPathExtension: String {
+***REMOVED******REMOVED***(self as NSString).deletingPathExtension
 ***REMOVED***
 ***REMOVED***
 
