@@ -149,8 +149,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***.menuStyle(.borderlessButton)
 #endif
 ***REMOVED******REMOVED***.task(id: importState) {
-***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = importState,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let attachments = try? await element.attachments else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = importState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let attachmentSize = Measurement(
 ***REMOVED******REMOVED******REMOVED******REMOVED***value: Double(newAttachmentImportData.data.count),
@@ -170,17 +169,15 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fileName = presetFileName
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***let attachmentNumber = attachments.count + 1
-***REMOVED******REMOVED******REMOVED******REMOVED***if let fileExtension = newAttachmentImportData.fileExtension {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber).\(fileExtension)"
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber)"
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = try await element.makeDefaultName(contentType: newAttachmentImportData.contentType)
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Unnamed Attachment"
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let newAttachment = element.addAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
 ***REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
-***REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType,
+***REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType.preferredMIMEType ?? "application/octet-stream",
 ***REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***onAdd?(newAttachment)
@@ -191,14 +188,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***case .success(let url):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** gain access to the url resource and verify there's data.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if url.startAccessingSecurityScopedResource(),
+***REMOVED******REMOVED******REMOVED******REMOVED***   let contentType = url.contentType,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let data = FileManager.default.contents(atPath: url.path) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .finalizing(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportData(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: url.mimeType(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName: url.lastPathComponent
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .finalizing(AttachmentImportData(contentType: contentType, data: data, fileName: url.lastPathComponent))
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.dataInaccessible)
 ***REMOVED******REMOVED******REMOVED***
@@ -220,19 +212,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsPresented: $photoPickerIsPresented
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
-extension URL {
-***REMOVED******REMOVED***/ The Mime type based on the path extension.
-***REMOVED******REMOVED***/ - Returns: The Mime type string.
-***REMOVED***public func mimeType() -> String {
-***REMOVED******REMOVED***if let mimeType = UTType(filenameExtension: self.pathExtension)?.preferredMIMEType {
-***REMOVED******REMOVED******REMOVED***return mimeType
-***REMOVED***
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***return "application/octet-stream"
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -335,5 +314,42 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message indicating the selected attachment exceeds the megabyte limit."
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private extension AttachmentsFormElement {
+***REMOVED******REMOVED***/ Creates a unique name for a new attachments with a file extension.
+***REMOVED******REMOVED***/ - Parameter contentType: The kind of attachment to generate a name for.
+***REMOVED******REMOVED***/ - Returns: A unique name for an attachment.
+***REMOVED***func makeDefaultName(contentType: UTType) async throws -> String {
+***REMOVED******REMOVED***let currentAttachments = try await attachments
+***REMOVED******REMOVED***let root = (contentType.preferredMIMEType?.components(separatedBy: "/").first ?? "Attachment").capitalized
+***REMOVED******REMOVED***var count = currentAttachments.filter { $0.contentType == contentType ***REMOVED***.count
+***REMOVED******REMOVED***var baseName: String
+***REMOVED******REMOVED***repeat {
+***REMOVED******REMOVED******REMOVED***count += 1
+***REMOVED******REMOVED******REMOVED***baseName = "\(root)\(count)"
+***REMOVED*** while( currentAttachments.filter { $0.name.deletingPathExtension == baseName ***REMOVED***.count > 0 )
+***REMOVED******REMOVED***if let fileExtension = contentType.preferredFilenameExtension {
+***REMOVED******REMOVED******REMOVED***return "\(baseName).\(fileExtension)"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return baseName
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED******REMOVED***/ A filename with the extension removed.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ For example, "Photo.png" is returned as "Photo"
+***REMOVED***var deletingPathExtension: String {
+***REMOVED******REMOVED***(self as NSString).deletingPathExtension
+***REMOVED***
+***REMOVED***
+
+private extension URL {
+***REMOVED******REMOVED***/ The type of data at the URL.
+***REMOVED***var contentType: UTType? {
+***REMOVED******REMOVED***UTType(filenameExtension: self.pathExtension)
 ***REMOVED***
 ***REMOVED***
