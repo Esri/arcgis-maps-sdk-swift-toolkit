@@ -104,7 +104,7 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
-***REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { self.thumbnail = thumbnail.uiImage ***REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED***
