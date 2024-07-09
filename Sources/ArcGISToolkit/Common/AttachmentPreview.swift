@@ -171,7 +171,8 @@ struct AttachmentPreview: View {
                             attachmentModel: attachmentModel,
                             size: attachmentModel.usingSystemImage ? CGSize(width: 36, height: 36) : cellSize
                         )
-                        if attachmentModel.loadStatus == .loaded {
+                        if attachmentModel.loadStatus == .loaded ||
+                            attachmentModel.loadStatus == .failed {
                             VStack {
                                 Spacer()
                                 ThumbnailViewFooter(
