@@ -70,6 +70,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***Carousel { computedCellSize, scrollToLeftAction in
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeCarouselContent(for: computedCellSize)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.asymmetric(insertion: .move(edge: .top), removal: .scale))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***scrollToNewAttachmentAction = scrollToLeftAction

@@ -176,7 +176,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
-***REMOVED******REMOVED***attachmentModelsState = .initialized(models)
+***REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
 ***REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***scrollToNewAttachmentAction?()
 ***REMOVED***
@@ -189,7 +189,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
 ***REMOVED******REMOVED***if let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
-***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
+***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModel.sync() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
@@ -204,7 +204,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***element.delete(attachment)
 ***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(models)
+***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
