@@ -70,6 +70,7 @@ struct AttachmentPreview: View {
         Carousel { computedCellSize, scrollToLeftAction in
             Group {
                 makeCarouselContent(for: computedCellSize)
+                    .transition(.asymmetric(insertion: .move(edge: .top), removal: .scale))
             }
             .onAppear {
                 scrollToNewAttachmentAction = scrollToLeftAction
