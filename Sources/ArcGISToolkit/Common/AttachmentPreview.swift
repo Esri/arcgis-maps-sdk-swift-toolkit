@@ -70,6 +70,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***Carousel { computedCellSize, scrollToLeftAction in
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeCarouselContent(for: computedCellSize)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.asymmetric(insertion: .slide, removal: .scale))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***scrollToNewAttachmentAction = scrollToLeftAction
@@ -183,7 +184,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus != .loaded {
