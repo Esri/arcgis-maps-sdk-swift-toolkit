@@ -86,16 +86,16 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to this feature will be lost.")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** swiftlint:disable vertical_parameter_alignment_on_call
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"The form wasn't submitted",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: model.alertIsPresented
-***REMOVED******REMOVED******REMOVED******REMOVED***) { ***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** No actions.
+***REMOVED******REMOVED******REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case let .generalError(_, errorMessage) = model.state {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errorMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** swiftlint:enable vertical_parameter_alignment_on_call
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch model.state {

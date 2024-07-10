@@ -67,17 +67,12 @@ import QuickLook
 ***REMOVED******REMOVED***self.name = attachment.name
 ***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
-***REMOVED******REMOVED***case .image:
-***REMOVED******REMOVED******REMOVED***systemImageName = "photo"
-***REMOVED******REMOVED***case .video:
-***REMOVED******REMOVED******REMOVED***systemImageName = "film"
-***REMOVED******REMOVED***case .audio:
-***REMOVED******REMOVED******REMOVED***systemImageName = "waveform"
-***REMOVED******REMOVED***case .document, .other:
-***REMOVED******REMOVED******REMOVED***systemImageName = "doc"
-***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***systemImageName = "questionmark"
+***REMOVED******REMOVED***systemImageName = switch attachment.featureAttachmentKind {
+***REMOVED******REMOVED***case .image: "photo"
+***REMOVED******REMOVED***case .video: "film"
+***REMOVED******REMOVED***case .audio: "waveform"
+***REMOVED******REMOVED***case .document: "doc"
+***REMOVED******REMOVED***case .other: "questionmark"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -27,7 +27,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
 ***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
 ***REMOVED******REMOVED***/ - Parameter onAdd: The action to perform when an attachment is added.
-***REMOVED***init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) -> Void)? = nil) {
+***REMOVED***init(element: AttachmentsFormElement, onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
@@ -54,7 +54,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when an attachment is added.
-***REMOVED***let onAdd: ((FeatureAttachment) -> Void)?
+***REMOVED***let onAdd: (@MainActor (FeatureAttachment) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the error alert is presented.
 ***REMOVED***var errorIsPresented: Binding<Bool> {

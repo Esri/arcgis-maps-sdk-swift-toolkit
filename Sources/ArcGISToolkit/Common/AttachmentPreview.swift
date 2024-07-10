@@ -42,10 +42,10 @@ struct AttachmentPreview: View {
 ***REMOVED***private let editControlsDisabled: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
-***REMOVED***private let onDelete: ((AttachmentModel) -> Void)?
+***REMOVED***private let onDelete: (@MainActor (AttachmentModel) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
-***REMOVED***private let onRename: ((AttachmentModel, String) -> Void)?
+***REMOVED***private let onRename: (@MainActor (AttachmentModel, String) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proposed size of each attachment preview cell.
 ***REMOVED***private let proposedCellSize: CGSize
@@ -53,8 +53,8 @@ struct AttachmentPreview: View {
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
-***REMOVED******REMOVED***onRename: ((AttachmentModel, String) -> Void)? = nil,
-***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil,
+***REMOVED******REMOVED***onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
+***REMOVED******REMOVED***onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
 ***REMOVED******REMOVED***proposedCellSize: CGSize,
 ***REMOVED******REMOVED***scrollToNewAttachmentAction: Binding<(() -> Void)?>
 ***REMOVED***) {
