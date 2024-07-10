@@ -46,13 +46,11 @@ extension AttachmentsFeatureElementDisplayType {
     /// Creates a display type from an attachment popup element's display type.
     /// - Parameter kind: The display type of the popup element.
     init(kind: AttachmentsPopupElement.DisplayType) {
-        switch kind {
-        case .list:
-            self = .list
-        case .preview:
-            self = .preview
-        case .auto:
-            self = .auto
+        self = switch kind {
+        case .list: .list
+        case .preview: .preview
+        case .auto: .auto
+        @unknown default: fatalError("Unknown case")
         }
     }
 }

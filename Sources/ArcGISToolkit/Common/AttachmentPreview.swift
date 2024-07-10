@@ -42,10 +42,10 @@ struct AttachmentPreview: View {
     private let editControlsDisabled: Bool
     
     /// The action to perform when the attachment is deleted.
-    private let onDelete: ((AttachmentModel) -> Void)?
+    private let onDelete: (@MainActor (AttachmentModel) -> Void)?
     
     /// The action to perform when the attachment is renamed.
-    private let onRename: ((AttachmentModel, String) -> Void)?
+    private let onRename: (@MainActor (AttachmentModel, String) -> Void)?
     
     /// The proposed size of each attachment preview cell.
     private let proposedCellSize: CGSize
@@ -53,8 +53,8 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
-        onRename: ((AttachmentModel, String) -> Void)? = nil,
-        onDelete: ((AttachmentModel) -> Void)? = nil,
+        onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
+        onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
         proposedCellSize: CGSize,
         scrollToNewAttachmentAction: Binding<(() -> Void)?>
     ) {

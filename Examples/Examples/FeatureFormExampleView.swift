@@ -86,16 +86,16 @@ struct FeatureFormExampleView: View {
                 } message: {
                     Text("Updates to this feature will be lost.")
                 }
-                // swiftlint:disable vertical_parameter_alignment_on_call
                 .alert(
                     "The form wasn't submitted",
                     isPresented: model.alertIsPresented
-                ) { } message: {
+                ) {
+                    // No actions.
+                } message: {
                     if case let .generalError(_, errorMessage) = model.state {
                         errorMessage
                     }
                 }
-                // swiftlint:enable vertical_parameter_alignment_on_call
                 .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
                 .overlay {
                     switch model.state {
