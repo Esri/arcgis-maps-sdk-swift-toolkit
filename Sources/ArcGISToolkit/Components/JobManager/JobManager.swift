@@ -44,7 +44,7 @@ import UIKit
 /// serialized when an app is backgrounded so that if the app is terminated the jobs can be
 /// rehydrated upon relaunch of the app.
 ///
-/// Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quit it),
+/// Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quits it),
 /// the system interprets this as a strong indication that the app should
 /// do no more work in the background. The consequences of this are two-fold for jobs.
 /// One, any background fetch tasks are not given any time until the app is relaunched again.
