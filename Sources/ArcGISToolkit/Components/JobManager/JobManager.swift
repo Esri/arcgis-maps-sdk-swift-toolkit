@@ -44,11 +44,11 @@ import UIKit
 ***REMOVED***/ serialized when an app is backgrounded so that if the app is terminated the jobs can be
 ***REMOVED***/ rehydrated upon relaunch of the app.
 ***REMOVED***/
-***REMOVED***/ Also in iOS if the user of an app removes the app from the app switcher (swiping up) then the
-***REMOVED***/ system interprets this as a strong indication that the user does not want the app running.
-***REMOVED***/ The consequences of this are two-fold for jobs. One, any background fetch tasks are not given
-***REMOVED***/ any time until the app is relaunched again. And two, any background downloads that are in
-***REMOVED***/ progress are canceled by the operating system.
+***REMOVED***/ Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quit it),
+***REMOVED***/ the system interprets this as a strong indication that the app should
+***REMOVED***/ do no more work in the background. The consequences of this are two-fold for jobs.
+***REMOVED***/ One, any background fetch tasks are not given any time until the app is relaunched again.
+***REMOVED***/ And two, any background downloads that are in progress are canceled by the operating system.
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
