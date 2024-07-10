@@ -45,7 +45,7 @@ struct AttachmentImportMenu: View {
     @State private var importState: AttachmentImportState = .none
     
     /// A Boolean value indicating whether the microphone access alert is visible.
-    @State private var micAccessWarningIsVisible = false
+    @State private var microphoneAccessAlertIsVisible = false
     
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
@@ -86,9 +86,6 @@ struct AttachmentImportMenu: View {
             }
         } label: {
             Text(cameraButtonLabel)
-            if micAccessWarningIsVisible {
-                Text(micAccessWarningMessage)
-            }
             Image(systemName: "camera")
         }
     }
@@ -97,12 +94,8 @@ struct AttachmentImportMenu: View {
         Button {
             photoPickerIsPresented = true
         } label: {
-            Label {
-                Text(libraryButtonLabel)
-            } icon: {
-                Image(systemName: "photo")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(libraryButtonLabel)
+            Image(systemName: "photo")
         }
     }
     
@@ -110,12 +103,8 @@ struct AttachmentImportMenu: View {
         Button {
             fileImporterIsShowing = true
         } label: {
-            Label {
-                Text(filesButtonLabel)
-            } icon: {
-                Image(systemName: "folder")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(filesButtonLabel)
+            Image(systemName: "folder")
         }
     }
     
@@ -137,9 +126,7 @@ struct AttachmentImportMenu: View {
         }
         .disabled(importState.importInProgress)
         .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
-            Button(String.settings) {
-                Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
-            }
+            appSettingsButton
             Button(String.cancel, role: .cancel) { }
         } message: {
             Text(cameraAccessAlertMessage)
@@ -204,24 +191,18 @@ struct AttachmentImportMenu: View {
             }
         }
         .fullScreenCover(isPresented: $cameraIsShowing) {
-            // Audio authorization status can change via the camera interface.
-            // Re-check on dismissal.
-            checkAudioAuthorizationStatus()
-        } content: {
             AttachmentCameraController(
                 importState: $importState
             )
-            .overlay(alignment: .topLeading) {
-                if micAccessWarningIsVisible {
-                    Label {
-                        Text(micAccessWarningMessage)
-                    } icon: {
-                        Image(systemName: "mic.slash.fill")
-                            .renderingMode(.original)
-                    }
-                    .padding()
-                    .background(.yellow.opacity(0.1))
-                    .clipShape(.rect(bottomTrailingRadius: 25))
+            .onCameraCaptureModeChanged { captureMode in
+                if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+                    microphoneAccessAlertIsVisible = true
+                }
+            }
+            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+                appSettingsButton
+                Button(role: .cancel) { } label: {
+                    Text(recordVideoOnlyButtonLabel)
                 }
             }
         }
@@ -231,17 +212,14 @@ struct AttachmentImportMenu: View {
                 photoPickerIsPresented: $photoPickerIsPresented
             )
         )
-        .onAppear {
-            checkAudioAuthorizationStatus()
-        }
     }
 }
 
 private extension AttachmentImportMenu {
-    /// Checks the current audio authorization status and sets the warning to visible if needed.
-    func checkAudioAuthorizationStatus() {
-        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
-            micAccessWarningIsVisible = true
+    /// A button that redirects the user to the application's entry in the iOS system Settings application.
+    var appSettingsButton: some View {
+        Button(String.settings) {
+            Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
         }
     }
     
@@ -337,11 +315,20 @@ private extension AttachmentImportMenu {
     }
     
     /// A warning message indicating microphone access has been disabled for the current application in the system settings.
-    var micAccessWarningMessage: String {
+    var microphoneAccessWarningMessage: String {
         .init(
-            localized: "Mic access is disabled",
+            localized: "Microphone access has been disabled in Settings.",
             bundle: .toolkitModule,
             comment: "A warning message indicating microphone access has been disabled for the current application in the system settings."
+        )
+    }
+    
+    /// A button allowing users to proceed to record a video while acknowledging audio will not be captured.
+    var recordVideoOnlyButtonLabel: String {
+        .init(
+            localized: "Record video only",
+            bundle: .toolkitModule,
+            comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
         )
     }
     

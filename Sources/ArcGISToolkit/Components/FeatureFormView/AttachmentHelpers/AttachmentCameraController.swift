@@ -25,6 +25,9 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     /// The image picker controller represented within the view.
     private let controller = UIImagePickerController()
     
+    /// The action to perform when the camera capture mode has changed.
+    var onCameraCaptureModeChanged: ((UIImagePickerController.CameraCaptureMode) -> Void)? = nil
+    
     /// Dismisses the picker controller.
     func endCapture() {
         controller.dismiss(animated: true)
@@ -35,6 +38,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
         controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
         controller.sourceType = .camera
         controller.delegate = context.coordinator
+        observeCameraCaptureMode()
         return controller
     }
     
@@ -73,5 +77,24 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         parent.endCapture()
+    }
+}
+
+extension AttachmentCameraController {
+    /// Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
+    /// - Parameter action: The new camera capture mode.
+    func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
+        var copy = self
+        copy.onCameraCaptureModeChanged = action
+        return copy
+    }
+    
+    /// Observes source format notifications to detect when the camera capture mode has changed from photo to video or vice versa.
+    private func observeCameraCaptureMode() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
+            Task.detached {
+                await onCameraCaptureModeChanged?(controller.cameraCaptureMode)
+            }
+        }
     }
 }
