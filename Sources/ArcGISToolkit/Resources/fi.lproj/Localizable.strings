@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Varmenteen luottamusvaroitus";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Å_Choose From Files__________________ö";
+"Choose From Files" = "Valitse tiedostoista";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Å_Choose From Library____________________ö";
+"Choose From Library" = "Valitse kirjastosta";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "Å_Clear___________ö";
+"Clear" = "Tyhjennä";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Tyhjennä kaikki tulokset";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Vaara: luotettava valtuuttaja ei ole allekirjoittanut kohteen %@ varmennetta.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "Å_Date exceeds maximum_____________________ö";
+"Date exceeds maximum" = "Päivämäärä ylittää enimmäisarvon";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "Å_Date less than minimum_______________________ö";
+"Date less than minimum" = "Päivämäärä on pienempi kuin vähimmäisarvo";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "Å_Date must be on or after %@____________________________ö";
+"Date must be on or after %@" = "Päivämäärän on oltava %@ tai sen jälkeen";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "Å_Date must be on or before %@_____________________________ö";
+"Date must be on or before %@" = "Päivämäärän on oltava %@ tai sitä ennen";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Poista";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "Å_Enter %lld to ^[%lld characters](inflect: true)_________________________ö";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Anna %lld–^[%lld characters](inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "Å_Enter ^[%lld characters](inflect: true)_____________________ö";
+"Enter ^[%lld characters](inflect: true)" = "Anna ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Anna arvo";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "Å_Enter value from %@ to %@__________________________ö";
+"Enter value from %@ to %@" = "Anna arvo väliltä %@–%@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Virhe";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "Å_Error importing attachment___________________________ö";
+"Error importing attachment" = "Virhe liitteen tuonnissa";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Arvioidaan ponnahdusikkunalausekkeita";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "Å_Exceeds maximum value______________________ö";
+"Exceeds maximum value" = "Suurempi kuin enimmäisarvo";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "suunta";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "Å_Less than minimum value________________________ö";
+"Less than minimum value" = "Pienempi kuin vähimmäisarvo";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "Å_Maximum ^[%lld characters](inflect: true)______________________ö";
+"Maximum ^[%lld characters](inflect: true)" = "Enintään ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "Å_Maximum character length exceeded__________________ö";
+"Maximum character length exceeded" = "Suurin sallittu merkkimäärä ylittynyt";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "Å_Minimum character length not met_________________ö";
+"Minimum character length not met" = "Pienin sallittu merkkimäärä ei täyttynyt";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Tila";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Verkko";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "Å_New name_________________ö";
+"New name" = "Uusi nimi";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Uusi jäljitys";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Ponnahdusikkunan arviointi epäonnistui: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "Å_Rename_____________ö";
+"Rename" = "Nimeä uudelleen";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "Å_Rename attachment__________________ö";
+"Rename attachment" = "Nimeä liite uudelleen";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Aloituspisteet";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "Å_Take Photo or Video____________________ö";
+"Take Photo or Video" = "Ota valokuva tai video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "Å_The selected attachment could not be imported________________________ö.";
+"The selected attachment could not be imported." = "Valittua liitettä ei voitu tuoda.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "Å_The selected attachment exceeds the %@ limit________________________ö.";
+"The selected attachment exceeds the %@ limit." = "Valittu liite ylittää rajan %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-osoitetta ei voitu käyttää tai se ei sisältänyt kuva-aineistoa.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Yritä uudelleen";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "Å_Unknown validation error_________________________ö";
+"Unknown validation error" = "Tuntematon validointivirhe";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Nimeämätön omaisuustyyppi";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "Å_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ö";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Arvon on oltava %lld–^[%lld characters](inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "Å_Value must be ^[%lld characters](inflect: true)_________________________ö";
+"Value must be ^[%lld characters](inflect: true)" = "Arvon on oltava ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "Å_Value must be a number_______________________ö";
+"Value must be a number" = "Arvon on oltava numero";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "Å_Value must be a whole number_____________________________ö";
+"Value must be a whole number" = "Arvon on oltava kokonaiskulu";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "Å_Value must be from %@ to %@____________________________ö";
+"Value must be from %@ to %@" = "Arvon on oltava %@–%@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "Å_Value must be of correct type______________________________ö";
+"Value must be of correct type" = "Arvon on oltava oikean tyyppinen";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "Å_Value must be within domain____________________________ö";
+"Value must be within domain" = "Arvon on oltava arvoalueella";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "Å_Value must not be empty________________________ö";
+"Value must not be empty" = "Arvo ei saa olla tyhjä";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

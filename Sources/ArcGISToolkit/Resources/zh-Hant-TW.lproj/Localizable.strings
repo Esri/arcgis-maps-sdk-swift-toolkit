@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "憑證信任警告";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "試_Choose From Files__________________驗";
+"Choose From Files" = "從檔案選擇";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "試_Choose From Library____________________驗";
+"Choose From Library" = "從圖庫選擇";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "試_Clear___________驗";
+"Clear" = "清除";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "清除所有結果";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "危險: '%@' 提供的憑證未經信任的機構簽署。";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "試_Date exceeds maximum_____________________驗";
+"Date exceeds maximum" = "日期超過最大值";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "試_Date less than minimum_______________________驗";
+"Date less than minimum" = "日期小於最小值";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "試_Date must be on or after %@____________________________驗";
+"Date must be on or after %@" = "日期必須等於或晚於 %@";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "試_Date must be on or before %@_____________________________驗";
+"Date must be on or before %@" = "日期必須等於或早於 %@";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "刪除";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "試_Enter %lld to ^[%lld characters](inflect: true)_________________________驗";
+"Enter %lld to ^[%lld characters](inflect: true)" = "輸入 %lld 到 ^[%lld 個字元](inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "試_Enter ^[%lld characters](inflect: true)_____________________驗";
+"Enter ^[%lld characters](inflect: true)" = "輸入 ^[%lld 個字元](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "輸入值";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "試_Enter value from %@ to %@__________________________驗";
+"Enter value from %@ to %@" = "輸入 %@ 到 %@ 的值";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "錯誤";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "試_Error importing attachment___________________________驗";
+"Error importing attachment" = "匯入附件時出錯";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "正在評估快顯視窗表達式";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "試_Exceeds maximum value______________________驗";
+"Exceeds maximum value" = "超過最大值";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "標題";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "試_Less than minimum value________________________驗";
+"Less than minimum value" = "小於最小值";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "試_Maximum ^[%lld characters](inflect: true)______________________驗";
+"Maximum ^[%lld characters](inflect: true)" = "最多 ^[%lld 個字元](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "試_Maximum character length exceeded__________________驗";
+"Maximum character length exceeded" = "已超過字元長度上限";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "媒體";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "試_Minimum character length not met_________________驗";
+"Minimum character length not met" = "不符合字元長度下限";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "模式";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "網路";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "試_New name_________________驗";
+"New name" = "新名稱";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "新增軌跡";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "快顯視窗評估失敗: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "試_Rename_____________驗";
+"Rename" = "重新命名";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "試_Rename attachment__________________驗";
+"Rename attachment" = "重新命名附件";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "起點";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "試_Take Photo or Video____________________驗";
+"Take Photo or Video" = "拍照或攝影";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "試_The selected attachment could not be imported________________________驗.";
+"The selected attachment could not be imported." = "無法匯入所選附件。";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "試_The selected attachment exceeds the %@ limit________________________驗.";
+"The selected attachment exceeds the %@ limit." = "所選附件超出 %@ 限制。";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL 無法連線或不包含圖像資料。";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "重試";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "試_Unknown validation error_________________________驗";
+"Unknown validation error" = "未知驗證錯誤";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "未命名的資產類型";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "試_Value must be %lld to ^[%lld characters](inflect: true)_____________________________驗";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "值必須為 %lld 到 ^[%lld 個字元](inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "試_Value must be ^[%lld characters](inflect: true)_________________________驗";
+"Value must be ^[%lld characters](inflect: true)" = "值必須為 ^[%lld 個字元](inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "試_Value must be a number_______________________驗";
+"Value must be a number" = "值必須是數字";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "試_Value must be a whole number_____________________________驗";
+"Value must be a whole number" = "值必須是整數";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "試_Value must be from %@ to %@____________________________驗";
+"Value must be from %@ to %@" = "值必須介於 %@ 到 %@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "試_Value must be of correct type______________________________驗";
+"Value must be of correct type" = "值必須為正確類型";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "試_Value must be within domain____________________________驗";
+"Value must be within domain" = "值必須位於網域中";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "試_Value must not be empty________________________驗";
+"Value must not be empty" = "值不得空白";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
