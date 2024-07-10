@@ -44,6 +44,9 @@ struct AttachmentImportMenu: View {
     /// The current import state.
     @State private var importState: AttachmentImportState = .none
     
+    /// A Boolean value indicating whether the microphone access alert is visible.
+    @State private var micAccessWarningIsVisible = false
+    
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
@@ -82,12 +85,11 @@ struct AttachmentImportMenu: View {
                 }
             }
         } label: {
-            Label {
-                Text(cameraButtonLabel)
-            } icon: {
-                Image(systemName: "camera")
+            Text(cameraButtonLabel)
+            if micAccessWarningIsVisible {
+                Text(micAccessWarningMessage)
             }
-            .labelStyle(.titleAndIcon)
+            Image(systemName: "camera")
         }
     }
     
@@ -202,9 +204,26 @@ struct AttachmentImportMenu: View {
             }
         }
         .fullScreenCover(isPresented: $cameraIsShowing) {
+            // Audio authorization status can change via the camera interface.
+            // Re-check on dismissal.
+            checkAudioAuthorizationStatus()
+        } content: {
             AttachmentCameraController(
                 importState: $importState
             )
+            .overlay(alignment: .topLeading) {
+                if micAccessWarningIsVisible {
+                    Label {
+                        Text(micAccessWarningMessage)
+                    } icon: {
+                        Image(systemName: "mic.slash.fill")
+                            .renderingMode(.original)
+                    }
+                    .padding()
+                    .background(.yellow.opacity(0.1))
+                    .clipShape(.rect(bottomTrailingRadius: 25))
+                }
+            }
         }
         .modifier(
             AttachmentPhotoPicker(
@@ -212,10 +231,20 @@ struct AttachmentImportMenu: View {
                 photoPickerIsPresented: $photoPickerIsPresented
             )
         )
+        .onAppear {
+            checkAudioAuthorizationStatus()
+        }
     }
 }
 
 private extension AttachmentImportMenu {
+    /// Checks the current audio authorization status and sets the warning to visible if needed.
+    func checkAudioAuthorizationStatus() {
+        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+            micAccessWarningIsVisible = true
+        }
+    }
+    
     /// A message for an alert requesting camera access.
     var cameraAccessAlertMessage: String {
         .init(
@@ -304,6 +333,15 @@ private extension AttachmentImportMenu {
             localized: "Choose From Library",
             bundle: .toolkitModule,
             comment: "A label for a button to choose a photo or video from the user's photo library."
+        )
+    }
+    
+    /// A warning message indicating microphone access has been disabled for the current application in the system settings.
+    var micAccessWarningMessage: String {
+        .init(
+            localized: "Mic access is disabled",
+            bundle: .toolkitModule,
+            comment: "A warning message indicating microphone access has been disabled for the current application in the system settings."
         )
     }
     
