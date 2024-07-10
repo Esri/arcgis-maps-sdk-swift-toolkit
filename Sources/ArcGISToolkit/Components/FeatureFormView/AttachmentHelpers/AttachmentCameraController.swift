@@ -23,10 +23,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     @Binding var importState: AttachmentImportState
     
     /// The image picker controller represented within the view.
-    private let controller = UIImagePickerController()
-    
-    /// The action to perform when the camera capture mode has changed.
-    var onCameraCaptureModeChanged: ((UIImagePickerController.CameraCaptureMode) -> Void)? = nil
+    private let controller = AttachmentUIImagePickerController()
     
     /// Dismisses the picker controller.
     func endCapture() {
@@ -38,7 +35,6 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
         controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
         controller.sourceType = .camera
         controller.delegate = context.coordinator
-        observeCameraCaptureMode()
         return controller
     }
     
@@ -84,17 +80,32 @@ extension AttachmentCameraController {
     /// Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
     /// - Parameter action: The new camera capture mode.
     func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
-        var copy = self
-        copy.onCameraCaptureModeChanged = action
-        return copy
+        self.controller.action = action
+        return self
+    }
+}
+
+/// A wrapper around ``UIImagePickerController``.
+///
+/// Use this wrapper to monitor additional properties like the current camera capture mode (photo/video).
+class AttachmentUIImagePickerController: UIImagePickerController {
+    /// Observes changes to the camera capture mode.
+    var cameraCaptureModeObserver: (any NSObjectProtocol)?
+    
+    /// An action to perform when the camera capture mode changes.
+    var action: ((UIImagePickerController.CameraCaptureMode) -> Void)?
+    
+    override func viewDidAppear(_ animated: Bool) {
+        cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
+            Task {
+                await self.action?(self.cameraCaptureMode)
+            }
+        }
     }
     
-    /// Observes source format notifications to detect when the camera capture mode has changed from photo to video or vice versa.
-    private func observeCameraCaptureMode() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
-            Task.detached {
-                await onCameraCaptureModeChanged?(controller.cameraCaptureMode)
-            }
+    override func viewDidDisappear(_ animated: Bool) {
+        if let cameraCaptureModeObserver {
+            NotificationCenter.default.removeObserver(cameraCaptureModeObserver)
         }
     }
 }
