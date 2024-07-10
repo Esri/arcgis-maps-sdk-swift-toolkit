@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Sertifika Güven Uyarısı";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "ı_Choose From Files__________________İ";
+"Choose From Files" = "Dosyalardan Seç";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "ı_Choose From Library____________________İ";
+"Choose From Library" = "Kütüphaneden Seç";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "ı_Clear___________İ";
+"Clear" = "Temizle";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Tüm sonuçları temizle";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Tehlike: '%@' tarafından sağlanan sertifika güvenilir bir otorite tarafından imzalanmamış.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "ı_Date exceeds maximum_____________________İ";
+"Date exceeds maximum" = "Tarih maksimum değeri aşıyor";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "ı_Date less than minimum_______________________İ";
+"Date less than minimum" = "Tarih minimum değerden küçük";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "ı_Date must be on or after %@____________________________İ";
+"Date must be on or after %@" = "Tarih %@ veya daha sonra olmalıdır";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "ı_Date must be on or before %@_____________________________İ";
+"Date must be on or before %@" = "Tarih %@ veya daha önce olmalıdır";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Sil";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "ı_Enter %lld to ^[%lld characters](inflect: true)_________________________İ";
+"Enter %lld to ^[%lld characters](inflect: true)" = "%lld - ^[%lld karakter] gir (çekim: doğru)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "ı_Enter ^[%lld characters](inflect: true)_____________________İ";
+"Enter ^[%lld characters](inflect: true)" = "^[%lld karakter] gir (çekim: doğru)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Değer Gir";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "ı_Enter value from %@ to %@__________________________İ";
+"Enter value from %@ to %@" = "%@'den %@'e değer gir";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Hata";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "ı_Error importing attachment___________________________İ";
+"Error importing attachment" = "Ek içe aktarılırken hata";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Açılır menü ifadeleri değerlendiriliyor";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "ı_Exceeds maximum value______________________İ";
+"Exceeds maximum value" = "Maksimum değeri aşıyor";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "başlık";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "ı_Less than minimum value________________________İ";
+"Less than minimum value" = "Minimum değerden daha küçük";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "ı_Maximum ^[%lld characters](inflect: true)______________________İ";
+"Maximum ^[%lld characters](inflect: true)" = "Maksimum ^[%lld karakter] (çekim: doğru)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "ı_Maximum character length exceeded__________________İ";
+"Maximum character length exceeded" = "Maksimum karakter uzunluğu aşıldı";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Ortam";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "ı_Minimum character length not met_________________İ";
+"Minimum character length not met" = "Maksimum karakter uzunluğu karşılanmadı";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mod";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Ağ";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "ı_New name_________________İ";
+"New name" = "Yeni ad";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Yeni iz";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Açılır menü değerlendirilemedi: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "ı_Rename_____________İ";
+"Rename" = "Yeniden Adlandır";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "ı_Rename attachment__________________İ";
+"Rename attachment" = "Eki yeniden adlandır";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Başlangıç Noktaları";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "ı_Take Photo or Video____________________İ";
+"Take Photo or Video" = "Fotoğraf veya Video Çek";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "ı_The selected attachment could not be imported________________________İ.";
+"The selected attachment could not be imported." = "Seçili ek içeri aktarılamadı.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "ı_The selected attachment exceeds the %@ limit________________________İ.";
+"The selected attachment exceeds the %@ limit." = "Seçili ek %@ sınırını aşıyor.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL adresine erişilemedi veya adres görüntü verisi içermiyor.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Yeniden Dene";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "ı_Unknown validation error_________________________İ";
+"Unknown validation error" = "Bilinmeyen doğrulama hatası";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Adsız Varlık Türü";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "ı_Value must be %lld to ^[%lld characters](inflect: true)_____________________________İ";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "%lld - ^[%lld karakter] olmalıdır (çekim: doğru)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "ı_Value must be ^[%lld characters](inflect: true)_________________________İ";
+"Value must be ^[%lld characters](inflect: true)" = "^[%lld karakter] olmalıdır (çekim: doğru)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "ı_Value must be a number_______________________İ";
+"Value must be a number" = "Değer bir sayı olmalıdır";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "ı_Value must be a whole number_____________________________İ";
+"Value must be a whole number" = "Değer bir tam sayı olmalıdır";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "ı_Value must be from %@ to %@____________________________İ";
+"Value must be from %@ to %@" = "Değer %@'den %@'e olmalıdır";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "ı_Value must be of correct type______________________________İ";
+"Value must be of correct type" = "Değer, doğru türde olmalıdır";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "ı_Value must be within domain____________________________İ";
+"Value must be within domain" = "Değer, domain içinde olmalıdır";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "ı_Value must not be empty________________________İ";
+"Value must not be empty" = "Değer boş olmamalıdır";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Προειδοποίηση Αξιοπιστίας Πιστοποιητικού";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Đ_Choose From Files__________________ớ";
+"Choose From Files" = "Επιλογή από Αρχεία";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Đ_Choose From Library____________________ớ";
+"Choose From Library" = "Επιλογή από Βιβλιοθήκη";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "Đ_Clear___________ớ";
+"Clear" = "Απαλοιφή";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Απαλοιφή όλων των αποτελεσμάτων";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Κίνδυνος: Το παρεχόμενο πιστοποιητικό από το '%@' δεν έχει υπογραφεί από αξιόπιστη αρχή.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "Đ_Date exceeds maximum_____________________ớ";
+"Date exceeds maximum" = "Η ημερομηνία υπερβαίνει τη μέγιστη";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "Đ_Date less than minimum_______________________ớ";
+"Date less than minimum" = "Η ημερομηνία είναι μικρότερη από την ελάχιστη";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "Đ_Date must be on or after %@____________________________ớ";
+"Date must be on or after %@" = "Η ημερομηνία πρέπει να είναι στις ή μετά από τις %@";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "Đ_Date must be on or before %@_____________________________ớ";
+"Date must be on or before %@" = "Η ημερομηνία πρέπει να είναι στις ή πριν από τις %@";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Διαγραφή";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "Đ_Enter %lld to ^[%lld characters](inflect: true)_________________________ớ";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Καταχωρίστε από %lld έως ^[%lld χαρακτήρες](διακύμανση: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "Đ_Enter ^[%lld characters](inflect: true)_____________________ớ";
+"Enter ^[%lld characters](inflect: true)" = "Καταχωρίστε ^[%lld χαρακτήρες](διακύμανση: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Καταχωρίστε τιμή";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "Đ_Enter value from %@ to %@__________________________ớ";
+"Enter value from %@ to %@" = "Καταχωρίστε τιμή από %@ έως %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Σφάλμα";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "Đ_Error importing attachment___________________________ớ";
+"Error importing attachment" = "Σφάλμα κατά την εισαγωγή του συνημμένου";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Αξιολόγηση αναδυόμενων εκφράσεων";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "Đ_Exceeds maximum value______________________ớ";
+"Exceeds maximum value" = "Υπερβαίνει τη μέγιστη τιμή";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "επικεφαλίδα";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "Đ_Less than minimum value________________________ớ";
+"Less than minimum value" = "Μικρότερο από την ελάχιστη τιμή";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "Đ_Maximum ^[%lld characters](inflect: true)______________________ớ";
+"Maximum ^[%lld characters](inflect: true)" = "Μέγιστο ^[%lld χαρακτήρες](διακύμανση: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "Đ_Maximum character length exceeded__________________ớ";
+"Maximum character length exceeded" = "Υπέρβαση του μέγιστου μήκους χαρακτήρων.";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Πολυμέσα";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "Đ_Minimum character length not met_________________ớ";
+"Minimum character length not met" = "Δεν ικανοποιείται το ελάχιστο μήκος χαρακτήρων";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Λειτουργία";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Δίκτυο";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "Đ_New name_________________ớ";
+"New name" = "Νέο όνομα";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Νέα ιχνηλάτηση";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Αποτυχία αξιολόγησης αναδυόμενων: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "Đ_Rename_____________ớ";
+"Rename" = "Μετονομασία";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "Đ_Rename attachment__________________ớ";
+"Rename attachment" = "Μετονομασία συνημμένου";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Σημεία Έναρξης";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "Đ_Take Photo or Video____________________ớ";
+"Take Photo or Video" = "Λήψη φωτογραφίας ή βίντεο";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "Đ_The selected attachment could not be imported________________________ớ.";
+"The selected attachment could not be imported." = "Το επιλεγμένο συνημμένο δεν μπόρεσε να εισαχθεί.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "Đ_The selected attachment exceeds the %@ limit________________________ớ.";
+"The selected attachment exceeds the %@ limit." = "Το επιλεγμένο συνημμένο υπερβαίνει το όριο των %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "Η διεύθυνση URL δεν ήταν προσβάσιμη ή δεν περιείχε δεδομένα εικόνας.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Δοκιμάστε Ξανά";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "Đ_Unknown validation error_________________________ớ";
+"Unknown validation error" = "Άγνωστο σφάλμα επικύρωσης";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Τύπος Στοιχείου Χωρίς Όνομα";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "Đ_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ớ";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Η τιμή πρέπει να είναι από %lld έως ^[%lld χαρακτήρες](διακύμανση: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "Đ_Value must be ^[%lld characters](inflect: true)_________________________ớ";
+"Value must be ^[%lld characters](inflect: true)" = "Η τιμή πρέπει να είναι ^[%lld χαρακτήρες](διακύμανση: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "Đ_Value must be a number_______________________ớ";
+"Value must be a number" = "Η τιμή πρέπει να είναι αριθμός";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "Đ_Value must be a whole number_____________________________ớ";
+"Value must be a whole number" = "Η τιμή πρέπει να είναι ακέραιος αριθμός";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "Đ_Value must be from %@ to %@____________________________ớ";
+"Value must be from %@ to %@" = "Η τιμή πρέπει να είναι από %@ έως %@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "Đ_Value must be of correct type______________________________ớ";
+"Value must be of correct type" = "Η τιμή πρέπει να είναι σωστού τύπου";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "Đ_Value must be within domain____________________________ớ";
+"Value must be within domain" = "Η τιμή πρέπει να εμπίπτει στον τομέα";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "Đ_Value must not be empty________________________ớ";
+"Value must not be empty" = "Η τιμή δεν πρέπει να είναι άδεια";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

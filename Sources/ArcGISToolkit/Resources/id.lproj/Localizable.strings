@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Peringatan Sertifikat Kepercayaan";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "ng_Choose From Files__________________ny";
+"Choose From Files" = "Pilih Dari File";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "ng_Choose From Library____________________ny";
+"Choose From Library" = "Pilih Dari Perpustakaan";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "ng_Clear___________ny";
+"Clear" = "Hapus";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Hapus semua hasil";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Berbahaya: Sertifikat yang diberikan oleh '%@' tidak ditandatangani oleh otoritas tepercaya.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "ng_Date exceeds maximum_____________________ny";
+"Date exceeds maximum" = "Tanggal melebihi maksimal";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "ng_Date less than minimum_______________________ny";
+"Date less than minimum" = "Tanggal kurang dari minimal";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "ng_Date must be on or after %@____________________________ny";
+"Date must be on or after %@" = "Tanggal harus pada atau setelah %@";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "ng_Date must be on or before %@_____________________________ny";
+"Date must be on or before %@" = "Tanggal harus pada atau sebelum %@";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Hapus";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "ng_Enter %lld to ^[%lld characters](inflect: true)_________________________ny";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Masukkan %lld ke ^[%lld characters](inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "ng_Enter ^[%lld characters](inflect: true)_____________________ny";
+"Enter ^[%lld characters](inflect: true)" = "Masukkan ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Masukkan Nilai";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "ng_Enter value from %@ to %@__________________________ny";
+"Enter value from %@ to %@" = "Masukkan nilai dari %@ hingga %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Kesalahan";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "ng_Error importing attachment___________________________ny";
+"Error importing attachment" = "Kesalahan saat mengimpor lampiran";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Mengevaluasi ekspresi popup";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "ng_Exceeds maximum value______________________ny";
+"Exceeds maximum value" = "Melebihi nilai maksimal";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "heading";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "ng_Less than minimum value________________________ny";
+"Less than minimum value" = "Kurang dari nilai minimal";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "ng_Maximum ^[%lld characters](inflect: true)______________________ny";
+"Maximum ^[%lld characters](inflect: true)" = "Maksimal ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "ng_Maximum character length exceeded__________________ny";
+"Maximum character length exceeded" = "Panjang karakter maksimal terlampaui";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "ng_Minimum character length not met_________________ny";
+"Minimum character length not met" = "Panjang karakter minimal tidak sesuai";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Jaringan";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "ng_New name_________________ny";
+"New name" = "Nama baru";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Pelacakan baru";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Evaluasi popup gagal: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "ng_Rename_____________ny";
+"Rename" = "Ubah Nama";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "ng_Rename attachment__________________ny";
+"Rename attachment" = "Ganti nama lampiran";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Titik Awal";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "ng_Take Photo or Video____________________ny";
+"Take Photo or Video" = "Ambil Foto atau Video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "ng_The selected attachment could not be imported________________________ny.";
+"The selected attachment could not be imported." = "Lampiran yang dipilih tidak dapat diimpor.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "ng_The selected attachment exceeds the %@ limit________________________ny.";
+"The selected attachment exceeds the %@ limit." = "Lampiran yang dipilih melebihi batas %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL tidak dapat dijangkau atau tidak berisi data gambar.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Coba lagi";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "ng_Unknown validation error_________________________ny";
+"Unknown validation error" = "Kesalahan validasi tidak diketahui";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Jenis Aset Tanpa Nama";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "ng_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ny";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Nilai harus %lld to ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "ng_Value must be ^[%lld characters](inflect: true)_________________________ny";
+"Value must be ^[%lld characters](inflect: true)" = "Nilai harus ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "ng_Value must be a number_______________________ny";
+"Value must be a number" = "Nilai harus berupa angka";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "ng_Value must be a whole number_____________________________ny";
+"Value must be a whole number" = "Nilai harus berupa bilangan bulat";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "ng_Value must be from %@ to %@____________________________ny";
+"Value must be from %@ to %@" = "Nilai harus dari %@ hingga %@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "ng_Value must be of correct type______________________________ny";
+"Value must be of correct type" = "Nilai harus dari jenis yang benar";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "ng_Value must be within domain____________________________ny";
+"Value must be within domain" = "Nilai harus berada dalam domain";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "ng_Value must not be empty________________________ny";
+"Value must not be empty" = "Nilai tidak boleh kosong";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
