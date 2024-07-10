@@ -27,7 +27,7 @@ struct AttachmentImportMenu: View {
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
     /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) -> Void)? = nil) {
+    init(element: AttachmentsFormElement, onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil) {
         self.element = element
         self.onAdd = onAdd
     }
@@ -54,7 +54,7 @@ struct AttachmentImportMenu: View {
     )
     
     /// The action to perform when an attachment is added.
-    let onAdd: ((FeatureAttachment) -> Void)?
+    let onAdd: (@MainActor (FeatureAttachment) -> Void)?
     
     /// A Boolean value indicating if the error alert is presented.
     var errorIsPresented: Binding<Bool> {

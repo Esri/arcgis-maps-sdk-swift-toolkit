@@ -70,32 +70,25 @@ extension FeatureAttachmentKind {
     /// Creates a feature attachment kind from a popup attachment kind.
     /// - Parameter kind: The popup attachment kind.
     init(kind: PopupAttachment.Kind) {
-        switch kind {
-        case .image:
-            self = .image
-        case .video:
-            self = .video
-        case .document:
-            self = .document
-        case .other:
-            self = .other
+        self = switch kind {
+        case .image: .image
+        case .video: .video
+        case .document: .document
+        case .other: .other
+        @unknown default: fatalError("Unknown case")
         }
     }
     
     /// Creates a feature attachment kind from a popup attachment kind.
     /// - Parameter kind: The popup attachment kind.
     init(kind: FormAttachment.Kind) {
-        switch kind {
-        case .other:
-            self = .other
-        case .image:
-            self = .image
-        case .video:
-            self = .video
-        case .document:
-            self = .document
-        case .audio:
-            self = .audio
+        self = switch kind {
+        case .other: .other
+        case .image: .image
+        case .video: .video
+        case .document: .document
+        case .audio: .audio
+        @unknown default: fatalError("Unknown case")
         }
     }
 }
