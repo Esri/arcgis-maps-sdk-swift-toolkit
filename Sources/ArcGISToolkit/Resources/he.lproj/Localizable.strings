@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "אזהרת אמון של אישור";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "כן_Choose From Files__________________ש";
+"Choose From Files" = "בחר מקבצים";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "כן_Choose From Library____________________ש";
+"Choose From Library" = "בחר מספרייה";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "כן_Clear___________ש";
+"Clear" = "נקה";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "נקה את כל התוצאות";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "סכנה: האישור שסופק על ידי '%@' לא חתום על ידי רשות מהימנה.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "כן_Date exceeds maximum_____________________ש";
+"Date exceeds maximum" = "התאריך חורג מהמקסימום";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "כן_Date less than minimum_______________________ש";
+"Date less than minimum" = "התאריך נמוך מהמינימום";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "כן_Date must be on or after %@____________________________ש";
+"Date must be on or after %@" = "התאריך חייב להיות %@ או אחרי";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "כן_Date must be on or before %@_____________________________ש";
+"Date must be on or before %@" = "התאריך חייב להיות %@ או לפני";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "מחק";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "כן_Enter %lld to ^[%lld characters](inflect: true)_________________________ש";
+"Enter %lld to ^[%lld characters](inflect: true)" = "הזן בין %lld ל-^[%lld תווים](inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "כן_Enter ^[%lld characters](inflect: true)_____________________ש";
+"Enter ^[%lld characters](inflect: true)" = "הזן ^[%lld תווים](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "הזן ערך";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "כן_Enter value from %@ to %@__________________________ש";
+"Enter value from %@ to %@" = "הזן ערך בין %@ ל-%@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "שגיאה";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "כן_Error importing attachment___________________________ש";
+"Error importing attachment" = "שגיאה בייבוא קובץ מקושר";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "הערכת ביטויי חלון קופץ";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "כן_Exceeds maximum value______________________ש";
+"Exceeds maximum value" = "חורג מהערך המקסימלי";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "כיוון";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "כן_Less than minimum value________________________ש";
+"Less than minimum value" = "פחות מהערך המינימלי";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "כן_Maximum ^[%lld characters](inflect: true)______________________ש";
+"Maximum ^[%lld characters](inflect: true)" = "מקסימום ^[%lld תווים](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "כן_Maximum character length exceeded__________________ש";
+"Maximum character length exceeded" = "חרגת מאורך התווים המקסימלי";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "מדיה";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "כן_Minimum character length not met_________________ש";
+"Minimum character length not met" = "לא הגעת לאורך התווים המינימלי";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "אופן";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "רשת";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "כן_New name_________________ש";
+"New name" = "שם חדש";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "עקיבה חדשה";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "הערכת חלון קופץ נכשלה: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "כן_Rename_____________ש";
+"Rename" = "שנה שם";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "כן_Rename attachment__________________ש";
+"Rename attachment" = "שנה שם קובץ מצורף";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "נקודות התחלה";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "כן_Take Photo or Video____________________ש";
+"Take Photo or Video" = "צלם תמונה או סרטון";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "כן_The selected attachment could not be imported________________________ש.";
+"The selected attachment could not be imported." = "לא ניתן לייבא את הקובץ המצורף שנבחר.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "כן_The selected attachment exceeds the %@ limit________________________ש.";
+"The selected attachment exceeds the %@ limit." = "הקובץ המצורף שנבחר חורג מהמגבלה של %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "לא ניתן להגיע לכתובת ה-URL או שהכתובת לא הכילה נתוני תמונה.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "נסה שוב";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "כן_Unknown validation error_________________________ש";
+"Unknown validation error" = "שגיאת אימות לא ידועה";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "סוג נכס ללא שם";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "כן_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ש";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "הערך חייב להיות בין %lld ל-^[%lld תווים](inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "כן_Value must be ^[%lld characters](inflect: true)_________________________ש";
+"Value must be ^[%lld characters](inflect: true)" = "הערך חייב להיות ^[%lld תווים](inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "כן_Value must be a number_______________________ש";
+"Value must be a number" = "הערך חייב להיות מספר";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "כן_Value must be a whole number_____________________________ש";
+"Value must be a whole number" = "הערך חייב להיות מספר שלם";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "כן_Value must be from %@ to %@____________________________ש";
+"Value must be from %@ to %@" = "הערך חייב להיות בין %@ ל-%@.";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "כן_Value must be of correct type______________________________ש";
+"Value must be of correct type" = "הערך חייב להיות מהסוג הנכון";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "כן_Value must be within domain____________________________ש";
+"Value must be within domain" = "הערך חייב להיות בתוך דומיין";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "כן_Value must not be empty________________________ש";
+"Value must not be empty" = "הערך לא יכול להיות ריק";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

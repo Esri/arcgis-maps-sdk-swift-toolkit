@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "인증서 신뢰 경고";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "한_Choose From Files__________________빠";
+"Choose From Files" = "파일에서 선택";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "한_Choose From Library____________________빠";
+"Choose From Library" = "라이브러리에서 선택";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "한_Clear___________빠";
+"Clear" = "지우기";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "모든 결과 지우기";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "위험: '%@'에서 제공된 인증서가 신뢰할 수 있는 기관에서 서명되지 않았습니다.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "한_Date exceeds maximum_____________________빠";
+"Date exceeds maximum" = "날짜가 최대값을 초과함";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "한_Date less than minimum_______________________빠";
+"Date less than minimum" = "날짜가 최소값보다 작음";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "한_Date must be on or after %@____________________________빠";
+"Date must be on or after %@" = "날짜는 %@ 또는 그 이후여야 함";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "한_Date must be on or before %@_____________________________빠";
+"Date must be on or before %@" = "날짜는 %@ 또는 그 이전이어야 함";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "삭제";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "한_Enter %lld to ^[%lld characters](inflect: true)_________________________빠";
+"Enter %lld to ^[%lld characters](inflect: true)" = "%lld~^[%lld자] 입력(변화: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "한_Enter ^[%lld characters](inflect: true)_____________________빠";
+"Enter ^[%lld characters](inflect: true)" = "^[%lld 자] 입력(변화: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "값 입력";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "한_Enter value from %@ to %@__________________________빠";
+"Enter value from %@ to %@" = "%@~%@의 값 입력";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "오류";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "한_Error importing attachment___________________________빠";
+"Error importing attachment" = "첨부 파일을 가져오는 동안 오류 발생";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "팝업 식 평가";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "한_Exceeds maximum value______________________빠";
+"Exceeds maximum value" = "최대값을 초과함";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "방향";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "한_Less than minimum value________________________빠";
+"Less than minimum value" = "최소값보다 작음";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "한_Maximum ^[%lld characters](inflect: true)______________________빠";
+"Maximum ^[%lld characters](inflect: true)" = "최소 ^[%lld 자](변화: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "한_Maximum character length exceeded__________________빠";
+"Maximum character length exceeded" = "최대 문자 길이를 초과함";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "미디어";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "한_Minimum character length not met_________________빠";
+"Minimum character length not met" = "최소 문자 길이를 충족하지 않음";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "모드";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "네트워크";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "한_New name_________________빠";
+"New name" = "새 이름";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "새 추적";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "팝업 평가 실패: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "한_Rename_____________빠";
+"Rename" = "이름 바꾸기";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "한_Rename attachment__________________빠";
+"Rename attachment" = "첨부 파일 이름 바꾸기";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "시작점";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "한_Take Photo or Video____________________빠";
+"Take Photo or Video" = "사진 또는 비디오 촬영";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "한_The selected attachment could not be imported________________________빠.";
+"The selected attachment could not be imported." = "선택한 첨부 파일을 가져올 수 없습니다.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "한_The selected attachment exceeds the %@ limit________________________빠.";
+"The selected attachment exceeds the %@ limit." = "선택한 첨부 파일이 %@ 제한을 초과합니다.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL에 연결할 수 없거나 이미지 데이터가 없습니다.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "다시 시도";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "한_Unknown validation error_________________________빠";
+"Unknown validation error" = "알 수 없는 유효성 검사 오류";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "이름이 정의되지 않은 자산 유형";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "한_Value must be %lld to ^[%lld characters](inflect: true)_____________________________빠";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "값은 %lld~^[%lld자]여야 함(변화: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "한_Value must be ^[%lld characters](inflect: true)_________________________빠";
+"Value must be ^[%lld characters](inflect: true)" = "값은 ^[%lld자]여야 함(변화: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "한_Value must be a number_______________________빠";
+"Value must be a number" = "값은 숫자여야 함";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "한_Value must be a whole number_____________________________빠";
+"Value must be a whole number" = "값은 정수여야 함";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "한_Value must be from %@ to %@____________________________빠";
+"Value must be from %@ to %@" = "값은 %@~%@여야 합니다.";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "한_Value must be of correct type______________________________빠";
+"Value must be of correct type" = "값은 올바른 유형이어야 함";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "한_Value must be within domain____________________________빠";
+"Value must be within domain" = "값은 도메인 내에 있어야 함";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "한_Value must not be empty________________________빠";
+"Value must not be empty" = "값은 비워 둘 수 없음";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
