@@ -44,6 +44,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The current import state.
 ***REMOVED***@State private var importState: AttachmentImportState = .none
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the microphone access alert is visible.
+***REMOVED***@State private var micAccessWarningIsVisible = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
@@ -82,12 +85,11 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
+***REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
+***REMOVED******REMOVED******REMOVED***if micAccessWarningIsVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(micAccessWarningMessage)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -202,9 +204,26 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.fullScreenCover(isPresented: $cameraIsShowing) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Audio authorization status can change via the camera interface.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Re-check on dismissal.
+***REMOVED******REMOVED******REMOVED***checkAudioAuthorizationStatus()
+***REMOVED*** content: {
 ***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if micAccessWarningIsVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(micAccessWarningMessage)
+***REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "mic.slash.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.original)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.yellow.opacity(0.1))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(bottomTrailingRadius: 25))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
@@ -212,10 +231,20 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsPresented: $photoPickerIsPresented
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***checkAudioAuthorizationStatus()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension AttachmentImportMenu {
+***REMOVED******REMOVED***/ Checks the current audio authorization status and sets the warning to visible if needed.
+***REMOVED***func checkAudioAuthorizationStatus() {
+***REMOVED******REMOVED***if AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+***REMOVED******REMOVED******REMOVED***micAccessWarningIsVisible = true
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A message for an alert requesting camera access.
 ***REMOVED***var cameraAccessAlertMessage: String {
 ***REMOVED******REMOVED***.init(
@@ -304,6 +333,15 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED******REMOVED***localized: "Choose From Library",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A warning message indicating microphone access has been disabled for the current application in the system settings.
+***REMOVED***var micAccessWarningMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Mic access is disabled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A warning message indicating microphone access has been disabled for the current application in the system settings."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
