@@ -145,8 +145,6 @@ struct AttachmentsFeatureElementView: View {
                     AttachmentList(attachmentModels: attachmentModels)
                 }
             }
-        @unknown default:
-            EmptyView()
         }
     }
     
@@ -225,23 +223,18 @@ extension AttachmentsFeatureElementView {
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
     var thumbnailSize: CGSize {
-        // Set thumbnail size
-        let thumbnailSize: CGSize
         switch featureElement.attachmentsDisplayType {
         case .list:
-            thumbnailSize = CGSize(width: 40, height: 40)
+            CGSize(width: 40, height: 40)
         case .preview:
-            thumbnailSize = CGSize(width: 120, height: 120)
+            CGSize(width: 120, height: 120)
         case .auto:
             if isRegularWidth {
-                thumbnailSize = CGSize(width: 120, height: 120)
+                CGSize(width: 120, height: 120)
             } else {
-                thumbnailSize = CGSize(width: 40, height: 40)
+                CGSize(width: 40, height: 40)
             }
-        @unknown default:
-            thumbnailSize = CGSize(width: 120, height: 120)
         }
-        return thumbnailSize
     }
     
     /// A Boolean value indicating whether the feature Element
