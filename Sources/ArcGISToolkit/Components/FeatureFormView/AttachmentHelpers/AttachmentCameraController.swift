@@ -25,6 +25,9 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The image picker controller represented within the view.
 ***REMOVED***private let controller = UIImagePickerController()
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when the camera capture mode has changed.
+***REMOVED***var onCameraCaptureModeChanged: ((UIImagePickerController.CameraCaptureMode) -> Void)? = nil
+***REMOVED***
 ***REMOVED******REMOVED***/ Dismisses the picker controller.
 ***REMOVED***func endCapture() {
 ***REMOVED******REMOVED***controller.dismiss(animated: true)
@@ -35,6 +38,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
 ***REMOVED******REMOVED***controller.sourceType = .camera
 ***REMOVED******REMOVED***controller.delegate = context.coordinator
+***REMOVED******REMOVED***observeCameraCaptureMode()
 ***REMOVED******REMOVED***return controller
 ***REMOVED***
 ***REMOVED***
@@ -73,5 +77,24 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 ***REMOVED***
 ***REMOVED***func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 ***REMOVED******REMOVED***parent.endCapture()
+***REMOVED***
+***REMOVED***
+
+extension AttachmentCameraController {
+***REMOVED******REMOVED***/ Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
+***REMOVED******REMOVED***/ - Parameter action: The new camera capture mode.
+***REMOVED***func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onCameraCaptureModeChanged = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Observes source format notifications to detect when the camera capture mode has changed from photo to video or vice versa.
+***REMOVED***private func observeCameraCaptureMode() {
+***REMOVED******REMOVED***NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
+***REMOVED******REMOVED******REMOVED***Task.detached {
+***REMOVED******REMOVED******REMOVED******REMOVED***await onCameraCaptureModeChanged?(controller.cameraCaptureMode)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
