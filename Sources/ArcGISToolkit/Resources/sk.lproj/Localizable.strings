@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Upozornenie na dôveryhodnosť certifikátu";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "ĺ_Choose From Files__________________ľ";
+"Choose From Files" = "Vyberte zo súborov";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "ĺ_Choose From Library____________________ľ";
+"Choose From Library" = "Vybrať z knižnice";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "ĺ_Clear___________ľ";
+"Clear" = "Vyčistiť";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Vyčistiť všetky výsledky";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nebezpečné: Certifikát poskytnutý '%@' nie je podpísaný dôveryhodnou autoritou.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "ĺ_Date exceeds maximum_____________________ľ";
+"Date exceeds maximum" = "Dátum presahuje maximum";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "ĺ_Date less than minimum_______________________ľ";
+"Date less than minimum" = "Dátum menší ako minimum";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "ĺ_Date must be on or after %@____________________________ľ";
+"Date must be on or after %@" = "Dátum musí byť v deň alebo po %@";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "ĺ_Date must be on or before %@_____________________________ľ";
+"Date must be on or before %@" = "Dátum musí byť v deň alebo pred %@";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Zmazať";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "ĺ_Enter %lld to ^[%lld characters](inflect: true)_________________________ľ";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Zadajte %lld to ^[%lld characters](inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "ĺ_Enter ^[%lld characters](inflect: true)_____________________ľ";
+"Enter ^[%lld characters](inflect: true)" = "Zadajte ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Zadajte hodnotu";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "ĺ_Enter value from %@ to %@__________________________ľ";
+"Enter value from %@ to %@" = "Zadajte hodnotu od %@ do %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Chyba";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "ĺ_Error importing attachment___________________________ľ";
+"Error importing attachment" = "Chyba pri importovaní prílohy";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Vyhodnocovanie kontextových výrazov";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "ĺ_Exceeds maximum value______________________ľ";
+"Exceeds maximum value" = "Presahuje maximálnu hodnotu";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "nadpis";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "ĺ_Less than minimum value________________________ľ";
+"Less than minimum value" = "Menej ako minimálna hodnota";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "ĺ_Maximum ^[%lld characters](inflect: true)______________________ľ";
+"Maximum ^[%lld characters](inflect: true)" = "Maximálne ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "ĺ_Maximum character length exceeded__________________ľ";
+"Maximum character length exceeded" = "Maximálna dĺžka znakov bola prekročená";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Médiá";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "ĺ_Minimum character length not met_________________ľ";
+"Minimum character length not met" = "Minimálna dĺžka znakov nie je splnená";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Režim";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Sieť";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "ĺ_New name_________________ľ";
+"New name" = "Nový názov";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Nové trasovanie";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Vyhodnotenie kontextového okna zlyhalo: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "ĺ_Rename_____________ľ";
+"Rename" = "Premenovať";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "ĺ_Rename attachment__________________ľ";
+"Rename attachment" = "Premenovať prílohu";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Počiatočné body";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "ĺ_Take Photo or Video____________________ľ";
+"Take Photo or Video" = "Odfotiť alebo natočiť video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "ĺ_The selected attachment could not be imported________________________ľ.";
+"The selected attachment could not be imported." = "Vybranú prílohu nebolo možné importovať.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "ĺ_The selected attachment exceeds the %@ limit________________________ľ.";
+"The selected attachment exceeds the %@ limit." = "Vybraná príloha prekračuje limit %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL adresa nebola dostupná alebo neobsahovala obrazové dáta.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Skúste to znova";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "ĺ_Unknown validation error_________________________ľ";
+"Unknown validation error" = "Neznáma chyba validácie";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Nepomenovaný typ prostriedku";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "ĺ_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ľ";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Hodnota musí byť %lld to ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "ĺ_Value must be ^[%lld characters](inflect: true)_________________________ľ";
+"Value must be ^[%lld characters](inflect: true)" = "Hodnota musí byť ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "ĺ_Value must be a number_______________________ľ";
+"Value must be a number" = "Hodnota musí byť číslo";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "ĺ_Value must be a whole number_____________________________ľ";
+"Value must be a whole number" = "Hodnota musí byť celé číslo";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "ĺ_Value must be from %@ to %@____________________________ľ";
+"Value must be from %@ to %@" = "Hodnota musí byť od %@ do %@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "ĺ_Value must be of correct type______________________________ľ";
+"Value must be of correct type" = "Hodnota musí byť správneho typu";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "ĺ_Value must be within domain____________________________ľ";
+"Value must be within domain" = "Hodnota musí byť v rámci domény";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "ĺ_Value must not be empty________________________ľ";
+"Value must not be empty" = "Hodnota nesmie byť prázdna";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

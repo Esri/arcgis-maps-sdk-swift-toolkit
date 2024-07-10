@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Waarschuwing vertrouwensniveau certificaat";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Ĳ_Choose From Files__________________ä";
+"Choose From Files" = "Kiezen uit bestanden";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Ĳ_Choose From Library____________________ä";
+"Choose From Library" = "Kiezen uit galerij";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "Ĳ_Clear___________ä";
+"Clear" = "Wissen";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Alle resultaten wissen";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Gevaar: het certificaat dat door '%@' wordt verstrekt, is niet ondertekend door een vertrouwde autoriteit.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "Ĳ_Date exceeds maximum_____________________ä";
+"Date exceeds maximum" = "Datum overschrijdt maximum";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "Ĳ_Date less than minimum_______________________ä";
+"Date less than minimum" = "Datum is vroeger dan minimum";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "Ĳ_Date must be on or after %@____________________________ä";
+"Date must be on or after %@" = "Datum moet op of na %@ liggen";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "Ĳ_Date must be on or before %@_____________________________ä";
+"Date must be on or before %@" = "Datum moet op of voor %@ liggen";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Verwijderen";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "Ĳ_Enter %lld to ^[%lld characters](inflect: true)_________________________ä";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Voer %lld tot ^[%lld tekens] in (inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "Ĳ_Enter ^[%lld characters](inflect: true)_____________________ä";
+"Enter ^[%lld characters](inflect: true)" = "Voer ^[%lld tekens] in (inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Waarde invoeren";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "Ĳ_Enter value from %@ to %@__________________________ä";
+"Enter value from %@ to %@" = "Voer waarde in van %@ tot %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Fout";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "Ĳ_Error importing attachment___________________________ä";
+"Error importing attachment" = "Fout bij importeren bijlage";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Bezig met evalueren pop-upexpressies";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "Ĳ_Exceeds maximum value______________________ä";
+"Exceeds maximum value" = "Overschrijdt maximumwaarde";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "richting";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "Ĳ_Less than minimum value________________________ä";
+"Less than minimum value" = "Minder dan minimumwaarde";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "Ĳ_Maximum ^[%lld characters](inflect: true)______________________ä";
+"Maximum ^[%lld characters](inflect: true)" = "Maximaal ^[%lld tekens](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "Ĳ_Maximum character length exceeded__________________ä";
+"Maximum character length exceeded" = "Maximale tekenlengte is overschreden";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "Ĳ_Minimum character length not met_________________ä";
+"Minimum character length not met" = "Er is niet aan de minimale tekenlengte voldaan";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Modus";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Netwerk";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "Ĳ_New name_________________ä";
+"New name" = "Nieuwe naam";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Nieuwe tracering";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Pop-upevaluatie is mislukt: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "Ĳ_Rename_____________ä";
+"Rename" = "Naam wijzigen";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "Ĳ_Rename attachment__________________ä";
+"Rename attachment" = "Naam bijlage wijzigen";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Startpunten";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "Ĳ_Take Photo or Video____________________ä";
+"Take Photo or Video" = "Foto of video maken";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "Ĳ_The selected attachment could not be imported________________________ä.";
+"The selected attachment could not be imported." = "Kan de geselecteerde bijlage niet importeren.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "Ĳ_The selected attachment exceeds the %@ limit________________________ä.";
+"The selected attachment exceeds the %@ limit." = "De geselecteerde bijlage overschrijdt de limiet van %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "Kan de URL niet bereiken of de URL bevat geen beeldgegevens.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Opnieuw proberen";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "Ĳ_Unknown validation error_________________________ä";
+"Unknown validation error" = "Onbekende validatiefout";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Naamloos type activa";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "Ĳ_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ä";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Waarde moet tussen %lld en ^[%lld tekens] liggen (inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "Ĳ_Value must be ^[%lld characters](inflect: true)_________________________ä";
+"Value must be ^[%lld characters](inflect: true)" = "Waarde moet uit ^[%lld tekens] bestaan (inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "Ĳ_Value must be a number_______________________ä";
+"Value must be a number" = "Waarde moet een getal zijn";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "Ĳ_Value must be a whole number_____________________________ä";
+"Value must be a whole number" = "Waarde moet een geheel getal zijn";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "Ĳ_Value must be from %@ to %@____________________________ä";
+"Value must be from %@ to %@" = "De waarde moet tussen %@ en %@ liggen.";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "Ĳ_Value must be of correct type______________________________ä";
+"Value must be of correct type" = "Waarde moet van het juiste type zijn";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "Ĳ_Value must be within domain____________________________ä";
+"Value must be within domain" = "Waarde moet binnen domein liggen";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "Ĳ_Value must not be empty________________________ä";
+"Value must not be empty" = "Waarde mag niet leeg zijn";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

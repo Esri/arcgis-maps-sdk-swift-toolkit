@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "証明書の信頼性の警告";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "須_Choose From Files__________________鷗";
+"Choose From Files" = "ファイルから選択";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "須_Choose From Library____________________鷗";
+"Choose From Library" = "ライブラリから選択";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "須_Clear___________鷗";
+"Clear" = "消去";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "結果をすべて消去";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "危険: %@ が提供する証明書は、信頼された認証機関が署名していません。";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "須_Date exceeds maximum_____________________鷗";
+"Date exceeds maximum" = "日付が最大値を超えています";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "須_Date less than minimum_______________________鷗";
+"Date less than minimum" = "日付が最小値未満です";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "須_Date must be on or after %@____________________________鷗";
+"Date must be on or after %@" = "日付は %@ かそれ以降にする必要があります";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "須_Date must be on or before %@_____________________________鷗";
+"Date must be on or before %@" = "日付は %@ かそれ以前にする必要があります";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "削除";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "須_Enter %lld to ^[%lld characters](inflect: true)_________________________鷗";
+"Enter %lld to ^[%lld characters](inflect: true)" = "%lld を ^[%lld characters](inflect: true) に入力してください";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "須_Enter ^[%lld characters](inflect: true)_____________________鷗";
+"Enter ^[%lld characters](inflect: true)" = "^[%lld characters](inflect: true) と入力してください";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "値を入力";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "須_Enter value from %@ to %@__________________________鷗";
+"Enter value from %@ to %@" = "%@ ～ %@ の値を入力してください";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "エラー";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "須_Error importing attachment___________________________鷗";
+"Error importing attachment" = "アタッチメント ファイルのインポート中にエラーが発生しました";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "ポップアップ式を評価しています";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "須_Exceeds maximum value______________________鷗";
+"Exceeds maximum value" = "最大値を超えています";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "方位";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "須_Less than minimum value________________________鷗";
+"Less than minimum value" = "最小値未満です";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "須_Maximum ^[%lld characters](inflect: true)______________________鷗";
+"Maximum ^[%lld characters](inflect: true)" = "最大 ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "須_Maximum character length exceeded__________________鷗";
+"Maximum character length exceeded" = "最大文字長を超えています";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "メディア";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "須_Minimum character length not met_________________鷗";
+"Minimum character length not met" = "最小文字長を満たしていません";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "モード";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "ネットワーク";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "須_New name_________________鷗";
+"New name" = "新しい名前";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "新しいトレース";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "ポップアップの評価に失敗しました: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "須_Rename_____________鷗";
+"Rename" = "名前の変更";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "須_Rename attachment__________________鷗";
+"Rename attachment" = "添付ファイル名の変更";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "始点";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "須_Take Photo or Video____________________鷗";
+"Take Photo or Video" = "写真またはビデオを撮る";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "須_The selected attachment could not be imported________________________鷗.";
+"The selected attachment could not be imported." = "選択した添付ファイルをインポートできませんでした。";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "須_The selected attachment exceeds the %@ limit________________________鷗.";
+"The selected attachment exceeds the %@ limit." = "選択した添付ファイルが %@ 制限を超えています。";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL に到達できなかったか、画像データが含まれていませんでした。";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "再試行";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "須_Unknown validation error_________________________鷗";
+"Unknown validation error" = "不明な検証エラー";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "無名のアセット タイプ";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "須_Value must be %lld to ^[%lld characters](inflect: true)_____________________________鷗";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "値は %lld から ^[%lld characters](inflect: true) でなければなりません";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "須_Value must be ^[%lld characters](inflect: true)_________________________鷗";
+"Value must be ^[%lld characters](inflect: true)" = "値は　^[%lld characters](inflect: true) でなければなりません";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "須_Value must be a number_______________________鷗";
+"Value must be a number" = "値を数値にする必要があります";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "須_Value must be a whole number_____________________________鷗";
+"Value must be a whole number" = "整数を使用してください";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "須_Value must be from %@ to %@____________________________鷗";
+"Value must be from %@ to %@" = "値は %@ ～ %@ である必要があります";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "須_Value must be of correct type______________________________鷗";
+"Value must be of correct type" = "値を正しいタイプにする必要があります";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "須_Value must be within domain____________________________鷗";
+"Value must be within domain" = "値はドメイン内である必要があります";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "須_Value must not be empty________________________鷗";
+"Value must not be empty" = "値は空にしてはなりません";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
