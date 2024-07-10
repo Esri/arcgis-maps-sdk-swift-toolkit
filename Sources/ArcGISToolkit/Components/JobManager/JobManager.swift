@@ -44,7 +44,7 @@ import UIKit
 ***REMOVED***/ serialized when an app is backgrounded so that if the app is terminated the jobs can be
 ***REMOVED***/ rehydrated upon relaunch of the app.
 ***REMOVED***/
-***REMOVED***/ Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quit it),
+***REMOVED***/ Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quits it),
 ***REMOVED***/ the system interprets this as a strong indication that the app should
 ***REMOVED***/ do no more work in the background. The consequences of this are two-fold for jobs.
 ***REMOVED***/ One, any background fetch tasks are not given any time until the app is relaunched again.
