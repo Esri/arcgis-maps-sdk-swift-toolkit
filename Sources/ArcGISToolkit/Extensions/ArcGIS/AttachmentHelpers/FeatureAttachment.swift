@@ -70,32 +70,25 @@ extension FeatureAttachmentKind {
 ***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
 ***REMOVED******REMOVED***/ - Parameter kind: The popup attachment kind.
 ***REMOVED***init(kind: PopupAttachment.Kind) {
-***REMOVED******REMOVED***switch kind {
-***REMOVED******REMOVED***case .image:
-***REMOVED******REMOVED******REMOVED***self = .image
-***REMOVED******REMOVED***case .video:
-***REMOVED******REMOVED******REMOVED***self = .video
-***REMOVED******REMOVED***case .document:
-***REMOVED******REMOVED******REMOVED***self = .document
-***REMOVED******REMOVED***case .other:
-***REMOVED******REMOVED******REMOVED***self = .other
+***REMOVED******REMOVED***self = switch kind {
+***REMOVED******REMOVED***case .image: .image
+***REMOVED******REMOVED***case .video: .video
+***REMOVED******REMOVED***case .document: .document
+***REMOVED******REMOVED***case .other: .other
+***REMOVED******REMOVED***@unknown default: fatalError("Unknown case")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
 ***REMOVED******REMOVED***/ - Parameter kind: The popup attachment kind.
 ***REMOVED***init(kind: FormAttachment.Kind) {
-***REMOVED******REMOVED***switch kind {
-***REMOVED******REMOVED***case .other:
-***REMOVED******REMOVED******REMOVED***self = .other
-***REMOVED******REMOVED***case .image:
-***REMOVED******REMOVED******REMOVED***self = .image
-***REMOVED******REMOVED***case .video:
-***REMOVED******REMOVED******REMOVED***self = .video
-***REMOVED******REMOVED***case .document:
-***REMOVED******REMOVED******REMOVED***self = .document
-***REMOVED******REMOVED***case .audio:
-***REMOVED******REMOVED******REMOVED***self = .audio
+***REMOVED******REMOVED***self = switch kind {
+***REMOVED******REMOVED***case .other: .other
+***REMOVED******REMOVED***case .image: .image
+***REMOVED******REMOVED***case .video: .video
+***REMOVED******REMOVED***case .document: .document
+***REMOVED******REMOVED***case .audio: .audio
+***REMOVED******REMOVED***@unknown default: fatalError("Unknown case")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

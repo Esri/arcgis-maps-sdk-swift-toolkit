@@ -145,8 +145,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -225,23 +223,18 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED***/ The size of thumbnail images, based on the attachment display type
 ***REMOVED******REMOVED***/ and the current size class of the view.
 ***REMOVED***var thumbnailSize: CGSize {
-***REMOVED******REMOVED******REMOVED*** Set thumbnail size
-***REMOVED******REMOVED***let thumbnailSize: CGSize
 ***REMOVED******REMOVED***switch featureElement.attachmentsDisplayType {
 ***REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED******REMOVED***CGSize(width: 40, height: 40)
 ***REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
 ***REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 40, height: 40)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
 ***REMOVED***
-***REMOVED******REMOVED***return thumbnailSize
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the feature Element

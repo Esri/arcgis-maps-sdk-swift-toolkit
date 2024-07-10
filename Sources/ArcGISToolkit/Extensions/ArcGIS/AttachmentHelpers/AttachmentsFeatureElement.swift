@@ -46,13 +46,11 @@ extension AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***/ Creates a display type from an attachment popup element's display type.
 ***REMOVED******REMOVED***/ - Parameter kind: The display type of the popup element.
 ***REMOVED***init(kind: AttachmentsPopupElement.DisplayType) {
-***REMOVED******REMOVED***switch kind {
-***REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED***self = .list
-***REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED***self = .preview
-***REMOVED******REMOVED***case .auto:
-***REMOVED******REMOVED******REMOVED***self = .auto
+***REMOVED******REMOVED***self = switch kind {
+***REMOVED******REMOVED***case .list: .list
+***REMOVED******REMOVED***case .preview: .preview
+***REMOVED******REMOVED***case .auto: .auto
+***REMOVED******REMOVED***@unknown default: fatalError("Unknown case")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
