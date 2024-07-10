@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Предупреждение сертификата доверия";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Ж_Choose From Files__________________Я";
+"Choose From Files" = "Выбрать из файлов";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Ж_Choose From Library____________________Я";
+"Choose From Library" = "Выбрать в библиотеке";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "Ж_Clear___________Я";
+"Clear" = "Очистить";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Очистить все результаты";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Опасно: сертификат, предоставленный '%@', не подписан доверенным органом.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "Ж_Date exceeds maximum_____________________Я";
+"Date exceeds maximum" = "Дата превышает максимальную";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "Ж_Date less than minimum_______________________Я";
+"Date less than minimum" = "Дата меньше минимальной";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "Ж_Date must be on or after %@____________________________Я";
+"Date must be on or after %@" = "Дата должна быть %@ или позже";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "Ж_Date must be on or before %@_____________________________Я";
+"Date must be on or before %@" = "Дата должна быть %@ или ранее";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Удалить";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "Ж_Enter %lld to ^[%lld characters](inflect: true)_________________________Я";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Введите от %lld до ^[%lld символов](inflect: истина)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "Ж_Enter ^[%lld characters](inflect: true)_____________________Я";
+"Enter ^[%lld characters](inflect: true)" = "Введите ^[%lld символов](inflect: истина)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Введите значение";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "Ж_Enter value from %@ to %@__________________________Я";
+"Enter value from %@ to %@" = "Введите значение от %@ до %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Ошибка";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "Ж_Error importing attachment___________________________Я";
+"Error importing attachment" = "Ошибка импорта вложения";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Оценка всплывающих выражений";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "Ж_Exceeds maximum value______________________Я";
+"Exceeds maximum value" = "Превышает максимальное значение";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "курс";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "Ж_Less than minimum value________________________Я";
+"Less than minimum value" = "Меньше минимального значения";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "Ж_Maximum ^[%lld characters](inflect: true)______________________Я";
+"Maximum ^[%lld characters](inflect: true)" = "Максимум ^[%lld символов](inflect: истина)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "Ж_Maximum character length exceeded__________________Я";
+"Maximum character length exceeded" = "Превышена максимальная длина в символах";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Медиа";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "Ж_Minimum character length not met_________________Я";
+"Minimum character length not met" = "Не соответствует минимальной длине в символах";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Режим";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Сеть";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "Ж_New name_________________Я";
+"New name" = "Новое имя";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Новая трассировка";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Оценка всплывающих окон не удалась: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "Ж_Rename_____________Я";
+"Rename" = "Переименовать";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "Ж_Rename attachment__________________Я";
+"Rename attachment" = "Переименовать вложение";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Начальные точки";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "Ж_Take Photo or Video____________________Я";
+"Take Photo or Video" = "Сделать фотографию или видео";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "Ж_The selected attachment could not be imported________________________Я.";
+"The selected attachment could not be imported." = "Выбранное вложение не может быть импортировано.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "Ж_The selected attachment exceeds the %@ limit________________________Я.";
+"The selected attachment exceeds the %@ limit." = "Выбранное вложение превышает ограничение %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-адрес недоступен или не содержит данных изображения.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Попробуйте еще раз";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "Ж_Unknown validation error_________________________Я";
+"Unknown validation error" = "Неизвестная ошибка проверки";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Тип устройства без названия";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "Ж_Value must be %lld to ^[%lld characters](inflect: true)_____________________________Я";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Значение должно быть от %lld до ^[%lld символов](inflect: истина)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "Ж_Value must be ^[%lld characters](inflect: true)_________________________Я";
+"Value must be ^[%lld characters](inflect: true)" = "Значение должно быть ^[%lld символов](inflect: истина)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "Ж_Value must be a number_______________________Я";
+"Value must be a number" = "Значение должно быть числом";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "Ж_Value must be a whole number_____________________________Я";
+"Value must be a whole number" = "Значение должно быть целым числом";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "Ж_Value must be from %@ to %@____________________________Я";
+"Value must be from %@ to %@" = "Значение должно содержать от %@ до %@ символов";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "Ж_Value must be of correct type______________________________Я";
+"Value must be of correct type" = "Значение должно быть корректного типа";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "Ж_Value must be within domain____________________________Я";
+"Value must be within domain" = "Значение должно быть в пределах домена";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "Ж_Value must not be empty________________________Я";
+"Value must not be empty" = "Значение не должно быть пустым";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

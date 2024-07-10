@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Advarsel om sertifikatklarering";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "å_Choose From Files__________________ø";
+"Choose From Files" = "Velg fra Filer";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "å_Choose From Library____________________ø";
+"Choose From Library" = "Velg fra Bibliotek";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "å_Clear___________ø";
+"Clear" = "Fjern";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Fjern all resultater";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Fare: Sertifikatet som er utstedt av \"%@\", er ikke signert av en klarert sertifiseringsinstans.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "å_Date exceeds maximum_____________________ø";
+"Date exceeds maximum" = "Datoen overstiger maksimum";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "å_Date less than minimum_______________________ø";
+"Date less than minimum" = "Dato mindre enn minimumsverdi";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "å_Date must be on or after %@____________________________ø";
+"Date must be on or after %@" = "Datoen må være den eller etter %@";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "å_Date must be on or before %@_____________________________ø";
+"Date must be on or before %@" = "Datoen må være den eller før %@";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Slett";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "å_Enter %lld to ^[%lld characters](inflect: true)_________________________ø";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Skriv inn %lld til ^[%lld tegn](inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "å_Enter ^[%lld characters](inflect: true)_____________________ø";
+"Enter ^[%lld characters](inflect: true)" = "Skriv inn ^[%lld tegn](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Angi verdi";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "å_Enter value from %@ to %@__________________________ø";
+"Enter value from %@ to %@" = "Angi verdi fra %@ til %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Feil";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "å_Error importing attachment___________________________ø";
+"Error importing attachment" = "Feil ved import av vedlegg";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Evaluerer popup-uttrykk";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "å_Exceeds maximum value______________________ø";
+"Exceeds maximum value" = "Overstiger maksimumsverdi";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "kurs";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "å_Less than minimum value________________________ø";
+"Less than minimum value" = "Mindre enn minimumsverdi";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "å_Maximum ^[%lld characters](inflect: true)______________________ø";
+"Maximum ^[%lld characters](inflect: true)" = "Maksimalt ^[%lld tegn](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "å_Maximum character length exceeded__________________ø";
+"Maximum character length exceeded" = "Maksimumsgrensen for antall tegn er overskredet";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "å_Minimum character length not met_________________ø";
+"Minimum character length not met" = "Minimumsgrensen for antall tegn er ikke nådd";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Modus";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Nettverk";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "å_New name_________________ø";
+"New name" = "Nytt navn";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Ny sporing";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup-evaluering mislyktes: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "å_Rename_____________ø";
+"Rename" = "Gi nytt navn";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "å_Rename attachment__________________ø";
+"Rename attachment" = "Endre navn på vedlegg";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Startpunkter";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "å_Take Photo or Video____________________ø";
+"Take Photo or Video" = "Ta bilde eller video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "å_The selected attachment could not be imported________________________ø.";
+"The selected attachment could not be imported." = "Det valgte vedlegget kunne ikke importeres.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "å_The selected attachment exceeds the %@ limit________________________ø.";
+"The selected attachment exceeds the %@ limit." = "Det valgte tillegget overstiger grensen på %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-en kunne ikke nås eller inneholdt ingen bildedata.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Prøv på nytt";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "å_Unknown validation error_________________________ø";
+"Unknown validation error" = "Ukjent valideringsfeil";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Ressurstype uten navn";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "å_Value must be %lld to ^[%lld characters](inflect: true)_____________________________ø";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Verdien må være %lld til ^[%lld tegn](inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "å_Value must be ^[%lld characters](inflect: true)_________________________ø";
+"Value must be ^[%lld characters](inflect: true)" = "Verdien må være ^[%lld tegn](inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "å_Value must be a number_______________________ø";
+"Value must be a number" = "Verdien må være et tall";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "å_Value must be a whole number_____________________________ø";
+"Value must be a whole number" = "Verdien må være et heltall";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "å_Value must be from %@ to %@____________________________ø";
+"Value must be from %@ to %@" = "Verdien må være mellom %@ og %@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "å_Value must be of correct type______________________________ø";
+"Value must be of correct type" = "Verdien må være av riktig type";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "å_Value must be within domain____________________________ø";
+"Value must be within domain" = "Verdien må være innenfor domenet";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "å_Value must not be empty________________________ø";
+"Value must not be empty" = "Verdien kan ikke være tom";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

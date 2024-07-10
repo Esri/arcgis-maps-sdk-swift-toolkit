@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Opozorilo glede zaupanja certifikatu";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Š_Choose From Files__________________č";
+"Choose From Files" = "Izberi iz datotek";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Š_Choose From Library____________________č";
+"Choose From Library" = "Izberi iz knjižnice";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "Š_Clear___________č";
+"Clear" = "Počisti";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Počisti vse rezultate";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nevarno: certifikata, ki ga zagotavlja '%@', ni podpisala zaupanja vredna ustanova.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "Š_Date exceeds maximum_____________________č";
+"Date exceeds maximum" = "Datum presega največjo vrednost";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "Š_Date less than minimum_______________________č";
+"Date less than minimum" = "Datum je nižji od dovoljenega";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "Š_Date must be on or after %@____________________________č";
+"Date must be on or after %@" = "Datum mora biti na ali po %@";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "Š_Date must be on or before %@_____________________________č";
+"Date must be on or before %@" = "Datum mora biti na ali pred %@";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Izbriši";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "Š_Enter %lld to ^[%lld characters](inflect: true)_________________________č";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Vnesite od %lld do ^[%lld znakov](inflect: true)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "Š_Enter ^[%lld characters](inflect: true)_____________________č";
+"Enter ^[%lld characters](inflect: true)" = "Vnesite ^[%lld znakov](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Vnesite vrednost";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "Š_Enter value from %@ to %@__________________________č";
+"Enter value from %@ to %@" = "Vnesite vrednosti od %@ do %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Napaka";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "Š_Error importing attachment___________________________č";
+"Error importing attachment" = "Napaka pri uvozu priloge";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Ovrednotenje pojavnih izrazov";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "Š_Exceeds maximum value______________________č";
+"Exceeds maximum value" = "Presega največjo vrednost";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "glava";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "Š_Less than minimum value________________________č";
+"Less than minimum value" = "Manj kot najmanjša vrednost";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "Š_Maximum ^[%lld characters](inflect: true)______________________č";
+"Maximum ^[%lld characters](inflect: true)" = "Največ ^[%lld znakov](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "Š_Maximum character length exceeded__________________č";
+"Maximum character length exceeded" = "Največja dolžina znakov je presežena.";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Mediji";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "Š_Minimum character length not met_________________č";
+"Minimum character length not met" = "Najmanjša dolžina znakov ni izpolnjena";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Način";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Omrežje";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "Š_New name_________________č";
+"New name" = "Novo ime";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Nova sled";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Ovrednotenje pojavnega okna ni uspelo: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "Š_Rename_____________č";
+"Rename" = "Preimenuj";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "Š_Rename attachment__________________č";
+"Rename attachment" = "Preimenuj prilogo";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Začetne točke";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "Š_Take Photo or Video____________________č";
+"Take Photo or Video" = "Zajemi fotografijo ali video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "Š_The selected attachment could not be imported________________________č.";
+"The selected attachment could not be imported." = "Izbrane priloge ni bilo mogoče uvoziti.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "Š_The selected attachment exceeds the %@ limit________________________č.";
+"The selected attachment exceeds the %@ limit." = "Izbrana priloga presega omejitev %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-ja ni bilo mogoče doseči oziroma ni vseboval podatkov o sliki.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Poskusite znova";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "Š_Unknown validation error_________________________č";
+"Unknown validation error" = "Neznana napaka pri preverjanju veljavnosti";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Neimenovani tip sredstva";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "Š_Value must be %lld to ^[%lld characters](inflect: true)_____________________________č";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Vrednost mora biti od %lld do ^[%lld znakov](inflect: true)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "Š_Value must be ^[%lld characters](inflect: true)_________________________č";
+"Value must be ^[%lld characters](inflect: true)" = "Vrednost mora biti ^[%lld znakov](inflect: true)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "Š_Value must be a number_______________________č";
+"Value must be a number" = "Vrednost mora biti število";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "Š_Value must be a whole number_____________________________č";
+"Value must be a whole number" = "Vrednost mora biti celo število";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "Š_Value must be from %@ to %@____________________________č";
+"Value must be from %@ to %@" = "Vrednost mora biti od %@ do %@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "Š_Value must be of correct type______________________________č";
+"Value must be of correct type" = "Vrednost mora biti ustrezne vrste";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "Š_Value must be within domain____________________________č";
+"Value must be within domain" = "Vrednost mora biti znotraj domene";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "Š_Value must not be empty________________________č";
+"Value must not be empty" = "Vrednost ne sme biti prazna";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

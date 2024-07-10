@@ -55,13 +55,13 @@ for the AR experience. */
 "Certificate Trust Warning" = "Advertencia de confianza del certificado";
 
 /* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "á_Choose From Files__________________Ó";
+"Choose From Files" = "Elegir de archivos";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "á_Choose From Library____________________Ó";
+"Choose From Library" = "Elegir de biblioteca";
 
 /* The label of a button that clears a form's input. */
-"Clear" = "á_Clear___________Ó";
+"Clear" = "Borrar";
 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Borrar todos los resultados";
@@ -85,16 +85,16 @@ east, etc.). */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Peligroso: el certificado proporcionado por '%@' no está firmado por una autoridad de confianza.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
-"Date exceeds maximum" = "á_Date exceeds maximum_____________________Ó";
+"Date exceeds maximum" = "La fecha supera el máximo";
 
 /* Text indicating a field's value must meet a minimum date. */
-"Date less than minimum" = "á_Date less than minimum_______________________Ó";
+"Date less than minimum" = "Fecha menor que el mínimo";
 
 /* Text indicating a field's value must be on or after the minimum date specified in the variable. */
-"Date must be on or after %@" = "á_Date must be on or after %@____________________________Ó";
+"Date must be on or after %@" = "La fecha debe ser el %@ o después";
 
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
-"Date must be on or before %@" = "á_Date must be on or before %@_____________________________Ó";
+"Date must be on or before %@" = "La fecha debe ser el %@ o antes";
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Eliminar";
@@ -117,24 +117,24 @@ AR experience. */
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to ^[%lld characters](inflect: true)" = "á_Enter %lld to ^[%lld characters](inflect: true)_________________________Ó";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Introducir de %lld a ^[%lld characters](modular: verdadero)";
 
 /* Text indicating the user should enter a field's exact number of characters. */
-"Enter ^[%lld characters](inflect: true)" = "á_Enter ^[%lld characters](inflect: true)_____________________Ó";
+"Enter ^[%lld characters](inflect: true)" = "Introducir ^[%lld characters](modular: verdadero)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Introducir valor";
 
 /* Text indicating a field's value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Enter value from %@ to %@" = "á_Enter value from %@ to %@__________________________Ó";
+"Enter value from %@ to %@" = "Introduzca un valor de %@ a %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
-"Error importing attachment" = "á_Error importing attachment___________________________Ó";
+"Error importing attachment" = "Error al importar el archivo adjunto";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -151,7 +151,7 @@ The variable provides additional data. */
 "Evaluating popup expressions" = "Evaluación de expresiones emergentes";
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
-"Exceeds maximum value" = "á_Exceeds maximum value______________________Ó";
+"Exceeds maximum value" = "Supera el valor máximo";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -193,19 +193,19 @@ AR experience. */
 "heading" = "grado";
 
 /* Text indicating a field's value must be within the allowed range. */
-"Less than minimum value" = "á_Less than minimum value________________________Ó";
+"Less than minimum value" = "Inferior al valor mínimo";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum ^[%lld characters](inflect: true)" = "á_Maximum ^[%lld characters](inflect: true)______________________Ó";
+"Maximum ^[%lld characters](inflect: true)" = "Máximo ^[%lld characters](modular: verdadero)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
-"Maximum character length exceeded" = "á_Maximum character length exceeded__________________Ó";
+"Maximum character length exceeded" = "Se ha superado la longitud de caracteres máxima";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Contenido multimedia";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
-"Minimum character length not met" = "á_Minimum character length not met_________________Ó";
+"Minimum character length not met" = "No se respeta la longitud de caracteres máxima";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Modo";
@@ -217,7 +217,7 @@ AR experience. */
 "Network" = "Red";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
-"New name" = "á_New name_________________Ó";
+"New name" = "Nombre nuevo";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Nuevo trazado";
@@ -280,10 +280,10 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Error en la evaluación de la ventana emergente: %@";
 
 /* A label for a button to rename an attachment. */
-"Rename" = "á_Rename_____________Ó";
+"Rename" = "Cambiar el nombre";
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
-"Rename attachment" = "á_Rename attachment__________________Ó";
+"Rename attachment" = "Cambiar nombre de adjunto";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -318,7 +318,7 @@ network trace operation. */
 "Starting Points" = "Puntos de partida";
 
 /* A label for a button to capture a new photo or video. */
-"Take Photo or Video" = "á_Take Photo or Video____________________Ó";
+"Take Photo or Video" = "Hacer foto o vídeo";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -356,10 +356,10 @@ match the spatial reference of the map. */
 
 /* A generic message for an alert that the selected file was not able
 to be imported as an attachment. */
-"The selected attachment could not be imported." = "á_The selected attachment could not be imported________________________Ó.";
+"The selected attachment could not be imported." = "El elemento adjunto seleccionado no se pudo importar.";
 
 /* An error message indicating the selected attachment exceeds the megabyte limit. */
-"The selected attachment exceeds the %@ limit." = "á_The selected attachment exceeds the %@ limit________________________Ó.";
+"The selected attachment exceeds the %@ limit." = "El elemento adjunto supera el límite de %@.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "No se ha podido acceder a la URL o no contenía datos de imagen.";
@@ -380,7 +380,7 @@ to be imported as an attachment. */
 "Try Again" = "Volver a intentarlo";
 
 /* Text indicating a field has an unknown validation error. */
-"Unknown validation error" = "á_Unknown validation error_________________________Ó";
+"Unknown validation error" = "Error de validación desconocido";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Tipo de activo sin nombre";
@@ -394,29 +394,29 @@ to be imported as an attachment. */
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Value must be %lld to ^[%lld characters](inflect: true)" = "á_Value must be %lld to ^[%lld characters](inflect: true)_____________________________Ó";
+"Value must be %lld to ^[%lld characters](inflect: true)" = "El valor debe ser de %lld a ^[%lld characters](modular: verdadero)";
 
 /* Text indicating a field's computed value must be an exact number of characters. */
-"Value must be ^[%lld characters](inflect: true)" = "á_Value must be ^[%lld characters](inflect: true)_________________________Ó";
+"Value must be ^[%lld characters](inflect: true)" = "El valor debe ser ^[%lld characters](modular: verdadero)";
 
 /* Text indicating a field's value must be convertible to a number. */
-"Value must be a number" = "á_Value must be a number_______________________Ó";
+"Value must be a number" = "El valor debe ser un número";
 
 /* Text indicating a field's value must be convertible to a whole number. */
-"Value must be a whole number" = "á_Value must be a whole number_____________________________Ó";
+"Value must be a whole number" = "El valor debe ser un número entero";
 
 /* Text indicating a field's computed value must be within the allowed range.
 The first and second parameter hold the minimum and maximum values respectively. */
-"Value must be from %@ to %@" = "á_Value must be from %@ to %@____________________________Ó";
+"Value must be from %@ to %@" = "El valor debe estar comprendido entre %@ y %@";
 
 /* Text indicating a field's value must be of the correct type. */
-"Value must be of correct type" = "á_Value must be of correct type______________________________Ó";
+"Value must be of correct type" = "El valor debe ser del tipo correcto";
 
 /* Text indicating a field's value must exist in the domain. */
-"Value must be within domain" = "á_Value must be within domain____________________________Ó";
+"Value must be within domain" = "El valor debe estar dentro del dominio";
 
 /* Text indicating a field's value must not be empty. */
-"Value must not be empty" = "á_Value must not be empty________________________Ó";
+"Value must not be empty" = "El valor no debe estar vacío";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
