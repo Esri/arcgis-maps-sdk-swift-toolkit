@@ -70,6 +70,7 @@ struct AttachmentPreview: View {
         Carousel { computedCellSize, scrollToLeftAction in
             Group {
                 makeCarouselContent(for: computedCellSize)
+                    .transition(.asymmetric(insertion: .slide, removal: .scale))
             }
             .onAppear {
                 scrollToNewAttachmentAction = scrollToLeftAction
@@ -183,7 +184,6 @@ struct AttachmentPreview: View {
                     } else {
                         ProgressView()
                             .padding(8)
-                            .background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
                     }
                 }
                 if attachmentModel.attachment.loadStatus != .loaded {
