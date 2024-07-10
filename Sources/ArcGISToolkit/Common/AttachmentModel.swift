@@ -104,7 +104,7 @@ import SwiftUI
             )
             do {
                 let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
-                self.thumbnail = thumbnail.uiImage
+                withAnimation { self.thumbnail = thumbnail.uiImage }
             } catch {
                 systemImageName = "exclamationmark.circle.fill"
             }
