@@ -16,7 +16,7 @@ public extension Result where Failure == Error {
     /// Creates a result based on the outcome of the given task. If the task
     /// succeeds, the result is `success`. If the task fails, the result is
     /// `failure`.
-    init(awaiting task: () async throws -> Success) async {
+    init(awaiting task: @Sendable () async throws -> Success) async {
         do {
             self = .success(try await task())
         } catch {

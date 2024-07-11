@@ -15,6 +15,7 @@
 import SwiftUI
 
 /// The view model for pie charts.
+@MainActor
 final class PieChartModel: ObservableObject {
     /// The slices that make up the pie chart.
     let pieSlices: [PieSlice]
@@ -38,7 +39,7 @@ final class PieChartModel: ObservableObject {
     }
     
     /// The pre-defined colors for the pie slices.
-    static var sliceColors: [Color] = [
+    static let sliceColors: [Color] = [
         .mint,
         .teal,
         .green,
