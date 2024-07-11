@@ -31,6 +31,7 @@ struct AttachmentCameraControllerTestView: View {
     
 }
 
+#if compiler(>=6.0)
 extension UIImagePickerController.CameraCaptureMode: @retroactive CustomStringConvertible {
     public var description: String {
         switch self {
@@ -40,3 +41,14 @@ extension UIImagePickerController.CameraCaptureMode: @retroactive CustomStringCo
         }
     }
 }
+#else
+extension UIImagePickerController.CameraCaptureMode: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .photo: "Photo"
+        case .video: "Video"
+        @unknown default: "N/A"
+        }
+    }
+}
+#endif
