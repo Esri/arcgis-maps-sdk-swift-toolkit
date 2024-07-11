@@ -67,12 +67,16 @@ import QuickLook
 ***REMOVED******REMOVED***self.name = attachment.name
 ***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***systemImageName = switch attachment.featureAttachmentKind {
-***REMOVED******REMOVED***case .image: "photo"
-***REMOVED******REMOVED***case .video: "film"
-***REMOVED******REMOVED***case .audio: "waveform"
-***REMOVED******REMOVED***case .document: "doc"
-***REMOVED******REMOVED***case .other: "questionmark"
+***REMOVED******REMOVED***if attachment.isLocal {
+***REMOVED******REMOVED******REMOVED***load()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***systemImageName = switch attachment.featureAttachmentKind {
+***REMOVED******REMOVED******REMOVED***case .image: "photo"
+***REMOVED******REMOVED******REMOVED***case .video: "film"
+***REMOVED******REMOVED******REMOVED***case .audio: "waveform"
+***REMOVED******REMOVED******REMOVED***case .document: "doc"
+***REMOVED******REMOVED******REMOVED***case .other: "questionmark"
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
