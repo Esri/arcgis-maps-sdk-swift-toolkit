@@ -112,6 +112,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***if importState.importInProgress {
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(5)
 ***REMOVED***
 ***REMOVED******REMOVED***Menu {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Show photo/video and library picker.
