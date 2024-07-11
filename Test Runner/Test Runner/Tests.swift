@@ -18,6 +18,7 @@ struct Tests: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("AttachmentCameraController Tests", destination: AttachmentCameraControllerTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
