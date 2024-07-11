@@ -18,6 +18,7 @@ struct Tests: View {
     var body: some View {
         NavigationStack {
             List {
+                NavigationLink("AttachmentCameraController Tests", destination: AttachmentCameraControllerTestView())
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
                 NavigationLink("Feature Form Tests", destination: FeatureFormTestView())

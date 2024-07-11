@@ -44,6 +44,9 @@ struct AttachmentImportMenu: View {
     /// The current import state.
     @State private var importState: AttachmentImportState = .none
     
+    /// A Boolean value indicating whether the microphone access alert is visible.
+    @State private var microphoneAccessAlertIsVisible = false
+    
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
@@ -82,12 +85,8 @@ struct AttachmentImportMenu: View {
                 }
             }
         } label: {
-            Label {
-                Text(cameraButtonLabel)
-            } icon: {
-                Image(systemName: "camera")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(cameraButtonLabel)
+            Image(systemName: "camera")
         }
     }
     
@@ -95,12 +94,8 @@ struct AttachmentImportMenu: View {
         Button {
             photoPickerIsPresented = true
         } label: {
-            Label {
-                Text(libraryButtonLabel)
-            } icon: {
-                Image(systemName: "photo")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(libraryButtonLabel)
+            Image(systemName: "photo")
         }
     }
     
@@ -108,12 +103,8 @@ struct AttachmentImportMenu: View {
         Button {
             fileImporterIsShowing = true
         } label: {
-            Label {
-                Text(filesButtonLabel)
-            } icon: {
-                Image(systemName: "folder")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(filesButtonLabel)
+            Image(systemName: "folder")
         }
     }
     
@@ -135,9 +126,7 @@ struct AttachmentImportMenu: View {
         }
         .disabled(importState.importInProgress)
         .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
-            Button(String.settings) {
-                Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
-            }
+            appSettingsButton
             Button(String.cancel, role: .cancel) { }
         } message: {
             Text(cameraAccessAlertMessage)
@@ -205,6 +194,17 @@ struct AttachmentImportMenu: View {
             AttachmentCameraController(
                 importState: $importState
             )
+            .onCameraCaptureModeChanged { captureMode in
+                if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+                    microphoneAccessAlertIsVisible = true
+                }
+            }
+            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+                appSettingsButton
+                Button(role: .cancel) { } label: {
+                    Text(recordVideoOnlyButtonLabel)
+                }
+            }
         }
         .modifier(
             AttachmentPhotoPicker(
@@ -216,6 +216,13 @@ struct AttachmentImportMenu: View {
 }
 
 private extension AttachmentImportMenu {
+    /// A button that redirects the user to the application's entry in the iOS system Settings application.
+    var appSettingsButton: some View {
+        Button(String.settings) {
+            Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
+        }
+    }
+    
     /// A message for an alert requesting camera access.
     var cameraAccessAlertMessage: String {
         .init(
@@ -304,6 +311,24 @@ private extension AttachmentImportMenu {
             localized: "Choose From Library",
             bundle: .toolkitModule,
             comment: "A label for a button to choose a photo or video from the user's photo library."
+        )
+    }
+    
+    /// A warning message indicating microphone access has been disabled for the current application in the system settings.
+    var microphoneAccessWarningMessage: String {
+        .init(
+            localized: "Microphone access has been disabled in Settings.",
+            bundle: .toolkitModule,
+            comment: "A warning message indicating microphone access has been disabled for the current application in the system settings."
+        )
+    }
+    
+    /// A button allowing users to proceed to record a video while acknowledging audio will not be captured.
+    var recordVideoOnlyButtonLabel: String {
+        .init(
+            localized: "Record video only",
+            bundle: .toolkitModule,
+            comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
         )
     }
     
