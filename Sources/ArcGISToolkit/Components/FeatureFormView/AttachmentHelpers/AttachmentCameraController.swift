@@ -23,7 +23,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     @Binding var importState: AttachmentImportState
     
     /// The image picker controller represented within the view.
-    private let controller = UIImagePickerController()
+    private let controller = AttachmentUIImagePickerController()
     
     /// Dismisses the picker controller.
     func endCapture() {
@@ -73,5 +73,39 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         parent.endCapture()
+    }
+}
+
+extension AttachmentCameraController {
+    /// Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
+    /// - Parameter action: The new camera capture mode.
+    func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
+        self.controller.action = action
+        return self
+    }
+}
+
+/// A wrapper around ``UIImagePickerController``.
+///
+/// Use this wrapper to monitor additional properties like the current camera capture mode (photo/video).
+class AttachmentUIImagePickerController: UIImagePickerController {
+    /// Observes changes to the camera capture mode.
+    var cameraCaptureModeObserver: (any NSObjectProtocol)?
+    
+    /// An action to perform when the camera capture mode changes.
+    var action: ((UIImagePickerController.CameraCaptureMode) -> Void)?
+    
+    override func viewDidAppear(_ animated: Bool) {
+        cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
+            Task {
+                await self.action?(self.cameraCaptureMode)
+            }
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if let cameraCaptureModeObserver {
+            NotificationCenter.default.removeObserver(cameraCaptureModeObserver)
+        }
     }
 }

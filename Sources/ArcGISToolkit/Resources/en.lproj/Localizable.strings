@@ -213,6 +213,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "Microphone access has been disabled in Settings.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimum character length not met";
 
@@ -290,6 +293,9 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "Record video only";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Rename";
