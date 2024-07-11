@@ -23,7 +23,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED***@Binding var importState: AttachmentImportState
 ***REMOVED***
 ***REMOVED******REMOVED***/ The image picker controller represented within the view.
-***REMOVED***private let controller = UIImagePickerController()
+***REMOVED***private let controller = AttachmentUIImagePickerController()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Dismisses the picker controller.
 ***REMOVED***func endCapture() {
@@ -73,5 +73,39 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 ***REMOVED***
 ***REMOVED***func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 ***REMOVED******REMOVED***parent.endCapture()
+***REMOVED***
+***REMOVED***
+
+extension AttachmentCameraController {
+***REMOVED******REMOVED***/ Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
+***REMOVED******REMOVED***/ - Parameter action: The new camera capture mode.
+***REMOVED***func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
+***REMOVED******REMOVED***self.controller.action = action
+***REMOVED******REMOVED***return self
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A wrapper around ``UIImagePickerController``.
+***REMOVED***/
+***REMOVED***/ Use this wrapper to monitor additional properties like the current camera capture mode (photo/video).
+class AttachmentUIImagePickerController: UIImagePickerController {
+***REMOVED******REMOVED***/ Observes changes to the camera capture mode.
+***REMOVED***var cameraCaptureModeObserver: (any NSObjectProtocol)?
+***REMOVED***
+***REMOVED******REMOVED***/ An action to perform when the camera capture mode changes.
+***REMOVED***var action: ((UIImagePickerController.CameraCaptureMode) -> Void)?
+***REMOVED***
+***REMOVED***override func viewDidAppear(_ animated: Bool) {
+***REMOVED******REMOVED***cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.action?(self.cameraCaptureMode)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***override func viewDidDisappear(_ animated: Bool) {
+***REMOVED******REMOVED***if let cameraCaptureModeObserver {
+***REMOVED******REMOVED******REMOVED***NotificationCenter.default.removeObserver(cameraCaptureModeObserver)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -44,6 +44,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The current import state.
 ***REMOVED***@State private var importState: AttachmentImportState = .none
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the microphone access alert is visible.
+***REMOVED***@State private var microphoneAccessAlertIsVisible = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
@@ -82,12 +85,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
+***REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -95,12 +94,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***photoPickerIsPresented = true
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(libraryButtonLabel)
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "photo")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED******REMOVED******REMOVED***Text(libraryButtonLabel)
+***REMOVED******REMOVED******REMOVED***Image(systemName: "photo")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -108,12 +103,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***fileImporterIsShowing = true
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(filesButtonLabel)
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "folder")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED******REMOVED******REMOVED***Text(filesButtonLabel)
+***REMOVED******REMOVED******REMOVED***Image(systemName: "folder")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -135,9 +126,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
 ***REMOVED******REMOVED***.alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
-***REMOVED******REMOVED******REMOVED***Button(String.settings) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***appSettingsButton
 ***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) { ***REMOVED***
 ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(cameraAccessAlertMessage)
@@ -205,6 +194,17 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
+***REMOVED******REMOVED******REMOVED******REMOVED***if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***microphoneAccessAlertIsVisible = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+***REMOVED******REMOVED******REMOVED******REMOVED***appSettingsButton
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) { ***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(recordVideoOnlyButtonLabel)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
@@ -216,6 +216,13 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 
 private extension AttachmentImportMenu {
+***REMOVED******REMOVED***/ A button that redirects the user to the application's entry in the iOS system Settings application.
+***REMOVED***var appSettingsButton: some View {
+***REMOVED******REMOVED***Button(String.settings) {
+***REMOVED******REMOVED******REMOVED***Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A message for an alert requesting camera access.
 ***REMOVED***var cameraAccessAlertMessage: String {
 ***REMOVED******REMOVED***.init(
@@ -304,6 +311,24 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED******REMOVED***localized: "Choose From Library",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A warning message indicating microphone access has been disabled for the current application in the system settings.
+***REMOVED***var microphoneAccessWarningMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Microphone access has been disabled in Settings.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A warning message indicating microphone access has been disabled for the current application in the system settings."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A button allowing users to proceed to record a video while acknowledging audio will not be captured.
+***REMOVED***var recordVideoOnlyButtonLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Record video only",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
