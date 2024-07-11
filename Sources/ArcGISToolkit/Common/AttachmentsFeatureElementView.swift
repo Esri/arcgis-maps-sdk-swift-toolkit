@@ -97,7 +97,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
 ***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment: $0,
@@ -105,14 +106,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !isShowingAttachmentsFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not displaying
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** via an AttachmentsFormElement.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows attachments in a non-editing context to
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** display in the same order as the online Map Viewer.
-***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachmentModels.reversed()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(attachmentModels)
 ***REMOVED***
 ***REMOVED***
