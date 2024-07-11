@@ -79,8 +79,8 @@ extension FeatureAttachmentKind {
         }
     }
     
-    /// Creates a feature attachment kind from a popup attachment kind.
-    /// - Parameter kind: The popup attachment kind.
+    /// Creates a feature attachment kind from a form attachment kind.
+    /// - Parameter kind: The form attachment kind.
     init(kind: FormAttachment.Kind) {
         self = switch kind {
         case .other: .other
