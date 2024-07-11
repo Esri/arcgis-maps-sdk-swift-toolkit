@@ -68,7 +68,7 @@ public protocol FeatureAttachment: Loadable {
 
 extension FeatureAttachmentKind {
     /// Creates a feature attachment kind from a popup attachment kind.
-    /// - Parameter kind: The popup attachment kind.
+    /// - Parameter kind: The feature attachment kind.
     init(kind: PopupAttachment.Kind) {
         self = switch kind {
         case .image: .image
@@ -79,8 +79,8 @@ extension FeatureAttachmentKind {
         }
     }
     
-    /// Creates a feature attachment kind from a popup attachment kind.
-    /// - Parameter kind: The popup attachment kind.
+    /// Creates a feature attachment kind from a form attachment kind.
+    /// - Parameter kind: The feature attachment kind.
     init(kind: FormAttachment.Kind) {
         self = switch kind {
         case .other: .other
