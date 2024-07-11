@@ -21,7 +21,7 @@ struct AttachmentCameraControllerTestView: View {
 ***REMOVED***@State private var captureMode: UIImagePickerController.CameraCaptureMode?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(captureMode?.description ?? "None")
+***REMOVED******REMOVED***Text(captureMode?.name ?? "None")
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Camera Capture Mode")
 ***REMOVED******REMOVED***AttachmentCameraController(importState: .constant(.none))
 ***REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
@@ -31,9 +31,8 @@ struct AttachmentCameraControllerTestView: View {
 ***REMOVED***
 ***REMOVED***
 
-#if compiler(>=6.0)
-extension UIImagePickerController.CameraCaptureMode: @retroactive CustomStringConvertible {
-***REMOVED***public var description: String {
+extension UIImagePickerController.CameraCaptureMode {
+***REMOVED***var name: String {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .photo: "Photo"
 ***REMOVED******REMOVED***case .video: "Video"
@@ -41,14 +40,3 @@ extension UIImagePickerController.CameraCaptureMode: @retroactive CustomStringCo
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-#else
-extension UIImagePickerController.CameraCaptureMode: CustomStringConvertible {
-***REMOVED***public var description: String {
-***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .photo: "Photo"
-***REMOVED******REMOVED***case .video: "Video"
-***REMOVED******REMOVED***@unknown default: "N/A"
-***REMOVED***
-***REMOVED***
-***REMOVED***
-#endif
