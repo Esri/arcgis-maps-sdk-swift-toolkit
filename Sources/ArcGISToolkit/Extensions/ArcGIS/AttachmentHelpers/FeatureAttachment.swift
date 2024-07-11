@@ -68,7 +68,7 @@ public protocol FeatureAttachment: Loadable {
 
 extension FeatureAttachmentKind {
 ***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
-***REMOVED******REMOVED***/ - Parameter kind: The popup attachment kind.
+***REMOVED******REMOVED***/ - Parameter kind: The feature attachment kind.
 ***REMOVED***init(kind: PopupAttachment.Kind) {
 ***REMOVED******REMOVED***self = switch kind {
 ***REMOVED******REMOVED***case .image: .image
@@ -79,8 +79,8 @@ extension FeatureAttachmentKind {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
-***REMOVED******REMOVED***/ - Parameter kind: The popup attachment kind.
+***REMOVED******REMOVED***/ Creates a feature attachment kind from a form attachment kind.
+***REMOVED******REMOVED***/ - Parameter kind: The feature attachment kind.
 ***REMOVED***init(kind: FormAttachment.Kind) {
 ***REMOVED******REMOVED***self = switch kind {
 ***REMOVED******REMOVED***case .other: .other
