@@ -98,11 +98,11 @@ class AttachmentUIImagePickerController: UIImagePickerController {
 ***REMOVED***override func viewDidAppear(_ animated: Bool) {
 ***REMOVED******REMOVED***cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***#if compiler(>=6.0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.action?(self.cameraCaptureMode)
-***REMOVED******REMOVED******REMOVED******REMOVED***#else
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.action?(self.cameraCaptureMode)
-***REMOVED******REMOVED******REMOVED******REMOVED***#endif
+#if compiler(>=6.0)
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.action?(self.cameraCaptureMode)
+#else
+***REMOVED******REMOVED******REMOVED******REMOVED***self.action?(self.cameraCaptureMode)
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
