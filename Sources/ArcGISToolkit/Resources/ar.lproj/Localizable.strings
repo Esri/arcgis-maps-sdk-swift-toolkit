@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "السماح";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "حدث خطأ أثناء تحميل الصورة: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "المرفقات";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "تحذير الثقة في الشهادة";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "اختيار من الملفات";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "اختيار من المكتبة";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "مسح";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "مسح كافة النتائج";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "خطير: الشهادة المقدمة من \"%@\" غير موقعة من قبل مرجع مصدق موثوق.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "يتجاوز التاريخ أقصى قيمة";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "التاريخ أقل من الحد الأدنى";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "يجب أن يكون التاريخ في %@ أو بعده";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "يجب أن يكون التاريخ في %@ أو قبله";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "حذف";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "الارتفاع";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "إدخال %lld من الرموز";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "أدخل %lld إلى ^[%lld characters](inflect: true)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "إدخال من %lld إلى %lld من الرموز";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "أدخل ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "إدخال قيمة";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "إدخال قيمة من %@ إلى %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "خطأ";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "حدث خطأ أثناء استيراد المرفق";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "تقييم التعبيرات المنبثقة";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "يتجاوز أقصى قيمة";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "العنوان";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "أقل من أدنى قيمة";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "%lld من الرموز كحد أقصى";
+"Maximum ^[%lld characters](inflect: true)" = "الحد الأقصى ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "تم تجاوز الحد الأقصى لطول الرموز";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "وسائط";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "لم يتم استيفاء الحد الأدنى لطول الأحرف";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "الوضع";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "شبكة";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "الاسم الجديد";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "تتبع جديد";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "فشل تقييم النافذة المنبثقة: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "إعادة تسمية";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "إعادة تسمية المرفق";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "نقاط البداية";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "التقاط صورة أو فيديو";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "اضغط على السطح لوضع المشهد";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "تكوين طرفي";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "اختبار";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "لا تحتوي خريطة الأساس على إسناد مكاني.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "لقد كانت كلمة المرور غير صالحة.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "تعذر استيراد المرفق المحدد.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "المرفق المحدد يتجاوز الحد %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "تعذر الوصول إلى عنوان URL أو أنه لا يحتوي على بيانات الصورة.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "المحاولة مرة أخرى";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "خطأ غير معروف في التحقق من الصحة";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "نوع الأصل بدون اسم";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "القيمة";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "يجب أن تتراوح القيمة من %lld إلى ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "يجب أن تكون القيمة ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "يجب أن تكون القيمة رقمًا";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "يجب أن تكون القيمة رقمًا كاملاً";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "يجب أن تتراوح القيمة بين %@ و %@.";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "يجب أن تكون القيمة من نوع صحيح";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "يجب أن تكون القيمة ضمن النطاق";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "يجب ألا تكون القيمة فارغة";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
