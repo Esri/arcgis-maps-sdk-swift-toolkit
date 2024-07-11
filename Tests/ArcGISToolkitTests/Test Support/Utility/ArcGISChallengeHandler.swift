@@ -18,13 +18,13 @@ import ArcGIS
 /// An `ArcGISChallengeHandler` that can handle challenges using ArcGIS credential.
 final class ArcGISChallengeHandler: ArcGISAuthenticationChallengeHandler {
     /// The arcgis credential used when an ArcGIS challenge is received.
-    let credentialProvider: ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)
+    let credentialProvider: @Sendable (ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?
     
     /// The ArcGIS authentication challenges.
     private(set) var challenges: [ArcGISAuthenticationChallenge] = []
     
     init(
-        credentialProvider: @escaping ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)
+        credentialProvider: @escaping @Sendable (ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?
     ) {
         self.credentialProvider = credentialProvider
     }

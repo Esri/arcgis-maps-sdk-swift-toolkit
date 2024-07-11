@@ -52,8 +52,8 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
     /// - Parameters:
     ///   - loginCredential: The username and password.
     func resume(with loginCredential: LoginCredential) {
-        Task {
-            setValue(await Result {
+        Task { @MainActor in
+            setValue(await Result { @MainActor in
                 .continueWithCredential(try await tokenCredentialProvider(loginCredential))
             })
         }

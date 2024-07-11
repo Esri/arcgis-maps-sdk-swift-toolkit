@@ -15,6 +15,7 @@
 import SwiftUI
 
 /// A view displaying details for pie chart popup media.
+@MainActor
 struct PieChart: View {
     /// The view model for the pie chart.
     @ObservedObject private var viewModel: PieChartModel
@@ -74,6 +75,7 @@ struct PieChart: View {
 }
 
 /// A view representing a pie chart.
+@MainActor
 struct Pie: View {
     /// The view model for the pie chart.
     @ObservedObject private var viewModel: PieChartModel

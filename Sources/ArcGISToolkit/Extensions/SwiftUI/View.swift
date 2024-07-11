@@ -106,7 +106,7 @@ extension View {
     /// - Parameters:
     ///   - delay: The delay to wait before allow the task to proceed, in nanoseconds. Defaults to 1/4 second.
     ///   - action: The action to perform after the delay.
-    func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping () -> Void) -> some View {
+    func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping @Sendable () -> Void) -> some View {
         task { @MainActor in
             try? await Task.sleep(nanoseconds: nanoseconds)
             action()
@@ -127,7 +127,7 @@ extension View {
     @MainActor @ViewBuilder func onReceive<S>(
         _ sequence: S,
         perform action: ((S.Element) -> Void)?
-    ) -> some View where S: AsyncSequence {
+    ) -> some View where S: AsyncSequence, S.Element: Sendable {
         if let action {
             task {
                 do {

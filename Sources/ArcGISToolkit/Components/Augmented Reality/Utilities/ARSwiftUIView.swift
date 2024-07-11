@@ -42,7 +42,7 @@ struct ARSwiftUIView {
     }
     
     /// Sets the closure to call when the session's geo-tracking state changes.
-    /// 
+    ///
     /// ARKit invokes the callback only for `ARGeoTrackingConfiguration` sessions.
     func onDidChangeGeoTrackingStatus(
         perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
@@ -155,7 +155,7 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 }
 
 extension ARSwiftUIViewProxy {
-    /// Performs a raycast to get the transformation matrix representing the corresponding 
+    /// Performs a raycast to get the transformation matrix representing the corresponding
     /// real-world point for `screenPoint`.
     ///
     /// The method returns `nil` when the raycast query or the raycast fails. They can fail due to

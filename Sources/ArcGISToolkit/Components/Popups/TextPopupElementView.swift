@@ -18,16 +18,16 @@ import ArcGIS
 /// A view displaying a `TextPopupElement`.
 struct TextPopupElementView: View {
     /// The `PopupElement` to display.
-    var popupElement: TextPopupElement
+    let popupElement: TextPopupElement
     
     /// The calculated height of the `HTMLTextView`.
-    @State private var webViewHeight: CGFloat = .zero
+    @State private var webViewHeight: CGFloat?
     
     var body: some View {
         if !popupElement.text.isEmpty {
             ZStack {
                 HTMLTextView(html: popupElement.text, height: $webViewHeight)
-                    .frame(height: webViewHeight)
+                    .frame(height: webViewHeight ?? .zero)
                 if webViewHeight == .zero {
                     // Show `ProgressView` until `HTMLTextView` has set the height.
                     ProgressView()

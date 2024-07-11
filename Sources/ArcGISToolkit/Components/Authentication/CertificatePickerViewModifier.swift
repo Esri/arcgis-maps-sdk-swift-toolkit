@@ -159,6 +159,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 }
 
 /// A view modifier that presents a certificate picker workflow.
+@MainActor
 struct CertificatePickerViewModifier: ViewModifier {
     /// Creates a certificate picker view modifier.
     /// - Parameter challenge: The challenge that requires a certificate.

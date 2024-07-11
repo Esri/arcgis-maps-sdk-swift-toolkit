@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view for date/time input.
+@MainActor
 struct DateTimeInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
