@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Tillåt";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Ett fel uppstod vid inläsning av bilden: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Bilagor";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Certifikatvarning";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Välj från filer";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Välj från bibliotek";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Radera";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Rensa alla resultat";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Farligt: Certifikatet som tillhandahålls av '%@' är inte signerat av en betrodd utfärdare.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "Datum överskrider maximum";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Datum är mindre än minimum";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "Datum måste vara på eller efter %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "Datum måste vara på eller efter %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Ta bort";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "höjd";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Ange %lld-tecken";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Ange %lld till ^[%lld-tecken](böjning: sant)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Ange %lld- till %lld-tecken";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Ange ^[%lld-tecken](böjning: sant)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Ange värde";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Ange ett värde mellan %@ och %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Fel";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Fel vid import av bilaga";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Utvärdera popup-uttryck";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Överstiger maximalt värde";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "riktning";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Mindre än minimivärdet";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Maximum %lld-tecken";
+"Maximum ^[%lld characters](inflect: true)" = "Maximum ^[%lld-tecken](böjning: sant)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Maximal teckenlängd har överskridits";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Medier";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Minsta teckenlängd har överskridits";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Läge";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Nätverk";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Nytt namn";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Nytt spår";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup-utvärdering misslyckades: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Byt namn";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Byt namn på bilaga";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Startpunkter";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Ta bild eller video";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Tryck på en yta för att placera scenen";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminalkonfiguration";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "Baskartan saknar spatial referens.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Lösenordet var ogiltigt.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "Den valda bilagan kunde inte importeras.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "Den valda bilagan överskrider gränsen %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL:en kunde inte nås eller innehöll inga bilddata.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Försök igen";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Okänt valideringsfel";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Namnlös resurstyp";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Värde";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Värdet måste vara %lld till ^[%lld-tecken](böjning: sant)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "Värdet måste vara ^[%lld-tecken](böjning: sant)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "Värdet måste vara ett tal";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "Värdet måste vara ett heltal";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "Värdet måste vara från %@ till %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "Värdet måste vara av korrekt typ";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "Värdet måste vara inom domän";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "Värdet får inte vara tomt";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

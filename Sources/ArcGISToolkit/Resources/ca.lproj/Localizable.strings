@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Permet";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "S'ha produït un error en carregar la imatge: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Fitxers adjunts";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Avís de confiança del certificat";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Trieu d'entre els fitxers";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Trieu de la biblioteca";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Esborra";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Esborra tots els resultats";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Perillós: el certificat proporcionat per \"%@\" no està firmat per una autoritat de confiança.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "La data supera el valor màxim";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "La data és anterior a la mínima";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "La data de finalització ha de ser el dia %@ o posterior";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "La data ha de ser el dia %@ o anterior";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Suprimeix";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "elevació";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Introduïu %lld caràcters";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Introduïu entre %lld i ^[%lld caràcters](inflect: true)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Introduïu entre %lld i %lld caràcters";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Introduïu ^[%lld caràcters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Introduïu un valor";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Introduïu un valor d'entre %@ i %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "S'ha produït un error en importar el fitxer adjunt";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "S'estan avaluant les expressions de la finestra emergent";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Supera el valor màxim";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "capçalera";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Menys que el valor mínim";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "%lld caràcters com a màxim";
+"Maximum ^[%lld characters](inflect: true)" = "Màxim ^[%lld caràcters](inflect: true)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "S'ha superat la longitud màxima de caràcters";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Contingut multimèdia";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "No s'ha arribat a la longitud mínima de caràcters";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Xarxa";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Nom nou";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Traçat nou";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "No s'ha pogut avaluar la finestra emergent: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Canvia el nom";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Canvia el nom del fitxer adjunt";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Punts d'inici";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Fes una foto o un vídeo";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Toqueu una superfície per col·locar l'escena";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Configuració del terminal";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "prova";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "El mapa de base no té cap referència espacial.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "La contrasenya no era vàlida.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "No s'ha pogut importar el fitxer adjunt seleccionat.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "El fitxer adjunt seleccionat supera el límit de %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "No s'ha pogut accedir a l'URL o l'URL no contenia dades d'imatge.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Torna-ho a provar";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Error de validació desconegut";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Tipus d'actiu sense nom";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Valor";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "El valor ha de ser d'entre %lld i ^[%lld caràcters](inflect: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "El valor ha de ser de ^[%lld caràcters](inflect: true)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "El valor ha de ser un nombre";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "El valor ha de ser un nombre enter";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "El valor ha de ser d'entre %@ i %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "El valor ha de ser del tipus correcte";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "El valor ha de ser dins del domini";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "El valor no pot ser buit";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
