@@ -21,7 +21,7 @@ struct AttachmentCameraControllerTestView: View {
     @State private var captureMode: UIImagePickerController.CameraCaptureMode?
     
     var body: some View {
-        Text(captureMode?.description ?? "None")
+        Text(captureMode?.name ?? "None")
             .accessibilityIdentifier("Camera Capture Mode")
         AttachmentCameraController(importState: .constant(.none))
             .onCameraCaptureModeChanged { captureMode in
@@ -31,8 +31,8 @@ struct AttachmentCameraControllerTestView: View {
     
 }
 
-extension UIImagePickerController.CameraCaptureMode: @retroactive CustomStringConvertible {
-    public var description: String {
+extension UIImagePickerController.CameraCaptureMode {
+    var name: String {
         switch self {
         case .photo: "Photo"
         case .video: "Video"
