@@ -97,7 +97,8 @@ struct AttachmentsFeatureElementView: View {
             attachmentModelsState = .initializing
             let attachments = (try? await featureElement.featureAttachments) ?? []
             
-            var attachmentModels = attachments
+            let attachmentModels = attachments
+                .reversed()
                 .map {
                     AttachmentModel(
                         attachment: $0,
@@ -105,14 +106,6 @@ struct AttachmentsFeatureElementView: View {
                         thumbnailSize: thumbnailSize
                     )
                 }
-            
-            if !isShowingAttachmentsFormElement {
-                // Reverse attachment models array if we're not displaying
-                // via an AttachmentsFormElement.
-                // This allows attachments in a non-editing context to
-                // display in the same order as the online Map Viewer.
-                attachmentModels = attachmentModels.reversed()
-            }
             attachmentModelsState = .initialized(attachmentModels)
         }
     }
