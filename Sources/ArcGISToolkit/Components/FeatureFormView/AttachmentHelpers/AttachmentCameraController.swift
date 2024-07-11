@@ -98,7 +98,7 @@ class AttachmentUIImagePickerController: UIImagePickerController {
     override func viewDidAppear(_ animated: Bool) {
         cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
             Task {
-                await self.action?(self.cameraCaptureMode)
+                self.action?(self.cameraCaptureMode)
             }
         }
     }
