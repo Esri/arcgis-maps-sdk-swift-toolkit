@@ -16,7 +16,7 @@ public extension Result where Failure == Error {
 ***REMOVED******REMOVED***/ Creates a result based on the outcome of the given task. If the task
 ***REMOVED******REMOVED***/ succeeds, the result is `success`. If the task fails, the result is
 ***REMOVED******REMOVED***/ `failure`.
-***REMOVED***init(awaiting task: () async throws -> Success) async {
+***REMOVED***init(awaiting task: @Sendable () async throws -> Success) async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***self = .success(try await task())
 ***REMOVED*** catch {

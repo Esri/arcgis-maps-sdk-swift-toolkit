@@ -14,13 +14,14 @@
 
 ***REMOVED***
 import AVFoundation
-import OSLog
 ***REMOVED***
 import UniformTypeIdentifiers
 
+internal import os
+
 ***REMOVED***/ The context menu shown when the new attachment button is pressed.
+@MainActor
 struct AttachmentImportMenu: View {
-***REMOVED***
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentsFormElement
 ***REMOVED***

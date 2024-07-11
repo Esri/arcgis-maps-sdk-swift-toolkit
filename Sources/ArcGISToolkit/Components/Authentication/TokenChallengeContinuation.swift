@@ -52,8 +52,8 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - loginCredential: The username and password.
 ***REMOVED***func resume(with loginCredential: LoginCredential) {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***setValue(await Result {
+***REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED***setValue(await Result { @MainActor in
 ***REMOVED******REMOVED******REMOVED******REMOVED***.continueWithCredential(try await tokenCredentialProvider(loginCredential))
 ***REMOVED******REMOVED***)
 ***REMOVED***

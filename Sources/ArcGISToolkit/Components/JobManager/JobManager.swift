@@ -16,8 +16,9 @@
 import BackgroundTasks
 import Combine
 import Foundation
-import OSLog
 import UIKit
+
+internal import os
 
 ***REMOVED***/ An object that manages saving and loading jobs so that they can continue to run if the
 ***REMOVED***/ app is backgrounded or even terminated.

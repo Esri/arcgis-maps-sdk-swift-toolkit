@@ -420,6 +420,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED***
 
 extension SearchViewModelTests {
+***REMOVED***@MainActor
 ***REMOVED***func searchResults(
 ***REMOVED******REMOVED***_ model: SearchViewModel,
 ***REMOVED******REMOVED***dropFirst: Bool = false
@@ -437,6 +438,7 @@ extension SearchViewModelTests {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func searchSuggestions(
 ***REMOVED******REMOVED***_ model: SearchViewModel,
 ***REMOVED******REMOVED***dropFirst: Bool = false

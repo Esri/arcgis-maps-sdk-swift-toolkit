@@ -15,6 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying details for pie chart popup media.
+@MainActor
 struct PieChart: View {
 ***REMOVED******REMOVED***/ The view model for the pie chart.
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel
@@ -74,6 +75,7 @@ struct PieChart: View {
 ***REMOVED***
 
 ***REMOVED***/ A view representing a pie chart.
+@MainActor
 struct Pie: View {
 ***REMOVED******REMOVED***/ The view model for the pie chart.
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel

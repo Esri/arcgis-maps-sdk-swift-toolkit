@@ -18,13 +18,13 @@ import Foundation
 ***REMOVED***/ An `ArcGISChallengeHandler` that can handle challenges using ArcGIS credential.
 final class ArcGISChallengeHandler: ArcGISAuthenticationChallengeHandler {
 ***REMOVED******REMOVED***/ The arcgis credential used when an ArcGIS challenge is received.
-***REMOVED***let credentialProvider: ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)
+***REMOVED***let credentialProvider: @Sendable (ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ArcGIS authentication challenges.
 ***REMOVED***private(set) var challenges: [ArcGISAuthenticationChallenge] = []
 ***REMOVED***
 ***REMOVED***init(
-***REMOVED******REMOVED***credentialProvider: @escaping ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)
+***REMOVED******REMOVED***credentialProvider: @escaping @Sendable (ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.credentialProvider = credentialProvider
 ***REMOVED***

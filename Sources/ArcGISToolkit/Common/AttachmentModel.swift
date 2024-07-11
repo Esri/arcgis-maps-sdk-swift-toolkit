@@ -13,15 +13,16 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import OSLog
 import QuickLook
 ***REMOVED***
+
+internal import os
 
 ***REMOVED***/ A view model representing the combination of a `FeatureAttachment` and
 ***REMOVED***/ an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `FeatureAttachment`.
-***REMOVED***let attachment: FeatureAttachment
+***REMOVED***nonisolated let attachment: FeatureAttachment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
