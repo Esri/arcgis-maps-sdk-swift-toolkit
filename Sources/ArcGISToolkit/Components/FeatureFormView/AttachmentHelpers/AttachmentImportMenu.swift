@@ -112,6 +112,7 @@ struct AttachmentImportMenu: View {
         if importState.importInProgress {
             ProgressView()
                 .progressViewStyle(.circular)
+                .catalystPadding(5)
         }
         Menu {
             // Show photo/video and library picker.
