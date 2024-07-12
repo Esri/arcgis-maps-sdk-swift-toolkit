@@ -154,7 +154,6 @@ struct AttachmentImportMenu: View {
                 return
             }
             
-            defer { importState = .none }
             let fileName: String
             if let presetFileName = newAttachmentImportData.fileName {
                 fileName = presetFileName
@@ -165,12 +164,16 @@ struct AttachmentImportMenu: View {
                     fileName = "Unnamed Attachment"
                 }
             }
-            let newAttachment = element.addAttachment(
+            guard let newAttachment = element.addAttachment(
                 name: fileName,
                 contentType: newAttachmentImportData.contentType.preferredMIMEType ?? "application/octet-stream",
                 data: newAttachmentImportData.data
-            )
+            ) else {
+                importState = .errored(.creationFailed)
+                return
+            }
             onAdd?(newAttachment)
+            importState = .none
         }
         .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
             importState = .importing
