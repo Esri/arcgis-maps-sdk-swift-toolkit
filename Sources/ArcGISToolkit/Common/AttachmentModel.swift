@@ -13,15 +13,16 @@
 // limitations under the License.
 
 import ArcGIS
-import OSLog
 import QuickLook
 import SwiftUI
+
+internal import os
 
 /// A view model representing the combination of a `FeatureAttachment` and
 /// an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
     /// The `FeatureAttachment`.
-    let attachment: FeatureAttachment
+    nonisolated let attachment: FeatureAttachment
     
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {

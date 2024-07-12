@@ -17,6 +17,7 @@ import QuickLook
 import SwiftUI
 
 /// A view displaying an `AttachmentsFeatureElement`.
+@MainActor
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
     let featureElement: AttachmentsFeatureElement
@@ -243,7 +244,9 @@ extension View {
     ///   - element: The attachment form element to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
-    @ViewBuilder func onAttachmentIsEditableChange(
+    @MainActor
+    @ViewBuilder
+    func onAttachmentIsEditableChange(
         of element: AttachmentsFeatureElement,
         action: @escaping (_ newIsEditable: Bool) -> Void
     ) -> some View {

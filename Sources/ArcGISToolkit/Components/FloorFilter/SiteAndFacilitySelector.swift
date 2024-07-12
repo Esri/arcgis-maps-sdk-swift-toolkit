@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
+@MainActor
 struct SiteAndFacilitySelector: View {
     /// Creates a `SiteAndFacilitySelector`.
     /// - Parameter isHidden: A binding used to dismiss the site selector.
@@ -56,6 +57,7 @@ struct SiteAndFacilitySelector: View {
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
+    @MainActor
     struct SitesList: View {
         @Environment(\.horizontalSizeClass)
         private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -193,6 +195,7 @@ struct SiteAndFacilitySelector: View {
     }
     
     /// A view displaying the facilities contained in a `FloorManager`.
+    @MainActor
     struct FacilitiesList: View {
         @Environment(\.horizontalSizeClass)
         private var horizontalSizeClass: UserInterfaceSizeClass?
