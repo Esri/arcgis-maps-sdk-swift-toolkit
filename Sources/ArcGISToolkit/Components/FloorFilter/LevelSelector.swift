@@ -16,6 +16,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view which allows selection of levels represented in `FloorFacility`.
+@MainActor
 struct LevelSelector: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel

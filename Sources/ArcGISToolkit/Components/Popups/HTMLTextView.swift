@@ -16,9 +16,12 @@ import WebKit
 import SwiftUI
 
 /// A SwiftUI view to display an HTML string in a `WKWebView`.
+@MainActor
 struct HTMLTextView: UIViewRepresentable {
     /// The user-defined HTML string.
-    var userHTML: String = ""
+    let html: String
+    /// The height of the view, calculated in the `webView(didFinish:)` delegate method.
+    @Binding var height: CGFloat?
     
     /// The HTML string to display, including the header.
     var displayHTML: String {
@@ -79,106 +82,80 @@ struct HTMLTextView: UIViewRepresentable {
                 """)
         
         // The final string is the header + userHTML + "</body></html>".
-        return header.appending(
-            userHTML.trimmingCharacters(in: .whitespacesAndNewlines)
-        ).appending("</body></html>")
-    }
-    
-    /// The height of the view, calculated in the `webView(didFinish:)` delegate method.
-    @Binding private var height: CGFloat
-    
-    /// Creates an `HTMLTextView`.
-    /// - Parameters:
-    ///   - html: The HTML string to be displayed.
-    ///   - height: A binding to the calculated height of the `WKWebView`.
-    init(html: String, height: Binding<CGFloat>) {
-        userHTML = html
-        _height = height
+        return header
+            .appending(html.trimmingCharacters(in: .whitespacesAndNewlines))
+            .appending("</body></html>")
     }
     
     func makeUIView(context: Context) -> WKWebView {
-        WKWebView()
-    }
-    
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        uiView.isOpaque = false
+        let webView = WKWebView()
+        webView.isOpaque = false
         // This is a case where we always want the background to be white
         // regardless of light/dark mode. If the user wants to implement dark
         // mode, within their HTML, the background of the HTML will be shown
         // over this background.
-        uiView.backgroundColor = .clear
-        uiView.scrollView.backgroundColor = .clear
-        uiView.scrollView.isScrollEnabled = false
-        uiView.loadHTMLString(displayHTML, baseURL: nil)
-        uiView.navigationDelegate = context.coordinator
+        webView.backgroundColor = .clear
+        webView.scrollView.backgroundColor = .clear
+        webView.scrollView.isScrollEnabled = false
+        webView.loadHTMLString(displayHTML, baseURL: nil)
+        webView.navigationDelegate = context.coordinator
+        return webView
     }
     
-    class Coordinator: NSObject, WKNavigationDelegate {
-        var parent: HTMLTextView
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
+    
+    class Coordinator: NSObject {
+        let onHeightChanged: @MainActor @Sendable (CGFloat) -> Void
         
-        /// A Boolean value indicating whether the content started arriving for the main frame.
-        private var hasCommitted = false
-        
-        /// A Boolean value indicating whether the height is calculated for the web view.
-        private var hasHeight = false
-        
-        init(_ parent: HTMLTextView) {
-            self.parent = parent
-        }
-        
-        // `WKNavigationDelegate` method invoked when content starts arriving for the main frame.
-        public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-            hasCommitted = true
-        }
-        
-        // `WKNavigationDelegate` method for navigation actions.
-        func webView(
-            _ webView: WKWebView,
-            decidePolicyFor navigationAction: WKNavigationAction
-        ) async -> WKNavigationActionPolicy {
-            if navigationAction.navigationType == .linkActivated,
-               let url = navigationAction.request.url,
-               (url.isHTTP || url.isHTTPS) {
-                DispatchQueue.main.async {
-                    UIApplication.shared.open(url)
-                }
-                return .cancel
-            }
-            else {
-                return .allow
-            }
-        }
-        
-        // `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
-        // where the height calculation happens.
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
-            webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
-                guard complete != nil,
-                      self?.hasCommitted ?? false
-                else { return }
-                
-                webView.evaluateJavaScript("document.body.scrollHeight") { height, _ in
-                    guard let self = self else { return }
-                    guard let height = height as? CGFloat,
-                          !self.hasHeight else {
-                        return
-                    }
-                    // Set the new height, if we have one.
-                    self.parent.height = height
-                    
-                    // With certain HTML strings, the JavaScript above kept
-                    // getting called, with increasingly large heights. This
-                    // prevents that from happening. As this block is only
-                    // called after the `document.readyState` is "complete",
-                    // this should be OK.
-                    self.hasHeight = true
-                }
-            }
+        init(onHeightChanged: @escaping @MainActor @Sendable (CGFloat) -> Void) {
+            self.onHeightChanged = onHeightChanged
         }
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        return Coordinator(
+            onHeightChanged: { newHeight in
+                guard height == nil else { return }
+                height = newHeight
+            }
+        )
+    }
+}
+
+extension HTMLTextView.Coordinator: WKNavigationDelegate {
+    // `WKNavigationDelegate` method for navigation actions.
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction
+    ) async -> WKNavigationActionPolicy {
+        if navigationAction.navigationType == .linkActivated,
+           let url = navigationAction.request.url,
+           (url.isHTTP || url.isHTTPS) {
+            DispatchQueue.main.async {
+                UIApplication.shared.open(url)
+            }
+            return .cancel
+        }
+        else {
+            return .allow
+        }
+    }
+    
+    // `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
+    // where the height calculation happens.
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        Task.detached { @MainActor [onHeightChanged] in
+            guard let readyState = try? await webView.evaluateJavaScript("document.readyState") as? String,
+                  readyState == "complete" else {
+                return
+            }
+            
+            guard let scrollHeight = try? await webView.evaluateJavaScript("document.body.scrollHeight") as? CGFloat else {
+                return
+            }
+            
+            onHeightChanged(scrollHeight)
+        }
     }
 }
 

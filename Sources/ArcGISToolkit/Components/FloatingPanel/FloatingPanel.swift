@@ -16,6 +16,7 @@ import SwiftUI
 
 /// A floating panel is a view that overlays a view and supplies view-related
 /// content. For more information see <doc:FloatingPanel>.
+@MainActor
 struct FloatingPanel<Content>: View where Content: View {
     /// The height of a geo-view's attribution bar.
     ///

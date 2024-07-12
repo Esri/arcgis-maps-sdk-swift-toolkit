@@ -18,6 +18,7 @@ import XCTest
 @testable import ArcGISToolkit
 
 final class BookmarksTests: XCTestCase {
+    @MainActor
     func testBookmarksWithGeoModel() async throws {
         var _isPresented = true
         var _selection: Bookmark?
@@ -42,6 +43,7 @@ final class BookmarksTests: XCTestCase {
         XCTAssertEqual(_selection, map.bookmarks.first)
     }
     
+    @MainActor
     func testBookmarksWithList() {
         var _isPresented = true
         var _selection: Bookmark?
@@ -60,6 +62,7 @@ final class BookmarksTests: XCTestCase {
     
     /// Asserts that the list properly handles a selection when provided a modifier.
     @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithModifier() {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
@@ -87,6 +90,7 @@ final class BookmarksTests: XCTestCase {
     
     /// Asserts that the list properly handles a selection when provided a modifier and web map.
     @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithModifierAndMap() async throws {
         let map = Map.portlandTreeSurvey
         do {
@@ -112,6 +116,7 @@ final class BookmarksTests: XCTestCase {
     
     /// Asserts that the list properly handles a selection when provided a viewpoint.
     @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithViewpoint() {
         let sampleBookmarks = sampleBookmarks
         var _isPresented = true
@@ -138,6 +143,7 @@ final class BookmarksTests: XCTestCase {
     
     /// Asserts that the list properly handles a selection when provided a viewpoint and web map.
     @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithViewpointAndMap() async throws {
         let map = Map.portlandTreeSurvey
         do {

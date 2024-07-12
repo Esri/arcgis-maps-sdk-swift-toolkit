@@ -420,6 +420,7 @@ class SearchViewModelTests: XCTestCase {
 }
 
 extension SearchViewModelTests {
+    @MainActor
     func searchResults(
         _ model: SearchViewModel,
         dropFirst: Bool = false
@@ -437,6 +438,7 @@ extension SearchViewModelTests {
         }
     }
     
+    @MainActor
     func searchSuggestions(
         _ model: SearchViewModel,
         dropFirst: Bool = false

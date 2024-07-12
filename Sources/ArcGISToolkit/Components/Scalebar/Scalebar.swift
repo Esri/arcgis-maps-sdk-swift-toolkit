@@ -49,6 +49,8 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [ScalebarExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) 
 /// in the project. To learn more about using the `Scalebar` see the <doc:ScalebarTutorial>.
+@MainActor
+@preconcurrency
 public struct Scalebar: View {
     // - MARK: Internal/Private vars
     
@@ -59,13 +61,13 @@ public struct Scalebar: View {
     @State private var height: Double?
     
     /// Controls the current opacity of the scalebar.
-    @State var opacity: Double
+    @State private var opacity: Double
     
     /// The view model used by the `Scalebar`.
     @StateObject var viewModel: ScalebarViewModel
     
     /// The font used by the scalebar, available in both `Font` and `UIFont` types.
-    static var font: (font: Font, uiFont: UIFont) {
+    nonisolated static var font: (font: Font, uiFont: UIFont) {
         let size = 9.0
         let uiFont = UIFont.systemFont(
             ofSize: size,
@@ -76,7 +78,7 @@ public struct Scalebar: View {
     }
     
     /// The rendering height of the scalebar font.
-    static var fontHeight: Double {
+    nonisolated static var fontHeight: Double {
         return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
     }
     
@@ -189,8 +191,10 @@ public struct Scalebar: View {
                     withTimeInterval: settings.autoHideDelay,
                     repeats: false
                 ) { _ in
-                    withAnimation {
-                        opacity = .zero
+                    Task.detached { @MainActor in
+                        withAnimation {
+                            opacity = .zero
+                        }
                     }
                 }
             }

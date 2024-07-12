@@ -15,6 +15,7 @@
 import ArcGIS
 import SwiftUI
 
+@MainActor
 extension View {
     /// Modifier for watching ``FormElement.isEditableChanged`` events.
     /// - Parameters:

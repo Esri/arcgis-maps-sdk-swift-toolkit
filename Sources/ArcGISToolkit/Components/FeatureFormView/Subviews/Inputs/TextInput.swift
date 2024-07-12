@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view for text input.
+@MainActor
 struct TextInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
