@@ -34,6 +34,14 @@ final class AttachmentCameraControllerTests: XCTestCase {
         
         app.launch()
         
+        let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
+        
+        XCTAssertTrue(
+            attachmentCameraControllerTestsButton.exists,
+            "The AttachmentCameraController Tests button wasn't found."
+        )
+        attachmentCameraControllerTestsButton.tap()
+        
         addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
             alert.buttons["Allow"].tap()
             return true
@@ -42,14 +50,6 @@ final class AttachmentCameraControllerTests: XCTestCase {
             alert.buttons["Allow"].tap()
             return true
         }
-        
-        let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
-        
-        XCTAssertTrue(
-            attachmentCameraControllerTestsButton.exists,
-            "The AttachmentCameraController Tests button wasn't found."
-        )
-        attachmentCameraControllerTestsButton.tap()
         
         XCTAssertTrue(
             cameraModeController.waitForExistence(timeout: 5)
