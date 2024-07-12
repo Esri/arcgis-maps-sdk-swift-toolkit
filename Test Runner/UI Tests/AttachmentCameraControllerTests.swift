@@ -34,6 +34,14 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***attachmentCameraControllerTestsButton.exists,
+***REMOVED******REMOVED******REMOVED***"The AttachmentCameraController Tests button wasn't found."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***attachmentCameraControllerTestsButton.tap()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
 ***REMOVED******REMOVED******REMOVED***alert.buttons["Allow"].tap()
 ***REMOVED******REMOVED******REMOVED***return true
@@ -42,14 +50,6 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***alert.buttons["Allow"].tap()
 ***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***attachmentCameraControllerTestsButton.exists,
-***REMOVED******REMOVED******REMOVED***"The AttachmentCameraController Tests button wasn't found."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***attachmentCameraControllerTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***cameraModeController.waitForExistence(timeout: 5)
