@@ -21,14 +21,18 @@ struct AttachmentCameraControllerTestView: View {
     @State private var captureMode: UIImagePickerController.CameraCaptureMode?
     
     var body: some View {
-        Text(captureMode?.name ?? "None")
-            .accessibilityIdentifier("Camera Capture Mode")
-        AttachmentCameraController(importState: .constant(.none))
-            .onCameraCaptureModeChanged { captureMode in
-                self.captureMode = captureMode
+        Color.clear
+            .fullScreenCover(isPresented: .constant(true)) {
+                AttachmentCameraController(importState: .constant(.none))
+                    .onCameraCaptureModeChanged { captureMode in
+                        self.captureMode = captureMode
+                    }
+                    .overlay {
+                        Text(captureMode?.name ?? "None")
+                            .accessibilityIdentifier("Camera Capture Mode")
+                    }
             }
     }
-    
 }
 
 extension UIImagePickerController.CameraCaptureMode {
