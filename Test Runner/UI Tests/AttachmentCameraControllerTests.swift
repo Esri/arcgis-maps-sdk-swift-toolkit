@@ -29,6 +29,7 @@ final class AttachmentCameraControllerTests: XCTestCase {
         let app = XCUIApplication()
         let cameraModeController = app.otherElements["CameraMode"]
         let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
+        let deviceOrientation = XCUIDevice.shared.orientation
         app.launch()
         
         addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
@@ -51,11 +52,20 @@ final class AttachmentCameraControllerTests: XCTestCase {
         XCTAssertTrue(
             cameraModeController.waitForExistence(timeout: 5)
         )
-        cameraModeController.swipeDown()
+        
+        if deviceOrientation.isPortrait {
+            cameraModeController.swipeRight()
+        } else {
+            cameraModeController.swipeDown()
+        }
         
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
-        cameraModeController.swipeUp()
+        if deviceOrientation.isPortrait {
+            cameraModeController.swipeLeft()
+        } else {
+            cameraModeController.swipeUp()
+        }
         
         XCTAssertEqual(cameraModeLabel.label, "Photo")
     }
