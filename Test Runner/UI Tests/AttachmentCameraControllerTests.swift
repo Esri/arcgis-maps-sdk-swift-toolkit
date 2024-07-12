@@ -30,6 +30,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***let cameraModeController = app.otherElements["CameraMode"]
 ***REMOVED******REMOVED***let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
 ***REMOVED******REMOVED***let deviceOrientation = XCUIDevice.shared.orientation
+***REMOVED******REMOVED***let deviceType = UIDevice.current.userInterfaceIdiom
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
@@ -53,18 +55,18 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.waitForExistence(timeout: 5)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if deviceOrientation.isPortrait {
-***REMOVED******REMOVED******REMOVED***cameraModeController.swipeRight()
+***REMOVED******REMOVED***if deviceOrientation.isLandscape || deviceType == .pad {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeRight()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Video")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if deviceOrientation.isPortrait {
-***REMOVED******REMOVED******REMOVED***cameraModeController.swipeLeft()
+***REMOVED******REMOVED***if deviceOrientation.isLandscape || deviceType == .pad {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeLeft()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Photo")
