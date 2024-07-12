@@ -16,6 +16,7 @@
 
 ***REMOVED***/ A floating panel is a view that overlays a view and supplies view-related
 ***REMOVED***/ content. For more information see <doc:FloatingPanel>.
+@MainActor
 struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of a geo-view's attribution bar.
 ***REMOVED******REMOVED***/

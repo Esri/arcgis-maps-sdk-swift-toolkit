@@ -16,9 +16,12 @@ import WebKit
 ***REMOVED***
 
 ***REMOVED***/ A SwiftUI view to display an HTML string in a `WKWebView`.
+@MainActor
 struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***/ The user-defined HTML string.
-***REMOVED***var userHTML: String = ""
+***REMOVED***let html: String
+***REMOVED******REMOVED***/ The height of the view, calculated in the `webView(didFinish:)` delegate method.
+***REMOVED***@Binding var height: CGFloat?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The HTML string to display, including the header.
 ***REMOVED***var displayHTML: String {
@@ -79,106 +82,80 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***""")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** The final string is the header + userHTML + "</body></html>".
-***REMOVED******REMOVED***return header.appending(
-***REMOVED******REMOVED******REMOVED***userHTML.trimmingCharacters(in: .whitespacesAndNewlines)
-***REMOVED******REMOVED***).appending("</body></html>")
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The height of the view, calculated in the `webView(didFinish:)` delegate method.
-***REMOVED***@Binding private var height: CGFloat
-***REMOVED***
-***REMOVED******REMOVED***/ Creates an `HTMLTextView`.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - html: The HTML string to be displayed.
-***REMOVED******REMOVED***/   - height: A binding to the calculated height of the `WKWebView`.
-***REMOVED***init(html: String, height: Binding<CGFloat>) {
-***REMOVED******REMOVED***userHTML = html
-***REMOVED******REMOVED***_height = height
+***REMOVED******REMOVED***return header
+***REMOVED******REMOVED******REMOVED***.appending(html.trimmingCharacters(in: .whitespacesAndNewlines))
+***REMOVED******REMOVED******REMOVED***.appending("</body></html>")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeUIView(context: Context) -> WKWebView {
-***REMOVED******REMOVED***WKWebView()
-***REMOVED***
-***REMOVED***
-***REMOVED***func updateUIView(_ uiView: WKWebView, context: Context) {
-***REMOVED******REMOVED***uiView.isOpaque = false
+***REMOVED******REMOVED***let webView = WKWebView()
+***REMOVED******REMOVED***webView.isOpaque = false
 ***REMOVED******REMOVED******REMOVED*** This is a case where we always want the background to be white
 ***REMOVED******REMOVED******REMOVED*** regardless of light/dark mode. If the user wants to implement dark
 ***REMOVED******REMOVED******REMOVED*** mode, within their HTML, the background of the HTML will be shown
 ***REMOVED******REMOVED******REMOVED*** over this background.
-***REMOVED******REMOVED***uiView.backgroundColor = .clear
-***REMOVED******REMOVED***uiView.scrollView.backgroundColor = .clear
-***REMOVED******REMOVED***uiView.scrollView.isScrollEnabled = false
-***REMOVED******REMOVED***uiView.loadHTMLString(displayHTML, baseURL: nil)
-***REMOVED******REMOVED***uiView.navigationDelegate = context.coordinator
+***REMOVED******REMOVED***webView.backgroundColor = .clear
+***REMOVED******REMOVED***webView.scrollView.backgroundColor = .clear
+***REMOVED******REMOVED***webView.scrollView.isScrollEnabled = false
+***REMOVED******REMOVED***webView.loadHTMLString(displayHTML, baseURL: nil)
+***REMOVED******REMOVED***webView.navigationDelegate = context.coordinator
+***REMOVED******REMOVED***return webView
 ***REMOVED***
 ***REMOVED***
-***REMOVED***class Coordinator: NSObject, WKNavigationDelegate {
-***REMOVED******REMOVED***var parent: HTMLTextView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the content started arriving for the main frame.
-***REMOVED******REMOVED***private var hasCommitted = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the height is calculated for the web view.
-***REMOVED******REMOVED***private var hasHeight = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(_ parent: HTMLTextView) {
-***REMOVED******REMOVED******REMOVED***self.parent = parent
+***REMOVED***func updateUIView(_ uiView: WKWebView, context: Context) {***REMOVED***
 ***REMOVED***
+***REMOVED***class Coordinator: NSObject {
+***REMOVED******REMOVED***let onHeightChanged: @MainActor @Sendable (CGFloat) -> Void
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** `WKNavigationDelegate` method invoked when content starts arriving for the main frame.
-***REMOVED******REMOVED***public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-***REMOVED******REMOVED******REMOVED***hasCommitted = true
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** `WKNavigationDelegate` method for navigation actions.
-***REMOVED******REMOVED***func webView(
-***REMOVED******REMOVED******REMOVED***_ webView: WKWebView,
-***REMOVED******REMOVED******REMOVED***decidePolicyFor navigationAction: WKNavigationAction
-***REMOVED******REMOVED***) async -> WKNavigationActionPolicy {
-***REMOVED******REMOVED******REMOVED***if navigationAction.navigationType == .linkActivated,
-***REMOVED******REMOVED******REMOVED***   let url = navigationAction.request.url,
-***REMOVED******REMOVED******REMOVED***   (url.isHTTP || url.isHTTPS) {
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(url)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***return .cancel
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return .allow
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
-***REMOVED******REMOVED******REMOVED*** where the height calculation happens.
-***REMOVED******REMOVED***func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
-***REMOVED******REMOVED******REMOVED***webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard complete != nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  self?.hasCommitted ?? false
-***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***webView.evaluateJavaScript("document.body.scrollHeight") { height, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let height = height as? CGFloat,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !self.hasHeight else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the new height, if we have one.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.parent.height = height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** With certain HTML strings, the JavaScript above kept
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** getting called, with increasingly large heights. This
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** prevents that from happening. As this block is only
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** called after the `document.readyState` is "complete",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this should be OK.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.hasHeight = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(onHeightChanged: @escaping @MainActor @Sendable (CGFloat) -> Void) {
+***REMOVED******REMOVED******REMOVED***self.onHeightChanged = onHeightChanged
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(self)
+***REMOVED******REMOVED***return Coordinator(
+***REMOVED******REMOVED******REMOVED***onHeightChanged: { newHeight in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard height == nil else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***height = newHeight
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+extension HTMLTextView.Coordinator: WKNavigationDelegate {
+***REMOVED******REMOVED*** `WKNavigationDelegate` method for navigation actions.
+***REMOVED***func webView(
+***REMOVED******REMOVED***_ webView: WKWebView,
+***REMOVED******REMOVED***decidePolicyFor navigationAction: WKNavigationAction
+***REMOVED***) async -> WKNavigationActionPolicy {
+***REMOVED******REMOVED***if navigationAction.navigationType == .linkActivated,
+***REMOVED******REMOVED***   let url = navigationAction.request.url,
+***REMOVED******REMOVED***   (url.isHTTP || url.isHTTPS) {
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(url)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return .cancel
+***REMOVED***
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***return .allow
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
+***REMOVED******REMOVED*** where the height calculation happens.
+***REMOVED***func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+***REMOVED******REMOVED***Task.detached { @MainActor [onHeightChanged] in
+***REMOVED******REMOVED******REMOVED***guard let readyState = try? await webView.evaluateJavaScript("document.readyState") as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED***  readyState == "complete" else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let scrollHeight = try? await webView.evaluateJavaScript("document.body.scrollHeight") as? CGFloat else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***onHeightChanged(scrollHeight)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

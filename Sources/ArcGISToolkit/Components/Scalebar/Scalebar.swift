@@ -49,6 +49,8 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [ScalebarExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) 
 ***REMOVED***/ in the project. To learn more about using the `Scalebar` see the <doc:ScalebarTutorial>.
+@MainActor
+@preconcurrency
 public struct Scalebar: View {
 ***REMOVED******REMOVED*** - MARK: Internal/Private vars
 ***REMOVED***
@@ -59,13 +61,13 @@ public struct Scalebar: View {
 ***REMOVED***@State private var height: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Controls the current opacity of the scalebar.
-***REMOVED***@State var opacity: Double
+***REMOVED***@State private var opacity: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
 ***REMOVED***@StateObject var viewModel: ScalebarViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The font used by the scalebar, available in both `Font` and `UIFont` types.
-***REMOVED***static var font: (font: Font, uiFont: UIFont) {
+***REMOVED***nonisolated static var font: (font: Font, uiFont: UIFont) {
 ***REMOVED******REMOVED***let size = 9.0
 ***REMOVED******REMOVED***let uiFont = UIFont.systemFont(
 ***REMOVED******REMOVED******REMOVED***ofSize: size,
@@ -76,7 +78,7 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The rendering height of the scalebar font.
-***REMOVED***static var fontHeight: Double {
+***REMOVED***nonisolated static var fontHeight: Double {
 ***REMOVED******REMOVED***return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
 ***REMOVED***
 ***REMOVED***
@@ -189,8 +191,10 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: settings.autoHideDelay,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: false
 ***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = .zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = .zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

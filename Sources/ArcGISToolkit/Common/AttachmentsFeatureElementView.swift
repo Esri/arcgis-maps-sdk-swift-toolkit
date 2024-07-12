@@ -17,6 +17,7 @@ import QuickLook
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an `AttachmentsFeatureElement`.
+@MainActor
 struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
 ***REMOVED***let featureElement: AttachmentsFeatureElement
@@ -243,7 +244,9 @@ extension View {
 ***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***@ViewBuilder func onAttachmentIsEditableChange(
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func onAttachmentIsEditableChange(
 ***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
 ***REMOVED******REMOVED***action: @escaping (_ newIsEditable: Bool) -> Void
 ***REMOVED***) -> some View {

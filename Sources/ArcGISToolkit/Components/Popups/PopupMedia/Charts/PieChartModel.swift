@@ -15,6 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ The view model for pie charts.
+@MainActor
 final class PieChartModel: ObservableObject {
 ***REMOVED******REMOVED***/ The slices that make up the pie chart.
 ***REMOVED***let pieSlices: [PieSlice]
@@ -38,7 +39,7 @@ final class PieChartModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The pre-defined colors for the pie slices.
-***REMOVED***static var sliceColors: [Color] = [
+***REMOVED***static let sliceColors: [Color] = [
 ***REMOVED******REMOVED***.mint,
 ***REMOVED******REMOVED***.teal,
 ***REMOVED******REMOVED***.green,

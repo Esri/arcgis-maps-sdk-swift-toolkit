@@ -106,7 +106,7 @@ extension View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - delay: The delay to wait before allow the task to proceed, in nanoseconds. Defaults to 1/4 second.
 ***REMOVED******REMOVED***/   - action: The action to perform after the delay.
-***REMOVED***func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping () -> Void) -> some View {
+***REMOVED***func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping @Sendable () -> Void) -> some View {
 ***REMOVED******REMOVED***task { @MainActor in
 ***REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: nanoseconds)
 ***REMOVED******REMOVED******REMOVED***action()
@@ -127,7 +127,7 @@ extension View {
 ***REMOVED***@MainActor @ViewBuilder func onReceive<S>(
 ***REMOVED******REMOVED***_ sequence: S,
 ***REMOVED******REMOVED***perform action: ((S.Element) -> Void)?
-***REMOVED***) -> some View where S: AsyncSequence {
+***REMOVED***) -> some View where S: AsyncSequence, S.Element: Sendable {
 ***REMOVED******REMOVED***if let action {
 ***REMOVED******REMOVED******REMOVED***task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {

@@ -12,7 +12,9 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import OSLog
+import Foundation
+
+internal import os
 
 extension Logger {
 ***REMOVED******REMOVED***/ A logger for the common `AttachmentsFeatureElementView` view.

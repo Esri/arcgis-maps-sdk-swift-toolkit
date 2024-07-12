@@ -18,6 +18,7 @@
 ***REMOVED***/ A view for numerical value input.
 ***REMOVED***/
 ***REMOVED***/ This is the preferable input type for long lists of coded value domains.
+@MainActor
 struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel

@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
+@MainActor
 struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***/ - Parameter isHidden: A binding used to dismiss the site selector.
@@ -56,6 +57,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
+***REMOVED***@MainActor
 ***REMOVED***struct SitesList: View {
 ***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -193,6 +195,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
+***REMOVED***@MainActor
 ***REMOVED***struct FacilitiesList: View {
 ***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
