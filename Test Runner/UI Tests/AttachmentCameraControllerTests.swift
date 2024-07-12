@@ -55,7 +55,9 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.waitForExistence(timeout: 5)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if deviceOrientation.isLandscape || deviceType == .pad {
+***REMOVED******REMOVED***if deviceType == .pad {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
+***REMOVED*** else if deviceOrientation.isLandscape && deviceType == .phone {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeRight()
@@ -63,7 +65,9 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Video")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if deviceOrientation.isLandscape || deviceType == .pad {
+***REMOVED******REMOVED***if deviceType == .pad {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
+***REMOVED*** else if deviceOrientation.isLandscape && deviceType == .phone {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeLeft()
