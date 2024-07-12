@@ -166,7 +166,7 @@ struct AttachmentImportMenu: View {
             }
             guard let newAttachment = element.addAttachment(
                 name: fileName,
-                contentType: newAttachmentImportData.contentType.preferredMIMEType ?? "application/octet-stream",
+                contentType: newAttachmentImportData.contentType,
                 data: newAttachmentImportData.data
             ) else {
                 importState = .errored(.creationFailed)
