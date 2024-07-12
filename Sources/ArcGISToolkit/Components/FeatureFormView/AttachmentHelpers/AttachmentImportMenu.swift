@@ -154,7 +154,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***defer { importState = .none ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***let fileName: String
 ***REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fileName = presetFileName
@@ -165,12 +164,16 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Unnamed Attachment"
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let newAttachment = element.addAttachment(
+***REMOVED******REMOVED******REMOVED***guard let newAttachment = element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
 ***REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType.preferredMIMEType ?? "application/octet-stream",
 ***REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***) else {
+***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.creationFailed)
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***onAdd?(newAttachment)
+***REMOVED******REMOVED******REMOVED***importState = .none
 ***REMOVED***
 ***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
 ***REMOVED******REMOVED******REMOVED***importState = .importing
