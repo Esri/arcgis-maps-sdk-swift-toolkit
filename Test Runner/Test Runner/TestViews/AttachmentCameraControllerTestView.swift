@@ -21,13 +21,17 @@ struct AttachmentCameraControllerTestView: View {
 ***REMOVED***@State private var captureMode: UIImagePickerController.CameraCaptureMode?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(captureMode?.name ?? "None")
-***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Camera Capture Mode")
-***REMOVED******REMOVED***AttachmentCameraController(importState: .constant(.none))
-***REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.captureMode = captureMode
+***REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED***.fullScreenCover(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCameraController(importState: .constant(.none))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.captureMode = captureMode
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(captureMode?.name ?? "None")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Camera Capture Mode")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
