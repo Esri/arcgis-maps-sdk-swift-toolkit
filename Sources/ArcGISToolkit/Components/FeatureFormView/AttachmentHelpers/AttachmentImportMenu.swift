@@ -166,7 +166,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***guard let newAttachment = element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
-***REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType.preferredMIMEType ?? "application/octet-stream",
+***REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType,
 ***REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
 ***REMOVED******REMOVED******REMOVED***) else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.creationFailed)
