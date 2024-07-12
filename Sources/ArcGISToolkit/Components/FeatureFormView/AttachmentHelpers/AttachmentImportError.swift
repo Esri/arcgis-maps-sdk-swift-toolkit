@@ -14,8 +14,14 @@
 
 /// The possible errors when importing an attachment.
 enum AttachmentImportError: Error, Equatable {
+    /// The SDK failed to create a ``ArcGIS/FormAttachment``.
+    case creationFailed
+    /// The raw attachment is inaccessible.
     case dataInaccessible
+    /// The provided file is empty (0 bytes).
     case emptyFilesNotSupported
+    /// The provided file exceeds the toolkit imposed size limit.
     case sizeLimitExceeded
+    /// The file import failed with a system error.
     case system(String)
 }
