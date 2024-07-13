@@ -29,8 +29,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
         let app = XCUIApplication()
         let cameraModeController = app.otherElements["CameraMode"]
         let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
-        let deviceOrientation = XCUIDevice.shared.orientation
-        let deviceType = UIDevice.current.userInterfaceIdiom
+        let device = UIDevice.current.userInterfaceIdiom
+        let orientation = app.staticTexts["Device Orientation"]
         
         app.launch()
         
@@ -55,21 +55,21 @@ final class AttachmentCameraControllerTests: XCTestCase {
             cameraModeController.waitForExistence(timeout: 5)
         )
         
-        if deviceType == .pad {
+        if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
             cameraModeController.swipeDown()
-        } else if deviceOrientation.isLandscape && deviceType == .phone {
+        } else if orientation.label == "Landscape Left" {
             cameraModeController.swipeUp()
-        } else {
+        } else /* iPhone - portrait */ {
             cameraModeController.swipeRight()
         }
         
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
-        if deviceType == .pad {
+        if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
             cameraModeController.swipeUp()
-        } else if deviceOrientation.isLandscape && deviceType == .phone {
+        } else if orientation.label == "Landscape Left" {
             cameraModeController.swipeDown()
-        } else {
+        } else /* iPhone - portrait */ {
             cameraModeController.swipeLeft()
         }
         
