@@ -29,8 +29,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let cameraModeController = app.otherElements["CameraMode"]
 ***REMOVED******REMOVED***let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
-***REMOVED******REMOVED***let deviceOrientation = XCUIDevice.shared.orientation
-***REMOVED******REMOVED***let deviceType = UIDevice.current.userInterfaceIdiom
+***REMOVED******REMOVED***let device = UIDevice.current.userInterfaceIdiom
+***REMOVED******REMOVED***let orientation = app.staticTexts["Device Orientation"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -55,21 +55,21 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.waitForExistence(timeout: 5)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if deviceType == .pad {
+***REMOVED******REMOVED***if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
-***REMOVED*** else if deviceOrientation.isLandscape && deviceType == .phone {
+***REMOVED*** else if orientation.label == "Landscape Left" {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
-***REMOVED*** else {
+***REMOVED*** else /* iPhone - portrait */ {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeRight()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Video")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if deviceType == .pad {
+***REMOVED******REMOVED***if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
-***REMOVED*** else if deviceOrientation.isLandscape && deviceType == .phone {
+***REMOVED*** else if orientation.label == "Landscape Left" {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
-***REMOVED*** else {
+***REMOVED*** else /* iPhone - portrait */ {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeLeft()
 ***REMOVED***
 ***REMOVED******REMOVED***
