@@ -14,6 +14,7 @@
 
 import SwiftUI
 
+@MainActor
 struct ExampleList: View {
     /// The name of the list of examples.
     var name: String

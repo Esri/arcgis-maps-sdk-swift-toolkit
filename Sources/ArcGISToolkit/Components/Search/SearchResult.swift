@@ -16,7 +16,7 @@ import UIKit.UIImage
 import ArcGIS
 
 /// Wraps a search result for display.
-public struct SearchResult {
+public struct SearchResult: Sendable {
     /// Creates a `SearchResult`.
     /// - Parameters:
     ///   - displayTitle: The string to be shown whenever a result is displayed.

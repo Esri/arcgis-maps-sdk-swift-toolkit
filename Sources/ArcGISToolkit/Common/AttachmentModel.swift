@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import QuickLook
+@preconcurrency import QuickLook
 import SwiftUI
 
 internal import os
