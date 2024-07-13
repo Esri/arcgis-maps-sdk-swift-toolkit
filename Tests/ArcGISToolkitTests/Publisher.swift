@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
 import Combine
 
-extension Publisher {
+extension Publisher where Self: Sendable {
     /// Asynchronously returns the first value emitted from the publisher.
     /// This property will return `nil` if this publisher completes without an error before
     /// it emits a value.

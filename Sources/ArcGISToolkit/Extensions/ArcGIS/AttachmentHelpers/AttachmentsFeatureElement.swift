@@ -26,7 +26,7 @@ public enum AttachmentsFeatureElementDisplayType {
 }
 
 /// Common properties for elements which display feature attachments.
-public protocol AttachmentsFeatureElement {
+public protocol AttachmentsFeatureElement: Sendable {
     /// Indicates how to display the attachments.
     var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get }
     

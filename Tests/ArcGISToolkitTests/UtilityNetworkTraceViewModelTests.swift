@@ -13,9 +13,8 @@
 // limitations under the License.
 
 import ArcGIS
-import XCTest
-
 @testable import ArcGISToolkit
+import XCTest
 
 final class UtilityNetworkTraceViewModelTests: XCTestCase {
     override func setUp() async throws {
@@ -38,7 +37,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     @MainActor
     func testCase_1_1() async throws {
         let viewModel = UtilityNetworkTraceViewModel(
-            map: try await makeMap(),
+            map: try await Map.load(basemapStyle: .arcGISTopographic),
             graphicsOverlay: GraphicsOverlay(),
             autoLoad: false
         )
@@ -56,7 +55,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     /// Test `UtilityNetworkTraceViewModel` on a map that contains a utility network.
     @MainActor
     func testCase_1_4() async throws {
-        let map = try await makeMapWithPortalItem()
+        let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
         
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
@@ -78,7 +77,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     /// Test initializing a `UtilityNetworkTraceViewModel` with starting points.
     @MainActor
     func testCase_2_1() async throws {
-        let map = try await makeMapWithPortalItem()
+        let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
         
         let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" } as? FeatureLayer)
         
@@ -122,7 +121,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     /// configuration.
     @MainActor
     func testCase_2_2() async throws {
-        let map = try await makeMapWithPortalItem()
+        let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
         
         let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" } as? FeatureLayer)
         
@@ -175,7 +174,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     /// Test modifying the fractional starting point along an edge based utility element.
     @MainActor
     func testCase_2_3() async throws {
-        let map = try await makeMapWithPortalItem()
+        let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
         
         let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" } as? FeatureLayer)
         
@@ -218,7 +217,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
     // Test an upstream trace and validate a function result.
     @MainActor
     func testCase_3_1() async throws {
-        let map = try await makeMapWithPortalItem()
+        let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
         
         let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" } as? FeatureLayer)
         
@@ -265,26 +264,6 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
 }
 
 extension UtilityNetworkTraceViewModelTests {
-    /// Creates and loads a topographic map.
-    ///
-    /// The returned map contains no utility networks.
-    /// - Returns: A loaded map.
-    func makeMap() async throws -> Map {
-        let map = Map(basemapStyle: .arcGISTopographic)
-        try await map.load()
-        return map
-    }
-    
-    func makeMapWithPortalItem() async throws -> Map {
-        let portalItem = PortalItem(
-            portal: .arcGISOnline(connection: .anonymous),
-            id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
-        )
-        let map = Map(item: portalItem)
-        try await map.load()
-        return map
-    }
-    
     /// A token to a sample public utility network dataset as previously published in the
     /// [Javascript sample](https://developers.arcgis.com/javascript/latest/sample-code/widgets-untrace/).
     var tokenForSampleServer7: ArcGISCredential {
@@ -295,6 +274,34 @@ extension UtilityNetworkTraceViewModelTests {
                 password: "I68VGU^nMurF"
             )
         }
+    }
+}
+
+private extension Map {
+    /// Creates and loads a map with the given basemap style.
+    /// - Returns: A loaded map.
+    class func load(basemapStyle: Basemap.Style) async throws -> Map {
+        let map = Map(basemapStyle: .arcGISTopographic)
+        try await map.load()
+        return map
+    }
+    
+    /// Creates and loads a map with the given portal item.
+    /// - Parameter portalItem: A map portal item.
+    /// - Returns: A loaded map.
+    class func load(portalItem: PortalItem) async throws -> Map {
+        let map = Map(item: portalItem)
+        try await map.load()
+        return map
+    }
+}
+
+private extension PortalItem {
+    class func nappervilleElectricUtilityNetwork() -> PortalItem {
+        return PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
+        )
     }
 }
 

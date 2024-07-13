@@ -19,5 +19,6 @@ protocol Example {
     var name: String { get }
     
     /// A function which creates the example view.
+    @MainActor
     func makeBody() -> AnyView
 }

@@ -17,6 +17,7 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience using world-tracking.
+@MainActor
 struct WorldTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
     @Binding var initialCameraIsSet: Bool
