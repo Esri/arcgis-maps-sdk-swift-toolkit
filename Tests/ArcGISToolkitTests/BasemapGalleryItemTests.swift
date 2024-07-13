@@ -12,13 +12,13 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
 
-import XCTest
 ***REMOVED***
 @testable ***REMOVED***Toolkit
+@preconcurrency import Combine
+import Foundation
 ***REMOVED***
-import Combine
+import XCTest
 
 ***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 ***REMOVED*** required a bit more properties/logic in the 'BasemapGalleryItem' (such
@@ -34,6 +34,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testInit() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
 ***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap)
@@ -83,6 +84,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(item3.loadBasemapError)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testLoadBasemapError() async throws {
 ***REMOVED******REMOVED******REMOVED*** Create item with bad portal item URL.
 ***REMOVED******REMOVED***let item = BasemapGalleryItem(
@@ -99,6 +101,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNotNil(item.loadBasemapError)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testSpatialReferenceAndStatus() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
 ***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap)

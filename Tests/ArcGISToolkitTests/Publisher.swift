@@ -12,10 +12,9 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
 import Combine
 
-extension Publisher {
+extension Publisher where Self: Sendable {
 ***REMOVED******REMOVED***/ Asynchronously returns the first value emitted from the publisher.
 ***REMOVED******REMOVED***/ This property will return `nil` if this publisher completes without an error before
 ***REMOVED******REMOVED***/ it emits a value.

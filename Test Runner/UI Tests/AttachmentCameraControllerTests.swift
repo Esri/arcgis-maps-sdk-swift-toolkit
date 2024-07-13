@@ -21,11 +21,14 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test `AttachmentCameraController.onCameraCaptureModeChanged(perform:)`
 ***REMOVED***func testOnCameraCaptureModeChanged() throws {
-#if targetEnvironment(simulator)
-***REMOVED******REMOVED***XCTSkip("This test intended for iOS devices only.")
-#elseif targetEnvironment(macCatalyst)
-***REMOVED******REMOVED***XCTSkip("This test intended for iOS devices only.")
+***REMOVED******REMOVED***let isUnsupportedEnvironment: Bool
+#if targetEnvironment(simulator) || targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***isUnsupportedEnvironment = true
+#else
+***REMOVED******REMOVED***isUnsupportedEnvironment = false
 #endif
+***REMOVED******REMOVED***try XCTSkipIf(isUnsupportedEnvironment, "This test intended for iOS devices only.")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let cameraModeController = app.otherElements["CameraMode"]
 ***REMOVED******REMOVED***let cameraModeLabel = app.staticTexts["Camera Capture Mode"]

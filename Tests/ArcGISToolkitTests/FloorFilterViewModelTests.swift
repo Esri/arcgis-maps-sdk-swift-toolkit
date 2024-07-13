@@ -259,6 +259,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***private func floorManager(
 ***REMOVED******REMOVED***forWebMapWithIdentifier id: PortalItem.ID,
 ***REMOVED******REMOVED***file: StaticString = #filePath,

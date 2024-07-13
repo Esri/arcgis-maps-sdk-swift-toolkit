@@ -20,6 +20,7 @@ import CoreLocation
 ***REMOVED***/ An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 ***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,
 ***REMOVED***/ it places a red circle around your initial location which can be explored.
+@MainActor
 struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.
@@ -78,7 +79,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***try? await locationDataSource.start()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location.
-***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDataSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDataSource.locations.first(where: { @Sendable _ in true ***REMOVED***) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location.
 ***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
