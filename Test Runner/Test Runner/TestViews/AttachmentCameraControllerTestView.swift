@@ -20,13 +20,40 @@
 struct AttachmentCameraControllerTestView: View {
 ***REMOVED***@State private var captureMode: UIImagePickerController.CameraCaptureMode?
 ***REMOVED***
+***REMOVED***@State private var orientation = UIDeviceOrientation.unknown
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(captureMode?.name ?? "None")
-***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Camera Capture Mode")
-***REMOVED******REMOVED***AttachmentCameraController(importState: .constant(.none))
-***REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.captureMode = captureMode
+***REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED***.fullScreenCover(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCameraController(importState: .constant(.none))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.captureMode = captureMode
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(captureMode?.name ?? "None")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Camera Capture Mode")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(orientation.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Device Orientation")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation = UIDevice.current.orientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation = UIDevice.current.orientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension UIDeviceOrientation {
+***REMOVED***var name: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .portrait: "Portrait"
+***REMOVED******REMOVED***case .landscapeLeft: "Landscape Left"
+***REMOVED******REMOVED***case .landscapeRight: "Landscape Right"
+***REMOVED******REMOVED***default: "Other"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
