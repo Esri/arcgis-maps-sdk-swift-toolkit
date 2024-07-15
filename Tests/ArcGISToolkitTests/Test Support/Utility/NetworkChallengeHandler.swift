@@ -12,8 +12,8 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
 ***REMOVED***
+import os
 
 ***REMOVED***/ A `NetworkChallengeHandler` that can handle trusting hosts with a self-signed certificate
 ***REMOVED***/ and the network credential.
@@ -25,7 +25,10 @@ final class NetworkChallengeHandler: NetworkAuthenticationChallengeHandler {
 ***REMOVED***let networkCredential: NetworkCredential?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***/ The network authentication challenges.
-***REMOVED***private(set) var challenges: [NetworkAuthenticationChallenge] = []
+***REMOVED***var challenges: [NetworkAuthenticationChallenge] {
+***REMOVED******REMOVED***_challenges.withLock { $0 ***REMOVED***
+***REMOVED***
+***REMOVED***private let _challenges = OSAllocatedUnfairLock<[NetworkAuthenticationChallenge]>(initialState: [])
 ***REMOVED******REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***allowUntrustedHosts: Bool,
@@ -40,7 +43,7 @@ final class NetworkChallengeHandler: NetworkAuthenticationChallengeHandler {
 ***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED******REMOVED*** Record challenge only if it is not a server trust.
 ***REMOVED******REMOVED***if challenge.kind != .serverTrust {
-***REMOVED******REMOVED******REMOVED***challenges.append(challenge)
+***REMOVED******REMOVED******REMOVED***_challenges.withLock { $0.append(challenge) ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if challenge.kind == .serverTrust {

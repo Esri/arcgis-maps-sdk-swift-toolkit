@@ -143,7 +143,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: deletedAttachmentModel) {
+***REMOVED******REMOVED***.task(id: deletedAttachmentModel?.id) {
 ***REMOVED******REMOVED******REMOVED***guard let deletedAttachmentModel else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***onDelete?(deletedAttachmentModel)
 ***REMOVED******REMOVED******REMOVED***self.deletedAttachmentModel = nil
