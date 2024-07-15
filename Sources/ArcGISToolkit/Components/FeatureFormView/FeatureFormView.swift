@@ -66,8 +66,8 @@ public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
-    /// A Boolean value indicating whether the initial expression evaluation is running.
-    @State private var isEvaluatingInitialExpressions = true
+    /// A Boolean value indicating whether initial expression evaluation is running.
+    @State private var initialExpressionsAreEvaluating = true
     
     /// The title of the feature form view.
     @State private var title = ""
@@ -80,26 +80,30 @@ public struct FeatureFormView: View {
     }
     
     public var body: some View {
+        if initialExpressionsAreEvaluating {
+            initialBody
+        } else {
+            evaluatedForm
+        }
+    }
+    
+    var evaluatedForm: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
-                if isEvaluatingInitialExpressions {
-                    ProgressView()
-                } else {
-                    VStack(alignment: .leading) {
-                        if !title.isEmpty {
-                            FormHeader(title: title)
-                            Divider()
-                        }
-                        ForEach(model.visibleElements, id: \.self) { element in
-                            makeElement(element)
-                        }
-                        if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
-                            // The Toolkit currently only supports AttachmentsFormElements via the
-                            // default attachments element. Once AttachmentsFormElements can be authored
-                            // this can call makeElement(_:) instead and makeElement(_:) should have a
-                            // case added for AttachmentsFormElement.
-                            AttachmentsFeatureElementView(featureElement: attachmentsElement)
-                        }
+                VStack(alignment: .leading) {
+                    if !title.isEmpty {
+                        FormHeader(title: title)
+                        Divider()
+                    }
+                    ForEach(model.visibleElements, id: \.self) { element in
+                        makeElement(element)
+                    }
+                    if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+                        // The Toolkit currently only supports AttachmentsFormElements via the
+                        // default attachments element. Once AttachmentsFormElements can be authored
+                        // this can call makeElement(_:) instead and makeElement(_:) should have a
+                        // case added for AttachmentsFormElement.
+                        AttachmentsFeatureElementView(featureElement: attachmentsElement)
                     }
                 }
             }
@@ -114,11 +118,6 @@ public struct FeatureFormView: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .environmentObject(model)
-        .task {
-            // Perform the initial expression evaluation.
-            await model.initialEvaluation()
-            isEvaluatingInitialExpressions = false
-        }
     }
 }
 
@@ -144,5 +143,17 @@ extension FeatureFormView {
             InputWrapper(element: element)
             Divider()
         }
+    }
+    
+    /// The progress view to be shown while initial expression evaluation is running.
+    ///
+    /// This avoids flashing elements that may immediately be set hidden or have
+    /// values change as a result of initial expression evaluation.
+    var initialBody: some View {
+        ProgressView()
+            .task {
+                await model.initialEvaluation()
+                initialExpressionsAreEvaluating = false
+            }
     }
 }
