@@ -76,8 +76,8 @@ struct FloorFilterExampleView: View {
                         maxWidth: 400,
                         maxHeight: 400
                     )
-                    .padding([.horizontal], 10)
-                    .padding([.vertical], 10 + attributionBarHeight)
+                    .padding([.bottom, .leading])
+                    .padding(.bottom, attributionBarHeight)
                 } else if mapLoadError {
                     Label(
                         "Map load error!",
