@@ -29,7 +29,18 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let cameraModeController = app.otherElements["CameraMode"]
 ***REMOVED******REMOVED***let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
+***REMOVED******REMOVED***let device = UIDevice.current.userInterfaceIdiom
+***REMOVED******REMOVED***let orientation = app.staticTexts["Device Orientation"]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***attachmentCameraControllerTestsButton.exists,
+***REMOVED******REMOVED******REMOVED***"The AttachmentCameraController Tests button wasn't found."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***attachmentCameraControllerTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
 ***REMOVED******REMOVED******REMOVED***alert.buttons["Allow"].tap()
@@ -40,22 +51,27 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***attachmentCameraControllerTestsButton.exists,
-***REMOVED******REMOVED******REMOVED***"The AttachmentCameraController Tests button wasn't found."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***attachmentCameraControllerTestsButton.tap()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***cameraModeController.waitForExistence(timeout: 5)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***cameraModeController.swipeDown()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
+***REMOVED*** else if orientation.label == "Landscape Left" {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
+***REMOVED*** else /* iPhone - portrait */ {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeRight()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Video")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***cameraModeController.swipeUp()
+***REMOVED******REMOVED***if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeUp()
+***REMOVED*** else if orientation.label == "Landscape Left" {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeDown()
+***REMOVED*** else /* iPhone - portrait */ {
+***REMOVED******REMOVED******REMOVED***cameraModeController.swipeLeft()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Photo")
 ***REMOVED***
