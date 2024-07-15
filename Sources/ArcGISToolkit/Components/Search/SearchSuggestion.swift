@@ -16,7 +16,7 @@ import Foundation
 import ArcGIS
 
 /// Wraps a suggestion for display.
-public struct SearchSuggestion {
+public struct SearchSuggestion: Sendable {
     /// Creates a `SearchSuggestion`.
     /// - Parameters:
     ///   - displayTitle: The string to be used when displaying a suggestion.
