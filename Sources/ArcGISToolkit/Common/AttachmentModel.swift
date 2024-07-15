@@ -13,7 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import QuickLook
+@preconcurrency import QuickLook
 ***REMOVED***
 
 internal import os

@@ -136,7 +136,7 @@ private struct JobView: View {
 ***REMOVED******REMOVED***/ Initializer that takes a job for which to show the data for.
 ***REMOVED***init(job: Job) {
 ***REMOVED******REMOVED***self.job = job
-***REMOVED******REMOVED***status = job.status
+***REMOVED******REMOVED***self._status = .init(initialValue: job.status)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the progress is showing.
@@ -286,7 +286,7 @@ extension JobManagerExampleView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if syncModel == .layer, let featureServiceInfo = task.featureServiceInfo {
 ***REMOVED******REMOVED******REMOVED***let layerOptions = featureServiceInfo.layerInfos
-***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 as? FeatureServiceLayerIDInfo ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap { $0 as? FeatureServiceLayerIDInfo ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap(\.id)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.map(GenerateLayerOption.init(layerID:))
 ***REMOVED******REMOVED******REMOVED***params.addLayerOptions(layerOptions)
