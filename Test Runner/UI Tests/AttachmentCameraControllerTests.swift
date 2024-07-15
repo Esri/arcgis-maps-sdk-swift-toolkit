@@ -29,7 +29,18 @@ final class AttachmentCameraControllerTests: XCTestCase {
         let app = XCUIApplication()
         let cameraModeController = app.otherElements["CameraMode"]
         let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
+        let device = UIDevice.current.userInterfaceIdiom
+        let orientation = app.staticTexts["Device Orientation"]
+        
         app.launch()
+        
+        let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
+        
+        XCTAssertTrue(
+            attachmentCameraControllerTestsButton.exists,
+            "The AttachmentCameraController Tests button wasn't found."
+        )
+        attachmentCameraControllerTestsButton.tap()
         
         addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
             alert.buttons["Allow"].tap()
@@ -40,22 +51,27 @@ final class AttachmentCameraControllerTests: XCTestCase {
             return true
         }
         
-        let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
-        
-        XCTAssertTrue(
-            attachmentCameraControllerTestsButton.exists,
-            "The AttachmentCameraController Tests button wasn't found."
-        )
-        attachmentCameraControllerTestsButton.tap()
-        
         XCTAssertTrue(
             cameraModeController.waitForExistence(timeout: 5)
         )
-        cameraModeController.swipeDown()
+        
+        if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
+            cameraModeController.swipeDown()
+        } else if orientation.label == "Landscape Left" {
+            cameraModeController.swipeUp()
+        } else /* iPhone - portrait */ {
+            cameraModeController.swipeRight()
+        }
         
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
-        cameraModeController.swipeUp()
+        if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
+            cameraModeController.swipeUp()
+        } else if orientation.label == "Landscape Left" {
+            cameraModeController.swipeDown()
+        } else /* iPhone - portrait */ {
+            cameraModeController.swipeLeft()
+        }
         
         XCTAssertEqual(cameraModeLabel.label, "Photo")
     }
