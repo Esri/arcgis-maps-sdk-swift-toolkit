@@ -76,8 +76,8 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 10 + attributionBarHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom, .leading])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, attributionBarHeight)
 ***REMOVED******REMOVED******REMOVED*** else if mapLoadError {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Map load error!",
