@@ -20,15 +20,42 @@ import SwiftUI
 struct AttachmentCameraControllerTestView: View {
     @State private var captureMode: UIImagePickerController.CameraCaptureMode?
     
+    @State private var orientation = UIDeviceOrientation.unknown
+    
     var body: some View {
-        Text(captureMode?.name ?? "None")
-            .accessibilityIdentifier("Camera Capture Mode")
-        AttachmentCameraController(importState: .constant(.none))
-            .onCameraCaptureModeChanged { captureMode in
-                self.captureMode = captureMode
+        Color.clear
+            .fullScreenCover(isPresented: .constant(true)) {
+                AttachmentCameraController(importState: .constant(.none))
+                    .onCameraCaptureModeChanged { captureMode in
+                        self.captureMode = captureMode
+                    }
+                    .overlay {
+                        VStack {
+                            Text(captureMode?.name ?? "None")
+                                .accessibilityIdentifier("Camera Capture Mode")
+                            Text(orientation.name)
+                                .accessibilityIdentifier("Device Orientation")
+                                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                                    orientation = UIDevice.current.orientation
+                                }
+                                .task {
+                                    orientation = UIDevice.current.orientation
+                                }
+                        }
+                    }
             }
     }
-    
+}
+
+extension UIDeviceOrientation {
+    var name: String {
+        switch self {
+        case .portrait: "Portrait"
+        case .landscapeLeft: "Landscape Left"
+        case .landscapeRight: "Landscape Right"
+        default: "Other"
+        }
+    }
 }
 
 extension UIImagePickerController.CameraCaptureMode {
