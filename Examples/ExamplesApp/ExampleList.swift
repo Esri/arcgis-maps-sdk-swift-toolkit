@@ -14,6 +14,7 @@
 
 ***REMOVED***
 
+@MainActor
 struct ExampleList: View {
 ***REMOVED******REMOVED***/ The name of the list of examples.
 ***REMOVED***var name: String

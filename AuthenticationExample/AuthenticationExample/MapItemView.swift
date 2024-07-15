@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view that displays a map.
+@MainActor
 struct MapItemView: View {
 ***REMOVED******REMOVED***/ The map that is to be displayed.
 ***REMOVED***let map: Map

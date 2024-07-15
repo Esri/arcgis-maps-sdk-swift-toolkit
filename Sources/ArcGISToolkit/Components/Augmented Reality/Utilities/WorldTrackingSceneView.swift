@@ -17,6 +17,7 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience using world-tracking.
+@MainActor
 struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
 ***REMOVED***@Binding var initialCameraIsSet: Bool

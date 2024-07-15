@@ -51,6 +51,8 @@
 ***REMOVED***/ and refer to
 ***REMOVED***/ [PopupExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
+@MainActor
+@preconcurrency
 public struct PopupView: View {
 ***REMOVED******REMOVED***/ Creates a `PopupView` with the given popup.
 ***REMOVED******REMOVED***/ - Parameters

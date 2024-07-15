@@ -17,9 +17,11 @@ import Combine
 import UIKit
 
 ***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
-public class BasemapGalleryItem: ObservableObject {
+@MainActor
+@preconcurrency
+public final class BasemapGalleryItem: ObservableObject, Sendable {
 ***REMOVED******REMOVED***/ The status of a basemap's spatial reference in relation to a reference spatial reference.
-***REMOVED***public enum SpatialReferenceStatus {
+***REMOVED***public enum SpatialReferenceStatus: Sendable {
 ***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference status is unknown, either because the basemap's
 ***REMOVED******REMOVED******REMOVED***/ base layers haven't been loaded yet or the status has yet to be updated.
 ***REMOVED******REMOVED***case unknown
@@ -52,7 +54,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***if basemap.loadStatus != .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await loadBasemap()
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***await finalizeLoading()
+***REMOVED******REMOVED******REMOVED******REMOVED***finalizeLoading()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -97,12 +99,12 @@ private extension BasemapGalleryItem {
 ***REMOVED*** catch  {
 ***REMOVED******REMOVED******REMOVED***loadError = error
 ***REMOVED***
-***REMOVED******REMOVED***await finalizeLoading(error: loadError)
+***REMOVED******REMOVED***finalizeLoading(error: loadError)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the item in response to basemap loading completion.
 ***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
-***REMOVED***@MainActor func finalizeLoading(error: Error? = nil) {
+***REMOVED***func finalizeLoading(error: Error? = nil) {
 ***REMOVED******REMOVED***if name == nil {
 ***REMOVED******REMOVED******REMOVED***name = basemap.name
 ***REMOVED***

@@ -15,7 +15,8 @@
 ***REMOVED***
 
 ***REMOVED***/ Defines the contract for a search result provider.
-public protocol SearchSource {
+@preconcurrency
+public protocol SearchSource: Sendable {
 ***REMOVED******REMOVED***/ Name to show when presenting this source in the UI.
 ***REMOVED***var name: String { get set ***REMOVED***
 ***REMOVED***

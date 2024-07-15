@@ -16,7 +16,7 @@ import Foundation
 ***REMOVED***
 
 ***REMOVED***/ Wraps a suggestion for display.
-public struct SearchSuggestion {
+public struct SearchSuggestion: Sendable {
 ***REMOVED******REMOVED***/ Creates a `SearchSuggestion`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - displayTitle: The string to be used when displaying a suggestion.

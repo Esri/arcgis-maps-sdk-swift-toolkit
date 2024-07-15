@@ -28,8 +28,8 @@ extension View {
 ***REMOVED***@ViewBuilder
 ***REMOVED***func onReceive<S>(
 ***REMOVED******REMOVED***_ sequence: S,
-***REMOVED******REMOVED***perform action: ((S.Element) -> Void)?
-***REMOVED***) -> some View where S: AsyncSequence {
+***REMOVED******REMOVED***perform action: (@MainActor (S.Element) -> Void)?
+***REMOVED***) -> some View where S: AsyncSequence & Sendable, S.Element: Sendable {
 ***REMOVED******REMOVED***if let action {
 ***REMOVED******REMOVED******REMOVED***task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
