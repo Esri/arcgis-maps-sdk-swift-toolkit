@@ -28,8 +28,8 @@ extension View {
     @ViewBuilder
     func onReceive<S>(
         _ sequence: S,
-        perform action: ((S.Element) -> Void)?
-    ) -> some View where S: AsyncSequence {
+        perform action: (@MainActor (S.Element) -> Void)?
+    ) -> some View where S: AsyncSequence & Sendable, S.Element: Sendable {
         if let action {
             task {
                 do {

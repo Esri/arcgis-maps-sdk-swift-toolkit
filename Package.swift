@@ -53,8 +53,8 @@ for target in package.targets {
     target.swiftSettings = (target.swiftSettings ?? []) + [
         // Experimental Features.
         .enableExperimentalFeature("AccessLevelOnImport"),
-        /* .enableExperimentalFeature("StrictConcurrency"), */
+        .enableExperimentalFeature("StrictConcurrency=targeted"),
         // Upcoming Features.
-        /* .enableUpcomingFeature("DisableOutwardActorInference") */
+        .enableUpcomingFeature("DisableOutwardActorInference")
     ]
 }
