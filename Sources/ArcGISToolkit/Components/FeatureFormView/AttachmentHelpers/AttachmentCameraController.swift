@@ -94,16 +94,12 @@ class AttachmentUIImagePickerController: UIImagePickerController {
     var cameraCaptureModeObserver: (any NSObjectProtocol)?
     
     /// An action to perform when the camera capture mode changes.
-    var action: ((UIImagePickerController.CameraCaptureMode) -> Void)?
+    var action: (@MainActor (UIImagePickerController.CameraCaptureMode) -> Void)?
     
     override func viewDidAppear(_ animated: Bool) {
-        cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
-            Task {
-#if compiler(>=6.0)
-                await self.action?(self.cameraCaptureMode)
-#else
+        cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
+            Task { @MainActor in
                 self.action?(self.cameraCaptureMode)
-#endif
             }
         }
     }

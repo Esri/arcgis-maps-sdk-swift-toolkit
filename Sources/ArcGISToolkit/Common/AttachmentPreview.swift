@@ -143,7 +143,7 @@ struct AttachmentPreview: View {
                 }
             }
         }
-        .task(id: deletedAttachmentModel) {
+        .task(id: deletedAttachmentModel?.id) {
             guard let deletedAttachmentModel else { return }
             onDelete?(deletedAttachmentModel)
             self.deletedAttachmentModel = nil
