@@ -150,7 +150,7 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
     
     /// The AR session.
     @objc dynamic var session: ARSession {
-        arView.session
+        MainActor.runUnsafely { arView.session }
     }
 }
 
