@@ -16,6 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+@MainActor
 struct FeatureFormTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
