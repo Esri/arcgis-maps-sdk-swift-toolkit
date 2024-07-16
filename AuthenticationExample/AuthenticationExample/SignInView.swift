@@ -18,6 +18,7 @@ import CryptoKit
 ***REMOVED***
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
+@MainActor
 struct SignInView: View {
 ***REMOVED******REMOVED***/ The error that occurred during an attempt to sign in.
 ***REMOVED***@State private var error: Error?

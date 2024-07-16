@@ -16,6 +16,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+@MainActor
 struct FeatureFormTestView: View {
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
