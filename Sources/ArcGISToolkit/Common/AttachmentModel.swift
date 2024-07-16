@@ -119,10 +119,3 @@ internal import os
 }
 
 extension AttachmentModel: Identifiable {}
-
-extension AttachmentModel: Equatable {
-    static func == (lhs: AttachmentModel, rhs: AttachmentModel) -> Bool {
-        lhs.attachment === rhs.attachment &&
-        lhs.thumbnail === rhs.thumbnail
-    }
-}
