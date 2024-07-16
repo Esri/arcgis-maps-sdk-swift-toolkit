@@ -16,7 +16,7 @@ import UIKit.UIImage
 ***REMOVED***
 
 ***REMOVED***/ Wraps a search result for display.
-public struct SearchResult: Sendable {
+public struct SearchResult: @unchecked Sendable {
 ***REMOVED******REMOVED***/ Creates a `SearchResult`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - displayTitle: The string to be shown whenever a result is displayed.
