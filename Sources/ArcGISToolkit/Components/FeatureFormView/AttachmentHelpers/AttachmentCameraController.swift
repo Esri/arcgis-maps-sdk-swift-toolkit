@@ -94,16 +94,12 @@ class AttachmentUIImagePickerController: UIImagePickerController {
 ***REMOVED***var cameraCaptureModeObserver: (any NSObjectProtocol)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An action to perform when the camera capture mode changes.
-***REMOVED***var action: ((UIImagePickerController.CameraCaptureMode) -> Void)?
+***REMOVED***var action: (@MainActor (UIImagePickerController.CameraCaptureMode) -> Void)?
 ***REMOVED***
 ***REMOVED***override func viewDidAppear(_ animated: Bool) {
-***REMOVED******REMOVED***cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
-***REMOVED******REMOVED******REMOVED***Task {
-#if compiler(>=6.0)
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.action?(self.cameraCaptureMode)
-#else
+***REMOVED******REMOVED***cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
+***REMOVED******REMOVED******REMOVED***Task { @MainActor in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.action?(self.cameraCaptureMode)
-#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

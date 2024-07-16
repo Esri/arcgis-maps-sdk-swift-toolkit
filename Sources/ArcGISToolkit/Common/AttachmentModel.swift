@@ -119,10 +119,3 @@ internal import os
 ***REMOVED***
 
 extension AttachmentModel: Identifiable {***REMOVED***
-
-extension AttachmentModel: Equatable {
-***REMOVED***static func == (lhs: AttachmentModel, rhs: AttachmentModel) -> Bool {
-***REMOVED******REMOVED***lhs.attachment === rhs.attachment &&
-***REMOVED******REMOVED***lhs.thumbnail === rhs.thumbnail
-***REMOVED***
-***REMOVED***

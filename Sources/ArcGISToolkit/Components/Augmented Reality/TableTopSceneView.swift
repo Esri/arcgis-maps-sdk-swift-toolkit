@@ -17,6 +17,7 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality table top experience.
+@MainActor
 public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
@@ -234,6 +235,7 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***/   - arViewProxy: The AR view proxy.
 ***REMOVED******REMOVED***/   - screenPoint: The screen point to determine the `initialTransformation` from.
 ***REMOVED******REMOVED***/ - Returns: The `initialTransformation`.
+***REMOVED***@MainActor
 ***REMOVED***func initialTransformation(
 ***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
 ***REMOVED******REMOVED***using screenPoint: CGPoint
