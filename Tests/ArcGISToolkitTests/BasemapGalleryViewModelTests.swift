@@ -31,6 +31,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         ArcGISEnvironment.apiKey = nil
     }
     
+    @MainActor
     let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
             basemap: Basemap(
