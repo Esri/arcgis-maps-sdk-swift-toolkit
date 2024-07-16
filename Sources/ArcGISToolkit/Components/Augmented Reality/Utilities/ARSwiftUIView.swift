@@ -150,7 +150,7 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@objc dynamic var session: ARSession {
-***REMOVED******REMOVED***arView.session
+***REMOVED******REMOVED***MainActor.runUnsafely { arView.session ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
