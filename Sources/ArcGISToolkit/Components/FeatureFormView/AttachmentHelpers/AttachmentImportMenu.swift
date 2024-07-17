@@ -52,7 +52,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment size limit.
-***REMOVED***let attachmentSizeLimit = Measurement(
+***REMOVED***let attachmentUploadSizeLimit = Measurement(
 ***REMOVED******REMOVED***value: 50,
 ***REMOVED******REMOVED***unit: UnitInformationStorage.megabytes
 ***REMOVED***)
@@ -146,7 +146,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***value: Double(newAttachmentImportData.data.count),
 ***REMOVED******REMOVED******REMOVED******REMOVED***unit: UnitInformationStorage.bytes
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***guard attachmentSize <= attachmentSizeLimit else {
+***REMOVED******REMOVED******REMOVED***guard attachmentSize <= attachmentUploadSizeLimit else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.sizeLimitExceeded)
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
@@ -340,7 +340,7 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***/ An error message indicating the selected attachment exceeds the megabyte limit.
 ***REMOVED***var sizeLimitExceededImportFailureAlertMessage: String {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
+***REMOVED******REMOVED******REMOVED***localized: "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message indicating the selected attachment exceeds the megabyte limit."
 ***REMOVED******REMOVED***)
