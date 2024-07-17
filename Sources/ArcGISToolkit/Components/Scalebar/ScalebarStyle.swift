@@ -12,10 +12,8 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
-
 ***REMOVED***/ Visual scalebar styles.
-public enum ScalebarStyle {
+public enum ScalebarStyle: Sendable {
 ***REMOVED******REMOVED***/ Displays a single unit with segmented bars of alternating fill color.
 ***REMOVED***case alternatingBar
 ***REMOVED***

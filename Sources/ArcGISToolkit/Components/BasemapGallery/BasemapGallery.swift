@@ -56,7 +56,7 @@
 @preconcurrency
 public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The view style of the gallery.
-***REMOVED***public enum Style {
+***REMOVED***public enum Style: Sendable {
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
 ***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
 ***REMOVED******REMOVED******REMOVED***/ When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.
