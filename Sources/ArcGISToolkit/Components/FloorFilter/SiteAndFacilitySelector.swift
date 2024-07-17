@@ -15,6 +15,41 @@
 import ArcGIS
 import SwiftUI
 
+extension SiteAndFacilitySelector {
+    struct Header: View {
+        @Binding var isPresented: Bool
+        
+        @FocusState var textFieldIsFocused: Bool
+        
+        @State private var filterTerm = ""
+        
+        var body: some View {
+            VStack {
+                HStack {
+                    Text("Sites")
+                        .font(.title3)
+                    Spacer()
+                    Button {
+                        isPresented = false
+                    } label: {
+                        Image(systemName: "x.circle")
+                    }
+                }
+                HStack {
+                    TextField("\(Image(systemName: "magnifyingglass")) Filter sites", text: $filterTerm)
+                        .focused($textFieldIsFocused)
+                    if textFieldIsFocused {
+                        Button(String.cancel) {
+                            filterTerm.removeAll()
+                            textFieldIsFocused = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 ///
 /// If the floor aware data contains only one site, the selector opens directly to the facilities list.
@@ -27,24 +62,24 @@ struct SiteAndFacilitySelector: View {
     @Binding var isPresented: Bool
     
     var body: some View {
-        NavigationStack {
-            Group {
-                if viewModel.sites.count > 1 {
-                    SitesList(isPresented: $isPresented)
-                } else {
-                    FacilitiesList(
-                        usesAllSitesStyling: false,
-                        facilities: viewModel.facilities,
-                        isPresented: $isPresented
-                    )
-                    .navigationBarBackButtonHidden(true)
-                }
+        VStack {
+            Header(isPresented: $isPresented)
+                .padding([.leading, .top, .trailing])
+            if viewModel.sites.count > 1 {
+                SitesList(isPresented: $isPresented)
+            } else {
+                FacilitiesList(
+                    usesAllSitesStyling: false,
+                    facilities: viewModel.facilities,
+                    isPresented: $isPresented
+                )
+                .navigationBarBackButtonHidden(true)
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    CloseButton { isPresented = false }
-                }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                CloseButton { isPresented = false }
             }
         }
     }
@@ -249,14 +284,14 @@ struct SiteAndFacilitySelector: View {
                     bundle: .toolkitModule,
                     comment: "A reference to all of the sites defined in a floor aware map."
                 ) :
-                viewModel.selection?.site?.name ?? String(
-                    localized: "Select a facility",
-                    bundle: .toolkitModule,
-                    comment: """
+                    viewModel.selection?.site?.name ?? String(
+                        localized: "Select a facility",
+                        bundle: .toolkitModule,
+                        comment: """
                              A label directing the user to select a facility. A facility contains one
                              or more levels in a floor-aware map or scene.
                              """
-                )
+                    )
             )
         }
         
