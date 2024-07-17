@@ -128,7 +128,9 @@ struct AttachmentImportMenu: View {
         }
         .disabled(importState.importInProgress)
         .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+#if !targetEnvironment(macCatalyst)
             appSettingsButton
+#endif
             Button(String.cancel, role: .cancel) { }
         } message: {
             Text(cameraAccessAlertMessage)
@@ -205,7 +207,9 @@ struct AttachmentImportMenu: View {
                 }
             }
             .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+#if !targetEnvironment(macCatalyst)
                 appSettingsButton
+#endif
                 Button(role: .cancel) { } label: {
                     Text(recordVideoOnlyButtonLabel)
                 }
