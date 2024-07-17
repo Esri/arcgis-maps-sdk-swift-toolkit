@@ -16,7 +16,7 @@ import ArcGIS
 import UIKit
 
 /// A starting point of a utility network trace.
-public struct UtilityNetworkTraceStartingPoint {
+public struct UtilityNetworkTraceStartingPoint: Sendable {
     /// The geo element to be used as a starting point.
     var geoElement: GeoElement
     

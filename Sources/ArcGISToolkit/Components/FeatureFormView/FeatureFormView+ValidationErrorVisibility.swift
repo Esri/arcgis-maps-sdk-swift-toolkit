@@ -16,7 +16,7 @@ import SwiftUI
 
 public extension FeatureFormView {
     /// The validation error visibility configuration of a form.
-    enum ValidationErrorVisibility {
+    enum ValidationErrorVisibility: Sendable {
         /// Errors may be visible or hidden for a given form field depending on its focus state.
         case automatic
         /// Errors will always be visible for a given form field.

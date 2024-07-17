@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
-
 /// Visual scalebar styles.
-public enum ScalebarStyle {
+public enum ScalebarStyle: Sendable {
     /// Displays a single unit with segmented bars of alternating fill color.
     case alternatingBar
     

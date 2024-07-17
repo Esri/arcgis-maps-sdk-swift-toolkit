@@ -16,7 +16,7 @@ import ArcGIS
 import Foundation
 
 /// Indicates how to display the attachments.
-public enum AttachmentsFeatureElementDisplayType {
+public enum AttachmentsFeatureElementDisplayType: Sendable {
     /// Show attachments as links.
     case list
     /// Attachments expand to the width of the view.
