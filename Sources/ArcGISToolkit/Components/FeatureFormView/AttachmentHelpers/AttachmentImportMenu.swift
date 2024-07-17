@@ -201,15 +201,15 @@ struct AttachmentImportMenu: View {
             AttachmentCameraController(
                 importState: $importState
             )
+#if !targetEnvironment(macCatalyst)
             .onCameraCaptureModeChanged { captureMode in
                 if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
                     microphoneAccessAlertIsVisible = true
                 }
             }
-            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
-#if !targetEnvironment(macCatalyst)
-                appSettingsButton
 #endif
+            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+                appSettingsButton
                 Button(role: .cancel) { } label: {
                     Text(recordVideoOnlyButtonLabel)
                 }
