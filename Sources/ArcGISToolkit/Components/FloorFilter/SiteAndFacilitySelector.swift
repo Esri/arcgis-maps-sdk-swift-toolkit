@@ -15,6 +15,41 @@
 ***REMOVED***
 ***REMOVED***
 
+extension SiteAndFacilitySelector {
+***REMOVED***struct Header: View {
+***REMOVED******REMOVED***@Binding var isPresented: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@FocusState var textFieldIsFocused: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@State private var filterTerm = ""
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Sites")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "x.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("\(Image(systemName: "magnifyingglass")) Filter sites", text: $filterTerm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if textFieldIsFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***filterTerm.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 ***REMOVED***/
 ***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
@@ -27,24 +62,24 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
+***REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isPresented: $isPresented)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isPresented = false ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isPresented = false ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -249,14 +284,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED******REMOVED******REMOVED***) :
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Select a facility",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Select a facility",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label directing the user to select a facility. A facility contains one
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or more levels in a floor-aware map or scene.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
