@@ -35,6 +35,12 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
+    /// The maximum attachment download size limit.
+    private let attachmentDownloadSizeLimit = Measurement(
+        value: 50,
+        unit: UnitInformationStorage.megabytes
+    )
+    
     /// The models for the attachments displayed in the list.
     private let attachmentModels: [AttachmentModel]
     
@@ -79,29 +85,36 @@ struct AttachmentPreview: View {
         .cellBaseWidth(proposedCellSize.width)
     }
     
+    /// - Note: Contextual actions are disabled for empty attachments as deletion and rename
+    /// operations cannot be applied successfully to the ServiceGeodatabase or ServiceFeatureTable.
+    ///
+    /// - Note: The rename contextual action is disabled for attachments greater than the attachment download
+    /// size limit as rename operations trigger a download which currently has adverse memory implications.
     @MainActor
     func makeCarouselContent(for size: CGSize) -> some View {
         ForEach(attachmentModels) { attachmentModel in
-            AttachmentCell(attachmentModel: attachmentModel, cellSize: size)
+            AttachmentCell(attachmentModel: attachmentModel, attachmentDownloadSizeLimit: attachmentDownloadSizeLimit, cellSize: size)
                 .contextMenu {
-                    if !editControlsDisabled {
-                        Button {
-                            renamedAttachmentModel = attachmentModel
-                            renameDialogueIsShowing = true
-                            if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
-                                newAttachmentName = String(attachmentModel.name[..<separatorIndex])
-                            } else {
-                                newAttachmentName = attachmentModel.name
-                            }
-                        } label: {
-                            Label {
-                                Text(
-                                    "Rename",
-                                    bundle: .toolkitModule,
-                                    comment: "A label for a button to rename an attachment."
-                                )
-                            } icon: {
-                                Image(systemName: "pencil")
+                    if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
+                        if attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
+                            Button {
+                                renamedAttachmentModel = attachmentModel
+                                renameDialogueIsShowing = true
+                                if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+                                    newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+                                } else {
+                                    newAttachmentName = attachmentModel.name
+                                }
+                            } label: {
+                                Label {
+                                    Text(
+                                        "Rename",
+                                        bundle: .toolkitModule,
+                                        comment: "A label for a button to rename an attachment."
+                                    )
+                                } icon: {
+                                    Image(systemName: "pencil")
+                                }
                             }
                         }
                         Button(role: .destructive) {
@@ -155,11 +168,17 @@ struct AttachmentPreview: View {
         /// The model representing the attachment to display.
         @ObservedObject var attachmentModel: AttachmentModel
         
-        /// A Boolean value indicating whether the download alert is presented.
-        @State private var downloadAlertIsPresented = false
+        /// A Boolean value indicating whether the empty download alert is presented.
+        @State private var emptyDownloadAlertIsPresented = false
+        
+        /// A Boolean value indicating whether the maximum size download alert is presented.
+        @State private var maximumSizeDownloadExceededAlertIsPresented = false
         
         /// The url of the the attachment, used to display the attachment via `QuickLook`.
         @State private var url: URL?
+        
+        /// The maximum attachment download size limit.
+        let attachmentDownloadSizeLimit: Measurement<UnitInformationStorage>
         
         /// The size of the cell.
         let cellSize: CGSize
@@ -209,14 +228,17 @@ struct AttachmentPreview: View {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
                 } else if attachmentModel.attachment.measuredSize.value.isZero {
-                    downloadAlertIsPresented = true
+                    emptyDownloadAlertIsPresented = true
+                } else if attachmentModel.attachment.measuredSize > attachmentDownloadSizeLimit {
+                    maximumSizeDownloadExceededAlertIsPresented = true
                 } else if attachmentModel.attachment.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
                     attachmentModel.load()
                 }
             }
             .quickLookPreview($url)
-            .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
+            .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { }
+            .alert(maximumSizeDownloadExceededErrorMessage, isPresented: $maximumSizeDownloadExceededAlertIsPresented) { }
         }
     }
 }
@@ -248,5 +270,16 @@ struct ThumbnailViewFooter: View {
             }
             .padding([.leading, .trailing], 6)
         }
+    }
+}
+
+private extension AttachmentPreview.AttachmentCell {
+    /// An error message explaining attachments larger than the provided maximum cannot be downloaded.
+    var maximumSizeDownloadExceededErrorMessage: Text {
+        .init(
+            "Attachments larger than \(attachmentDownloadSizeLimit, format: .byteCount(style: .file)) cannot be downloaded.",
+            bundle: .toolkitModule,
+            comment: "An error message explaining attachments larger than the provided maximum cannot be downloaded."
+        )
     }
 }

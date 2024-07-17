@@ -23,6 +23,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
 
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "Attachments larger than %@ cannot be downloaded.";
+
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attributes";
 
