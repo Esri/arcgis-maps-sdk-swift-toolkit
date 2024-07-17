@@ -16,6 +16,8 @@ import ArcGIS
 import SwiftUI
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
+///
+/// If the floor aware data contains only one site, the selector opens directly to the facilities list.
 @MainActor
 struct SiteAndFacilitySelector: View {
     /// The view model used by the `SiteAndFacilitySelector`.
@@ -27,12 +29,9 @@ struct SiteAndFacilitySelector: View {
     var body: some View {
         NavigationStack {
             Group {
-                // If there's more than one site
                 if viewModel.sites.count > 1 {
-                    // Show the list of sites for site selection
                     SitesList(isPresented: $isPresented)
                 } else {
-                    // Otherwise there're no sites or only one site, show the list of facilities
                     FacilitiesList(
                         usesAllSitesStyling: false,
                         facilities: viewModel.facilities,
