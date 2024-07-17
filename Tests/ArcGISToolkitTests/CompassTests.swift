@@ -20,6 +20,7 @@ import XCTest
 final class CompassTests: XCTestCase {
     /// Verifies that the compass accurately indicates it shouldn't be hidden when `autoHideDisabled`
     /// is applied.
+    @MainActor
     func testHiddenWithAutoHideOff() {
         let compass1Heading = Double.zero
         let compass1 = Compass(rotation: compass1Heading, mapViewProxy: nil, action: nil)
@@ -38,6 +39,7 @@ final class CompassTests: XCTestCase {
     }
     
     /// Verifies that the compass accurately indicates when it should be hidden.
+    @MainActor
     func testHiddenWithAutoHideOn() {
         let compass1Heading: Double = .zero
         let compass1 = Compass(rotation: compass1Heading, mapViewProxy: nil, action: nil)

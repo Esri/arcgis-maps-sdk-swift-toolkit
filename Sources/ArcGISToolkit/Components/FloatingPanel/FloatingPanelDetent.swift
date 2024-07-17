@@ -15,7 +15,7 @@
 import Foundation
 
 /// A value that represents a height where a sheet naturally rests.
-public enum FloatingPanelDetent: Equatable {
+public enum FloatingPanelDetent: Equatable, Sendable {
     /// A height based upon a fraction of the maximum height.
     case fraction(_ fraction: CGFloat)
     /// The maximum height.
