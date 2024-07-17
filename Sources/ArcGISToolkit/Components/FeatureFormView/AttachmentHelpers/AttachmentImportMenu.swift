@@ -201,15 +201,15 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
 ***REMOVED******REMOVED******REMOVED***)
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***microphoneAccessAlertIsVisible = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
-#if !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED******REMOVED***appSettingsButton
 #endif
+***REMOVED******REMOVED******REMOVED***.alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+***REMOVED******REMOVED******REMOVED******REMOVED***appSettingsButton
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) { ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(recordVideoOnlyButtonLabel)
 ***REMOVED******REMOVED******REMOVED***
