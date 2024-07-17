@@ -128,7 +128,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
 ***REMOVED******REMOVED***.alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED***appSettingsButton
+#endif
 ***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) { ***REMOVED***
 ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(cameraAccessAlertMessage)
@@ -205,7 +207,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED******REMOVED***appSettingsButton
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) { ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(recordVideoOnlyButtonLabel)
 ***REMOVED******REMOVED******REMOVED***
