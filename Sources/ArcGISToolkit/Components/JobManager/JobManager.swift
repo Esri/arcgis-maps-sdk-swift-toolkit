@@ -287,7 +287,7 @@ public class JobManager: ObservableObject {
 }
 
 /// An enum that defines a schedule for background status checks.
-public enum BackgroundStatusCheckSchedule {
+public enum BackgroundStatusCheckSchedule: Sendable {
     /// No background status checks will be requested.
     case disabled
     /// Requests that the system schedule a background check at a regular interval.
@@ -300,11 +300,11 @@ extension Logger {
     ///
     /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER" under Scheme
     /// -> Arguments -> Environment Variables
-    static let jobManager: Logger = {
+    static var jobManager: Logger {
         if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
             return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
         } else {
             return Logger(OSLog.disabled)
         }
-    }()
+    }
 }
