@@ -15,7 +15,7 @@
 import ArcGIS
 
 ///  A selected site, facility, or level.
-public enum FloorFilterSelection: Hashable {
+public enum FloorFilterSelection: Hashable, Sendable {
     /// A selected site.
     case site(FloorSite)
     /// A selected facility.
