@@ -16,6 +16,8 @@
 ***REMOVED***
 
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
+***REMOVED***/
+***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
 @MainActor
 struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
@@ -27,12 +29,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If there's more than one site
 ***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show the list of sites for site selection
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isPresented: $isPresented)
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise there're no sites or only one site, show the list of facilities
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
