@@ -16,7 +16,7 @@
 
 public extension FeatureFormView {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
-***REMOVED***enum ValidationErrorVisibility {
+***REMOVED***enum ValidationErrorVisibility: Sendable {
 ***REMOVED******REMOVED******REMOVED***/ Errors may be visible or hidden for a given form field depending on its focus state.
 ***REMOVED******REMOVED***case automatic
 ***REMOVED******REMOVED******REMOVED***/ Errors will always be visible for a given form field.

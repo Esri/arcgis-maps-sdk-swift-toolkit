@@ -18,7 +18,7 @@ internal import os
 
 extension Logger {
 ***REMOVED******REMOVED***/ A logger for the common `AttachmentsFeatureElementView` view.
-***REMOVED***static let attachmentsFeatureElementView: Logger = {
+***REMOVED***static var attachmentsFeatureElementView: Logger {
 ***REMOVED******REMOVED***Logger(subsystem: Bundle.toolkitIdentifier, category: "AttachmentsFeatureElementView")
-***REMOVED***()
+***REMOVED***
 ***REMOVED***

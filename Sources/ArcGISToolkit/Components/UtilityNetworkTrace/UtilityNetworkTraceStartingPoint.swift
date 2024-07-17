@@ -16,7 +16,7 @@
 import UIKit
 
 ***REMOVED***/ A starting point of a utility network trace.
-public struct UtilityNetworkTraceStartingPoint {
+public struct UtilityNetworkTraceStartingPoint: Sendable {
 ***REMOVED******REMOVED***/ The geo element to be used as a starting point.
 ***REMOVED***var geoElement: GeoElement
 ***REMOVED***

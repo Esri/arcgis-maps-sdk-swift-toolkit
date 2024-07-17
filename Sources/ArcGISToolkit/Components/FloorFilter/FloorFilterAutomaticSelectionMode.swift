@@ -13,7 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***/ Defines automatic selection behavior.
-public enum FloorFilterAutomaticSelectionMode {
+public enum FloorFilterAutomaticSelectionMode: Sendable {
 ***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
 ***REMOVED******REMOVED***/ navigates away.
 ***REMOVED***case always
