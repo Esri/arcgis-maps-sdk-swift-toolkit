@@ -101,7 +101,7 @@ public struct FloorFilter: View {
 ***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
-***REMOVED***@State private var sitesAndFacilitiesArePresented = false
+***REMOVED***@State private var siteAndFacilitySelectorIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
 ***REMOVED***private var selection: Binding<FloorFilterSelection?>?
@@ -119,7 +119,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var sitesAndFacilitiesButton: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***sitesAndFacilitiesArePresented.toggle()
+***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
@@ -185,18 +185,18 @@ public struct FloorFilter: View {
 ***REMOVED***@ViewBuilder private var siteAndFacilitySelector: some View {
 ***REMOVED******REMOVED***if horizontalSizeClass == .compact {
 ***REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $sitesAndFacilitiesArePresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isPresented: $sitesAndFacilitiesArePresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $siteAndFacilitySelectorIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isPresented: $sitesAndFacilitiesArePresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .leading, .trailing], 2.5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.opacity(sitesAndFacilitiesArePresented ? 1 : .zero)
+***REMOVED******REMOVED******REMOVED***.opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
