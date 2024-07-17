@@ -80,6 +80,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 extension AttachmentCameraController {
     /// Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
     /// - Parameter action: The new camera capture mode.
+    @available(macCatalyst, unavailable)
     func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
         self.controller.action = action
         return self
