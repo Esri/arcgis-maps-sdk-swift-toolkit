@@ -19,9 +19,9 @@ extension SiteAndFacilitySelector {
     struct Header: View {
         @Binding var isPresented: Bool
         
-        @FocusState var textFieldIsFocused: Bool
+        @Binding var query: String
         
-        @State private var filterTerm = ""
+        @FocusState var textFieldIsFocused: Bool
         
         var body: some View {
             VStack {
@@ -71,23 +71,27 @@ extension SiteAndFacilitySelector {
 /// If the floor aware data contains only one site, the selector opens directly to the facilities list.
 @MainActor
 struct SiteAndFacilitySelector: View {
-    /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var viewModel: FloorFilterViewModel
-    
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
     
+    /// The view model used by the `SiteAndFacilitySelector`.
+    @EnvironmentObject var viewModel: FloorFilterViewModel
+    
+    /// <#Description#>
+    @State private var query = ""
+    
     var body: some View {
         VStack {
-            Header(isPresented: $isPresented)
+            Header(isPresented: $isPresented, query: $query)
                 .padding([.leading, .top, .trailing])
             if viewModel.sites.count > 1 {
-                SitesList(isPresented: $isPresented)
+                SitesList(isPresented: $isPresented, query: $query)
             } else {
                 FacilitiesList(
+                    isPresented: $isPresented,
+                    query: $query,
                     usesAllSitesStyling: false,
-                    facilities: viewModel.facilities,
-                    isPresented: $isPresented
+                    facilities: viewModel.facilities
                 )
                 .navigationBarBackButtonHidden(true)
             }
@@ -103,23 +107,23 @@ struct SiteAndFacilitySelector: View {
     /// A view displaying the sites contained in a `FloorManager`.
     @MainActor
     struct SitesList: View {
+        /// Allows the user to toggle the visibility of the site and facility selector.
+        @Binding var isPresented: Bool
+        
+        /// A site name filter phrase entered by the user.
+        @Binding var query: String
+        
         @Environment(\.horizontalSizeClass)
         private var horizontalSizeClass: UserInterfaceSizeClass?
         
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
-        /// A site name filter phrase entered by the user.
-        @State private var query: String = ""
-        
         /// A Boolean value indicating whether the user pressed the back button in the navigation stack.
         ///
         /// This allows for programatic navigation back to the list of sites without clearing the view model's
         /// selection. Leaving the view model's selection unmodified keeps the level selector visible.
         @State private var userBackedOutOfSelectedSite = false
-        
-        /// Allows the user to toggle the visibility of the site and facility selector.
-        @Binding var isPresented: Bool
         
         /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
         /// `searchPhrase` is empty.
@@ -161,9 +165,10 @@ struct SiteAndFacilitySelector: View {
         var allSitesButton: some View {
             NavigationLink {
                 FacilitiesList(
+                    isPresented: $isPresented,
+                    query: $query,
                     usesAllSitesStyling: true,
-                    facilities: viewModel.sites.flatMap(\.facilities),
-                    isPresented: $isPresented
+                    facilities: viewModel.sites.flatMap(\.facilities)
                 )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -227,23 +232,23 @@ struct SiteAndFacilitySelector: View {
     /// A view displaying the facilities contained in a `FloorManager`.
     @MainActor
     struct FacilitiesList: View {
+        /// Allows the user to toggle the visibility of the site and facility selector.
+        @Binding var isPresented: Bool
+        
+        /// A facility name filter phrase entered by the user.
+        @Binding var query: String
+        
         @Environment(\.horizontalSizeClass)
         private var horizontalSizeClass: UserInterfaceSizeClass?
         
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
-        /// A facility name filter phrase entered by the user.
-        @State var query: String = ""
-        
         /// When `true`, the facilities list will be display with all sites styling.
         let usesAllSitesStyling: Bool
         
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
-        
-        /// Allows the user to toggle the visibility of the site and facility selector.
-        @Binding var isPresented: Bool
         
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
@@ -339,9 +344,10 @@ extension SiteAndFacilitySelector.SitesList {
     /// Makes the list of facilities for a site from the sites list.
     func makeFacilitiesList(site: FloorSite) -> some View {
         SiteAndFacilitySelector.FacilitiesList(
+            isPresented: $isPresented,
+            query: $query,
             usesAllSitesStyling: false,
-            facilities: site.facilities,
-            isPresented: $isPresented
+            facilities: site.facilities
         )
         .navigationBarBackButtonHidden(true)
         .toolbar {
