@@ -34,7 +34,7 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
 ***REMOVED******REMOVED***let device = UIDevice.current.userInterfaceIdiom
 ***REMOVED******REMOVED***let orientation = app.staticTexts["Device Orientation"]
-***REMOVED******REMOVED***let springboard = XCUIApplication(bundleIdentifier: .springboardIdentifier)
+***REMOVED******REMOVED***let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 ***REMOVED******REMOVED***let allowButton = springboard.buttons["Allow"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
