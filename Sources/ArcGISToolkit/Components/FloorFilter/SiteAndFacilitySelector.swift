@@ -86,7 +86,7 @@ struct SiteAndFacilitySelector: View {
             Header(isPresented: $isPresented, query: $query)
                 .padding([.leading, .top, .trailing])
             if viewModel.sites.count > 1 {
-                SitesList(isPresented: $isPresented, query: $query)
+                SiteList(isPresented: $isPresented, query: $query)
             } else {
                 FacilitiesList(
                     isPresented: $isPresented,
@@ -100,7 +100,7 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the sites contained in a `FloorManager`.
     @MainActor
-    struct SitesList: View {
+    struct SiteList: View {
         /// Allows the user to toggle the visibility of the site and facility selector.
         @Binding var isPresented: Bool
         
@@ -298,7 +298,7 @@ struct SiteAndFacilitySelector: View {
     }
 }
 
-extension SiteAndFacilitySelector.SitesList {
+extension SiteAndFacilitySelector.SiteList {
     /// The selected site as reflected in the state of the navigation stack.
     ///
     /// Note that the selection state of the navigation stack can differ from the selection state of the
