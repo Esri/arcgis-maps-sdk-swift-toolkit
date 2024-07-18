@@ -230,7 +230,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingFacilities.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityListView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(usesAllSitesStyling ? String.allSites : (viewModel.selection?.site?.name ?? String.selectAFacility))
@@ -244,7 +244,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
 ***REMOVED******REMOVED******REMOVED***/ selected item.
-***REMOVED******REMOVED***var facilityListView: some View {
+***REMOVED******REMOVED***var facilityList: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
