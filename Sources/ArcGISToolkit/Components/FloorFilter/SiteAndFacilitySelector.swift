@@ -409,10 +409,6 @@ private struct NoMatchesView: View {
     }
 }
 
-/// A custom button with an "X" enclosed within a circle to be used as a "close" button.
-private struct CloseButton: View {
-    /// The button's action to be performed when tapped.
-    var action: (() -> Void)
 private extension String {
     static var allSites: Self {
         .init(
@@ -422,10 +418,6 @@ private extension String {
         )
     }
     
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: "xmark.circle")
-        }
 }
     }
 }
