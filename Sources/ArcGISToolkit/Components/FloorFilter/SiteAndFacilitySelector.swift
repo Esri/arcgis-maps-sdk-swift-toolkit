@@ -18,17 +18,11 @@ import SwiftUI
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 @MainActor
 struct SiteAndFacilitySelector: View {
-    /// Creates a `SiteAndFacilitySelector`.
-    /// - Parameter isHidden: A binding used to dismiss the site selector.
-    init(isHidden: Binding<Bool>) {
-        self.isHidden = isHidden
-    }
-    
     /// The view model used by the `SiteAndFacilitySelector`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site and facility selector.
-    private var isHidden: Binding<Bool>
+    @Binding var isPresented: Bool
     
     var body: some View {
         NavigationStack {
@@ -36,13 +30,13 @@ struct SiteAndFacilitySelector: View {
                 // If there's more than one site
                 if viewModel.sites.count > 1 {
                     // Show the list of sites for site selection
-                    SitesList(isHidden: isHidden)
+                    SitesList(isPresented: $isPresented)
                 } else {
                     // Otherwise there're no sites or only one site, show the list of facilities
                     FacilitiesList(
                         usesAllSitesStyling: false,
                         facilities: viewModel.facilities,
-                        isHidden: isHidden
+                        isPresented: $isPresented
                     )
                     .navigationBarBackButtonHidden(true)
                 }
@@ -50,7 +44,7 @@ struct SiteAndFacilitySelector: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    CloseButton { isHidden.wrappedValue.toggle() }
+                    CloseButton { isPresented = false }
                 }
             }
         }
@@ -75,7 +69,7 @@ struct SiteAndFacilitySelector: View {
         @State private var userBackedOutOfSelectedSite = false
         
         /// Allows the user to toggle the visibility of the site and facility selector.
-        var isHidden: Binding<Bool>
+        @Binding var isPresented: Bool
         
         /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
         /// `searchPhrase` is empty.
@@ -133,11 +127,11 @@ struct SiteAndFacilitySelector: View {
                 FacilitiesList(
                     usesAllSitesStyling: true,
                     facilities: viewModel.sites.flatMap(\.facilities),
-                    isHidden: isHidden
+                    isPresented: $isPresented
                 )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        CloseButton { isHidden.wrappedValue.toggle() }
+                        CloseButton { isPresented = false }
                     }
                 }
             } label: {
@@ -213,7 +207,7 @@ struct SiteAndFacilitySelector: View {
         let facilities: [FloorFacility]
         
         /// Allows the user to toggle the visibility of the site and facility selector.
-        var isHidden: Binding<Bool>
+        @Binding var isPresented: Bool
         
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
@@ -298,7 +292,7 @@ struct SiteAndFacilitySelector: View {
                     .onTapGesture {
                         viewModel.setFacility(facility, zoomTo: true)
                         if horizontalSizeClass == .compact {
-                            isHidden.wrappedValue.toggle()
+                            isPresented = false
                         }
                     }
                 }
@@ -340,7 +334,7 @@ extension SiteAndFacilitySelector.SitesList {
         SiteAndFacilitySelector.FacilitiesList(
             usesAllSitesStyling: false,
             facilities: site.facilities,
-            isHidden: isHidden
+            isPresented: $isPresented
         )
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -354,7 +348,7 @@ extension SiteAndFacilitySelector.SitesList {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                CloseButton { isHidden.wrappedValue.toggle() }
+                CloseButton { isPresented = false }
             }
         }
     }
