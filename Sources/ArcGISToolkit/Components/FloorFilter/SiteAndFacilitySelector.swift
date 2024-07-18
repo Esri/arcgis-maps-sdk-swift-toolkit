@@ -148,7 +148,11 @@ struct SiteAndFacilitySelector: View {
         var body: some View {
             VStack {
                 if matchingSites.isEmpty {
-                    NoMatchesView()
+                    if #available(iOS 17, *) {
+                        ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+                    } else {
+                        NoMatchesView()
+                    }
                 } else {
                     siteList
                 }
@@ -228,7 +232,11 @@ struct SiteAndFacilitySelector: View {
         var body: some View {
             Group {
                 if matchingFacilities.isEmpty {
-                    NoMatchesView()
+                    if #available(iOS 17, *) {
+                        ContentUnavailableView(String.noMatchesFound, systemImage: "building")
+                    } else {
+                        NoMatchesView()
+                    }
                 } else {
                     facilityList
                 }
@@ -330,12 +338,8 @@ extension SiteAndFacilitySelector.SiteList {
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
     var body: some View {
-        Text(
-            "No matches found.",
-            bundle: .toolkitModule,
-            comment: "A statement that no sites or facilities with names matching a filter phrase were found."
-        )
-        .frame(maxHeight: .infinity)
+        Text(String.noMatchesFound)
+            .frame(maxHeight: .infinity)
     }
 }
 
@@ -369,6 +373,15 @@ private extension String {
                  A field allowing the user to filter a list of sites by name. A site
                  contains one or more facilities in a floor-aware map or scene.
                  """
+        )
+    }
+    
+    /// A statement that no sites or facilities with names matching a filter phrase were found.
+    static var noMatchesFound: Self {
+        .init(
+            localized: "No matches found.",
+            bundle: .toolkitModule,
+            comment: "A statement that no sites or facilities with names matching a filter phrase were found."
         )
     }
     
