@@ -34,6 +34,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
 ***REMOVED******REMOVED***let device = UIDevice.current.userInterfaceIdiom
 ***REMOVED******REMOVED***let orientation = app.staticTexts["Device Orientation"]
+***REMOVED******REMOVED***let springboard = XCUIApplication(bundleIdentifier: .springboardIdentifier)
+***REMOVED******REMOVED***let allowButton = springboard.buttons["Allow"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -45,14 +47,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***attachmentCameraControllerTestsButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
-***REMOVED******REMOVED******REMOVED***alert.buttons["Allow"].tap()
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED***
-***REMOVED******REMOVED***addUIInterruptionMonitor(withDescription: "Microphone access alert") { (alert) -> Bool in
-***REMOVED******REMOVED******REMOVED***alert.buttons["Allow"].tap()
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
+***REMOVED******REMOVED***allowButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***cameraModeController.waitForExistence(timeout: 5)
@@ -66,6 +62,9 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***cameraModeController.swipeRight()
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
+***REMOVED******REMOVED***allowButton.tap()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Video")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
@@ -78,4 +77,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Photo")
 ***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED***static let springboardIdentifier = "com.apple.springboard"
 ***REMOVED***
