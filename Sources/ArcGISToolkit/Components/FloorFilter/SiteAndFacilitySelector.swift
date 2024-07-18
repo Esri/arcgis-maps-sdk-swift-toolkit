@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 extension SiteAndFacilitySelector {
+    /// <#Description#>
     struct Header: View {
         @Binding var isPresented: Bool
         
@@ -132,12 +133,9 @@ struct SiteAndFacilitySelector: View {
         /// A view with a filter-via-name field, a list of site names and an "All sites" button.
         var body: some View {
             VStack {
-                // If the filtered set of sites is empty
                 if matchingSites.isEmpty {
-                    // Show the "no matches" view
                     NoMatchesView()
                 } else {
-                    // Show the filtered set of sites
                     sitesList
                 }
                 allSitesButton
