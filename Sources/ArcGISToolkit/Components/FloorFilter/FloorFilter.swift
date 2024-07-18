@@ -101,7 +101,7 @@ public struct FloorFilter: View {
     @StateObject private var viewModel: FloorFilterViewModel
     
     /// A Boolean value that indicates whether the site and facility selector is presented.
-    @State private var isSitesAndFacilitiesHidden = true
+    @State private var siteAndFacilitySelectorIsPresented = false
     
     /// The selected site, floor, or level.
     private var selection: Binding<FloorFilterSelection?>?
@@ -119,7 +119,7 @@ public struct FloorFilter: View {
     /// Button to open and close the site and facility selector.
     private var sitesAndFacilitiesButton: some View {
         Button {
-            isSitesAndFacilitiesHidden.toggle()
+            siteAndFacilitySelectorIsPresented.toggle()
         } label: {
             Image(systemName: "building.2")
                 .padding(.toolkitDefault)
@@ -133,7 +133,7 @@ public struct FloorFilter: View {
         }
     }
     
-    /// A view that displays the level selector and the sites and facilites button.
+    /// A view that displays the level selector and the sites and facilities button.
     private var levelSelectorContainer: some View {
         VStack {
             if isTopAligned {
@@ -185,18 +185,18 @@ public struct FloorFilter: View {
     @ViewBuilder private var siteAndFacilitySelector: some View {
         if horizontalSizeClass == .compact {
             Color.clear
-                .sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
-                    SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+                .sheet(isPresented: $siteAndFacilitySelectorIsPresented) {
+                    SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
                 }
         } else {
             ZStack {
                 Color.clear
                     .esriBorder()
-                SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+                SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
                     .padding([.top, .leading, .trailing], 2.5)
                     .padding(.bottom)
             }
-            .opacity(isSitesAndFacilitiesHidden ? .zero : 1)
+            .opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
         }
     }
     
