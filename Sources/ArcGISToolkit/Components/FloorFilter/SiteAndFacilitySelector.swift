@@ -392,6 +392,41 @@ private extension String {
         )
     }
     
+    /// <#Description#>
+    static var filterFacilities: Self {
+        .init(
+            localized: "Filter facilities",
+            bundle: .toolkitModule,
+            comment: """
+                A field allowing the user to filter a list of facilities by name. A
+                facility contains one or more levels in a floor-aware map or scene.
+                """
+        )
+    }
+    
+    /// <#Description#>
+    static var filterSites: Self {
+        .init(
+            localized: "Filter sites",
+            bundle: .toolkitModule,
+            comment: """
+                 A field allowing the user to filter a list of sites by name. A site
+                 contains one or more facilities in a floor-aware map or scene.
+                 """
+        )
+    }
+    
+    /// <#Description#>
+    static var selectAFacility: Self {
+        .init(
+            localized: "Select a facility",
+            bundle: .toolkitModule,
+            comment: """
+                 A label directing the user to select a facility. A facility contains one
+                 or more levels in a floor-aware map or scene.
+                 """
+        )
+    }
 }
 
 private extension Text {
