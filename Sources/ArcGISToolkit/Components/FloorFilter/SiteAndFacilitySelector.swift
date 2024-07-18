@@ -150,7 +150,7 @@ struct SiteAndFacilitySelector: View {
                 if matchingSites.isEmpty {
                     NoMatchesView()
                 } else {
-                    sitesList
+                    siteList
                 }
                 allSitesButton
             }
@@ -179,7 +179,7 @@ struct SiteAndFacilitySelector: View {
         ///
         /// If `AutomaticSelectionMode` mode is in use, items will automatically be
         /// selected/deselected.
-        var sitesList: some View {
+        var siteList: some View {
             List(matchingSites) { site in
                 Button(site.name) {
                     viewModel.setSite(site)
