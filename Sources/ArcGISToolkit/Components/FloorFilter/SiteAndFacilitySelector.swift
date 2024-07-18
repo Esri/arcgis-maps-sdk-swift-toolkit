@@ -25,6 +25,10 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***upperHeader
+***REMOVED******REMOVED******REMOVED******REMOVED***lowerHeader
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***var lowerHeader: some View {
