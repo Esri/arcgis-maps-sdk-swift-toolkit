@@ -175,13 +175,7 @@ public struct FloorFilter: View {
         )
     }
     
-    /// A configured `SiteAndFacilitySelector` view.
-    ///
-    /// The layering of the `SiteAndFacilitySelector` over a `RoundedRectangle` is needed to
-    /// produce a rounded corners effect. We can not simply use `.esriBorder()` here because
-    /// applying the `cornerRadius()` modifier on `SiteAndFacilitySelector`'s underlying
-    /// `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
-    /// `NavigationStack` and has been reported to Apple as FB10034457.
+    /// A configured `SiteAndFacilitySelector`.
     @ViewBuilder private var siteAndFacilitySelector: some View {
         if horizontalSizeClass == .compact {
             Color.clear
