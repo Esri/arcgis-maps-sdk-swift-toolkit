@@ -418,10 +418,19 @@ private struct NoMatchesView: View {
 private struct CloseButton: View {
     /// The button's action to be performed when tapped.
     var action: (() -> Void)
+private extension String {
+    static var allSites: Self {
+        .init(
+            localized: "All sites",
+            bundle: .toolkitModule,
+            comment: "A reference to all of the sites defined in a floor aware map."
+        )
+    }
     
     var body: some View {
         Button(action: action) {
             Image(systemName: "xmark.circle")
         }
+}
     }
 }
