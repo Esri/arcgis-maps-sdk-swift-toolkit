@@ -16,6 +16,7 @@
 ***REMOVED***
 
 extension SiteAndFacilitySelector {
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***struct Header: View {
 ***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
@@ -132,12 +133,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A view with a filter-via-name field, a list of site names and an "All sites" button.
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the filtered set of sites is empty
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show the "no matches" view
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show the filtered set of sites
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sitesList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
