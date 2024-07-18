@@ -150,7 +150,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sitesList
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
 ***REMOVED******REMOVED***
@@ -179,7 +179,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, items will automatically be
 ***REMOVED******REMOVED******REMOVED***/ selected/deselected.
-***REMOVED******REMOVED***var sitesList: some View {
+***REMOVED******REMOVED***var siteList: some View {
 ***REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(site.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
