@@ -141,20 +141,6 @@ struct SiteAndFacilitySelector: View {
                 }
                 allSitesButton
             }
-            .searchable(
-                text: $query,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: String(
-                    localized: "Filter sites",
-                    bundle: .toolkitModule,
-                    comment: """
-                             A field allowing the user to filter a list of sites by name. A site
-                             contains one or more facilities in a floor-aware map or scene.
-                             """
-                )
-            )
-            .keyboardType(.alphabet)
-            .disableAutocorrection(true)
             .navigationTitle(
                 String(
                     localized: "Sites",
@@ -275,20 +261,6 @@ struct SiteAndFacilitySelector: View {
                     facilityListView
                 }
             }
-            .searchable(
-                text: $query,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: String(
-                    localized: "Filter facilities",
-                    bundle: .toolkitModule,
-                    comment: """
-                             A field allowing the user to filter a list of facilities by name. A
-                             facility contains one or more levels in a floor-aware map or scene.
-                             """
-                )
-            )
-            .keyboardType(.alphabet)
-            .disableAutocorrection(true)
             .navigationTitle(
                 usesAllSitesStyling ?
                 String(
