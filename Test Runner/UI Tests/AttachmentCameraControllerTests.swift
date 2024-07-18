@@ -78,7 +78,3 @@ final class AttachmentCameraControllerTests: XCTestCase {
         XCTAssertEqual(cameraModeLabel.label, "Photo")
     }
 }
-
-private extension String {
-    static let springboardIdentifier = "com.apple.springboard"
-}
