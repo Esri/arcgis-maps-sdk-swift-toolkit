@@ -88,7 +88,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
@@ -148,7 +148,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ shows every facility in every site within the floor manager.
 ***REMOVED******REMOVED***var allSitesButton: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationLink {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
@@ -206,7 +206,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***@MainActor
-***REMOVED***struct FacilitiesList: View {
+***REMOVED***struct FacilityList: View {
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
@@ -318,7 +318,7 @@ extension SiteAndFacilitySelector.SiteList {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes the list of facilities for a site from the sites list.
 ***REMOVED***func makeFacilitiesList(site: FloorSite) -> some View {
-***REMOVED******REMOVED***SiteAndFacilitySelector.FacilitiesList(
+***REMOVED******REMOVED***SiteAndFacilitySelector.FacilityList(
 ***REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
 ***REMOVED******REMOVED******REMOVED***query: $query,
 ***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
