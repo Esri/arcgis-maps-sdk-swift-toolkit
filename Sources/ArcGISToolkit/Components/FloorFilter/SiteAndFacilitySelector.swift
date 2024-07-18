@@ -149,13 +149,6 @@ struct SiteAndFacilitySelector: View {
                 }
                 allSitesButton
             }
-            .navigationTitle(
-                String(
-                    localized: "Sites",
-                    bundle: .toolkitModule,
-                    comment: "A label in reference to all of the sites in a floor-aware map or scene."
-                )
-            )
         }
         
         /// The "All sites" button.
@@ -170,11 +163,6 @@ struct SiteAndFacilitySelector: View {
                     usesAllSitesStyling: true,
                     facilities: viewModel.sites.flatMap(\.facilities)
                 )
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        CloseButton { isPresented = false }
-                    }
-                }
             } label: {
                 Text(
                     "All sites",
