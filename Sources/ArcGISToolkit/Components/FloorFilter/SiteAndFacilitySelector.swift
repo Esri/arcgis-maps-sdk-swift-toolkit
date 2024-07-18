@@ -88,7 +88,19 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented, query: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
 ***REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query)
+***REMOVED******REMOVED******REMOVED******REMOVED***switch viewModel.selection {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .site(let floorSite):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorSite)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .facility(let floorFacility):
+#warning("Remove forced optionals")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorFacility.site!)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .level(let floorLevel):
+#warning("Remove forced optionals")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorLevel.facility!.site!)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
@@ -168,40 +180,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, items will automatically be
 ***REMOVED******REMOVED******REMOVED***/ selected/deselected.
 ***REMOVED******REMOVED***var sitesList: some View {
-***REMOVED******REMOVED******REMOVED***let list = {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(site.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = false
+***REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(site.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***list()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(item: selectedSite) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: site)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***list()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite.wrappedValue != nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: { isPresented in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.clearSelection()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedSite = viewModel.selection?.site {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: selectedSite)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
