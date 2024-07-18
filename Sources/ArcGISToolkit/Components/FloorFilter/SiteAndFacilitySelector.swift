@@ -419,5 +419,14 @@ private extension String {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+private extension Text {
+***REMOVED******REMOVED***/ A label in reference to all of the sites in a floor-aware map or scene.
+***REMOVED***static var sites: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Sites",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label in reference to all of the sites in a floor-aware map or scene."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
