@@ -23,6 +23,11 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***@Binding var query: String
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
+***REMOVED******REMOVED***@Binding var userDidBackOutToSiteList: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED******REMOVED***
@@ -56,6 +61,13 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***var upperHeader: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = true
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(1)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -83,14 +95,21 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@State private var query = ""
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
+***REMOVED***@State private var userDidBackOutToSiteList = false
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented, query: $query)
+***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
-***REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
+***REMOVED******REMOVED******REMOVED***if userDidBackOutToSiteList {
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+***REMOVED******REMOVED*** else if viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch viewModel.selection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .site(let floorSite):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorSite)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .facility(let floorFacility):
@@ -100,7 +119,6 @@ struct SiteAndFacilitySelector: View {
 #warning("Remove forced optionals")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorLevel.facility!.site!)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
@@ -121,20 +139,18 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@Binding var query: String
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
+***REMOVED******REMOVED***@Binding var userDidBackOutToSiteList: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the navigation stack.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ This allows for programatic navigation back to the list of sites without clearing the view model's
-***REMOVED******REMOVED******REMOVED***/ selection. Leaving the view model's selection unmodified keeps the level selector visible.
-***REMOVED******REMOVED***@State private var userBackedOutOfSelectedSite = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
-***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
+***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
 ***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return viewModel.sites
@@ -191,7 +207,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = false
+***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -217,8 +233,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
-***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
+***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `query` or all `facilities` if
+***REMOVED******REMOVED******REMOVED***/ `query` is empty.
 ***REMOVED******REMOVED***var matchingFacilities: [FloorFacility] {
 ***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return facilities
@@ -303,16 +319,6 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
 ***REMOVED******REMOVED******REMOVED***facilities: site.facilities
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = true
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -324,11 +330,11 @@ extension SiteAndFacilitySelector.SiteList {
 ***REMOVED***var selectedSite: Binding<FloorSite?> {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
+***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList ? nil : viewModel.selection?.site
 ***REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { newSite in
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let newSite = newSite else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = false
+***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(newSite, zoomTo: true)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
