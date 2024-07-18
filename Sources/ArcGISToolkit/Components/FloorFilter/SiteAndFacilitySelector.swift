@@ -392,6 +392,41 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***static var filterFacilities: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Filter facilities",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED***A field allowing the user to filter a list of facilities by name. A
+***REMOVED******REMOVED******REMOVED******REMOVED***facility contains one or more levels in a floor-aware map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***static var filterSites: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Filter sites",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A field allowing the user to filter a list of sites by name. A site
+***REMOVED******REMOVED******REMOVED******REMOVED*** contains one or more facilities in a floor-aware map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***static var selectAFacility: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Select a facility",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label directing the user to select a facility. A facility contains one
+***REMOVED******REMOVED******REMOVED******REMOVED*** or more levels in a floor-aware map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 
 private extension Text {
