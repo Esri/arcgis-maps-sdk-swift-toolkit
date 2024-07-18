@@ -34,6 +34,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
         let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
         let device = UIDevice.current.userInterfaceIdiom
         let orientation = app.staticTexts["Device Orientation"]
+        let springboard = XCUIApplication(bundleIdentifier: .springboardIdentifier)
+        let allowButton = springboard.buttons["Allow"]
         
         app.launch()
         
@@ -45,14 +47,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
         )
         attachmentCameraControllerTestsButton.tap()
         
-        addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
-            alert.buttons["Allow"].tap()
-            return true
-        }
-        addUIInterruptionMonitor(withDescription: "Microphone access alert") { (alert) -> Bool in
-            alert.buttons["Allow"].tap()
-            return true
-        }
+        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
+        allowButton.tap()
         
         XCTAssertTrue(
             cameraModeController.waitForExistence(timeout: 5)
@@ -66,6 +62,9 @@ final class AttachmentCameraControllerTests: XCTestCase {
             cameraModeController.swipeRight()
         }
         
+        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
+        allowButton.tap()
+        
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
         if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
@@ -78,4 +77,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
         
         XCTAssertEqual(cameraModeLabel.label, "Photo")
     }
+}
+
+private extension String {
+    static let springboardIdentifier = "com.apple.springboard"
 }
