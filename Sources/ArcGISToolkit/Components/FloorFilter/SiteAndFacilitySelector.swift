@@ -230,7 +230,7 @@ struct SiteAndFacilitySelector: View {
                 if matchingFacilities.isEmpty {
                     NoMatchesView()
                 } else {
-                    facilityListView
+                    facilityList
                 }
             }
             .navigationTitle(usesAllSitesStyling ? String.allSites : (viewModel.selection?.site?.name ?? String.selectAFacility))
@@ -244,7 +244,7 @@ struct SiteAndFacilitySelector: View {
         ///
         /// If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
         /// selected item.
-        var facilityListView: some View {
+        var facilityList: some View {
             ScrollViewReader { proxy in
                 List(matchingFacilities, id: \.id) { facility in
                     VStack {
