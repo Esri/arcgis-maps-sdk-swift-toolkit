@@ -88,7 +88,19 @@ struct SiteAndFacilitySelector: View {
             Header(isPresented: $isPresented, query: $query)
                 .padding([.leading, .top, .trailing])
             if viewModel.sites.count > 1 {
-                SiteList(isPresented: $isPresented, query: $query)
+                switch viewModel.selection {
+                case .none:
+                    SiteList(isPresented: $isPresented, query: $query)
+                case .site(let floorSite):
+                    makeFacilitiesList(site: floorSite)
+                case .facility(let floorFacility):
+#warning("Remove forced optionals")
+                    makeFacilitiesList(site: floorFacility.site!)
+                case .level(let floorLevel):
+#warning("Remove forced optionals")
+                    makeFacilitiesList(site: floorLevel.facility!.site!)
+                }
+                
             } else {
                 FacilityList(
                     isPresented: $isPresented,
@@ -168,40 +180,14 @@ struct SiteAndFacilitySelector: View {
         /// If `AutomaticSelectionMode` mode is in use, items will automatically be
         /// selected/deselected.
         var sitesList: some View {
-            let list = {
-                List(matchingSites) { site in
-                    Button(site.name) {
-                        viewModel.setSite(site)
-                    }
-                }
-                .listStyle(.plain)
-                .onChange(of: viewModel.selection) { _ in
-                    userBackedOutOfSelectedSite = false
+            List(matchingSites) { site in
+                Button(site.name) {
+                    viewModel.setSite(site)
                 }
             }
-            return Group {
-                if #available(iOS 17.0, *) {
-                    list()
-                        .navigationDestination(item: selectedSite) { site in
-                            makeFacilitiesList(site: site)
-                        }
-                } else {
-                    list()
-                        .navigationDestination(
-                            isPresented: Binding {
-                                selectedSite.wrappedValue != nil
-                            } set: { isPresented in
-                                if !isPresented {
-                                    viewModel.clearSelection()
-                                }
-                            },
-                            destination: {
-                                if let selectedSite = viewModel.selection?.site {
-                                    makeFacilitiesList(site: selectedSite)
-                                }
-                            }
-                        )
-                }
+            .listStyle(.plain)
+            .onChange(of: viewModel.selection) { _ in
+                userBackedOutOfSelectedSite = false
             }
         }
     }
