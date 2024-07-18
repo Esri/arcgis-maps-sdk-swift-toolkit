@@ -419,5 +419,14 @@ private extension String {
     }
     
 }
+
+private extension Text {
+    /// A label in reference to all of the sites in a floor-aware map or scene.
+    static var sites: Self {
+        .init(
+            "Sites",
+            bundle: .toolkitModule,
+            comment: "A label in reference to all of the sites in a floor-aware map or scene."
+        )
     }
 }
