@@ -88,7 +88,7 @@ struct SiteAndFacilitySelector: View {
             if viewModel.sites.count > 1 {
                 SiteList(isPresented: $isPresented, query: $query)
             } else {
-                FacilitiesList(
+                FacilityList(
                     isPresented: $isPresented,
                     query: $query,
                     usesAllSitesStyling: false,
@@ -148,7 +148,7 @@ struct SiteAndFacilitySelector: View {
         /// shows every facility in every site within the floor manager.
         var allSitesButton: some View {
             NavigationLink {
-                FacilitiesList(
+                FacilityList(
                     isPresented: $isPresented,
                     query: $query,
                     usesAllSitesStyling: true,
@@ -206,7 +206,7 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the facilities contained in a `FloorManager`.
     @MainActor
-    struct FacilitiesList: View {
+    struct FacilityList: View {
         /// Allows the user to toggle the visibility of the site and facility selector.
         @Binding var isPresented: Bool
         
@@ -318,7 +318,7 @@ extension SiteAndFacilitySelector.SiteList {
     
     /// Makes the list of facilities for a site from the sites list.
     func makeFacilitiesList(site: FloorSite) -> some View {
-        SiteAndFacilitySelector.FacilitiesList(
+        SiteAndFacilitySelector.FacilityList(
             isPresented: $isPresented,
             query: $query,
             usesAllSitesStyling: false,
