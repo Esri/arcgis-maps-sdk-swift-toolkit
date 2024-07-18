@@ -19,9 +19,9 @@ extension SiteAndFacilitySelector {
 ***REMOVED***struct Header: View {
 ***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@FocusState var textFieldIsFocused: Bool
+***REMOVED******REMOVED***@Binding var query: String
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@State private var filterTerm = ""
+***REMOVED******REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -71,23 +71,27 @@ extension SiteAndFacilitySelector {
 ***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
 @MainActor
 struct SiteAndFacilitySelector: View {
-***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
-***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
+***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var query = ""
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented, query: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
 ***REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isPresented: $isPresented, query: $query)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
 ***REMOVED******REMOVED***
@@ -103,23 +107,23 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***@MainActor
 ***REMOVED***struct SitesList: View {
+***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
+***REMOVED******REMOVED***@Binding var isPresented: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
+***REMOVED******REMOVED***@Binding var query: String
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
-***REMOVED******REMOVED***@State private var query: String = ""
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the navigation stack.
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ This allows for programatic navigation back to the list of sites without clearing the view model's
 ***REMOVED******REMOVED******REMOVED***/ selection. Leaving the view model's selection unmodified keeps the level selector visible.
 ***REMOVED******REMOVED***@State private var userBackedOutOfSelectedSite = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
@@ -161,9 +165,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var allSitesButton: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationLink {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
@@ -227,23 +232,23 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***@MainActor
 ***REMOVED***struct FacilitiesList: View {
+***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
+***REMOVED******REMOVED***@Binding var isPresented: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A facility name filter phrase entered by the user.
+***REMOVED******REMOVED***@Binding var query: String
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A facility name filter phrase entered by the user.
-***REMOVED******REMOVED***@State var query: String = ""
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ When `true`, the facilities list will be display with all sites styling.
 ***REMOVED******REMOVED***let usesAllSitesStyling: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
 ***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
@@ -339,9 +344,10 @@ extension SiteAndFacilitySelector.SitesList {
 ***REMOVED******REMOVED***/ Makes the list of facilities for a site from the sites list.
 ***REMOVED***func makeFacilitiesList(site: FloorSite) -> some View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector.FacilitiesList(
+***REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED***query: $query,
 ***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
-***REMOVED******REMOVED******REMOVED***facilities: site.facilities,
-***REMOVED******REMOVED******REMOVED***isPresented: $isPresented
+***REMOVED******REMOVED******REMOVED***facilities: site.facilities
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
 ***REMOVED******REMOVED***.toolbar {
