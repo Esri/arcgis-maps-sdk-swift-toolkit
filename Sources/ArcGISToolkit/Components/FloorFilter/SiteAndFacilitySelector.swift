@@ -25,6 +25,10 @@ extension SiteAndFacilitySelector {
         
         var body: some View {
             VStack {
+                upperHeader
+                lowerHeader
+            }
+        }
         
         /// <#Description#>
         var lowerHeader: some View {
