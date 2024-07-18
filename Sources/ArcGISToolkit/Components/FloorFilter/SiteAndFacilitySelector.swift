@@ -23,6 +23,11 @@ extension SiteAndFacilitySelector {
         /// <#Description#>
         @Binding var query: String
         
+        /// A Boolean value indicating whether the user pressed the back button in the header.
+        ///
+        /// This allows for browsing the site list while keeping the current selection unmodified.
+        @Binding var userDidBackOutToSiteList: Bool
+        
         /// <#Description#>
         @FocusState var textFieldIsFocused: Bool
         
@@ -56,6 +61,13 @@ extension SiteAndFacilitySelector {
         /// <#Description#>
         var upperHeader: some View {
             HStack {
+                Button {
+                    userDidBackOutToSiteList = true
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .opacity(1)
+                Spacer()
                 Text.sites
                     .font(.title3)
                 Spacer()
@@ -83,14 +95,21 @@ struct SiteAndFacilitySelector: View {
     /// <#Description#>
     @State private var query = ""
     
+    /// A Boolean value indicating whether the user pressed the back button in the header.
+    ///
+    /// This allows for browsing the site list while keeping the current selection unmodified.
+    @State private var userDidBackOutToSiteList = false
+    
     var body: some View {
         VStack {
-            Header(isPresented: $isPresented, query: $query)
+            Header(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
                 .padding([.leading, .top, .trailing])
-            if viewModel.sites.count > 1 {
+            if userDidBackOutToSiteList {
+                SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+            } else if viewModel.sites.count > 1 {
                 switch viewModel.selection {
                 case .none:
-                    SiteList(isPresented: $isPresented, query: $query)
+                    SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
                 case .site(let floorSite):
                     makeFacilitiesList(site: floorSite)
                 case .facility(let floorFacility):
@@ -100,7 +119,6 @@ struct SiteAndFacilitySelector: View {
 #warning("Remove forced optionals")
                     makeFacilitiesList(site: floorLevel.facility!.site!)
                 }
-                
             } else {
                 FacilityList(
                     isPresented: $isPresented,
@@ -121,20 +139,18 @@ struct SiteAndFacilitySelector: View {
         /// A site name filter phrase entered by the user.
         @Binding var query: String
         
+        /// A Boolean value indicating whether the user pressed the back button in the header.
+        ///
+        /// This allows for browsing the site list while keeping the current selection unmodified.
+        @Binding var userDidBackOutToSiteList: Bool
+        
         @Environment(\.horizontalSizeClass)
         private var horizontalSizeClass: UserInterfaceSizeClass?
         
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
-        /// A Boolean value indicating whether the user pressed the back button in the navigation stack.
-        ///
-        /// This allows for programatic navigation back to the list of sites without clearing the view model's
-        /// selection. Leaving the view model's selection unmodified keeps the level selector visible.
-        @State private var userBackedOutOfSelectedSite = false
-        
-        /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
-        /// `searchPhrase` is empty.
+        /// A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
         var matchingSites: [FloorSite] {
             guard !query.isEmpty else {
                 return viewModel.sites
@@ -191,7 +207,7 @@ struct SiteAndFacilitySelector: View {
             }
             .listStyle(.plain)
             .onChange(of: viewModel.selection) { _ in
-                userBackedOutOfSelectedSite = false
+                userDidBackOutToSiteList = false
             }
         }
     }
@@ -217,8 +233,8 @@ struct SiteAndFacilitySelector: View {
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
         
-        /// A subset of `facilities` with names containing `searchPhrase` or all
-        /// `facilities` if `searchPhrase` is empty.
+        /// A subset of `facilities` with names containing `query` or all `facilities` if
+        /// `query` is empty.
         var matchingFacilities: [FloorFacility] {
             guard !query.isEmpty else {
                 return facilities
@@ -303,16 +319,6 @@ extension SiteAndFacilitySelector {
             usesAllSitesStyling: false,
             facilities: site.facilities
         )
-//        .navigationBarBackButtonHidden(true)
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarLeading) {
-//                Button {
-//                    userBackedOutOfSelectedSite = true
-//                } label: {
-//                    Image(systemName: "chevron.left")
-//                }
-//            }
-//        }
     }
 }
 
@@ -324,11 +330,11 @@ extension SiteAndFacilitySelector.SiteList {
     var selectedSite: Binding<FloorSite?> {
         .init(
             get: {
-                userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
+                userDidBackOutToSiteList ? nil : viewModel.selection?.site
             },
             set: { newSite in
                 guard let newSite = newSite else { return }
-                userBackedOutOfSelectedSite = false
+                userDidBackOutToSiteList = false
                 viewModel.setSite(newSite, zoomTo: true)
             }
         )
