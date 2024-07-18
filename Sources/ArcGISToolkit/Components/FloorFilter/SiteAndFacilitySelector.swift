@@ -25,24 +25,22 @@ extension SiteAndFacilitySelector {
         
         var body: some View {
             VStack {
+        
+        /// <#Description#>
+        var lowerHeader: some View {
+            HStack {
                 HStack {
-                    Text("Sites")
-                        .font(.title3)
-                    Spacer()
-                    Button {
-                        isPresented = false
-                    } label: {
-                        Image(systemName: "x.circle")
-                    }
-                }
-                HStack {
-                    TextField("\(Image(systemName: "magnifyingglass")) Filter sites", text: $filterTerm)
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    TextField(String.filterSites, text: $query)
+                        .disableAutocorrection(true)
                         .focused($textFieldIsFocused)
-                    if textFieldIsFocused {
-                        Button(String.cancel) {
-                            filterTerm.removeAll()
-                            textFieldIsFocused = false
-                        }
+                        .keyboardType(.alphabet)
+                }
+                if textFieldIsFocused {
+                    Button(String.cancel) {
+                        query.removeAll()
+                        textFieldIsFocused = false
                     }
                 }
             }
