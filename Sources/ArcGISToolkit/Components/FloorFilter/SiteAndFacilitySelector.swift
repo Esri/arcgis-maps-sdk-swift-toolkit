@@ -418,10 +418,19 @@ private struct NoMatchesView: View {
 private struct CloseButton: View {
 ***REMOVED******REMOVED***/ The button's action to be performed when tapped.
 ***REMOVED***var action: (() -> Void)
+private extension String {
+***REMOVED***static var allSites: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "All sites",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button(action: action) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
