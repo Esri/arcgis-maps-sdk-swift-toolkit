@@ -86,7 +86,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented, query: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
 ***REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isPresented: $isPresented, query: $query)
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
@@ -100,7 +100,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***@MainActor
-***REMOVED***struct SitesList: View {
+***REMOVED***struct SiteList: View {
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
@@ -298,7 +298,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 
-extension SiteAndFacilitySelector.SitesList {
+extension SiteAndFacilitySelector.SiteList {
 ***REMOVED******REMOVED***/ The selected site as reflected in the state of the navigation stack.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Note that the selection state of the navigation stack can differ from the selection state of the
