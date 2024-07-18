@@ -409,10 +409,6 @@ private struct NoMatchesView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A custom button with an "X" enclosed within a circle to be used as a "close" button.
-private struct CloseButton: View {
-***REMOVED******REMOVED***/ The button's action to be performed when tapped.
-***REMOVED***var action: (() -> Void)
 private extension String {
 ***REMOVED***static var allSites: Self {
 ***REMOVED******REMOVED***.init(
@@ -421,10 +417,6 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button(action: action) {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
