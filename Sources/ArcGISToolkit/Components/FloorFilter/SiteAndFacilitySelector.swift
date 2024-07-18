@@ -20,8 +20,10 @@ extension SiteAndFacilitySelector {
     struct Header: View {
         @Binding var isPresented: Bool
         
+        /// <#Description#>
         @Binding var query: String
         
+        /// <#Description#>
         @FocusState var textFieldIsFocused: Bool
         
         var body: some View {
