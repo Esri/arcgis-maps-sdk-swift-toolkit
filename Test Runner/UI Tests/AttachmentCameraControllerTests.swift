@@ -63,6 +63,7 @@ final class AttachmentCameraControllerTests: XCTestCase {
             cameraModeController.swipeRight()
         }
         
+        // Wait for microphone access alert's allow button.
         XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
         allowButton.tap()
         
