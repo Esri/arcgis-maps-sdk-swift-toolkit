@@ -157,11 +157,7 @@ struct SiteAndFacilitySelector: View {
                     facilities: viewModel.sites.flatMap(\.facilities)
                 )
             } label: {
-                Text(
-                    "All sites",
-                    bundle: .toolkitModule,
-                    comment: "A reference to all of the sites defined in a floor aware map."
-                )
+                Text(String.allSites)
             }
             .buttonStyle(.bordered)
             .padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
