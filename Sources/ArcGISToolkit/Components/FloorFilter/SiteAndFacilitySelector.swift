@@ -93,13 +93,6 @@ struct SiteAndFacilitySelector: View {
                     usesAllSitesStyling: false,
                     facilities: viewModel.facilities
                 )
-                .navigationBarBackButtonHidden(true)
-            }
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                CloseButton { isPresented = false }
             }
         }
     }
