@@ -148,7 +148,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteList
 ***REMOVED******REMOVED******REMOVED***
@@ -228,7 +232,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingFacilities.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ContentUnavailableView(String.noMatchesFound, systemImage: "building")
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityList
 ***REMOVED******REMOVED******REMOVED***
@@ -330,12 +338,8 @@ extension SiteAndFacilitySelector.SiteList {
 ***REMOVED***/ Displays text "No matches found".
 private struct NoMatchesView: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"No matches found.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A statement that no sites or facilities with names matching a filter phrase were found."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.frame(maxHeight: .infinity)
+***REMOVED******REMOVED***Text(String.noMatchesFound)
+***REMOVED******REMOVED******REMOVED***.frame(maxHeight: .infinity)
 ***REMOVED***
 ***REMOVED***
 
@@ -369,6 +373,15 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A field allowing the user to filter a list of sites by name. A site
 ***REMOVED******REMOVED******REMOVED******REMOVED*** contains one or more facilities in a floor-aware map or scene.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A statement that no sites or facilities with names matching a filter phrase were found.
+***REMOVED***static var noMatchesFound: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "No matches found.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A statement that no sites or facilities with names matching a filter phrase were found."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
