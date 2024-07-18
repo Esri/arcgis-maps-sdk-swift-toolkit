@@ -300,6 +300,28 @@ struct SiteAndFacilitySelector: View {
     }
 }
 
+extension SiteAndFacilitySelector {
+    /// Makes the list of facilities for a site from the sites list.
+    func makeFacilitiesList(site: FloorSite) -> some View {
+        SiteAndFacilitySelector.FacilityList(
+            isPresented: $isPresented,
+            query: $query,
+            usesAllSitesStyling: false,
+            facilities: site.facilities
+        )
+//        .navigationBarBackButtonHidden(true)
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarLeading) {
+//                Button {
+//                    userBackedOutOfSelectedSite = true
+//                } label: {
+//                    Image(systemName: "chevron.left")
+//                }
+//            }
+//        }
+    }
+}
+
 extension SiteAndFacilitySelector.SiteList {
     /// The selected site as reflected in the state of the navigation stack.
     ///
@@ -316,26 +338,6 @@ extension SiteAndFacilitySelector.SiteList {
                 viewModel.setSite(newSite, zoomTo: true)
             }
         )
-    }
-    
-    /// Makes the list of facilities for a site from the sites list.
-    func makeFacilitiesList(site: FloorSite) -> some View {
-        SiteAndFacilitySelector.FacilityList(
-            isPresented: $isPresented,
-            query: $query,
-            usesAllSitesStyling: false,
-            facilities: site.facilities
-        )
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    userBackedOutOfSelectedSite = true
-                } label: {
-                    Image(systemName: "chevron.left")
-                }
-            }
-        }
     }
 }
 
