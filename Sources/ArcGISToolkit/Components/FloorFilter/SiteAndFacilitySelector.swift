@@ -18,17 +18,11 @@
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 @MainActor
 struct SiteAndFacilitySelector: View {
-***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`.
-***REMOVED******REMOVED***/ - Parameter isHidden: A binding used to dismiss the site selector.
-***REMOVED***init(isHidden: Binding<Bool>) {
-***REMOVED******REMOVED***self.isHidden = isHidden
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED***private var isHidden: Binding<Bool>
+***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
@@ -36,13 +30,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If there's more than one site
 ***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show the list of sites for site selection
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isHidden: isHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isPresented: $isPresented)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise there're no sites or only one site, show the list of facilities
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
 ***REMOVED******REMOVED******REMOVED***
@@ -50,7 +44,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isPresented = false ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -75,7 +69,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@State private var userBackedOutOfSelectedSite = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED******REMOVED***var isHidden: Binding<Bool>
+***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
@@ -133,11 +127,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isPresented = false ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -213,7 +207,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED******REMOVED***var isHidden: Binding<Bool>
+***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
 ***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
@@ -298,7 +292,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .compact {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -340,7 +334,7 @@ extension SiteAndFacilitySelector.SitesList {
 ***REMOVED******REMOVED***SiteAndFacilitySelector.FacilitiesList(
 ***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
 ***REMOVED******REMOVED******REMOVED***facilities: site.facilities,
-***REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
 ***REMOVED******REMOVED***.toolbar {
@@ -354,7 +348,7 @@ extension SiteAndFacilitySelector.SitesList {
 ***REMOVED***
 ***REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isPresented = false ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
