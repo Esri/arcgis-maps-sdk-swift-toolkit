@@ -20,8 +20,10 @@ extension SiteAndFacilitySelector {
 ***REMOVED***struct Header: View {
 ***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***@Binding var query: String
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
