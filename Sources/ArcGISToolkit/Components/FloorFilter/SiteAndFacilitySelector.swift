@@ -300,6 +300,28 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 
+extension SiteAndFacilitySelector {
+***REMOVED******REMOVED***/ Makes the list of facilities for a site from the sites list.
+***REMOVED***func makeFacilitiesList(site: FloorSite) -> some View {
+***REMOVED******REMOVED***SiteAndFacilitySelector.FacilityList(
+***REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED***query: $query,
+***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
+***REMOVED******REMOVED******REMOVED***facilities: site.facilities
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
 extension SiteAndFacilitySelector.SiteList {
 ***REMOVED******REMOVED***/ The selected site as reflected in the state of the navigation stack.
 ***REMOVED******REMOVED***/
@@ -316,26 +338,6 @@ extension SiteAndFacilitySelector.SiteList {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(newSite, zoomTo: true)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Makes the list of facilities for a site from the sites list.
-***REMOVED***func makeFacilitiesList(site: FloorSite) -> some View {
-***REMOVED******REMOVED***SiteAndFacilitySelector.FacilityList(
-***REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED***query: $query,
-***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
-***REMOVED******REMOVED******REMOVED***facilities: site.facilities
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
-***REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = true
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
