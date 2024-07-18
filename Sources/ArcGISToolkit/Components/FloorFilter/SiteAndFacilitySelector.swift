@@ -394,11 +394,6 @@ extension SiteAndFacilitySelector.SitesList {
                 }
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                CloseButton { isPresented = false }
-            }
-        }
     }
 }
 
