@@ -47,6 +47,20 @@ extension SiteAndFacilitySelector {
                 }
             }
         }
+        
+        /// <#Description#>
+        var upperHeader: some View {
+            HStack {
+                Text.sites
+                    .font(.title3)
+                Spacer()
+                Button {
+                    isPresented = false
+                } label: {
+                    Image(systemName: "xmark.circle")
+                }
+            }
+        }
     }
 }
 
