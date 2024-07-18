@@ -47,6 +47,7 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***attachmentCameraControllerTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait for camera access alert's allow button.
 ***REMOVED******REMOVED***XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
 ***REMOVED******REMOVED***allowButton.tap()
 ***REMOVED******REMOVED***
