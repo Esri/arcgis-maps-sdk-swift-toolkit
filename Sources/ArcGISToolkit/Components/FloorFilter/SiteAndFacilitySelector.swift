@@ -51,7 +51,7 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(String.filterSites, text: $query)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField((viewModel.selection == .none || userDidBackOutToSiteList) && !allSitesIsSelected ? String.filterSites : String.filterFacilities, text: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
