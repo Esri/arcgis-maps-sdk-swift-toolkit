@@ -28,6 +28,9 @@ extension SiteAndFacilitySelector {
         /// This allows for browsing the site list while keeping the current selection unmodified.
         @Binding var userDidBackOutToSiteList: Bool
         
+        /// The view model used by the `SiteAndFacilitySelector`.
+        @EnvironmentObject var viewModel: FloorFilterViewModel
+        
         /// <#Description#>
         @FocusState var textFieldIsFocused: Bool
         
@@ -59,6 +62,7 @@ extension SiteAndFacilitySelector {
         }
         
         /// <#Description#>
+        @MainActor
         var upperHeader: some View {
             HStack {
                 Button {
@@ -66,7 +70,10 @@ extension SiteAndFacilitySelector {
                 } label: {
                     Image(systemName: "chevron.left")
                 }
-                .opacity(1)
+                .opacity(
+                    viewModel.selection == .none || userDidBackOutToSiteList
+                    ? 0 : 1
+                )
                 Spacer()
                 Text.sites
                     .font(.title3)
