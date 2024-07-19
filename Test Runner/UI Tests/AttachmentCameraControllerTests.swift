@@ -34,6 +34,8 @@ final class AttachmentCameraControllerTests: XCTestCase {
         let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
         let device = UIDevice.current.userInterfaceIdiom
         let orientation = app.staticTexts["Device Orientation"]
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allowButton = springboard.buttons["Allow"]
         
         app.launch()
         
@@ -45,14 +47,9 @@ final class AttachmentCameraControllerTests: XCTestCase {
         )
         attachmentCameraControllerTestsButton.tap()
         
-        addUIInterruptionMonitor(withDescription: "Camera access alert") { (alert) -> Bool in
-            alert.buttons["Allow"].tap()
-            return true
-        }
-        addUIInterruptionMonitor(withDescription: "Microphone access alert") { (alert) -> Bool in
-            alert.buttons["Allow"].tap()
-            return true
-        }
+        // Wait for camera access alert's allow button.
+        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
+        allowButton.tap()
         
         XCTAssertTrue(
             cameraModeController.waitForExistence(timeout: 5)
@@ -65,6 +62,10 @@ final class AttachmentCameraControllerTests: XCTestCase {
         } else /* iPhone - portrait */ {
             cameraModeController.swipeRight()
         }
+        
+        // Wait for microphone access alert's allow button.
+        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
+        allowButton.tap()
         
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
