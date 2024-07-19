@@ -82,7 +82,7 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.selection == .none || userDidBackOutToSiteList {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Facilities")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selection?.site?.name ?? String.selectAFacility)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
