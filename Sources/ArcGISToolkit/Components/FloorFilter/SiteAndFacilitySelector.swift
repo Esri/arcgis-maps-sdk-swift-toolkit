@@ -18,6 +18,9 @@ import SwiftUI
 extension SiteAndFacilitySelector {
     /// <#Description#>
     struct Header: View {
+        /// <#Description#>
+        @Binding var allSitesIsSelected: Bool
+        
         @Binding var isPresented: Bool
         
         /// <#Description#>
@@ -118,14 +121,14 @@ struct SiteAndFacilitySelector: View {
     
     var body: some View {
         VStack {
-            Header(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+            Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
                 .padding([.leading, .top, .trailing])
             if userDidBackOutToSiteList {
-                SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+                SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
             } else if viewModel.sites.count > 1 {
                 switch viewModel.selection {
                 case .none:
-                    SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+                    SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
                 case .site(let floorSite):
                     makeFacilitiesList(site: floorSite)
                 case .facility(let floorFacility):
@@ -149,6 +152,9 @@ struct SiteAndFacilitySelector: View {
     /// A view displaying the sites contained in a `FloorManager`.
     @MainActor
     struct SiteList: View {
+        /// <#Description#>
+        @Binding var allSitesIsSelected: Bool
+        
         /// Allows the user to toggle the visibility of the site and facility selector.
         @Binding var isPresented: Bool
         
