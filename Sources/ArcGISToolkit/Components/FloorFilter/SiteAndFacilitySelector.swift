@@ -124,21 +124,10 @@ struct SiteAndFacilitySelector: View {
         VStack {
             Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
                 .padding([.leading, .top, .trailing])
-            if userDidBackOutToSiteList {
+            if (userDidBackOutToSiteList || viewModel.selection == .none) && viewModel.sites.count > 1 {
                 SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-            } else if allSitesIsSelected {
-                FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: true, facilities: viewModel.sites.flatMap(\.facilities))
-            } else if viewModel.sites.count > 1 {
-                switch viewModel.selection {
-                case .none:
-                    SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-                default:
-                    if let site = viewModel.selection?.site {
-                        FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: site.facilities)
-                    }
-                }
             } else {
-                FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: viewModel.facilities )
+                FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: allSitesIsSelected, facilities: viewModel.selection?.site?.facilities ?? viewModel.facilities)
             }
         }
     }
