@@ -28,6 +28,9 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
 ***REMOVED******REMOVED***@Binding var userDidBackOutToSiteList: Bool
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
+***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED******REMOVED***
@@ -59,6 +62,7 @@ extension SiteAndFacilitySelector {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***@MainActor
 ***REMOVED******REMOVED***var upperHeader: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -66,7 +70,10 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection == .none || userDidBackOutToSiteList
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***? 0 : 1
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
