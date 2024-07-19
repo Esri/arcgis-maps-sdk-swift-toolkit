@@ -79,7 +79,9 @@ extension SiteAndFacilitySelector {
                 )
                 Spacer()
                 Group {
-                    if viewModel.selection == .none || userDidBackOutToSiteList {
+                    if allSitesIsSelected {
+                        Text(String.allSites)
+                    } else if viewModel.selection == .none || userDidBackOutToSiteList {
                         Text.sites
                     } else {
                         Text(viewModel.selection?.site?.name ?? String.selectAFacility)
