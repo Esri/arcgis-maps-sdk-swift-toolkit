@@ -229,13 +229,11 @@ struct SiteAndFacilitySelector: View {
         var siteList: some View {
             List(matchingSites) { site in
                 Button(site.name) {
+                    userDidBackOutToSiteList = false
                     viewModel.setSite(site)
                 }
             }
             .listStyle(.plain)
-            .onChange(of: viewModel.selection) { _ in
-                userDidBackOutToSiteList = false
-            }
         }
     }
     
