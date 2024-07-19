@@ -75,10 +75,7 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection == .none || userDidBackOutToSiteList
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***? 0 : 1
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(viewModel.selection == .none || userDidBackOutToSiteList ? 0 : 1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSitesIsSelected {
@@ -130,32 +127,18 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***if userDidBackOutToSiteList {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED*** else if allSitesIsSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: true, facilities: viewModel.sites.flatMap(\.facilities))
 ***REMOVED******REMOVED*** else if viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch viewModel.selection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-***REMOVED******REMOVED******REMOVED******REMOVED***case .site(let floorSite):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorSite)
-***REMOVED******REMOVED******REMOVED******REMOVED***case .facility(let floorFacility):
-#warning("Remove forced optionals")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorFacility.site!)
-***REMOVED******REMOVED******REMOVED******REMOVED***case .level(let floorLevel):
-#warning("Remove forced optionals")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorLevel.facility!.site!)
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let site = viewModel.selection?.site {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: site.facilities)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: viewModel.facilities )
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -333,18 +316,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension SiteAndFacilitySelector {
-***REMOVED******REMOVED***/ Makes the list of facilities for a site from the sites list.
-***REMOVED***func makeFacilitiesList(site: FloorSite) -> some View {
-***REMOVED******REMOVED***SiteAndFacilitySelector.FacilityList(
-***REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED***query: $query,
-***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
-***REMOVED******REMOVED******REMOVED***facilities: site.facilities
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
