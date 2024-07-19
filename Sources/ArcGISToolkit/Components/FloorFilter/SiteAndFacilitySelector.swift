@@ -75,10 +75,7 @@ extension SiteAndFacilitySelector {
                 } label: {
                     Image(systemName: "chevron.left")
                 }
-                .opacity(
-                    viewModel.selection == .none || userDidBackOutToSiteList
-                    ? 0 : 1
-                )
+                .opacity(viewModel.selection == .none || userDidBackOutToSiteList ? 0 : 1)
                 Spacer()
                 Group {
                     if allSitesIsSelected {
@@ -130,32 +127,18 @@ struct SiteAndFacilitySelector: View {
             if userDidBackOutToSiteList {
                 SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
             } else if allSitesIsSelected {
-                FacilityList(
-                    isPresented: $isPresented,
-                    query: $query,
-                    usesAllSitesStyling: true,
-                    facilities: viewModel.sites.flatMap(\.facilities)
-                )
+                FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: true, facilities: viewModel.sites.flatMap(\.facilities))
             } else if viewModel.sites.count > 1 {
                 switch viewModel.selection {
                 case .none:
                     SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-                case .site(let floorSite):
-                    makeFacilitiesList(site: floorSite)
-                case .facility(let floorFacility):
-#warning("Remove forced optionals")
-                    makeFacilitiesList(site: floorFacility.site!)
-                case .level(let floorLevel):
-#warning("Remove forced optionals")
-                    makeFacilitiesList(site: floorLevel.facility!.site!)
+                default:
+                    if let site = viewModel.selection?.site {
+                        FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: site.facilities)
+                    }
                 }
             } else {
-                FacilityList(
-                    isPresented: $isPresented,
-                    query: $query,
-                    usesAllSitesStyling: false,
-                    facilities: viewModel.facilities
-                )
+                FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: viewModel.facilities )
             }
         }
     }
@@ -333,18 +316,6 @@ struct SiteAndFacilitySelector: View {
                 }
             }
         }
-    }
-}
-
-extension SiteAndFacilitySelector {
-    /// Makes the list of facilities for a site from the sites list.
-    func makeFacilitiesList(site: FloorSite) -> some View {
-        SiteAndFacilitySelector.FacilityList(
-            isPresented: $isPresented,
-            query: $query,
-            usesAllSitesStyling: false,
-            facilities: site.facilities
-        )
     }
 }
 
