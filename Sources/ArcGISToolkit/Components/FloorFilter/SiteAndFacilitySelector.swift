@@ -51,7 +51,7 @@ extension SiteAndFacilitySelector {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
-                    TextField(String.filterSites, text: $query)
+                    TextField((viewModel.selection == .none || userDidBackOutToSiteList) && !allSitesIsSelected ? String.filterSites : String.filterFacilities, text: $query)
                         .disableAutocorrection(true)
                         .focused($textFieldIsFocused)
                         .keyboardType(.alphabet)
