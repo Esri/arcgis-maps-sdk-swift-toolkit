@@ -284,7 +284,6 @@ struct SiteAndFacilitySelector: View {
                     facilityList
                 }
             }
-            .navigationTitle(usesAllSitesStyling ? String.allSites : (viewModel.selection?.site?.name ?? String.selectAFacility))
         }
         
         /// Displays a list of facilities matching the filter criteria as determined by
