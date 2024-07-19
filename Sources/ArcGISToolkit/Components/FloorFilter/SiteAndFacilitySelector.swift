@@ -106,6 +106,9 @@ struct SiteAndFacilitySelector: View {
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
     /// <#Description#>
+    @State private var allSitesIsSelected = false
+    
+    /// <#Description#>
     @State private var query = ""
     
     /// A Boolean value indicating whether the user pressed the back button in the header.
