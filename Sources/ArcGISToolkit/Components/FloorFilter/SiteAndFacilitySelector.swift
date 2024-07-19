@@ -284,7 +284,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle(usesAllSitesStyling ? String.allSites : (viewModel.selection?.site?.name ?? String.selectAFacility))
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Displays a list of facilities matching the filter criteria as determined by
