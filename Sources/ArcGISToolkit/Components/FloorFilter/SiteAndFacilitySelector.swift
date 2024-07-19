@@ -203,13 +203,9 @@ struct SiteAndFacilitySelector: View {
         /// This button presents the facilities list in a special format where the facilities list
         /// shows every facility in every site within the floor manager.
         var allSitesButton: some View {
-            NavigationLink {
-                FacilityList(
-                    isPresented: $isPresented,
-                    query: $query,
-                    usesAllSitesStyling: true,
-                    facilities: viewModel.sites.flatMap(\.facilities)
-                )
+            Button {
+                allSitesIsSelected = true
+                userDidBackOutToSiteList = false
             } label: {
                 Text(String.allSites)
             }
