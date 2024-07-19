@@ -79,7 +79,9 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.selection == .none || userDidBackOutToSiteList {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSitesIsSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.allSites)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if viewModel.selection == .none || userDidBackOutToSiteList {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selection?.site?.name ?? String.selectAFacility)
