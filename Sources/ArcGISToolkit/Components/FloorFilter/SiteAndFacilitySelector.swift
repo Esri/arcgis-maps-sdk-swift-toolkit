@@ -203,13 +203,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ This button presents the facilities list in a special format where the facilities list
 ***REMOVED******REMOVED******REMOVED***/ shows every facility in every site within the floor manager.
 ***REMOVED******REMOVED***var allSitesButton: some View {
-***REMOVED******REMOVED******REMOVED***NavigationLink {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***allSitesIsSelected = true
+***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.allSites)
 ***REMOVED******REMOVED***
