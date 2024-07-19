@@ -124,21 +124,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
-***REMOVED******REMOVED******REMOVED***if userDidBackOutToSiteList {
+***REMOVED******REMOVED******REMOVED***if (userDidBackOutToSiteList || viewModel.selection == .none) && viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-***REMOVED******REMOVED*** else if allSitesIsSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: true, facilities: viewModel.sites.flatMap(\.facilities))
-***REMOVED******REMOVED*** else if viewModel.sites.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch viewModel.selection {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let site = viewModel.selection?.site {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: site.facilities)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: false, facilities: viewModel.facilities )
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: allSitesIsSelected, facilities: viewModel.selection?.site?.facilities ?? viewModel.facilities)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
