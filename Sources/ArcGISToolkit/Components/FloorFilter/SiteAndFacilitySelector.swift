@@ -349,10 +349,10 @@ extension SiteAndFacilitySelector {
 }
 
 extension SiteAndFacilitySelector.SiteList {
-    /// The selected site as reflected in the state of the navigation stack.
+    /// The selected site as reflected in the `SiteAndFacilitySelector`.
     ///
-    /// Note that the selection state of the navigation stack can differ from the selection state of the
-    /// view model. See `userBackedOutOfSelectedSite` for further explanation.
+    /// Note that the selection state can differ from the selection state of the view model.
+    /// See `userBackedOutOfSelectedSite` for further explanation.
     var selectedSite: Binding<FloorSite?> {
         .init(
             get: {
