@@ -45,6 +45,7 @@ extension SiteAndFacilitySelector {
         }
         
         /// <#Description#>
+        @MainActor
         var lowerHeader: some View {
             HStack {
                 HStack {
