@@ -35,7 +35,7 @@ final class AttachmentCameraControllerTests: XCTestCase {
         let device = UIDevice.current.userInterfaceIdiom
         let orientation = app.staticTexts["Device Orientation"]
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let allowButton = springboard.buttons["Allow"]
+        let allowButton = springboard.buttons["OK"]
         
         app.launch()
         
