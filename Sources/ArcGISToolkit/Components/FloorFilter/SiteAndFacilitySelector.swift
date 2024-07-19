@@ -125,6 +125,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
 ***REMOVED******REMOVED******REMOVED***if userDidBackOutToSiteList {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+***REMOVED******REMOVED*** else if allSitesIsSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else if viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch viewModel.selection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
