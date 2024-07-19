@@ -45,6 +45,7 @@ extension SiteAndFacilitySelector {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***@MainActor
 ***REMOVED******REMOVED***var lowerHeader: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
