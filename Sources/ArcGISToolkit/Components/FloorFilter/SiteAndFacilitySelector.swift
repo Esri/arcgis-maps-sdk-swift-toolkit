@@ -229,13 +229,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var siteList: some View {
 ***REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(site.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
