@@ -75,8 +75,14 @@ extension SiteAndFacilitySelector {
                     ? 0 : 1
                 )
                 Spacer()
-                Text.sites
-                    .font(.title3)
+                Group {
+                    if viewModel.selection == .none || userDidBackOutToSiteList {
+                        Text.sites
+                    } else {
+                        Text("Facilities")
+                    }
+                }
+                .font(.title3)
                 Spacer()
                 Button {
                     isPresented = false
