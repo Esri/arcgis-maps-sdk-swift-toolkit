@@ -18,6 +18,9 @@
 extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***struct Header: View {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***@Binding var allSitesIsSelected: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
@@ -118,14 +121,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Header(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+***REMOVED******REMOVED******REMOVED***Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
 ***REMOVED******REMOVED******REMOVED***if userDidBackOutToSiteList {
-***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED*** else if viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch viewModel.selection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteList(isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .site(let floorSite):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: floorSite)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .facility(let floorFacility):
@@ -149,6 +152,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***@MainActor
 ***REMOVED***struct SiteList: View {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***@Binding var allSitesIsSelected: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***
