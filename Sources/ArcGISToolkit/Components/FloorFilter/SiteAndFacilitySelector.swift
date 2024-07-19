@@ -106,6 +106,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var allSitesIsSelected = false
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@State private var query = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
