@@ -349,10 +349,10 @@ extension SiteAndFacilitySelector {
 ***REMOVED***
 
 extension SiteAndFacilitySelector.SiteList {
-***REMOVED******REMOVED***/ The selected site as reflected in the state of the navigation stack.
+***REMOVED******REMOVED***/ The selected site as reflected in the `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Note that the selection state of the navigation stack can differ from the selection state of the
-***REMOVED******REMOVED***/ view model. See `userBackedOutOfSelectedSite` for further explanation.
+***REMOVED******REMOVED***/ Note that the selection state can differ from the selection state of the view model.
+***REMOVED******REMOVED***/ See `userBackedOutOfSelectedSite` for further explanation.
 ***REMOVED***var selectedSite: Binding<FloorSite?> {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***get: {
