@@ -82,7 +82,7 @@ extension SiteAndFacilitySelector {
                     if viewModel.selection == .none || userDidBackOutToSiteList {
                         Text.sites
                     } else {
-                        Text("Facilities")
+                        Text(viewModel.selection?.site?.name ?? String.selectAFacility)
                     }
                 }
                 .font(.title3)
