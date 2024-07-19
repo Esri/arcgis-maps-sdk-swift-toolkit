@@ -201,7 +201,7 @@ struct AttachmentImportMenu: View {
             AttachmentCameraController(
                 importState: $importState
             )
-#if !targetEnvironment(macCatalyst)
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
             .onCameraCaptureModeChanged { captureMode in
                 if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
                     microphoneAccessAlertIsVisible = true
