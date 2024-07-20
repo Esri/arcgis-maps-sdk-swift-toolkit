@@ -43,7 +43,9 @@ extension SiteAndFacilitySelector {
         
         var body: some View {
             VStack {
-                upperHeader
+                if !textFieldIsFocused {
+                    upperHeader
+                }
                 lowerHeader
             }
         }
