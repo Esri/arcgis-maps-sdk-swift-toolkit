@@ -307,6 +307,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 
+extension SiteAndFacilitySelector {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***var multipleSitesAreAvailable: Bool {
+***REMOVED******REMOVED***viewModel.sites.count > 1
+***REMOVED***
+***REMOVED***
+
 extension SiteAndFacilitySelector.SiteList {
 ***REMOVED******REMOVED***/ The selected site as reflected in the `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***/
