@@ -43,7 +43,9 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***upperHeader
+***REMOVED******REMOVED******REMOVED******REMOVED***if !textFieldIsFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***upperHeader
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***lowerHeader
 ***REMOVED******REMOVED***
 ***REMOVED***
