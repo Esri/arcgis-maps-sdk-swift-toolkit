@@ -54,7 +54,7 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField((viewModel.selection == .none || userDidBackOutToSiteList) && !allSitesIsSelected ? String.filterSites : String.filterFacilities, text: $query)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
@@ -77,15 +77,15 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(viewModel.selection == .none || userDidBackOutToSiteList ? 0 : 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(backButtonIsVisible ? 1 : 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSitesIsSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.allSites)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if viewModel.selection == .none || userDidBackOutToSiteList {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if facilityListIsVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selection?.site?.name ?? String.selectAFacility)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
@@ -140,7 +140,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList, multipleSitesAreAvailable: multipleSitesAreAvailable)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
-***REMOVED******REMOVED******REMOVED***if (userDidBackOutToSiteList || viewModel.selection == .none) && viewModel.sites.count > 1 {
+***REMOVED******REMOVED******REMOVED***if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: allSitesIsSelected, facilities: viewModel.selection?.site?.facilities ?? viewModel.facilities)
