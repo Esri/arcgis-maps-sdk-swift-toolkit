@@ -72,7 +72,6 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED***var upperHeader: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allSitesIsSelected = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = true
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
@@ -194,6 +193,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***allSitesIsSelected = false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
