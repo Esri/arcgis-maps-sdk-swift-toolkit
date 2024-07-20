@@ -142,7 +142,12 @@ struct SiteAndFacilitySelector: View {
             if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
                 SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
             } else {
-                FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: allSitesIsSelected, facilities: viewModel.selection?.site?.facilities ?? viewModel.facilities)
+                FacilityList(
+                    isPresented: $isPresented,
+                    query: $query,
+                    usesAllSitesStyling: allSitesIsSelected,
+                    facilities: allSitesIsSelected ? viewModel.facilities : viewModel.selection?.site?.facilities ?? viewModel.facilities
+                )
             }
         }
     }
