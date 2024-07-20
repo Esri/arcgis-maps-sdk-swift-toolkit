@@ -307,6 +307,13 @@ struct SiteAndFacilitySelector: View {
     }
 }
 
+extension SiteAndFacilitySelector {
+    /// <#Description#>
+    var multipleSitesAreAvailable: Bool {
+        viewModel.sites.count > 1
+    }
+}
+
 extension SiteAndFacilitySelector.SiteList {
     /// The selected site as reflected in the `SiteAndFacilitySelector`.
     ///
