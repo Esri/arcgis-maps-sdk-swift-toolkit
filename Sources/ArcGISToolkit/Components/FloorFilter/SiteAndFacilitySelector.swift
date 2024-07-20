@@ -17,6 +17,7 @@ import SwiftUI
 
 extension SiteAndFacilitySelector {
     /// <#Description#>
+    @MainActor
     struct Header: View {
         /// <#Description#>
         @Binding var allSitesIsSelected: Bool
@@ -45,7 +46,6 @@ extension SiteAndFacilitySelector {
         }
         
         /// <#Description#>
-        @MainActor
         var lowerHeader: some View {
             HStack {
                 HStack {
@@ -66,7 +66,6 @@ extension SiteAndFacilitySelector {
         }
         
         /// <#Description#>
-        @MainActor
         var upperHeader: some View {
             HStack {
                 Button {
