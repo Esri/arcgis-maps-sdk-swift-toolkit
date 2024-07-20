@@ -75,17 +75,11 @@ struct SiteAndFacilitySelector: View {
             List(matchingFacilities, id: \.id) { facility in
                 VStack {
                     Text(facility.name)
-                        .frame(
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     if allSitesIsSelected, let siteName = facility.site?.name {
                         Text(siteName)
                             .font(.caption)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: .leading
-                            )
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .contentShape(Rectangle())
