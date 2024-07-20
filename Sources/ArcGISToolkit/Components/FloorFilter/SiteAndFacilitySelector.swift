@@ -17,6 +17,7 @@
 
 extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@MainActor
 ***REMOVED***struct Header: View {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***@Binding var allSitesIsSelected: Bool
@@ -45,7 +46,6 @@ extension SiteAndFacilitySelector {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***@MainActor
 ***REMOVED******REMOVED***var lowerHeader: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -66,7 +66,6 @@ extension SiteAndFacilitySelector {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***@MainActor
 ***REMOVED******REMOVED***var upperHeader: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
