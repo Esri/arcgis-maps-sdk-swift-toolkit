@@ -15,7 +15,45 @@
 ***REMOVED***
 ***REMOVED***
 
-extension SiteAndFacilitySelector {
+***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
+***REMOVED***/
+***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
+@MainActor
+struct SiteAndFacilitySelector: View {
+***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
+***REMOVED***@Binding var isPresented: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
+***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var allSitesIsSelected = false
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var query = ""
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
+***REMOVED***@State private var userDidBackOutToSiteList = false
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList, multipleSitesAreAvailable: multipleSitesAreAvailable)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
+***REMOVED******REMOVED******REMOVED***if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: allSitesIsSelected,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: allSitesIsSelected ? viewModel.facilities : viewModel.selection?.site?.facilities ?? viewModel.facilities
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@MainActor
 ***REMOVED***struct Header: View {
@@ -123,128 +161,6 @@ extension SiteAndFacilitySelector {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
-***REMOVED***/
-***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
-@MainActor
-struct SiteAndFacilitySelector: View {
-***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED***@Binding var isPresented: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
-***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var allSitesIsSelected = false
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var query = ""
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
-***REMOVED***@State private var userDidBackOutToSiteList = false
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList, multipleSitesAreAvailable: multipleSitesAreAvailable)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
-***REMOVED******REMOVED******REMOVED***if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
-***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: allSitesIsSelected,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: allSitesIsSelected ? viewModel.facilities : viewModel.selection?.site?.facilities ?? viewModel.facilities
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
-***REMOVED***@MainActor
-***REMOVED***struct SiteList: View {
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***@Binding var allSitesIsSelected: Bool
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED******REMOVED***@Binding var isPresented: Bool
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
-***REMOVED******REMOVED***@Binding var query: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
-***REMOVED******REMOVED***@Binding var userDidBackOutToSiteList: Bool
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
-***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
-***REMOVED******REMOVED***var matchingSites: [FloorSite] {
-***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return viewModel.sites
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return viewModel.sites.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.localizedStandardContains(query)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A view with a filter-via-name field, a list of site names and an "All sites" button.
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteList
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***allSitesIsSelected = false
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The "All sites" button.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ This button presents the facilities list in a special format where the facilities list
-***REMOVED******REMOVED******REMOVED***/ shows every facility in every site within the floor manager.
-***REMOVED******REMOVED***var allSitesButton: some View {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***allSitesIsSelected = true
-***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.allSites)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A view containing a list of the site names.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, items will automatically be
-***REMOVED******REMOVED******REMOVED***/ selected/deselected.
-***REMOVED******REMOVED***var siteList: some View {
-***REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(site.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***@MainActor
 ***REMOVED***struct FacilityList: View {
@@ -338,6 +254,88 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
+***REMOVED***@MainActor
+***REMOVED***struct SiteList: View {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***@Binding var allSitesIsSelected: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
+***REMOVED******REMOVED***@Binding var isPresented: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
+***REMOVED******REMOVED***@Binding var query: String
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ This allows for browsing the site list while keeping the current selection unmodified.
+***REMOVED******REMOVED***@Binding var userDidBackOutToSiteList: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
+***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
+***REMOVED******REMOVED***var matchingSites: [FloorSite] {
+***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return viewModel.sites
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return viewModel.sites.filter {
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.localizedStandardContains(query)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A view with a filter-via-name field, a list of site names and an "All sites" button.
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteList
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***allSitesIsSelected = false
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The "All sites" button.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ This button presents the facilities list in a special format where the facilities list
+***REMOVED******REMOVED******REMOVED***/ shows every facility in every site within the floor manager.
+***REMOVED******REMOVED***var allSitesButton: some View {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***allSitesIsSelected = true
+***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.allSites)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A view containing a list of the site names.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, items will automatically be
+***REMOVED******REMOVED******REMOVED***/ selected/deselected.
+***REMOVED******REMOVED***var siteList: some View {
+***REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(site.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
