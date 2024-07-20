@@ -29,13 +29,13 @@ struct SiteAndFacilitySelector: View {
     /// The view model used by the `SiteAndFacilitySelector`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
-    /// <#Description#>
+    /// A Boolean value indicating whether the user is typing into the text field.
     @FocusState var textFieldIsFocused: Bool
     
-    /// <#Description#>
+    /// A Boolean value indicating whether the user tapped the "All sites" button.
     @State private var allSitesIsSelected = false
     
-    /// <#Description#>
+    /// The site or facility filter phrase.
     @State private var query = ""
     
     /// A Boolean value indicating whether the user pressed the back button in the header.
@@ -110,7 +110,7 @@ struct SiteAndFacilitySelector: View {
         }
     }
     
-    /// <#Description#>
+    /// The header at the top of the selector containing the navigation controls and text field.
     var header: some View {
         VStack {
             if !textFieldIsFocused {
@@ -120,7 +120,7 @@ struct SiteAndFacilitySelector: View {
         }
     }
     
-    /// <#Description#>
+    /// The portion of the header containing the text field.
     var headerLowerHalf: some View {
         HStack {
             HStack {
@@ -149,7 +149,7 @@ struct SiteAndFacilitySelector: View {
         }
     }
     
-    /// <#Description#>
+    /// The portion of the header containing the navigation controls.
     var headerUpperHalf: some View {
         HStack {
             Button {
@@ -206,13 +206,13 @@ struct SiteAndFacilitySelector: View {
 }
 
 extension SiteAndFacilitySelector {
-    /// <#Description#>
+    /// A Boolean value indicating whether the back button in the header navigations controls is visible..
     var backButtonIsVisible: Bool {
         facilityListIsVisible
         && multipleSitesAreAvailable
     }
     
-    /// <#Description#>
+    /// A Boolean value indicating whether the facility list is visible.
     var facilityListIsVisible: Bool {
         (allSitesIsSelected
          || viewModel.selection != .none
@@ -243,7 +243,7 @@ extension SiteAndFacilitySelector {
         }
     }
     
-    /// <#Description#>
+    /// A Boolean value indicating whether the floor aware data contains more than one site.
     var multipleSitesAreAvailable: Bool {
         viewModel.sites.count > 1
     }
@@ -258,7 +258,7 @@ private extension String {
         )
     }
     
-    /// <#Description#>
+    /// A field allowing the user to filter a list of facilities by name. A facility contains one or more levels in a floor-aware map or scene.
     static var filterFacilities: Self {
         .init(
             localized: "Filter facilities",
@@ -270,7 +270,7 @@ private extension String {
         )
     }
     
-    /// <#Description#>
+    /// A field allowing the user to filter a list of sites by name. A site contains one or more facilities in a floor-aware map or scene.
     static var filterSites: Self {
         .init(
             localized: "Filter sites",
@@ -291,7 +291,7 @@ private extension String {
         )
     }
     
-    /// <#Description#>
+    /// A label directing the user to select a facility. A facility contains one or more levels in a floor-aware map or scene.
     static var selectAFacility: Self {
         .init(
             localized: "Select a facility",
