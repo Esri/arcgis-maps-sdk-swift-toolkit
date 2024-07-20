@@ -38,6 +38,9 @@ extension SiteAndFacilitySelector {
         /// <#Description#>
         @FocusState var textFieldIsFocused: Bool
         
+        /// <#Description#>
+        let multipleSitesAreAvailable: Bool
+        
         var body: some View {
             VStack {
                 upperHeader
@@ -121,7 +124,7 @@ struct SiteAndFacilitySelector: View {
     
     var body: some View {
         VStack {
-            Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+            Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList, multipleSitesAreAvailable: multipleSitesAreAvailable)
                 .padding([.leading, .top, .trailing])
             if (userDidBackOutToSiteList || viewModel.selection == .none) && viewModel.sites.count > 1 {
                 SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
