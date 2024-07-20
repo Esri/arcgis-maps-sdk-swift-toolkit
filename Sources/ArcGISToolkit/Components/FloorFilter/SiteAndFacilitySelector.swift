@@ -54,7 +54,7 @@ extension SiteAndFacilitySelector {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
-                    TextField((viewModel.selection == .none || userDidBackOutToSiteList) && !allSitesIsSelected ? String.filterSites : String.filterFacilities, text: $query)
+                    TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
                         .disableAutocorrection(true)
                         .focused($textFieldIsFocused)
                         .keyboardType(.alphabet)
@@ -77,15 +77,15 @@ extension SiteAndFacilitySelector {
                 } label: {
                     Image(systemName: "chevron.left")
                 }
-                .opacity(viewModel.selection == .none || userDidBackOutToSiteList ? 0 : 1)
+                .opacity(backButtonIsVisible ? 1 : 0)
                 Spacer()
                 Group {
                     if allSitesIsSelected {
                         Text(String.allSites)
-                    } else if viewModel.selection == .none || userDidBackOutToSiteList {
-                        Text.sites
-                    } else {
+                    } else if facilityListIsVisible {
                         Text(viewModel.selection?.site?.name ?? String.selectAFacility)
+                    } else {
+                        Text.sites
                     }
                 }
                 .font(.title3)
@@ -140,7 +140,7 @@ struct SiteAndFacilitySelector: View {
         VStack {
             Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList, multipleSitesAreAvailable: multipleSitesAreAvailable)
                 .padding([.leading, .top, .trailing])
-            if (userDidBackOutToSiteList || viewModel.selection == .none) && viewModel.sites.count > 1 {
+            if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
                 SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
             } else {
                 FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: allSitesIsSelected, facilities: viewModel.selection?.site?.facilities ?? viewModel.facilities)
