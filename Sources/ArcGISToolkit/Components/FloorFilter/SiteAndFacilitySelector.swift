@@ -29,13 +29,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user is typing into the text field.
 ***REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user tapped the "All sites" button.
 ***REMOVED***@State private var allSitesIsSelected = false
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The site or facility filter phrase.
 ***REMOVED***@State private var query = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the header.
@@ -110,7 +110,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The header at the top of the selector containing the navigation controls and text field.
 ***REMOVED***var header: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !textFieldIsFocused {
@@ -120,7 +120,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The portion of the header containing the text field.
 ***REMOVED***var headerLowerHalf: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
@@ -149,7 +149,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The portion of the header containing the navigation controls.
 ***REMOVED***var headerUpperHalf: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button {
@@ -206,13 +206,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 
 extension SiteAndFacilitySelector {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the back button in the header navigations controls is visible..
 ***REMOVED***var backButtonIsVisible: Bool {
 ***REMOVED******REMOVED***facilityListIsVisible
 ***REMOVED******REMOVED***&& multipleSitesAreAvailable
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the facility list is visible.
 ***REMOVED***var facilityListIsVisible: Bool {
 ***REMOVED******REMOVED***(allSitesIsSelected
 ***REMOVED******REMOVED*** || viewModel.selection != .none
@@ -243,7 +243,7 @@ extension SiteAndFacilitySelector {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the floor aware data contains more than one site.
 ***REMOVED***var multipleSitesAreAvailable: Bool {
 ***REMOVED******REMOVED***viewModel.sites.count > 1
 ***REMOVED***
@@ -258,7 +258,7 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A field allowing the user to filter a list of facilities by name. A facility contains one or more levels in a floor-aware map or scene.
 ***REMOVED***static var filterFacilities: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Filter facilities",
@@ -270,7 +270,7 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A field allowing the user to filter a list of sites by name. A site contains one or more facilities in a floor-aware map or scene.
 ***REMOVED***static var filterSites: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Filter sites",
@@ -291,7 +291,7 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A label directing the user to select a facility. A facility contains one or more levels in a floor-aware map or scene.
 ***REMOVED***static var selectAFacility: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Select a facility",
