@@ -97,6 +97,20 @@ extension SiteAndFacilitySelector {
                 }
             }
         }
+        
+        /// <#Description#>
+        var backButtonIsVisible: Bool {
+            facilityListIsVisible
+            && multipleSitesAreAvailable
+        }
+        
+        /// <#Description#>
+        var facilityListIsVisible: Bool {
+            (allSitesIsSelected
+            || viewModel.selection != .none
+            || !multipleSitesAreAvailable)
+            && !userDidBackOutToSiteList
+        }
     }
 }
 
