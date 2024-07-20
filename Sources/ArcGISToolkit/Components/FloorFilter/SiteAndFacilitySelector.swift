@@ -15,7 +15,45 @@
 import ArcGIS
 import SwiftUI
 
-extension SiteAndFacilitySelector {
+/// A view which allows selection of sites and facilities represented in a `FloorManager`.
+///
+/// If the floor aware data contains only one site, the selector opens directly to the facilities list.
+@MainActor
+struct SiteAndFacilitySelector: View {
+    /// Allows the user to toggle the visibility of the site and facility selector.
+    @Binding var isPresented: Bool
+    
+    /// The view model used by the `SiteAndFacilitySelector`.
+    @EnvironmentObject var viewModel: FloorFilterViewModel
+    
+    /// <#Description#>
+    @State private var allSitesIsSelected = false
+    
+    /// <#Description#>
+    @State private var query = ""
+    
+    /// A Boolean value indicating whether the user pressed the back button in the header.
+    ///
+    /// This allows for browsing the site list while keeping the current selection unmodified.
+    @State private var userDidBackOutToSiteList = false
+    
+    var body: some View {
+        VStack {
+            Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList, multipleSitesAreAvailable: multipleSitesAreAvailable)
+                .padding([.leading, .top, .trailing])
+            if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
+                SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
+            } else {
+                FacilityList(
+                    isPresented: $isPresented,
+                    query: $query,
+                    usesAllSitesStyling: allSitesIsSelected,
+                    facilities: allSitesIsSelected ? viewModel.facilities : viewModel.selection?.site?.facilities ?? viewModel.facilities
+                )
+            }
+        }
+    }
+    
     /// <#Description#>
     @MainActor
     struct Header: View {
@@ -122,128 +160,6 @@ extension SiteAndFacilitySelector {
             && !userDidBackOutToSiteList
         }
     }
-}
-
-/// A view which allows selection of sites and facilities represented in a `FloorManager`.
-///
-/// If the floor aware data contains only one site, the selector opens directly to the facilities list.
-@MainActor
-struct SiteAndFacilitySelector: View {
-    /// Allows the user to toggle the visibility of the site and facility selector.
-    @Binding var isPresented: Bool
-    
-    /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var viewModel: FloorFilterViewModel
-    
-    /// <#Description#>
-    @State private var allSitesIsSelected = false
-    
-    /// <#Description#>
-    @State private var query = ""
-    
-    /// A Boolean value indicating whether the user pressed the back button in the header.
-    ///
-    /// This allows for browsing the site list while keeping the current selection unmodified.
-    @State private var userDidBackOutToSiteList = false
-    
-    var body: some View {
-        VStack {
-            Header(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList, multipleSitesAreAvailable: multipleSitesAreAvailable)
-                .padding([.leading, .top, .trailing])
-            if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
-                SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
-            } else {
-                FacilityList(
-                    isPresented: $isPresented,
-                    query: $query,
-                    usesAllSitesStyling: allSitesIsSelected,
-                    facilities: allSitesIsSelected ? viewModel.facilities : viewModel.selection?.site?.facilities ?? viewModel.facilities
-                )
-            }
-        }
-    }
-    
-    /// A view displaying the sites contained in a `FloorManager`.
-    @MainActor
-    struct SiteList: View {
-        /// <#Description#>
-        @Binding var allSitesIsSelected: Bool
-        
-        /// Allows the user to toggle the visibility of the site and facility selector.
-        @Binding var isPresented: Bool
-        
-        /// A site name filter phrase entered by the user.
-        @Binding var query: String
-        
-        /// A Boolean value indicating whether the user pressed the back button in the header.
-        ///
-        /// This allows for browsing the site list while keeping the current selection unmodified.
-        @Binding var userDidBackOutToSiteList: Bool
-        
-        @Environment(\.horizontalSizeClass)
-        private var horizontalSizeClass: UserInterfaceSizeClass?
-        
-        /// The view model used by this selector.
-        @EnvironmentObject var viewModel: FloorFilterViewModel
-        
-        /// A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
-        var matchingSites: [FloorSite] {
-            guard !query.isEmpty else {
-                return viewModel.sites
-            }
-            return viewModel.sites.filter {
-                $0.name.localizedStandardContains(query)
-            }
-        }
-        
-        /// A view with a filter-via-name field, a list of site names and an "All sites" button.
-        var body: some View {
-            VStack {
-                if matchingSites.isEmpty {
-                    if #available(iOS 17, *) {
-                        ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
-                    } else {
-                        NoMatchesView()
-                    }
-                } else {
-                    siteList
-                }
-                allSitesButton
-            }
-            .onAppear {
-                allSitesIsSelected = false
-            }
-        }
-        
-        /// The "All sites" button.
-        ///
-        /// This button presents the facilities list in a special format where the facilities list
-        /// shows every facility in every site within the floor manager.
-        var allSitesButton: some View {
-            Button {
-                allSitesIsSelected = true
-                userDidBackOutToSiteList = false
-            } label: {
-                Text(String.allSites)
-            }
-            .buttonStyle(.bordered)
-            .padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
-        }
-        
-        /// A view containing a list of the site names.
-        ///
-        /// If `AutomaticSelectionMode` mode is in use, items will automatically be
-        /// selected/deselected.
-        var siteList: some View {
-            List(matchingSites) { site in
-                Button(site.name) {
-                    userDidBackOutToSiteList = false
-                    viewModel.setSite(site)
-                }
-            }
-            .listStyle(.plain)
-        }
-    }
     
     /// A view displaying the facilities contained in a `FloorManager`.
     @MainActor
@@ -338,6 +254,88 @@ struct SiteAndFacilitySelector: View {
                     }
                 }
             }
+        }
+    }
+    
+    /// A view displaying the sites contained in a `FloorManager`.
+    @MainActor
+    struct SiteList: View {
+        /// <#Description#>
+        @Binding var allSitesIsSelected: Bool
+        
+        /// Allows the user to toggle the visibility of the site and facility selector.
+        @Binding var isPresented: Bool
+        
+        /// A site name filter phrase entered by the user.
+        @Binding var query: String
+        
+        /// A Boolean value indicating whether the user pressed the back button in the header.
+        ///
+        /// This allows for browsing the site list while keeping the current selection unmodified.
+        @Binding var userDidBackOutToSiteList: Bool
+        
+        @Environment(\.horizontalSizeClass)
+        private var horizontalSizeClass: UserInterfaceSizeClass?
+        
+        /// The view model used by this selector.
+        @EnvironmentObject var viewModel: FloorFilterViewModel
+        
+        /// A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
+        var matchingSites: [FloorSite] {
+            guard !query.isEmpty else {
+                return viewModel.sites
+            }
+            return viewModel.sites.filter {
+                $0.name.localizedStandardContains(query)
+            }
+        }
+        
+        /// A view with a filter-via-name field, a list of site names and an "All sites" button.
+        var body: some View {
+            VStack {
+                if matchingSites.isEmpty {
+                    if #available(iOS 17, *) {
+                        ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+                    } else {
+                        NoMatchesView()
+                    }
+                } else {
+                    siteList
+                }
+                allSitesButton
+            }
+            .onAppear {
+                allSitesIsSelected = false
+            }
+        }
+        
+        /// The "All sites" button.
+        ///
+        /// This button presents the facilities list in a special format where the facilities list
+        /// shows every facility in every site within the floor manager.
+        var allSitesButton: some View {
+            Button {
+                allSitesIsSelected = true
+                userDidBackOutToSiteList = false
+            } label: {
+                Text(String.allSites)
+            }
+            .buttonStyle(.bordered)
+            .padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
+        }
+        
+        /// A view containing a list of the site names.
+        ///
+        /// If `AutomaticSelectionMode` mode is in use, items will automatically be
+        /// selected/deselected.
+        var siteList: some View {
+            List(matchingSites) { site in
+                Button(site.name) {
+                    userDidBackOutToSiteList = false
+                    viewModel.setSite(site)
+                }
+            }
+            .listStyle(.plain)
         }
     }
 }
