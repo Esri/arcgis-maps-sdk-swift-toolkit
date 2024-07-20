@@ -97,6 +97,20 @@ extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***var backButtonIsVisible: Bool {
+***REMOVED******REMOVED******REMOVED***facilityListIsVisible
+***REMOVED******REMOVED******REMOVED***&& multipleSitesAreAvailable
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***var facilityListIsVisible: Bool {
+***REMOVED******REMOVED******REMOVED***(allSitesIsSelected
+***REMOVED******REMOVED******REMOVED***|| viewModel.selection != .none
+***REMOVED******REMOVED******REMOVED***|| !multipleSitesAreAvailable)
+***REMOVED******REMOVED******REMOVED***&& !userDidBackOutToSiteList
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
