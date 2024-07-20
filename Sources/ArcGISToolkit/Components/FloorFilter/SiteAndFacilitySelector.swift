@@ -72,7 +72,6 @@ extension SiteAndFacilitySelector {
         var upperHeader: some View {
             HStack {
                 Button {
-                    allSitesIsSelected = false
                     userDidBackOutToSiteList = true
                 } label: {
                     Image(systemName: "chevron.left")
@@ -194,6 +193,9 @@ struct SiteAndFacilitySelector: View {
                     siteList
                 }
                 allSitesButton
+            }
+            .onAppear {
+                allSitesIsSelected = false
             }
         }
         
