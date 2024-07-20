@@ -58,6 +58,15 @@ extension SiteAndFacilitySelector {
                         .disableAutocorrection(true)
                         .focused($textFieldIsFocused)
                         .keyboardType(.alphabet)
+                    if textFieldIsFocused {
+                        Button {
+                            query.removeAll()
+                        } label: {
+                            Image(systemName: "x.circle.fill")
+                                .renderingMode(.template)
+                        }
+                        .foregroundStyle(.secondary)
+                    }
                 }
                 if textFieldIsFocused {
                     Button(String.cancel) {
