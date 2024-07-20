@@ -142,7 +142,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***if (userDidBackOutToSiteList || viewModel.selection == .none) && multipleSitesAreAvailable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteList(allSitesIsSelected: $allSitesIsSelected, isPresented: $isPresented, query: $query, userDidBackOutToSiteList: $userDidBackOutToSiteList)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(isPresented: $isPresented, query: $query, usesAllSitesStyling: allSitesIsSelected, facilities: viewModel.selection?.site?.facilities ?? viewModel.facilities)
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilityList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $query,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: allSitesIsSelected,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: allSitesIsSelected ? viewModel.facilities : viewModel.selection?.site?.facilities ?? viewModel.facilities
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
