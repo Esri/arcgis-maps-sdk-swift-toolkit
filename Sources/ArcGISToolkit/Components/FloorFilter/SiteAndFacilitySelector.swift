@@ -138,6 +138,9 @@ struct SiteAndFacilitySelector: View {
                     .foregroundStyle(.secondary)
                 }
             }
+            .padding(5)
+            .background(.quinary)
+            .clipShape(.rect(cornerRadius: 10))
             if textFieldIsFocused {
                 Button(String.cancel) {
                     query.removeAll()
