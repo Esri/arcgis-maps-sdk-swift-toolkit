@@ -26,9 +26,11 @@ struct AttachmentCameraControllerTestView: View {
         Color.clear
             .fullScreenCover(isPresented: .constant(true)) {
                 AttachmentCameraController(importState: .constant(.none))
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
                     .onCameraCaptureModeChanged { captureMode in
                         self.captureMode = captureMode
                     }
+#endif
                     .overlay {
                         VStack {
                             Text(captureMode?.name ?? "None")
