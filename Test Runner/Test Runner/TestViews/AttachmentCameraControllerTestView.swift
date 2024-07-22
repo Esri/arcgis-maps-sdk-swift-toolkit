@@ -26,9 +26,11 @@ struct AttachmentCameraControllerTestView: View {
 ***REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED***.fullScreenCover(isPresented: .constant(true)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCameraController(importState: .constant(.none))
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.captureMode = captureMode
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(captureMode?.name ?? "None")
