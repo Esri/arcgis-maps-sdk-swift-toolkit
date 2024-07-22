@@ -138,6 +138,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding(5)
+***REMOVED******REMOVED******REMOVED***.background(.quinary)
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED******REMOVED******REMOVED***if textFieldIsFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.removeAll()
