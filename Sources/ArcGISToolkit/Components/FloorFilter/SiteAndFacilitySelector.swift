@@ -124,6 +124,10 @@ struct SiteAndFacilitySelector: View {
                     .disableAutocorrection(true)
                     .focused($textFieldIsFocused)
                     .keyboardType(.alphabet)
+                    .onChange(of: facilityListIsVisible) { _ in
+                        query.removeAll()
+                        textFieldIsFocused = false
+                    }
                 if textFieldIsFocused && !query.isEmpty {
                     Button {
                         query.removeAll()
