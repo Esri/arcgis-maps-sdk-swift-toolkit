@@ -77,6 +77,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     }
 }
 
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
 extension AttachmentCameraController {
     /// Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
     /// - Parameter action: The new camera capture mode.
@@ -85,6 +86,7 @@ extension AttachmentCameraController {
         return self
     }
 }
+#endif
 
 /// A wrapper around ``UIImagePickerController``.
 ///
