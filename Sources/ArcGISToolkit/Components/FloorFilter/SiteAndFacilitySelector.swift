@@ -56,10 +56,15 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if facilityListIsVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilityList
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .trailing))
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***siteList
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .leading))
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.animation(.default, value: facilityListIsVisible)
+***REMOVED******REMOVED***.animation(.default, value: textFieldIsFocused)
+***REMOVED******REMOVED***.clipped()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays a list of facilities matching the filter criteria as determined by
@@ -109,6 +114,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !textFieldIsFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED***headerUpperHalf
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.opacity)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***headerLowerHalf
 ***REMOVED***
@@ -146,6 +152,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.removeAll()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = false
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .trailing))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -203,6 +210,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
+***REMOVED******REMOVED***.transition(.move(edge: .bottom))
 ***REMOVED***
 ***REMOVED***
 
