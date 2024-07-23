@@ -122,6 +122,7 @@ public struct FloorFilter: View {
             siteAndFacilitySelectorIsPresented.toggle()
         } label: {
             Image(systemName: "building.2")
+                .accessibilityIdentifier("Floor Filter button")
                 .padding(.toolkitDefault)
                 .opacity(viewModel.isLoading ? .zero : 1)
                 .overlay {
