@@ -56,10 +56,15 @@ struct SiteAndFacilitySelector: View {
                 }
             } else if facilityListIsVisible {
                 facilityList
+                    .transition(.move(edge: .trailing))
             } else {
                 siteList
+                    .transition(.move(edge: .leading))
             }
         }
+        .animation(.default, value: facilityListIsVisible)
+        .animation(.default, value: textFieldIsFocused)
+        .clipped()
     }
     
     /// Displays a list of facilities matching the filter criteria as determined by
@@ -109,6 +114,7 @@ struct SiteAndFacilitySelector: View {
         VStack {
             if !textFieldIsFocused {
                 headerUpperHalf
+                    .transition(.opacity)
             }
             headerLowerHalf
         }
@@ -146,6 +152,7 @@ struct SiteAndFacilitySelector: View {
                     query.removeAll()
                     textFieldIsFocused = false
                 }
+                .transition(.move(edge: .trailing))
             }
         }
     }
@@ -203,6 +210,7 @@ struct SiteAndFacilitySelector: View {
         }
         .buttonStyle(.bordered)
         .padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
+        .transition(.move(edge: .bottom))
     }
 }
 
