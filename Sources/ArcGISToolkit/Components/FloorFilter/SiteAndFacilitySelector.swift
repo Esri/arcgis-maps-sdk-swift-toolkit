@@ -197,7 +197,6 @@ struct SiteAndFacilitySelector: View {
                 userDidBackOutToSiteList = false
                 viewModel.setSite(site)
             }
-            .listRowBackground(site == viewModel.selection?.site ? Color.secondary.opacity(0.5) : Color.clear)
         }
         .listStyle(.plain)
         .onAppear {
