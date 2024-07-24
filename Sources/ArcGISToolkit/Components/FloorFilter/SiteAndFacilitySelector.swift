@@ -197,7 +197,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.listRowBackground(site == viewModel.selection?.site ? Color.secondary.opacity(0.5) : Color.clear)
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED***.onAppear {
