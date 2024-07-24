@@ -17,7 +17,7 @@ import Combine
 import SwiftUI
 
 /// Defines how many results to return; one, many, or automatic based on circumstance.
-public enum SearchResultMode {
+public enum SearchResultMode: Sendable {
     /// Search should always result in at most one result.
     case single
     /// Search should always try to return multiple results.

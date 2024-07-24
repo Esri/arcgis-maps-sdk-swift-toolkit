@@ -52,7 +52,7 @@ struct AttachmentImportMenu: View {
     @State private var photoPickerIsPresented = false
     
     /// The maximum attachment size limit.
-    let attachmentSizeLimit = Measurement(
+    let attachmentUploadSizeLimit = Measurement(
         value: 50,
         unit: UnitInformationStorage.megabytes
     )
@@ -128,7 +128,9 @@ struct AttachmentImportMenu: View {
         }
         .disabled(importState.importInProgress)
         .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+#if !targetEnvironment(macCatalyst)
             appSettingsButton
+#endif
             Button(String.cancel, role: .cancel) { }
         } message: {
             Text(cameraAccessAlertMessage)
@@ -146,7 +148,7 @@ struct AttachmentImportMenu: View {
                 value: Double(newAttachmentImportData.data.count),
                 unit: UnitInformationStorage.bytes
             )
-            guard attachmentSize <= attachmentSizeLimit else {
+            guard attachmentSize <= attachmentUploadSizeLimit else {
                 importState = .errored(.sizeLimitExceeded)
                 return
             }
@@ -199,11 +201,13 @@ struct AttachmentImportMenu: View {
             AttachmentCameraController(
                 importState: $importState
             )
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
             .onCameraCaptureModeChanged { captureMode in
                 if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
                     microphoneAccessAlertIsVisible = true
                 }
             }
+#endif
             .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
                 appSettingsButton
                 Button(role: .cancel) { } label: {
@@ -340,7 +344,7 @@ private extension AttachmentImportMenu {
     /// An error message indicating the selected attachment exceeds the megabyte limit.
     var sizeLimitExceededImportFailureAlertMessage: String {
         .init(
-            localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
+            localized: "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )

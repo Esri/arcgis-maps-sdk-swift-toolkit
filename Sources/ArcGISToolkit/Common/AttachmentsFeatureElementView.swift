@@ -195,7 +195,7 @@ struct AttachmentsFeatureElementView: View {
            let attachment = attachmentModel.attachment as? FormAttachment {
             element.delete(attachment)
             guard case .initialized(var models) = attachmentModelsState else { return }
-            models.removeAll { $0 == attachmentModel }
+            models.removeAll { $0 === attachmentModel }
             withAnimation { attachmentModelsState = .initialized(models) }
             formViewModel.evaluateExpressions()
         }

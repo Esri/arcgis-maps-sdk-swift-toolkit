@@ -15,7 +15,7 @@
 import SwiftUI
 
 /// Customizes scalebar appearance and behavior.
-public struct ScalebarSettings {
+public struct ScalebarSettings: Sendable {
     /// Determines if the scalebar should automatically hide/show itself.
     var autoHide: Bool
     
