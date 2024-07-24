@@ -16,7 +16,7 @@
 import Foundation
 
 ***REMOVED***/ Indicates how to display the attachments.
-public enum AttachmentsFeatureElementDisplayType {
+public enum AttachmentsFeatureElementDisplayType: Sendable {
 ***REMOVED******REMOVED***/ Show attachments as links.
 ***REMOVED***case list
 ***REMOVED******REMOVED***/ Attachments expand to the width of the view.

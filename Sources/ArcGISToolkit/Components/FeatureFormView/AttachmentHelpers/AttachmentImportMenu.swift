@@ -52,7 +52,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment size limit.
-***REMOVED***let attachmentSizeLimit = Measurement(
+***REMOVED***let attachmentUploadSizeLimit = Measurement(
 ***REMOVED******REMOVED***value: 50,
 ***REMOVED******REMOVED***unit: UnitInformationStorage.megabytes
 ***REMOVED***)
@@ -128,7 +128,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
 ***REMOVED******REMOVED***.alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED***appSettingsButton
+#endif
 ***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) { ***REMOVED***
 ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(cameraAccessAlertMessage)
@@ -146,7 +148,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***value: Double(newAttachmentImportData.data.count),
 ***REMOVED******REMOVED******REMOVED******REMOVED***unit: UnitInformationStorage.bytes
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***guard attachmentSize <= attachmentSizeLimit else {
+***REMOVED******REMOVED******REMOVED***guard attachmentSize <= attachmentUploadSizeLimit else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.sizeLimitExceeded)
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
@@ -199,11 +201,13 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
 ***REMOVED******REMOVED******REMOVED***)
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
 ***REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***microphoneAccessAlertIsVisible = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED***.alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***appSettingsButton
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) { ***REMOVED*** label: {
@@ -340,7 +344,7 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***/ An error message indicating the selected attachment exceeds the megabyte limit.
 ***REMOVED***var sizeLimitExceededImportFailureAlertMessage: String {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
+***REMOVED******REMOVED******REMOVED***localized: "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message indicating the selected attachment exceeds the megabyte limit."
 ***REMOVED******REMOVED***)

@@ -60,8 +60,8 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 ***REMOVED***) {
 ***REMOVED******REMOVED***parent.importState = .importing
 ***REMOVED******REMOVED***if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-***REMOVED******REMOVED******REMOVED***if let pngData = image.pngData() {
-***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(contentType: .png, data: pngData))
+***REMOVED******REMOVED******REMOVED***if let jpegData = image.jpegData(compressionQuality: 0.9) {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(contentType: .jpeg, data: jpegData))
 ***REMOVED******REMOVED***
 ***REMOVED*** else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
 ***REMOVED******REMOVED******REMOVED***if let contentType = UTType(filenameExtension: videoURL.pathExtension),
@@ -77,6 +77,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 ***REMOVED***
 ***REMOVED***
 
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
 extension AttachmentCameraController {
 ***REMOVED******REMOVED***/ Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
 ***REMOVED******REMOVED***/ - Parameter action: The new camera capture mode.
@@ -85,6 +86,7 @@ extension AttachmentCameraController {
 ***REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
+#endif
 
 ***REMOVED***/ A wrapper around ``UIImagePickerController``.
 ***REMOVED***/
@@ -94,16 +96,12 @@ class AttachmentUIImagePickerController: UIImagePickerController {
 ***REMOVED***var cameraCaptureModeObserver: (any NSObjectProtocol)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An action to perform when the camera capture mode changes.
-***REMOVED***var action: ((UIImagePickerController.CameraCaptureMode) -> Void)?
+***REMOVED***var action: (@MainActor (UIImagePickerController.CameraCaptureMode) -> Void)?
 ***REMOVED***
 ***REMOVED***override func viewDidAppear(_ animated: Bool) {
-***REMOVED******REMOVED***cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
-***REMOVED******REMOVED******REMOVED***Task {
-#if compiler(>=6.0)
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.action?(self.cameraCaptureMode)
-#else
+***REMOVED******REMOVED***cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
+***REMOVED******REMOVED******REMOVED***Task { @MainActor in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.action?(self.cameraCaptureMode)
-#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

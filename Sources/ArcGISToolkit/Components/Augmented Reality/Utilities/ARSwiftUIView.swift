@@ -150,7 +150,7 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@objc dynamic var session: ARSession {
-***REMOVED******REMOVED***arView.session
+***REMOVED******REMOVED***MainActor.runUnsafely { arView.session ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -166,7 +166,7 @@ extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/   - screenPoint: The screen point to determine the real world transformation matrix from.
 ***REMOVED******REMOVED***/   - target: The type of surface the raycast can interact with.
 ***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-***REMOVED***func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
+***REMOVED***@MainActor func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
 ***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
 ***REMOVED******REMOVED***guard let query = arView.raycastQuery(
 ***REMOVED******REMOVED******REMOVED***from: screenPoint,

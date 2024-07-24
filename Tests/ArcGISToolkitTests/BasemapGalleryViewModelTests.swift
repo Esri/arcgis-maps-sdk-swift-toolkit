@@ -31,6 +31,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(

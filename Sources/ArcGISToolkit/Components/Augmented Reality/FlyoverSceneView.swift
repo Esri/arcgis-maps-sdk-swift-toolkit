@@ -17,6 +17,8 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality fly over experience.
+@MainActor
+@preconcurrency
 public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@StateObject private var session = ObservableARSession()

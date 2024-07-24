@@ -35,6 +35,12 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The maximum attachment download size limit.
+***REMOVED***private let attachmentDownloadSizeLimit = Measurement(
+***REMOVED******REMOVED***value: 50,
+***REMOVED******REMOVED***unit: UnitInformationStorage.megabytes
+***REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
 ***REMOVED***private let attachmentModels: [AttachmentModel]
 ***REMOVED***
@@ -79,29 +85,36 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***.cellBaseWidth(proposedCellSize.width)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Note: Contextual actions are disabled for empty attachments as deletion and rename
+***REMOVED******REMOVED***/ operations cannot be applied successfully to the ServiceGeodatabase or ServiceFeatureTable.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: The rename contextual action is disabled for attachments greater than the attachment download
+***REMOVED******REMOVED***/ size limit as rename operations trigger a download which currently has adverse memory implications.
 ***REMOVED***@MainActor
 ***REMOVED***func makeCarouselContent(for size: CGSize) -> some View {
 ***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, cellSize: size)
+***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, attachmentDownloadSizeLimit: attachmentDownloadSizeLimit, cellSize: size)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renamedAttachmentModel = attachmentModel
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = String(attachmentModel.name[..<separatorIndex])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Rename",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename an attachment."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "pencil")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renamedAttachmentModel = attachmentModel
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Rename",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename an attachment."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "pencil")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
@@ -143,7 +156,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: deletedAttachmentModel) {
+***REMOVED******REMOVED***.task(id: deletedAttachmentModel?.id) {
 ***REMOVED******REMOVED******REMOVED***guard let deletedAttachmentModel else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***onDelete?(deletedAttachmentModel)
 ***REMOVED******REMOVED******REMOVED***self.deletedAttachmentModel = nil
@@ -155,11 +168,17 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***/ The model representing the attachment to display.
 ***REMOVED******REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the download alert is presented.
-***REMOVED******REMOVED***@State private var downloadAlertIsPresented = false
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the empty download alert is presented.
+***REMOVED******REMOVED***@State private var emptyDownloadAlertIsPresented = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the maximum size download alert is presented.
+***REMOVED******REMOVED***@State private var maximumSizeDownloadExceededAlertIsPresented = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
 ***REMOVED******REMOVED***@State private var url: URL?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The maximum attachment download size limit.
+***REMOVED******REMOVED***let attachmentDownloadSizeLimit: Measurement<UnitInformationStorage>
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The size of the cell.
 ***REMOVED******REMOVED***let cellSize: CGSize
@@ -209,14 +228,17 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.measuredSize.value.isZero {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***downloadAlertIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyDownloadAlertIsPresented = true
+***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.measuredSize > attachmentDownloadSizeLimit {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumSizeDownloadExceededAlertIsPresented = true
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
-***REMOVED******REMOVED******REMOVED***.alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.alert(maximumSizeDownloadExceededErrorMessage, isPresented: $maximumSizeDownloadExceededAlertIsPresented) { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -248,5 +270,16 @@ struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 6)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension AttachmentPreview.AttachmentCell {
+***REMOVED******REMOVED***/ An error message explaining attachments larger than the provided maximum cannot be downloaded.
+***REMOVED***var maximumSizeDownloadExceededErrorMessage: Text {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Attachments larger than \(attachmentDownloadSizeLimit, format: .byteCount(style: .file)) cannot be downloaded.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining attachments larger than the provided maximum cannot be downloaded."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

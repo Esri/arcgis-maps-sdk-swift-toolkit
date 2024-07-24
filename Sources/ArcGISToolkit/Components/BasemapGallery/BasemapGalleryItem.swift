@@ -60,7 +60,7 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The basemap represented by `BasemapGalleryItem`.
-***REMOVED***public let basemap: Basemap
+***REMOVED***public nonisolated let basemap: Basemap
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the `basemap`.
 ***REMOVED***@Published public private(set) var name: String?
@@ -123,11 +123,8 @@ private extension BasemapGalleryItem {
 extension BasemapGalleryItem: Identifiable {***REMOVED***
 
 extension BasemapGalleryItem: Equatable {
-***REMOVED***public static func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
-***REMOVED******REMOVED***lhs.basemap === rhs.basemap &&
-***REMOVED******REMOVED***lhs.name == rhs.name &&
-***REMOVED******REMOVED***lhs.description == rhs.description &&
-***REMOVED******REMOVED***lhs.thumbnail === rhs.thumbnail
+***REMOVED***public static nonisolated func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
+***REMOVED******REMOVED***return lhs.basemap === rhs.basemap
 ***REMOVED***
 ***REMOVED***
 
