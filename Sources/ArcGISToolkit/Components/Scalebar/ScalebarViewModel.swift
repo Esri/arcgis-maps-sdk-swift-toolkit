@@ -113,13 +113,6 @@ final class ScalebarViewModel: ObservableObject {
     /// The units to be displayed in the scalebar.
     private var displayUnit: LinearUnit? = nil
     
-    /// A Boolean value indicating whether an initial scale has been calculated.
-    ///
-    /// The scale requires 3 values (spatial reference, units per point and a viewpoint) to be
-    /// calculated. As these values are initially received in a non-deterministic order, this allows
-    /// a calculation to be attempted upon initial receipt of each of the 3 values.
-    private var initialScaleWasCalculated = false
-    
     /// The length of the line to display in map units.
     private var lineMapLength: Double = .zero
     
@@ -219,21 +212,18 @@ final class ScalebarViewModel: ObservableObject {
     /// - Parameter spatialReference: The spatial reference to calculate the scale with.
     func update(_ spatialReference: SpatialReference?) {
         self.spatialReference = spatialReference
-        if !initialScaleWasCalculated { updateScale() }
     }
     
     /// Updates the stored units per point value for use in the next scale calculation.
     /// - Parameter unitsPerPoint: The units per point to calculate the scale with.
     func update(_ unitsPerPoint: Double?) {
         self.unitsPerPoint = unitsPerPoint
-        if !initialScaleWasCalculated { updateScale() }
     }
     
     /// Updates the stored units viewpoint value for use in the next scale calculation.
     /// - Parameter viewpoint: The viewpoint to calculate the scale with.
     func update(_ viewpoint: Viewpoint?) {
         self.viewpoint = viewpoint
-        if !initialScaleWasCalculated { updateScale() }
     }
     
     /// Update the information necessary to render a scalebar based off the stored viewpoint, units
@@ -316,8 +306,6 @@ final class ScalebarViewModel: ObservableObject {
         self.displayLength = displayLength
         self.displayUnit = displayUnit
         self.lineMapLength = lineMapLength
-        
-        initialScaleWasCalculated = true
         
         updateLabels()
     }
