@@ -113,13 +113,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The units to be displayed in the scalebar.
 ***REMOVED***private var displayUnit: LinearUnit? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether an initial scale has been calculated.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ The scale requires 3 values (spatial reference, units per point and a viewpoint) to be
-***REMOVED******REMOVED***/ calculated. As these values are initially received in a non-deterministic order, this allows
-***REMOVED******REMOVED***/ a calculation to be attempted upon initial receipt of each of the 3 values.
-***REMOVED***private var initialScaleWasCalculated = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The length of the line to display in map units.
 ***REMOVED***private var lineMapLength: Double = .zero
 ***REMOVED***
@@ -219,21 +212,18 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter spatialReference: The spatial reference to calculate the scale with.
 ***REMOVED***func update(_ spatialReference: SpatialReference?) {
 ***REMOVED******REMOVED***self.spatialReference = spatialReference
-***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the stored units per point value for use in the next scale calculation.
 ***REMOVED******REMOVED***/ - Parameter unitsPerPoint: The units per point to calculate the scale with.
 ***REMOVED***func update(_ unitsPerPoint: Double?) {
 ***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
-***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the stored units viewpoint value for use in the next scale calculation.
 ***REMOVED******REMOVED***/ - Parameter viewpoint: The viewpoint to calculate the scale with.
 ***REMOVED***func update(_ viewpoint: Viewpoint?) {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Update the information necessary to render a scalebar based off the stored viewpoint, units
@@ -316,8 +306,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.displayLength = displayLength
 ***REMOVED******REMOVED***self.displayUnit = displayUnit
 ***REMOVED******REMOVED***self.lineMapLength = lineMapLength
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***initialScaleWasCalculated = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateLabels()
 ***REMOVED***
