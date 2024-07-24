@@ -56,7 +56,7 @@ import ArcGIS
 @preconcurrency
 public struct BasemapGallery: View {
     /// The view style of the gallery.
-    public enum Style {
+    public enum Style: Sendable {
         /// The `BasemapGallery` will display as a grid when there is an appropriate
         /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
         /// When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.

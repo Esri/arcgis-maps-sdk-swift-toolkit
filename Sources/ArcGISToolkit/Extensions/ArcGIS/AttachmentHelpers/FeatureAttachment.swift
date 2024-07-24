@@ -16,7 +16,7 @@ import ArcGIS
 import UIKit
 
 /// The type of an attachment in a FeatureAttachment.
-public enum FeatureAttachmentKind {
+public enum FeatureAttachmentKind: Sendable {
     /// An attachment of another type.
     case other
     /// An image.

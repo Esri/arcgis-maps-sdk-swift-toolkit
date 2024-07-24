@@ -18,7 +18,7 @@ internal import os
 
 extension Logger {
     /// A logger for the common `AttachmentsFeatureElementView` view.
-    static let attachmentsFeatureElementView: Logger = {
+    static var attachmentsFeatureElementView: Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "AttachmentsFeatureElementView")
-    }()
+    }
 }

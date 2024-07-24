@@ -60,8 +60,8 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     ) {
         parent.importState = .importing
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if let pngData = image.pngData() {
-                parent.importState = .finalizing(AttachmentImportData(contentType: .png, data: pngData))
+            if let jpegData = image.jpegData(compressionQuality: 0.9) {
+                parent.importState = .finalizing(AttachmentImportData(contentType: .jpeg, data: jpegData))
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
             if let contentType = UTType(filenameExtension: videoURL.pathExtension),
@@ -77,6 +77,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     }
 }
 
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
 extension AttachmentCameraController {
     /// Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
     /// - Parameter action: The new camera capture mode.
@@ -85,6 +86,7 @@ extension AttachmentCameraController {
         return self
     }
 }
+#endif
 
 /// A wrapper around ``UIImagePickerController``.
 ///
@@ -94,16 +96,12 @@ class AttachmentUIImagePickerController: UIImagePickerController {
     var cameraCaptureModeObserver: (any NSObjectProtocol)?
     
     /// An action to perform when the camera capture mode changes.
-    var action: ((UIImagePickerController.CameraCaptureMode) -> Void)?
+    var action: (@MainActor (UIImagePickerController.CameraCaptureMode) -> Void)?
     
     override func viewDidAppear(_ animated: Bool) {
-        cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { _ in
-            Task {
-#if compiler(>=6.0)
-                await self.action?(self.cameraCaptureMode)
-#else
+        cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
+            Task { @MainActor in
                 self.action?(self.cameraCaptureMode)
-#endif
             }
         }
     }
