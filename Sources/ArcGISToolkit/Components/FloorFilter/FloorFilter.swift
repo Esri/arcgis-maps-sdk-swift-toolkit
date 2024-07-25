@@ -122,6 +122,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Floor Filter button")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(viewModel.isLoading ? .zero : 1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
@@ -175,13 +176,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ The layering of the `SiteAndFacilitySelector` over a `RoundedRectangle` is needed to
-***REMOVED******REMOVED***/ produce a rounded corners effect. We can not simply use `.esriBorder()` here because
-***REMOVED******REMOVED***/ applying the `cornerRadius()` modifier on `SiteAndFacilitySelector`'s underlying
-***REMOVED******REMOVED***/ `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
-***REMOVED******REMOVED***/ `NavigationStack` and has been reported to Apple as FB10034457.
+***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector`.
 ***REMOVED***@ViewBuilder private var siteAndFacilitySelector: some View {
 ***REMOVED******REMOVED***if horizontalSizeClass == .compact {
 ***REMOVED******REMOVED******REMOVED***Color.clear
