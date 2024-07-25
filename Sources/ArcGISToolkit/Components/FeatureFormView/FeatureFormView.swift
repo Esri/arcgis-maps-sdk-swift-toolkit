@@ -43,6 +43,7 @@
 ***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map.
 ***REMOVED***/ - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 ***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+***REMOVED***/ - Add, delete, or rename feature attachments.
 ***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
