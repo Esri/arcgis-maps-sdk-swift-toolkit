@@ -23,7 +23,7 @@
 ***REMOVED***/ Forms are currently only supported in maps. The form definition is stored
 ***REMOVED***/ in the web map itself and contains a title, description, and a list of "form elements".
 ***REMOVED***/
-***REMOVED***/ `FeatureFormView` will support the display of form elements created by
+***REMOVED***/ `FeatureFormView` supports the display of form elements created by
 ***REMOVED***/ the Map Viewer or Field Maps Designer, including:
 ***REMOVED***/
 ***REMOVED***/ - Field Element - used to edit a single field of a feature with a specific "input type".
