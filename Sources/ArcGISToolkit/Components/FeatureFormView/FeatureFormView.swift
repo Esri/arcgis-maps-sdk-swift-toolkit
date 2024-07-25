@@ -18,10 +18,12 @@
 ***REMOVED***/ The `FeatureFormView` component enables users to edit field values of a feature using
 ***REMOVED***/ pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ***REMOVED***/
+***REMOVED***/ ![An image of the FeatureFormView component](FeatureFormView)
+***REMOVED***/
 ***REMOVED***/ Forms are currently only supported in maps. The form definition is stored
 ***REMOVED***/ in the web map itself and contains a title, description, and a list of "form elements".
 ***REMOVED***/
-***REMOVED***/ `FeatureFormView` will support the display of form elements created by
+***REMOVED***/ `FeatureFormView` supports the display of form elements created by
 ***REMOVED***/ the Map Viewer or Field Maps Designer, including:
 ***REMOVED***/
 ***REMOVED***/ - Field Element - used to edit a single field of a feature with a specific "input type".
@@ -43,6 +45,7 @@
 ***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map.
 ***REMOVED***/ - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 ***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+***REMOVED***/ - Add, delete, or rename feature attachments.
 ***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
