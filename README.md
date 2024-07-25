@@ -29,9 +29,9 @@ To use Toolkit in your project:
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
-* Xcode 15.0 (or newer)
-
-The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *16.0*, meaning that it can run on devices with *iOS 16.0* or newer.
+* Xcode 15.2 (or newer)
+* For Mac, macOS 13 or higher
+* For iOS/iPadOS, iOS/iPadOS 16 or higher
 
 ## Instructions
 
