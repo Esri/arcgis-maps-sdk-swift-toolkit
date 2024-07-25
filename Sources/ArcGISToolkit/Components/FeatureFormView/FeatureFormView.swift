@@ -43,6 +43,7 @@ import SwiftUI
 /// - Display a form editing view for a feature based on the feature form definition defined in a web map.
 /// - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 /// - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+/// - Add, delete, or rename feature attachments.
 /// - Fully supports dark mode, as do all Toolkit components.
 ///
 /// **Behavior**
