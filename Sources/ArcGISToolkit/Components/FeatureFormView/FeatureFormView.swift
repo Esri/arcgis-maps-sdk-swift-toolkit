@@ -18,6 +18,8 @@ import SwiftUI
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
+/// ![An image of the FeatureFormView component](FeatureFormView)
+///
 /// Forms are currently only supported in maps. The form definition is stored
 /// in the web map itself and contains a title, description, and a list of "form elements".
 ///
