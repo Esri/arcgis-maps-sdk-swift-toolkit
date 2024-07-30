@@ -235,13 +235,13 @@ private extension Text {
 ***REMOVED***
 ***REMOVED***
 
-extension CodedValue: Equatable {
+extension CodedValue: @retroactive Equatable {
 ***REMOVED***public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
 ***REMOVED******REMOVED***lhs.name == rhs.name
 ***REMOVED***
 ***REMOVED***
 
-extension CodedValue: Hashable {
+extension CodedValue: @retroactive Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED***
