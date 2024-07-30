@@ -116,7 +116,7 @@ import UniformTypeIdentifiers
     }
 }
 
-extension CertificateImportError: LocalizedError {
+extension ArcGIS.CertificateImportError: Foundation.LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidData:

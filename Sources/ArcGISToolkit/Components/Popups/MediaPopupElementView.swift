@@ -102,7 +102,7 @@ struct MediaPopupElementView: View {
     }
 }
 
-extension PopupMedia: Identifiable {}
+extension ArcGIS.PopupMedia: Swift.Identifiable {}
 
 private extension MediaPopupElement {
     /// Provides a default title to display if `title` is empty.
