@@ -116,7 +116,7 @@ import UniformTypeIdentifiers
     }
 }
 
-extension CertificateImportError: LocalizedError {
+extension CertificateImportError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidData:
