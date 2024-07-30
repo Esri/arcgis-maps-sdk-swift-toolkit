@@ -15,4 +15,4 @@
 ***REMOVED***
 ***REMOVED***
 
-extension PopupElement: Identifiable {***REMOVED***
+extension ArcGIS.PopupElement: Swift.Identifiable {***REMOVED***
