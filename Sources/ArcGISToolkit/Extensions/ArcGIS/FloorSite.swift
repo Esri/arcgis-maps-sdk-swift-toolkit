@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
-extension FloorSite: Equatable {
+extension FloorSite: @retroactive Equatable {
     public static func == (lhs: FloorSite, rhs: FloorSite) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension FloorSite: Hashable {
+extension FloorSite: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
