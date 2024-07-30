@@ -15,13 +15,13 @@
 ***REMOVED***
 ***REMOVED***
 
-extension FloorSite: Equatable {
+extension FloorSite: @retroactive Equatable {
 ***REMOVED***public static func == (lhs: FloorSite, rhs: FloorSite) -> Bool {
 ***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
 
-extension FloorSite: Hashable {
+extension FloorSite: @retroactive Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***

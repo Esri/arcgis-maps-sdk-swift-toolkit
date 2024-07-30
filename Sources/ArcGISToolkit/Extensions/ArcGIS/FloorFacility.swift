@@ -22,13 +22,13 @@ extension FloorFacility {
 ***REMOVED***
 ***REMOVED***
 
-extension FloorFacility: Equatable {
+extension FloorFacility: @retroactive Equatable {
 ***REMOVED***public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
 ***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
 
-extension FloorFacility: Hashable {
+extension FloorFacility: @retroactive Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***

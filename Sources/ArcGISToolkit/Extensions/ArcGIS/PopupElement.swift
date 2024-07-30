@@ -15,4 +15,4 @@
 ***REMOVED***
 ***REMOVED***
 
-extension PopupElement: Identifiable {***REMOVED***
+extension PopupElement: @retroactive Identifiable {***REMOVED***
