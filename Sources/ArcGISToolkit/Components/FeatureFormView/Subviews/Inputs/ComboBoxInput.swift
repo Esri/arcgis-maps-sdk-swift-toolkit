@@ -235,13 +235,13 @@ private extension Text {
     }
 }
 
-extension CodedValue: Equatable {
+extension ArcGIS.CodedValue: Swift.Equatable {
     public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
         lhs.name == rhs.name
     }
 }
 
-extension CodedValue: Hashable {
+extension ArcGIS.CodedValue: Swift.Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
