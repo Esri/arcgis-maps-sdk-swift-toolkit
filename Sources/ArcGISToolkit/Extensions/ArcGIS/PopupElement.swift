@@ -15,4 +15,4 @@
 import ArcGIS
 import SwiftUI
 
-extension PopupElement: @retroactive Identifiable {}
+extension ArcGIS.PopupElement: Swift.Identifiable {}

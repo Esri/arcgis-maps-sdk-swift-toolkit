@@ -22,13 +22,13 @@ extension FloorFacility {
     }
 }
 
-extension FloorFacility: @retroactive Equatable {
+extension ArcGIS.FloorFacility: Swift.Equatable {
     public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension FloorFacility: @retroactive Hashable {
+extension ArcGIS.FloorFacility: Swift.Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

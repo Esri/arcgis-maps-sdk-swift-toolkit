@@ -15,13 +15,13 @@
 import ArcGIS
 import SwiftUI
 
-extension FloorSite: @retroactive Equatable {
+extension ArcGIS.FloorSite: Swift.Equatable {
     public static func == (lhs: FloorSite, rhs: FloorSite) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension FloorSite: @retroactive Hashable {
+extension ArcGIS.FloorSite: Swift.Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
