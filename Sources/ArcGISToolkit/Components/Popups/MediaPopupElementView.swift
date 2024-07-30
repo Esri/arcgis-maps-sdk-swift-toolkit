@@ -102,7 +102,7 @@ struct MediaPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension PopupMedia: Identifiable {***REMOVED***
+extension PopupMedia: @retroactive Identifiable {***REMOVED***
 
 private extension MediaPopupElement {
 ***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
