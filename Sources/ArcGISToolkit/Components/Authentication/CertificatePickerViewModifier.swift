@@ -116,7 +116,7 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 
-extension CertificateImportError: LocalizedError {
+extension CertificateImportError: @retroactive LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .invalidData:
