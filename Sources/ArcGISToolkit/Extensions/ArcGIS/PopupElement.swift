@@ -15,4 +15,4 @@
 ***REMOVED***
 ***REMOVED***
 
-extension PopupElement: @retroactive Identifiable {***REMOVED***
+extension ArcGIS.PopupElement: Swift.Identifiable {***REMOVED***

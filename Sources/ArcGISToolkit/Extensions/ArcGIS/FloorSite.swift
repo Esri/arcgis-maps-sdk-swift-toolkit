@@ -15,13 +15,13 @@
 ***REMOVED***
 ***REMOVED***
 
-extension FloorSite: @retroactive Equatable {
+extension ArcGIS.FloorSite: Swift.Equatable {
 ***REMOVED***public static func == (lhs: FloorSite, rhs: FloorSite) -> Bool {
 ***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
 
-extension FloorSite: @retroactive Hashable {
+extension ArcGIS.FloorSite: Swift.Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***
