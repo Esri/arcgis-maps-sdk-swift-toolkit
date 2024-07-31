@@ -146,7 +146,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Allows the user to switch between the trace creation and viewing tabs.
 ***REMOVED***private var activityPicker: some View {
 ***REMOVED******REMOVED***Picker(
-***REMOVED******REMOVED******REMOVED***modePickerTitle,
+***REMOVED******REMOVED******REMOVED***String.modePickerTitle,
 ***REMOVED******REMOVED******REMOVED***selection: Binding<UserActivity>(
 ***REMOVED******REMOVED******REMOVED******REMOVED***get: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch currentActivity {
@@ -160,8 +160,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***Text(newTraceOptionLabel).tag(UserActivity.creatingTrace(nil))
-***REMOVED******REMOVED******REMOVED***Text(resultsOptionLabel).tag(UserActivity.viewingTraces(nil))
+***REMOVED******REMOVED******REMOVED***Text(String.newTraceOptionLabel).tag(UserActivity.creatingTrace(nil))
+***REMOVED******REMOVED******REMOVED***Text(String.resultsOptionLabel).tag(UserActivity.viewingTraces(nil))
 ***REMOVED***
 ***REMOVED******REMOVED***.pickerStyle(.segmented)
 ***REMOVED******REMOVED***.padding()
@@ -169,7 +169,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to cancel out of selecting a new starting point.
 ***REMOVED***private var cancelAddStartingPoints: some View {
-***REMOVED******REMOVED***Button(cancelStartingPointSelection, role: .destructive) {
+***REMOVED******REMOVED***Button(String.cancelStartingPointSelection, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED***
@@ -180,7 +180,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
 ***REMOVED******REMOVED***if let assetGroupName = selectedAssetGroupName,
 ***REMOVED******REMOVED***   let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
-***REMOVED******REMOVED******REMOVED***makeBackButton(title: featureResultsTitle) {
+***REMOVED******REMOVED******REMOVED***makeBackButton(title: String.featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(title: assetGroupName)
@@ -229,7 +229,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays the list of available named trace configurations.
 ***REMOVED***@ViewBuilder private var configurationsList: some View {
 ***REMOVED******REMOVED***if viewModel.configurations.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(noConfigurationsAvailable)
+***REMOVED******REMOVED******REMOVED***Text(String.noConfigurationsAvailable)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations.sorted { $0.name < $1.name ***REMOVED***, id: \.name) { configuration in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -260,7 +260,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***@ViewBuilder private var newTraceTab: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***if viewModel.networks.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(networkSectionLabel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.networkSectionLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceCreationActivity: .viewingNetworkOptions)
@@ -270,12 +270,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networksList
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.network?.name ?? noneSelected)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.network?.name ?? String.noneSelected)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section(traceConfigurationSectionLabel) {
+***REMOVED******REMOVED******REMOVED***Section(String.traceConfigurationSectionLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceCreationActivity: .viewingTraceConfigurations)
@@ -285,12 +285,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.pendingTrace.configuration?.name ?? noneSelected)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.pendingTrace.configuration?.name ?? String.noneSelected)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section(startingPointsTitle) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(addNewButtonLabel) {
+***REMOVED******REMOVED******REMOVED***Section(String.startingPointsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
 ***REMOVED******REMOVED******REMOVED***
@@ -322,24 +322,24 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(nameLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.nameLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(nameLabel, text: $viewModel.pendingTrace.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.trailing)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(colorLabel, selection: $viewModel.pendingTrace.color)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(zoomToResult, isOn: $shouldZoomOnTraceCompletion)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(advancedOptionsHeaderLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.advancedOptionsHeaderLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***Button(traceButtonLabel) {
+***REMOVED******REMOVED***Button(String.traceButtonLabel) {
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if await viewModel.trace() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(nil)
@@ -385,7 +385,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
 ***REMOVED******REMOVED******REMOVED***Menu(selectedTrace.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let resultExtent = selectedTrace.resultExtent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(zoomToButtonLabel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.zoomToButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
@@ -394,7 +394,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(deleteButtonLabel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.deleteButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -406,7 +406,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***if activeDetent != .summary {
 ***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(featureResultsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceViewingActivity: .viewingFeatureResults)
@@ -433,7 +433,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(functionResultsSectionTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.functionResultsSectionTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceViewingActivity: .viewingFunctionResults)
@@ -477,7 +477,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***colorLabel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.colorLabel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.color ?? Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: { newValue in
@@ -488,37 +488,37 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(advancedOptionsHeaderLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.advancedOptionsHeaderLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.vertical], 2)
-***REMOVED******REMOVED******REMOVED***Button(clearAllResults, role: .destructive) {
+***REMOVED******REMOVED******REMOVED***Button(String.clearAllResults, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isShowingClearAllResultsConfirmationDialog = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.confirmationDialog(
-***REMOVED******REMOVED******REMOVED******REMOVED***clearAllResults,
+***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResults,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isShowingClearAllResultsConfirmationDialog
 ***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(clearAllResults, role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.clearAllResults, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(clearAllResultsMessage)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.clearAllResultsMessage)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays information about a chosen starting point.
 ***REMOVED***@ViewBuilder private var startingPointDetail: some View {
-***REMOVED******REMOVED***makeBackButton(title: startingPointsTitle) {
+***REMOVED******REMOVED***makeBackButton(title: String.startingPointsTitle) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED***
-***REMOVED******REMOVED***Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? unnamedAssetType) {
-***REMOVED******REMOVED******REMOVED***Button(zoomToButtonLabel) {
+***REMOVED******REMOVED***Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? String.unnamedAssetType) {
+***REMOVED******REMOVED******REMOVED***Button(String.zoomToButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: extent)
@@ -529,7 +529,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(deleteButtonLabel, role: .destructive) {
+***REMOVED******REMOVED******REMOVED***Button(String.deleteButtonLabel, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let startingPoint = selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
@@ -540,7 +540,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***.catalystPadding()
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(fractionAlongEdgeSectionTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.fractionAlongEdgeSectionTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Slider(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.startingPoints.first {
@@ -561,7 +561,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!(selectedStartingPoint?.utilityElement?.assetType.terminalConfiguration?.terminals.isEmpty ?? true) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalConfigurationPickerTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.terminalConfigurationPickerTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedStartingPoint!.utilityElement!.terminal!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: { newValue in
@@ -577,7 +577,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section(attributesSectionTitle) {
+***REMOVED******REMOVED******REMOVED***Section(String.attributesSectionTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key***REMOVED***)), id: \.key) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack{
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.key)
@@ -806,8 +806,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 
-extension UtilityNetworkTrace {
-***REMOVED***var addNewButtonLabel: String {
+extension String {
+***REMOVED***static var addNewButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Add new",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -815,7 +815,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var advancedOptionsHeaderLabel: String {
+***REMOVED***static var advancedOptionsHeaderLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Advanced Options",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -823,7 +823,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var attributesSectionTitle: String {
+***REMOVED***static var attributesSectionTitle: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Attributes",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -831,7 +831,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var cancelStartingPointSelection: String {
+***REMOVED***static var cancelStartingPointSelection: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Cancel starting point selection",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -839,7 +839,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var clearAllResults: String {
+***REMOVED***static var clearAllResults: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Clear all results",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -847,7 +847,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var clearAllResultsMessage: String {
+***REMOVED***static var clearAllResultsMessage: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "All the trace inputs and results will be lost.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -855,7 +855,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var colorLabel: String {
+***REMOVED***static var colorLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Color",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -863,7 +863,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var deleteButtonLabel: String {
+***REMOVED***static var deleteButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Delete",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -872,7 +872,7 @@ extension UtilityNetworkTrace {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the feature results section
-***REMOVED***var featureResultsTitle: String {
+***REMOVED***static var featureResultsTitle: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Feature Results",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -883,7 +883,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var fractionAlongEdgeSectionTitle: String {
+***REMOVED***static var fractionAlongEdgeSectionTitle: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Fraction Along Edge",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -891,7 +891,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var functionResultsSectionTitle: String {
+***REMOVED***static var functionResultsSectionTitle: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Function Results",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -901,7 +901,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED***)***REMOVED***
 ***REMOVED***
-***REMOVED***var modePickerTitle: String {
+***REMOVED***static var modePickerTitle: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Mode",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -909,7 +909,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var nameLabel: String {
+***REMOVED***static var nameLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Name",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -917,7 +917,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var networkSectionLabel: String {
+***REMOVED***static var networkSectionLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Network",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -925,7 +925,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var newTraceOptionLabel: String {
+***REMOVED***static var newTraceOptionLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "New trace",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -933,7 +933,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var noConfigurationsAvailable: String {
+***REMOVED***static var noConfigurationsAvailable: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "No configurations available.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -941,7 +941,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var noneSelected: String {
+***REMOVED***static var noneSelected: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "None selected",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -949,7 +949,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var resultsOptionLabel: String {
+***REMOVED***static var resultsOptionLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Results",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -958,7 +958,7 @@ extension UtilityNetworkTrace {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the starting points section
-***REMOVED***var startingPointsTitle: String {
+***REMOVED***static var startingPointsTitle: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Starting Points",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -969,7 +969,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var terminalConfigurationPickerTitle: String {
+***REMOVED***static var terminalConfigurationPickerTitle: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Terminal Configuration",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -977,7 +977,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var traceButtonLabel: String {
+***REMOVED***static var traceButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Trace",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -985,7 +985,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var traceConfigurationSectionLabel: String {
+***REMOVED***static var traceConfigurationSectionLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Trace Configuration",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -993,7 +993,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var unnamedAssetType: String {
+***REMOVED***static var unnamedAssetType: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Unnamed Asset Type",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -1001,7 +1001,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var zoomToButtonLabel: String {
+***REMOVED***static var zoomToButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Zoom To",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -1009,7 +1009,7 @@ extension UtilityNetworkTrace {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var zoomToResult: String {
+***REMOVED***static var zoomToResult: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Zoom to result",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
