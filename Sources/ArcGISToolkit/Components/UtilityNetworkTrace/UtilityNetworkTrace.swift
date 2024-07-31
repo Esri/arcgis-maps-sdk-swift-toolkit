@@ -146,7 +146,7 @@ public struct UtilityNetworkTrace: View {
     /// Allows the user to switch between the trace creation and viewing tabs.
     private var activityPicker: some View {
         Picker(
-            String.modePickerTitle,
+            modePickerTitle,
             selection: Binding<UserActivity>(
                 get: {
                     switch currentActivity {
@@ -160,8 +160,8 @@ public struct UtilityNetworkTrace: View {
                 }
             )
         ) {
-            Text(String.newTraceOptionLabel).tag(UserActivity.creatingTrace(nil))
-            Text(String.resultsOptionLabel).tag(UserActivity.viewingTraces(nil))
+            Text(newTraceOptionLabel).tag(UserActivity.creatingTrace(nil))
+            Text(resultsOptionLabel).tag(UserActivity.viewingTraces(nil))
         }
         .pickerStyle(.segmented)
         .padding()
@@ -169,7 +169,7 @@ public struct UtilityNetworkTrace: View {
     
     /// Allows the user to cancel out of selecting a new starting point.
     private var cancelAddStartingPoints: some View {
-        Button(String.cancelStartingPointSelection, role: .destructive) {
+        Button(cancelStartingPointSelection, role: .destructive) {
             currentActivity = .creatingTrace(nil)
             activeDetent = .half
         }
@@ -180,7 +180,7 @@ public struct UtilityNetworkTrace: View {
     @ViewBuilder private var assetGroupDetail: some View {
         if let assetGroupName = selectedAssetGroupName,
            let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
-            makeBackButton(title: .featureResultsTitle) {
+            makeBackButton(title: featureResultsTitle) {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
             makeDetailSectionHeader(title: assetGroupName)
@@ -229,7 +229,7 @@ public struct UtilityNetworkTrace: View {
     /// Displays the list of available named trace configurations.
     @ViewBuilder private var configurationsList: some View {
         if viewModel.configurations.isEmpty {
-            Text(String.noConfigurationsAvailable)
+            Text(noConfigurationsAvailable)
         } else {
             ForEach(viewModel.configurations.sorted { $0.name < $1.name }, id: \.name) { configuration in
                 Button {
@@ -260,7 +260,7 @@ public struct UtilityNetworkTrace: View {
     @ViewBuilder private var newTraceTab: some View {
         List {
             if viewModel.networks.count > 1 {
-                Section(String.networkSectionLabel) {
+                Section(networkSectionLabel) {
                     DisclosureGroup(
                         isExpanded: Binding {
                             isFocused(traceCreationActivity: .viewingNetworkOptions)
@@ -270,12 +270,12 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         networksList
                     } label: {
-                        Text(viewModel.network?.name ?? .noneSelected)
+                        Text(viewModel.network?.name ?? noneSelected)
                             .catalystPadding(4)
                     }
                 }
             }
-            Section(String.traceConfigurationSectionLabel) {
+            Section(traceConfigurationSectionLabel) {
                 DisclosureGroup(
                     isExpanded: Binding {
                         isFocused(traceCreationActivity: .viewingTraceConfigurations)
@@ -285,12 +285,12 @@ public struct UtilityNetworkTrace: View {
                 ) {
                     configurationsList
                 } label: {
-                    Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
+                    Text(viewModel.pendingTrace.configuration?.name ?? noneSelected)
                         .catalystPadding(4)
                 }
             }
-            Section(String.startingPointsTitle) {
-                Button(String.addNewButtonLabel) {
+            Section(startingPointsTitle) {
+                Button(addNewButtonLabel) {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                     activeDetent = .summary
                 }
@@ -322,24 +322,24 @@ public struct UtilityNetworkTrace: View {
                     }
                 ) {
                     HStack {
-                        Text(String.nameLabel)
+                        Text(nameLabel)
                         Spacer()
-                        TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
+                        TextField(nameLabel, text: $viewModel.pendingTrace.name)
                             .onSubmit {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(.blue)
                     }
-                    ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
-                    Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
+                    ColorPicker(colorLabel, selection: $viewModel.pendingTrace.color)
+                    Toggle(zoomToResult, isOn: $shouldZoomOnTraceCompletion)
                 } label: {
-                    Text(String.advancedOptionsHeaderLabel)
+                    Text(advancedOptionsHeaderLabel)
                         .catalystPadding(4)
                 }
             }
         }
-        Button(String.traceButtonLabel) {
+        Button(traceButtonLabel) {
             Task {
                 if await viewModel.trace() {
                     currentActivity = .viewingTraces(nil)
@@ -385,7 +385,7 @@ public struct UtilityNetworkTrace: View {
         if let selectedTrace = viewModel.selectedTrace {
             Menu(selectedTrace.name) {
                 if let resultExtent = selectedTrace.resultExtent {
-                    Button(String.zoomToButtonLabel) {
+                    Button(zoomToButtonLabel) {
                         let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
                         if let mapViewProxy {
                             Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
@@ -394,7 +394,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     }
                 }
-                Button(String.deleteButtonLabel) {
+                Button(deleteButtonLabel) {
                     if viewModel.completedTraces.count == 1 {
                         currentActivity = .creatingTrace(nil)
                     }
@@ -406,7 +406,7 @@ public struct UtilityNetworkTrace: View {
         }
         if activeDetent != .summary {
             List {
-                Section(String.featureResultsTitle) {
+                Section(featureResultsTitle) {
                     DisclosureGroup(
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingFeatureResults)
@@ -433,7 +433,7 @@ public struct UtilityNetworkTrace: View {
                             .catalystPadding(4)
                     }
                 }
-                Section(String.functionResultsSectionTitle) {
+                Section(functionResultsSectionTitle) {
                     DisclosureGroup(
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingFunctionResults)
@@ -477,7 +477,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     ) {
                         ColorPicker(
-                            String.colorLabel,
+                            colorLabel,
                             selection: Binding {
                                 viewModel.selectedTrace?.color ?? Color.clear
                             } set: { newValue in
@@ -488,37 +488,37 @@ public struct UtilityNetworkTrace: View {
                             }
                         )
                     } label: {
-                        Text(String.advancedOptionsHeaderLabel)
+                        Text(advancedOptionsHeaderLabel)
                             .catalystPadding(4)
                     }
                 }
             }
             .padding([.vertical], 2)
-            Button(String.clearAllResults, role: .destructive) {
+            Button(clearAllResults, role: .destructive) {
                 isShowingClearAllResultsConfirmationDialog = true
             }
             .buttonStyle(.bordered)
             .confirmationDialog(
-                String.clearAllResults,
+                clearAllResults,
                 isPresented: $isShowingClearAllResultsConfirmationDialog
             ) {
-                Button(String.clearAllResults, role: .destructive) {
+                Button(clearAllResults, role: .destructive) {
                     viewModel.deleteAllTraces()
                     currentActivity = .creatingTrace(nil)
                 }
             } message: {
-                Text(String.clearAllResultsMessage)
+                Text(clearAllResultsMessage)
             }
         }
     }
     
     /// Displays information about a chosen starting point.
     @ViewBuilder private var startingPointDetail: some View {
-        makeBackButton(title: .startingPointsTitle) {
+        makeBackButton(title: startingPointsTitle) {
             currentActivity = .creatingTrace(.viewingStartingPoints)
         }
-        Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? String.unnamedAssetType) {
-            Button(String.zoomToButtonLabel) {
+        Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? unnamedAssetType) {
+            Button(zoomToButtonLabel) {
                 if let selectedStartingPoint = selectedStartingPoint,
                    let extent = selectedStartingPoint.geoElement.geometry?.extent {
                     let newViewpoint = Viewpoint(boundingGeometry: extent)
@@ -529,7 +529,7 @@ public struct UtilityNetworkTrace: View {
                     }
                 }
             }
-            Button(String.deleteButtonLabel, role: .destructive) {
+            Button(deleteButtonLabel, role: .destructive) {
                 if let startingPoint = selectedStartingPoint {
                     viewModel.deleteStartingPoint(startingPoint)
                     currentActivity = .creatingTrace(.viewingStartingPoints)
@@ -540,7 +540,7 @@ public struct UtilityNetworkTrace: View {
         .catalystPadding()
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
-                Section(String.fractionAlongEdgeSectionTitle) {
+                Section(fractionAlongEdgeSectionTitle) {
                     Slider(
                         value: Binding {
                             viewModel.pendingTrace.startingPoints.first {
@@ -561,7 +561,7 @@ public struct UtilityNetworkTrace: View {
                         !(selectedStartingPoint?.utilityElement?.assetType.terminalConfiguration?.terminals.isEmpty ?? true) {
                 Section {
                     Picker(
-                        String.terminalConfigurationPickerTitle,
+                        terminalConfigurationPickerTitle,
                         selection: Binding {
                             selectedStartingPoint!.utilityElement!.terminal!
                         } set: { newValue in
@@ -577,7 +577,7 @@ public struct UtilityNetworkTrace: View {
                     .foregroundColor(.blue)
                 }
             }
-            Section(String.attributesSectionTitle) {
+            Section(attributesSectionTitle) {
                 ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
                     HStack{
                         Text(item.key)
@@ -806,165 +806,214 @@ public struct UtilityNetworkTrace: View {
     }
 }
 
-private extension String {
-    static let addNewButtonLabel = String(
-        localized: "Add new",
-        bundle: .toolkitModule,
-        comment: "A button to add new utility trace starting points."
-    )
+extension UtilityNetworkTrace {
+    var addNewButtonLabel: String {
+        .init(
+            localized: "Add new",
+            bundle: .toolkitModule,
+            comment: "A button to add new utility trace starting points."
+        )
+    }
     
-    static let advancedOptionsHeaderLabel = String(
-        localized: "Advanced Options",
-        bundle: .toolkitModule,
-        comment: "A section header for advanced options."
-    )
+    var advancedOptionsHeaderLabel: String {
+        .init(
+            localized: "Advanced Options",
+            bundle: .toolkitModule,
+            comment: "A section header for advanced options."
+        )
+    }
     
-    static let attributesSectionTitle = String(
-        localized: "Attributes",
-        bundle: .toolkitModule,
-        comment: "A label in reference to the attributes of a geo element."
-    )
+    var attributesSectionTitle: String {
+        .init(
+            localized: "Attributes",
+            bundle: .toolkitModule,
+            comment: "A label in reference to the attributes of a geo element."
+        )
+    }
     
-    static let cancelStartingPointSelection = String(
-        localized: "Cancel starting point selection",
-        bundle: .toolkitModule,
-        comment: "A label for a button to cancel the starting point selection operation."
-    )
+    var cancelStartingPointSelection: String {
+        .init(
+            localized: "Cancel starting point selection",
+            bundle: .toolkitModule,
+            comment: "A label for a button to cancel the starting point selection operation."
+        )
+    }
     
-    static let clearAllResults = String(
-        localized: "Clear all results",
-        bundle: .toolkitModule,
-        comment: "A directive to clear all of the completed utility network traces."
-    )
+    var clearAllResults: String {
+        .init(
+            localized: "Clear all results",
+            bundle: .toolkitModule,
+            comment: "A directive to clear all of the completed utility network traces."
+        )
+    }
     
-    static let clearAllResultsMessage = String(
-        localized: "All the trace inputs and results will be lost.",
-        bundle: .toolkitModule,
-        comment: "A message describing the outcome of clearing all utility network trace results."
-    )
+    var clearAllResultsMessage: String {
+        .init(
+            localized: "All the trace inputs and results will be lost.",
+            bundle: .toolkitModule,
+            comment: "A message describing the outcome of clearing all utility network trace results."
+        )
+    }
     
-    static let colorLabel = String(
-        localized: "Color",
-        bundle: .toolkitModule,
-        comment: "A label in reference to the color used to display utility trace result graphics."
-    )
+    var colorLabel: String {
+        .init(
+            localized: "Color",
+            bundle: .toolkitModule,
+            comment: "A label in reference to the color used to display utility trace result graphics."
+        )
+    }
     
-    static let deleteButtonLabel = String(
-        localized: "Delete",
-        bundle: .toolkitModule,
-        comment: "A label for a button used to delete a utility network trace input component or result."
-    )
+    var deleteButtonLabel: String {
+        .init(
+            localized: "Delete",
+            bundle: .toolkitModule,
+            comment: "A label for a button used to delete a utility network trace input component or result."
+        )
+    }
     
     /// Title for the feature results section
-    static let featureResultsTitle = String(
-        localized: "Feature Results",
-        bundle: .toolkitModule,
-        comment: """
+    var featureResultsTitle: String {
+        .init(
+            localized: "Feature Results",
+            bundle: .toolkitModule,
+            comment: """
                  A label in reference to utility elements returned as results of a utility network
                  trace operation.
                  """
-    )
+        )
+    }
     
-    static let fractionAlongEdgeSectionTitle = String(
-        localized: "Fraction Along Edge",
-        bundle: .toolkitModule,
-        comment: "A label in reference to a fractional distance along an edge style utility network element."
-    )
+    var fractionAlongEdgeSectionTitle: String {
+        .init(
+            localized: "Fraction Along Edge",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a fractional distance along an edge style utility network element."
+        )
+    }
     
-    static let functionResultsSectionTitle = String(
-        localized: "Function Results",
-        bundle: .toolkitModule,
-        comment: """
+    var functionResultsSectionTitle: String {
+        .init(
+            localized: "Function Results",
+            bundle: .toolkitModule,
+            comment: """
                  A label in reference to function outputs returned as results of a utility network
                  trace operation.
                  """
-    )
+        )}
     
-    static let modePickerTitle = String(
-        localized: "Mode",
-        bundle: .toolkitModule,
-        comment: "The mode in which the utility network trace tool is being used (either creating traces or viewing traces)."
-    )
+    var modePickerTitle: String {
+        .init(
+            localized: "Mode",
+            bundle: .toolkitModule,
+            comment: "The mode in which the utility network trace tool is being used (either creating traces or viewing traces)."
+        )
+    }
     
-    static let nameLabel = String(
-        localized: "Name",
-        bundle: .toolkitModule,
-        comment: "A label in reference to the user defined name for an individual utility network trace."
-    )
+    var nameLabel: String {
+        .init(
+            localized: "Name",
+            bundle: .toolkitModule,
+            comment: "A label in reference to the user defined name for an individual utility network trace."
+        )
+    }
     
-    static let networkSectionLabel = String(
-        localized: "Network",
-        bundle: .toolkitModule,
-        comment: "A label in reference to a specific utility network."
-    )
+    var networkSectionLabel: String {
+        .init(
+            localized: "Network",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a specific utility network."
+        )
+    }
     
-    static let newTraceOptionLabel = String(
-        localized: "New trace",
-        bundle: .toolkitModule,
-        comment: "A label for a button to show new utility network trace configuration options."
-    )
+    var newTraceOptionLabel: String {
+        .init(
+            localized: "New trace",
+            bundle: .toolkitModule,
+            comment: "A label for a button to show new utility network trace configuration options."
+        )
+    }
     
-    static let noConfigurationsAvailable = String(
-        localized: "No configurations available.",
-        bundle: .toolkitModule,
-        comment: "A statement that no utility trace configurations are available."
-    )
+    var noConfigurationsAvailable: String {
+        .init(
+            localized: "No configurations available.",
+            bundle: .toolkitModule,
+            comment: "A statement that no utility trace configurations are available."
+        )
+    }
     
-    static let noneSelected = String(
-        localized: "None selected",
-        bundle: .toolkitModule,
-        comment: "A label indicating that no utility network trace configuration has been selected."
-    )
+    var noneSelected: String {
+        .init(
+            localized: "None selected",
+            bundle: .toolkitModule,
+            comment: "A label indicating that no utility network trace configuration has been selected."
+        )
+    }
     
-    static let resultsOptionLabel = String(
-        localized: "Results",
-        bundle: .toolkitModule,
-        comment: "A label for a button to show utility network trace results."
-    )
+    var resultsOptionLabel: String {
+        .init(
+            localized: "Results",
+            bundle: .toolkitModule,
+            comment: "A label for a button to show utility network trace results."
+        )
+    }
     
     /// Title for the starting points section
-    static let startingPointsTitle = String(
-        localized: "Starting Points",
-        bundle: .toolkitModule,
-        comment: """
+    var startingPointsTitle: String {
+        .init(
+            localized: "Starting Points",
+            bundle: .toolkitModule,
+            comment: """
                  A label in reference to the utility elements chosen as starting points for a utility
                  network trace operation.
                  """
-    )
+        )
+    }
     
-    static let terminalConfigurationPickerTitle = String(
-        localized: "Terminal Configuration",
-        bundle: .toolkitModule,
-        comment: "A label in reference to the chosen terminal configuration of a utility network element."
-    )
+    var terminalConfigurationPickerTitle: String {
+        .init(
+            localized: "Terminal Configuration",
+            bundle: .toolkitModule,
+            comment: "A label in reference to the chosen terminal configuration of a utility network element."
+        )
+    }
     
-    static let traceButtonLabel = String(
-        localized: "Trace",
-        bundle: .toolkitModule,
-        comment: "A label for a button to begin a utility network trace operation."
-    )
+    var traceButtonLabel: String {
+        .init(
+            localized: "Trace",
+            bundle: .toolkitModule,
+            comment: "A label for a button to begin a utility network trace operation."
+        )
+    }
     
-    static let traceConfigurationSectionLabel = String(
-        localized: "Trace Configuration",
-        bundle: .toolkitModule,
-        comment: "A label in reference to a utility network trace configuration."
-    )
+    var traceConfigurationSectionLabel: String {
+        .init(
+            localized: "Trace Configuration",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a utility network trace configuration."
+        )
+    }
     
-    static let unnamedAssetType = String(
-        localized: "Unnamed Asset Type",
-        bundle: .toolkitModule,
-        comment: "A label to use in place of a utility element asset type name."
-    )
+    var unnamedAssetType: String {
+        .init(
+            localized: "Unnamed Asset Type",
+            bundle: .toolkitModule,
+            comment: "A label to use in place of a utility element asset type name."
+        )
+    }
     
-    static let zoomToButtonLabel = String(
-        localized: "Zoom To",
-        bundle: .toolkitModule,
-        comment: "A button to change the map to the extent of the selected trace."
-    )
+    var zoomToButtonLabel: String {
+        .init(
+            localized: "Zoom To",
+            bundle: .toolkitModule,
+            comment: "A button to change the map to the extent of the selected trace."
+        )
+    }
     
-    static let zoomToResult = String(
-        localized: "Zoom to result",
-        bundle: .toolkitModule,
-        comment: "A user option specifying that a map should automatically change to show completed trace results."
-    )
+    var zoomToResult: String {
+        .init(
+            localized: "Zoom to result",
+            bundle: .toolkitModule,
+            comment: "A user option specifying that a map should automatically change to show completed trace results."
+        )
+    }
 }
