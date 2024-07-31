@@ -806,7 +806,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 
-extension String {
+private extension String {
 ***REMOVED***static var addNewButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Add new",
