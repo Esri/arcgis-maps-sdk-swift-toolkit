@@ -180,7 +180,7 @@ public struct UtilityNetworkTrace: View {
     @ViewBuilder private var assetGroupDetail: some View {
         if let assetGroupName = selectedAssetGroupName,
            let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
-            makeBackButton(title: String.featureResultsTitle) {
+            makeBackButton(title: .featureResultsTitle) {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
             makeDetailSectionHeader(title: assetGroupName)
@@ -270,7 +270,7 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         networksList
                     } label: {
-                        Text(viewModel.network?.name ?? String.noneSelected)
+                        Text(viewModel.network?.name ?? .noneSelected)
                             .catalystPadding(4)
                     }
                 }
@@ -285,7 +285,7 @@ public struct UtilityNetworkTrace: View {
                 ) {
                     configurationsList
                 } label: {
-                    Text(viewModel.pendingTrace.configuration?.name ?? String.noneSelected)
+                    Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
                         .catalystPadding(4)
                 }
             }
@@ -514,7 +514,7 @@ public struct UtilityNetworkTrace: View {
     
     /// Displays information about a chosen starting point.
     @ViewBuilder private var startingPointDetail: some View {
-        makeBackButton(title: String.startingPointsTitle) {
+        makeBackButton(title: .startingPointsTitle) {
             currentActivity = .creatingTrace(.viewingStartingPoints)
         }
         Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? String.unnamedAssetType) {
