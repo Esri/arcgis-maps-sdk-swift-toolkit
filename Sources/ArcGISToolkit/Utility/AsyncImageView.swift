@@ -16,6 +16,8 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
+@MainActor
+@preconcurrency
 public struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `URL` of the image.
 ***REMOVED***private var url: URL?
@@ -33,7 +35,7 @@ public struct AsyncImageView: View {
 ***REMOVED***private let mediaSize: CGSize?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The data model for an `AsyncImageView`.
-***REMOVED***@StateObject var viewModel: AsyncImageViewModel
+***REMOVED***@StateObject private var viewModel = AsyncImageViewModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -52,8 +54,6 @@ public struct AsyncImageView: View {
 ***REMOVED******REMOVED***self.url = url
 ***REMOVED******REMOVED***self.refreshInterval = refreshInterval
 ***REMOVED******REMOVED***loadableImage = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: AsyncImageViewModel())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
@@ -94,9 +94,7 @@ public struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom])
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, macCatalyst 16.0, *),
-***REMOVED******REMOVED******REMOVED***   let progressInterval = viewModel.progressInterval {
-#if canImport(Charts)
+***REMOVED******REMOVED******REMOVED***if let progressInterval = viewModel.progressInterval {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***timerInterval: progressInterval,
@@ -108,7 +106,6 @@ public struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize?.width)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
-#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear() {

@@ -13,11 +13,10 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+@testable ***REMOVED***Toolkit
 import XCTest
 
-@testable ***REMOVED***Toolkit
-
-@MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
+final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = .default
 ***REMOVED******REMOVED***
@@ -35,9 +34,10 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test `UtilityNetworkTraceViewModel` on a map that does not contain a utility network.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_1_1() async throws {
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
-***REMOVED******REMOVED******REMOVED***map: try await makeMap(),
+***REMOVED******REMOVED******REMOVED***map: try await Map.load(basemapStyle: .arcGISTopographic),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -53,8 +53,9 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test `UtilityNetworkTraceViewModel` on a map that contains a utility network.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_1_4() async throws {
-***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
+***REMOVED******REMOVED***let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
@@ -74,10 +75,11 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test initializing a `UtilityNetworkTraceViewModel` with starting points.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_2_1() async throws {
-***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
+***REMOVED******REMOVED***let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(3726)
@@ -117,10 +119,11 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test modifying the terminal configuration of a utility element that supports terminal
 ***REMOVED******REMOVED***/ configuration.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_2_2() async throws {
-***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
+***REMOVED******REMOVED***let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(3174)
@@ -169,10 +172,11 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test modifying the fractional starting point along an edge based utility element.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_2_3() async throws {
-***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
+***REMOVED******REMOVED***let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Line" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(1748)
@@ -211,10 +215,11 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** Test an upstream trace and validate a function result.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_3_1() async throws {
-***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
+***REMOVED******REMOVED***let map = try await Map.load(portalItem: .nappervilleElectricUtilityNetwork())
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first?.subLayerContents.first { $0.name == "Electric Distribution Device" ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED***parameters.addObjectID(2247)
@@ -259,26 +264,6 @@ import XCTest
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModelTests {
-***REMOVED******REMOVED***/ Creates and loads a topographic map.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ The returned map contains no utility networks.
-***REMOVED******REMOVED***/ - Returns: A loaded map.
-***REMOVED***func makeMap() async throws -> Map {
-***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISTopographic)
-***REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED***return map
-***REMOVED***
-***REMOVED***
-***REMOVED***func makeMapWithPortalItem() async throws -> Map {
-***REMOVED******REMOVED***let portalItem = PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let map = Map(item: portalItem)
-***REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED***return map
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A token to a sample public utility network dataset as previously published in the
 ***REMOVED******REMOVED***/ [Javascript sample](https:***REMOVED***developers.arcgis.com/javascript/latest/sample-code/widgets-untrace/).
 ***REMOVED***var tokenForSampleServer7: ArcGISCredential {
@@ -289,6 +274,34 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension Map {
+***REMOVED******REMOVED***/ Creates and loads a map with the given basemap style.
+***REMOVED******REMOVED***/ - Returns: A loaded map.
+***REMOVED***class func load(basemapStyle: Basemap.Style) async throws -> Map {
+***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED***return map
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates and loads a map with the given portal item.
+***REMOVED******REMOVED***/ - Parameter portalItem: A map portal item.
+***REMOVED******REMOVED***/ - Returns: A loaded map.
+***REMOVED***class func load(portalItem: PortalItem) async throws -> Map {
+***REMOVED******REMOVED***let map = Map(item: portalItem)
+***REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED***return map
+***REMOVED***
+***REMOVED***
+
+private extension PortalItem {
+***REMOVED***class func nappervilleElectricUtilityNetwork() -> PortalItem {
+***REMOVED******REMOVED***return PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED***id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 

@@ -51,10 +51,12 @@
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BasemapGalleryExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `BasemapGallery` see the [BasemapGallery Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/basemapgallerytutorial).
+***REMOVED***/ in the project. To learn more about using the `BasemapGallery` see the <doc:BasemapGalleryTutorial>.
+@MainActor
+@preconcurrency
 public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The view style of the gallery.
-***REMOVED***public enum Style {
+***REMOVED***public enum Style: Sendable {
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
 ***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
 ***REMOVED******REMOVED******REMOVED***/ When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.

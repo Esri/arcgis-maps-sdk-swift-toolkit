@@ -24,7 +24,7 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let filterButton = app.buttons["Business"]
+***REMOVED******REMOVED***let filterButton = app.buttons["Floor Filter button"]
 ***REMOVED******REMOVED***let researchAnnexButton = app.buttons["Research Annex"]
 ***REMOVED******REMOVED***let latticeText = app.staticTexts["Lattice"]
 ***REMOVED******REMOVED***let levelEightText = app.scrollViews.otherElements.staticTexts["8"]
@@ -35,10 +35,7 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***app.buttons["Floor Filter Tests"].tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for floor aware data to load and then open the filter.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***filterButton.waitForExistence(timeout: 5),
-***REMOVED******REMOVED******REMOVED***"The filter button wasn't found within 5 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***XCTAssertTrue(filterButton.waitForExistence(timeout: 10), "The filter button wasn't found.")
 ***REMOVED******REMOVED***filterButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the site named "Research Annex".
@@ -49,7 +46,10 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***researchAnnexButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the facility named "Lattice".
-***REMOVED******REMOVED***XCTAssertTrue(latticeText.exists, "The Lattice text wasn't found.")
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***latticeText.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The Lattice text wasn't found."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***latticeText.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the level labeled "8".

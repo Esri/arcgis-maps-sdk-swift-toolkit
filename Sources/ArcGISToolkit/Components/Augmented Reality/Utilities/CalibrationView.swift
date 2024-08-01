@@ -63,6 +63,7 @@ class WorldScaleCalibrationViewModel: ObservableObject {
 
 extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
+***REMOVED***@MainActor
 ***REMOVED***struct CalibrationView: View {
 ***REMOVED******REMOVED***@ObservedObject
 ***REMOVED******REMOVED***var viewModel: WorldScaleCalibrationViewModel

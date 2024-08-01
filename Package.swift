@@ -20,8 +20,8 @@ let package = Package(
 ***REMOVED***name: "arcgis-maps-sdk-swift-toolkit",
 ***REMOVED***defaultLocalization: "en",
 ***REMOVED***platforms: [
-***REMOVED******REMOVED***.iOS(.v15),
-***REMOVED******REMOVED***.macCatalyst(.v15)
+***REMOVED******REMOVED***.iOS(.v16),
+***REMOVED******REMOVED***.macCatalyst(.v16)
 ***REMOVED***],
 ***REMOVED***products: [
 ***REMOVED******REMOVED***.library(
@@ -30,7 +30,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.4.0"))
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.5.0"))
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
@@ -48,3 +48,13 @@ let package = Package(
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 )
+
+for target in package.targets {
+***REMOVED***target.swiftSettings = (target.swiftSettings ?? []) + [
+***REMOVED******REMOVED******REMOVED*** Experimental Features.
+***REMOVED******REMOVED***.enableExperimentalFeature("AccessLevelOnImport"),
+***REMOVED******REMOVED***.enableExperimentalFeature("StrictConcurrency"),
+***REMOVED******REMOVED******REMOVED*** Upcoming Features.
+***REMOVED******REMOVED***.enableUpcomingFeature("DisableOutwardActorInference")
+***REMOVED***]
+***REMOVED***

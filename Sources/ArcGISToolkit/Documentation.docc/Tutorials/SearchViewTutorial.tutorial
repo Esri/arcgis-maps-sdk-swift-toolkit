@@ -16,43 +16,43 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Also create a map viewpoint used by the `SearchView` to pan/zoom the map to the 
 ***REMOVED******REMOVED******REMOVED******REMOVED***extent of the search results.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Provide a search source which also allows search behavior customization.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `GraphicsOverlay` to display search results on the map.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a property to detect when the viewpoint is changing. This will help to implement
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeat search behavior.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add properties to track the extent and center of the visible region.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep5.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `MapView` and overlay the `SearchView`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep6)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep6.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add additional modifiers, further interconnecting the `SearchView` and `MapView`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep7)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep7.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Use `MapView` modifiers to track stateful information important to the `SearchView`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep8)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep8.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

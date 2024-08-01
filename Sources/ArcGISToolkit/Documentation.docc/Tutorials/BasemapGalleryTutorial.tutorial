@@ -13,29 +13,30 @@
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***To begin, set up the parent view.
-***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map with a basemap style, create member variable to control when the gallery is shown or hidden and pick an initial viewpoint.
-***REMOVED******REMOVED******REMOVED******REMOVED***Finally, add a `MapView` to the body of view, passing in the map and initial viewpoint.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map with a basemap style and an initial viewpoint. 
+***REMOVED******REMOVED******REMOVED******REMOVED***Create a member variable to control when the gallery is shown or hidden.
+***REMOVED******REMOVED******REMOVED******REMOVED***Finally, add a `MapView` to the body of view, passing in the map.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Create a list of items to be shown in the gallery.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Host the BasemapGallery on top of the `MapView` in a sheet, passing in the list of basemap gallery items and the map.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Place a button in the navigation bar to open the gallery.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Place a done button in the sheet to close the gallery.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep5.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

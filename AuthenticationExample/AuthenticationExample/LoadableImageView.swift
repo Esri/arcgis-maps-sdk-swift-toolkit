@@ -18,12 +18,13 @@
 ***REMOVED***/ A view that loads a `LoadableImage` and displays it.
 ***REMOVED***/ While the image is loading a progress view is displayed.
 ***REMOVED***/ If there is an error displaying the image a red exclamation circle is displayed.
+@MainActor
 struct LoadableImageView: View {
 ***REMOVED******REMOVED***/ The loadable image to display.
 ***REMOVED***let loadableImage: LoadableImage
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of loading the image.
-***REMOVED***@State var result: Result<UIImage, Error>? = nil
+***REMOVED***@State private var result: Result<UIImage, Error>?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
@@ -38,7 +39,8 @@ struct LoadableImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED***
-***REMOVED***.task {
+***REMOVED***
+***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***result = await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await loadableImage.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***return loadableImage.image ?? UIImage()

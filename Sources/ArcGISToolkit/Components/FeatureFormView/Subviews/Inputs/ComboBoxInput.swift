@@ -18,6 +18,7 @@
 ***REMOVED***/ A view for numerical value input.
 ***REMOVED***/
 ***REMOVED***/ This is the preferable input type for long lists of coded value domains.
+@MainActor
 struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -133,9 +134,8 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view that allows the user to filter and select coded values by name.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Adds navigation context to support toolbar items and other visual elements in the picker.
-***REMOVED******REMOVED***/ - Note `NavigationView` is deprecated after iOS 17.0.
 ***REMOVED***func makePicker(for values: [CodedValue]) -> some View {
-***REMOVED******REMOVED***let picker = {
+***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
@@ -193,16 +193,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
-***REMOVED******REMOVED******REMOVED***return NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***picker()
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***picker()
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -245,13 +235,13 @@ private extension Text {
 ***REMOVED***
 ***REMOVED***
 
-extension CodedValue: Equatable {
+extension ArcGIS.CodedValue: Swift.Equatable {
 ***REMOVED***public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
 ***REMOVED******REMOVED***lhs.name == rhs.name
 ***REMOVED***
 ***REMOVED***
 
-extension CodedValue: Hashable {
+extension ArcGIS.CodedValue: Swift.Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED***

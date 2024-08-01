@@ -15,7 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/  A selected site, facility, or level.
-public enum FloorFilterSelection: Hashable {
+public enum FloorFilterSelection: Hashable, Sendable {
 ***REMOVED******REMOVED***/ A selected site.
 ***REMOVED***case site(FloorSite)
 ***REMOVED******REMOVED***/ A selected facility.

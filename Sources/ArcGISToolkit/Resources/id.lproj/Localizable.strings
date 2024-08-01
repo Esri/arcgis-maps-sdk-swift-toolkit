@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Izinkan";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Terjadi kesalahan saat memuat gambar: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Lampiran";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Peringatan Sertifikat Kepercayaan";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Pilih Dari File";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Pilih Dari Perpustakaan";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Hapus";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Hapus semua hasil";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Berbahaya: Sertifikat yang diberikan oleh '%@' tidak ditandatangani oleh otoritas tepercaya.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "Tanggal melebihi maksimal";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Tanggal kurang dari minimal";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "Tanggal harus pada atau setelah %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "Tanggal harus pada atau sebelum %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Hapus";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "elevasi";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Masukkan %lld karakter";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Masukkan %lld ke ^[%lld characters](inflect: true)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Masukkan %lld hingga %lld karakter";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Masukkan ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Masukkan Nilai";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Masukkan nilai dari %@ hingga %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Kesalahan";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Kesalahan saat mengimpor lampiran";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Mengevaluasi ekspresi popup";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Melebihi nilai maksimal";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "heading";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Kurang dari nilai minimal";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Maksimal %lld karakter";
+"Maximum ^[%lld characters](inflect: true)" = "Maksimal ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Panjang karakter maksimal terlampaui";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Panjang karakter minimal tidak sesuai";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Jaringan";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Nama baru";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Pelacakan baru";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Evaluasi popup gagal: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Ubah Nama";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Ganti nama lampiran";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Titik Awal";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Ambil Foto atau Video";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Ketuk permukaan untuk meletakkan tempat kejadian";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Konfigurasi Terminal";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "tes";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "Peta dasar tidak memiliki referensi spasial.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Kata sandi tidak valid.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "Lampiran yang dipilih tidak dapat diimpor.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "Lampiran yang dipilih melebihi batas %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL tidak dapat dijangkau atau tidak berisi data gambar.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Coba lagi";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Kesalahan validasi tidak diketahui";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Jenis Aset Tanpa Nama";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Nilai";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Nilai harus %lld to ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "Nilai harus ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "Nilai harus berupa angka";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "Nilai harus berupa bilangan bulat";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "Nilai harus dari %@ hingga %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "Nilai harus dari jenis yang benar";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "Nilai harus berada dalam domain";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "Nilai tidak boleh kosong";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

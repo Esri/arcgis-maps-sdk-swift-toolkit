@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,37 +43,34 @@ struct ChartMediaView: View {
 ***REMOVED***@State private var isShowingDetailView = false
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ChartView(popupMedia: popupMedia, data: chartData)
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaFooter(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.gray, lineWidth: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
-***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView = true
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingDetailView) {
-***REMOVED******REMOVED******REMOVED******REMOVED***MediaDetailView(
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***ChartView(popupMedia: popupMedia, data: chartData)
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaFooter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: $isShowingDetailView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.gray, lineWidth: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
+***REMOVED***
+***REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
+***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+***REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED***isShowingDetailView = true
+***REMOVED***
+***REMOVED******REMOVED***.sheet(isPresented: $isShowingDetailView) {
+***REMOVED******REMOVED******REMOVED***MediaDetailView(
+***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
+***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: $isShowingDetailView
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-@available(iOS 16, macCatalyst 16, *)
 ***REMOVED***/ A view describing a chart.
 struct ChartView: View {
 ***REMOVED******REMOVED***/ The popup media to display.

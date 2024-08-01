@@ -17,6 +17,8 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
+@MainActor
+@preconcurrency
 public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The clipping distance of the scene view.
 ***REMOVED***let clippingDistance: Double?
@@ -170,7 +172,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***.onCameraTrackingStateChanged { trackingState in
 ***REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
 ***REMOVED***
-***REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
+***REMOVED******REMOVED***.onTapGesture { tapPoint in
 ***REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED***
 ***REMOVED***
@@ -190,7 +192,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***.onCameraTrackingStateChanged { trackingState in
 ***REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
 ***REMOVED***
-***REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
+***REMOVED******REMOVED***.onTapGesture { tapPoint in
 ***REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED***
 ***REMOVED***

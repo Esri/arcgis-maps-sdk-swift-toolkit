@@ -13,8 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct OverviewMapExampleView: View {
 ***REMOVED***enum MapOrScene {
@@ -48,10 +48,8 @@ struct OverviewMapExampleView: View {
 ***REMOVED***
 
 struct OverviewMapForMapView: View {
-***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
-***REMOVED***)
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
@@ -61,10 +59,10 @@ struct OverviewMapForMapView: View {
 ***REMOVED******REMOVED***@State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: dataModel.map)
+***REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap.forMapView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: viewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: visibleArea***REMOVED*** ,
@@ -75,17 +73,14 @@ struct OverviewMapForMapView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbol(.customFillSymbol)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaleFactor(15.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 struct OverviewMapForSceneView: View {
-***REMOVED******REMOVED***/ The data model containing the `Scene` displayed in the `SceneView`.
-***REMOVED***@StateObject private var dataModel = SceneDataModel(
-***REMOVED******REMOVED***scene: Scene(basemapStyle: .arcGISImagery)
-***REMOVED***)
+***REMOVED******REMOVED***/ The `Scene` displayed in the `SceneView`.
+***REMOVED***@State private var scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
@@ -93,9 +88,9 @@ struct OverviewMapForSceneView: View {
 ***REMOVED******REMOVED******REMOVED***@State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***SceneView(scene: dataModel.scene)
+***REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap.forSceneView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: viewpoint***REMOVED*** ,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** map: customOverviewMap ***REMOVED*** Uncomment to use a custom map.
@@ -105,9 +100,8 @@ struct OverviewMapForSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbol(.customMarkerSymbol)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaleFactor(15.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 

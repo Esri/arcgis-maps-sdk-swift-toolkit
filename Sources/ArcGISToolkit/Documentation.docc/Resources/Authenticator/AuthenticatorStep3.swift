@@ -4,20 +4,16 @@
 
 ***REMOVED***
 struct AuthenticationApp: App {
-***REMOVED***@ObservedObject var authenticator: Authenticator
-***REMOVED***
-***REMOVED***init() {
-***REMOVED******REMOVED***authenticator = Authenticator()
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+***REMOVED***@StateObject private var authenticator = Authenticator()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***HomeView()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
-***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
+***REMOVED******REMOVED******REMOVED***HomeView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
+***REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

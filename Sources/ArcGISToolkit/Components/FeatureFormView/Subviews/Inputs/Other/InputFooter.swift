@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the bottom of a field element in a form.
+@MainActor
 struct InputFooter: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
@@ -207,9 +208,9 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value which indicates whether or not an error is showing in the footer.
 ***REMOVED***var isShowingError: Bool {
-***REMOVED******REMOVED***element.isEditable 
+***REMOVED******REMOVED***(element.isEditable || element.hasValueExpression)
 ***REMOVED******REMOVED***&& primaryError != nil
-***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
+***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible || element.hasValueExpression)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable number of characters in the input.
@@ -261,30 +262,50 @@ extension InputFooter {
 ***REMOVED******REMOVED***/ - Note: This is intended to be used in instances where the character minimum and maximum are
 ***REMOVED******REMOVED***/ identical, such as an ID field.
 ***REMOVED***func makeExactLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) characters",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of required characters."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if element.hasValueExpression {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be ^[\(lengthRange.lowerBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's computed value must be an exact number of characters."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Enter ^[\(lengthRange.lowerBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of characters."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's value must be within the allowed length range.
 ***REMOVED***func makeLengthRangeMessage(_ lengthRange: ClosedRange<Int>) -> Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's value must be within the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** allowed length range. The first and second parameter
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** hold the minimum and maximum length respectively.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if element.hasValueExpression {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be \(lengthRange.lowerBound) to ^[\(lengthRange.upperBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's computed value must be within the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** allowed length range. The first and second parameter
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** hold the minimum and maximum length respectively.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) to ^[\(lengthRange.upperBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's value must be within the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** allowed length range. The first and second parameter
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** hold the minimum and maximum length respectively.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's maximum number of allowed characters.
 ***REMOVED***func makeMaximumLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange.upperBound) characters",
+***REMOVED******REMOVED******REMOVED***"Maximum ^[\(lengthRange.upperBound) characters](inflect: true)",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's maximum number of allowed characters."
 ***REMOVED******REMOVED***)
@@ -292,14 +313,25 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's value must be within the allowed numeric range.
 ***REMOVED***func makeNumericRangeMessage(_ numericRange: (min: String, max: String)) -> Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter value from \(numericRange.min) to \(numericRange.max)",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's value must be within the allowed range.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The first and second parameter hold the minimum and maximum values respectively.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if element.hasValueExpression {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be from \(numericRange.min) to \(numericRange.max)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's computed value must be within the allowed range.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The first and second parameter hold the minimum and maximum values respectively.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Enter value from \(numericRange.min) to \(numericRange.max)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's value must be within the allowed range.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The first and second parameter hold the minimum and maximum values respectively.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

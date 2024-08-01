@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying a thumbnail image for an attachment.
+@MainActor
 struct ThumbnailView: View  {
 ***REMOVED******REMOVED***/ The model represented by the thumbnail.
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
@@ -25,22 +26,13 @@ struct ThumbnailView: View  {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if attachmentModel.usingDefaultImage,
-***REMOVED******REMOVED******REMOVED***   let systemName = attachmentModel.defaultSystemName {
-***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-#if canImport(Charts)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.light)
-#endif
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if attachmentModel.usingSystemImage,
+***REMOVED******REMOVED******REMOVED***   let systemName = attachmentModel.systemImageName {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.light)
 ***REMOVED******REMOVED*** else if let image = attachmentModel.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
@@ -48,6 +40,7 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
 ***REMOVED******REMOVED***.frame(width: size.width, height: size.height, alignment: .center)
 ***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
 ***REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 4))
@@ -59,6 +52,6 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED***/ - Returns: A color to be used as the foreground color.
 ***REMOVED***func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
 ***REMOVED******REMOVED***attachmentModel.loadStatus == .failed ? .red :
-***REMOVED******REMOVED***(attachmentModel.usingDefaultImage ? .gray : .primary)
+***REMOVED******REMOVED***(attachmentModel.usingSystemImage ? .gray : .primary)
 ***REMOVED***
 ***REMOVED***

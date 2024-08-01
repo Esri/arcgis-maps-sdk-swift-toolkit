@@ -13,27 +13,25 @@
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Declare and initialize an `Authenticator` member in your app.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep1)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Set the `Authenticator` to handle challenges.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***For OAuth implementations use `Authenticator(oAuthUserConfigurations:)`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Declare the app's body, placing the `Authenticator` into the hierarchy.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Setup credential persistence.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***Set the `Authenticator` to handle challenges.
+***REMOVED******REMOVED******REMOVED******REMOVED***Set up credential persistence.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***During sign-out, use these `AuthenticationManager` methods.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SignOutView.swift", file: AuthenticatorStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SignOutView.swift", file: AuthenticatorStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

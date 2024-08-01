@@ -17,7 +17,8 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class ARTests: XCTestCase {
+final class ARTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testFlyoverLocationInitWithDefaults() throws {
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: .init(
@@ -40,6 +41,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testFlyoverLocationInit() throws {
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: .init(
@@ -63,6 +65,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testFlyoverLatLongInitWithDefaults() throws {
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLatitude: 34.056397,
@@ -84,6 +87,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testFlyoverLatLongInit() throws {
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLatitude: 34.056397,
@@ -106,6 +110,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testTableTopInit() throws {
 ***REMOVED******REMOVED***let view = TableTopSceneView(
 ***REMOVED******REMOVED******REMOVED***anchorPoint: .init(latitude: 34.056397, longitude: -117.195646),
@@ -124,6 +129,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(view.coachingOverlayIsHidden)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testTableTopARCoachingOverlayViewModifier() throws {
 ***REMOVED******REMOVED***let view = TableTopSceneView(
 ***REMOVED******REMOVED******REMOVED***anchorPoint: .init(latitude: 0, longitude: 0),
@@ -137,6 +143,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(view.coachingOverlayIsHidden)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testWorldScaleGeoTrackingInitWithDefaults() throws {
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .geoTracking
@@ -150,6 +157,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(view.calibrationViewIsHidden)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testWorldScaleWorldTrackingInitWithDefaults() throws {
 ***REMOVED******REMOVED***let view = WorldScaleSceneView { _ in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
@@ -161,6 +169,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(view.calibrationViewIsHidden)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testWorldScalePreferGeoTrackingInitWithDefaults() throws {
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .preferGeoTracking
@@ -174,6 +183,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(view.calibrationViewIsHidden)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testWorldScaleInitWithClippingDistance() throws {
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 1_000,
@@ -188,7 +198,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(view.calibrationViewIsHidden)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testWorldScaleCalibrationViewHiddenViewModifier() throws {
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .geoTracking
@@ -200,6 +210,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(view.calibrationViewIsHidden)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testWorldScaleCalibrationButtonAlignmentViewModifier() throws {
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .geoTracking

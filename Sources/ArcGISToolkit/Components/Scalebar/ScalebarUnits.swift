@@ -15,7 +15,7 @@
 ***REMOVED***
 import Foundation
 
-public enum ScalebarUnits {
+public enum ScalebarUnits: Sendable {
 ***REMOVED******REMOVED***/ Imperial units (feet, miles, etc)
 ***REMOVED***case imperial
 ***REMOVED***

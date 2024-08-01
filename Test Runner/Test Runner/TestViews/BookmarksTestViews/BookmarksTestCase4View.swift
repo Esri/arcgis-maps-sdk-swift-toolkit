@@ -26,7 +26,8 @@ struct BookmarksTestCase4View: View {
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: .constant(true)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: [Bookmark(name: "Redlands")]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: [Bookmark(name: "Redlands")],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: .constant(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***

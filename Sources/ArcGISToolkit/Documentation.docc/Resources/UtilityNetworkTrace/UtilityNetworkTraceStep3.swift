@@ -7,9 +7,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var mapPoint: Point?
 ***REMOVED***
-***REMOVED***@State private var screenPoint: CGPoint?
-***REMOVED***
 ***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***
+***REMOVED***@State private var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
@@ -36,5 +36,17 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***return Map(item: portalItem)
+***REMOVED***
+***REMOVED***
+
+private extension ArcGISCredential {
+***REMOVED***static var publicSample: ArcGISCredential {
+***REMOVED******REMOVED***get async throws {
+***REMOVED******REMOVED******REMOVED***try await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED***for: URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
+***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

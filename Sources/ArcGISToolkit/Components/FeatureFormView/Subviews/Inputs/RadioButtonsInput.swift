@@ -18,6 +18,7 @@
 ***REMOVED***/ A view for numerical value input.
 ***REMOVED***/
 ***REMOVED***/ This is the preferable input type for short lists of coded value domains.
+@MainActor
 struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel

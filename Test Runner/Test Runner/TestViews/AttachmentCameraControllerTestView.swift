@@ -1,0 +1,71 @@
+***REMOVED*** Copyright 2024 Esri
+***REMOVED***
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+
+@testable ***REMOVED***Toolkit
+
+***REMOVED***
+
+struct AttachmentCameraControllerTestView: View {
+***REMOVED***@State private var captureMode: UIImagePickerController.CameraCaptureMode?
+***REMOVED***
+***REMOVED***@State private var orientation = UIDeviceOrientation.unknown
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED***.fullScreenCover(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCameraController(importState: .constant(.none))
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraCaptureModeChanged { captureMode in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.captureMode = captureMode
+***REMOVED******REMOVED******REMOVED******REMOVED***
+#endif
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(captureMode?.name ?? "None")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Camera Capture Mode")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(orientation.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Device Orientation")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation = UIDevice.current.orientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation = UIDevice.current.orientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension UIDeviceOrientation {
+***REMOVED***var name: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .portrait: "Portrait"
+***REMOVED******REMOVED***case .landscapeLeft: "Landscape Left"
+***REMOVED******REMOVED***case .landscapeRight: "Landscape Right"
+***REMOVED******REMOVED***default: "Other"
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension UIImagePickerController.CameraCaptureMode {
+***REMOVED***var name: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .photo: "Photo"
+***REMOVED******REMOVED***case .video: "Video"
+***REMOVED******REMOVED***@unknown default: "N/A"
+***REMOVED***
+***REMOVED***
+***REMOVED***

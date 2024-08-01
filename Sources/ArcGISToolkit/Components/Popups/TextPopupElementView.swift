@@ -18,16 +18,16 @@
 ***REMOVED***/ A view displaying a `TextPopupElement`.
 struct TextPopupElementView: View {
 ***REMOVED******REMOVED***/ The `PopupElement` to display.
-***REMOVED***var popupElement: TextPopupElement
+***REMOVED***let popupElement: TextPopupElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The calculated height of the `HTMLTextView`.
-***REMOVED***@State private var webViewHeight: CGFloat = .zero
+***REMOVED***@State private var webViewHeight: CGFloat?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if !popupElement.text.isEmpty {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HTMLTextView(html: popupElement.text, height: $webViewHeight)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: webViewHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: webViewHeight ?? .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if webViewHeight == .zero {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show `ProgressView` until `HTMLTextView` has set the height.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()

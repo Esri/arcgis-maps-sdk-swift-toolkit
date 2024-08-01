@@ -10,7 +10,7 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED***LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
 ***REMOVED******REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(1..<10) { number in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String(describing: number))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(number, format: .number)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

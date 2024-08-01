@@ -18,7 +18,51 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 final class BookmarksTests: XCTestCase {
+***REMOVED***@MainActor
+***REMOVED***func testBookmarksWithGeoModel() async throws {
+***REMOVED******REMOVED***var _isPresented = true
+***REMOVED******REMOVED***var _selection: Bookmark?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
+***REMOVED******REMOVED***let bookmarks = Bookmarks(
+***REMOVED******REMOVED******REMOVED***isPresented: Binding(get: { _isPresented ***REMOVED***, set: { _isPresented = $0 ***REMOVED***),
+***REMOVED******REMOVED******REMOVED***geoModel: map,
+***REMOVED******REMOVED******REMOVED***selection: Binding(get: { _selection ***REMOVED***, set: { _selection = $0 ***REMOVED***),
+***REMOVED******REMOVED******REMOVED***geoViewProxy: nil
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***XCTFail("Web map failed to load \(error.localizedDescription)")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***bookmarks.selectBookmark(map.bookmarks.first!)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
+***REMOVED******REMOVED***XCTAssertEqual(_selection, map.bookmarks.first)
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testBookmarksWithList() {
+***REMOVED******REMOVED***var _isPresented = true
+***REMOVED******REMOVED***var _selection: Bookmark?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let bookmarks = Bookmarks(
+***REMOVED******REMOVED******REMOVED***isPresented: Binding(get: { _isPresented ***REMOVED***, set: { _isPresented = $0 ***REMOVED***),
+***REMOVED******REMOVED******REMOVED***bookmarks: sampleBookmarks,
+***REMOVED******REMOVED******REMOVED***selection: Binding(get: { _selection ***REMOVED***, set: { _selection = $0 ***REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***bookmarks.selectBookmark(sampleBookmarks.first!)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
+***REMOVED******REMOVED***XCTAssertEqual(_selection, sampleBookmarks.first)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier.
+***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithModifier() {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
@@ -31,7 +75,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
@@ -45,6 +89,8 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier and web map.
+***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithModifierAndMap() async throws {
 ***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
@@ -55,7 +101,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var selectedBookmark: Bookmark?
@@ -69,12 +115,14 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint.
+***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithViewpoint() {
 ***REMOVED******REMOVED***let sampleBookmarks = sampleBookmarks
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
 ***REMOVED******REMOVED***let viewpoint = Binding(
@@ -94,6 +142,8 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint and web map.
+***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithViewpointAndMap() async throws {
 ***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
@@ -104,7 +154,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
 ***REMOVED******REMOVED***let viewpoint = Binding(

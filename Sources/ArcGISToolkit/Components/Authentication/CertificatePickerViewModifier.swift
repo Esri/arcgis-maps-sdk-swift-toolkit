@@ -116,7 +116,7 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 
-extension CertificateImportError: LocalizedError {
+extension ArcGIS.CertificateImportError: Foundation.LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .invalidData:
@@ -159,6 +159,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 ***REMOVED***
 
 ***REMOVED***/ A view modifier that presents a certificate picker workflow.
+@MainActor
 struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ Creates a certificate picker view modifier.
 ***REMOVED******REMOVED***/ - Parameter challenge: The challenge that requires a certificate.
@@ -287,7 +288,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
@@ -378,7 +379,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

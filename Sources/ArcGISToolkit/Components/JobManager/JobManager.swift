@@ -16,8 +16,9 @@
 import BackgroundTasks
 import Combine
 import Foundation
-import OSLog
 import UIKit
+
+internal import os
 
 ***REMOVED***/ An object that manages saving and loading jobs so that they can continue to run if the
 ***REMOVED***/ app is backgrounded or even terminated.
@@ -44,11 +45,11 @@ import UIKit
 ***REMOVED***/ serialized when an app is backgrounded so that if the app is terminated the jobs can be
 ***REMOVED***/ rehydrated upon relaunch of the app.
 ***REMOVED***/
-***REMOVED***/ Also in iOS if the user of an app removes the app from the app switcher (swiping up) then the
-***REMOVED***/ system interprets this as a strong indication that the user does not want the app running.
-***REMOVED***/ The consequences of this are two-fold for jobs. One, any background fetch tasks are not given
-***REMOVED***/ any time until the app is relaunched again. And two, any background downloads that are in
-***REMOVED***/ progress are canceled by the operating system.
+***REMOVED***/ Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quits it),
+***REMOVED***/ the system interprets this as a strong indication that the app should
+***REMOVED***/ do no more work in the background. The consequences of this are two-fold for jobs.
+***REMOVED***/ One, any background fetch tasks are not given any time until the app is relaunched again.
+***REMOVED***/ And two, any background downloads that are in progress are canceled by the operating system.
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
@@ -286,7 +287,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 
 ***REMOVED***/ An enum that defines a schedule for background status checks.
-public enum BackgroundStatusCheckSchedule {
+public enum BackgroundStatusCheckSchedule: Sendable {
 ***REMOVED******REMOVED***/ No background status checks will be requested.
 ***REMOVED***case disabled
 ***REMOVED******REMOVED***/ Requests that the system schedule a background check at a regular interval.
@@ -299,11 +300,11 @@ extension Logger {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER" under Scheme
 ***REMOVED******REMOVED***/ -> Arguments -> Environment Variables
-***REMOVED***static let jobManager: Logger = {
+***REMOVED***static var jobManager: Logger {
 ***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
 ***REMOVED******REMOVED******REMOVED***return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return Logger(OSLog.disabled)
 ***REMOVED***
-***REMOVED***()
+***REMOVED***
 ***REMOVED***

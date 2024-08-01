@@ -18,19 +18,12 @@
 
 ***REMOVED***
 struct AuthenticationApp: App {
-***REMOVED***@ObservedObject var authenticator: Authenticator
-***REMOVED***@State var isSettingUp = true
+***REMOVED***@StateObject private var authenticator = Authenticator(
+***REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
+***REMOVED******REMOVED***  oAuthUserConfigurations: [.arcgisDotCom]
+***REMOVED***)
 ***REMOVED***
-***REMOVED***init() {
-***REMOVED******REMOVED******REMOVED*** Create an authenticator.
-***REMOVED******REMOVED***authenticator = Authenticator(
-***REMOVED******REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
-***REMOVED******REMOVED******REMOVED******REMOVED***oAuthUserConfigurations: [.arcgisDotCom]
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
-***REMOVED******REMOVED******REMOVED*** challenges.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-***REMOVED***
+***REMOVED***@State private var isSettingUp = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -48,9 +41,9 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** - Integrated Windows Authentication (IWA)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** - Client Certificate (PKI)
 ***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
-***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = true
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we setup credential stores to be persistent, which means that it will
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** synchronize with the keychain for storing credentials.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
@@ -63,8 +56,8 @@ struct AuthenticationApp: App {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** If you want to use OAuth, you can uncomment this code:
-***REMOVED***private extension OAuthUserConfiguration {
+private extension OAuthUserConfiguration {
+***REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
 ***REMOVED******REMOVED***static let arcgisDotCom = OAuthUserConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: .portal,
 ***REMOVED******REMOVED******REMOVED***clientID: "<#Your client ID goes here#>",
@@ -73,7 +66,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** The scheme of the redirect URL is also specified in the Info.plist file.
 ***REMOVED******REMOVED******REMOVED***redirectURL: URL(string: "authexample:***REMOVED***auth")!
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED***
 
 extension URL {
 ***REMOVED******REMOVED*** If you want to use your own portal, provide your own URL here:

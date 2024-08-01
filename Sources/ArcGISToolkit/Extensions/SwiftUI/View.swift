@@ -92,19 +92,6 @@ extension View {
 ***REMOVED******REMOVED******REMOVED***.padding(isMacCatalyst ? [.horizontal] : [], length)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Configures the behavior in which scrollable content interacts with the software keyboard.
-***REMOVED******REMOVED***/ - Returns: A view that dismisses the keyboard when the  scroll.
-***REMOVED******REMOVED***/ - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
-***REMOVED******REMOVED***/ dismiss as soon as scrolling starts when `true` and interactively when `false`.
-***REMOVED***func scrollDismissesKeyboard(immediately: Bool) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(immediately ? .immediately : .interactively)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
@@ -114,23 +101,12 @@ extension View {
 ***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns a new view with medium presentation detents, if presentation
-***REMOVED******REMOVED***/ detents are supported (iOS 16 and up).
-***REMOVED***func mediumPresentationDetents() -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Performs the provided action when the view appears after a slight delay.
 ***REMOVED******REMOVED***/ - Tip: Occasionally delaying allows a sheet's presentation animation to work correctly.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - delay: The delay to wait before allow the task to proceed, in nanoseconds. Defaults to 1/4 second.
 ***REMOVED******REMOVED***/   - action: The action to perform after the delay.
-***REMOVED***func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping () -> Void) -> some View {
+***REMOVED***func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping @Sendable () -> Void) -> some View {
 ***REMOVED******REMOVED***task { @MainActor in
 ***REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: nanoseconds)
 ***REMOVED******REMOVED******REMOVED***action()
@@ -151,7 +127,7 @@ extension View {
 ***REMOVED***@MainActor @ViewBuilder func onReceive<S>(
 ***REMOVED******REMOVED***_ sequence: S,
 ***REMOVED******REMOVED***perform action: ((S.Element) -> Void)?
-***REMOVED***) -> some View where S: AsyncSequence {
+***REMOVED***) -> some View where S: AsyncSequence, S.Element: Sendable {
 ***REMOVED******REMOVED***if let action {
 ***REMOVED******REMOVED******REMOVED***task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
@@ -162,31 +138,6 @@ extension View {
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***self
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension View {
-***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Note: This is to retrofit the tap gesture to iOS 15.0.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - action: The closure to perform upon single tap.
-***REMOVED******REMOVED***/   - screenPoint: The location of the tap in the view's coordinate space.
-***REMOVED***func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self.onTapGesture { screenPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint)
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Use a drag gesture with a minimum dragging distance of zero so the
-***REMOVED******REMOVED******REMOVED******REMOVED*** gesture is recognized with a single tap.
-***REMOVED******REMOVED******REMOVED***return self.gesture(
-***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture(minimumDistance: 0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { dragAttributes in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(dragAttributes.location)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

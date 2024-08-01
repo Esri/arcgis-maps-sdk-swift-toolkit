@@ -15,15 +15,8 @@
 ***REMOVED***
 
 ***REMOVED***/ A floating panel is a view that overlays a view and supplies view-related
-***REMOVED***/ content. For a map view, for instance, it could display a legend, bookmarks, search results, etc..
-***REMOVED***/ Apple Maps, Google Maps, Windows 10, and Collector have floating panel
-***REMOVED***/ implementations, sometimes referred to as a "bottom sheet".
-***REMOVED***/
-***REMOVED***/ Floating panels are non-modal and can be transient, only displaying
-***REMOVED***/ information for a short period of time like identify results,
-***REMOVED***/ or persistent, where the information is always displayed, for example a
-***REMOVED***/ dedicated search panel. They will also be primarily simple containers
-***REMOVED***/ that clients will fill with their own content.
+***REMOVED***/ content. For more information see <doc:FloatingPanel>.
+@MainActor
 struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of a geo-view's attribution bar.
 ***REMOVED******REMOVED***/

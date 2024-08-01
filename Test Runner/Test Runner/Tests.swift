@@ -16,14 +16,15 @@
 
 struct Tests: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
+***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("AttachmentCameraController Tests", destination: AttachmentCameraControllerTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("RepresentedUITextView Tests", destination: RepresentedUITextViewTestView())
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED***
 ***REMOVED***

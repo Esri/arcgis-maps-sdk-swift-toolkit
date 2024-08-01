@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying details for pie chart popup media.
+@MainActor
 struct PieChart: View {
 ***REMOVED******REMOVED***/ The view model for the pie chart.
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel
@@ -73,6 +75,7 @@ struct PieChart: View {
 ***REMOVED***
 
 ***REMOVED***/ A view representing a pie chart.
+@MainActor
 struct Pie: View {
 ***REMOVED******REMOVED***/ The view model for the pie chart.
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel

@@ -11,9 +11,7 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: makeMap()
-***REMOVED***)
+***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
@@ -23,7 +21,7 @@ struct PopupExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
-***REMOVED******REMOVED******REMOVED***MapView(map: dataModel.map)
+***REMOVED******REMOVED******REMOVED***MapView(map: map)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

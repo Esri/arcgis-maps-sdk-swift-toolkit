@@ -1,9 +1,7 @@
 # Floating Panel
 
 A floating panel is a view that overlays a view and supplies view-related
-content. For a map view, for instance, it could display a legend, bookmarks, search results, etc.
-Apple Maps, Google Maps, Windows 10, and Collector have floating panel
-implementations, sometimes referred to as a "bottom sheet".
+content. A map view, for instance, could display a legend, bookmarks, search results, etc..
 
 Floating panels are non-modal and can be transient, only displaying
 information for a short period of time like identify results,
@@ -19,7 +17,8 @@ The following images are of a simple list of numbers in a floating panel.
 | iPhone | iPad |
 | ------ | ---- |
 | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202795901-b86d6d26-3572-4c88-8f6e-84473ce57002.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202796009-92e3b5c3-d88b-4124-8d9f-bad6df445f02.png) |
-- Note: The Floating Panel is exposed as a view modifier.
+
+- Note: The Floating Panel is exposed as a view modifier. See ``SwiftUI/View/floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)``
 
 **Features**
 
@@ -47,5 +46,4 @@ properties, including:
 
 To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 and refer to [FloatingPanelExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloatingPanelExampleView.swift)
-in the project. To learn more about using the Floating Panel see the 
-[FloatingPanel Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/floatingpaneltutorial).
+in the project. To learn more about using the Floating Panel see the <doc:FloatingPanelTutorial>.

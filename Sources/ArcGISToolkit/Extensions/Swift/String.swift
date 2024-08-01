@@ -24,6 +24,15 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
+***REMOVED***static var emptyAttachmentDownloadErrorMessage: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Empty attachments cannot be downloaded.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining attachments with empty files (0 bytes) cannot be downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Field".
 ***REMOVED***static var field: Self {
 ***REMOVED******REMOVED***.init(
@@ -39,6 +48,15 @@ extension String {
 ***REMOVED******REMOVED******REMOVED***localized: "No Value",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no value has been set for a form field."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to take the user to a contextually inferred settings page.
+***REMOVED***static var settings: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Settings",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to take the user to a contextually inferred settings page."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

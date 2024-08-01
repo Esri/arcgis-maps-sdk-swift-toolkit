@@ -240,7 +240,9 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ per point and spatial reference values.
 ***REMOVED***func updateScale() {
 ***REMOVED******REMOVED***guard let spatialReference, let unitsPerPoint, let viewpoint,
-***REMOVED******REMOVED******REMOVED***  minScale <= 0 || viewpoint.targetScale < minScale else {
+***REMOVED******REMOVED******REMOVED***  minScale <= 0 || viewpoint.targetScale < minScale,
+***REMOVED******REMOVED******REMOVED***  !unitsPerPoint.isNaN
+***REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
