@@ -899,7 +899,8 @@ private extension String {
                  A label in reference to function outputs returned as results of a utility network
                  trace operation.
                  """
-        )}
+        )
+    }
     
     static var modePickerTitle: Self {
         .init(
