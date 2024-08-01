@@ -964,9 +964,9 @@ private extension String {
             localized: "Starting Points",
             bundle: .toolkitModule,
             comment: """
-                 A label in reference to the utility elements chosen as starting points for a utility
-                 network trace operation.
-                 """
+                A label in reference to the utility elements chosen as starting points for a utility
+                network trace operation.
+                """
         )
     }
     
