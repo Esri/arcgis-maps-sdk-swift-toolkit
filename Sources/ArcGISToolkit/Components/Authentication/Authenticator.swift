@@ -25,7 +25,7 @@ import CryptoTokenKit
 /// 
 /// The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is
 /// asked to handle an authentication challenge. This will handle many different types of
-/// authentication, for example:
+/// authentication, for example:
 ///
 ///   - ArcGIS authentication (token and OAuth)
 ///   - Integrated Windows Authentication (IWA)
@@ -49,7 +49,7 @@ import CryptoTokenKit
 ///
 /// To see the `Authenticator` in action, check out the [Authentication Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
 /// and refer to [AuthenticationApp.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
-/// To learn more about using the `Authenticator`, see the [Authenticator Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/authenticatortutorial).
+/// To learn more about using the `Authenticator`, see the <doc:AuthenticatorTutorial>.
 @MainActor
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.

@@ -15,23 +15,23 @@
             @Step {
                 To begin, set up the parent view.
                 Initialize a map property and pass it to a `MapView` in the view's body.
-                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep1)
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep1.swift)
             }
             
             @Step {
                 The Scalebar needs three pieces of information to determine scale: a spatial reference, the number of units per point, and the viewpoint. Set these values and track their changes with their respective modifiers.
-                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep2)
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep2.swift)
             }
             
             @Step {
                 Choose an alignment for the Scalebar, such as `bottomLeading`, and determine
                 the maximum amount of screen width the Scalebar should consume.
-                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep3)
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep3.swift)
             }
             
             @Step {
                 Overlay the `Scalebar` on the `MapView`, passing in all of the previously created properties.
-                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep4)
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep4.swift)
             }
         }
     }

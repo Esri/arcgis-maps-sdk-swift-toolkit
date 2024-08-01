@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
 
-import XCTest
 import ArcGIS
 @testable import ArcGISToolkit
+@preconcurrency import Combine
+import Foundation
 import SwiftUI
-import Combine
+import XCTest
 
 // Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the 'BasemapGalleryItem' (such
 // as the 'loadBasemapError' and 'spatialReferenceStatus' properties than
 // the 'BasemapGallery' design specifies. Tests not present in the
 // test design have been added to accommodate those differences.
-@MainActor
 final class BasemapGalleryItemTests: XCTestCase {
     override func setUp() async throws {
         ArcGISEnvironment.apiKey = .default
@@ -35,6 +34,7 @@ final class BasemapGalleryItemTests: XCTestCase {
         ArcGISEnvironment.apiKey = nil
     }
     
+    @MainActor
     func testInit() async throws {
         let basemap = Basemap(style: .arcGISLightGray)
         let item = BasemapGalleryItem(basemap: basemap)
@@ -84,6 +84,7 @@ final class BasemapGalleryItemTests: XCTestCase {
         XCTAssertNil(item3.loadBasemapError)
     }
     
+    @MainActor
     func testLoadBasemapError() async throws {
         // Create item with bad portal item URL.
         let item = BasemapGalleryItem(
@@ -100,6 +101,7 @@ final class BasemapGalleryItemTests: XCTestCase {
         XCTAssertNotNil(item.loadBasemapError)
     }
     
+    @MainActor
     func testSpatialReferenceAndStatus() async throws {
         let basemap = Basemap(style: .arcGISLightGray)
         let item = BasemapGalleryItem(basemap: basemap)

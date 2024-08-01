@@ -15,28 +15,28 @@
                 required. A `Point` and `CGPoint` will help allow the component to create trace
                 starting points at tap locations. A `GraphicsOverlay` will allow the component to
                 visually display trace results.
-                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep1)
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep1.swift)
             }
             
             @Step {
                 Add a `MapView`, optionally setting credentials if needed within a task.
-                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep2)
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep2.swift)
             }
             
             @Step {
                 Track viewpoint changes.
-                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep3)
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep3.swift)
             }
             
             @Step {
                 Track any tap gestures on the map view. When the user is adding starting points,
                 the trace tool needs to know the tap locations to detect the desired network element.
-                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4)
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4.swift)
             }
             
             @Step {
                 Overlay the `UtilityNetworkTrace` on the `MapView` with a `FloatingPanel`.
-                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep5)
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep5.swift)
             }
         }
     }

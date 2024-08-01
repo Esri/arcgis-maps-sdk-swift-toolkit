@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
 import CoreLocation
+import SwiftUI
 
 /// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 /// of your current location. Because this is an example that can be run from anywhere,
 /// it places a red circle around your initial location which can be explored.
+@MainActor
 struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {
         // Creates an elevation source from Terrain3D REST service.
@@ -78,7 +79,7 @@ struct WorldScaleExampleView: View {
             try? await locationDataSource.start()
             
             // Retrieve initial location.
-            guard let initialLocation = await locationDataSource.locations.first(where: { _ in true }) else { return }
+            guard let initialLocation = await locationDataSource.locations.first(where: { @Sendable _ in true }) else { return }
             
             // Put a circle graphic around the initial location.
             let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)

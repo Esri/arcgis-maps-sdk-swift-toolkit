@@ -20,8 +20,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Allow";
 
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Attachments";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "Attachments larger than %@ cannot be downloaded.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attributes";
@@ -42,6 +45,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "Calibration";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "Camera access is disabled";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Cancel";
 
@@ -53,6 +59,12 @@ for the AR experience. */
 
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Certificate Trust Warning";
+
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Choose From Files";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Choose From Library";
 
 /* The label of a button that clears a form's input. */
 "Clear" = "Clear";
@@ -108,13 +120,19 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "elevation";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Enter %lld characters";
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "Empty attachments cannot be downloaded.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "Empty files are not supported.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
-"Enter %lld to %lld characters" = "Enter %lld to %lld characters";
+"Enter %lld to ^[%lld characters](inflect: true)" = "Enter %lld to ^[%lld characters](inflect: true)";
+
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Enter ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Enter Value";
@@ -125,6 +143,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Error importing attachment";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -186,13 +208,16 @@ AR experience. */
 "Less than minimum value" = "Less than minimum value";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Maximum %lld characters";
+"Maximum ^[%lld characters](inflect: true)" = "Maximum ^[%lld characters](inflect: true)";
 
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
 "Maximum character length exceeded" = "Maximum character length exceeded";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
+
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "Microphone access has been disabled in Settings.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimum character length not met";
@@ -205,6 +230,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Network";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "New name";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "New trace";
@@ -251,6 +279,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Password Required";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "Please enable camera access in settings.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Please enter a password for the chosen certificate.";
 
@@ -265,6 +296,15 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "Record video only";
+
+/* A label for a button to rename an attachment. */
+"Rename" = "Rename";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Rename attachment";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -287,6 +327,9 @@ current visible extent of the map or scene. */
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
 
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "Settings";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
 
@@ -298,6 +341,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Starting Points";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Take Photo or Video";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Tap a surface to place the scene";
@@ -308,9 +354,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Configuration";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "The basemap does not have a spatial reference.";
@@ -334,6 +377,13 @@ match the spatial reference of the map. */
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "The password was invalid.";
+
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "The selected attachment could not be imported.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "The selected attachment exceeds the %@ limit.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "The URL could not be reached or did not contain image data.";
@@ -365,11 +415,23 @@ match the spatial reference of the map. */
 /* A value in a set of data contained in a popup. */
 "Value" = "Value";
 
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Value must be %lld to ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "Value must be ^[%lld characters](inflect: true)";
+
 /* Text indicating a field's value must be convertible to a number. */
 "Value must be a number" = "Value must be a number";
 
 /* Text indicating a field's value must be convertible to a whole number. */
 "Value must be a whole number" = "Value must be a whole number";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "Value must be from %@ to %@";
 
 /* Text indicating a field's value must be of the correct type. */
 "Value must be of correct type" = "Value must be of correct type";

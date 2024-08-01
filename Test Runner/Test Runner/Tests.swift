@@ -16,14 +16,15 @@ import SwiftUI
 
 struct Tests: View {
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
+                NavigationLink("AttachmentCameraController Tests", destination: AttachmentCameraControllerTestView())
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
                 NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
+                NavigationLink("RepresentedUITextView Tests", destination: RepresentedUITextViewTestView())
             }
         }
-        .navigationViewStyle(.stack)
     }
 }

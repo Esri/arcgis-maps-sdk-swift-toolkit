@@ -12,16 +12,33 @@ struct FeatureFormExampleView: View {
     }
     
     @State private var map = makeMap()
-
-    @State private var identifyScreenPoint: CGPoint?
     
-    @State private var featureForm: FeatureForm?
-    
-    @State private var showFeatureForm = false
+    @StateObject private var model = Model()
     
     var body: some View {
-        MapViewReader { proxy in
-            MapView(map: map)
+        NavigationStack {
+            MapViewReader { mapViewProxy in
+                MapView(map: map)
+            }
         }
+    }
+}
+
+@MainActor
+class Model: ObservableObject {
+    enum State {
+        case applyingEdits(FeatureForm)
+        case cancellationPending(FeatureForm)
+        case editing(FeatureForm)
+        case finishingEdits(FeatureForm)
+        case generalError(FeatureForm, Text)
+        case idle
+        case validating(FeatureForm)
+    }
+}
+
+private extension FeatureForm {
+    var featureLayer: FeatureLayer? {
+        feature.table?.layer as? FeatureLayer
     }
 }

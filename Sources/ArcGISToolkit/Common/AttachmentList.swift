@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view displaying a list of attachments, with a thumbnail, title, and download button.
 struct AttachmentList: View {
@@ -33,7 +33,7 @@ struct AttachmentRow: View  {
     @ObservedObject var attachmentModel: AttachmentModel
     
     /// The url of the the attachment, used to display the attachment via `QuickLook`.
-    @State var url: URL?
+    @State private var url: URL?
     
     var body: some View {
         HStack {
@@ -44,7 +44,7 @@ struct AttachmentRow: View  {
                     Text(attachmentModel.attachment.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
-                    Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
+                    Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -59,9 +59,7 @@ struct AttachmentRow: View  {
                 AttachmentLoadButton(attachmentModel: attachmentModel)
             }
         }
-#if !targetEnvironment(macCatalyst)
         .quickLookPreview($url)
-#endif
     }
 }
 
@@ -69,9 +67,14 @@ struct AttachmentRow: View  {
 struct AttachmentLoadButton: View  {
     @ObservedObject var attachmentModel: AttachmentModel
     
+    /// A Boolean value indicating whether the download alert is presented.
+    @State private var downloadAlertIsPresented = false
+    
     var body: some View {
         Button {
-            if attachmentModel.loadStatus == .notLoaded {
+            if attachmentModel.attachment.measuredSize.value.isZero {
+                downloadAlertIsPresented = true
+            } else if attachmentModel.loadStatus == .notLoaded {
                 attachmentModel.load()
             }
         } label: {
@@ -97,5 +100,6 @@ struct AttachmentLoadButton: View  {
             .frame(width: 24, height: 24)
             .padding(.leading)
         }
+        .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
     }
 }

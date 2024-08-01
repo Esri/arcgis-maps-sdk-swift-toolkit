@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Permitir";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Ocorreu um erro ao carregar a imagem: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Anexos";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Aviso de Confiança de Certificado";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Escolher de Arquivos";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Escolher da Biblioteca";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Limpar";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Apagar todos resultados";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Perigoso: O certificado fornecido por '%@' não está assinado por uma autoridade confiável.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "A data excede o máximo";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Data menor que o mínimo";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "A data deve ser igual ou posterior a %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "A data deve ser igual ou anterior a %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Excluir";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "elevação";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Insira %lld caracteres";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Digite %lld para ^[%lld characters](inflect: true)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Insira %lld a %lld caracteres";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Digite ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Inserir Valor";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Insira o valor de %@ para %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Erro";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Erro ao importar anexo";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Avaliando expressões de pop-up";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Excede o valor máximo";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "cabeçalho";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Menor que o valor mínimo";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Máximo de %lld caracteres";
+"Maximum ^[%lld characters](inflect: true)" = "Máximo ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Comprimento máximo de caracteres excedido";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Mídia";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Comprimento mínimo de caracteres não atendido";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Modo";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Rede";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Novo nome";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Novo traçado";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Falha de avaliação de pop-up: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Renomear";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Renomear anexo";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Pontos Iniciais";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Tirar Foto ou Vídeo";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Toque em uma superfície para posicionar a cena";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Configuração do Terminal";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "testar";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "O mapa base não tem uma referência espacial.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "A senha era inválida.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "Não foi possível importar o anexo selecionado.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "O anexo selecionado excede o limite %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "Não foi possível alcançar a URL ou não contém dados de imagem.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Tentar Novamente";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Erro de validação desconhecido";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Tipo de Ativo Sem Nome";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Valor";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "O valor deve ser %lld para ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "O valor deve ser ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "O valor deve ser um número";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "O valor deve ser um número inteiro";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "O valor deve ser de %@ até %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "O valor deve ser do tipo correto";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "O valor precisa estar dentro do domínio";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "O valor não deve estar vazio";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

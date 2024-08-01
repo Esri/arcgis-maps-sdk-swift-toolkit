@@ -4,9 +4,5 @@ import ArcGIS
 
 @main
 struct AuthenticationApp: App {
-    @ObservedObject var authenticator: Authenticator
-    
-    init() {
-        authenticator = Authenticator()
-    }
+    @StateObject private var authenticator = Authenticator()
 }

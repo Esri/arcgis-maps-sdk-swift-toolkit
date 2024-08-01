@@ -17,6 +17,8 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality table top experience.
+@MainActor
+@preconcurrency
 public struct TableTopSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
@@ -102,7 +104,7 @@ public struct TableTopSceneView: View {
                     .onUpdateNode { _, node, anchor in
                         updatePlane(with: node, for: anchor)
                     }
-                    .onSingleTapGesture { screenPoint in
+                    .onTapGesture { screenPoint in
                         guard !initialTransformationIsSet else { return }
                         
                         if let transformation = sceneViewProxy.initialTransformation(
@@ -234,6 +236,7 @@ private extension SceneViewProxy {
     ///   - arViewProxy: The AR view proxy.
     ///   - screenPoint: The screen point to determine the `initialTransformation` from.
     /// - Returns: The `initialTransformation`.
+    @MainActor
     func initialTransformation(
         for arViewProxy: ARSwiftUIViewProxy,
         using screenPoint: CGPoint

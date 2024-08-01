@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
-extension FloorLevel: Equatable {
+extension ArcGIS.FloorLevel: Swift.Equatable {
     public static func == (lhs: FloorLevel, rhs: FloorLevel) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension FloorLevel: Hashable {
+extension ArcGIS.FloorLevel: Swift.Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

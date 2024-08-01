@@ -18,6 +18,7 @@ import SwiftUI
 /// A view for numerical value input.
 ///
 /// This is the preferable input type for long lists of coded value domains.
+@MainActor
 struct ComboBoxInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -133,9 +134,8 @@ struct ComboBoxInput: View {
     /// The view that allows the user to filter and select coded values by name.
     ///
     /// Adds navigation context to support toolbar items and other visual elements in the picker.
-    /// - Note `NavigationView` is deprecated after iOS 17.0.
     func makePicker(for values: [CodedValue]) -> some View {
-        let picker = {
+        NavigationStack {
             VStack {
                 Text(element.description)
                     .foregroundColor(.secondary)
@@ -193,16 +193,6 @@ struct ComboBoxInput: View {
                 }
             }
         }
-        
-        if #available(iOS 16, macCatalyst 16, *) {
-            return NavigationStack {
-                picker()
-            }
-        } else {
-            return NavigationView {
-                picker()
-            }
-        }
     }
 }
 
@@ -245,13 +235,13 @@ private extension Text {
     }
 }
 
-extension CodedValue: Equatable {
+extension ArcGIS.CodedValue: Swift.Equatable {
     public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
         lhs.name == rhs.name
     }
 }
 
-extension CodedValue: Hashable {
+extension ArcGIS.CodedValue: Swift.Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }

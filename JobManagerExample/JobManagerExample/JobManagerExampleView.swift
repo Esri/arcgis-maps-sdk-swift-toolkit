@@ -136,7 +136,7 @@ private struct JobView: View {
     /// Initializer that takes a job for which to show the data for.
     init(job: Job) {
         self.job = job
-        status = job.status
+        self._status = .init(initialValue: job.status)
     }
     
     /// A Boolean value indicating if the progress is showing.
@@ -155,7 +155,7 @@ private struct JobView: View {
     }
     
     var body: some View {
-        VStack (alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(jobType)
             Text(status.displayText)
                 .font(.footnote)
@@ -243,6 +243,8 @@ extension Job.Status {
             return "Failed"
         case .canceling:
             return "Canceling"
+        @unknown default:
+            return "Unknown"
         }
     }
 }
@@ -284,7 +286,7 @@ extension JobManagerExampleView {
         
         if syncModel == .layer, let featureServiceInfo = task.featureServiceInfo {
             let layerOptions = featureServiceInfo.layerInfos
-                .compactMap( { $0 as? FeatureServiceLayerIDInfo })
+                .compactMap { $0 as? FeatureServiceLayerIDInfo }
                 .compactMap(\.id)
                 .map(GenerateLayerOption.init(layerID:))
             params.addLayerOptions(layerOptions)
@@ -321,9 +323,9 @@ extension FileManager {
     }
 }
 
-extension JobProtocol {
+public extension JobProtocol {
     /// The id of the job.
-    public var id: ObjectIdentifier {
+    var id: ObjectIdentifier {
         ObjectIdentifier(self)
     }
 }

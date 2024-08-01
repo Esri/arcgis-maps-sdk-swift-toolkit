@@ -18,7 +18,51 @@ import XCTest
 @testable import ArcGISToolkit
 
 final class BookmarksTests: XCTestCase {
+    @MainActor
+    func testBookmarksWithGeoModel() async throws {
+        var _isPresented = true
+        var _selection: Bookmark?
+        
+        let map = Map.portlandTreeSurvey
+        let bookmarks = Bookmarks(
+            isPresented: Binding(get: { _isPresented }, set: { _isPresented = $0 }),
+            geoModel: map,
+            selection: Binding(get: { _selection }, set: { _selection = $0 }),
+            geoViewProxy: nil
+        )
+        
+        do {
+            try await map.load()
+        } catch {
+            XCTFail("Web map failed to load \(error.localizedDescription)")
+        }
+        
+        bookmarks.selectBookmark(map.bookmarks.first!)
+        
+        XCTAssertFalse(_isPresented)
+        XCTAssertEqual(_selection, map.bookmarks.first)
+    }
+    
+    @MainActor
+    func testBookmarksWithList() {
+        var _isPresented = true
+        var _selection: Bookmark?
+        
+        let bookmarks = Bookmarks(
+            isPresented: Binding(get: { _isPresented }, set: { _isPresented = $0 }),
+            bookmarks: sampleBookmarks,
+            selection: Binding(get: { _selection }, set: { _selection = $0 })
+        )
+        
+        bookmarks.selectBookmark(sampleBookmarks.first!)
+        
+        XCTAssertFalse(_isPresented)
+        XCTAssertEqual(_selection, sampleBookmarks.first)
+    }
+    
     /// Asserts that the list properly handles a selection when provided a modifier.
+    @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithModifier() {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
@@ -31,7 +75,7 @@ final class BookmarksTests: XCTestCase {
         }
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         var bookmarks = Bookmarks(
             isPresented: isPresented,
@@ -45,6 +89,8 @@ final class BookmarksTests: XCTestCase {
     }
     
     /// Asserts that the list properly handles a selection when provided a modifier and web map.
+    @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithModifierAndMap() async throws {
         let map = Map.portlandTreeSurvey
         do {
@@ -55,7 +101,7 @@ final class BookmarksTests: XCTestCase {
         var _isPresented = true
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         
         var selectedBookmark: Bookmark?
@@ -69,12 +115,14 @@ final class BookmarksTests: XCTestCase {
     }
     
     /// Asserts that the list properly handles a selection when provided a viewpoint.
+    @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithViewpoint() {
         let sampleBookmarks = sampleBookmarks
         var _isPresented = true
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
         let viewpoint = Binding(
@@ -94,6 +142,8 @@ final class BookmarksTests: XCTestCase {
     }
     
     /// Asserts that the list properly handles a selection when provided a viewpoint and web map.
+    @available(*, deprecated)
+    @MainActor
     func testSelectBookmarkWithViewpointAndMap() async throws {
         let map = Map.portlandTreeSurvey
         do {
@@ -104,7 +154,7 @@ final class BookmarksTests: XCTestCase {
         var _isPresented = true
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
         let viewpoint = Binding(

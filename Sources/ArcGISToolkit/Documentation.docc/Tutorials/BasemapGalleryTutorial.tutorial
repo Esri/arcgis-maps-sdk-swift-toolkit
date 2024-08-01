@@ -13,29 +13,30 @@
         @Steps {
             @Step {
                 To begin, set up the parent view.
-                Initialize a map with a basemap style, create member variable to control when the gallery is shown or hidden and pick an initial viewpoint.
-                Finally, add a `MapView` to the body of view, passing in the map and initial viewpoint.
-                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep1)
+                Initialize a map with a basemap style and an initial viewpoint. 
+                Create a member variable to control when the gallery is shown or hidden.
+                Finally, add a `MapView` to the body of view, passing in the map.
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep1.swift)
             }
             
             @Step {
                 Create a list of items to be shown in the gallery.
-                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep2)
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep2.swift)
             }
             
             @Step {
                 Host the BasemapGallery on top of the `MapView` in a sheet, passing in the list of basemap gallery items and the map.
-                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep3)
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep3.swift)
             }
             
             @Step {
                 Place a button in the navigation bar to open the gallery.
-                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep4)
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep4.swift)
             }
             
             @Step {
                 Place a done button in the sheet to close the gallery.
-                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep5)
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep5.swift)
             }
         }
     }

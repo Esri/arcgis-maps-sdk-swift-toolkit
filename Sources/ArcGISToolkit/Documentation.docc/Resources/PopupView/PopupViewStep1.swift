@@ -11,7 +11,5 @@ struct PopupExampleView: View {
         return Map(item: portalItem)
     }
     
-    @StateObject private var dataModel = MapDataModel(
-        map: makeMap()
-    )
+    @State private var map = makeMap()
 }

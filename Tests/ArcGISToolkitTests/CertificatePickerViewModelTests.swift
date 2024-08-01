@@ -30,6 +30,12 @@ final class CertificatePickerViewModelTests: XCTestCase {
         
         model.proceedToPicker()
         
+#if swift(<5.10)
+        XCTExpectFailure(
+            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Swift 5.9. Ref Toolkit #699",
+            options: .nonStrict()
+        )
+#endif
         // Have to wait here because the proceed function is delayed to avoid a bug.
         await fulfillment(
             of: [
@@ -48,6 +54,12 @@ final class CertificatePickerViewModelTests: XCTestCase {
         
         model.proceedToUseCertificate(withPassword: "1234")
         
+#if swift(<5.10)
+        XCTExpectFailure(
+            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Swift 5.9. Ref Toolkit #699",
+            options: .nonStrict()
+        )
+#endif
         await fulfillment(
             of: [
                 expectation(

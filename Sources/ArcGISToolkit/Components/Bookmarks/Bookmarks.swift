@@ -15,39 +15,35 @@
 import ArcGIS
 import SwiftUI
 
-/// The `Bookmarks` component will display a list of bookmarks and allow the user to select a
-/// bookmark and perform some action. You can create the component with either an array of
-/// `Bookmark` values, or with a `Map` or `Scene` containing the bookmarks to display.
+/// The `Bookmarks` component displays a list of bookmarks and allows the user to make a selection.
+/// You can initialize the component with an array of bookmarks or with a `GeoModel`
+/// containing bookmarks.
 ///
-/// `Bookmarks` can be configured to handle automated bookmark selection (zooming the map/scene to
-/// the bookmark’s viewpoint) by passing in a `Viewpoint` binding or the client can handle bookmark
-/// selection changes manually using ``onSelectionChanged(perform:)``.
+/// The map or scene will automatically pan and zoom to the selected bookmark when a `GeoViewProxy`
+/// is provided in the initializer. Alternatively, handle selection changes manually using the bound
+/// `selection` property.
 ///
-/// | iPhone | iPad |
-/// | ------ | ---- |
-/// | ![image](https://user-images.githubusercontent.com/3998072/202765630-894bee44-a0c2-4435-86f4-c80c4cc4a0b9.png) | ![image](https://user-images.githubusercontent.com/3998072/202765729-91c52555-4677-4c2b-b62b-215e6c3790a6.png) |
+/// The component will automatically hide itself when a selection is made.
 ///
-/// **Features**
-///
-/// - Can be configured to display bookmarks from a map or scene, or from an array of user-defined
-/// bookmarks.
-/// - Can be configured to automatically zoom the map or scene to a bookmark selection.
-/// - Can be configured to perform a user-defined action when a bookmark is selected.
-/// - Will automatically hide when a bookmark is selected.
-///
-/// **Behavior**
-/// 
-/// If a `Viewpoint` binding is provided to the `Bookmarks` view, selecting a bookmark will set that
-/// viewpoint binding to the viewpoint of the bookmark. Selecting a bookmark will dismiss the
-/// `Bookmarks` view. If a `GeoModel` is provided, that geo model's bookmarks will be displayed to
-/// the user.
+/// @Image(source: Bookmarks, alt: "An image of the Bookmarks component.")
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BookmarksExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
-/// in the project. To learn more about using the `Bookmarks` component see the [Bookmarks Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/bookmarkstutorial).
+/// in the project. To learn more about using the `Bookmarks` component see the <doc:BookmarksTutorial>.
+@MainActor
+@preconcurrency
 public struct Bookmarks: View {
-    /// A list of selectable bookmarks.
-    @State private var bookmarks: [Bookmark]
+    /// The data source used to initialize the view.
+    enum BookmarkSource {
+        case array([Bookmark])
+        case geoModel(GeoModel)
+    }
+    
+    /// The bookmark data source.
+    let bookmarkSource: BookmarkSource
+    
+    /// The proxy to provide access to geo view operations.
+    private let geoViewProxy: GeoViewProxy?
     
     /// An error that occurred while loading the geo model.
     @State private var loadingError: Error?
@@ -59,10 +55,7 @@ public struct Bookmarks: View {
     @Binding private var isPresented: Bool
     
     /// The selected bookmark.
-    @State private var selectedBookmark: Bookmark? = nil
-    
-    /// A map or scene model containing bookmarks.
-    private var geoModel: GeoModel?
+    private var selection: Binding<Bookmark?>?
     
     /// User defined action to be performed when a bookmark is selected.
     ///
@@ -73,91 +66,97 @@ public struct Bookmarks: View {
     /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
     private var viewpoint: Binding<Viewpoint?>?
     
+    public var body: some View {
+        VStack {
+            BookmarksHeader(isPresented: $isPresented)
+                .padding([.horizontal, .top])
+            Divider()
+            switch bookmarkSource {
+            case .array(let array):
+                makeList(bookmarks: array)
+            case .geoModel(let geoModel):
+                if isGeoModelLoaded {
+                    makeList(bookmarks: geoModel.bookmarks)
+                } else if let loadingError {
+                    makeErrorMessage(with: loadingError)
+                } else if !isGeoModelLoaded {
+                    makeLoadingView(geoModel: geoModel)
+                }
+            }
+            Spacer()
+        }
+        .frame(idealWidth: 320, idealHeight: 428)
+    }
+}
+
+public extension Bookmarks {
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    ///   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
-    ///   bookmark selection.
-    public init(
+    ///   - selection: A selected Bookmark.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
+    ///
+    /// When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
+    /// selected bookmark.
+    init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
-        viewpoint: Binding<Viewpoint?>? = nil
+        selection: Binding<Bookmark?>,
+        geoViewProxy: GeoViewProxy? = nil
     ) {
-        _isPresented = isPresented
-        _bookmarks = State(initialValue: bookmarks)
-        self.viewpoint = viewpoint
+        self.init(
+            bookmarkSource: .array(bookmarks),
+            geoViewProxy: geoViewProxy,
+            isPresented: isPresented,
+            selection: selection
+        )
     }
     
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    ///   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
-    ///   bookmark selection.
-    public init(
+    ///   - selection: A selected Bookmark.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
+    ///
+    /// When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
+    /// selected bookmark.
+    init(
         isPresented: Binding<Bool>,
         geoModel: GeoModel,
-        viewpoint: Binding<Viewpoint?>? = nil
+        selection: Binding<Bookmark?>,
+        geoViewProxy: GeoViewProxy? = nil
     ) {
-        self.geoModel = geoModel
-        self.viewpoint = viewpoint
-        _bookmarks = State(initialValue: [])
-        _isPresented = isPresented
-    }
-    
-    public var body: some View {
-        BookmarksHeader(isPresented: $isPresented)
-            .padding([.horizontal, .top])
-        Divider()
-        if !bookmarks.isEmpty {
-            list
-                .onChange(of: selectedBookmark) { selectedBookmark in
-                    if let selectedBookmark {
-                        selectBookmark(selectedBookmark)
-                    }
-                }
-        } else if let loadingError {
-            makeErrorMessage(with: loadingError)
-        } else if geoModel != nil && !isGeoModelLoaded {
-            loading
-        } else {
-            noBookmarks
-        }
-        // Push content to the top edge.
-        Spacer()
+        self.init(
+            bookmarkSource: .geoModel(geoModel),
+            geoViewProxy: geoViewProxy,
+            isPresented: isPresented,
+            selection: selection
+        )
     }
 }
 
 extension Bookmarks {
-    /// The list of bookmarks sorted alphabetically.
-    var sortedBookmarks: [Bookmark] {
-        bookmarks.sorted { $0.name <  $1.name }
-    }
-    
-    /// Sets an action to perform when the bookmark selection changes.
-    /// - Parameter action: The action to perform when the bookmark selection has changed.
-    public func onSelectionChanged(
-        perform action: @escaping (Bookmark) -> Void
-    ) -> Bookmarks {
-        var copy = self
-        copy.selectionChangedAction = action
-        return copy
-    }
-    
     /// Performs the necessary actions when a bookmark is selected.
     ///
     /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
     /// binding (if provided) or calling the action provided by the `onSelectionChanged(perform:)` modifier.
     /// - Parameter bookmark: The bookmark that was selected.
     func selectBookmark(_ bookmark: Bookmark) {
+        selection?.wrappedValue = bookmark
         isPresented = false
-        if let viewpoint = viewpoint {
+        
+        if let geoViewProxy, let viewpoint = bookmark.viewpoint {
+            Task {
+                await geoViewProxy.setViewpoint(viewpoint, duration: nil)
+            }
+        } else if let viewpoint = viewpoint {
             viewpoint.wrappedValue = bookmark.viewpoint
-        } else if let onSelectionChanged = selectionChangedAction {
-            onSelectionChanged(bookmark)
+        }
+        
+        if let selectionChangedAction {
+            selectionChangedAction(bookmark)
         }
     }
     
@@ -173,41 +172,41 @@ extension Bookmarks {
         )
     }
     
-    /// A view that shows the list of bookmarks.
-    ///
-    /// - Note: Once the minimum supported platform is 16.4 or greater, the `ScrollView`, `VStack`
-    /// and `ForEach` can be replaced with a `List` with `scrollContentBackground(.hidden)` applied.
-    private var list: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                ForEach(sortedBookmarks, id: \.self) { bookmark in
-                    Button {
-                        selectedBookmark = bookmark
-                    } label: {
-                        Text(bookmark.name)
-                            // Make the entire row tappable.
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .padding(4)
-                    if bookmark != sortedBookmarks.last {
-                        Divider()
-                    }
+    /// Makes a view that shows a list of bookmarks.
+    /// - Parameter bookmarks: The bookmarks to be shown.
+    @ViewBuilder private func makeList(bookmarks: [Bookmark]) -> some View {
+        if bookmarks.isEmpty {
+            noBookmarks
+        } else {
+            List(bookmarks.sorted { $0.name <  $1.name }, id: \.self, selection: selection) { bookmark in
+                // When 'init(isPresented:bookmarks:viewpoint:)' and
+                // 'init(isPresented:geoModel:viewpoint:)' are removed, this
+                // button can be replaced with 'Text' and the list's selection
+                // mechanism and 'onChange(of: selection)' can be used instead.
+                Button {
+                    selectBookmark(bookmark)
+                } label: {
+                    Text(bookmark.name)
+                        // Make the entire row tappable.
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+#if targetEnvironment(macCatalyst)
+                .listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
+#endif
             }
+            .listStyle(.plain)
         }
-        .padding([.horizontal])
     }
     
-    /// A view that is shown while a `GeoModel` is loading.
-    private var loading: some View {
-        ProgressView()
+    /// Makes a view that is shown while a `GeoModel` is loading.
+    private func makeLoadingView(geoModel: GeoModel) -> some View {
+        return ProgressView()
             .padding()
-            .task {
+            .task(id: geoModel) {
                 do {
-                    try await geoModel?.load()
-                    bookmarks = geoModel?.bookmarks ?? []
+                    try await geoModel.load()
                     isGeoModelLoaded = true
                 } catch {
                     loadingError = error
@@ -228,5 +227,59 @@ extension Bookmarks {
         }
         .foregroundColor(.primary)
         .padding()
+    }
+}
+
+public extension Bookmarks /* Deprecated */ {
+    /// Creates a `Bookmarks` component.
+    /// - Parameters:
+    ///   - isPresented: Determines if the bookmarks list is presented.
+    ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
+    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
+    init(
+        isPresented: Binding<Bool>,
+        bookmarks: [Bookmark],
+        viewpoint: Binding<Viewpoint?>? = nil
+    ) {
+        self.init(
+            bookmarkSource: .array(bookmarks),
+            geoViewProxy: nil,
+            isPresented: isPresented,
+            viewpoint: viewpoint
+        )
+    }
+    
+    /// Creates a `Bookmarks` component.
+    /// - Parameters:
+    ///   - isPresented: Determines if the bookmarks list is presented.
+    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
+    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
+    init(
+        isPresented: Binding<Bool>,
+        geoModel: GeoModel,
+        viewpoint: Binding<Viewpoint?>? = nil
+    ) {
+        self.init(
+            bookmarkSource: .geoModel(geoModel),
+            geoViewProxy: nil,
+            isPresented: isPresented,
+            viewpoint: viewpoint
+        )
+    }
+    
+    /// Sets an action to perform when the bookmark selection changes.
+    /// - Parameter action: The action to perform when the bookmark selection has changed.
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated)
+    func onSelectionChanged(
+        perform action: @escaping (Bookmark) -> Void
+    ) -> Bookmarks {
+        var copy = self
+        copy.selectionChangedAction = action
+        return copy
     }
 }

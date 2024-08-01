@@ -29,9 +29,7 @@ To use Toolkit in your project:
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
-* Xcode 15.0 (or newer)
-
-The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, meaning that it can run on devices with *iOS 15.0* or newer.
+* The [System Requirements](https://developers.arcgis.com/swift/system-requirements/system-requirements-for-200-5/) are the same as those for the ArcGIS Maps SDK for Swift
 
 ## Instructions
 
@@ -47,9 +45,11 @@ The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, me
 
  New to Swift Package Manager? Visit [swift.org/package-manager/](https://swift.org/package-manager/).
 
-## Configure API Key
+## Configure API Key & Licensing
 
-Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https://developers.arcgis.com/swift/get-started/#3-access-services-and-content-with-an-api-key/) for more information.
+Use of ArcGIS location services, such as basemap styles, geocoding, and routing services, requires either user authentication or API key authentication. Some of the toolkit components and examples utilize a set of these ready-to-use ArcGIS location services, including basemap styles, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see [Get started](https://developers.arcgis.com/swift/get-started/#3-get-an-access-token), [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) and [API Key Authentication](https://developers.arcgis.com/swift/security-and-authentication/#api-key-authentication) for more information.
+
+Production deployment of applications built with the ArcGIS Maps SDK for Swift requires that you license your app. For more information, see [License and deployment](https://developers.arcgis.com/swift/license-and-deployment).
 
 ## Additional Resources
 

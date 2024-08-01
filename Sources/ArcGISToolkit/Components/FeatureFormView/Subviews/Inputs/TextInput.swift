@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view for text input.
+@MainActor
 struct TextInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -23,22 +24,8 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
-    
-    /// A Boolean value indicating whether placeholder text is shown, thereby indicating the
-    /// presence of a value.
-    ///
-    /// If iOS 16.0 minimum APIs are not supported we use a TextField for single line entry and a
-    /// TextEditor for multiline entry. TextEditors don't have placeholder support so instead we
-    /// replace empty text with the configured placeholder message and adjust the font
-    /// color.
-    ///
-    /// Once iOS 16.0 is the minimum supported platform this property can be removed.
-    @State private var isPlaceholder = false
     
     /// The current text value.
     @State private var text = ""
@@ -60,13 +47,6 @@ struct TextInput: View {
     var body: some View {
         textWriter
             .onChange(of: isFocused) { isFocused in
-                if isFocused && isPlaceholder {
-                    isPlaceholder = false
-                    text = ""
-                } else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
-                    isPlaceholder = true
-                    text = element.hint
-                }
                 if isFocused {
                     model.focusedElement = element
                 } else if model.focusedElement == element {
@@ -80,7 +60,6 @@ struct TextInput: View {
                 }
             }
             .onChange(of: text) { text in
-                guard !isPlaceholder else { return }
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
@@ -90,57 +69,43 @@ struct TextInput: View {
                     model.focusedElement = element
                 }
             }
-            .onValueChange(of: element) { newValue, newFormattedValue in
-                formattedValue = newFormattedValue
-                updateText()
+            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+                text = newFormattedValue
             }
     }
 }
 
 private extension TextInput {
-    /// A Boolean value indicating whether iOS 16.0 minimum APIs are supported.
-    var iOS16MinimumIsSupported: Bool {
-        if #available(iOS 16.0, *) {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .bottom) {
             Group {
-                if #available(iOS 16.0, *) {
-                    TextField(
-                        element.label,
-                        text: $text,
-                        prompt: Text(element.hint).foregroundColor(.secondary),
-                        axis: element.isMultiline ? .vertical : .horizontal
-                    )
-                    .disabled(element.isMultiline)
-                    .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                        FullScreenTextInput(text: $text, element: element)
+                if element.isMultiline {
+                    Text(text)
+                        .accessibilityIdentifier("\(element.label) Text Input Preview")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(10)
+                        .truncationMode(.tail)
+                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                            FullScreenTextInput(text: $text, element: element, model: model)
+                                .padding()
 #if targetEnvironment(macCatalyst)
-                            .environmentObject(model)
+                                .environmentObject(model)
 #endif
-                            .padding()
-                    }
-                } else if element.isMultiline {
-                    TextEditor(text: $text)
-                        .foregroundColor(isPlaceholder ? .secondary : .primary)
+                        }
                 } else {
                     TextField(
                         element.label,
                         text: $text,
-                        prompt: Text(element.hint).foregroundColor(.secondary)
+                        prompt: Text(element.hint).foregroundColor(.secondary),
+                        axis: .horizontal
                     )
+                    .accessibilityIdentifier("\(element.label) Text Input")
+                    .keyboardType(keyboardType)
                 }
             }
-            .accessibilityIdentifier("\(element.label) Text Input")
-            .background(.clear)
             .focused($isFocused)
-            .keyboardType(keyboardType)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
@@ -149,7 +114,7 @@ private extension TextInput {
                     }
                 }
             }
-            .scrollContentBackgroundHidden()
+            .scrollContentBackground(.hidden)
             if !text.isEmpty {
                 ClearButton {
                     if !isFocused {
@@ -186,17 +151,8 @@ private extension TextInput {
             Image(systemName: "plus.forwardslash.minus")
         }
     }
-    
-    /// Updates ``text`` and ``placeholder`` values in response to
-    /// a change in ``formattedValue``.
-    private func updateText() {
-        let text = formattedValue
-        isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-        self.text = isPlaceholder ? element.hint : text
-    }
 }
 
-@available(iOS 16.0, *)
 private extension TextInput {
     /// A view for displaying a multiline text input outside the body of the feature form view.
     ///
@@ -215,6 +171,9 @@ private extension TextInput {
         /// The element the input belongs to.
         let element: FieldFormElement
         
+        /// The view model for the form.
+        let model: FormViewModel
+        
         var body: some View {
             HStack {
                 InputHeader(element: element)
@@ -224,12 +183,12 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
             }
-            TextField(
-                element.label,
-                text: $text,
-                prompt: Text(element.hint).foregroundColor(.secondary),
-                axis: .vertical
-            )
+            RepresentedUITextView(initialText: text) { text in
+                element.convertAndUpdateValue(text)
+                model.evaluateExpressions()
+            } onTextViewDidEndEditing: { text in
+                self.text = text
+            }
             .focused($textFieldIsFocused, equals: true)
             .onAppear {
                 textFieldIsFocused = true
@@ -267,14 +226,37 @@ private extension FieldFormElement {
 }
 
 private extension View {
-    /// - Returns: A view with the scroll content background hidden.
-    func scrollContentBackgroundHidden() -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .scrollContentBackground(.hidden)
+    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
+    /// not monitor value changes.
+    /// - Parameters:
+    ///   - element: The form element to watch for changes on.
+    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
+    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
+        modifier(
+            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
+                action(newValue, newFormattedValue)
+            }
+        )
+    }
+}
+
+private struct ConditionalChangeOfModifier: ViewModifier {
+    let element: FieldFormElement
+    
+    let condition: Bool
+    
+    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
+    
+    func body(content: Content) -> some View {
+        if condition {
+            content
+                .onValueChange(of: element) { newValue, newFormattedValue in
+                    action(newValue, newFormattedValue)
+                }
         } else {
-            UITextView.appearance().backgroundColor = .clear
-            return self
+            content
         }
     }
 }

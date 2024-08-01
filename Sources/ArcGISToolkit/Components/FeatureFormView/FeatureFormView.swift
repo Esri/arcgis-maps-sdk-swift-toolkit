@@ -18,10 +18,12 @@ import SwiftUI
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
+/// ![An image of the FeatureFormView component](FeatureFormView)
+///
 /// Forms are currently only supported in maps. The form definition is stored
 /// in the web map itself and contains a title, description, and a list of "form elements".
 ///
-/// `FeatureFormView` will support the display of form elements created by
+/// `FeatureFormView` supports the display of form elements created by
 /// the Map Viewer or Field Maps Designer, including:
 ///
 /// - Field Element - used to edit a single field of a feature with a specific "input type".
@@ -43,6 +45,7 @@ import SwiftUI
 /// - Display a form editing view for a feature based on the feature form definition defined in a web map.
 /// - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 /// - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+/// - Add, delete, or rename feature attachments.
 /// - Fully supports dark mode, as do all Toolkit components.
 ///
 /// **Behavior**
@@ -53,15 +56,21 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
 /// and refer to
 /// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
-/// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial).
-/// 
+/// in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
+///
+/// - Note: In order to capture video and photos as form attachments, your application will need
+/// `NSCameraUsageDescription` and, `NSMicrophoneUsageDescription` entries in the
+/// `Info.plist` file.
+///
 /// - Since: 200.4
+@MainActor
+@preconcurrency
 public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
-    /// A Boolean value indicating whether the initial expression evaluation is running.
-    @State private var isEvaluatingInitialExpressions = true
+    /// A Boolean value indicating whether initial expression evaluation is running.
+    @State private var initialExpressionsAreEvaluating = true
     
     /// The title of the feature form view.
     @State private var title = ""
@@ -74,19 +83,30 @@ public struct FeatureFormView: View {
     }
     
     public var body: some View {
+        if initialExpressionsAreEvaluating {
+            initialBody
+        } else {
+            evaluatedForm
+        }
+    }
+    
+    var evaluatedForm: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
-                if isEvaluatingInitialExpressions {
-                    ProgressView()
-                } else {
-                    VStack(alignment: .leading) {
-                        if !title.isEmpty {
-                            FormHeader(title: title)
-                            Divider()
-                        }
-                        ForEach(model.visibleElements, id: \.self) { element in
-                            makeElement(element)
-                        }
+                VStack(alignment: .leading) {
+                    if !title.isEmpty {
+                        FormHeader(title: title)
+                        Divider()
+                    }
+                    ForEach(model.visibleElements, id: \.self) { element in
+                        makeElement(element)
+                    }
+                    if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+                        // The Toolkit currently only supports AttachmentsFormElements via the
+                        // default attachments element. Once AttachmentsFormElements can be authored
+                        // this can call makeElement(_:) instead and makeElement(_:) should have a
+                        // case added for AttachmentsFormElement.
+                        AttachmentsFeatureElementView(featureElement: attachmentsElement)
                     }
                 }
             }
@@ -99,16 +119,8 @@ public struct FeatureFormView: View {
                 title = newTitle
             }
         }
-        .scrollDismissesKeyboard(
-            // Allow tall multiline text fields to be scrolled
-            immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
-        )
+        .scrollDismissesKeyboard(.immediately)
         .environmentObject(model)
-        .task {
-            // Perform the initial expression evaluation.
-            await model.initialEvaluation()
-            isEvaluatingInitialExpressions = false
-        }
     }
 }
 
@@ -129,9 +141,22 @@ extension FeatureFormView {
     /// Makes UI for a field form element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        if !(element.input is UnsupportedFormInput) {
+        if !(element.input is UnsupportedFormInput ||
+             element.input is BarcodeScannerFormInput) {
             InputWrapper(element: element)
             Divider()
         }
+    }
+    
+    /// The progress view to be shown while initial expression evaluation is running.
+    ///
+    /// This avoids flashing elements that may immediately be set hidden or have
+    /// values change as a result of initial expression evaluation.
+    var initialBody: some View {
+        ProgressView()
+            .task {
+                await model.initialEvaluation()
+                initialExpressionsAreEvaluating = false
+            }
     }
 }

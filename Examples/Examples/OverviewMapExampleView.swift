@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct OverviewMapExampleView: View {
     enum MapOrScene {
@@ -48,10 +48,8 @@ struct OverviewMapExampleView: View {
 }
 
 struct OverviewMapForMapView: View {
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISImagery)
-    )
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     @State private var viewpoint: Viewpoint?
     
@@ -61,10 +59,10 @@ struct OverviewMapForMapView: View {
 //    @State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
     
     var body: some View {
-        MapView(map: dataModel.map)
+        MapView(map: map)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
-            .overlay(
+            .overlay(alignment: .topTrailing) {
                 OverviewMap.forMapView(
                     with: viewpoint,
                     visibleArea: visibleArea// ,
@@ -75,17 +73,14 @@ struct OverviewMapForMapView: View {
 //                    .symbol(.customFillSymbol)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
-                    .padding(),
-                alignment: .topTrailing
-            )
+                    .padding()
+            }
     }
 }
 
 struct OverviewMapForSceneView: View {
-    /// The data model containing the `Scene` displayed in the `SceneView`.
-    @StateObject private var dataModel = SceneDataModel(
-        scene: Scene(basemapStyle: .arcGISImagery)
-    )
+    /// The `Scene` displayed in the `SceneView`.
+    @State private var scene = Scene(basemapStyle: .arcGISImagery)
     
     @State private var viewpoint: Viewpoint?
     
@@ -93,9 +88,9 @@ struct OverviewMapForSceneView: View {
     //    @State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 
     var body: some View {
-        SceneView(scene: dataModel.scene)
+        SceneView(scene: scene)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-            .overlay(
+            .overlay(alignment: .topTrailing) {
                 OverviewMap.forSceneView(
                     with: viewpoint// ,
                     // map: customOverviewMap // Uncomment to use a custom map.
@@ -105,9 +100,8 @@ struct OverviewMapForSceneView: View {
 //                    .symbol(.customMarkerSymbol)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
-                    .padding(),
-                alignment: .topTrailing
-            )
+                    .padding()
+            }
     }
 }
 

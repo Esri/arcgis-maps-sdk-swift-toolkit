@@ -3,11 +3,9 @@ import ArcGIS
 import ArcGISToolkit
 
 struct OverviewMapForSceneView: View {
-    @StateObject private var dataModel = SceneDataModel(
-        scene: Scene(basemapStyle: .arcGISImagery)
-    )
+    @State private var scene = Scene(basemapStyle: .arcGISImagery)
     
     var body: some View {
-        SceneView(scene: dataModel.scene)
+        SceneView(scene: scene)
     }
 }

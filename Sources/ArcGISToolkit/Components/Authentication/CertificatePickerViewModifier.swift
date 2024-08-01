@@ -116,7 +116,7 @@ import UniformTypeIdentifiers
     }
 }
 
-extension CertificateImportError: LocalizedError {
+extension ArcGIS.CertificateImportError: Foundation.LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidData:
@@ -159,6 +159,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 }
 
 /// A view modifier that presents a certificate picker workflow.
+@MainActor
 struct CertificatePickerViewModifier: ViewModifier {
     /// Creates a certificate picker view modifier.
     /// - Parameter challenge: The challenge that requires a certificate.
@@ -287,7 +288,7 @@ private extension View {
                 Spacer()
             }
             .interactiveDismissDisabled()
-            .mediumPresentationDetents()
+            .presentationDetents([.medium])
             .padding()
         }
     }
@@ -378,7 +379,7 @@ private extension View {
                 Spacer()
             }
             .interactiveDismissDisabled()
-            .mediumPresentationDetents()
+            .presentationDetents([.medium])
             .padding()
         }
     }

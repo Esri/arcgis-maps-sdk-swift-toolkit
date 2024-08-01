@@ -17,9 +17,11 @@ import Combine
 import UIKit
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
-public class BasemapGalleryItem: ObservableObject {
+@MainActor
+@preconcurrency
+public final class BasemapGalleryItem: ObservableObject, Sendable {
     /// The status of a basemap's spatial reference in relation to a reference spatial reference.
-    public enum SpatialReferenceStatus {
+    public enum SpatialReferenceStatus: Sendable {
         /// The basemap's spatial reference status is unknown, either because the basemap's
         /// base layers haven't been loaded yet or the status has yet to be updated.
         case unknown
@@ -52,13 +54,13 @@ public class BasemapGalleryItem: ObservableObject {
             if basemap.loadStatus != .loaded {
                 await loadBasemap()
             } else {
-                await finalizeLoading()
+                finalizeLoading()
             }
         }
     }
     
     /// The basemap represented by `BasemapGalleryItem`.
-    public let basemap: Basemap
+    public nonisolated let basemap: Basemap
     
     /// The name of the `basemap`.
     @Published public private(set) var name: String?
@@ -97,12 +99,12 @@ private extension BasemapGalleryItem {
         } catch  {
             loadError = error
         }
-        await finalizeLoading(error: loadError)
+        finalizeLoading(error: loadError)
     }
     
     /// Updates the item in response to basemap loading completion.
     /// - Parameter error: The basemap load error, if any.
-    @MainActor func finalizeLoading(error: Error? = nil) {
+    func finalizeLoading(error: Error? = nil) {
         if name == nil {
             name = basemap.name
         }
@@ -121,11 +123,8 @@ private extension BasemapGalleryItem {
 extension BasemapGalleryItem: Identifiable {}
 
 extension BasemapGalleryItem: Equatable {
-    public static func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
-        lhs.basemap === rhs.basemap &&
-        lhs.name == rhs.name &&
-        lhs.description == rhs.description &&
-        lhs.thumbnail === rhs.thumbnail
+    public static nonisolated func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
+        return lhs.basemap === rhs.basemap
     }
 }
 

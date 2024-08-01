@@ -12,41 +12,105 @@ struct FeatureFormExampleView: View {
     }
     
     @State private var map = makeMap()
-
-    @State private var identifyScreenPoint: CGPoint?
     
-    @State private var featureForm: FeatureForm? {
-        didSet { showFeatureForm = featureForm != nil }
-    }
-    
-    @State private var showFeatureForm = false
+    @StateObject private var model = Model()
     
     var body: some View {
-        MapViewReader { proxy in
-            MapView(map: map)
-                .onSingleTapGesture { screenPoint, _ in
-                    identifyScreenPoint = screenPoint
-                }
-                .task(id: identifyScreenPoint) {
-                    guard let identifyScreenPoint else { return }
-                    let identifyResult = try? await proxy.identifyLayers(
-                        screenPoint: identifyScreenPoint,
-                        tolerance: 10
-                    )
-                        .first(where: { result in
-                            if let feature = result.geoElements.first as? ArcGISFeature,
-                               (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
-                                return true
-                            } else {
-                                return false
-                            }
-                        })
-                    
-                    if let feature = identifyResult?.geoElements.first as? ArcGISFeature,
-                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
-                        featureForm = FeatureForm(feature: feature, definition: formDefinition)
-                    }
-                }
+        NavigationStack {
+            MapViewReader { mapViewProxy in
+                MapView(map: map)
+            }
         }
+    }
+}
+
+@MainActor
+class Model: ObservableObject {
+    enum State {
+        case applyingEdits(FeatureForm)
+        case cancellationPending(FeatureForm)
+        case editing(FeatureForm)
+        case finishingEdits(FeatureForm)
+        case generalError(FeatureForm, Text)
+        case idle
+        case validating(FeatureForm)
+    }
+    
+    @Published var state: State = .idle {
+        willSet {
+            switch newValue {
+            case let .editing(featureForm):
+                featureForm.featureLayer?.selectFeature(featureForm.feature)
+            case .idle:
+                guard let featureForm else { return }
+                featureForm.featureLayer?.unselectFeature(featureForm.feature)
+            default:
+                break
+            }
+        }
+    }
+    
+    var alertIsPresented: Binding<Bool> {
+        Binding {
+            guard case .generalError = self.state else { return false }
+            return true
+        } set: { newIsErrorShowing in
+            if !newIsErrorShowing {
+                guard case let .generalError(featureForm, _) = self.state else { return }
+                self.state = .editing(featureForm)
+            }
+        }
+    }
+    
+    var cancelConfirmationIsPresented: Binding<Bool> {
+        Binding {
+            guard case .cancellationPending = self.state else { return false }
+            return true
+        } set: { _ in
+        }
+    }
+    
+    var featureForm: FeatureForm? {
+        switch state {
+        case .idle:
+            return nil
+        case
+            let .editing(form), let .validating(form),
+            let .finishingEdits(form), let .applyingEdits(form),
+            let .cancellationPending(form), let .generalError(form, _):
+            return form
+        }
+    }
+    
+    var formControlsAreDisabled: Bool {
+        guard case .editing = state else { return true }
+        return false
+    }
+    
+    var formIsPresented: Binding<Bool> {
+        Binding {
+            guard case .idle = self.state else { return true }
+            return false
+        } set: { _ in
+        }
+    }
+    
+    var textForState: Text {
+        switch state {
+        case .validating:
+            Text("Validating")
+        case .finishingEdits:
+            Text("Finishing edits")
+        case .applyingEdits:
+            Text("Applying edits")
+        default:
+            Text("")
+        }
+    }
+}
+
+private extension FeatureForm {
+    var featureLayer: FeatureLayer? {
+        feature.table?.layer as? FeatureLayer
     }
 }

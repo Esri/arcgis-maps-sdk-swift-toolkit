@@ -74,15 +74,11 @@ struct MediaDetailView : View {
                     }
                 }
             case .barChart, .columnChart, .pieChart, .lineChart:
-                if #available(iOS 16, macCatalyst 16, *) {
-                    ChartView(
-                        popupMedia: popupMedia,
-                        data: ChartData.getChartData(from: popupMedia),
-                        isShowingDetailView: true
-                    )
-                } else {
-                    EmptyView()
-                }
+                ChartView(
+                    popupMedia: popupMedia,
+                    data: ChartData.getChartData(from: popupMedia),
+                    isShowingDetailView: true
+                )
             default:
                 EmptyView()
             }
