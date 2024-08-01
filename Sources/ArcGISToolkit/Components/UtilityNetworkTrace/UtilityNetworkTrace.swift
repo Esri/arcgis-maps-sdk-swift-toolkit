@@ -896,9 +896,9 @@ private extension String {
             localized: "Function Results",
             bundle: .toolkitModule,
             comment: """
-                 A label in reference to function outputs returned as results of a utility network
-                 trace operation.
-                 """
+                A label in reference to function outputs returned as results of a utility network
+                trace operation.
+                """
         )
     }
     
