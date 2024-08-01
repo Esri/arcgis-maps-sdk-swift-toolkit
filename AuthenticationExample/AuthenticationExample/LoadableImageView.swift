@@ -12,18 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view that loads a `LoadableImage` and displays it.
 /// While the image is loading a progress view is displayed.
 /// If there is an error displaying the image a red exclamation circle is displayed.
+@MainActor
 struct LoadableImageView: View {
     /// The loadable image to display.
     let loadableImage: LoadableImage
     
     /// The result of loading the image.
-    @State var result: Result<UIImage, Error>? = nil
+    @State private var result: Result<UIImage, Error>?
     
     var body: some View {
         Group {
@@ -38,7 +39,8 @@ struct LoadableImageView: View {
                 Image(uiImage: image)
                     .resizable()
             }
-        }.task {
+        }
+        .task {
             result = await Result {
                 try await loadableImage.load()
                 return loadableImage.image ?? UIImage()

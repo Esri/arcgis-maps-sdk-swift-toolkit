@@ -22,7 +22,7 @@ struct BookmarksTestCase1View: View {
     @State private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     
     /// The last selected bookmark.
-    @State private var selectedBookmark: Bookmark?
+    @State private var selection: Bookmark?
     
     /// Indicates if the `Bookmarks` component is shown or not.
     /// - Remark: This allows a developer to control when the `Bookmarks` component is
@@ -30,13 +30,13 @@ struct BookmarksTestCase1View: View {
     @State private var showingBookmarks = false
     
     var body: some View {
-        MapView(map: map, viewpoint: selectedBookmark?.viewpoint)
+        MapView(map: map, viewpoint: selection?.viewpoint)
             .sheet(isPresented: $showingBookmarks) {
                 Bookmarks(
                     isPresented: $showingBookmarks,
-                    geoModel: map
+                    geoModel: map,
+                    selection: $selection
                 )
-                .onSelectionChanged { selectedBookmark = $0 }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -45,9 +45,9 @@ struct BookmarksTestCase1View: View {
                     }
                 }
                 
-                if let selectedBookmark {
+                if let selection {
                     ToolbarItem(placement: .bottomBar) {
-                        Text(selectedBookmark.name)
+                        Text(selection.name)
                     }
                 }
             }

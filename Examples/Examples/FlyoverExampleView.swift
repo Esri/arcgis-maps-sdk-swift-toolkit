@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct FlyoverExampleView: View {
     @State private var scene = Scene(
@@ -32,7 +32,7 @@ struct FlyoverExampleView: View {
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
-                    Task.detached {
+                    Task.detached { @MainActor in
                         let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
                         print("\(results.count) identify result(s).")
                     }

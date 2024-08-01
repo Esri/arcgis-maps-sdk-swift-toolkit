@@ -4,10 +4,12 @@ import ArcGIS
 
 @main
 struct AuthenticationApp: App {
-    @ObservedObject var authenticator: Authenticator
+    @StateObject private var authenticator = Authenticator()
     
-    init() {
-        authenticator = Authenticator()
-        ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+    var body: some SwiftUI.Scene {
+        WindowGroup {
+            HomeView()
+                .authenticator(authenticator)
+        }
     }
 }

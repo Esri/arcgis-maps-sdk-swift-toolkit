@@ -1,7 +1,6 @@
 @Tutorial(time: 10) {
     @Intro(title: "Bookmarks Tutorial") {
-        The `Bookmarks` component will display a list of bookmarks and allow the user to select a
-        bookmark and perform some action.
+        The `Bookmarks` component displays a list of bookmarks and allows the user to make a selection.
         @Image(source: Bookmarks, alt: "An image of the Bookmarks component.")
     }
     
@@ -16,30 +15,29 @@
                 
                 Initialize a map that contains preset bookmarks.
                 Add a `MapView` to the body of the view, passing in the map.
-                Wrap the `MapView` in a `MapViewReader` to allow for programatic animated viewpoint changes.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep1)
+                Wrap the `MapView` in a `MapViewReader` to obtain a `MapViewProxy`.
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep1.swift)
             }
             
             @Step {
-                Add a toolbar button to open the bookmark selector. 
+                Add a button within a toolbar to present the `Bookmarks` component.
                 
-                The property `showingBookmarks` will control when the bookmarks are shown or hidden.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep2)
+                The property `bookmarksIsPresented` will control when the `Bookmarks` component is shown or hidden.
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep2.swift)
             }
             
             @Step {
-                Host the Bookmarks component inside of a popover.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep3)
+                Host the `Bookmarks` component inside of a popover.
+                
+                Create a new property named `selection` to hold the selected bookmark.
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep3.swift)
             }
             
             @Step {
-                Use the `onSelectionChanged` modifier to track when a bookmark selection is made.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep4)
-            }
-            
-            @Step {
-                Use a task to animate viewpoint changes when the selected bookmark is changed.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep5)
+                Enable automatic pan and zoom to the selected bookmark.
+                
+                Pass the `MapViewProxy` from Step 1 into the `Bookmarks` initializer.
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep4.swift)
             }
         }
     }

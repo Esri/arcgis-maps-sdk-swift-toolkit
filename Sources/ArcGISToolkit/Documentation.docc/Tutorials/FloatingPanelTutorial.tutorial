@@ -14,24 +14,24 @@
                 To begin, set up the parent view.
                 A floating panel can host content over a `MapView`, `SceneView`, or some other view.
                 Add a simple gradient to the body of the view.
-                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep1)
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep1.swift)
             }
             
             @Step {
                 Add a `FloatingPanelDetent` property to control the height of the panel. 
                 In this case we will use a named value (`.half`), but a custom value can also be used.
                 Add a Boolean property to control when the panel is shown or hidden.
-                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep2)
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep2.swift)
             }
             
             @Step {
                 Add the Floating Panel into the hierarchy, passing in values for `selectedDetent` and `isPresented`.
-                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep3)
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep3.swift)
             }
             
             @Step {
                 Add the desired content to the body of the Floating Panel.
-                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep4)
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep4.swift)
             }
         }
     }

@@ -12,17 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 /// A view that displays the profile of a user.
+@MainActor
 struct ProfileView: View {
     /// The portal that the user is signed in to.
-    @State var portal: Portal
+    let portal: Portal
     
     /// A Boolean indicating whether the user is signing out.
-    @State var isSigningOut: Bool = false
+    @State private var isSigningOut = false
     
     /// The closure to call once the user has signed out.
     var signOutAction: () -> Void

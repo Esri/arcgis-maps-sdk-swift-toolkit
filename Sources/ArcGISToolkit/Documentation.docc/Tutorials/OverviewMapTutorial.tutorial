@@ -15,17 +15,17 @@
             @Step {
                 To begin, set up the parent view.
                 Initialize a map and pass it to a `MapView` in the view's body.
-                @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep1)
+                @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep1.swift)
             }
             
             @Step {
                 When using an overview map with a map we need to track the current viewpoint and visible area.
-                @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep2)
+                @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep2.swift)
             }
             
             @Step {
                 Overlay the `OverviewMap` using ``OverviewMap/forMapView(with:visibleArea:map:)``.
-                @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep3)
+                @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep3.swift)
             }
         }
     }
@@ -39,17 +39,17 @@
             @Step {
                 To begin, set up the parent view.
                 Initialize a scene and pass it to a `SceneView` in the view's body.
-                @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep1)
+                @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep1.swift)
             }
             
             @Step {
                 When using an overview map with a scene we need to track the current viewpoint.
-                @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep2)
+                @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep2.swift)
             }
             
             @Step {
                 Overlay the `OverviewMap` using ``OverviewMap/forSceneView(with:map:)``.
-                @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep3)
+                @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep3.swift)
             }
         }
     }

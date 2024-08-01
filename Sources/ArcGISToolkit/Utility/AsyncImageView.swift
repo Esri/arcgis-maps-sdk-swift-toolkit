@@ -16,6 +16,8 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
+@MainActor
+@preconcurrency
 public struct AsyncImageView: View {
     /// The `URL` of the image.
     private var url: URL?
@@ -33,7 +35,7 @@ public struct AsyncImageView: View {
     private let mediaSize: CGSize?
     
     /// The data model for an `AsyncImageView`.
-    @StateObject var viewModel: AsyncImageViewModel
+    @StateObject private var viewModel = AsyncImageViewModel()
     
     /// Creates an `AsyncImageView`.
     /// - Parameters:
@@ -52,8 +54,6 @@ public struct AsyncImageView: View {
         self.url = url
         self.refreshInterval = refreshInterval
         loadableImage = nil
-        
-        _viewModel = StateObject(wrappedValue: AsyncImageViewModel())
     }
     
     /// Creates an `AsyncImageView`.
@@ -94,9 +94,7 @@ public struct AsyncImageView: View {
                 }
                 .padding([.top, .bottom])
             }
-            if #available(iOS 16.0, macCatalyst 16.0, *),
-               let progressInterval = viewModel.progressInterval {
-#if canImport(Charts)
+            if let progressInterval = viewModel.progressInterval {
                 VStack {
                     ProgressView(
                         timerInterval: progressInterval,
@@ -108,7 +106,6 @@ public struct AsyncImageView: View {
                     .frame(width: mediaSize?.width)
                     Spacer()
                 }
-#endif
             }
         }
         .onAppear() {

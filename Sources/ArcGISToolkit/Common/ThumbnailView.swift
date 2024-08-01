@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view displaying a thumbnail image for an attachment.
+@MainActor
 struct ThumbnailView: View  {
     /// The model represented by the thumbnail.
     @ObservedObject var attachmentModel: AttachmentModel
@@ -25,22 +26,13 @@ struct ThumbnailView: View  {
     
     var body: some View {
         Group {
-            if attachmentModel.usingDefaultImage,
-               let systemName = attachmentModel.defaultSystemName {
-                if #available(iOS 16, macCatalyst 16, *) {
-                    Image(systemName: systemName)
-                        .resizable()
-                        .renderingMode(.template)
-                        .aspectRatio(contentMode: .fit)
-#if canImport(Charts)
-                        .fontWeight(.light)
-#endif
-                } else {
-                    Image(systemName: systemName)
-                        .resizable()
-                        .renderingMode(.template)
-                        .aspectRatio(contentMode: .fit)
-                }
+            if attachmentModel.usingSystemImage,
+               let systemName = attachmentModel.systemImageName {
+                Image(systemName: systemName)
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit)
+                    .fontWeight(.light)
             } else if let image = attachmentModel.thumbnail {
                 Image(uiImage: image)
                     .resizable()
@@ -48,6 +40,7 @@ struct ThumbnailView: View  {
                     .aspectRatio(contentMode: .fill)
             }
         }
+        .accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
         .frame(width: size.width, height: size.height, alignment: .center)
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .contentShape(RoundedRectangle(cornerRadius: 4))
@@ -59,6 +52,6 @@ struct ThumbnailView: View  {
     /// - Returns: A color to be used as the foreground color.
     func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
         attachmentModel.loadStatus == .failed ? .red :
-        (attachmentModel.usingDefaultImage ? .gray : .primary)
+        (attachmentModel.usingSystemImage ? .gray : .primary)
     }
 }

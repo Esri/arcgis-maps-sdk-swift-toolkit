@@ -12,20 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
-
-import XCTest
 import ArcGIS
 @testable import ArcGISToolkit
-import SwiftUI
-import Combine
+@preconcurrency import Combine
+import XCTest
 
 // Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
 // as 'geoModel.actualSpatialReference') than the 'BasemapGallery' design
 // specifies. Tests not present in the test design have been added to
 // accommodate those differences.
-@MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
     override func setUp() async throws {
         ArcGISEnvironment.apiKey = .default
@@ -35,6 +31,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         ArcGISEnvironment.apiKey = nil
     }
     
+    @MainActor
     let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
             basemap: Basemap(
@@ -53,6 +50,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
     ]
     
     /// Test the various constructor methods.
+    @MainActor
     func testInit() async throws {
         // Note:  this is a good candidate for mocking portal data.
         // This would allow the test to check for a specific number of items.
@@ -168,6 +166,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
     }
     
     /// Test the `currentItem` property including valid and invalid basemaps.
+    @MainActor
     func testCurrentItem() async throws {
         let basemap = Basemap(style: .arcGISStreets)
         let geoModel = Map(basemap: basemap)
@@ -229,6 +228,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
     }
     
     /// Test setting the portal after the model has been created.
+    @MainActor
     func testUpdatePortal() async throws {
         // Create a model with a default list of items.
         let viewModel = BasemapGalleryViewModel(

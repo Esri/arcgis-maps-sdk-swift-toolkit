@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 @main
 struct ExamplesApp: App {
@@ -24,14 +24,18 @@ struct ExamplesApp: App {
     }
     
     init() {
-        #warning("Require user to sign in with an ArcGIS identity or set your developer API key")
+        #warning("You must set your API Key or request that the user signs in with an ArcGIS account")
         /*
-         Use of Esri location services, including basemaps and geocoding, requires either an ArcGIS identity or an API Key. For more information see https://links.esri.com/arcgis-maps-sdk-security-auth.
-         1) ArcGIS identity: An ArcGIS named user account that is a member of an organization in ArcGIS Online or ArcGIS Enterprise.
-         2) API key: A permanent key that gives your application access to Esri location services. Create a new API key or access existing API keys from your ArcGIS for Developers dashboard (https://links.esri.com/arcgis-api-keys).
-         Production deployment of applications built with ArcGIS Maps SDK requires you to license ArcGIS Maps SDK functionality. For more information see https://links.esri.com/arcgis-maps-sdk-license-and-deploy.
+         Use of ArcGIS location services, such as basemap styles, geocoding, and routing services, requires either user authentication or API key authentication. For more information see https://developers.arcgis.com/documentation/security-and-authentication/types-of-authentication/ or https://developers.arcgis.com/swift/security-and-authentication/.
+         1) User authentication: Allows users with an ArcGIS account to sign into an application and access secure services.
+         2) API key authentication: A long-lived access token that gives your application access to secure services. Go to the [Create an API key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) tutorial to copy the API key access token. To access all services used by this application set the location services privileges to:
+         
+           Location services > Basemaps
+           Location services > Geocoding
+         
+        Production deployment of applications built with the ArcGIS Maps SDK for Swift requires that you license your app. For more information see https://developers.arcgis.com/swift/license-and-deployment/.
          */
-        // Uncomment the following line to access Esri location services using an API key.
+        // Uncomment the following line to access ArcGIS location services using an API key.
 //         ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
     }
 }

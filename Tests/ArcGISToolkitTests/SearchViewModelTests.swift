@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
 import ArcGIS
 @testable import ArcGISToolkit
+@preconcurrency import Combine
+import XCTest
 
-@MainActor
 class SearchViewModelTests: XCTestCase {
+    @MainActor
     func testAcceptSuggestion() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         model.currentQuery = "Magers & Quinn Booksellers"
@@ -25,12 +26,12 @@ class SearchViewModelTests: XCTestCase {
         model.updateSuggestions()
         
         // Get suggestion
-        let suggestions = try await searchSuggestions(model)
+        let suggestions = try await model.searchSuggestions()
         let suggestion = try XCTUnwrap(suggestions?.first)
         
         model.acceptSuggestion(suggestion)
         
-        let results = try await searchResults(model, dropFirst: true)
+        let results = try await model.searchResults(dropFirst: true)
         let result = try XCTUnwrap(results)
         XCTAssertEqual(result.count, 1)
         
@@ -38,6 +39,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.first, model.selectedResult)
     }
     
+    @MainActor
     func testCommitSearch() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -49,7 +51,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        var results = try await searchResults(model)
+        var results = try await model.searchResults()
         var result = try XCTUnwrap(results)
         XCTAssertEqual(result, [])
         XCTAssertNil(model.selectedResult)
@@ -59,7 +61,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        results = try await searchResults(model)
+        results = try await model.searchResults()
         result = try XCTUnwrap(results)
         XCTAssertEqual(result.count, 1)
         
@@ -71,7 +73,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        results = try await searchResults(model)
+        results = try await model.searchResults()
         result = try XCTUnwrap(results)
         XCTAssertGreaterThan(result.count, 1)
         
@@ -81,13 +83,14 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        results = try await searchResults(model, dropFirst: true)
+        results = try await model.searchResults(dropFirst: true)
         result = try XCTUnwrap(results)
         XCTAssertGreaterThan(result.count, 1)
         
         XCTAssertNil(model.selectedResult)
     }
     
+    @MainActor
     func testCurrentQuery() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -100,7 +103,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        let results = try await searchResults(model)
+        let results = try await model.searchResults()
         XCTAssertNotNil(results)
         
         // Changing the `currentQuery` should set searchOutcome to nil.
@@ -109,7 +112,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.updateSuggestions()
         
-        let suggestions = try await searchSuggestions(model)
+        let suggestions = try await model.searchSuggestions()
         XCTAssertNotNil(suggestions)
         
         // Changing current query after search with 1 result
@@ -118,12 +121,13 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        _ = try await searchResults(model, dropFirst: true)
+        _ = try await model.searchResults(dropFirst: true)
         XCTAssertNotNil(model.selectedResult)
         model.currentQuery = "Hotel"
         XCTAssertNil(model.selectedResult)
     }
     
+    @MainActor
     func testIsEligibleForRequery() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -137,7 +141,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        _ = try await searchResults(model)
+        _ = try await model.searchResults()
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Offset extent by 10% - isEligibleForRequery should still be `false`.
@@ -164,7 +168,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        _ = try await searchResults(model, dropFirst: true)
+        _ = try await model.searchResults(dropFirst: true)
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Expand extent by 1.1x - isEligibleForRequery should still be `false`.
@@ -184,6 +188,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(model.isEligibleForRequery)
     }
     
+    @MainActor
     func testQueryArea() async throws {
         let source = LocatorSearchSource()
         source.maximumResults = .max
@@ -195,7 +200,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        var results = try await searchResults(model)
+        var results = try await model.searchResults()
         var result = try XCTUnwrap(results)
         XCTAssertGreaterThan(result.count, 1)
         
@@ -216,7 +221,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        results = try await searchResults(model)
+        results = try await model.searchResults()
         result = try XCTUnwrap(results)
         XCTAssertEqual(result, [])
         
@@ -232,11 +237,12 @@ class SearchViewModelTests: XCTestCase {
         // incorrect.  Calling `.dropFirst()` will remove that one
         // and will give us the next one, which is the correct one (the result
         // from the second `model.commitSearch()` call).
-        results = try await searchResults(model, dropFirst: true)
+        results = try await model.searchResults(dropFirst: true)
         result = try XCTUnwrap(results)
         XCTAssertEqual(result.count, 1)
     }
     
+    @MainActor
     func testQueryCenter() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -246,7 +252,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        var results = try await searchResults(model)
+        var results = try await model.searchResults()
         var result = try XCTUnwrap(results)
         
         var resultPoint = try XCTUnwrap(
@@ -272,7 +278,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        results = try await searchResults(model)
+        results = try await model.searchResults()
         result = try XCTUnwrap(results)
         
         resultPoint = try XCTUnwrap(
@@ -294,6 +300,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertLessThan(geodeticDistance.distance.value,  100)
     }
     
+    @MainActor
     func testRepeatSearch() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -303,7 +310,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.repeatSearch()
         
-        var results = try await searchResults(model)
+        var results = try await model.searchResults()
         var result = try XCTUnwrap(results)
         XCTAssertGreaterThan(result.count, 1)
         
@@ -324,7 +331,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.repeatSearch()
         
-        results = try await searchResults(model)
+        results = try await model.searchResults()
         result = try XCTUnwrap(results)
         XCTAssertEqual(result.count, 0)
         
@@ -332,11 +339,12 @@ class SearchViewModelTests: XCTestCase {
         
         model.repeatSearch()
         
-        results = try await searchResults(model, dropFirst: true)
+        results = try await model.searchResults(dropFirst: true)
         result = try XCTUnwrap(results)
         XCTAssertEqual(result.count, 1)
     }
     
+    @MainActor
     func testSearchResultMode() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         XCTAssertEqual(model.resultMode, .automatic)
@@ -346,7 +354,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        var results = try await searchResults(model)
+        var results = try await model.searchResults()
         var result = try XCTUnwrap(results)
         XCTAssertEqual(result.count, 1)
         
@@ -354,7 +362,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.commitSearch()
         
-        results = try await searchResults(model, dropFirst: true)
+        results = try await model.searchResults(dropFirst: true)
         result = try XCTUnwrap(results)
         XCTAssertGreaterThan(result.count, 1)
         
@@ -362,7 +370,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.updateSuggestions()
         
-        let suggestionResults = try await searchSuggestions(model)
+        let suggestionResults = try await model.searchSuggestions()
         let suggestions = try XCTUnwrap(suggestionResults)
         
         let collectionSuggestion = try XCTUnwrap(suggestions.filter(\.isCollection).first)
@@ -372,17 +380,18 @@ class SearchViewModelTests: XCTestCase {
         
         model.acceptSuggestion(collectionSuggestion)
         
-        results = try await searchResults(model, dropFirst: true)
+        results = try await model.searchResults(dropFirst: true)
         result = try XCTUnwrap(results)
         XCTAssertGreaterThan(result.count, 1)
         
         model.acceptSuggestion(singleSuggestion)
         
-        results = try await searchResults(model)
+        results = try await model.searchResults()
         result = try XCTUnwrap(results)
         XCTAssertEqual(result.count, 1)
     }
     
+    @MainActor
     func testUpdateSuggestions() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -394,7 +403,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.updateSuggestions()
         
-        var suggestionResults = try await searchSuggestions(model)
+        var suggestionResults = try await model.searchSuggestions()
         var suggestions = try XCTUnwrap(suggestionResults)
         XCTAssertEqual(suggestions, [])
         
@@ -403,7 +412,7 @@ class SearchViewModelTests: XCTestCase {
         
         model.updateSuggestions()
         
-        suggestionResults = try await searchSuggestions(model, dropFirst: true)
+        suggestionResults = try await model.searchSuggestions(dropFirst: true)
         suggestions = try XCTUnwrap(suggestionResults)
         XCTAssertGreaterThanOrEqual(suggestions.count, 1)
         
@@ -411,43 +420,7 @@ class SearchViewModelTests: XCTestCase {
     }
 }
 
-extension SearchViewModelTests {
-    func searchResults(
-        _ model: SearchViewModel,
-        dropFirst: Bool = false
-    ) async throws -> [SearchResult]? {
-        let searchOutcome = try await model.$searchOutcome
-            .compactMap { $0 }
-            .dropFirst(dropFirst ? 1 : 0)
-            .first
-        
-        switch searchOutcome {
-        case .results(let results):
-            return results
-        default:
-            return nil
-        }
-    }
-    
-    func searchSuggestions(
-        _ model: SearchViewModel,
-        dropFirst: Bool = false
-    ) async throws -> [SearchSuggestion]? {
-        let searchOutcome = try await model.$searchOutcome
-            .compactMap { $0 }
-            .dropFirst(dropFirst ? 1 : 0)
-            .first
-        
-        switch searchOutcome {
-        case .suggestions(let suggestions):
-            return suggestions
-        default:
-            return nil
-        }
-    }
-}
-
-extension ArcGIS.Polygon {
+private extension ArcGIS.Polygon {
     class var chippewaFalls: ArcGIS.Polygon {
         let points = [
             Point(x: -91.59127653822401, y: 44.74770908213401),
@@ -469,11 +442,41 @@ extension ArcGIS.Polygon {
     }
 }
 
-extension Point {
+private extension Point {
     class var edinburgh: Point {
         .init(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
     }
     class var portland: Point {
         .init(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
+    }
+}
+
+private extension SearchViewModel {
+    func searchResults(dropFirst: Bool = false) async throws -> [SearchResult]? {
+        let searchOutcome = try await $searchOutcome
+            .compactMap { $0 }
+            .dropFirst(dropFirst ? 1 : 0)
+            .first
+        
+        switch searchOutcome {
+        case .results(let results):
+            return results
+        default:
+            return nil
+        }
+    }
+    
+    func searchSuggestions(dropFirst: Bool = false) async throws -> [SearchSuggestion]? {
+        let searchOutcome = try await $searchOutcome
+            .compactMap { $0 }
+            .dropFirst(dropFirst ? 1 : 0)
+            .first
+        
+        switch searchOutcome {
+        case .suggestions(let suggestions):
+            return suggestions
+        default:
+            return nil
+        }
     }
 }

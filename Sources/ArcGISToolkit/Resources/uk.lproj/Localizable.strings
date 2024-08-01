@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Дозволити";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Під час завантаження зображення сталася помилка: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Прикріплення";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Попередження про сертифікат довіри";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Вибрати з файлів";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Вибрати з бібліотеки";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Очистити";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Очистити всі результати";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Небезпечно: сертифікат, наданий '%@', не підписаний довіреним центром.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "Дата перевищує максимум";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Дата менша за мінімальну";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "Дата повинна бути не пізніше %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "Дата має бути не раніше %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Видалити";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "висота";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Введіть %lld символи(-ів)";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Ввести від %lld до ^[%lld символи(-ів)](зігнути: істина)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Введіть від %lld до %lld символів";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Ввести ^[%lld символи(-ів)](зігнути: істина)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Ввести значення";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Ввести значення від %@ до %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Помилка";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Помилка імпорту прикріплення";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Оцінка спливаючих виразів";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Перевищує максимальне значення";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "курс";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Менше мінімального значення";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Максимум %lld символи(-ів)";
+"Maximum ^[%lld characters](inflect: true)" = "Максимум ^[%lld символи(-ів)](зігнути: істина)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Перевищено максимальну довжину символів";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Середовище";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Мінімальна довжина символів не досягнута";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Режим";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Мережа";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Нова назва";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Нове трасування";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Помилка оцінки спливаючого вікна: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Змінити назву";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Перейменувати прикріплення";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Початкові точки";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Зробити фото або відео";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Торкніться поверхні, щоб розмістити сцену";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Конфігурація терміналу";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "тест";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "Базова карта не має просторової прив'язки.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Пароль недійсний.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "Не вдалося імпортувати вибраний вкладений файл.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "Вибране вкладення перевищує обмеження %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-адреса недоступна або не містить даних зображення.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Спробуйте знову";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Невідома помилка перевірки";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Тип активу без назви";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Значення";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Значення повинне бути від %lld до ^[%lld символи(-ів)](зігнути: істина)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "Значення повинне бути ^[%lld символи(-ів)](зігнути: істина)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "Значення має бути числом";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "Значення повинно бути цілим числом";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "Значення має бути від %@ до %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "Значення має бути правильного типу";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "Значення має бути в межах домену";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "Значення не має бути порожнім";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

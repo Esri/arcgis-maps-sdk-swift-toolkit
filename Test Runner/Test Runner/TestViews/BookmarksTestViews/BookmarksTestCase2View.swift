@@ -26,7 +26,8 @@ struct BookmarksTestCase2View: View {
             .sheet(isPresented: .constant(true)) {
                 Bookmarks(
                     isPresented: .constant(true),
-                    geoModel: map
+                    geoModel: map,
+                    selection: .constant(nil)
                 )
             }
     }

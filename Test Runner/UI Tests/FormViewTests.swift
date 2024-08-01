@@ -327,7 +327,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Highlight/select the current value and replace it
         textField.doubleTap()
-        textField.typeText("2.1")
+        textField.typeText("3")
         
         expectation(
             for: NSPredicate(format: "label == \"Range domain 2-5\""),
@@ -337,7 +337,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Highlight/select the current value and replace it
         textField.doubleTap()
-        textField.typeText("5.1")
+        textField.typeText("6")
         
         XCTAssertEqual(
             footer.label,
@@ -568,7 +568,7 @@ final class FeatureFormViewTests: XCTestCase {
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
-        selectTestCase( app)
+        selectTestCase(app)
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
@@ -1456,7 +1456,7 @@ final class FeatureFormViewTests: XCTestCase {
         let shortTextTextInput = app.textFields["Short text Text Input"]
         
         let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
-        let longTextTextInput = app.textViews["Long text Text Input"]
+        let longTextTextInputPreview = app.staticTexts["Long text Text Input Preview"]
         
         app.launch()
         
@@ -1497,7 +1497,73 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(shortTextTextInput.exists)
         
-        XCTAssertTrue(longTextTextInput.exists)
+        XCTAssertTrue(longTextTextInputPreview.exists)
+    }
+    
+    func testCase_8_1() {
+        let app = XCUIApplication()
+        let attachmentElementTitle = app.staticTexts["Attachments"]
+        let attachmentName = app.staticTexts["EsriHQ.jpeg"]
+        let downloadIcon = app.images["Download"]
+        let formTitle = app.staticTexts["Esri Location"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let placeholderImage = app.images["Photo"]
+        let sizeLabel = app.staticTexts["154 kB"]
+        let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+        
+        XCTAssertTrue(attachmentElementTitle.exists)
+        XCTAssertTrue(placeholderImage.exists)
+        XCTAssertTrue(attachmentName.exists)
+        XCTAssertTrue(sizeLabel.exists)
+        XCTAssertTrue(downloadIcon.exists)
+        
+        placeholderImage.tap()
+        
+        XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
+        XCTAssertFalse(placeholderImage.exists)
+        XCTAssertFalse(downloadIcon.exists)
+    }
+    
+    /// Test value backed read only elements
+    func testCase_9_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test Case 9 Form"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let singleCharacterString = app.staticTexts["singleCharacterString Footer"]
+        let lengthRangeString = app.staticTexts["lengthRangeString Footer"]
+        let maxExceededString = app.staticTexts["maxExceededString Footer"]
+        let numericalRange = app.staticTexts["numericalRange Footer"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+        
+        XCTAssertEqual(singleCharacterString.label, "Value must be 1 character")
+        XCTAssertEqual(lengthRangeString.label, "Value must be 2 to 5 characters")
+        XCTAssertEqual(maxExceededString.label, "Maximum 5 characters")
+        XCTAssertEqual(numericalRange.label, "Value must be from 2 to 5")
     }
 }
 

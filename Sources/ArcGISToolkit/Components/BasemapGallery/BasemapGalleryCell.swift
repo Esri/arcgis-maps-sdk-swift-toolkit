@@ -15,6 +15,7 @@
 import SwiftUI
 
 /// A row or grid element representing a basemap gallery item.
+@MainActor
 struct BasemapGalleryCell: View {
     /// The displayed item.
     @ObservedObject var item: BasemapGalleryItem

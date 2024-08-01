@@ -22,20 +22,20 @@ struct UtilityNetworkTraceExampleView: View {
     @Environment(\.isPortraitOrientation)
     private var isPortraitOrientation
     
-    /// The map with the utility networks.
-    @State private var map = makeMap()
-    
     /// The current detent of the floating panel presenting the trace tool.
     @State private var activeDetent: FloatingPanelDetent = .half
+    
+    /// The map with the utility networks.
+    @State private var map = makeMap()
     
     /// Provides the ability to detect tap locations in the context of the map view.
     @State private var mapPoint: Point?
     
-    /// Provides the ability to detect tap locations in the context of the screen.
-    @State private var screenPoint: CGPoint?
-    
     /// A container for graphical trace results.
     @State private var resultGraphicsOverlay = GraphicsOverlay()
+    
+    /// Provides the ability to detect tap locations in the context of the screen.
+    @State private var screenPoint: CGPoint?
     
     /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
     @State private var viewpoint: Viewpoint?

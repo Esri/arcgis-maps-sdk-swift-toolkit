@@ -92,19 +92,6 @@ extension View {
             .padding(isMacCatalyst ? [.horizontal] : [], length)
     }
     
-    /// Configures the behavior in which scrollable content interacts with the software keyboard.
-    /// - Returns: A view that dismisses the keyboard when the  scroll.
-    /// - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
-    /// dismiss as soon as scrolling starts when `true` and interactively when `false`.
-    func scrollDismissesKeyboard(immediately: Bool) -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .scrollDismissesKeyboard(immediately ? .immediately : .interactively)
-        } else {
-            return self
-        }
-    }
-    
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
     /// - Returns: The modified view.
@@ -114,23 +101,12 @@ extension View {
         modifier(SelectedModifier(isSelected: isSelected))
     }
     
-    /// Returns a new view with medium presentation detents, if presentation
-    /// detents are supported (iOS 16 and up).
-    func mediumPresentationDetents() -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .presentationDetents([.medium])
-        } else {
-            return self
-        }
-    }
-    
     /// Performs the provided action when the view appears after a slight delay.
     /// - Tip: Occasionally delaying allows a sheet's presentation animation to work correctly.
     /// - Parameters:
     ///   - delay: The delay to wait before allow the task to proceed, in nanoseconds. Defaults to 1/4 second.
     ///   - action: The action to perform after the delay.
-    func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping () -> Void) -> some View {
+    func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping @Sendable () -> Void) -> some View {
         task { @MainActor in
             try? await Task.sleep(nanoseconds: nanoseconds)
             action()
@@ -151,7 +127,7 @@ extension View {
     @MainActor @ViewBuilder func onReceive<S>(
         _ sequence: S,
         perform action: ((S.Element) -> Void)?
-    ) -> some View where S: AsyncSequence {
+    ) -> some View where S: AsyncSequence, S.Element: Sendable {
         if let action {
             task {
                 do {
@@ -162,31 +138,6 @@ extension View {
             }
         } else {
             self
-        }
-    }
-}
-
-extension View {
-    /// Sets a closure to perform when a single tap occurs on the view.
-    ///
-    /// - Note: This is to retrofit the tap gesture to iOS 15.0.
-    /// - Parameters:
-    ///   - action: The closure to perform upon single tap.
-    ///   - screenPoint: The location of the tap in the view's coordinate space.
-    func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
-        if #available(iOS 16.0, *) {
-            return self.onTapGesture { screenPoint in
-                action(screenPoint)
-            }
-        } else {
-            // Use a drag gesture with a minimum dragging distance of zero so the
-            // gesture is recognized with a single tap.
-            return self.gesture(
-                DragGesture(minimumDistance: 0)
-                    .onEnded { dragAttributes in
-                        action(dragAttributes.location)
-                    }
-            )
         }
     }
 }

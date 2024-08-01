@@ -16,9 +16,9 @@ import SwiftUI
 
 struct AnyExample<Content: View> {
     var name: String
-    var content: () -> Content
+    var content: @MainActor () -> Content
     
-    init(_ name: String, content: @autoclosure @escaping () -> Content) {
+    init(_ name: String, content: @autoclosure @escaping @MainActor () -> Content) {
         self.name = name
         self.content = content
     }

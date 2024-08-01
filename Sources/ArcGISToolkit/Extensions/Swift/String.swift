@@ -24,6 +24,15 @@ extension String {
         )
     }
     
+    /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
+    static var emptyAttachmentDownloadErrorMessage: Self {
+        .init(
+            localized: "Empty attachments cannot be downloaded.",
+            bundle: .toolkitModule,
+            comment: "An error message explaining attachments with empty files (0 bytes) cannot be downloaded."
+        )
+    }
+    
     /// A localized string for the word "Field".
     static var field: Self {
         .init(
@@ -39,6 +48,15 @@ extension String {
             localized: "No Value",
             bundle: .toolkitModule,
             comment: "A string indicating that no value has been set for a form field."
+        )
+    }
+    
+    /// A label for a button to take the user to a contextually inferred settings page.
+    static var settings: String {
+        .init(
+            localized: "Settings",
+            bundle: .toolkitModule,
+            comment: "A label for a button to take the user to a contextually inferred settings page."
         )
     }
     

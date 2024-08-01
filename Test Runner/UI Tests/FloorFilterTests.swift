@@ -24,7 +24,7 @@ final class FloorFilterTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        let filterButton = app.buttons["Business"]
+        let filterButton = app.buttons["Floor Filter button"]
         let researchAnnexButton = app.buttons["Research Annex"]
         let latticeText = app.staticTexts["Lattice"]
         let levelEightText = app.scrollViews.otherElements.staticTexts["8"]
@@ -35,10 +35,7 @@ final class FloorFilterTests: XCTestCase {
         app.buttons["Floor Filter Tests"].tap()
         
         // Wait for floor aware data to load and then open the filter.
-        XCTAssertTrue(
-            filterButton.waitForExistence(timeout: 5),
-            "The filter button wasn't found within 5 seconds."
-        )
+        XCTAssertTrue(filterButton.waitForExistence(timeout: 10), "The filter button wasn't found.")
         filterButton.tap()
         
         // Select the site named "Research Annex".
@@ -49,7 +46,10 @@ final class FloorFilterTests: XCTestCase {
         researchAnnexButton.tap()
         
         // Select the facility named "Lattice".
-        XCTAssertTrue(latticeText.exists, "The Lattice text wasn't found.")
+        XCTAssertTrue(
+            latticeText.waitForExistence(timeout: 10),
+            "The Lattice text wasn't found."
+        )
         latticeText.tap()
         
         // Select the level labeled "8".

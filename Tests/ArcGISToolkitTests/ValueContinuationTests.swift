@@ -15,7 +15,8 @@
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class ValueContinuationTests: XCTestCase {
+final class ValueContinuationTests: XCTestCase {
+    @MainActor
     func testValueContinuation() async {
         // Tests setting value before awaiting.
         let valueContinuation = ValueContinuation<String>()
