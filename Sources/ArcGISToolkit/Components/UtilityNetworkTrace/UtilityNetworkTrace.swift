@@ -896,9 +896,9 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***localized: "Function Results",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to function outputs returned as results of a utility network
-***REMOVED******REMOVED******REMOVED******REMOVED*** trace operation.
-***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***A label in reference to function outputs returned as results of a utility network
+***REMOVED******REMOVED******REMOVED******REMOVED***trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
