@@ -270,7 +270,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networksList
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.network?.name ?? .noneSelected)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.network?.name ?? .selectNetwork)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -285,7 +285,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.pendingTrace.configuration?.name ?? .selectTraceConfiguration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -809,7 +809,7 @@ public struct UtilityNetworkTrace: View {
 private extension String {
 ***REMOVED***static var addNewButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Add new",
+***REMOVED******REMOVED******REMOVED***localized: "Add New",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A button to add new utility trace starting points."
 ***REMOVED******REMOVED***)
@@ -833,7 +833,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static var cancelStartingPointSelection: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Cancel starting point selection",
+***REMOVED******REMOVED******REMOVED***localized: "Cancel Starting Point Selection",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel the starting point selection operation."
 ***REMOVED******REMOVED***)
@@ -841,7 +841,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static var clearAllResults: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Clear all results",
+***REMOVED******REMOVED******REMOVED***localized: "Clear All Results",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A directive to clear all of the completed utility network traces."
 ***REMOVED******REMOVED***)
@@ -928,7 +928,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static var newTraceOptionLabel: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "New trace",
+***REMOVED******REMOVED******REMOVED***localized: "New Trace",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to show new utility network trace configuration options."
 ***REMOVED******REMOVED***)
@@ -942,19 +942,29 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static var noneSelected: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "None selected",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label indicating that no utility network trace configuration has been selected."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED***static var resultsOptionLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Results",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to show utility network trace results."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for button to select a utility network.
+***REMOVED***static var selectNetwork: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Select Network",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for button to select a utility network."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for button to select a utility network trace configuration.
+***REMOVED***static var selectTraceConfiguration: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Select Trace Configuration",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for button to select a utility network trace configuration."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
