@@ -270,7 +270,7 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         networksList
                     } label: {
-                        Text(viewModel.network?.name ?? .noneSelected)
+                        Text(viewModel.network?.name ?? .selectNetwork)
                             .catalystPadding(4)
                     }
                 }
@@ -285,7 +285,7 @@ public struct UtilityNetworkTrace: View {
                 ) {
                     configurationsList
                 } label: {
-                    Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
+                    Text(viewModel.pendingTrace.configuration?.name ?? .selectTraceConfiguration)
                         .catalystPadding(4)
                 }
             }
@@ -809,7 +809,7 @@ public struct UtilityNetworkTrace: View {
 private extension String {
     static var addNewButtonLabel: Self {
         .init(
-            localized: "Add new",
+            localized: "Add New",
             bundle: .toolkitModule,
             comment: "A button to add new utility trace starting points."
         )
@@ -833,7 +833,7 @@ private extension String {
     
     static var cancelStartingPointSelection: Self {
         .init(
-            localized: "Cancel starting point selection",
+            localized: "Cancel Starting Point Selection",
             bundle: .toolkitModule,
             comment: "A label for a button to cancel the starting point selection operation."
         )
@@ -841,7 +841,7 @@ private extension String {
     
     static var clearAllResults: Self {
         .init(
-            localized: "Clear all results",
+            localized: "Clear All Results",
             bundle: .toolkitModule,
             comment: "A directive to clear all of the completed utility network traces."
         )
@@ -928,7 +928,7 @@ private extension String {
     
     static var newTraceOptionLabel: Self {
         .init(
-            localized: "New trace",
+            localized: "New Trace",
             bundle: .toolkitModule,
             comment: "A label for a button to show new utility network trace configuration options."
         )
@@ -942,19 +942,29 @@ private extension String {
         )
     }
     
-    static var noneSelected: Self {
-        .init(
-            localized: "None selected",
-            bundle: .toolkitModule,
-            comment: "A label indicating that no utility network trace configuration has been selected."
-        )
-    }
-    
     static var resultsOptionLabel: Self {
         .init(
             localized: "Results",
             bundle: .toolkitModule,
             comment: "A label for a button to show utility network trace results."
+        )
+    }
+    
+    /// A label for button to select a utility network.
+    static var selectNetwork: Self {
+        .init(
+            localized: "Select Network",
+            bundle: .toolkitModule,
+            comment: "A label for button to select a utility network."
+        )
+    }
+    
+    /// A label for button to select a utility network trace configuration.
+    static var selectTraceConfiguration: Self {
+        .init(
+            localized: "Select Trace Configuration",
+            bundle: .toolkitModule,
+            comment: "A label for button to select a utility network trace configuration."
         )
     }
     
