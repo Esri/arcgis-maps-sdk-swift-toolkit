@@ -877,9 +877,9 @@ private extension String {
             localized: "Feature Results",
             bundle: .toolkitModule,
             comment: """
-                 A label in reference to utility elements returned as results of a utility network
-                 trace operation.
-                 """
+                A label in reference to utility elements returned as results of a utility network
+                trace operation.
+                """
         )
     }
     
