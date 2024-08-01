@@ -964,9 +964,9 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***localized: "Starting Points",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to the utility elements chosen as starting points for a utility
-***REMOVED******REMOVED******REMOVED******REMOVED*** network trace operation.
-***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***A label in reference to the utility elements chosen as starting points for a utility
+***REMOVED******REMOVED******REMOVED******REMOVED***network trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
