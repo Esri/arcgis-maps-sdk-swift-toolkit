@@ -1022,7 +1022,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static var zoomToResult: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Zoom to result",
+***REMOVED******REMOVED******REMOVED***localized: "Zoom To Result",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A user option specifying that a map should automatically change to show completed trace results."
 ***REMOVED******REMOVED***)
