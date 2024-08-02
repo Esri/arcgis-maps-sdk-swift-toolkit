@@ -6,7 +6,7 @@
     
     @Section(title: "Using the UtilityNetworkTrace component") {
         @ContentAndMedia {
-            @Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
+            @Image(source: UtilityNetworkTrace-iPhone, alt: "An image of the UtilityNetworkTrace component.")
         }
         
         @Steps {
