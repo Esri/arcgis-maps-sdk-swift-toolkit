@@ -1022,7 +1022,7 @@ private extension String {
     
     static var zoomToResult: Self {
         .init(
-            localized: "Zoom to result",
+            localized: "Zoom To Result",
             bundle: .toolkitModule,
             comment: "A user option specifying that a map should automatically change to show completed trace results."
         )
