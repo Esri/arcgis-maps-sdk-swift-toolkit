@@ -101,7 +101,7 @@
 ***REMOVED***@Chapter(name: "UtilityNetworkTrace") {
 ***REMOVED******REMOVED***`UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
 ***REMOVED******REMOVED***configurations.
-***REMOVED******REMOVED***@Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
+***REMOVED******REMOVED***@Image(source: UtilityNetworkTrace-iPhone, alt: "An image of the UtilityNetworkTrace component.")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:UtilityNetworkTraceTutorial")
 ***REMOVED***
 ***REMOVED***
