@@ -22,8 +22,8 @@ import UniformTypeIdentifiers
 @MainActor final class CertificatePickerViewModel: ObservableObject {
     /// The types of certificate error.
     enum CertificateError: Error {
-        /// Could not access the certificate file.
-        case couldNotAccessCertificateFile
+        /// Failed to access the certificate file.
+        case failedToAccessCertificateFile
         /// The certificate import error.
         case importError(CertificateImportError)
         // The other error.
@@ -95,7 +95,7 @@ import UniformTypeIdentifiers
                     let credential = try NetworkCredential.certificate(at: certificateURL, password: password)
                     await self.challenge.resume(with: .continueWithCredential(credential))
                 } else {
-                    await self.showCertificateError(.couldNotAccessCertificateFile)
+                    await self.showCertificateError(.failedToAccessCertificateFile)
                 }
             } catch(let certificateImportError as CertificateImportError) {
                 await self.showCertificateError(.importError(certificateImportError))
@@ -144,9 +144,9 @@ extension ArcGIS.CertificateImportError: Foundation.LocalizedError {
 extension CertificatePickerViewModel.CertificateError: LocalizedError {
     var errorDescription: String? {
         switch self {
-        case .couldNotAccessCertificateFile:
+        case .failedToAccessCertificateFile:
             return String(
-                localized: "Could not access the certificate file.",
+                localized: "Failed to access the certificate file.",
                 bundle: .toolkitModule,
                 comment: "A label indicating a certificate file was inaccessible."
             )
