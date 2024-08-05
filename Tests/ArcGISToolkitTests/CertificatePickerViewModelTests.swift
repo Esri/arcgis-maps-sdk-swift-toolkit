@@ -76,8 +76,8 @@ final class CertificatePickerViewModelTests: XCTestCase {
     }
     
     func testCertificateErrorLocalizedDescription() {
-        let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
-        XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
+        let failedToAccessCertificateFile = CertificatePickerViewModel.CertificateError.failedToAccessCertificateFile
+        XCTAssertEqual(failedToAccessCertificateFile.localizedDescription, "Failed to access the certificate file.")
         
         let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
         XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")
