@@ -84,9 +84,6 @@ east, etc.). */
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Continue";
 
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Could not access the certificate file.";
-
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Dangerous: The certificate provided by '%@' is not signed by a trusted authority.";
 
@@ -164,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "Exceeds maximum value";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "Failed to access the certificate file.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
