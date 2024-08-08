@@ -176,10 +176,12 @@ extension Carousel {
                     self.scrollToLeftAction = scrollToLeftAction
                 }
             }
-            Button("Scroll to 1") {
+            Button {
                 withAnimation {
                     scrollToLeftAction?()
                 }
+            } label: {
+                Text(verbatim: "Scroll to left")
             }
         }
     }
