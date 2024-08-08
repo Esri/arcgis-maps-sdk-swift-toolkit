@@ -154,11 +154,11 @@ extension Carousel {
 
 #Preview("In a List") {
 ***REMOVED***List {
-***REMOVED******REMOVED***Text("Hello")
+***REMOVED******REMOVED***Text(verbatim: "Hello")
 ***REMOVED******REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
-***REMOVED******REMOVED***Text("World!")
+***REMOVED******REMOVED***Text(verbatim: "World!")
 ***REMOVED***
 ***REMOVED***
 
