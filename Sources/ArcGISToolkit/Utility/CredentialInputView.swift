@@ -47,7 +47,7 @@ extension View {
 
 struct CredentialInputSheetView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***Text(verbatim: "test")
+***REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
 ***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
