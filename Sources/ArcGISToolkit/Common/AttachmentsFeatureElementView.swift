@@ -108,6 +108,12 @@ struct AttachmentsFeatureElementView: View {
                     )
                 }
             attachmentModelsState = .initialized(attachmentModels)
+            
+            if !isShowingAttachmentsFormElement {
+                attachmentModels.forEach { model in
+                    model.load()
+                }
+            }
         }
     }
     
