@@ -154,11 +154,11 @@ extension Carousel {
 
 #Preview("In a List") {
     List {
-        Text("Hello")
+        Text(verbatim: "Hello")
         Carousel { _, _ in
             PreviewContent()
         }
-        Text("World!")
+        Text(verbatim: "World!")
     }
 }
 
