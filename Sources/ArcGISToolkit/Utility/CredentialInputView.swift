@@ -47,27 +47,23 @@ extension View {
 
 struct CredentialInputSheetView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"test",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for development purposes only. This is not user visible."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
-***REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
-***REMOVED******REMOVED******REMOVED***message: "You must sign in to access 'arcgis.com'",
-***REMOVED******REMOVED******REMOVED***title: "Authentication Required",
-***REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
-***REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
-***REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED***.credentialInput(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access 'arcgis.com'",
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
