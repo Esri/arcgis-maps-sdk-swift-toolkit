@@ -154,11 +154,11 @@ extension Carousel {
 
 #Preview("In a List") {
     List {
-        Text("Hello")
+        Text(verbatim: "Hello")
         Carousel { _, _ in
             PreviewContent()
         }
-        Text("World!")
+        Text(verbatim: "World!")
     }
 }
 
@@ -176,10 +176,12 @@ extension Carousel {
                     self.scrollToLeftAction = scrollToLeftAction
                 }
             }
-            Button("Scroll to 1") {
+            Button {
                 withAnimation {
                     scrollToLeftAction?()
                 }
+            } label: {
+                Text(verbatim: "Scroll to left")
             }
         }
     }
