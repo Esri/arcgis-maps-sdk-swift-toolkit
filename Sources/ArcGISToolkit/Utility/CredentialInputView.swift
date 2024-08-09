@@ -47,27 +47,23 @@ extension View {
 
 struct CredentialInputSheetView_Previews: PreviewProvider {
     static var previews: some View {
-        Text(
-            "test",
-            bundle: .toolkitModule,
-            comment: "A label for development purposes only. This is not user visible."
-        )
-        .credentialInput(
-            isPresented: .constant(true),
-            fields: .usernamePassword,
-            message: "You must sign in to access 'arcgis.com'",
-            title: "Authentication Required",
-            cancelAction: .init(
-                title: "Cancel",
-                handler: { _, _ in
-                }
-            ),
-            continueAction: .init(
-                title: "Continue",
-                handler: { username, password in
-                }
+        Color.clear
+            .credentialInput(
+                isPresented: .constant(true),
+                fields: .usernamePassword,
+                message: "You must sign in to access 'arcgis.com'",
+                title: "Authentication Required",
+                cancelAction: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                    }
+                ),
+                continueAction: .init(
+                    title: "Continue",
+                    handler: { username, password in
+                    }
+                )
             )
-        )
     }
 }
 
