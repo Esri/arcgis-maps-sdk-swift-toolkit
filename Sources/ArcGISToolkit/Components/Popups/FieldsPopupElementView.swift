@@ -46,6 +46,7 @@ struct FieldsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED***
+***REMOVED******REMOVED***.disclosureGroupPadding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view for displaying a `DisplayField`.
