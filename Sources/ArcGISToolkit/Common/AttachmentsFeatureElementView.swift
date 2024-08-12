@@ -87,6 +87,7 @@ struct AttachmentsFeatureElementView: View {
                         attachmentHeader
                             .catalystPadding(4)
                     }
+                    .disclosureGroupPadding()
                 }
             }
         }

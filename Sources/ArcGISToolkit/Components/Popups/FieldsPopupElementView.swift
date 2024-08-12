@@ -46,6 +46,7 @@ struct FieldsPopupElementView: View {
             )
             .catalystPadding(4)
         }
+        .disclosureGroupPadding()
     }
     
     /// A view for displaying a `DisplayField`.
