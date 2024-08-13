@@ -34,6 +34,25 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***case generalError(FeatureForm, Text)
 ***REMOVED******REMOVED***case idle
 ***REMOVED******REMOVED***case validating(FeatureForm)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var label: String {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .applyingEdits:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Applying Edits"
+***REMOVED******REMOVED******REMOVED***case .cancellationPending:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Cancellation Pending"
+***REMOVED******REMOVED******REMOVED***case .editing:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Editing"
+***REMOVED******REMOVED******REMOVED***case .finishingEdits:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Finishing Edits"
+***REMOVED******REMOVED******REMOVED***case .generalError:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Error"
+***REMOVED******REMOVED******REMOVED***case .idle:
+***REMOVED******REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED******REMOVED***case .validating:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Validating"
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var state: State = .idle {
@@ -92,19 +111,6 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***guard case .idle = self.state else { return true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED*** set: { _ in
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var textForState: Text {
-***REMOVED******REMOVED***switch state {
-***REMOVED******REMOVED***case .validating:
-***REMOVED******REMOVED******REMOVED***Text("Validating")
-***REMOVED******REMOVED***case .finishingEdits:
-***REMOVED******REMOVED******REMOVED***Text("Finishing edits")
-***REMOVED******REMOVED***case .applyingEdits:
-***REMOVED******REMOVED******REMOVED***Text("Applying edits")
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***Text("")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
