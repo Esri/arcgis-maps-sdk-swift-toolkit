@@ -76,6 +76,12 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
 ***REMOVED***
+***REMOVED******REMOVED***/ The title visibility configuration of the form.
+***REMOVED***var titleVisibility: TitleVisibility = .visible
+***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
+***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
@@ -95,7 +101,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty && titleVisibility == .visible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -123,6 +129,7 @@ public struct FeatureFormView: View {
 #if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
+***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED***
 ***REMOVED***
