@@ -16,6 +16,7 @@ import SwiftUI
 
 public extension FeatureFormView {
     /// The visibility of the form title.
+    /// - Since: 200.6
     enum TitleVisibility: Sendable {
         /// The form title is hidden.
         case hidden
