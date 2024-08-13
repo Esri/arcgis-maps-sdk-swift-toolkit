@@ -76,6 +76,12 @@ public struct FeatureFormView: View {
     /// The title of the feature form view.
     @State private var title = ""
     
+    /// The title visibility configuration of the form.
+    var titleVisibility: TitleVisibility = .visible
+    
+    /// The validation error visibility configuration of the form.
+    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
@@ -95,7 +101,7 @@ public struct FeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty {
+                    if !title.isEmpty && titleVisibility == .visible {
                         FormHeader(title: title)
                         Divider()
                     }
@@ -123,6 +129,7 @@ public struct FeatureFormView: View {
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
+        .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
     }
 }
