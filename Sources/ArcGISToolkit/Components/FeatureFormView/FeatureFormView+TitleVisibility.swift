@@ -16,6 +16,7 @@
 
 public extension FeatureFormView {
 ***REMOVED******REMOVED***/ The visibility of the form title.
+***REMOVED******REMOVED***/ - Since: 200.6
 ***REMOVED***enum TitleVisibility: Sendable {
 ***REMOVED******REMOVED******REMOVED***/ The form title is hidden.
 ***REMOVED******REMOVED***case hidden
