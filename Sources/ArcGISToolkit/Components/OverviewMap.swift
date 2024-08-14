@@ -47,6 +47,8 @@ import SwiftUI
 /// the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [OverviewMapExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/OverviewMapExampleView.swift)
 /// in the project. To learn more about using the `OverviewMap` see the <doc:OverviewMapTutorial>.
+@MainActor
+@preconcurrency
 public struct OverviewMap: View {
     /// The `Viewpoint` of the main `GeoView`.
     let viewpoint: Viewpoint?

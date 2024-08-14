@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Να επιτραπεί.";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Παρουσιάστηκε σφάλμα κατά τη φόρτωση της εικόνας: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Συνημμένα";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Προειδοποίηση Αξιοπιστίας Πιστοποιητικού";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Επιλογή από Αρχεία";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Επιλογή από Βιβλιοθήκη";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Απαλοιφή";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Απαλοιφή όλων των αποτελεσμάτων";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Κίνδυνος: Το παρεχόμενο πιστοποιητικό από το '%@' δεν έχει υπογραφεί από αξιόπιστη αρχή.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "Η ημερομηνία υπερβαίνει τη μέγιστη";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Η ημερομηνία είναι μικρότερη από την ελάχιστη";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "Η ημερομηνία πρέπει να είναι στις ή μετά από τις %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "Η ημερομηνία πρέπει να είναι στις ή πριν από τις %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Διαγραφή";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "υψόμετρο";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Καταχωρίστε %lld χαρακτήρες";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Καταχωρίστε από %lld έως ^[%lld χαρακτήρες](διακύμανση: true)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Καταχωρίστε από %lld έως %lld χαρακτήρες";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Καταχωρίστε ^[%lld χαρακτήρες](διακύμανση: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Καταχωρίστε τιμή";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Καταχωρίστε τιμή από %@ έως %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Σφάλμα";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Σφάλμα κατά την εισαγωγή του συνημμένου";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Αξιολόγηση αναδυόμενων εκφράσεων";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Υπερβαίνει τη μέγιστη τιμή";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "επικεφαλίδα";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Μικρότερο από την ελάχιστη τιμή";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Μέγιστο %lld χαρακτήρες";
+"Maximum ^[%lld characters](inflect: true)" = "Μέγιστο ^[%lld χαρακτήρες](διακύμανση: true)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Υπέρβαση του μέγιστου μήκους χαρακτήρων.";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Πολυμέσα";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Δεν ικανοποιείται το ελάχιστο μήκος χαρακτήρων";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Λειτουργία";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Δίκτυο";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Νέο όνομα";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Νέα ιχνηλάτηση";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Αποτυχία αξιολόγησης αναδυόμενων: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Μετονομασία";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Μετονομασία συνημμένου";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Σημεία Έναρξης";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Λήψη φωτογραφίας ή βίντεο";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Πατήστε σε μια επιφάνεια για να τοποθετήσετε 3D προβολή";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Παραμετροποίηση Τερματικού";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "Το υπόβαθρο δεν έχει χωρική αναφορά.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Ο κωδικός πρόσβασης ήταν άκυρος.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "Το επιλεγμένο συνημμένο δεν μπόρεσε να εισαχθεί.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "Το επιλεγμένο συνημμένο υπερβαίνει το όριο των %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "Η διεύθυνση URL δεν ήταν προσβάσιμη ή δεν περιείχε δεδομένα εικόνας.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Δοκιμάστε Ξανά";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Άγνωστο σφάλμα επικύρωσης";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Τύπος Στοιχείου Χωρίς Όνομα";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Αξία";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Η τιμή πρέπει να είναι από %lld έως ^[%lld χαρακτήρες](διακύμανση: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "Η τιμή πρέπει να είναι ^[%lld χαρακτήρες](διακύμανση: true)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "Η τιμή πρέπει να είναι αριθμός";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "Η τιμή πρέπει να είναι ακέραιος αριθμός";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "Η τιμή πρέπει να είναι από %@ έως %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "Η τιμή πρέπει να είναι σωστού τύπου";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "Η τιμή πρέπει να εμπίπτει στον τομέα";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "Η τιμή δεν πρέπει να είναι άδεια";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

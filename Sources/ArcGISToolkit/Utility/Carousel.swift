@@ -22,7 +22,7 @@ struct Carousel<Content: View>: View {
     @State private var cellSize = CGSize.zero
     
     /// The identifier for the Carousel content.
-    let contentIdentifier = UUID()
+    @State private var contentIdentifier = UUID()
     
     /// The content shown in the Carousel.
     let content: (_: CGSize, _: (() -> Void)?) -> Content
@@ -154,11 +154,11 @@ extension Carousel {
 
 #Preview("In a List") {
     List {
-        Text("Hello")
+        Text(verbatim: "Hello")
         Carousel { _, _ in
             PreviewContent()
         }
-        Text("World!")
+        Text(verbatim: "World!")
     }
 }
 
@@ -176,10 +176,12 @@ extension Carousel {
                     self.scrollToLeftAction = scrollToLeftAction
                 }
             }
-            Button("Scroll to 1") {
+            Button {
                 withAnimation {
                     scrollToLeftAction?()
                 }
+            } label: {
+                Text(verbatim: "Scroll to left")
             }
         }
     }

@@ -22,8 +22,8 @@ import UniformTypeIdentifiers
 @MainActor final class CertificatePickerViewModel: ObservableObject {
     /// The types of certificate error.
     enum CertificateError: Error {
-        /// Could not access the certificate file.
-        case couldNotAccessCertificateFile
+        /// Failed to access the certificate file.
+        case failedToAccessCertificateFile
         /// The certificate import error.
         case importError(CertificateImportError)
         // The other error.
@@ -95,7 +95,7 @@ import UniformTypeIdentifiers
                     let credential = try NetworkCredential.certificate(at: certificateURL, password: password)
                     await self.challenge.resume(with: .continueWithCredential(credential))
                 } else {
-                    await self.showCertificateError(.couldNotAccessCertificateFile)
+                    await self.showCertificateError(.failedToAccessCertificateFile)
                 }
             } catch(let certificateImportError as CertificateImportError) {
                 await self.showCertificateError(.importError(certificateImportError))
@@ -116,7 +116,7 @@ import UniformTypeIdentifiers
     }
 }
 
-extension CertificateImportError: LocalizedError {
+extension ArcGIS.CertificateImportError: Foundation.LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidData:
@@ -144,9 +144,9 @@ extension CertificateImportError: LocalizedError {
 extension CertificatePickerViewModel.CertificateError: LocalizedError {
     var errorDescription: String? {
         switch self {
-        case .couldNotAccessCertificateFile:
+        case .failedToAccessCertificateFile:
             return String(
-                localized: "Could not access the certificate file.",
+                localized: "Failed to access the certificate file.",
                 bundle: .toolkitModule,
                 comment: "A label indicating a certificate file was inaccessible."
             )
@@ -159,6 +159,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 }
 
 /// A view modifier that presents a certificate picker workflow.
+@MainActor
 struct CertificatePickerViewModifier: ViewModifier {
     /// Creates a certificate picker view modifier.
     /// - Parameter challenge: The challenge that requires a certificate.

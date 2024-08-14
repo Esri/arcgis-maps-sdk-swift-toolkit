@@ -259,6 +259,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
     }
     
+    @MainActor
     private func floorManager(
         forWebMapWithIdentifier id: PortalItem.ID,
         file: StaticString = #filePath,

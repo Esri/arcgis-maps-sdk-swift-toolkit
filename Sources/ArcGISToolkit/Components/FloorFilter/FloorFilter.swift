@@ -62,6 +62,8 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FloorFilterExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 /// in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
+@MainActor
+@preconcurrency
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -99,7 +101,7 @@ public struct FloorFilter: View {
     @StateObject private var viewModel: FloorFilterViewModel
     
     /// A Boolean value that indicates whether the site and facility selector is presented.
-    @State private var isSitesAndFacilitiesHidden = true
+    @State private var siteAndFacilitySelectorIsPresented = false
     
     /// The selected site, floor, or level.
     private var selection: Binding<FloorFilterSelection?>?
@@ -117,9 +119,10 @@ public struct FloorFilter: View {
     /// Button to open and close the site and facility selector.
     private var sitesAndFacilitiesButton: some View {
         Button {
-            isSitesAndFacilitiesHidden.toggle()
+            siteAndFacilitySelectorIsPresented.toggle()
         } label: {
             Image(systemName: "building.2")
+                .accessibilityIdentifier("Floor Filter button")
                 .padding(.toolkitDefault)
                 .opacity(viewModel.isLoading ? .zero : 1)
                 .overlay {
@@ -131,7 +134,7 @@ public struct FloorFilter: View {
         }
     }
     
-    /// A view that displays the level selector and the sites and facilites button.
+    /// A view that displays the level selector and the sites and facilities button.
     private var levelSelectorContainer: some View {
         VStack {
             if isTopAligned {
@@ -173,28 +176,22 @@ public struct FloorFilter: View {
         )
     }
     
-    /// A configured `SiteAndFacilitySelector` view.
-    ///
-    /// The layering of the `SiteAndFacilitySelector` over a `RoundedRectangle` is needed to
-    /// produce a rounded corners effect. We can not simply use `.esriBorder()` here because
-    /// applying the `cornerRadius()` modifier on `SiteAndFacilitySelector`'s underlying
-    /// `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
-    /// `NavigationStack` and has been reported to Apple as FB10034457.
+    /// A configured `SiteAndFacilitySelector`.
     @ViewBuilder private var siteAndFacilitySelector: some View {
         if horizontalSizeClass == .compact {
             Color.clear
-                .sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
-                    SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+                .sheet(isPresented: $siteAndFacilitySelectorIsPresented) {
+                    SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
                 }
         } else {
             ZStack {
                 Color.clear
                     .esriBorder()
-                SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+                SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
                     .padding([.top, .leading, .trailing], 2.5)
                     .padding(.bottom)
             }
-            .opacity(isSitesAndFacilitiesHidden ? .zero : 1)
+            .opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
         }
     }
     

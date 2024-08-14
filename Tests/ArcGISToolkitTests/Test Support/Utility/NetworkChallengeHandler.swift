@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
 import ArcGIS
+import os
 
 /// A `NetworkChallengeHandler` that can handle trusting hosts with a self-signed certificate
 /// and the network credential.
@@ -25,7 +25,10 @@ final class NetworkChallengeHandler: NetworkAuthenticationChallengeHandler {
     let networkCredential: NetworkCredential?
         
     /// The network authentication challenges.
-    private(set) var challenges: [NetworkAuthenticationChallenge] = []
+    var challenges: [NetworkAuthenticationChallenge] {
+        _challenges.withLock { $0 }
+    }
+    private let _challenges = OSAllocatedUnfairLock<[NetworkAuthenticationChallenge]>(initialState: [])
         
     init(
         allowUntrustedHosts: Bool,
@@ -40,7 +43,7 @@ final class NetworkChallengeHandler: NetworkAuthenticationChallengeHandler {
     ) async -> NetworkAuthenticationChallenge.Disposition {
         // Record challenge only if it is not a server trust.
         if challenge.kind != .serverTrust {
-            challenges.append(challenge)
+            _challenges.withLock { $0.append(challenge) }
         }
         
         if challenge.kind == .serverTrust {

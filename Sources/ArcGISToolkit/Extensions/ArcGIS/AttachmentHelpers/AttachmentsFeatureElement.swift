@@ -16,7 +16,7 @@ import ArcGIS
 import Foundation
 
 /// Indicates how to display the attachments.
-public enum AttachmentsFeatureElementDisplayType {
+public enum AttachmentsFeatureElementDisplayType: Sendable {
     /// Show attachments as links.
     case list
     /// Attachments expand to the width of the view.
@@ -26,7 +26,7 @@ public enum AttachmentsFeatureElementDisplayType {
 }
 
 /// Common properties for elements which display feature attachments.
-public protocol AttachmentsFeatureElement {
+public protocol AttachmentsFeatureElement: Sendable {
     /// Indicates how to display the attachments.
     var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get }
     
@@ -46,13 +46,11 @@ extension AttachmentsFeatureElementDisplayType {
     /// Creates a display type from an attachment popup element's display type.
     /// - Parameter kind: The display type of the popup element.
     init(kind: AttachmentsPopupElement.DisplayType) {
-        switch kind {
-        case .list:
-            self = .list
-        case .preview:
-            self = .preview
-        case .auto:
-            self = .auto
+        self = switch kind {
+        case .list: .list
+        case .preview: .preview
+        case .auto: .auto
+        @unknown default: fatalError("Unknown case")
         }
     }
 }

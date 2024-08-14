@@ -52,9 +52,11 @@ import ArcGIS
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BasemapGalleryExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
 /// in the project. To learn more about using the `BasemapGallery` see the <doc:BasemapGalleryTutorial>.
+@MainActor
+@preconcurrency
 public struct BasemapGallery: View {
     /// The view style of the gallery.
-    public enum Style {
+    public enum Style: Sendable {
         /// The `BasemapGallery` will display as a grid when there is an appropriate
         /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
         /// When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.

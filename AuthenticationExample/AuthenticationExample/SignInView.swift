@@ -18,6 +18,7 @@ import CryptoKit
 import SwiftUI
 
 /// A view that allows the user to sign in to a portal.
+@MainActor
 struct SignInView: View {
     /// The error that occurred during an attempt to sign in.
     @State private var error: Error?

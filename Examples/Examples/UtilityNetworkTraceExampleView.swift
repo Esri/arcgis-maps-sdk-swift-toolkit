@@ -25,6 +25,9 @@ struct UtilityNetworkTraceExampleView: View {
     /// The current detent of the floating panel presenting the trace tool.
     @State private var activeDetent: FloatingPanelDetent = .half
     
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
     /// The map with the utility networks.
     @State private var map = makeMap()
     
@@ -48,6 +51,9 @@ struct UtilityNetworkTraceExampleView: View {
                     viewpoint: viewpoint,
                     graphicsOverlays: [resultGraphicsOverlay]
                 )
+                .onAttributionBarHeightChanged {
+                    attributionBarHeight = $0
+                }
                 .onSingleTapGesture { screenPoint, mapPoint in
                     self.screenPoint = screenPoint
                     self.mapPoint = mapPoint
@@ -60,6 +66,7 @@ struct UtilityNetworkTraceExampleView: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .floatingPanel(
+                        attributionBarHeight: attributionBarHeight,
                         backgroundColor: Color(uiColor: .systemGroupedBackground),
                         selectedDetent: $activeDetent,
                         horizontalAlignment: .trailing,

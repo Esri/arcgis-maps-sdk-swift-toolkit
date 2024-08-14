@@ -63,6 +63,7 @@ class WorldScaleCalibrationViewModel: ObservableObject {
 
 extension WorldScaleSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
+    @MainActor
     struct CalibrationView: View {
         @ObservedObject
         var viewModel: WorldScaleCalibrationViewModel

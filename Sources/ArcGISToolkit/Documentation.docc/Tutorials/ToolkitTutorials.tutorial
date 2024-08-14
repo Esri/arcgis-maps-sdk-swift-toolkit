@@ -101,7 +101,7 @@
     @Chapter(name: "UtilityNetworkTrace") {
         `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
         configurations.
-        @Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
+        @Image(source: UtilityNetworkTrace-iPhone, alt: "An image of the UtilityNetworkTrace component.")
         @TutorialReference(tutorial: "doc:UtilityNetworkTraceTutorial")
     }
 }

@@ -71,6 +71,25 @@ class Model: ObservableObject {
         case generalError(FeatureForm, Text)
         case idle
         case validating(FeatureForm)
+        
+        var label: String {
+            switch self {
+            case .applyingEdits:
+                "Applying Edits"
+            case .cancellationPending:
+                "Cancellation Pending"
+            case .editing:
+                "Editing"
+            case .finishingEdits:
+                "Finishing Edits"
+            case .generalError:
+                "Error"
+            case .idle:
+                ""
+            case .validating:
+                "Validating"
+            }
+        }
     }
     
     @Published var state: State = .idle {
@@ -129,19 +148,6 @@ class Model: ObservableObject {
             guard case .idle = self.state else { return true }
             return false
         } set: { _ in
-        }
-    }
-    
-    var textForState: Text {
-        switch state {
-        case .validating:
-            Text("Validating")
-        case .finishingEdits:
-            Text("Finishing edits")
-        case .applyingEdits:
-            Text("Applying edits")
-        default:
-            Text("")
         }
     }
     
