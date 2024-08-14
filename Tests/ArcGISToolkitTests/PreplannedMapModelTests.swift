@@ -87,7 +87,7 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testPackagingStatus() async throws {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+        final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
             var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
             
             func retryLoad() async throws {
@@ -103,7 +103,7 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testPackagedStatus() async throws {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+        final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
             var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
             
             func retryLoad() async throws {
@@ -119,7 +119,7 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testPackageFailureStatus() async throws {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+        final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
             var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
             
             func retryLoad() async throws {
@@ -136,7 +136,7 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testPackagingNotCompletePackageFailureStatus() async throws {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+        final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
             var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
             
             func retryLoad() async throws {
