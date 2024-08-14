@@ -69,6 +69,9 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
 ***REMOVED***private var showCloseButton = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The visibility of the popup title.
+***REMOVED***private var titleVisibility: TitleVisibility = .visible
+***REMOVED***
 ***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
 ***REMOVED***@State private var evaluation: Evaluation?
 ***REMOVED***
@@ -78,7 +81,7 @@ public struct PopupView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !popup.title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !popup.title.isEmpty && titleVisibility == .visible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(popup.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
@@ -203,6 +206,15 @@ extension PopupView {
 ***REMOVED***
 
 extension PopupView {
+***REMOVED******REMOVED***/ The visibility of the popup title.
+***REMOVED******REMOVED***/ - Since: 200.6
+***REMOVED***public enum TitleVisibility: Sendable {
+***REMOVED******REMOVED******REMOVED***/ The popup title is hidden.
+***REMOVED******REMOVED***case hidden
+***REMOVED******REMOVED******REMOVED***/ The popup title is visible.
+***REMOVED******REMOVED***case visible
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the `PopupView`
 ***REMOVED******REMOVED***/ initializer, so that the the "close" button can close the view.
@@ -212,6 +224,15 @@ extension PopupView {
 ***REMOVED***public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.showCloseButton = newShowCloseButton
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Specifies the visibility of the popup title.
+***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the popup title.
+***REMOVED******REMOVED***/ - Since: 200.6
+***REMOVED***public func popupTitle(_ visibility: TitleVisibility) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.titleVisibility = visibility
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

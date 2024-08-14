@@ -76,7 +76,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The title visibility configuration of the form.
+***REMOVED******REMOVED***/ The visibility of the form title.
 ***REMOVED***var titleVisibility: TitleVisibility = .visible
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
