@@ -101,12 +101,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
         // Update area status for a given packaging status.
         switch packagingStatus {
-        case .processing:
-            status = .packaging
-        case .failed:
-            status = .packageFailure
-        case .complete:
-            status = .packaged
+            case .processing:
+                status = .packaging
+            case .failed:
+                status = .packageFailure
+            case .complete:
+                status = .packaged
+            @unknown default:
+                fatalError("Unknown case")
         }
     }
     
@@ -229,13 +231,13 @@ extension PreplannedMapModel: Hashable {
         lhs === rhs
     }
     
-    public func hash(into hasher: inout Hasher) {
+    nonisolated public func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self))
     }
 }
 
 /// A type that acts as a preplanned map area.
-protocol PreplannedMapAreaProtocol {
+protocol PreplannedMapAreaProtocol: Sendable {
     func retryLoad() async throws
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters
     
