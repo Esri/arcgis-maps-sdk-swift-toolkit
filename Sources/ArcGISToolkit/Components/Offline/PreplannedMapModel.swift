@@ -101,14 +101,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
         // Update area status for a given packaging status.
         switch packagingStatus {
-            case .processing:
-                status = .packaging
-            case .failed:
-                status = .packageFailure
-            case .complete:
-                status = .packaged
-            @unknown default:
-                fatalError("Unknown case")
+        case .processing:
+            status = .packaging
+        case .failed:
+            status = .packageFailure
+        case .complete:
+            status = .packaged
+        @unknown default:
+            fatalError("Unknown case")
         }
     }
     
