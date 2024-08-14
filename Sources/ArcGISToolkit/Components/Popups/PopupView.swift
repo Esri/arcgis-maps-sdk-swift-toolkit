@@ -69,6 +69,9 @@ public struct PopupView: View {
     /// so that the the "close" button can close the view.
     private var showCloseButton = false
     
+    /// The visibility of the popup title.
+    private var titleVisibility: TitleVisibility = .visible
+    
     /// The result of evaluating the popup expressions.
     @State private var evaluation: Evaluation?
     
@@ -78,7 +81,7 @@ public struct PopupView: View {
     public var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                if !popup.title.isEmpty {
+                if !popup.title.isEmpty && titleVisibility == .visible {
                     Text(popup.title)
                         .font(.title)
                         .fontWeight(.bold)
@@ -203,6 +206,15 @@ extension PopupView {
 }
 
 extension PopupView {
+    /// The visibility of the popup title.
+    /// - Since: 200.6
+    public enum TitleVisibility: Sendable {
+        /// The popup title is hidden.
+        case hidden
+        /// The popup title is visible.
+        case visible
+    }
+    
     /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
     /// initializer, so that the the "close" button can close the view.
@@ -212,6 +224,15 @@ extension PopupView {
     public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
         var copy = self
         copy.showCloseButton = newShowCloseButton
+        return copy
+    }
+    
+    /// Specifies the visibility of the popup title.
+    /// - Parameter visibility: The visibility of the popup title.
+    /// - Since: 200.6
+    public func popupTitle(_ visibility: TitleVisibility) -> Self {
+        var copy = self
+        copy.titleVisibility = visibility
         return copy
     }
 }
