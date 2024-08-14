@@ -86,16 +86,16 @@ struct FeatureFormExampleView: View {
                 } message: {
                     Text("Updates to this feature will be lost.")
                 }
-                // swiftlint:disable vertical_parameter_alignment_on_call
                 .alert(
                     "The form wasn't submitted",
                     isPresented: model.alertIsPresented
-                ) { } message: {
+                ) {
+                    // No actions.
+                } message: {
                     if case let .generalError(_, errorMessage) = model.state {
                         errorMessage
                     }
                 }
-                // swiftlint:enable vertical_parameter_alignment_on_call
                 .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
                 .overlay {
                     switch model.state {
@@ -103,7 +103,7 @@ struct FeatureFormExampleView: View {
                         HStack(spacing: 5) {
                             ProgressView()
                                 .progressViewStyle(.circular)
-                            model.textForState
+                            Text(model.state.label)
                         }
                         .padding()
                         .background(.thinMaterial)
@@ -184,6 +184,26 @@ class Model: ObservableObject {
         case idle
         /// The form is being checked for validation errors.
         case validating(FeatureForm)
+        
+        /// User-friendly text that describes this state.
+        var label: String {
+            switch self {
+            case .applyingEdits:
+                "Applying Edits"
+            case .cancellationPending:
+                "Cancellation Pending"
+            case .editing:
+                "Editing"
+            case .finishingEdits:
+                "Finishing Edits"
+            case .generalError:
+                "Error"
+            case .idle:
+                ""
+            case .validating:
+                "Validating"
+            }
+        }
     }
     
     /// The current feature form workflow state.
@@ -250,22 +270,6 @@ class Model: ObservableObject {
             guard case .idle = self.state else { return true }
             return false
         } set: { _ in
-        }
-    }
-    
-    /// User facing text indicating the current form workflow state.
-    ///
-    /// This is most useful during post form processing to indicate ongoing background work.
-    var textForState: Text {
-        switch state {
-        case .validating:
-            Text("Validating")
-        case .finishingEdits:
-            Text("Finishing edits")
-        case .applyingEdits:
-            Text("Applying edits")
-        default:
-            Text("")
         }
     }
     

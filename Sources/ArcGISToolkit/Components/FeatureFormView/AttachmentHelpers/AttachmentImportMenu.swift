@@ -14,20 +14,21 @@
 
 import ArcGIS
 import AVFoundation
-import OSLog
 import SwiftUI
 import UniformTypeIdentifiers
 
+internal import os
+
 /// The context menu shown when the new attachment button is pressed.
+@MainActor
 struct AttachmentImportMenu: View {
-    
     /// The attachment form element displaying the menu.
     private let element: AttachmentsFormElement
     
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
     /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) -> Void)? = nil) {
+    init(element: AttachmentsFormElement, onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil) {
         self.element = element
         self.onAdd = onAdd
     }
@@ -44,17 +45,20 @@ struct AttachmentImportMenu: View {
     /// The current import state.
     @State private var importState: AttachmentImportState = .none
     
+    /// A Boolean value indicating whether the microphone access alert is visible.
+    @State private var microphoneAccessAlertIsVisible = false
+    
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
     /// The maximum attachment size limit.
-    let attachmentSizeLimit = Measurement(
+    let attachmentUploadSizeLimit = Measurement(
         value: 50,
         unit: UnitInformationStorage.megabytes
     )
     
     /// The action to perform when an attachment is added.
-    let onAdd: ((FeatureAttachment) -> Void)?
+    let onAdd: (@MainActor (FeatureAttachment) -> Void)?
     
     /// A Boolean value indicating if the error alert is presented.
     var errorIsPresented: Binding<Bool> {
@@ -82,12 +86,8 @@ struct AttachmentImportMenu: View {
                 }
             }
         } label: {
-            Label {
-                Text(cameraButtonLabel)
-            } icon: {
-                Image(systemName: "camera")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(cameraButtonLabel)
+            Image(systemName: "camera")
         }
     }
     
@@ -95,12 +95,8 @@ struct AttachmentImportMenu: View {
         Button {
             photoPickerIsPresented = true
         } label: {
-            Label {
-                Text(libraryButtonLabel)
-            } icon: {
-                Image(systemName: "photo")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(libraryButtonLabel)
+            Image(systemName: "photo")
         }
     }
     
@@ -108,12 +104,8 @@ struct AttachmentImportMenu: View {
         Button {
             fileImporterIsShowing = true
         } label: {
-            Label {
-                Text(filesButtonLabel)
-            } icon: {
-                Image(systemName: "folder")
-            }
-            .labelStyle(.titleAndIcon)
+            Text(filesButtonLabel)
+            Image(systemName: "folder")
         }
     }
     
@@ -121,6 +113,7 @@ struct AttachmentImportMenu: View {
         if importState.importInProgress {
             ProgressView()
                 .progressViewStyle(.circular)
+                .catalystPadding(5)
         }
         Menu {
             // Show photo/video and library picker.
@@ -135,9 +128,9 @@ struct AttachmentImportMenu: View {
         }
         .disabled(importState.importInProgress)
         .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
-            Button(String.settings) {
-                Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
-            }
+#if !targetEnvironment(macCatalyst)
+            appSettingsButton
+#endif
             Button(String.cancel, role: .cancel) { }
         } message: {
             Text(cameraAccessAlertMessage)
@@ -149,37 +142,41 @@ struct AttachmentImportMenu: View {
         .menuStyle(.borderlessButton)
 #endif
         .task(id: importState) {
-            guard case let .finalizing(newAttachmentImportData) = importState,
-                  let attachments = try? await element.attachments else { return }
+            guard case let .finalizing(newAttachmentImportData) = importState else { return }
             
             let attachmentSize = Measurement(
                 value: Double(newAttachmentImportData.data.count),
                 unit: UnitInformationStorage.bytes
             )
-            guard attachmentSize <= attachmentSizeLimit else {
+            guard attachmentSize <= attachmentUploadSizeLimit else {
                 importState = .errored(.sizeLimitExceeded)
                 return
             }
+            guard attachmentSize.value > .zero else {
+                importState = .errored(.emptyFilesNotSupported)
+                return
+            }
             
-            defer { importState = .none }
             let fileName: String
             if let presetFileName = newAttachmentImportData.fileName {
                 fileName = presetFileName
             } else {
-                let attachmentNumber = attachments.count + 1
-                if let fileExtension = newAttachmentImportData.fileExtension {
-                    fileName = "Attachment \(attachmentNumber).\(fileExtension)"
-                } else {
-                    fileName = "Attachment \(attachmentNumber)"
+                do {
+                    fileName = try await element.makeDefaultName(contentType: newAttachmentImportData.contentType)
+                } catch {
+                    fileName = "Unnamed Attachment"
                 }
             }
-            let newAttachment = element.addAttachment(
-                // Can this be better? What does legacy do?
+            guard let newAttachment = element.addAttachment(
                 name: fileName,
                 contentType: newAttachmentImportData.contentType,
                 data: newAttachmentImportData.data
-            )
+            ) else {
+                importState = .errored(.creationFailed)
+                return
+            }
             onAdd?(newAttachment)
+            importState = .none
         }
         .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
             importState = .importing
@@ -187,14 +184,9 @@ struct AttachmentImportMenu: View {
             case .success(let url):
                 // gain access to the url resource and verify there's data.
                 if url.startAccessingSecurityScopedResource(),
+                   let contentType = url.contentType,
                    let data = FileManager.default.contents(atPath: url.path) {
-                    importState = .finalizing(
-                        AttachmentImportData(
-                            data: data,
-                            contentType: url.mimeType(),
-                            fileName: url.lastPathComponent
-                        )
-                    )
+                    importState = .finalizing(AttachmentImportData(contentType: contentType, data: data, fileName: url.lastPathComponent))
                 } else {
                     importState = .errored(.dataInaccessible)
                 }
@@ -209,6 +201,19 @@ struct AttachmentImportMenu: View {
             AttachmentCameraController(
                 importState: $importState
             )
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
+            .onCameraCaptureModeChanged { captureMode in
+                if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+                    microphoneAccessAlertIsVisible = true
+                }
+            }
+#endif
+            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+                appSettingsButton
+                Button(role: .cancel) { } label: {
+                    Text(recordVideoOnlyButtonLabel)
+                }
+            }
         }
         .modifier(
             AttachmentPhotoPicker(
@@ -219,20 +224,14 @@ struct AttachmentImportMenu: View {
     }
 }
 
-extension URL {
-    /// The Mime type based on the path extension.
-    /// - Returns: The Mime type string.
-    public func mimeType() -> String {
-        if let mimeType = UTType(filenameExtension: self.pathExtension)?.preferredMIMEType {
-            return mimeType
-        }
-        else {
-            return "application/octet-stream"
+private extension AttachmentImportMenu {
+    /// A button that redirects the user to the application's entry in the iOS system Settings application.
+    var appSettingsButton: some View {
+        Button(String.settings) {
+            Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
         }
     }
-}
-
-private extension AttachmentImportMenu {
+    
     /// A message for an alert requesting camera access.
     var cameraAccessAlertMessage: String {
         .init(
@@ -257,6 +256,15 @@ private extension AttachmentImportMenu {
             localized: "Take Photo or Video",
             bundle: .toolkitModule,
             comment: "A label for a button to capture a new photo or video."
+        )
+    }
+    
+    /// An error message indicating the selected attachment is an empty file and not supported.
+    var emptyFilesNotSupportedAlertMessage: String {
+        .init(
+            localized: "Empty files are not supported.",
+            bundle: .toolkitModule,
+            comment: "An error message indicating the selected attachment is an empty file and not supported."
         )
     }
     
@@ -285,6 +293,8 @@ private extension AttachmentImportMenu {
     var importFailureAlertMessage: String {
         guard case .errored(let attachmentImportError) = importState else { return "" }
         return switch attachmentImportError {
+        case .emptyFilesNotSupported:
+            emptyFilesNotSupportedAlertMessage
         case .sizeLimitExceeded:
             sizeLimitExceededImportFailureAlertMessage
         default:
@@ -313,12 +323,67 @@ private extension AttachmentImportMenu {
         )
     }
     
+    /// A warning message indicating microphone access has been disabled for the current application in the system settings.
+    var microphoneAccessWarningMessage: String {
+        .init(
+            localized: "Microphone access has been disabled in Settings.",
+            bundle: .toolkitModule,
+            comment: "A warning message indicating microphone access has been disabled for the current application in the system settings."
+        )
+    }
+    
+    /// A button allowing users to proceed to record a video while acknowledging audio will not be captured.
+    var recordVideoOnlyButtonLabel: String {
+        .init(
+            localized: "Record video only",
+            bundle: .toolkitModule,
+            comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
+        )
+    }
+    
     /// An error message indicating the selected attachment exceeds the megabyte limit.
     var sizeLimitExceededImportFailureAlertMessage: String {
         .init(
-            localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
+            localized: "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )
+    }
+}
+
+private extension AttachmentsFormElement {
+    /// Creates a unique name for a new attachments with a file extension.
+    /// - Parameter contentType: The kind of attachment to generate a name for.
+    /// - Returns: A unique name for an attachment.
+    func makeDefaultName(contentType: UTType) async throws -> String {
+        let currentAttachments = try await attachments
+        let root = (contentType.preferredMIMEType?.components(separatedBy: "/").first ?? "Attachment").capitalized
+        var count = currentAttachments.filter { $0.contentType == contentType }.count
+        var baseName: String
+        repeat {
+            count += 1
+            baseName = "\(root)\(count)"
+        } while( currentAttachments.filter { $0.name.deletingPathExtension == baseName }.count > 0 )
+        if let fileExtension = contentType.preferredFilenameExtension {
+            return "\(baseName).\(fileExtension)"
+        } else {
+            return baseName
+        }
+    }
+}
+
+private extension String {
+    /// A filename with the extension removed.
+    ///
+    /// For example, "Photo.png" is returned as "Photo"
+    var deletingPathExtension: String {
+        (self as NSString).deletingPathExtension
+    }
+}
+
+private extension URL {
+    /// The type of data at the URL.
+    var contentType: UTType? {
+        UTType(filenameExtension: self.pathExtension)
     }
 }

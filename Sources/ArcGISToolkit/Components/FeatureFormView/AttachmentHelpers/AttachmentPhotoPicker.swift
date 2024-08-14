@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import OSLog
 import PhotosUI
 import SwiftUI
 
 /// A wrapper for the PhotosPicker API.
+@MainActor
 struct AttachmentPhotoPicker: ViewModifier {
     /// The item selected in the photos picker.
     @State private var item: PhotosPickerItem?
@@ -42,25 +42,17 @@ struct AttachmentPhotoPicker: ViewModifier {
                 self.item = nil
                 importState = .importing
                 do {
-                    guard let data = try await item.loadTransferable(type: Data.self) else {
+                    guard let contentType = item.supportedContentTypes.first,
+                          let data = try await item.loadTransferable(type: Data.self) else {
                         importState = .errored(.dataInaccessible)
                         return
                     }
-                    
-                    var contentTypes = item.supportedContentTypes.enumerated().makeIterator()
-                    var mimeType = contentTypes.next()?.element.preferredMIMEType
-                    while mimeType == nil {
-                        mimeType = contentTypes.next()?.element.preferredMIMEType
-                    }
-                    
-                    importState = .finalizing(AttachmentImportData(
-                        data: data,
-                        contentType: mimeType ?? "application/octet-stream",
-                        fileExtension: item.supportedContentTypes.first?.preferredFilenameExtension ?? ""
-                    ))
+                    importState = .finalizing(AttachmentImportData(contentType: contentType, data: data))
                 } catch {
                     importState = .errored(.system(error.localizedDescription))
                 }
             }
     }
 }
+
+extension PhotosPickerItem: @unchecked Swift.Sendable {}

@@ -30,7 +30,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.4.0"))
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.5.0"))
     ],
     targets: [
         .target(
@@ -48,3 +48,13 @@ let package = Package(
         )
     ]
 )
+
+for target in package.targets {
+    target.swiftSettings = (target.swiftSettings ?? []) + [
+        // Experimental Features.
+        .enableExperimentalFeature("AccessLevelOnImport"),
+        .enableExperimentalFeature("StrictConcurrency"),
+        // Upcoming Features.
+        .enableUpcomingFeature("DisableOutwardActorInference")
+    ]
+}

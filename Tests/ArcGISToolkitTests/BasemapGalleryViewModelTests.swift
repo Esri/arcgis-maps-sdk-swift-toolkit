@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
-
-import XCTest
 import ArcGIS
 @testable import ArcGISToolkit
-import SwiftUI
-import Combine
+@preconcurrency import Combine
+import XCTest
 
 // Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
@@ -34,6 +31,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         ArcGISEnvironment.apiKey = nil
     }
     
+    @MainActor
     let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
             basemap: Basemap(

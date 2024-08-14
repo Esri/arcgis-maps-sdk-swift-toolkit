@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Cho phép";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Đã xảy ra lỗi khi tải hình ảnh: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Các tệp đính kèm";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Cảnh báo Độ tin cậy của Chứng chỉ";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Chọn Từ Tệp";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Chọn Từ Thư viện";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Xóa";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Xóa tất cả các kết quả";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nguy hiểm: Chứng chỉ do '%@' cung cấp không được ký bởi cơ quan đáng tin cậy.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "Ngày vượt quá giới hạn tối đa";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Ngày nhỏ hơn giới hạn tối thiểu";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "Ngày phải vào hoặc sau %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "Ngày phải vào hoặc trước %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Xóa";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "độ cao";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Nhập %lld ký tự";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Nhập từ %lld đến ^[%lld ký tự](inflect: true)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Nhập %lld đến %lld ký tự";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Nhập ^[%lld ký tự](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Nhập Giá trị";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Nhập giá trị trong khoảng từ %@ đến %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Lỗi";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Lỗi khi nhập tệp đính kèm";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Đánh giá biểu thức popup";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Vượt quá giá trị tối đa";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "đầu mục";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Dưới giá trị tối thiểu";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Tối đa %lld ký tự";
+"Maximum ^[%lld characters](inflect: true)" = "Tối đa ^[%lld ký tự](inflect: true)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Đã vượt quá độ dài ký tự tối đa";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Phương tiện truyền thông";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Chưa đáp ứng độ dài ký tự tối thiểu";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Chế độ";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Mạng";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Tên mới";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Truy dấu mới";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Không thể đánh giá popup: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Đổi tên";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Đổi tên tệp đính kèm";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Điểm Bắt đầu";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Chụp Ảnh hoặc Quay Video";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Chạm vào bề mặt để đặt scene";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Cấu hình Thiết bị đầu cuối";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "kiểm tra";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "Bản đồ nền không có mục tham chiếu không gian.";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Mật khẩu không hợp lệ.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "Không thể nhập tệp đính kèm đã chọn.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "Tệp đính kèm đã chọn vượt quá giới hạn %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL không thể truy cập được hoặc không chứa dữ liệu hình ảnh.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Thử lại";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Lỗi xác minh không xác định";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Loại Tài liệu Không có tên";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Giá trị";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Giá trị phải từ %lld đến ^[%lld ký tự](inflect: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "Giá trị phải là ^[%lld ký tự](inflect: true)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "Giá trị phải là một số";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "Giá trị phải là một số nguyên";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "Giá trị phải từ %@ đến %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "Giá trị phải đúng loại";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "Giá trị phải nằm trong domain";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "Giá trị không được trống";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

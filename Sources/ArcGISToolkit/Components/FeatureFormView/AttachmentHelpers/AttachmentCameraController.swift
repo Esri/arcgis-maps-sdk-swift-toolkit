@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// A UIImagePickerController wrapper to provide a native photo capture experience.
+@MainActor
 struct AttachmentCameraController: UIViewControllerRepresentable {
     @Environment(\.dismiss) private var dismiss
     
@@ -22,7 +24,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     @Binding var importState: AttachmentImportState
     
     /// The image picker controller represented within the view.
-    private let controller = UIImagePickerController()
+    private let controller = AttachmentUIImagePickerController()
     
     /// Dismisses the picker controller.
     func endCapture() {
@@ -58,12 +60,13 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     ) {
         parent.importState = .importing
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            if let pngData = image.pngData() {
-                parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png", fileExtension: "png"))
+            if let jpegData = image.jpegData(compressionQuality: 0.9) {
+                parent.importState = .finalizing(AttachmentImportData(contentType: .jpeg, data: jpegData))
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-            if let videoData = try? Data(contentsOf: videoURL) {
-                parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileExtension: videoURL.pathExtension))
+            if let contentType = UTType(filenameExtension: videoURL.pathExtension),
+               let videoData = try? Data(contentsOf: videoURL) {
+                parent.importState = .finalizing(AttachmentImportData(contentType: contentType, data: videoData))
             }
         }
         parent.endCapture()
@@ -71,5 +74,41 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         parent.endCapture()
+    }
+}
+
+#if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
+extension AttachmentCameraController {
+    /// Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
+    /// - Parameter action: The new camera capture mode.
+    func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
+        self.controller.action = action
+        return self
+    }
+}
+#endif
+
+/// A wrapper around ``UIImagePickerController``.
+///
+/// Use this wrapper to monitor additional properties like the current camera capture mode (photo/video).
+class AttachmentUIImagePickerController: UIImagePickerController {
+    /// Observes changes to the camera capture mode.
+    var cameraCaptureModeObserver: (any NSObjectProtocol)?
+    
+    /// An action to perform when the camera capture mode changes.
+    var action: (@MainActor (UIImagePickerController.CameraCaptureMode) -> Void)?
+    
+    override func viewDidAppear(_ animated: Bool) {
+        cameraCaptureModeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name("SourceFormatDidChange"), object: nil, queue: nil) { notification in
+            Task { @MainActor in
+                self.action?(self.cameraCaptureMode)
+            }
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if let cameraCaptureModeObserver {
+            NotificationCenter.default.removeObserver(cameraCaptureModeObserver)
+        }
     }
 }

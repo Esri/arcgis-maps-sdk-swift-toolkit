@@ -13,13 +13,12 @@
 // limitations under the License.
 
 import ArcGIS
-import OSLog
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// Data used to create the attachment.
 struct AttachmentImportData: Equatable {
+    let contentType: UTType
     let data: Data
-    let contentType: String
     var fileName: String? = nil
-    var fileExtension: String? = nil
 }

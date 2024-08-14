@@ -42,7 +42,7 @@ struct ARSwiftUIView {
     }
     
     /// Sets the closure to call when the session's geo-tracking state changes.
-    /// 
+    ///
     /// ARKit invokes the callback only for `ARGeoTrackingConfiguration` sessions.
     func onDidChangeGeoTrackingStatus(
         perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
@@ -150,12 +150,12 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
     
     /// The AR session.
     @objc dynamic var session: ARSession {
-        arView.session
+        MainActor.runUnsafely { arView.session }
     }
 }
 
 extension ARSwiftUIViewProxy {
-    /// Performs a raycast to get the transformation matrix representing the corresponding 
+    /// Performs a raycast to get the transformation matrix representing the corresponding
     /// real-world point for `screenPoint`.
     ///
     /// The method returns `nil` when the raycast query or the raycast fails. They can fail due to
@@ -166,7 +166,7 @@ extension ARSwiftUIViewProxy {
     ///   - screenPoint: The screen point to determine the real world transformation matrix from.
     ///   - target: The type of surface the raycast can interact with.
     /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-    func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
+    @MainActor func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
         // Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
         guard let query = arView.raycastQuery(
             from: screenPoint,

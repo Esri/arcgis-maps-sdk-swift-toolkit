@@ -14,9 +14,10 @@
 
 import SwiftUI
 
+@MainActor
 struct ExampleList: View {
     /// The name of the list of examples.
-    var name: String
+    let name: String
     
     /// The list of examples to display.
     var examples: [Example]
@@ -31,5 +32,5 @@ struct ExampleList: View {
 }
 
 extension ExampleList: Identifiable {
-    var id: String { name }
+    nonisolated var id: String { name }
 }

@@ -16,8 +16,9 @@ import ArcGIS
 import BackgroundTasks
 import Combine
 import Foundation
-import OSLog
 import UIKit
+
+internal import os
 
 /// An object that manages saving and loading jobs so that they can continue to run if the
 /// app is backgrounded or even terminated.
@@ -44,11 +45,11 @@ import UIKit
 /// serialized when an app is backgrounded so that if the app is terminated the jobs can be
 /// rehydrated upon relaunch of the app.
 ///
-/// Also in iOS if the user of an app removes the app from the app switcher (swiping up) then the
-/// system interprets this as a strong indication that the user does not want the app running.
-/// The consequences of this are two-fold for jobs. One, any background fetch tasks are not given
-/// any time until the app is relaunched again. And two, any background downloads that are in
-/// progress are canceled by the operating system.
+/// Also, in iOS, if the user of an app removes the app from the multitasking UI (aka force quits it),
+/// the system interprets this as a strong indication that the app should
+/// do no more work in the background. The consequences of this are two-fold for jobs.
+/// One, any background fetch tasks are not given any time until the app is relaunched again.
+/// And two, any background downloads that are in progress are canceled by the operating system.
 ///
 /// **Features**
 ///
@@ -321,7 +322,7 @@ public class JobManager: ObservableObject {
 }
 
 /// An enum that defines a schedule for background status checks.
-public enum BackgroundStatusCheckSchedule {
+public enum BackgroundStatusCheckSchedule: Sendable {
     /// No background status checks will be requested.
     case disabled
     /// Requests that the system schedule a background check at a regular interval.
@@ -334,11 +335,11 @@ extension Logger {
     ///
     /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER" under Scheme
     /// -> Arguments -> Environment Variables
-    static let jobManager: Logger = {
+    static var jobManager: Logger {
         if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
             return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
         } else {
             return Logger(OSLog.disabled)
         }
-    }()
+    }
 }

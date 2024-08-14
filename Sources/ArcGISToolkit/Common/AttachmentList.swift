@@ -33,7 +33,7 @@ struct AttachmentRow: View  {
     @ObservedObject var attachmentModel: AttachmentModel
     
     /// The url of the the attachment, used to display the attachment via `QuickLook`.
-    @State var url: URL?
+    @State private var url: URL?
     
     var body: some View {
         HStack {
@@ -67,9 +67,14 @@ struct AttachmentRow: View  {
 struct AttachmentLoadButton: View  {
     @ObservedObject var attachmentModel: AttachmentModel
     
+    /// A Boolean value indicating whether the download alert is presented.
+    @State private var downloadAlertIsPresented = false
+    
     var body: some View {
         Button {
-            if attachmentModel.loadStatus == .notLoaded {
+            if attachmentModel.attachment.measuredSize.value.isZero {
+                downloadAlertIsPresented = true
+            } else if attachmentModel.loadStatus == .notLoaded {
                 attachmentModel.load()
             }
         } label: {
@@ -95,5 +100,6 @@ struct AttachmentLoadButton: View  {
             .frame(width: 24, height: 24)
             .padding(.leading)
         }
+        .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
     }
 }

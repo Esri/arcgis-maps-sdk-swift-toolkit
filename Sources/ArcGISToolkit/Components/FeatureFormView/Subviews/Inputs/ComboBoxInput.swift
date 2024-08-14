@@ -18,6 +18,7 @@ import SwiftUI
 /// A view for numerical value input.
 ///
 /// This is the preferable input type for long lists of coded value domains.
+@MainActor
 struct ComboBoxInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -234,13 +235,13 @@ private extension Text {
     }
 }
 
-extension CodedValue: Equatable {
+extension ArcGIS.CodedValue: Swift.Equatable {
     public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
         lhs.name == rhs.name
     }
 }
 
-extension CodedValue: Hashable {
+extension ArcGIS.CodedValue: Swift.Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }

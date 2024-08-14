@@ -18,6 +18,7 @@ import XCTest
 @testable import ArcGISToolkit
 
 final class ARTests: XCTestCase {
+    @MainActor
     func testFlyoverLocationInitWithDefaults() throws {
         let view = FlyoverSceneView(
             initialLocation: .init(
@@ -40,6 +41,7 @@ final class ARTests: XCTestCase {
         XCTAssertTrue(view.shouldOrientToCompass)
     }
     
+    @MainActor
     func testFlyoverLocationInit() throws {
         let view = FlyoverSceneView(
             initialLocation: .init(
@@ -63,6 +65,7 @@ final class ARTests: XCTestCase {
         XCTAssertFalse(view.shouldOrientToCompass)
     }
     
+    @MainActor
     func testFlyoverLatLongInitWithDefaults() throws {
         let view = FlyoverSceneView(
             initialLatitude: 34.056397,
@@ -84,6 +87,7 @@ final class ARTests: XCTestCase {
         XCTAssertTrue(view.shouldOrientToCompass)
     }
     
+    @MainActor
     func testFlyoverLatLongInit() throws {
         let view = FlyoverSceneView(
             initialLatitude: 34.056397,
@@ -106,6 +110,7 @@ final class ARTests: XCTestCase {
         XCTAssertFalse(view.shouldOrientToCompass)
     }
     
+    @MainActor
     func testTableTopInit() throws {
         let view = TableTopSceneView(
             anchorPoint: .init(latitude: 34.056397, longitude: -117.195646),
@@ -124,6 +129,7 @@ final class ARTests: XCTestCase {
         XCTAssertFalse(view.coachingOverlayIsHidden)
     }
     
+    @MainActor
     func testTableTopARCoachingOverlayViewModifier() throws {
         let view = TableTopSceneView(
             anchorPoint: .init(latitude: 0, longitude: 0),
@@ -137,6 +143,7 @@ final class ARTests: XCTestCase {
         XCTAssertTrue(view.coachingOverlayIsHidden)
     }
     
+    @MainActor
     func testWorldScaleGeoTrackingInitWithDefaults() throws {
         let view = WorldScaleSceneView(
             trackingMode: .geoTracking
@@ -150,6 +157,7 @@ final class ARTests: XCTestCase {
         XCTAssertFalse(view.calibrationViewIsHidden)
     }
     
+    @MainActor
     func testWorldScaleWorldTrackingInitWithDefaults() throws {
         let view = WorldScaleSceneView { _ in
             SceneView(scene: Scene())
@@ -161,6 +169,7 @@ final class ARTests: XCTestCase {
         XCTAssertFalse(view.calibrationViewIsHidden)
     }
     
+    @MainActor
     func testWorldScalePreferGeoTrackingInitWithDefaults() throws {
         let view = WorldScaleSceneView(
             trackingMode: .preferGeoTracking
@@ -174,6 +183,7 @@ final class ARTests: XCTestCase {
         XCTAssertFalse(view.calibrationViewIsHidden)
     }
     
+    @MainActor
     func testWorldScaleInitWithClippingDistance() throws {
         let view = WorldScaleSceneView(
             clippingDistance: 1_000,
@@ -188,7 +198,7 @@ final class ARTests: XCTestCase {
         XCTAssertFalse(view.calibrationViewIsHidden)
     }
     
-    
+    @MainActor
     func testWorldScaleCalibrationViewHiddenViewModifier() throws {
         let view = WorldScaleSceneView(
             trackingMode: .geoTracking
@@ -200,6 +210,7 @@ final class ARTests: XCTestCase {
         XCTAssertTrue(view.calibrationViewIsHidden)
     }
     
+    @MainActor
     func testWorldScaleCalibrationButtonAlignmentViewModifier() throws {
         let view = WorldScaleSceneView(
             trackingMode: .geoTracking

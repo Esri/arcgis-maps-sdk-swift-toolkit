@@ -30,6 +30,8 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [CompassExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
 /// in the project. To learn more about using the `Compass` see the <doc:CompassTutorial>.
+@MainActor
+@preconcurrency
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero

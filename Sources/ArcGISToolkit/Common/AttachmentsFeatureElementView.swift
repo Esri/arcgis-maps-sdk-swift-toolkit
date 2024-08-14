@@ -17,6 +17,7 @@ import QuickLook
 import SwiftUI
 
 /// A view displaying an `AttachmentsFeatureElement`.
+@MainActor
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
     let featureElement: AttachmentsFeatureElement
@@ -86,6 +87,7 @@ struct AttachmentsFeatureElementView: View {
                         attachmentHeader
                             .catalystPadding(4)
                     }
+                    .disclosureGroupPadding()
                 }
             }
         }
@@ -97,7 +99,8 @@ struct AttachmentsFeatureElementView: View {
             attachmentModelsState = .initializing
             let attachments = (try? await featureElement.featureAttachments) ?? []
             
-            var attachmentModels = attachments
+            let attachmentModels = attachments
+                .reversed()
                 .map {
                     AttachmentModel(
                         attachment: $0,
@@ -105,14 +108,6 @@ struct AttachmentsFeatureElementView: View {
                         thumbnailSize: thumbnailSize
                     )
                 }
-            
-            if !isShowingAttachmentsFormElement {
-                // Reverse attachment models array if we're not displaying
-                // via an AttachmentsFormElement.
-                // This allows attachments in a non-editing context to
-                // display in the same order as the online Map Viewer.
-                attachmentModels = attachmentModels.reversed()
-            }
             attachmentModelsState = .initialized(attachmentModels)
         }
     }
@@ -145,8 +140,6 @@ struct AttachmentsFeatureElementView: View {
                     AttachmentList(attachmentModels: attachmentModels)
                 }
             }
-        @unknown default:
-            EmptyView()
         }
     }
     
@@ -176,7 +169,7 @@ struct AttachmentsFeatureElementView: View {
         )
         newModel.load()
         models.insert(newModel, at: 0)
-        attachmentModelsState = .initialized(models)
+        withAnimation { attachmentModelsState = .initialized(models) }
         formViewModel.evaluateExpressions()
         scrollToNewAttachmentAction?()
     }
@@ -189,7 +182,7 @@ struct AttachmentsFeatureElementView: View {
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
-            attachmentModel.sync()
+            withAnimation { attachmentModel.sync() }
             formViewModel.evaluateExpressions()
         }
     }
@@ -203,8 +196,8 @@ struct AttachmentsFeatureElementView: View {
            let attachment = attachmentModel.attachment as? FormAttachment {
             element.delete(attachment)
             guard case .initialized(var models) = attachmentModelsState else { return }
-            models.removeAll { $0 == attachmentModel }
-            attachmentModelsState = .initialized(models)
+            models.removeAll { $0 === attachmentModel }
+            withAnimation { attachmentModelsState = .initialized(models) }
             formViewModel.evaluateExpressions()
         }
     }
@@ -225,23 +218,18 @@ extension AttachmentsFeatureElementView {
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
     var thumbnailSize: CGSize {
-        // Set thumbnail size
-        let thumbnailSize: CGSize
         switch featureElement.attachmentsDisplayType {
         case .list:
-            thumbnailSize = CGSize(width: 40, height: 40)
+            CGSize(width: 40, height: 40)
         case .preview:
-            thumbnailSize = CGSize(width: 120, height: 120)
+            CGSize(width: 120, height: 120)
         case .auto:
             if isRegularWidth {
-                thumbnailSize = CGSize(width: 120, height: 120)
+                CGSize(width: 120, height: 120)
             } else {
-                thumbnailSize = CGSize(width: 40, height: 40)
+                CGSize(width: 40, height: 40)
             }
-        @unknown default:
-            thumbnailSize = CGSize(width: 120, height: 120)
         }
-        return thumbnailSize
     }
     
     /// A Boolean value indicating whether the feature Element
@@ -257,7 +245,9 @@ extension View {
     ///   - element: The attachment form element to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
-    @ViewBuilder func onAttachmentIsEditableChange(
+    @MainActor
+    @ViewBuilder
+    func onAttachmentIsEditableChange(
         of element: AttachmentsFeatureElement,
         action: @escaping (_ newIsEditable: Bool) -> Void
     ) -> some View {

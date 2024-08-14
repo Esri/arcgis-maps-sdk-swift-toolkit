@@ -13,15 +13,16 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
-import QuickLook
+@preconcurrency import QuickLook
 import SwiftUI
+
+internal import os
 
 /// A view model representing the combination of a `FeatureAttachment` and
 /// an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
     /// The `FeatureAttachment`.
-    let attachment: FeatureAttachment
+    nonisolated let attachment: FeatureAttachment
     
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
@@ -67,17 +68,16 @@ import SwiftUI
         self.name = attachment.name
         self.thumbnailSize = thumbnailSize
         
-        switch attachment.featureAttachmentKind {
-        case .image:
-            systemImageName = "photo"
-        case .video:
-            systemImageName = "film"
-        case .audio:
-            systemImageName = "waveform"
-        case .document, .other:
-            systemImageName = "doc"
-        @unknown default:
-            systemImageName = "questionmark"
+        if attachment.isLocal {
+            load()
+        } else {
+            systemImageName = switch attachment.featureAttachmentKind {
+            case .image: "photo"
+            case .video: "film"
+            case .audio: "waveform"
+            case .document: "doc"
+            case .other: "questionmark"
+            }
         }
     }
     
@@ -86,7 +86,11 @@ import SwiftUI
     func load() {
         Task {
             loadStatus = .loading
-            try await attachment.load()
+            do {
+                try await attachment.load()
+            } catch {
+                Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription)")
+            }
             sync()
             if loadStatus == .failed || attachment.fileURL == nil {
                 systemImageName = "exclamationmark.circle.fill"
@@ -100,7 +104,7 @@ import SwiftUI
             )
             do {
                 let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
-                self.thumbnail = thumbnail.uiImage
+                withAnimation { self.thumbnail = thumbnail.uiImage }
             } catch {
                 systemImageName = "exclamationmark.circle.fill"
             }
@@ -115,10 +119,3 @@ import SwiftUI
 }
 
 extension AttachmentModel: Identifiable {}
-
-extension AttachmentModel: Equatable {
-    static func == (lhs: AttachmentModel, rhs: AttachmentModel) -> Bool {
-        lhs.attachment === rhs.attachment &&
-        lhs.thumbnail === rhs.thumbnail
-    }
-}
