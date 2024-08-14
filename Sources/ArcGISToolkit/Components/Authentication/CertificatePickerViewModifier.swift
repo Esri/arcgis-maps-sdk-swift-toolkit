@@ -22,8 +22,8 @@ import UniformTypeIdentifiers
 @MainActor final class CertificatePickerViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The types of certificate error.
 ***REMOVED***enum CertificateError: Error {
-***REMOVED******REMOVED******REMOVED***/ Could not access the certificate file.
-***REMOVED******REMOVED***case couldNotAccessCertificateFile
+***REMOVED******REMOVED******REMOVED***/ Failed to access the certificate file.
+***REMOVED******REMOVED***case failedToAccessCertificateFile
 ***REMOVED******REMOVED******REMOVED***/ The certificate import error.
 ***REMOVED******REMOVED***case importError(CertificateImportError)
 ***REMOVED******REMOVED******REMOVED*** The other error.
@@ -95,7 +95,7 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let credential = try NetworkCredential.certificate(at: certificateURL, password: password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.challenge.resume(with: .continueWithCredential(credential))
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(.couldNotAccessCertificateFile)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(.failedToAccessCertificateFile)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch(let certificateImportError as CertificateImportError) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(.importError(certificateImportError))
@@ -116,7 +116,7 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 
-extension CertificateImportError: LocalizedError {
+extension ArcGIS.CertificateImportError: Foundation.LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .invalidData:
@@ -144,9 +144,9 @@ extension CertificateImportError: LocalizedError {
 extension CertificatePickerViewModel.CertificateError: LocalizedError {
 ***REMOVED***var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
+***REMOVED******REMOVED***case .failedToAccessCertificateFile:
 ***REMOVED******REMOVED******REMOVED***return String(
-***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Could not access the certificate file.",
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Failed to access the certificate file.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating a certificate file was inaccessible."
 ***REMOVED******REMOVED******REMOVED***)
@@ -159,6 +159,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 ***REMOVED***
 
 ***REMOVED***/ A view modifier that presents a certificate picker workflow.
+@MainActor
 struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ Creates a certificate picker view modifier.
 ***REMOVED******REMOVED***/ - Parameter challenge: The challenge that requires a certificate.

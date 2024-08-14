@@ -33,7 +33,7 @@ struct AttachmentRow: View  {
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
-***REMOVED***@State var url: URL?
+***REMOVED***@State private var url: URL?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
@@ -67,9 +67,14 @@ struct AttachmentRow: View  {
 struct AttachmentLoadButton: View  {
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the download alert is presented.
+***REMOVED***@State private var downloadAlertIsPresented = false
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus == .notLoaded {
+***REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.measuredSize.value.isZero {
+***REMOVED******REMOVED******REMOVED******REMOVED***downloadAlertIsPresented = true
+***REMOVED******REMOVED*** else if attachmentModel.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
@@ -95,5 +100,6 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED******REMOVED***.frame(width: 24, height: 24)
 ***REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED***
+***REMOVED******REMOVED***.alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { ***REMOVED***
 ***REMOVED***
 ***REMOVED***

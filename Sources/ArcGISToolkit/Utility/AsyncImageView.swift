@@ -16,6 +16,8 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
+@MainActor
+@preconcurrency
 public struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `URL` of the image.
 ***REMOVED***private var url: URL?
@@ -33,7 +35,7 @@ public struct AsyncImageView: View {
 ***REMOVED***private let mediaSize: CGSize?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The data model for an `AsyncImageView`.
-***REMOVED***@StateObject var viewModel: AsyncImageViewModel
+***REMOVED***@StateObject private var viewModel = AsyncImageViewModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -52,8 +54,6 @@ public struct AsyncImageView: View {
 ***REMOVED******REMOVED***self.url = url
 ***REMOVED******REMOVED***self.refreshInterval = refreshInterval
 ***REMOVED******REMOVED***loadableImage = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: AsyncImageViewModel())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageView`.

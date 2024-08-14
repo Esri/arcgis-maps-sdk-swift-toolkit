@@ -14,7 +14,14 @@
 
 ***REMOVED***/ The possible errors when importing an attachment.
 enum AttachmentImportError: Error, Equatable {
+***REMOVED******REMOVED***/ The SDK failed to create a ``ArcGIS/FormAttachment``.
+***REMOVED***case creationFailed
+***REMOVED******REMOVED***/ The raw attachment is inaccessible.
 ***REMOVED***case dataInaccessible
+***REMOVED******REMOVED***/ The provided file is empty (0 bytes).
+***REMOVED***case emptyFilesNotSupported
+***REMOVED******REMOVED***/ The provided file exceeds the toolkit imposed size limit.
 ***REMOVED***case sizeLimitExceeded
+***REMOVED******REMOVED***/ The file import failed with a system error.
 ***REMOVED***case system(String)
 ***REMOVED***

@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for text input.
+@MainActor
 struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel

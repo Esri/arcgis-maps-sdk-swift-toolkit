@@ -18,6 +18,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 final class BookmarksTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testBookmarksWithGeoModel() async throws {
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***var _selection: Bookmark?
@@ -42,6 +43,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(_selection, map.bookmarks.first)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testBookmarksWithList() {
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***var _selection: Bookmark?
@@ -60,6 +62,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier.
 ***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithModifier() {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
@@ -87,6 +90,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier and web map.
 ***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithModifierAndMap() async throws {
 ***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
@@ -112,6 +116,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint.
 ***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithViewpoint() {
 ***REMOVED******REMOVED***let sampleBookmarks = sampleBookmarks
 ***REMOVED******REMOVED***var _isPresented = true
@@ -138,6 +143,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint and web map.
 ***REMOVED***@available(*, deprecated)
+***REMOVED***@MainActor
 ***REMOVED***func testSelectBookmarkWithViewpointAndMap() async throws {
 ***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {

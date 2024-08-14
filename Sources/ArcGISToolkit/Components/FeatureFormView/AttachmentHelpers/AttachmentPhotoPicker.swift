@@ -12,11 +12,11 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import OSLog
 import PhotosUI
 ***REMOVED***
 
 ***REMOVED***/ A wrapper for the PhotosPicker API.
+@MainActor
 struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED***/ The item selected in the photos picker.
 ***REMOVED***@State private var item: PhotosPickerItem?
@@ -42,25 +42,17 @@ struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.item = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .importing
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let data = try await item.loadTransferable(type: Data.self) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let contentType = item.supportedContentTypes.first,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let data = try await item.loadTransferable(type: Data.self) else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.dataInaccessible)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var contentTypes = item.supportedContentTypes.enumerated().makeIterator()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var mimeType = contentTypes.next()?.element.preferredMIMEType
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***while mimeType == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mimeType = contentTypes.next()?.element.preferredMIMEType
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .finalizing(AttachmentImportData(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: mimeType ?? "application/octet-stream",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileExtension: item.supportedContentTypes.first?.preferredFilenameExtension ?? ""
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .finalizing(AttachmentImportData(contentType: contentType, data: data))
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+extension PhotosPickerItem: @unchecked Swift.Sendable {***REMOVED***

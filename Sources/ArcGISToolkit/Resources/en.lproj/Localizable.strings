@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "A certificate is required to access content on %@.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Add new";
+"Add New" = "Add New";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Advanced Options";
@@ -22,6 +22,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "Attachments larger than %@ cannot be downloaded.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attributes";
@@ -49,7 +52,7 @@ for the AR experience. */
 "Cancel" = "Cancel";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Cancel starting point selection";
+"Cancel Starting Point Selection" = "Cancel Starting Point Selection";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificate Required";
@@ -67,7 +70,7 @@ for the AR experience. */
 "Clear" = "Clear";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Clear all results";
+"Clear All Results" = "Clear All Results";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
@@ -80,9 +83,6 @@ east, etc.). */
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Continue";
-
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Could not access the certificate file.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Dangerous: The certificate provided by '%@' is not signed by a trusted authority.";
@@ -116,6 +116,12 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "elevation";
+
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "Empty attachments cannot be downloaded.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "Empty files are not supported.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -155,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "Exceeds maximum value";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "Failed to access the certificate file.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -207,6 +216,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "Microphone access has been disabled in Settings.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimum character length not met";
 
@@ -223,7 +235,7 @@ AR experience. */
 "New name" = "New name";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "New trace";
+"New Trace" = "New Trace";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
@@ -245,9 +257,6 @@ AR experience. */
 
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "No Value";
-
-/* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "None selected";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Not Available";
@@ -285,6 +294,9 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
 
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "Record video only";
+
 /* A label for a button to rename an attachment. */
 "Rename" = "Rename";
 
@@ -311,6 +323,12 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
+
+/* A label for button to select a utility network. */
+"Select Network" = "Select Network";
+
+/* A label for button to select a utility network trace configuration. */
+"Select Trace Configuration" = "Select Trace Configuration";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Settings";
@@ -435,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Zoom To";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Zoom to result";
+"Zoom To Result" = "Zoom To Result";
 

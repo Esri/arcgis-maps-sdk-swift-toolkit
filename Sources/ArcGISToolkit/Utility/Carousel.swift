@@ -22,7 +22,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED***@State private var cellSize = CGSize.zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The identifier for the Carousel content.
-***REMOVED***let contentIdentifier = UUID()
+***REMOVED***@State private var contentIdentifier = UUID()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the Carousel.
 ***REMOVED***let content: (_: CGSize, _: (() -> Void)?) -> Content
@@ -154,11 +154,11 @@ extension Carousel {
 
 #Preview("In a List") {
 ***REMOVED***List {
-***REMOVED******REMOVED***Text("Hello")
+***REMOVED******REMOVED***Text(verbatim: "Hello")
 ***REMOVED******REMOVED***Carousel { _, _ in
 ***REMOVED******REMOVED******REMOVED***PreviewContent()
 ***REMOVED***
-***REMOVED******REMOVED***Text("World!")
+***REMOVED******REMOVED***Text(verbatim: "World!")
 ***REMOVED***
 ***REMOVED***
 
@@ -176,10 +176,12 @@ extension Carousel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scrollToLeftAction = scrollToLeftAction
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button("Scroll to 1") {
+***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollToLeftAction?()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "Scroll to left")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

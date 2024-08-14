@@ -15,7 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ Customizes scalebar appearance and behavior.
-public struct ScalebarSettings {
+public struct ScalebarSettings: Sendable {
 ***REMOVED******REMOVED***/ Determines if the scalebar should automatically hide/show itself.
 ***REMOVED***var autoHide: Bool
 ***REMOVED***

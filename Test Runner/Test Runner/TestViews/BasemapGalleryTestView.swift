@@ -16,6 +16,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+@MainActor
 struct BasemapGalleryTestView: View {
 ***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***

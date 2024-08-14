@@ -14,9 +14,10 @@
 
 ***REMOVED***
 
+@MainActor
 struct ExampleList: View {
 ***REMOVED******REMOVED***/ The name of the list of examples.
-***REMOVED***var name: String
+***REMOVED***let name: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of examples to display.
 ***REMOVED***var examples: [Example]
@@ -31,5 +32,5 @@ struct ExampleList: View {
 ***REMOVED***
 
 extension ExampleList: Identifiable {
-***REMOVED***var id: String { name ***REMOVED***
+***REMOVED***nonisolated var id: String { name ***REMOVED***
 ***REMOVED***

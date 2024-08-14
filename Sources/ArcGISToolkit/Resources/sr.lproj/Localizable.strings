@@ -20,10 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Dozvoli";
 
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Došlo je do greške prilikom učitavanja slike: %@.";
-
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Prilozi";
 
 /* A label in reference to the attributes of a geo element. */
@@ -57,6 +54,15 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Upozorenje o poverenju sertifikatu";
 
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Izaberite iz datoteka";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Izaberite iz biblioteke";
+
+/* The label of a button that clears a form's input. */
+"Clear" = "Obriši";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Obriši rezultate";
 
@@ -78,6 +84,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Opasno: Sertifikat koji je obezbeđen '%@' nije potpisan od strane pouzdanog tela.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "Datum prekoračuje maksimum";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Datum manji od minimuma";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "Datum mora biti na dan ili nakon %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "Datum mora biti na dan ili ranije %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Izbriši";
 
@@ -96,17 +114,27 @@ for a utility network trace. */
 AR experience. */
 "elevation" = "elevacija";
 
-/* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Unesite %lld znakova";
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Enter %lld to ^[%lld characters](inflect: true)" = "Unesite %lld za ^[%lld characters](inflect: true)";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Unesite %lld do %lld znakova";
+/* Text indicating the user should enter a field's exact number of characters. */
+"Enter ^[%lld characters](inflect: true)" = "Unesite ^[%lld characters](inflect: true)";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Unesite vrednost";
 
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Unesite vrednost od %@ do %@";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Greška";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Greška prilikom uvoza priloga";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -121,6 +149,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Ocenjivanje iskačućih izraza";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Prekoračuje maksimalnu vrednost";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -161,11 +192,20 @@ trace operation. */
 AR experience. */
 "heading" = "zaglavlje";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Manje od minimalne vrednosti";
+
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Maksimalno %lld znakova";
+"Maximum ^[%lld characters](inflect: true)" = "Maksimalno ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Prekoračena je maksimalna dužina znakova";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Mediji";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Minimalna dužina karaktera nije ispunjena";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Režim";
@@ -175,6 +215,9 @@ AR experience. */
 
 /* A label in reference to a specific utility network. */
 "Network" = "Mreža";
+
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "Novi naziv";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "Novo praćenje";
@@ -236,6 +279,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Iskačuća evaluacija neuspešna: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Preimenuj";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Preimenuj prilog";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -268,6 +317,9 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Početne tačke";
 
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Napravi fotografiju ili video";
+
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
 "Tap a surface to place the scene" = "Dodirnite površinu da postavite scenu";
@@ -278,9 +330,6 @@ additional information. */
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Konfiguracija terminala";
-
-/* A label for development purposes only. This is not user visible. */
-"test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "Osnovna mapa nema prostornu referencu";
@@ -305,6 +354,13 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Nevažeća lozinka.";
 
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
+"The selected attachment could not be imported." = "Nije moguće uvesti izabrani prilog.";
+
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "Izabrani prilog premašuje ograničenje od %@.";
+
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "Nije moguće pristupiti URL adresi ili ne sadrži podatke o slici.";
 
@@ -323,6 +379,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Pokušajte ponovo";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Nepoznata greška pri proveri validnosti";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Neimenovani tip imovine";
 
@@ -331,6 +390,33 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Vrednost";
+
+/* Text indicating a field's computed value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
+"Value must be %lld to ^[%lld characters](inflect: true)" = "Vrednost mora biti %lld do ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's computed value must be an exact number of characters. */
+"Value must be ^[%lld characters](inflect: true)" = "Vrednost mora biti ^[%lld characters](inflect: true)";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "Vrednost mora da bude broj";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "Vrednost mora da bude ceo broj";
+
+/* Text indicating a field's computed value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Value must be from %@ to %@" = "Vrednost mora biti od %@ do %@";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "Vrednost mora da bude ispravnog tipa";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "Vrednost mora da bude unutar domena";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "Vrednost ne sme biti prazna";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

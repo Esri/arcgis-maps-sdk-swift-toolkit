@@ -36,6 +36,7 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.disclosureGroupPadding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -102,7 +103,7 @@ struct MediaPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension PopupMedia: Identifiable {***REMOVED***
+extension ArcGIS.PopupMedia: Swift.Identifiable {***REMOVED***
 
 private extension MediaPopupElement {
 ***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.

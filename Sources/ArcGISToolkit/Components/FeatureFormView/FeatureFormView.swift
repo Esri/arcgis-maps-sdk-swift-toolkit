@@ -18,10 +18,12 @@
 ***REMOVED***/ The `FeatureFormView` component enables users to edit field values of a feature using
 ***REMOVED***/ pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ***REMOVED***/
+***REMOVED***/ ![An image of the FeatureFormView component](FeatureFormView)
+***REMOVED***/
 ***REMOVED***/ Forms are currently only supported in maps. The form definition is stored
 ***REMOVED***/ in the web map itself and contains a title, description, and a list of "form elements".
 ***REMOVED***/
-***REMOVED***/ `FeatureFormView` will support the display of form elements created by
+***REMOVED***/ `FeatureFormView` supports the display of form elements created by
 ***REMOVED***/ the Map Viewer or Field Maps Designer, including:
 ***REMOVED***/
 ***REMOVED***/ - Field Element - used to edit a single field of a feature with a specific "input type".
@@ -43,6 +45,7 @@
 ***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map.
 ***REMOVED***/ - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 ***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+***REMOVED***/ - Add, delete, or rename feature attachments.
 ***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
@@ -60,12 +63,14 @@
 ***REMOVED***/ `Info.plist` file.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
+@MainActor
+@preconcurrency
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the initial expression evaluation is running.
-***REMOVED***@State private var isEvaluatingInitialExpressions = true
+***REMOVED******REMOVED***/ A Boolean value indicating whether initial expression evaluation is running.
+***REMOVED***@State private var initialExpressionsAreEvaluating = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
@@ -78,22 +83,30 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
+***REMOVED******REMOVED***if initialExpressionsAreEvaluating {
+***REMOVED******REMOVED******REMOVED***initialBody
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***evaluatedForm
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var evaluatedForm: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isEvaluatingInitialExpressions {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentElement = model.featureForm.defaultAttachmentsElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(attachmentElement)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The Toolkit currently only supports AttachmentsFormElements via the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** default attachments element. Once AttachmentsFormElements can be authored
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this can call makeElement(_:) instead and makeElement(_:) should have a
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -108,11 +121,6 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 ***REMOVED******REMOVED***.environmentObject(model)
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Perform the initial expression evaluation.
-***REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
-***REMOVED******REMOVED******REMOVED***isEvaluatingInitialExpressions = false
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -121,8 +129,6 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
 ***REMOVED******REMOVED***switch element {
-***REMOVED******REMOVED***case let attachmentsElement as AttachmentsFormElement:
-***REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
@@ -140,5 +146,17 @@ extension FeatureFormView {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The progress view to be shown while initial expression evaluation is running.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This avoids flashing elements that may immediately be set hidden or have
+***REMOVED******REMOVED***/ values change as a result of initial expression evaluation.
+***REMOVED***var initialBody: some View {
+***REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
+***REMOVED******REMOVED******REMOVED******REMOVED***initialExpressionsAreEvaluating = false
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -16,7 +16,7 @@
 import Foundation
 
 ***REMOVED***/ Indicates how to display the attachments.
-public enum AttachmentsFeatureElementDisplayType {
+public enum AttachmentsFeatureElementDisplayType: Sendable {
 ***REMOVED******REMOVED***/ Show attachments as links.
 ***REMOVED***case list
 ***REMOVED******REMOVED***/ Attachments expand to the width of the view.
@@ -26,7 +26,7 @@ public enum AttachmentsFeatureElementDisplayType {
 ***REMOVED***
 
 ***REMOVED***/ Common properties for elements which display feature attachments.
-public protocol AttachmentsFeatureElement {
+public protocol AttachmentsFeatureElement: Sendable {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
 ***REMOVED***var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get ***REMOVED***
 ***REMOVED***
@@ -46,13 +46,11 @@ extension AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***/ Creates a display type from an attachment popup element's display type.
 ***REMOVED******REMOVED***/ - Parameter kind: The display type of the popup element.
 ***REMOVED***init(kind: AttachmentsPopupElement.DisplayType) {
-***REMOVED******REMOVED***switch kind {
-***REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED***self = .list
-***REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED***self = .preview
-***REMOVED******REMOVED***case .auto:
-***REMOVED******REMOVED******REMOVED***self = .auto
+***REMOVED******REMOVED***self = switch kind {
+***REMOVED******REMOVED***case .list: .list
+***REMOVED******REMOVED***case .preview: .preview
+***REMOVED******REMOVED***case .auto: .auto
+***REMOVED******REMOVED***@unknown default: fatalError("Unknown case")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

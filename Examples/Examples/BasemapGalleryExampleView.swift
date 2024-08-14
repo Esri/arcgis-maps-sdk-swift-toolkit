@@ -16,6 +16,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+@MainActor
 struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the basemap gallery is presented.
 ***REMOVED***@State private var basemapGalleryIsPresented = false

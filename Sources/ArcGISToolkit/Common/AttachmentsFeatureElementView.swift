@@ -17,6 +17,7 @@ import QuickLook
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an `AttachmentsFeatureElement`.
+@MainActor
 struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
 ***REMOVED***let featureElement: AttachmentsFeatureElement
@@ -86,6 +87,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disclosureGroupPadding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -97,7 +99,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
 ***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment: $0,
@@ -105,14 +108,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !isShowingAttachmentsFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not displaying
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** via an AttachmentsFormElement.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows attachments in a non-editing context to
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** display in the same order as the online Map Viewer.
-***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachmentModels.reversed()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(attachmentModels)
 ***REMOVED***
 ***REMOVED***
@@ -145,8 +140,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -176,7 +169,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
-***REMOVED******REMOVED***attachmentModelsState = .initialized(models)
+***REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
 ***REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***scrollToNewAttachmentAction?()
 ***REMOVED***
@@ -189,7 +182,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
 ***REMOVED******REMOVED***if let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
-***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
+***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModel.sync() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
@@ -203,8 +196,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***element.delete(attachment)
 ***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(models)
+***REMOVED******REMOVED******REMOVED***models.removeAll { $0 === attachmentModel ***REMOVED***
+***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
@@ -225,23 +218,18 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED***/ The size of thumbnail images, based on the attachment display type
 ***REMOVED******REMOVED***/ and the current size class of the view.
 ***REMOVED***var thumbnailSize: CGSize {
-***REMOVED******REMOVED******REMOVED*** Set thumbnail size
-***REMOVED******REMOVED***let thumbnailSize: CGSize
 ***REMOVED******REMOVED***switch featureElement.attachmentsDisplayType {
 ***REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED******REMOVED***CGSize(width: 40, height: 40)
 ***REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
 ***REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 40, height: 40)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
 ***REMOVED***
-***REMOVED******REMOVED***return thumbnailSize
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the feature Element
@@ -257,7 +245,9 @@ extension View {
 ***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***@ViewBuilder func onAttachmentIsEditableChange(
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func onAttachmentIsEditableChange(
 ***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
 ***REMOVED******REMOVED***action: @escaping (_ newIsEditable: Bool) -> Void
 ***REMOVED***) -> some View {

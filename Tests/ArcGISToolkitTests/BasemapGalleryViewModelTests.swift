@@ -12,13 +12,10 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
-
-import XCTest
 ***REMOVED***
 @testable ***REMOVED***Toolkit
-***REMOVED***
-import Combine
+@preconcurrency import Combine
+import XCTest
 
 ***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 ***REMOVED*** required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
@@ -34,6 +31,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(

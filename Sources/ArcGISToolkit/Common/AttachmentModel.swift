@@ -13,15 +13,16 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
-import QuickLook
+@preconcurrency import QuickLook
 ***REMOVED***
+
+internal import os
 
 ***REMOVED***/ A view model representing the combination of a `FeatureAttachment` and
 ***REMOVED***/ an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `FeatureAttachment`.
-***REMOVED***let attachment: FeatureAttachment
+***REMOVED***nonisolated let attachment: FeatureAttachment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
@@ -67,17 +68,16 @@ import QuickLook
 ***REMOVED******REMOVED***self.name = attachment.name
 ***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
-***REMOVED******REMOVED***case .image:
-***REMOVED******REMOVED******REMOVED***systemImageName = "photo"
-***REMOVED******REMOVED***case .video:
-***REMOVED******REMOVED******REMOVED***systemImageName = "film"
-***REMOVED******REMOVED***case .audio:
-***REMOVED******REMOVED******REMOVED***systemImageName = "waveform"
-***REMOVED******REMOVED***case .document, .other:
-***REMOVED******REMOVED******REMOVED***systemImageName = "doc"
-***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***systemImageName = "questionmark"
+***REMOVED******REMOVED***if attachment.isLocal {
+***REMOVED******REMOVED******REMOVED***load()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***systemImageName = switch attachment.featureAttachmentKind {
+***REMOVED******REMOVED******REMOVED***case .image: "photo"
+***REMOVED******REMOVED******REMOVED***case .video: "film"
+***REMOVED******REMOVED******REMOVED***case .audio: "waveform"
+***REMOVED******REMOVED******REMOVED***case .document: "doc"
+***REMOVED******REMOVED******REMOVED***case .other: "questionmark"
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -86,7 +86,11 @@ import QuickLook
 ***REMOVED***func load() {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
-***REMOVED******REMOVED******REMOVED***try await attachment.load()
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await attachment.load()
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription)")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***sync()
 ***REMOVED******REMOVED******REMOVED***if loadStatus == .failed || attachment.fileURL == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
@@ -100,7 +104,7 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
-***REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { self.thumbnail = thumbnail.uiImage ***REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED***
@@ -115,10 +119,3 @@ import QuickLook
 ***REMOVED***
 
 extension AttachmentModel: Identifiable {***REMOVED***
-
-extension AttachmentModel: Equatable {
-***REMOVED***static func == (lhs: AttachmentModel, rhs: AttachmentModel) -> Bool {
-***REMOVED******REMOVED***lhs.attachment === rhs.attachment &&
-***REMOVED******REMOVED***lhs.thumbnail === rhs.thumbnail
-***REMOVED***
-***REMOVED***

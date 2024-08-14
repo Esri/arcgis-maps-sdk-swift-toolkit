@@ -86,16 +86,16 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to this feature will be lost.")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** swiftlint:disable vertical_parameter_alignment_on_call
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"The form wasn't submitted",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: model.alertIsPresented
-***REMOVED******REMOVED******REMOVED******REMOVED***) { ***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** No actions.
+***REMOVED******REMOVED******REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case let .generalError(_, errorMessage) = model.state {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errorMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** swiftlint:enable vertical_parameter_alignment_on_call
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch model.state {
@@ -103,7 +103,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 5) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.textForState
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.state.label)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial)
@@ -184,6 +184,26 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***case idle
 ***REMOVED******REMOVED******REMOVED***/ The form is being checked for validation errors.
 ***REMOVED******REMOVED***case validating(FeatureForm)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ User-friendly text that describes this state.
+***REMOVED******REMOVED***var label: String {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .applyingEdits:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Applying Edits"
+***REMOVED******REMOVED******REMOVED***case .cancellationPending:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Cancellation Pending"
+***REMOVED******REMOVED******REMOVED***case .editing:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Editing"
+***REMOVED******REMOVED******REMOVED***case .finishingEdits:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Finishing Edits"
+***REMOVED******REMOVED******REMOVED***case .generalError:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Error"
+***REMOVED******REMOVED******REMOVED***case .idle:
+***REMOVED******REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED******REMOVED***case .validating:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Validating"
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current feature form workflow state.
@@ -250,22 +270,6 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***guard case .idle = self.state else { return true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED*** set: { _ in
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ User facing text indicating the current form workflow state.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This is most useful during post form processing to indicate ongoing background work.
-***REMOVED***var textForState: Text {
-***REMOVED******REMOVED***switch state {
-***REMOVED******REMOVED***case .validating:
-***REMOVED******REMOVED******REMOVED***Text("Validating")
-***REMOVED******REMOVED***case .finishingEdits:
-***REMOVED******REMOVED******REMOVED***Text("Finishing edits")
-***REMOVED******REMOVED***case .applyingEdits:
-***REMOVED******REMOVED******REMOVED***Text("Applying edits")
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***Text("")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

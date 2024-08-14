@@ -19,5 +19,6 @@ protocol Example {
 ***REMOVED***var name: String { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A function which creates the example view.
+***REMOVED***@MainActor
 ***REMOVED***func makeBody() -> AnyView
 ***REMOVED***

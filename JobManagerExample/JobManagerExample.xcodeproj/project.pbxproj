@@ -325,10 +325,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.4.0;
+				MARKETING_VERSION = 200.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.JobManagerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			***REMOVED***;
@@ -356,10 +357,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.4.0;
+				MARKETING_VERSION = 200.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.JobManagerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			***REMOVED***;
