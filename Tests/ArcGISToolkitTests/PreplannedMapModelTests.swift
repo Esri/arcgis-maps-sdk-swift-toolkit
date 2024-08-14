@@ -87,7 +87,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagingStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
@@ -103,7 +103,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagedStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
@@ -119,7 +119,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackageFailureStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
@@ -136,7 +136,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagingNotCompletePackageFailureStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
