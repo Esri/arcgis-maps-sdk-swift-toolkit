@@ -76,7 +76,7 @@ public struct FeatureFormView: View {
     /// The title of the feature form view.
     @State private var title = ""
     
-    /// The title visibility configuration of the form.
+    /// The visibility of the form title.
     var titleVisibility: TitleVisibility = .visible
     
     /// The validation error visibility configuration of the form.
