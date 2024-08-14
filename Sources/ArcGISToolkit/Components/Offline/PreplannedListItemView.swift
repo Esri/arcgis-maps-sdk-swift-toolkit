@@ -15,6 +15,7 @@
 import SwiftUI
 import ArcGIS
 
+@MainActor
 public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
