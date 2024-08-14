@@ -101,14 +101,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
 ***REMOVED******REMOVED******REMOVED*** Update area status for a given packaging status.
 ***REMOVED******REMOVED***switch packagingStatus {
-***REMOVED******REMOVED******REMOVED***case .processing:
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .packaging
-***REMOVED******REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .packageFailure
-***REMOVED******REMOVED******REMOVED***case .complete:
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .packaged
-***REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("Unknown case")
+***REMOVED******REMOVED***case .processing:
+***REMOVED******REMOVED******REMOVED***status = .packaging
+***REMOVED******REMOVED***case .failed:
+***REMOVED******REMOVED******REMOVED***status = .packageFailure
+***REMOVED******REMOVED***case .complete:
+***REMOVED******REMOVED******REMOVED***status = .packaged
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError("Unknown case")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
