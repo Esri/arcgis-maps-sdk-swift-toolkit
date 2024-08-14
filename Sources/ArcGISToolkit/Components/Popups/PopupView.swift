@@ -215,6 +215,15 @@ extension PopupView {
         case visible
     }
     
+    /// Specifies the visibility of the popup title.
+    /// - Parameter visibility: The visibility of the popup title.
+    /// - Since: 200.6
+    public func popupTitle(_ visibility: TitleVisibility) -> Self {
+        var copy = self
+        copy.titleVisibility = visibility
+        return copy
+    }
+    
     /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
     /// initializer, so that the the "close" button can close the view.
@@ -224,15 +233,6 @@ extension PopupView {
     public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
         var copy = self
         copy.showCloseButton = newShowCloseButton
-        return copy
-    }
-    
-    /// Specifies the visibility of the popup title.
-    /// - Parameter visibility: The visibility of the popup title.
-    /// - Since: 200.6
-    public func popupTitle(_ visibility: TitleVisibility) -> Self {
-        var copy = self
-        copy.titleVisibility = visibility
         return copy
     }
 }
