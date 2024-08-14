@@ -101,12 +101,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
 ***REMOVED******REMOVED******REMOVED*** Update area status for a given packaging status.
 ***REMOVED******REMOVED***switch packagingStatus {
-***REMOVED******REMOVED***case .processing:
-***REMOVED******REMOVED******REMOVED***status = .packaging
-***REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED***status = .packageFailure
-***REMOVED******REMOVED***case .complete:
-***REMOVED******REMOVED******REMOVED***status = .packaged
+***REMOVED******REMOVED******REMOVED***case .processing:
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .packaging
+***REMOVED******REMOVED******REMOVED***case .failed:
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .packageFailure
+***REMOVED******REMOVED******REMOVED***case .complete:
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .packaged
+***REMOVED******REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("Unknown case")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -229,13 +231,13 @@ extension PreplannedMapModel: Hashable {
 ***REMOVED******REMOVED***lhs === rhs
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED***nonisolated public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(ObjectIdentifier(self))
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A type that acts as a preplanned map area.
-protocol PreplannedMapAreaProtocol {
+protocol PreplannedMapAreaProtocol: Sendable {
 ***REMOVED***func retryLoad() async throws
 ***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters
 ***REMOVED***

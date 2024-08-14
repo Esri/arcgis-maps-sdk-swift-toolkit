@@ -32,7 +32,7 @@ private extension PreplannedMapAreaProtocol {
 class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -43,7 +43,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testInitialStatus() {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -71,7 +71,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testLoadFailureStatus() async throws {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Throws an error other than `MappingError.packagingNotComplete`
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to indicate the area fails to load in the first place.
@@ -87,7 +87,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagingStatus() async throws {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
@@ -103,7 +103,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagedStatus() async throws {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
@@ -119,7 +119,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackageFailureStatus() async throws {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
@@ -136,7 +136,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagingNotCompletePackageFailureStatus() async throws {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {

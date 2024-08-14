@@ -15,6 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
+@MainActor
 public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
