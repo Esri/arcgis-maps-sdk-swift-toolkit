@@ -215,6 +215,15 @@ extension PopupView {
 ***REMOVED******REMOVED***case visible
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Specifies the visibility of the popup title.
+***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the popup title.
+***REMOVED******REMOVED***/ - Since: 200.6
+***REMOVED***public func popupTitle(_ visibility: TitleVisibility) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.titleVisibility = visibility
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the `PopupView`
 ***REMOVED******REMOVED***/ initializer, so that the the "close" button can close the view.
@@ -224,15 +233,6 @@ extension PopupView {
 ***REMOVED***public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.showCloseButton = newShowCloseButton
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Specifies the visibility of the popup title.
-***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the popup title.
-***REMOVED******REMOVED***/ - Since: 200.6
-***REMOVED***public func popupTitle(_ visibility: TitleVisibility) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.titleVisibility = visibility
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
