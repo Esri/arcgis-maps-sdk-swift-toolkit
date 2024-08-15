@@ -19,13 +19,12 @@ struct TextFormElementView: View {
     let element: TextFormElement
     
     var body: some View {
-        Text("Start TextFormElement")
-            .font(.subheadline)
-            .foregroundStyle(.red)
         Text(element.label)
-        Text(element.text)
-        Text("End TextFormElement")
-            .font(.subheadline)
-            .foregroundStyle(.red)
+        switch element.textFormat {
+        case .markdown:
+            Text(.init(element.text))
+        case .plainText:
+            Text(element.text)
+        }
     }
 }
