@@ -19,13 +19,12 @@ struct TextFormElementView: View {
 ***REMOVED***let element: TextFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text("Start TextFormElement")
-***REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
 ***REMOVED******REMOVED***Text(element.label)
-***REMOVED******REMOVED***Text(element.text)
-***REMOVED******REMOVED***Text("End TextFormElement")
-***REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
+***REMOVED******REMOVED***switch element.textFormat {
+***REMOVED******REMOVED***case .markdown:
+***REMOVED******REMOVED******REMOVED***Text(.init(element.text))
+***REMOVED******REMOVED***case .plainText:
+***REMOVED******REMOVED******REMOVED***Text(element.text)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
