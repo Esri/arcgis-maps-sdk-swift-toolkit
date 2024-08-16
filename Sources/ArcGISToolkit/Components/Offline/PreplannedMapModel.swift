@@ -211,7 +211,7 @@ extension PreplannedMapModel {
     }
 }
 
-extension PreplannedMapModel.Status {
+private extension PreplannedMapModel.Status {
     init(packagingStatus: PreplannedMapArea.PackagingStatus) {
         self = switch packagingStatus {
         case .processing: .packaging
