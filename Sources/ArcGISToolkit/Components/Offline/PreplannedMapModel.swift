@@ -226,12 +226,14 @@ extension PreplannedMapModel {
     }
 }
 
-extension PreplannedMapModel: Hashable {
-    nonisolated public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
-        lhs === rhs
+extension PreplannedMapModel: Equatable {
+    nonisolated static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
+        return lhs === rhs
     }
-    
-    nonisolated public func hash(into hasher: inout Hasher) {
+}
+
+extension PreplannedMapModel: Hashable {
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self))
     }
 }

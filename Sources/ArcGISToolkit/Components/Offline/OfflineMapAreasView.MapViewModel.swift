@@ -15,7 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
-@preconcurrency import UserNotifications
+import UserNotifications
 
 extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
@@ -56,7 +56,7 @@ extension OfflineMapAreasView {
         }
         
         /// Requests authorization to show notifications.
-        func requestUserNotificationAuthorization() async {
+        nonisolated func requestUserNotificationAuthorization() async {
             _ = try? await UNUserNotificationCenter.current()
                 .requestAuthorization(options: [.alert, .sound])
         }
