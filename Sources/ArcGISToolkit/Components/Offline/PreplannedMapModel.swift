@@ -211,7 +211,7 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED***
 
-extension PreplannedMapModel.Status {
+private extension PreplannedMapModel.Status {
 ***REMOVED***init(packagingStatus: PreplannedMapArea.PackagingStatus) {
 ***REMOVED******REMOVED***self = switch packagingStatus {
 ***REMOVED******REMOVED***case .processing: .packaging

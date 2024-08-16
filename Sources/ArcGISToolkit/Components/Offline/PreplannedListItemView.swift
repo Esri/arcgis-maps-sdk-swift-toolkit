@@ -121,7 +121,19 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 
 #Preview {
-***REMOVED***PreplannedListItemView(
+***REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
+***REMOVED******REMOVED***var title: String = "Mock Preplanned Map Area"
+***REMOVED******REMOVED***var description: String = "This is the description text"
+***REMOVED******REMOVED***var thumbnail: LoadableImage? = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
+***REMOVED******REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***return PreplannedListItemView(
 ***REMOVED******REMOVED***model: PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
@@ -130,16 +142,4 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***.padding()
-***REMOVED***
-
-private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
-***REMOVED***var title: String = "Mock Preplanned Map Area"
-***REMOVED***var description: String = "This is the description text"
-***REMOVED***var thumbnail: LoadableImage? = nil
-***REMOVED***
-***REMOVED***func retryLoad() async throws { ***REMOVED***
-***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-***REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
-***REMOVED***
 ***REMOVED***

@@ -15,6 +15,7 @@
 import XCTest
 ***REMOVED***
 import Combine
+import os
 @testable ***REMOVED***Toolkit
 
 private extension PreplannedMapAreaProtocol {
@@ -82,11 +83,15 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagingStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
-***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? {
+***REMOVED******REMOVED******REMOVED******REMOVED***_packagingStatus.withLock { $0 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***private let _packagingStatus = OSAllocatedUnfairLock<PreplannedMapArea.PackagingStatus?>(initialState: nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
-***REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = .processing
+***REMOVED******REMOVED******REMOVED******REMOVED***_packagingStatus.withLock { $0 = .processing ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -98,11 +103,15 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagedStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
-***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? {
+***REMOVED******REMOVED******REMOVED******REMOVED***_packagingStatus.withLock { $0 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***private let _packagingStatus = OSAllocatedUnfairLock<PreplannedMapArea.PackagingStatus?>(initialState: nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
-***REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = .complete
+***REMOVED******REMOVED******REMOVED******REMOVED***_packagingStatus.withLock { $0 = .complete ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -114,12 +123,16 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackageFailureStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
-***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? {
+***REMOVED******REMOVED******REMOVED******REMOVED***_packagingStatus.withLock { $0 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***private let _packagingStatus = OSAllocatedUnfairLock<PreplannedMapArea.PackagingStatus?>(initialState: nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The webmap metadata indicates the area fails to package.
-***REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = .failed
+***REMOVED******REMOVED******REMOVED******REMOVED***_packagingStatus.withLock { $0 = .failed ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
