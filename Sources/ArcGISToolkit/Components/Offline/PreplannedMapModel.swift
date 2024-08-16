@@ -76,11 +76,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             // Note: Packaging status is `nil` for compatibility with
             // legacy webmaps that have incomplete metadata.
             // If the area loads, then you know for certain the status is complete.
-            updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+            status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
         } catch MappingError.packagingNotComplete {
             // Load will throw an `MappingError.packagingNotComplete` error if not complete,
             // this case is not a normal load failure.
-            updateStatus(for: preplannedMapArea.packagingStatus ?? .failed)
+            status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
         } catch {
             // Normal load failure.
             status = .loadFailure(error)
@@ -95,21 +95,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             .first {
                 $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID.rawValue
             }
-    }
-    
-    /// Updates the status for a given packaging status.
-    private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
-        // Update area status for a given packaging status.
-        switch packagingStatus {
-        case .processing:
-            status = .packaging
-        case .failed:
-            status = .packageFailure
-        case .complete:
-            status = .packaged
-        @unknown default:
-            fatalError("Unknown case")
-        }
     }
     
     /// Updates the status based on the download result of the mobile map package.
@@ -222,6 +207,17 @@ extension PreplannedMapModel {
             case .packaged, .downloadFailure:
                 true
             }
+        }
+    }
+}
+
+extension PreplannedMapModel.Status {
+    init(packagingStatus: PreplannedMapArea.PackagingStatus) {
+        self = switch packagingStatus {
+        case .processing: .packaging
+        case .failed: .packageFailure
+        case .complete: .packaged
+        @unknown default: fatalError("Unknown case")
         }
     }
 }
