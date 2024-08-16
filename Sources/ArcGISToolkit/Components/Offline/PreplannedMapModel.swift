@@ -226,12 +226,14 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED***
 
+extension PreplannedMapModel: Equatable {
+***REMOVED***nonisolated static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
+***REMOVED******REMOVED***return lhs === rhs
+***REMOVED***
+***REMOVED***
+
 extension PreplannedMapModel: Hashable {
-***REMOVED***nonisolated public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
-***REMOVED******REMOVED***lhs === rhs
-***REMOVED***
-***REMOVED***
-***REMOVED***nonisolated public func hash(into hasher: inout Hasher) {
+***REMOVED***nonisolated func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(ObjectIdentifier(self))
 ***REMOVED***
 ***REMOVED***
