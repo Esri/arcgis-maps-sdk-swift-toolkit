@@ -24,6 +24,7 @@ private extension PreplannedMapAreaProtocol {
     var description: String { "This is the description text" }
     var thumbnail: LoadableImage? { nil }
     
+    func retryLoad() async throws { }
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         throw NSError()
     }
@@ -32,20 +33,16 @@ private extension PreplannedMapAreaProtocol {
 class PreplannedMapModelTests: XCTestCase {
     @MainActor
     func testInit() {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
-            func retryLoad() async throws { }
-        }
+        struct MockPreplannedMapArea: PreplannedMapAreaProtocol {}
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        XCTAssertIdentical(model.preplannedMapArea as? MockPreplannedMapArea, mockArea)
+        XCTAssert(model.preplannedMapArea is MockPreplannedMapArea)
     }
     
     @MainActor
     func testInitialStatus() {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
-            func retryLoad() async throws { }
-        }
+        struct MockPreplannedMapArea: PreplannedMapAreaProtocol {}
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
@@ -54,9 +51,7 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testNilPackagingStatus() async throws {
-        struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-            func retryLoad() async throws { }
-        }
+        struct MockPreplannedMapArea: PreplannedMapAreaProtocol {}
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
@@ -71,7 +66,7 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testLoadFailureStatus() async throws {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+        struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
             func retryLoad() async throws {
                 // Throws an error other than `MappingError.packagingNotComplete`
                 // to indicate the area fails to load in the first place.
@@ -136,8 +131,8 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testPackagingNotCompletePackageFailureStatus() async throws {
-        final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
-            var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
+        final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+            var packagingStatus: PreplannedMapArea.PackagingStatus? { nil }
             
             func retryLoad() async throws {
                 // Throws an error to indicate the area loaded successfully,
