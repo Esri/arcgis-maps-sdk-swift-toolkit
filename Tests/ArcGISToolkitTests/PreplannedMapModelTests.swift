@@ -24,6 +24,7 @@ private extension PreplannedMapAreaProtocol {
 ***REMOVED***var description: String { "This is the description text" ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { nil ***REMOVED***
 ***REMOVED***
+***REMOVED***func retryLoad() async throws { ***REMOVED***
 ***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
 ***REMOVED******REMOVED***throw NSError()
 ***REMOVED***
@@ -32,20 +33,16 @@ private extension PreplannedMapAreaProtocol {
 class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED******REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-***REMOVED******REMOVED***XCTAssertIdentical(model.preplannedMapArea as? MockPreplannedMapArea, mockArea)
+***REMOVED******REMOVED***XCTAssert(model.preplannedMapArea is MockPreplannedMapArea)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testInitialStatus() {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED******REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
@@ -54,9 +51,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testNilPackagingStatus() async throws {
-***REMOVED******REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED******REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
@@ -71,7 +66,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testLoadFailureStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Throws an error other than `MappingError.packagingNotComplete`
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to indicate the area fails to load in the first place.
@@ -136,8 +131,8 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testPackagingNotCompletePackageFailureStatus() async throws {
-***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol, @unchecked Sendable {
-***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = nil
+***REMOVED******REMOVED***final class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Throws an error to indicate the area loaded successfully,
