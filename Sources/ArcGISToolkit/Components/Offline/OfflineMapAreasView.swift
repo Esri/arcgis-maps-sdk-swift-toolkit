@@ -16,6 +16,8 @@ import SwiftUI
 import ArcGIS
 
 /// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
+@MainActor
+@preconcurrency
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
