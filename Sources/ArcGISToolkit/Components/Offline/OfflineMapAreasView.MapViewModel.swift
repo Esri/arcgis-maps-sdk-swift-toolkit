@@ -15,7 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
-import SwiftUI
+import UserNotifications
 
 extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
@@ -40,7 +40,7 @@ extension OfflineMapAreasView {
         func makePreplannedOfflineMapModels() async {
             guard let portalItemID else { return }
             
-            preplannedMapModels = await Result {
+            preplannedMapModels = await Result { @MainActor in
                 try await offlineMapTask.preplannedMapAreas
                     .filter { $0.portalItem.id != nil }
                     .sorted(using: KeyPathComparator(\.portalItem.title))
@@ -56,7 +56,7 @@ extension OfflineMapAreasView {
         }
         
         /// Requests authorization to show notifications.
-        func requestUserNotificationAuthorization() async {
+        nonisolated func requestUserNotificationAuthorization() async {
             _ = try? await UNUserNotificationCenter.current()
                 .requestAuthorization(options: [.alert, .sound])
         }
