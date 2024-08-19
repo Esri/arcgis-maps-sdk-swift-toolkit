@@ -15,7 +15,7 @@
 ***REMOVED***
 import Combine
 import Foundation
-***REMOVED***
+import UserNotifications
 
 extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ The model class for the offline map areas view.
@@ -40,7 +40,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***func makePreplannedOfflineMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result {
+***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result { @MainActor in
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await offlineMapTask.preplannedMapAreas
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.portalItem.id != nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
@@ -56,7 +56,7 @@ extension OfflineMapAreasView {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Requests authorization to show notifications.
-***REMOVED******REMOVED***func requestUserNotificationAuthorization() async {
+***REMOVED******REMOVED***nonisolated func requestUserNotificationAuthorization() async {
 ***REMOVED******REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
 ***REMOVED***
