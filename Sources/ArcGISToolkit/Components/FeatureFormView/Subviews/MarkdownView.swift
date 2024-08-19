@@ -103,11 +103,6 @@ struct MarkdownView: View {
 ***REMOVED******REMOVED******REMOVED***print(#function)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***mutating func visitParagraph(_ paragraph: Paragraph) -> () {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(#function)
-***REMOVED******REMOVED******REMOVED***defaultVisit(paragraph)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func visitSoftBreak(_ softBreak: SoftBreak) -> () {
 ***REMOVED******REMOVED******REMOVED***print(#function)
 ***REMOVED***
