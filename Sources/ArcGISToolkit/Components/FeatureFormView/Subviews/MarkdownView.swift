@@ -103,11 +103,6 @@ struct MarkdownView: View {
             print(#function)
         }
         
-        mutating func visitParagraph(_ paragraph: Paragraph) -> () {
-//            print(#function)
-            defaultVisit(paragraph)
-        }
-        
         func visitSoftBreak(_ softBreak: SoftBreak) -> () {
             print(#function)
         }
