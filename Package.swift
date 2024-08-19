@@ -30,13 +30,15 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.5.0"))
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.5.0")),
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/apple/swift-markdown.git", branch: "0.4.0")
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkit",
 ***REMOVED******REMOVED******REMOVED***dependencies: [
-***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
+***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
+***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "Markdown", package: "swift-markdown")
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***resources: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***.copy("PrivacyInfo.xcprivacy")
