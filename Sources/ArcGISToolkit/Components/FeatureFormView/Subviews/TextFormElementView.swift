@@ -22,7 +22,7 @@ struct TextFormElementView: View {
         Text(element.label)
         switch element.textFormat {
         case .markdown:
-            Text(.init(element.text))
+            MarkdownView(markdown: element.text)
         case .plainText:
             Text(element.text)
         }
