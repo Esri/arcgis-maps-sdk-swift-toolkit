@@ -20,6 +20,9 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
+    /// The closure to perform when the map selection changes.
+    public var onMapSelectionChanged: ((Map) -> Void)?
+    
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
@@ -54,8 +57,22 @@ public struct PreplannedListItemView: View {
     @ViewBuilder private var downloadButton: some View {
         switch model.status {
         case .downloaded:
-            Image(systemName: "checkmark.circle")
-                .foregroundStyle(.secondary)
+            Button {
+                Task {
+                    try await model.mobileMapPackage?.load()
+                    if let map = model.mobileMapPackage?.maps.first {
+                        onMapSelectionChanged?(map)
+                    }
+                }
+            } label: {
+                Text("Open")
+                    .font(.system(.headline, weight: .bold))
+                    .foregroundColor(.accentColor)
+                    .frame(width: 76, height: 32)
+                    .background(Color(UIColor.tertiarySystemFill))
+                    .cornerRadius(16)
+            }
+            .buttonStyle(.plain)
         case .downloading:
             if let job = model.job {
                 ProgressView(job.progress)
@@ -116,6 +133,15 @@ public struct PreplannedListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
+    }
+    
+    /// Sets the closure to call when the map selection changes.
+    public func onMapSelectionChanged(
+        perform action: @escaping (_ newMap: Map) -> Void
+    ) -> Self {
+        var copy = self
+        copy.onMapSelectionChanged = action
+        return copy
     }
 }
 

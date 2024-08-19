@@ -28,6 +28,9 @@ public struct OfflineMapAreasView: View {
     /// A Boolean value indicating whether the preplanned map areas are being reloaded.
     @State private var isReloadingPreplannedMapAreas = false
     
+    /// The closure to perform when the map selection changes.
+    public var onMapSelectionChanged: ((Map) -> Void)?
+    
     /// Creates an `OfflineMapAreasView` with a given web map.
     /// - Parameter map: The web map.
     public init(map: Map) {
@@ -83,6 +86,10 @@ public struct OfflineMapAreasView: View {
                     PreplannedListItemView(
                         model: preplannedMapModel
                     )
+                    .onMapSelectionChanged { newMap in
+                        onMapSelectionChanged?(newMap)
+                        dismiss()
+                    }
                 }
             } else {
                 emptyPreplannedMapAreasView
@@ -110,6 +117,15 @@ public struct OfflineMapAreasView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+    }
+    
+    /// Sets the closure to call when the map selection changes.
+    public func onMapSelectionChanged(
+        perform action: @escaping (_ newMap: Map) -> Void
+    ) -> Self {
+        var copy = self
+        copy.onMapSelectionChanged = action
+        return copy
     }
 }
 
