@@ -20,6 +20,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
+***REMOVED***public var onMapSelectionChanged: ((Map) -> Void)?
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
@@ -54,8 +57,22 @@ public struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
 ***REMOVED******REMOVED***switch model.status {
 ***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await model.mobileMapPackage?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.mobileMapPackage?.maps.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged?(map)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(.headline, weight: .bold))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 76, height: 32)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(UIColor.tertiarySystemFill))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(16)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***case .downloading:
 ***REMOVED******REMOVED******REMOVED***if let job = model.job {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
@@ -116,6 +133,15 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the closure to call when the map selection changes.
+***REMOVED***public func onMapSelectionChanged(
+***REMOVED******REMOVED***perform action: @escaping (_ newMap: Map) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onMapSelectionChanged = action
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 

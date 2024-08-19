@@ -28,6 +28,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map areas are being reloaded.
 ***REMOVED***@State private var isReloadingPreplannedMapAreas = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
+***REMOVED***public var onMapSelectionChanged: ((Map) -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OfflineMapAreasView` with a given web map.
 ***REMOVED******REMOVED***/ - Parameter map: The web map.
 ***REMOVED***public init(map: Map) {
@@ -83,6 +86,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onMapSelectionChanged { newMap in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged?(newMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
@@ -110,6 +117,15 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the closure to call when the map selection changes.
+***REMOVED***public func onMapSelectionChanged(
+***REMOVED******REMOVED***perform action: @escaping (_ newMap: Map) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onMapSelectionChanged = action
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
