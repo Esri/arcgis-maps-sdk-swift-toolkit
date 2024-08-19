@@ -22,7 +22,7 @@ struct TextFormElementView: View {
 ***REMOVED******REMOVED***Text(element.label)
 ***REMOVED******REMOVED***switch element.textFormat {
 ***REMOVED******REMOVED***case .markdown:
-***REMOVED******REMOVED******REMOVED***Text(.init(element.text))
+***REMOVED******REMOVED******REMOVED***MarkdownView(markdown: element.text)
 ***REMOVED******REMOVED***case .plainText:
 ***REMOVED******REMOVED******REMOVED***Text(element.text)
 ***REMOVED***
