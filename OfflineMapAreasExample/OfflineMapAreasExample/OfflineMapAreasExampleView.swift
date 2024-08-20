@@ -22,13 +22,13 @@ struct OfflineMapAreasExampleView: View {
 ***REMOVED***@State private var onlineMap = Map(item: PortalItem.naperville())
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected map.
-***REMOVED***@State private var map: Map?
+***REMOVED***@State private var selectedMap: Map?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the offline map ares view should be presented.
 ***REMOVED***@State private var isShowingOfflineMapAreasView = false
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map ?? onlineMap)
+***REMOVED******REMOVED***MapView(map: selectedMap ?? onlineMap)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .bottomBar) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Offline Maps") {
@@ -39,7 +39,7 @@ struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingOfflineMapAreasView) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView(map: onlineMap)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onMapSelectionChanged { newMap in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map = newMap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = newMap
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
