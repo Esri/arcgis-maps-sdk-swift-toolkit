@@ -59,8 +59,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await model.mobileMapPackage?.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.mobileMapPackage?.maps.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.loadMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged?(map)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -111,7 +110,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***switch model.status {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
-***REMOVED******REMOVED******REMOVED***case .loadFailure:
+***REMOVED******REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
 ***REMOVED******REMOVED******REMOVED***case .packaging:

@@ -23,6 +23,7 @@ class PreplannedMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.packaged.needsToBeLoaded)
 ***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloading.needsToBeLoaded)
 ***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloaded.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.mmpkLoadFailure(NSError()).needsToBeLoaded)
 ***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.notLoaded.needsToBeLoaded)
 ***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).needsToBeLoaded)
 ***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.loadFailure(NSError()).needsToBeLoaded)
@@ -39,5 +40,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloading.allowsDownload)
 ***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloaded.allowsDownload)
 ***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.mmpkLoadFailure(NSError()).allowsDownload)
 ***REMOVED***
 ***REMOVED***
