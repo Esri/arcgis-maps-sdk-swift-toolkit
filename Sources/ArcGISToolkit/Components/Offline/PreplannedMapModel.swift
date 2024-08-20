@@ -137,6 +137,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         return MobileMapPackage.init(fileURL: fileURL)
     }
     
+    /// Loads the mobile map package and updates the status.
+    /// - Returns: The mobile map package map.
+    func loadMobileMapPackage() async -> Map? {
+        do {
+            try await mobileMapPackage?.load()
+        } catch {
+            status = .mmpkLoadFailure(error)
+        }
+        return mobileMapPackage?.maps.first
+    }
+    
     /// Downloads the preplanned map area.
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
@@ -201,12 +212,14 @@ extension PreplannedMapModel {
         case downloaded
         /// Preplanned map area failed to download.
         case downloadFailure(Error)
+        /// Downloaded mobile map package failed to load.
+        case mmpkLoadFailure(Error)
         
         /// A Boolean value indicating whether the model is in a state
         /// where it needs to be loaded or reloaded.
         var needsToBeLoaded: Bool {
             switch self {
-            case .loading, .packaging, .packaged, .downloading, .downloaded:
+            case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
                 false
             default:
                 true
@@ -217,7 +230,7 @@ extension PreplannedMapModel {
         var allowsDownload: Bool {
             switch self {
             case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-                    .downloading, .downloaded:
+                    .downloading, .downloaded, .mmpkLoadFailure:
                 false
             case .packaged, .downloadFailure:
                 true

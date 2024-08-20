@@ -23,6 +23,7 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertFalse(PreplannedMapModel.Status.packaged.needsToBeLoaded)
         XCTAssertFalse(PreplannedMapModel.Status.downloading.needsToBeLoaded)
         XCTAssertFalse(PreplannedMapModel.Status.downloaded.needsToBeLoaded)
+        XCTAssertFalse(PreplannedMapModel.Status.mmpkLoadFailure(NSError()).needsToBeLoaded)
         XCTAssertTrue(PreplannedMapModel.Status.notLoaded.needsToBeLoaded)
         XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).needsToBeLoaded)
         XCTAssertTrue(PreplannedMapModel.Status.loadFailure(NSError()).needsToBeLoaded)
@@ -39,5 +40,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertFalse(PreplannedMapModel.Status.downloading.allowsDownload)
         XCTAssertFalse(PreplannedMapModel.Status.downloaded.allowsDownload)
         XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).allowsDownload)
+        XCTAssertFalse(PreplannedMapModel.Status.mmpkLoadFailure(NSError()).allowsDownload)
     }
 }

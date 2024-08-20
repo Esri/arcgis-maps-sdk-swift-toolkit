@@ -59,8 +59,7 @@ public struct PreplannedListItemView: View {
         case .downloaded:
             Button {
                 Task {
-                    try await model.mobileMapPackage?.load()
-                    if let map = model.mobileMapPackage?.maps.first {
+                    if let map = await model.loadMobileMapPackage() {
                         onMapSelectionChanged?(map)
                     }
                 }
@@ -111,7 +110,7 @@ public struct PreplannedListItemView: View {
             switch model.status {
             case .notLoaded, .loading:
                 Text("Loading")
-            case .loadFailure:
+            case .loadFailure, .mmpkLoadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Loading failed")
             case .packaging:

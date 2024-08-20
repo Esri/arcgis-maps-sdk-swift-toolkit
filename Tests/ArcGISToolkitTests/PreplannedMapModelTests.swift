@@ -276,6 +276,81 @@ class PreplannedMapModelTests: XCTestCase {
         
         model2.status.assertExpectedValue(.downloaded)
     }
+    
+    @MainActor
+    func testLoadMobileMapPackage() async throws {
+        let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let task = OfflineMapTask(portalItem: portalItem)
+        let areas = try await task.preplannedMapAreas
+        let area = try XCTUnwrap(areas.first)
+        let areaID = try XCTUnwrap(area.portalItem.id)
+        
+        defer {
+            // Clean up JobManager.
+            OfflineManager.shared.jobManager.jobs.removeAll()
+            
+            // Clean up folder.
+            let directory = FileManager.default.preplannedDirectory(
+                forPortalItemID: portalItem.id!,
+                preplannedMapAreaID: areaID
+            )
+            try? FileManager.default.removeItem(at: directory)
+        }
+        
+        let model = PreplannedMapModel(
+            offlineMapTask: task,
+            mapArea: area,
+            portalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID,
+            // User notifications in unit tests are not supported, must pass false here
+            // or the test process will crash.
+            showsUserNotificationOnCompletion: false
+        )
+        
+        var statuses = [PreplannedMapModel.Status]()
+        var subscriptions = Set<AnyCancellable>()
+        model.$status
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                statuses.append(value)
+            }
+            .store(in: &subscriptions)
+        
+        await model.load()
+        
+        // Start downloading
+        await model.downloadPreplannedMapArea()
+        
+        // Wait for job to finish.
+        _ = await model.job?.result
+        
+        // Verify that mobile map package can be loaded.
+        let map = await model.loadMobileMapPackage()
+        XCTAssertNotNil(map)
+        
+        // Give the final status some time to be updated.
+        try? await Task.sleep(nanoseconds: 1_000_000)
+        
+        // Verify statuses
+        let expectedStatusCount = 6
+        guard statuses.count == expectedStatusCount else {
+            XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
+            return
+        }
+        
+        let expected: [PreplannedMapModel.Status] = [
+            .notLoaded,
+            .loading,
+            .packaged,
+            .downloading,
+            .downloading,
+            .downloaded
+        ]
+        
+        for (status, expected) in zip(statuses, expected) {
+            status.assertExpectedValue(expected)
+        }
+    }
 }
 
 private extension PreplannedMapModel.Status {
@@ -301,6 +376,8 @@ private extension PreplannedMapModel.Status {
             if case .downloaded = other { true } else { false }
         case .downloadFailure:
             if case .downloadFailure = other { true } else { false }
+        case .mmpkLoadFailure:
+            if case .mmpkLoadFailure = other { true } else { false }
         }
     }
     
