@@ -16,6 +16,7 @@ import SwiftUI
 import ArcGIS
 
 @MainActor
+@preconcurrency
 public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
@@ -145,7 +146,19 @@ public struct PreplannedListItemView: View {
 }
 
 #Preview {
-    PreplannedListItemView(
+    struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
+        var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
+        var title: String = "Mock Preplanned Map Area"
+        var description: String = "This is the description text"
+        var thumbnail: LoadableImage? = nil
+        
+        func retryLoad() async throws { }
+        func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+            DownloadPreplannedOfflineMapParameters()
+        }
+    }
+    
+    return PreplannedListItemView(
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
@@ -154,16 +167,4 @@ public struct PreplannedListItemView: View {
         )
     )
     .padding()
-}
-
-private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-    var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
-    var title: String = "Mock Preplanned Map Area"
-    var description: String = "This is the description text"
-    var thumbnail: LoadableImage? = nil
-    
-    func retryLoad() async throws { }
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-        DownloadPreplannedOfflineMapParameters()
-    }
 }
