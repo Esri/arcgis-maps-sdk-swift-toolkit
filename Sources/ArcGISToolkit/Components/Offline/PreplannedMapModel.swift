@@ -76,11 +76,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
 ***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If the area loads, then you know for certain the status is complete.
-***REMOVED******REMOVED******REMOVED***updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+***REMOVED******REMOVED******REMOVED***status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
 ***REMOVED*** catch MappingError.packagingNotComplete {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load will throw an `MappingError.packagingNotComplete` error if not complete,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** this case is not a normal load failure.
-***REMOVED******REMOVED******REMOVED***updateStatus(for: preplannedMapArea.packagingStatus ?? .failed)
+***REMOVED******REMOVED******REMOVED***status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Normal load failure.
 ***REMOVED******REMOVED******REMOVED***status = .loadFailure(error)
@@ -95,21 +95,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID.rawValue
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the status for a given packaging status.
-***REMOVED***private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
-***REMOVED******REMOVED******REMOVED*** Update area status for a given packaging status.
-***REMOVED******REMOVED***switch packagingStatus {
-***REMOVED******REMOVED******REMOVED***case .processing:
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .packaging
-***REMOVED******REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .packageFailure
-***REMOVED******REMOVED******REMOVED***case .complete:
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .packaged
-***REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("Unknown case")
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
@@ -239,12 +224,25 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED***
 
+private extension PreplannedMapModel.Status {
+***REMOVED***init(packagingStatus: PreplannedMapArea.PackagingStatus) {
+***REMOVED******REMOVED***self = switch packagingStatus {
+***REMOVED******REMOVED***case .processing: .packaging
+***REMOVED******REMOVED***case .failed: .packageFailure
+***REMOVED******REMOVED***case .complete: .packaged
+***REMOVED******REMOVED***@unknown default: fatalError("Unknown case")
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension PreplannedMapModel: Equatable {
+***REMOVED***nonisolated static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
+***REMOVED******REMOVED***return lhs === rhs
+***REMOVED***
+***REMOVED***
+
 extension PreplannedMapModel: Hashable {
-***REMOVED***nonisolated public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
-***REMOVED******REMOVED***lhs === rhs
-***REMOVED***
-***REMOVED***
-***REMOVED***nonisolated public func hash(into hasher: inout Hasher) {
+***REMOVED***nonisolated func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(ObjectIdentifier(self))
 ***REMOVED***
 ***REMOVED***

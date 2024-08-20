@@ -15,7 +15,7 @@
 ***REMOVED***
 import Combine
 import Foundation
-@preconcurrency import UserNotifications
+import UserNotifications
 
 extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ The model class for the offline map areas view.
@@ -56,7 +56,7 @@ extension OfflineMapAreasView {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Requests authorization to show notifications.
-***REMOVED******REMOVED***func requestUserNotificationAuthorization() async {
+***REMOVED******REMOVED***nonisolated func requestUserNotificationAuthorization() async {
 ***REMOVED******REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
 ***REMOVED***
