@@ -149,6 +149,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func removeDownloadedPreplannedMapArea() async {
+***REMOVED******REMOVED***let mmpkDirectory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectory)
+***REMOVED******REMOVED******REMOVED*** Reload the model after local files removal.
+***REMOVED******REMOVED***status = .notLoaded
+***REMOVED******REMOVED***await load()
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
 ***REMOVED******REMOVED***/ when it's done, updates the status, removes the job from the job manager,
 ***REMOVED******REMOVED***/ and fires a user notification.
@@ -206,6 +217,16 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED******REMOVED***case .packaged, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the local files can be removed.
+***REMOVED******REMOVED***var allowsRemoval: Bool {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .downloaded, .downloadFailure, .loadFailure, .packageFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -34,6 +34,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.swipeActions {
+***REMOVED******REMOVED******REMOVED***deleteButton
+***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***await model.load()
 ***REMOVED***
@@ -50,6 +53,19 @@ public struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var titleView: some View {
 ***REMOVED******REMOVED***Text(model.preplannedMapArea.title)
 ***REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var deleteButton: some View {
+***REMOVED******REMOVED***if model.status.allowsRemoval {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.removeDownloadedPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Remove Area", systemImage: "trash")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.tint(.red)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
