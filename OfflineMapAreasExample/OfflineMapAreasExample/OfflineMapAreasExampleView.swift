@@ -37,10 +37,10 @@ struct OfflineMapAreasExampleView: View {
                 }
             }
             .sheet(isPresented: $isShowingOfflineMapAreasView) {
-                OfflineMapAreasView(map: onlineMap)
-                    .onMapSelectionChanged { newMap in
-                        selectedMap = newMap
-                    }
+                OfflineMapAreasView(
+                    onlineMap: onlineMap,
+                    selectedMap: $selectedMap
+                )
             }
     }
 }

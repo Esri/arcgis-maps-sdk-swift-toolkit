@@ -28,13 +28,19 @@ public struct OfflineMapAreasView: View {
     /// A Boolean value indicating whether the preplanned map areas are being reloaded.
     @State private var isReloadingPreplannedMapAreas = false
     
-    /// The closure to perform when the map selection changes.
-    private var onMapSelectionChanged: ((Map) -> Void)?
+    /// The currently selected map.
+    private var selectedMap: Binding<Map?>
     
     /// Creates an `OfflineMapAreasView` with a given web map.
-    /// - Parameter map: The web map.
-    public init(map: Map) {
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
+    /// - Parameters:
+    ///   - onlineMap: The web map.
+    ///   - selectedMap: A binding to the currently selected map.
+    public init(
+        onlineMap: Map,
+        selectedMap: Binding<Map?>
+    ) {
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+        self.selectedMap = selectedMap
     }
     
     public var body: some View {
@@ -87,7 +93,7 @@ public struct OfflineMapAreasView: View {
                         model: preplannedMapModel
                     )
                     .onMapSelectionChanged { newMap in
-                        onMapSelectionChanged?(newMap)
+                        selectedMap.wrappedValue = newMap
                         dismiss()
                     }
                 }
@@ -118,24 +124,24 @@ public struct OfflineMapAreasView: View {
         }
         .frame(maxWidth: .infinity)
     }
-    
-    /// Sets the closure to call when the map selection changes.
-    public func onMapSelectionChanged(
-        perform action: @escaping (_ newMap: Map) -> Void
-    ) -> Self {
-        var copy = self
-        copy.onMapSelectionChanged = action
-        return copy
-    }
 }
 
 #Preview {
-    OfflineMapAreasView(
-        map: Map(
-            item: PortalItem(
-                portal: .arcGISOnline(connection: .anonymous),
-                id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+    @MainActor
+    struct OfflineMapAreasViewPreview: View {
+        @State private var map: Map?
+        
+        var body: some View {
+            OfflineMapAreasView(
+                onlineMap: Map(
+                    item: PortalItem(
+                        portal: .arcGISOnline(connection: .anonymous),
+                        id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+                    )
+                ),
+                selectedMap: $map
             )
-        )
-    )
+        }
+    }
+    return OfflineMapAreasViewPreview()
 }
