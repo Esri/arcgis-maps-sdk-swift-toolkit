@@ -34,6 +34,9 @@ public struct PreplannedListItemView: View {
                 statusView
             }
         }
+        .swipeActions {
+            deleteButton
+        }
         .task {
             await model.load()
         }
@@ -50,6 +53,19 @@ public struct PreplannedListItemView: View {
     @ViewBuilder private var titleView: some View {
         Text(model.preplannedMapArea.title)
             .font(.body)
+    }
+    
+    @ViewBuilder private var deleteButton: some View {
+        if model.status.allowsRemoval {
+            Button {
+                Task {
+                    await model.removeDownloadedPreplannedMapArea()
+                }
+            } label: {
+                Label("Remove Area", systemImage: "trash")
+            }
+            .tint(.red)
+        }
     }
     
     @ViewBuilder private var downloadButton: some View {

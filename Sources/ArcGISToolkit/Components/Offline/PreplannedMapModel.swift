@@ -149,6 +149,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
+    func removeDownloadedPreplannedMapArea() async {
+        let mmpkDirectory = FileManager.default.preplannedDirectory(
+            forPortalItemID: portalItemID,
+            preplannedMapAreaID: preplannedMapAreaID
+        )
+        try? FileManager.default.removeItem(at: mmpkDirectory)
+        // Reload the model after local files removal.
+        status = .notLoaded
+        await load()
+    }
+    
     /// Sets the job property of this instance, starts the job, observes it, and
     /// when it's done, updates the status, removes the job from the job manager,
     /// and fires a user notification.
@@ -206,6 +217,16 @@ extension PreplannedMapModel {
                 false
             case .packaged, .downloadFailure:
                 true
+            }
+        }
+        
+        /// A Boolean value indicating whether the local files can be removed.
+        var allowsRemoval: Bool {
+            switch self {
+            case .downloaded, .downloadFailure, .loadFailure, .packageFailure:
+                true
+            default:
+                false
             }
         }
     }
