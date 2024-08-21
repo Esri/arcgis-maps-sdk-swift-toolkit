@@ -125,12 +125,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// Loads the mobile map package and updates the status.
     /// - Returns: The mobile map package map.
     func loadMobileMapPackage() async -> Map? {
+        guard let mobileMapPackage else { return nil }
+        
         do {
-            try await mobileMapPackage?.load()
+            try await mobileMapPackage.load()
         } catch {
             status = .mmpkLoadFailure(error)
         }
-        return mobileMapPackage?.maps.first
+        return mobileMapPackage.maps.first
     }
     
     /// Downloads the preplanned map area.
