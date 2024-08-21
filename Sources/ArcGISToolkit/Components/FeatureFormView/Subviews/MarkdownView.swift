@@ -187,6 +187,17 @@ private struct CodeStyle: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***.background(.tertiary)
 ***REMOVED***
 ***REMOVED***
+
+private extension ListItemContainer {
+***REMOVED***var depth: Int {
+***REMOVED******REMOVED***var index = 0
+***REMOVED******REMOVED***var current = parent
+***REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED***if current is ListItemContainer {
+***REMOVED******REMOVED******REMOVED******REMOVED***index += 1
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***current = current!.parent
 ***REMOVED***
+***REMOVED******REMOVED***return index
 ***REMOVED***
 ***REMOVED***
