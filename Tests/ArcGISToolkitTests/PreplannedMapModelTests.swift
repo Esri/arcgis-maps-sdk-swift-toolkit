@@ -27,7 +27,7 @@ private extension PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws { ***REMOVED***
 ***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-***REMOVED******REMOVED***throw NSError()
+***REMOVED******REMOVED***throw CancellationError()
 ***REMOVED***
 ***REMOVED***
 
@@ -315,13 +315,11 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var statuses = [PreplannedMapModel.Status]()
+***REMOVED******REMOVED***var statuses: [PreplannedMapModel.Status] = []
 ***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED***.sink { value in
-***REMOVED******REMOVED******REMOVED******REMOVED***statuses.append(value)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sink { statuses.append($0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await model.load()
@@ -365,27 +363,20 @@ private extension PreplannedMapModel.Status {
 ***REMOVED******REMOVED***/ Checks if another value is equivalent to this value ignoring
 ***REMOVED******REMOVED***/ any associated values.
 ***REMOVED***private func isMatch(for other: Self) -> Bool {
-***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .notLoaded:
-***REMOVED******REMOVED******REMOVED***if case .notLoaded = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .loading:
-***REMOVED******REMOVED******REMOVED***if case .loading = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .loadFailure:
-***REMOVED******REMOVED******REMOVED***if case .loadFailure = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED***if case .packaged = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .packaging:
-***REMOVED******REMOVED******REMOVED***if case .packaging = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .packageFailure:
-***REMOVED******REMOVED******REMOVED***if case .packageFailure = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***if case .downloading = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***if case .downloaded = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED***if case .downloadFailure = other { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED******REMOVED***case .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED***if case .mmpkLoadFailure = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***return switch (self, other) {
+***REMOVED******REMOVED***case (.notLoaded, .notLoaded),
+***REMOVED******REMOVED******REMOVED***(.loading, .loading),
+***REMOVED******REMOVED******REMOVED***(.loadFailure, .loadFailure),
+***REMOVED******REMOVED******REMOVED***(.packaged, .packaged),
+***REMOVED******REMOVED******REMOVED***(.packaging, .packaging),
+***REMOVED******REMOVED******REMOVED***(.packageFailure, .packageFailure),
+***REMOVED******REMOVED******REMOVED***(.downloading, .downloading),
+***REMOVED******REMOVED******REMOVED***(.downloaded, .downloaded),
+***REMOVED******REMOVED******REMOVED***(.downloadFailure, .downloadFailure),
+***REMOVED******REMOVED******REMOVED***(.mmpkLoadFailure, .mmpkLoadFailure):
+***REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

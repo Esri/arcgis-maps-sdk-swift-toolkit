@@ -125,12 +125,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Loads the mobile map package and updates the status.
 ***REMOVED******REMOVED***/ - Returns: The mobile map package map.
 ***REMOVED***func loadMobileMapPackage() async -> Map? {
+***REMOVED******REMOVED***guard let mobileMapPackage else { return nil ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await mobileMapPackage?.load()
+***REMOVED******REMOVED******REMOVED***try await mobileMapPackage.load()
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
 ***REMOVED***
-***REMOVED******REMOVED***return mobileMapPackage?.maps.first
+***REMOVED******REMOVED***return mobileMapPackage.maps.first
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
