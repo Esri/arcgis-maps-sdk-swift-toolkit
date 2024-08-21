@@ -47,7 +47,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        model.status.assertExpectedValue(.notLoaded)
+        XCTAssertEqual(model.status, .notLoaded)
     }
     
     @MainActor
@@ -62,7 +62,7 @@ class PreplannedMapModelTests: XCTestCase {
         // When the preplanned map area finishes loading, if its
         // packaging status is `nil`, we consider it as completed.
         await model.load()
-        model.status.assertExpectedValue(.packaged)
+        XCTAssertEqual(model.status, .packaged)
     }
     
     @MainActor
@@ -78,7 +78,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.loadFailure(MappingError.notLoaded(details: "")))
+        XCTAssertEqual(model.status, .loadFailure(MappingError.notLoaded(details: "")))
     }
     
     @MainActor
@@ -98,7 +98,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packaging)
+        XCTAssertEqual(model.status, .packaging)
     }
     
     @MainActor
@@ -118,7 +118,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packaged)
+        XCTAssertEqual(model.status, .packaged)
     }
     
     @MainActor
@@ -139,7 +139,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packageFailure)
+        XCTAssertEqual(model.status, .packageFailure)
     }
     
     @MainActor
@@ -157,7 +157,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packageFailure)
+        XCTAssertEqual(model.status, .packageFailure)
     }
     
     /// This tests that the initial status is "downloading" if there is a matching job
@@ -197,7 +197,7 @@ class PreplannedMapModelTests: XCTestCase {
             showsUserNotificationOnCompletion: false
         )
         
-        model.status.assertExpectedValue(.downloading)
+        XCTAssertEqual(model.status, .downloading)
         
         // Cancel the job to be a good citizen.
         await job.cancel()
@@ -270,7 +270,9 @@ class PreplannedMapModelTests: XCTestCase {
         ]
         
         for (status, expected) in zip(statuses, expected) {
-            status.assertExpectedValue(expected)
+            if status != expected {
+                XCTFail("Status '\(status)' does not match expected status of '\(expected)'")
+            }
         }
         
         // Now test that creating a new matching model will have the status set to
@@ -282,7 +284,7 @@ class PreplannedMapModelTests: XCTestCase {
             preplannedMapAreaID: areaID
         )
         
-        model2.status.assertExpectedValue(.downloaded)
+        XCTAssertEqual(model2.status, .downloaded)
     }
     
     @MainActor
@@ -354,35 +356,10 @@ class PreplannedMapModelTests: XCTestCase {
         ]
         
         for (status, expected) in zip(statuses, expected) {
-            status.assertExpectedValue(expected)
+            if status != expected {
+                XCTFail("Status '\(status)' does not match expected status of '\(expected)'")
+            }
         }
-    }
-}
-
-private extension PreplannedMapModel.Status {
-    /// Checks if another value is equivalent to this value ignoring
-    /// any associated values.
-    private func isMatch(for other: Self) -> Bool {
-        return switch (self, other) {
-        case (.notLoaded, .notLoaded),
-            (.loading, .loading),
-            (.loadFailure, .loadFailure),
-            (.packaged, .packaged),
-            (.packaging, .packaging),
-            (.packageFailure, .packageFailure),
-            (.downloading, .downloading),
-            (.downloaded, .downloaded),
-            (.downloadFailure, .downloadFailure),
-            (.mmpkLoadFailure, .mmpkLoadFailure):
-            true
-        default:
-            false
-        }
-    }
-    
-    func assertExpectedValue(_ expected: Self, file: StaticString = #filePath, line: UInt = #line) {
-        guard !isMatch(for: expected) else { return }
-        XCTFail("Status '\(self)' does not match expected status of '\(expected)'", file: file, line: line)
     }
 }
 
