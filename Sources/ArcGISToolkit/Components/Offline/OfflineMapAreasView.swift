@@ -28,13 +28,19 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map areas are being reloaded.
 ***REMOVED***@State private var isReloadingPreplannedMapAreas = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
-***REMOVED***private var onMapSelectionChanged: ((Map) -> Void)?
+***REMOVED******REMOVED***/ The currently selected map.
+***REMOVED***private var selectedMap: Binding<Map?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OfflineMapAreasView` with a given web map.
-***REMOVED******REMOVED***/ - Parameter map: The web map.
-***REMOVED***public init(map: Map) {
-***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - onlineMap: The web map.
+***REMOVED******REMOVED***/   - selectedMap: A binding to the currently selected map.
+***REMOVED***public init(
+***REMOVED******REMOVED***onlineMap: Map,
+***REMOVED******REMOVED***selectedMap: Binding<Map?>
+***REMOVED***) {
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+***REMOVED******REMOVED***self.selectedMap = selectedMap
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -87,7 +93,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onMapSelectionChanged { newMap in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged?(newMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap.wrappedValue = newMap
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -119,23 +125,23 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the closure to call when the map selection changes.
-***REMOVED***public func onMapSelectionChanged(
-***REMOVED******REMOVED***perform action: @escaping (_ newMap: Map) -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onMapSelectionChanged = action
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
 
 #Preview {
-***REMOVED***OfflineMapAreasView(
-***REMOVED******REMOVED***map: Map(
-***REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED***@MainActor
+***REMOVED***struct OfflineMapAreasViewPreview: View {
+***REMOVED******REMOVED***@State private var map: Map?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***OfflineMapAreasView(
+***REMOVED******REMOVED******REMOVED******REMOVED***onlineMap: Map(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $map
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***return OfflineMapAreasViewPreview()
 ***REMOVED***

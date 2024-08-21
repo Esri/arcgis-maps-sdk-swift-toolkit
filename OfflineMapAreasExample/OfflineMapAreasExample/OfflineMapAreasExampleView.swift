@@ -37,10 +37,10 @@ struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingOfflineMapAreasView) {
-***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView(map: onlineMap)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onMapSelectionChanged { newMap in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = newMap
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onlineMap: onlineMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
