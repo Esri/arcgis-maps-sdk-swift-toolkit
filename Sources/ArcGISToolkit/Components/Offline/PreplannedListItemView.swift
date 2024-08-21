@@ -17,7 +17,7 @@ import ArcGIS
 
 @MainActor
 @preconcurrency
-public struct PreplannedListItemView: View {
+struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     

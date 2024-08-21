@@ -27,7 +27,7 @@ private extension PreplannedMapAreaProtocol {
     
     func retryLoad() async throws { }
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-        throw NSError()
+        throw CancellationError()
     }
 }
 
@@ -315,13 +315,11 @@ class PreplannedMapModelTests: XCTestCase {
             showsUserNotificationOnCompletion: false
         )
         
-        var statuses = [PreplannedMapModel.Status]()
+        var statuses: [PreplannedMapModel.Status] = []
         var subscriptions = Set<AnyCancellable>()
         model.$status
             .receive(on: DispatchQueue.main)
-            .sink { value in
-                statuses.append(value)
-            }
+            .sink { statuses.append($0) }
             .store(in: &subscriptions)
         
         await model.load()
@@ -365,27 +363,20 @@ private extension PreplannedMapModel.Status {
     /// Checks if another value is equivalent to this value ignoring
     /// any associated values.
     private func isMatch(for other: Self) -> Bool {
-        switch self {
-        case .notLoaded:
-            if case .notLoaded = other { true } else { false }
-        case .loading:
-            if case .loading = other { true } else { false }
-        case .loadFailure:
-            if case .loadFailure = other { true } else { false }
-        case .packaged:
-            if case .packaged = other { true } else { false }
-        case .packaging:
-            if case .packaging = other { true } else { false }
-        case .packageFailure:
-            if case .packageFailure = other { true } else { false }
-        case .downloading:
-            if case .downloading = other { true } else { false }
-        case .downloaded:
-            if case .downloaded = other { true } else { false }
-        case .downloadFailure:
-            if case .downloadFailure = other { true } else { false }
-        case .mmpkLoadFailure:
-            if case .mmpkLoadFailure = other { true } else { false }
+        return switch (self, other) {
+        case (.notLoaded, .notLoaded),
+            (.loading, .loading),
+            (.loadFailure, .loadFailure),
+            (.packaged, .packaged),
+            (.packaging, .packaging),
+            (.packageFailure, .packageFailure),
+            (.downloading, .downloading),
+            (.downloaded, .downloaded),
+            (.downloadFailure, .downloadFailure),
+            (.mmpkLoadFailure, .mmpkLoadFailure):
+            true
+        default:
+            false
         }
     }
     
