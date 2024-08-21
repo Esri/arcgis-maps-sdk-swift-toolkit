@@ -22,7 +22,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
-***REMOVED***public var onMapSelectionChanged: ((Map) -> Void)?
+***REMOVED***var onMapSelectionChanged: ((Map) -> Void)?
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -67,10 +67,10 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(.headline, weight: .bold))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 76, height: 32)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(UIColor.tertiarySystemFill))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(16)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(.tertiarySystemFill))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 16))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***case .downloading:
@@ -89,7 +89,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

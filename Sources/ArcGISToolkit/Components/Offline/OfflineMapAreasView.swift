@@ -29,7 +29,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***@State private var isReloadingPreplannedMapAreas = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
-***REMOVED***public var onMapSelectionChanged: ((Map) -> Void)?
+***REMOVED***private var onMapSelectionChanged: ((Map) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OfflineMapAreasView` with a given web map.
 ***REMOVED******REMOVED***/ - Parameter map: The web map.
