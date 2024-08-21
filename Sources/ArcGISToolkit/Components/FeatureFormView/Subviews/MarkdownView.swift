@@ -187,6 +187,17 @@ private struct CodeStyle: ViewModifier {
             .background(.tertiary)
     }
 }
+
+private extension ListItemContainer {
+    var depth: Int {
+        var index = 0
+        var current = parent
+        while current != nil {
+            if current is ListItemContainer {
+                index += 1
+            }
+            current = current!.parent
         }
+        return index
     }
 }
