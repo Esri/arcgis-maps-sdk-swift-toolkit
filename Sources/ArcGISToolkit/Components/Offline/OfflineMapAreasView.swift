@@ -29,7 +29,7 @@ public struct OfflineMapAreasView: View {
     @State private var isReloadingPreplannedMapAreas = false
     
     /// The closure to perform when the map selection changes.
-    public var onMapSelectionChanged: ((Map) -> Void)?
+    private var onMapSelectionChanged: ((Map) -> Void)?
     
     /// Creates an `OfflineMapAreasView` with a given web map.
     /// - Parameter map: The web map.

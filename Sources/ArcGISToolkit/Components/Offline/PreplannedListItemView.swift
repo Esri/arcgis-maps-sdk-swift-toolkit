@@ -22,7 +22,7 @@ public struct PreplannedListItemView: View {
     @ObservedObject var model: PreplannedMapModel
     
     /// The closure to perform when the map selection changes.
-    public var onMapSelectionChanged: ((Map) -> Void)?
+    var onMapSelectionChanged: ((Map) -> Void)?
     
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -67,10 +67,10 @@ public struct PreplannedListItemView: View {
             } label: {
                 Text("Open")
                     .font(.system(.headline, weight: .bold))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(Color.accentColor)
                     .frame(width: 76, height: 32)
-                    .background(Color(UIColor.tertiarySystemFill))
-                    .cornerRadius(16)
+                    .background(Color(.tertiarySystemFill))
+                    .clipShape(.rect(cornerRadius: 16))
             }
             .buttonStyle(.plain)
         case .downloading:
@@ -89,7 +89,7 @@ public struct PreplannedListItemView: View {
             }
             .buttonStyle(.plain)
             .disabled(!model.status.allowsDownload)
-            .foregroundColor(.accentColor)
+            .foregroundStyle(Color.accentColor)
         }
     }
     
