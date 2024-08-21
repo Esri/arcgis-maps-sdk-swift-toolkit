@@ -18,137 +18,175 @@ import SwiftUI
 struct MarkdownView: View {
     let markdown: String
     
+    let listIndentation = 15.0
+    
     var body: some View {
-        makeDocumentView(Document(parsing: markdown))
-    }
-    
-    func makeDocumentView(_ document: Document) -> some View {
-        Text(document.format())
-            .onAppear {
-                var walker = Walker()
-                walker.visitDocument(document)
+        let document = Document(parsing: markdown)
+        VStack(alignment: .leading) {
+            ForEach(Array(document.children), id: \.indexInParent) {
+                viewFor($0)
             }
+        }
+        .frame(maxWidth: .infinity)
     }
     
-    struct Walker: MarkupWalker {
-        func visitBlockQuote(_ blockQuote: BlockQuote) -> () {
-            print(#function)
+    @ViewBuilder
+    func viewFor(_ markup: Markup) -> some View {
+        switch markup {
+        case let markup as CodeBlock:
+            AnyView(viewFor(markup))
+        case let markup as Heading:
+            AnyView(viewFor(markup))
+        case let markup as InlineCode:
+            AnyView(viewFor(markup))
+        case let markup as Emphasis:
+            AnyView(viewFor(markup))
+        case let markup as Markdown.Link:
+            AnyView(viewFor(markup))
+        case let markup as ListItem:
+            AnyView(viewFor(markup))
+        case let markup as OrderedList:
+            AnyView(viewFor(markup))
+        case let markup as UnorderedList:
+            AnyView(viewFor(markup))
+        case let markup as Paragraph:
+            AnyView(viewFor(markup))
+        case let markup as Strong:
+            AnyView(viewFor(markup))
+        case let markup as Strikethrough:
+            AnyView(viewFor(markup))
+        case let markup as Markdown.Text:
+            AnyView(viewFor(markup))
+        case let markup as Markdown.ThematicBreak:
+            AnyView(viewFor(markup))
+        default:
+            AnyView(unsupportedViewFor(markup))
         }
-        
-        func visitBlockDirective(_ blockDirective: BlockDirective) -> () {
-            print(#function)
+    }
+    
+    func unsupportedViewFor(_ markup: Markup) -> some View {
+        Text("\(type(of: markup))")
+            .foregroundStyle(.red)
+    }
+    
+    func viewFor(_ thematicBreak: ThematicBreak) -> some View {
+        Divider()
+    }
+    
+    func viewFor(_ markupChildren: MarkupChildren) -> some View {
+        ForEach(Array(markupChildren), id: \.indexInParent) {
+            viewFor($0)
         }
-        
-        func visitCodeBlock(_ codeBlock: CodeBlock) -> () {
-            print(#function)
+    }
+    
+    func viewFor(_ codeBlock: CodeBlock) -> some View {
+        Text(codeBlock.codeDroppingTrailingNewline)
+            .codeStyle()
+    }
+    
+    func viewFor(_ emphasis: Emphasis) -> some View {
+        viewFor(emphasis.children)
+            .italic()
+    }
+    
+    func viewFor(_ heading: Heading) -> some View {
+        Text(heading.plainText)
+            .font(fontForHeading(level: heading.level))
+    }
+    
+    func viewFor(_ inlineCode: InlineCode) -> some View {
+        Text(inlineCode.code)
+            .codeStyle()
+    }
+    
+    func viewFor(_ link: Markdown.Link) -> some View {
+        Text("[\(link.plainText)](\(link.destination!))")
+    }
+    
+    @ViewBuilder
+    func viewFor(_ listItem: ListItem) -> some View {
+        let ordered = listItem.parent is OrderedList
+        ForEach(Array(listItem.children), id: \.indexInParent) { child in
+            if child is ListItemContainer {
+                viewFor(child)
+            } else {
+                HStack {
+                    if ordered {
+                        Text(listItem.indexInParent + 1, format: .number) + Text(".")
+                    } else {
+                        Text("*")
+                    }
+                    viewFor(child)
+                }
+            }
         }
-        
-        func visitCustomBlock(_ customBlock: CustomBlock) -> () {
-            print(#function)
+    }
+    
+    func viewFor(_ orderedList: OrderedList) -> some View {
+        viewFor(orderedList.children)
+            .padding(.leading, CGFloat(orderedList.depth) * listIndentation)
+    }
+    
+    func viewFor(_ strikethrough: Strikethrough) -> some View {
+        viewFor(strikethrough.children)
+            .strikethrough()
+    }
+    
+    func viewFor(_ strong: Strong) -> some View {
+        viewFor(strong.children)
+            .bold()
+    }
+    
+    func viewFor(_ text: Markdown.Text) -> some View {
+        Text(text.string)
+    }
+    
+    func viewFor(_ unorderedList: UnorderedList) -> some View {
+        viewFor(unorderedList.children)
+            .padding(.leading, CGFloat(unorderedList.depth) * listIndentation)
+    }
+    
+    @ViewBuilder
+    func viewFor(_ paragraph: Paragraph) -> some View {
+        ForEach(Array(paragraph.children), id: \.indexInParent) {
+            viewFor($0)
         }
-        
-        func visitCustomInline(_ customInline: CustomInline) -> () {
-            print(#function)
+    }
+}
+
+private extension View {
+    func fontForHeading(level: Int) -> Font {
+        switch level {
+        case 1: .largeTitle
+        case 2: .title
+        case 3: .title2
+        case 4: .title3
+        default: .body
         }
-        
-        func visitDoxygenParameter(_ doxygenParam: DoxygenParameter) -> () {
-            print(#function)
-        }
-        
-        func visitDoxygenReturns(_ doxygenReturns: DoxygenReturns) -> () {
-            print(#function)
-        }
-        
-        func visitEmphasis(_ emphasis: Emphasis) -> () {
-            print(#function)
-        }
-        
-        func visitHeading(_ heading: Heading) -> () {
-            print(#function)
-        }
-        
-        func visitHTMLBlock(_ html: HTMLBlock) -> () {
-            print(#function)
-        }
-        
-        func visitImage(_ image: Markdown.Image) -> () {
-            print(#function)
-        }
-        
-        func visitInlineAttributes(_ attributes: InlineAttributes) -> () {
-            print(#function)
-        }
-        
-        func visitInlineCode(_ inlineCode: InlineCode) -> () {
-            print(#function)
-        }
-        
-        func visitInlineHTML(_ inlineHTML: InlineHTML) -> () {
-            print(#function)
-        }
-        
-        func visitLineBreak(_ lineBreak: LineBreak) -> () {
-            print(#function)
-        }
-        
-        func visitLink(_ link: Markdown.Link) -> () {
-            print(#function)
-        }
-        
-        func visitListItem(_ listItem: ListItem) -> () {
-            print(#function)
-        }
-        
-        func visitOrderedList(_ orderedList: OrderedList) -> () {
-            print(#function)
-        }
-        
-        func visitSoftBreak(_ softBreak: SoftBreak) -> () {
-            print(#function)
-        }
-        
-        func visitStrikethrough(_ strikethrough: Strikethrough) -> () {
-            print(#function)
-        }
-        
-        func visitStrong(_ strong: Strong) -> () {
-            print(#function)
-        }
-        
-        func visitSymbolLink(_ symbolLink: SymbolLink) -> () {
-            print(#function)
-        }
-        
-        func visitTable(_ table: Markdown.Table) -> () {
-            print(#function)
-        }
-        
-        func visitTableBody(_ tableBody: Markdown.Table.Body) -> () {
-            print(#function)
-        }
-        
-        func visitTableCell(_ tableCell: Markdown.Table.Cell) -> () {
-            print(#function)
-        }
-        
-        func visitTableHead(_ tableHead: Markdown.Table.Head) -> () {
-            print(#function)
-        }
-        
-        func visitTableRow(_ tableRow: Markdown.Table.Row) -> () {
-            print(#function)
-        }
-        
-        func visitText(_ text: Markdown.Text) -> () {
-            print(#function)
-        }
-        
-        func visitThematicBreak(_ thematicBreak: ThematicBreak) -> () {
-            print(#function)
-        }
-        
-        func visitUnorderedList(_ unorderedList: UnorderedList) -> () {
-            print(#function)
+    }
+}
+
+private extension Markdown.CodeBlock {
+    var codeDroppingTrailingNewline: String {
+        var copy = code
+        copy.removeLast()
+        return copy
+    }
+}
+
+private extension SwiftUI.Text {
+    func codeStyle() -> some View {
+        modifier(CodeStyle())
+    }
+}
+
+private struct CodeStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .monospaced()
+            .background(.tertiary)
+    }
+}
         }
     }
 }
