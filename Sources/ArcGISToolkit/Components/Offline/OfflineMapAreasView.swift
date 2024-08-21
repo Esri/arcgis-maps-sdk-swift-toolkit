@@ -49,7 +49,7 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-                await mapViewModel.makePreplannedOfflineMapModels()
+               await makePreplannedMapModels()
             }
             .task {
                 await mapViewModel.requestUserNotificationAuthorization()
@@ -81,13 +81,26 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            VStack(alignment: .center) {
-                Image(systemName: "exclamationmark.circle")
-                    .imageScale(.large)
-                    .foregroundStyle(.red)
-                Text(error.localizedDescription)
+            if let models = mapViewModel.offlinePreplannedModels,
+               !models.isEmpty {
+                List(models) { preplannedMapModel in
+                    PreplannedListItemView(
+                        model: preplannedMapModel
+                    )
+                    .onMapSelectionChanged { newMap in
+                        onMapSelectionChanged?(newMap)
+                        dismiss()
+                    }
+                }
+            } else {
+                VStack(alignment: .center) {
+                    Image(systemName: "exclamationmark.circle")
+                        .imageScale(.large)
+                        .foregroundStyle(.red)
+                    Text(error.localizedDescription)
+                }
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
@@ -103,6 +116,12 @@ public struct OfflineMapAreasView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+    }
+
+    /// Makes the preplanned map models.
+    private func makePreplannedMapModels() async {
+        await mapViewModel.makePreplannedMapModels()
+        await mapViewModel.makeOfflinePreplannedMapModels()
     }
 }
 
