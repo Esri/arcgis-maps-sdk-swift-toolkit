@@ -226,6 +226,26 @@ extension PreplannedMapModel {
     }
 }
 
+extension PreplannedMapModel.Status: Equatable {
+    static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
+        return switch (lhs, rhs) {
+        case (.notLoaded, .notLoaded),
+            (.loading, .loading),
+            (.loadFailure, .loadFailure),
+            (.packaged, .packaged),
+            (.packaging, .packaging),
+            (.packageFailure, .packageFailure),
+            (.downloading, .downloading),
+            (.downloaded, .downloaded),
+            (.downloadFailure, .downloadFailure),
+            (.mmpkLoadFailure, .mmpkLoadFailure):
+            true
+        default:
+            false
+        }
+    }
+}
+
 private extension PreplannedMapModel.Status {
     init(packagingStatus: PreplannedMapArea.PackagingStatus) {
         self = switch packagingStatus {
