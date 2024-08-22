@@ -57,6 +57,7 @@ struct Carousel<Content: View>: View {
             ScrollViewReader { scrollViewProxy in
                 ScrollView(.horizontal) {
                     makeCommonScrollViewContent(scrollViewProxy)
+                        .padding(.bottom, 10)
                 }
             }
             .onAppear {
@@ -77,6 +78,7 @@ struct Carousel<Content: View>: View {
 //        ScrollViewReader { scrollViewProxy in
 //            ScrollView(.horizontal) {
 //                makeCommonScrollViewContent(scrollViewProxy)
+//                    .padding(.bottom, 10)
 //            }
 //        }
 //        .onScrollGeometryChange(for: CGFloat.self) { geometry in
