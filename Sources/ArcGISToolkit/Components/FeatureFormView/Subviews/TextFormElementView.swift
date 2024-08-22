@@ -18,13 +18,21 @@ import SwiftUI
 struct TextFormElementView: View {
     let element: TextFormElement
     
+    @State private var text = ""
+    
     var body: some View {
-        Text(element.label)
-        switch element.textFormat {
-        case .markdown:
-            MarkdownView(markdown: element.text)
-        case .plainText:
-            Text(element.text)
+        Group {
+            switch element.textFormat {
+            case .markdown:
+                MarkdownView(markdown: text)
+            case .plainText:
+                Text(text)
+            }
+        }
+        .task {
+            for await text in element.$text {
+                self.text = text
+            }
         }
     }
 }
