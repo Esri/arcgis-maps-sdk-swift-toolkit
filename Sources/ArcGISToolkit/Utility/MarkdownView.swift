@@ -18,12 +18,13 @@ import Markdown
 ***REMOVED***/ Rendered Markdown text content.
 ***REMOVED***/
 ***REMOVED***/ Supports the following Markdown tags:
-***REMOVED***/  - Inline code
 ***REMOVED***/  - Emphasis
+***REMOVED***/  - Heading
+***REMOVED***/  - Inline code
 ***REMOVED***/  - Links
 ***REMOVED***/  - Ordered lists
-***REMOVED***/  - Unordered lists
 ***REMOVED***/  - Strikethrough
+***REMOVED***/  - Unordered lists
 struct MarkdownView: View {
 ***REMOVED***let markdown: String
 ***REMOVED***
@@ -211,25 +212,29 @@ private extension ListItemContainer {
 ***REMOVED***
 
 #Preview {
-***REMOVED***MarkdownView(markdown: 
-***REMOVED***"""
+***REMOVED***MarkdownView(markdown: """
+***REMOVED****Emphasis*
+***REMOVED***
 ***REMOVED***# Heading 1
-***REMOVED***
 ***REMOVED***## Heading 2
-***REMOVED***
 ***REMOVED***### Heading 3
 ***REMOVED***
-***REMOVED***Basic text.
+***REMOVED***`Inline code`
 ***REMOVED***
-***REMOVED***Text with `inline code`.
+***REMOVED***[Link](https:***REMOVED***www.esri.com)
 ***REMOVED***
-***REMOVED***1. First item
-***REMOVED***2. Second item
-***REMOVED***3. Third item
+***REMOVED***1. 1st item
+***REMOVED***1. 2nd item
+***REMOVED***1. 3rd item
+***REMOVED***   1. 4th item
 ***REMOVED***
-***REMOVED***- Unordered item
-***REMOVED***- Another unordered item
-***REMOVED***  - An indented unordered item
+***REMOVED***~Strikethrough~
+***REMOVED***
+***REMOVED***- 1st item
+***REMOVED***- 2nd item
+***REMOVED***- 3rd item
+***REMOVED***  - 4th item
+***REMOVED******REMOVED***- 5th item
 ***REMOVED***"""
 ***REMOVED***)
 ***REMOVED***
