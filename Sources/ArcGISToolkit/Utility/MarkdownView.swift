@@ -209,3 +209,27 @@ private extension ListItemContainer {
         return index
     }
 }
+
+#Preview {
+    MarkdownView(markdown: 
+    """
+    # Heading 1
+    
+    ## Heading 2
+    
+    ### Heading 3
+    
+    Basic text.
+    
+    Text with `inline code`.
+    
+    1. First item
+    2. Second item
+    3. Third item
+    
+    - Unordered item
+    - Another unordered item
+      - An indented unordered item
+    """
+    )
+}
