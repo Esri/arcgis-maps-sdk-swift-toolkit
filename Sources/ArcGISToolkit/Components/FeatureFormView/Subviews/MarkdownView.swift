@@ -15,147 +15,164 @@
 import Markdown
 import SwiftUI
 
+/// Rendered Markdown text content.
+///
+/// Supports the following Markdown tags:
+///  - Inline code
+///  - Emphasis
+///  - Links
+///  - Ordered lists
+///  - Unordered lists
+///  - Strikethrough
 struct MarkdownView: View {
     let markdown: String
-    
-    let listIndentation = 15.0
     
     var body: some View {
         let document = Document(parsing: markdown)
         VStack(alignment: .leading) {
-            ForEach(Array(document.children), id: \.indexInParent) {
-                viewFor($0)
+            ForEach(Array(document.children), id: \.indexInParent) { markup in
+                Text(stringFor(markup))
             }
         }
-        .frame(maxWidth: .infinity)
     }
     
-    @ViewBuilder
-    func viewFor(_ markup: Markup) -> some View {
-        switch markup {
-        case let markup as CodeBlock:
-            AnyView(viewFor(markup))
-        case let markup as Heading:
-            AnyView(viewFor(markup))
-        case let markup as InlineCode:
-            AnyView(viewFor(markup))
-        case let markup as Emphasis:
-            AnyView(viewFor(markup))
-        case let markup as Markdown.Link:
-            AnyView(viewFor(markup))
-        case let markup as ListItem:
-            AnyView(viewFor(markup))
-        case let markup as OrderedList:
-            AnyView(viewFor(markup))
-        case let markup as UnorderedList:
-            AnyView(viewFor(markup))
-        case let markup as Paragraph:
-            AnyView(viewFor(markup))
-        case let markup as Strong:
-            AnyView(viewFor(markup))
-        case let markup as Strikethrough:
-            AnyView(viewFor(markup))
-        case let markup as Markdown.Text:
-            AnyView(viewFor(markup))
-        case let markup as Markdown.ThematicBreak:
-            AnyView(viewFor(markup))
-        default:
-            AnyView(unsupportedViewFor(markup))
+    func stringFor(_ emphasis: Emphasis) -> AttributedString {
+        var attributedString = stringFor(emphasis.children)
+        if let currentFont = attributedString.font {
+            attributedString.font = currentFont.italic()
+        } else {
+            attributedString.font = Font.system(.body).italic()
         }
+        return attributedString
     }
     
-    func unsupportedViewFor(_ markup: Markup) -> some View {
-        Text("\(type(of: markup))")
-            .foregroundStyle(.red)
+    func stringFor(_ heading: Heading) -> AttributedString {
+        var attributedString = AttributedString(heading.plainText)
+        attributedString.font = Font.fontForHeading(level: heading.level)
+        return attributedString
     }
     
-    func viewFor(_ thematicBreak: ThematicBreak) -> some View {
-        Divider()
+    func stringFor(_ image: Markdown.Image) -> AttributedString {
+        .init(image.plainText)
     }
     
-    func viewFor(_ markupChildren: MarkupChildren) -> some View {
-        ForEach(Array(markupChildren), id: \.indexInParent) {
-            viewFor($0)
-        }
+    func stringFor(_ inlineCode: InlineCode) -> AttributedString {
+        var attributedString = AttributedString(inlineCode.code)
+        attributedString.font = Font.system(.body).monospaced()
+        attributedString.backgroundColor = Color.codeBackground
+        return attributedString
     }
     
-    func viewFor(_ codeBlock: CodeBlock) -> some View {
-        Text(codeBlock.codeDroppingTrailingNewline)
-            .codeStyle()
+    func stringFor(_ link: Markdown.Link) -> AttributedString {
+        var attributedString = stringFor(link.children)
+        attributedString.link = URL(string: link.destination ?? "")
+        return attributedString
     }
     
-    func viewFor(_ emphasis: Emphasis) -> some View {
-        viewFor(emphasis.children)
-            .italic()
-    }
-    
-    func viewFor(_ heading: Heading) -> some View {
-        Text(heading.plainText)
-            .font(fontForHeading(level: heading.level))
-    }
-    
-    func viewFor(_ inlineCode: InlineCode) -> some View {
-        Text(inlineCode.code)
-            .codeStyle()
-    }
-    
-    func viewFor(_ link: Markdown.Link) -> some View {
-        Text("[\(link.plainText)](\(link.destination!))")
-    }
-    
-    @ViewBuilder
-    func viewFor(_ listItem: ListItem) -> some View {
-        let ordered = listItem.parent is OrderedList
-        ForEach(Array(listItem.children), id: \.indexInParent) { child in
+    func stringFor(_ listItem: ListItem) -> AttributedString {
+        let isInOrderedList = listItem.parent is OrderedList
+        var output = AttributedString()
+        listItem.children.forEach { child in
             if child is ListItemContainer {
-                viewFor(child)
+                ()
             } else {
-                HStack {
-                    if ordered {
-                        Text(listItem.indexInParent + 1, format: .number) + Text(".")
-                    } else {
-                        Text("*")
+                output.append(AttributedString("\n"))
+                output.append(AttributedString(String(repeating: "\t", count: listItem.depth)))
+                if isInOrderedList {
+                    output.append(AttributedString("\(listItem.indexInParent + 1). "))
+                } else {
+                    switch listItem.depth {
+                    case 0: output.append(AttributedString("•"))
+                    case 1: output.append(AttributedString("⚬"))
+                    default: output.append(AttributedString("▪︎︎"))
                     }
-                    viewFor(child)
                 }
+                output.append(stringFor(listItem.children))
             }
         }
+        return output
     }
     
-    func viewFor(_ orderedList: OrderedList) -> some View {
-        viewFor(orderedList.children)
-            .padding(.leading, CGFloat(orderedList.depth) * listIndentation)
-    }
-    
-    func viewFor(_ strikethrough: Strikethrough) -> some View {
-        viewFor(strikethrough.children)
-            .strikethrough()
-    }
-    
-    func viewFor(_ strong: Strong) -> some View {
-        viewFor(strong.children)
-            .bold()
-    }
-    
-    func viewFor(_ text: Markdown.Text) -> some View {
-        Text(text.string)
-    }
-    
-    func viewFor(_ unorderedList: UnorderedList) -> some View {
-        viewFor(unorderedList.children)
-            .padding(.leading, CGFloat(unorderedList.depth) * listIndentation)
-    }
-    
-    @ViewBuilder
-    func viewFor(_ paragraph: Paragraph) -> some View {
-        ForEach(Array(paragraph.children), id: \.indexInParent) {
-            viewFor($0)
+    func stringFor(_ markup: Markup) -> AttributedString {
+        switch markup {
+        case let markup as Emphasis:
+            stringFor(markup)
+        case let markup as Heading:
+            stringFor(markup)
+        case let markup as Markdown.Image:
+            stringFor(markup)
+        case let markup as InlineCode:
+            stringFor(markup)
+        case let markup as Markdown.Link:
+            stringFor(markup)
+        case let markup as ListItem:
+            stringFor(markup)
+        case let markup as OrderedList:
+            stringFor(markup)
+        case let markup as Paragraph:
+            stringFor(markup)
+        case let markup as Strikethrough:
+            stringFor(markup)
+        case let markup as Strong:
+            stringFor(markup)
+        case let markup as Markdown.Text:
+            stringFor(markup)
+        case let markup as UnorderedList:
+            stringFor(markup)
+        default:
+            AttributedString()
         }
+    }
+    
+    func stringFor(_ markupChildren: MarkupChildren) -> AttributedString {
+        var attributedString = AttributedString()
+        markupChildren.forEach { markup in
+            attributedString.append(stringFor(markup))
+        }
+        return attributedString
+    }
+    
+    func stringFor(_ orderedList: OrderedList) -> AttributedString {
+        stringFor(orderedList.children)
+    }
+    
+    func stringFor(_ paragraph: Paragraph) -> AttributedString {
+        stringFor(paragraph.children)
+    }
+    
+    func stringFor(_ strikethrough: Strikethrough) -> AttributedString {
+        var attributedString = stringFor(strikethrough.children)
+        attributedString.strikethroughStyle = .single
+        return attributedString
+    }
+    
+    func stringFor(_ strong: Strong) -> AttributedString {
+        var attributedString = stringFor(strong.children)
+        if let currentFont = attributedString.font {
+            attributedString.font = currentFont.bold()
+        } else {
+            attributedString.font = Font.system(.body).bold()
+        }
+        return attributedString
+    }
+    
+    func stringFor(_ text: Markdown.Text) -> AttributedString {
+        .init(text.string)
+    }
+    
+    func stringFor(_ unorderedList: UnorderedList) -> AttributedString {
+        stringFor(unorderedList.children)
     }
 }
 
-private extension View {
-    func fontForHeading(level: Int) -> Font {
+private extension Color {
+    static var codeBackground: Self {
+        .gray.opacity(0.5)
+    }
+}
+
+private extension Font {
+    static func fontForHeading(level: Int) -> Self {
         switch level {
         case 1: .largeTitle
         case 2: .title
@@ -166,25 +183,16 @@ private extension View {
     }
 }
 
-private extension Markdown.CodeBlock {
-    var codeDroppingTrailingNewline: String {
-        var copy = code
-        copy.removeLast()
-        return copy
-    }
-}
-
-private extension SwiftUI.Text {
-    func codeStyle() -> some View {
-        modifier(CodeStyle())
-    }
-}
-
-private struct CodeStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .monospaced()
-            .background(.tertiary)
+private extension ListItem {
+    var depth: Int {
+        var current = parent
+        while current != nil {
+            if let container = current as? ListItemContainer {
+                return container.depth
+            }
+            current = current?.parent
+        }
+        return 0
     }
 }
 
