@@ -22,7 +22,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
-***REMOVED***let onMapSelectionChanged: ((Map) -> Void)
+***REMOVED***let onMapSelectionChanged: (Map) -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
