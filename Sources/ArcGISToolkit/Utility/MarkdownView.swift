@@ -18,12 +18,13 @@ import SwiftUI
 /// Rendered Markdown text content.
 ///
 /// Supports the following Markdown tags:
-///  - Inline code
 ///  - Emphasis
+///  - Heading
+///  - Inline code
 ///  - Links
 ///  - Ordered lists
-///  - Unordered lists
 ///  - Strikethrough
+///  - Unordered lists
 struct MarkdownView: View {
     let markdown: String
     
@@ -211,25 +212,29 @@ private extension ListItemContainer {
 }
 
 #Preview {
-    MarkdownView(markdown: 
-    """
+    MarkdownView(markdown: """
+    *Emphasis*
+    
     # Heading 1
-    
     ## Heading 2
-    
     ### Heading 3
     
-    Basic text.
+    `Inline code`
     
-    Text with `inline code`.
+    [Link](https://www.esri.com)
     
-    1. First item
-    2. Second item
-    3. Third item
+    1. 1st item
+    1. 2nd item
+    1. 3rd item
+       1. 4th item
     
-    - Unordered item
-    - Another unordered item
-      - An indented unordered item
+    ~Strikethrough~
+    
+    - 1st item
+    - 2nd item
+    - 3rd item
+      - 4th item
+        - 5th item
     """
     )
 }
