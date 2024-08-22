@@ -22,7 +22,7 @@ struct PreplannedListItemView: View {
     @ObservedObject var model: PreplannedMapModel
     
     /// The closure to perform when the map selection changes.
-    let onMapSelectionChanged: ((Map) -> Void)
+    let onMapSelectionChanged: (Map) -> Void
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
