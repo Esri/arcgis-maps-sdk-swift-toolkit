@@ -22,7 +22,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
-***REMOVED***var onMapSelectionChanged: ((Map) -> Void)?
+***REMOVED***let onMapSelectionChanged: ((Map) -> Void)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -61,7 +61,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.loadMobileMapPackage() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged?(map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged(map)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -156,6 +156,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
 ***REMOVED******REMOVED***)
-***REMOVED***)
+***REMOVED***) { _ in ***REMOVED***
 ***REMOVED***.padding()
 ***REMOVED***
