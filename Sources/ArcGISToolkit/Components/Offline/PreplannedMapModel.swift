@@ -226,26 +226,6 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED***
 
-extension PreplannedMapModel.Status: Equatable {
-***REMOVED***static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
-***REMOVED******REMOVED***return switch (lhs, rhs) {
-***REMOVED******REMOVED***case (.notLoaded, .notLoaded),
-***REMOVED******REMOVED******REMOVED***(.loading, .loading),
-***REMOVED******REMOVED******REMOVED***(.loadFailure, .loadFailure),
-***REMOVED******REMOVED******REMOVED***(.packaged, .packaged),
-***REMOVED******REMOVED******REMOVED***(.packaging, .packaging),
-***REMOVED******REMOVED******REMOVED***(.packageFailure, .packageFailure),
-***REMOVED******REMOVED******REMOVED***(.downloading, .downloading),
-***REMOVED******REMOVED******REMOVED***(.downloaded, .downloaded),
-***REMOVED******REMOVED******REMOVED***(.downloadFailure, .downloadFailure),
-***REMOVED******REMOVED******REMOVED***(.mmpkLoadFailure, .mmpkLoadFailure):
-***REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension PreplannedMapModel.Status {
 ***REMOVED***init(packagingStatus: PreplannedMapArea.PackagingStatus) {
 ***REMOVED******REMOVED***self = switch packagingStatus {

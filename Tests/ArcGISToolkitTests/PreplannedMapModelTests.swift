@@ -253,27 +253,11 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Give the final status some time to be updated.
 ***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 1_000_000)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Verify statuses
-***REMOVED******REMOVED***let expectedStatusCount = 6
-***REMOVED******REMOVED***guard statuses.count == expectedStatusCount else {
-***REMOVED******REMOVED******REMOVED***XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let expected: [PreplannedMapModel.Status] = [
-***REMOVED******REMOVED******REMOVED***.notLoaded,
-***REMOVED******REMOVED******REMOVED***.loading,
-***REMOVED******REMOVED******REMOVED***.packaged,
-***REMOVED******REMOVED******REMOVED***.downloading,
-***REMOVED******REMOVED******REMOVED***.downloading,
-***REMOVED******REMOVED******REMOVED***.downloaded
-***REMOVED******REMOVED***]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***for (status, expected) in zip(statuses, expected) {
-***REMOVED******REMOVED******REMOVED***if status != expected {
-***REMOVED******REMOVED******REMOVED******REMOVED***XCTFail("Status '\(status)' does not match expected status of '\(expected)'")
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify statuses.
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***statuses,
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now test that creating a new matching model will have the status set to
 ***REMOVED******REMOVED******REMOVED*** downloaded as there is a mmpk downloaded at the appropriate location.
@@ -339,26 +323,30 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Give the final status some time to be updated.
 ***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 1_000_000)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Verify statuses
-***REMOVED******REMOVED***let expectedStatusCount = 6
-***REMOVED******REMOVED***guard statuses.count == expectedStatusCount else {
-***REMOVED******REMOVED******REMOVED***XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
-***REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED*** Verify statuses.
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***statuses,
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let expected: [PreplannedMapModel.Status] = [
-***REMOVED******REMOVED******REMOVED***.notLoaded,
-***REMOVED******REMOVED******REMOVED***.loading,
-***REMOVED******REMOVED******REMOVED***.packaged,
-***REMOVED******REMOVED******REMOVED***.downloading,
-***REMOVED******REMOVED******REMOVED***.downloading,
-***REMOVED******REMOVED******REMOVED***.downloaded
-***REMOVED******REMOVED***]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***for (status, expected) in zip(statuses, expected) {
-***REMOVED******REMOVED******REMOVED***if status != expected {
-***REMOVED******REMOVED******REMOVED******REMOVED***XCTFail("Status '\(status)' does not match expected status of '\(expected)'")
-***REMOVED******REMOVED***
+***REMOVED***
+
+extension PreplannedMapModel.Status: Equatable {
+***REMOVED***public static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
+***REMOVED******REMOVED***return switch (lhs, rhs) {
+***REMOVED******REMOVED***case (.notLoaded, .notLoaded),
+***REMOVED******REMOVED******REMOVED***(.loading, .loading),
+***REMOVED******REMOVED******REMOVED***(.loadFailure, .loadFailure),
+***REMOVED******REMOVED******REMOVED***(.packaged, .packaged),
+***REMOVED******REMOVED******REMOVED***(.packaging, .packaging),
+***REMOVED******REMOVED******REMOVED***(.packageFailure, .packageFailure),
+***REMOVED******REMOVED******REMOVED***(.downloading, .downloading),
+***REMOVED******REMOVED******REMOVED***(.downloaded, .downloaded),
+***REMOVED******REMOVED******REMOVED***(.downloadFailure, .downloadFailure),
+***REMOVED******REMOVED******REMOVED***(.mmpkLoadFailure, .mmpkLoadFailure):
+***REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
