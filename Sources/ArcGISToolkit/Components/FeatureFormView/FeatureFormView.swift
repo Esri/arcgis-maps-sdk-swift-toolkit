@@ -133,8 +133,6 @@ extension FeatureFormView {
             makeFieldElement(element)
         case let element as GroupFormElement:
             GroupView(element: element, viewCreator: { makeFieldElement($0) })
-        case let element as TextFormElement:
-            TextFormElementView(element: element)
         default:
             EmptyView()
         }
