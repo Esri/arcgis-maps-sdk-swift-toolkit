@@ -18,13 +18,21 @@
 struct TextFormElementView: View {
 ***REMOVED***let element: TextFormElement
 ***REMOVED***
+***REMOVED***@State private var text = ""
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(element.label)
-***REMOVED******REMOVED***switch element.textFormat {
-***REMOVED******REMOVED***case .markdown:
-***REMOVED******REMOVED******REMOVED***MarkdownView(markdown: element.text)
-***REMOVED******REMOVED***case .plainText:
-***REMOVED******REMOVED******REMOVED***Text(element.text)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***switch element.textFormat {
+***REMOVED******REMOVED******REMOVED***case .markdown:
+***REMOVED******REMOVED******REMOVED******REMOVED***MarkdownView(markdown: text)
+***REMOVED******REMOVED******REMOVED***case .plainText:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***for await text in element.$text {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
