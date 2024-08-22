@@ -15,147 +15,164 @@
 import Markdown
 ***REMOVED***
 
+***REMOVED***/ Rendered Markdown text content.
+***REMOVED***/
+***REMOVED***/ Supports the following Markdown tags:
+***REMOVED***/  - Inline code
+***REMOVED***/  - Emphasis
+***REMOVED***/  - Links
+***REMOVED***/  - Ordered lists
+***REMOVED***/  - Unordered lists
+***REMOVED***/  - Strikethrough
 struct MarkdownView: View {
 ***REMOVED***let markdown: String
-***REMOVED***
-***REMOVED***let listIndentation = 15.0
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***let document = Document(parsing: markdown)
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***ForEach(Array(document.children), id: \.indexInParent) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewFor($0)
+***REMOVED******REMOVED******REMOVED***ForEach(Array(document.children), id: \.indexInParent) { markup in
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(stringFor(markup))
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***func viewFor(_ markup: Markup) -> some View {
-***REMOVED******REMOVED***switch markup {
-***REMOVED******REMOVED***case let markup as CodeBlock:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Heading:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as InlineCode:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Emphasis:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Markdown.Link:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as ListItem:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as OrderedList:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as UnorderedList:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Paragraph:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Strong:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Strikethrough:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Markdown.Text:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***case let markup as Markdown.ThematicBreak:
-***REMOVED******REMOVED******REMOVED***AnyView(viewFor(markup))
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***AnyView(unsupportedViewFor(markup))
+***REMOVED***func stringFor(_ emphasis: Emphasis) -> AttributedString {
+***REMOVED******REMOVED***var attributedString = stringFor(emphasis.children)
+***REMOVED******REMOVED***if let currentFont = attributedString.font {
+***REMOVED******REMOVED******REMOVED***attributedString.font = currentFont.italic()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***attributedString.font = Font.system(.body).italic()
+***REMOVED***
+***REMOVED******REMOVED***return attributedString
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***func unsupportedViewFor(_ markup: Markup) -> some View {
-***REMOVED******REMOVED***Text("\(type(of: markup))")
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
-***REMOVED***
-***REMOVED***
-***REMOVED***func viewFor(_ thematicBreak: ThematicBreak) -> some View {
-***REMOVED******REMOVED***Divider()
+***REMOVED***func stringFor(_ heading: Heading) -> AttributedString {
+***REMOVED******REMOVED***var attributedString = AttributedString(heading.plainText)
+***REMOVED******REMOVED***attributedString.font = Font.fontForHeading(level: heading.level)
+***REMOVED******REMOVED***return attributedString
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ markupChildren: MarkupChildren) -> some View {
-***REMOVED******REMOVED***ForEach(Array(markupChildren), id: \.indexInParent) {
-***REMOVED******REMOVED******REMOVED***viewFor($0)
+***REMOVED***func stringFor(_ image: Markdown.Image) -> AttributedString {
+***REMOVED******REMOVED***.init(image.plainText)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***func viewFor(_ codeBlock: CodeBlock) -> some View {
-***REMOVED******REMOVED***Text(codeBlock.codeDroppingTrailingNewline)
-***REMOVED******REMOVED******REMOVED***.codeStyle()
-***REMOVED***
-***REMOVED***
-***REMOVED***func viewFor(_ emphasis: Emphasis) -> some View {
-***REMOVED******REMOVED***viewFor(emphasis.children)
-***REMOVED******REMOVED******REMOVED***.italic()
+***REMOVED***func stringFor(_ inlineCode: InlineCode) -> AttributedString {
+***REMOVED******REMOVED***var attributedString = AttributedString(inlineCode.code)
+***REMOVED******REMOVED***attributedString.font = Font.system(.body).monospaced()
+***REMOVED******REMOVED***attributedString.backgroundColor = Color.codeBackground
+***REMOVED******REMOVED***return attributedString
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ heading: Heading) -> some View {
-***REMOVED******REMOVED***Text(heading.plainText)
-***REMOVED******REMOVED******REMOVED***.font(fontForHeading(level: heading.level))
+***REMOVED***func stringFor(_ link: Markdown.Link) -> AttributedString {
+***REMOVED******REMOVED***var attributedString = stringFor(link.children)
+***REMOVED******REMOVED***attributedString.link = URL(string: link.destination ?? "")
+***REMOVED******REMOVED***return attributedString
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ inlineCode: InlineCode) -> some View {
-***REMOVED******REMOVED***Text(inlineCode.code)
-***REMOVED******REMOVED******REMOVED***.codeStyle()
-***REMOVED***
-***REMOVED***
-***REMOVED***func viewFor(_ link: Markdown.Link) -> some View {
-***REMOVED******REMOVED***Text("[\(link.plainText)](\(link.destination!))")
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***func viewFor(_ listItem: ListItem) -> some View {
-***REMOVED******REMOVED***let ordered = listItem.parent is OrderedList
-***REMOVED******REMOVED***ForEach(Array(listItem.children), id: \.indexInParent) { child in
+***REMOVED***func stringFor(_ listItem: ListItem) -> AttributedString {
+***REMOVED******REMOVED***let isInOrderedList = listItem.parent is OrderedList
+***REMOVED******REMOVED***var output = AttributedString()
+***REMOVED******REMOVED***listItem.children.forEach { child in
 ***REMOVED******REMOVED******REMOVED***if child is ListItemContainer {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewFor(child)
+***REMOVED******REMOVED******REMOVED******REMOVED***()
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if ordered {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(listItem.indexInParent + 1, format: .number) + Text(".")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("*")
+***REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString("\n"))
+***REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString(String(repeating: "\t", count: listItem.depth)))
+***REMOVED******REMOVED******REMOVED******REMOVED***if isInOrderedList {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString("\(listItem.indexInParent + 1). "))
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch listItem.depth {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 0: output.append(AttributedString("•"))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 1: output.append(AttributedString("⚬"))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default: output.append(AttributedString("▪︎︎"))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewFor(child)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***output.append(stringFor(listItem.children))
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***return output
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ orderedList: OrderedList) -> some View {
-***REMOVED******REMOVED***viewFor(orderedList.children)
-***REMOVED******REMOVED******REMOVED***.padding(.leading, CGFloat(orderedList.depth) * listIndentation)
+***REMOVED***func stringFor(_ markup: Markup) -> AttributedString {
+***REMOVED******REMOVED***switch markup {
+***REMOVED******REMOVED***case let markup as Emphasis:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as Heading:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as Markdown.Image:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as InlineCode:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as Markdown.Link:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as ListItem:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as OrderedList:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as Paragraph:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as Strikethrough:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as Strong:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as Markdown.Text:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***case let markup as UnorderedList:
+***REMOVED******REMOVED******REMOVED***stringFor(markup)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***AttributedString()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ strikethrough: Strikethrough) -> some View {
-***REMOVED******REMOVED***viewFor(strikethrough.children)
-***REMOVED******REMOVED******REMOVED***.strikethrough()
+***REMOVED***
+***REMOVED***func stringFor(_ markupChildren: MarkupChildren) -> AttributedString {
+***REMOVED******REMOVED***var attributedString = AttributedString()
+***REMOVED******REMOVED***markupChildren.forEach { markup in
+***REMOVED******REMOVED******REMOVED***attributedString.append(stringFor(markup))
+***REMOVED***
+***REMOVED******REMOVED***return attributedString
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ strong: Strong) -> some View {
-***REMOVED******REMOVED***viewFor(strong.children)
-***REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED***func stringFor(_ orderedList: OrderedList) -> AttributedString {
+***REMOVED******REMOVED***stringFor(orderedList.children)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ text: Markdown.Text) -> some View {
-***REMOVED******REMOVED***Text(text.string)
+***REMOVED***func stringFor(_ paragraph: Paragraph) -> AttributedString {
+***REMOVED******REMOVED***stringFor(paragraph.children)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func viewFor(_ unorderedList: UnorderedList) -> some View {
-***REMOVED******REMOVED***viewFor(unorderedList.children)
-***REMOVED******REMOVED******REMOVED***.padding(.leading, CGFloat(unorderedList.depth) * listIndentation)
+***REMOVED***func stringFor(_ strikethrough: Strikethrough) -> AttributedString {
+***REMOVED******REMOVED***var attributedString = stringFor(strikethrough.children)
+***REMOVED******REMOVED***attributedString.strikethroughStyle = .single
+***REMOVED******REMOVED***return attributedString
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***func viewFor(_ paragraph: Paragraph) -> some View {
-***REMOVED******REMOVED***ForEach(Array(paragraph.children), id: \.indexInParent) {
-***REMOVED******REMOVED******REMOVED***viewFor($0)
+***REMOVED***func stringFor(_ strong: Strong) -> AttributedString {
+***REMOVED******REMOVED***var attributedString = stringFor(strong.children)
+***REMOVED******REMOVED***if let currentFont = attributedString.font {
+***REMOVED******REMOVED******REMOVED***attributedString.font = currentFont.bold()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***attributedString.font = Font.system(.body).bold()
 ***REMOVED***
+***REMOVED******REMOVED***return attributedString
+***REMOVED***
+***REMOVED***
+***REMOVED***func stringFor(_ text: Markdown.Text) -> AttributedString {
+***REMOVED******REMOVED***.init(text.string)
+***REMOVED***
+***REMOVED***
+***REMOVED***func stringFor(_ unorderedList: UnorderedList) -> AttributedString {
+***REMOVED******REMOVED***stringFor(unorderedList.children)
 ***REMOVED***
 ***REMOVED***
 
-private extension View {
-***REMOVED***func fontForHeading(level: Int) -> Font {
+private extension Color {
+***REMOVED***static var codeBackground: Self {
+***REMOVED******REMOVED***.gray.opacity(0.5)
+***REMOVED***
+***REMOVED***
+
+private extension Font {
+***REMOVED***static func fontForHeading(level: Int) -> Self {
 ***REMOVED******REMOVED***switch level {
 ***REMOVED******REMOVED***case 1: .largeTitle
 ***REMOVED******REMOVED***case 2: .title
@@ -166,25 +183,16 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
-private extension Markdown.CodeBlock {
-***REMOVED***var codeDroppingTrailingNewline: String {
-***REMOVED******REMOVED***var copy = code
-***REMOVED******REMOVED***copy.removeLast()
-***REMOVED******REMOVED***return copy
+private extension ListItem {
+***REMOVED***var depth: Int {
+***REMOVED******REMOVED***var current = parent
+***REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED***if let container = current as? ListItemContainer {
+***REMOVED******REMOVED******REMOVED******REMOVED***return container.depth
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***current = current?.parent
 ***REMOVED***
-***REMOVED***
-
-private extension SwiftUI.Text {
-***REMOVED***func codeStyle() -> some View {
-***REMOVED******REMOVED***modifier(CodeStyle())
-***REMOVED***
-***REMOVED***
-
-private struct CodeStyle: ViewModifier {
-***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.monospaced()
-***REMOVED******REMOVED******REMOVED***.background(.tertiary)
+***REMOVED******REMOVED***return 0
 ***REMOVED***
 ***REMOVED***
 
