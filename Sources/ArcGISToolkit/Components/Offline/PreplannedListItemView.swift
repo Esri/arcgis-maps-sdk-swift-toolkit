@@ -22,7 +22,7 @@ struct PreplannedListItemView: View {
     @ObservedObject var model: PreplannedMapModel
     
     /// The closure to perform when the map selection changes.
-    var onMapSelectionChanged: ((Map) -> Void)?
+    let onMapSelectionChanged: ((Map) -> Void)
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -61,7 +61,7 @@ struct PreplannedListItemView: View {
             Button {
                 Task {
                     if let map = await model.loadMobileMapPackage() {
-                        onMapSelectionChanged?(map)
+                        onMapSelectionChanged(map)
                     }
                 }
             } label: {
@@ -156,6 +156,6 @@ struct PreplannedListItemView: View {
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!
         )
-    )
+    ) { _ in }
     .padding()
 }
