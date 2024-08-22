@@ -209,3 +209,27 @@ private extension ListItemContainer {
 ***REMOVED******REMOVED***return index
 ***REMOVED***
 ***REMOVED***
+
+#Preview {
+***REMOVED***MarkdownView(markdown: 
+***REMOVED***"""
+***REMOVED***# Heading 1
+***REMOVED***
+***REMOVED***## Heading 2
+***REMOVED***
+***REMOVED***### Heading 3
+***REMOVED***
+***REMOVED***Basic text.
+***REMOVED***
+***REMOVED***Text with `inline code`.
+***REMOVED***
+***REMOVED***1. First item
+***REMOVED***2. Second item
+***REMOVED***3. Third item
+***REMOVED***
+***REMOVED***- Unordered item
+***REMOVED***- Another unordered item
+***REMOVED***  - An indented unordered item
+***REMOVED***"""
+***REMOVED***)
+***REMOVED***
