@@ -31,7 +31,7 @@ extension OfflineMapAreasView {
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
         
         /// The offline preplanned map information sourced from downloaded mobile map packages.
-        @Published private(set) var offlinePreplannedModels: [PreplannedMapModel]?
+        @Published private(set) var offlinePreplannedMapModels: [PreplannedMapModel]?
         
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -63,7 +63,7 @@ extension OfflineMapAreasView {
             }
         }
         
-        /// Makes offline preplanned map models with infomation from the downloaded mobile map pacakges
+        /// Makes offline preplanned map models with infomation from the downloaded mobile map packages
         /// for the online map.
         func makeOfflinePreplannedMapModels() async {
             guard let portalItemID else { return }
@@ -84,7 +84,7 @@ extension OfflineMapAreasView {
                 }
             }
             
-            offlinePreplannedModels = mapAreas.map { mapArea in
+            offlinePreplannedMapModels = mapAreas.map { mapArea in
                 PreplannedMapModel(
                     offlineMapTask: offlineMapTask,
                     mapArea: mapArea,
