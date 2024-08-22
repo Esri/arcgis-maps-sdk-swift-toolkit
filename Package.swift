@@ -31,7 +31,7 @@ let package = Package(
 ***REMOVED***],
 ***REMOVED***dependencies: [
 ***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.5.0")),
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/apple/swift-markdown.git", branch: "0.4.0")
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/apple/swift-markdown", .upToNextMinor(from: "0.4.0"))
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
