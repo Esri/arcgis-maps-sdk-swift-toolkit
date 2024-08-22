@@ -81,7 +81,7 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            if let models = mapViewModel.offlinePreplannedModels,
+            if let models = mapViewModel.offlinePreplannedMapModels,
                !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
