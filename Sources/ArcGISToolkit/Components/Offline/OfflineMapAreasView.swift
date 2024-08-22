@@ -35,10 +35,7 @@ public struct OfflineMapAreasView: View {
     /// - Parameters:
     ///   - online: The web map to be taken offline.
     ///   - selection: A binding to the currently selected map.
-    public init(
-        online: Map,
-        selection: Binding<Map?>
-    ) {
+    public init(online: Map, selection: Binding<Map?>) {
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
         _selectedMap = selection
     }
@@ -89,9 +86,7 @@ public struct OfflineMapAreasView: View {
         case .success(let models):
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
-                    PreplannedListItemView(
-                        model: preplannedMapModel
-                    ) { newMap in
+                    PreplannedListItemView(model: preplannedMapModel) { newMap in
                         selectedMap = newMap
                         dismiss()
                     }
