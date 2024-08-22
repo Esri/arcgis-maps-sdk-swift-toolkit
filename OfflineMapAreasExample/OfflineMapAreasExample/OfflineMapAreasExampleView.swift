@@ -38,8 +38,8 @@ struct OfflineMapAreasExampleView: View {
             }
             .sheet(isPresented: $isShowingOfflineMapAreasView) {
                 OfflineMapAreasView(
-                    onlineMap: onlineMap,
-                    selectedMap: $selectedMap
+                    online: onlineMap,
+                    selection: $selectedMap
                 )
             }
     }

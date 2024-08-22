@@ -253,27 +253,11 @@ class PreplannedMapModelTests: XCTestCase {
         // Give the final status some time to be updated.
         try? await Task.sleep(nanoseconds: 1_000_000)
         
-        // Verify statuses
-        let expectedStatusCount = 6
-        guard statuses.count == expectedStatusCount else {
-            XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
-            return
-        }
-        
-        let expected: [PreplannedMapModel.Status] = [
-            .notLoaded,
-            .loading,
-            .packaged,
-            .downloading,
-            .downloading,
-            .downloaded
-        ]
-        
-        for (status, expected) in zip(statuses, expected) {
-            if status != expected {
-                XCTFail("Status '\(status)' does not match expected status of '\(expected)'")
-            }
-        }
+        // Verify statuses.
+        XCTAssertEqual(
+            statuses,
+            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+        )
         
         // Now test that creating a new matching model will have the status set to
         // downloaded as there is a mmpk downloaded at the appropriate location.
@@ -339,26 +323,30 @@ class PreplannedMapModelTests: XCTestCase {
         // Give the final status some time to be updated.
         try? await Task.sleep(nanoseconds: 1_000_000)
         
-        // Verify statuses
-        let expectedStatusCount = 6
-        guard statuses.count == expectedStatusCount else {
-            XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
-            return
-        }
-        
-        let expected: [PreplannedMapModel.Status] = [
-            .notLoaded,
-            .loading,
-            .packaged,
-            .downloading,
-            .downloading,
-            .downloaded
-        ]
-        
-        for (status, expected) in zip(statuses, expected) {
-            if status != expected {
-                XCTFail("Status '\(status)' does not match expected status of '\(expected)'")
-            }
+        // Verify statuses.
+        XCTAssertEqual(
+            statuses,
+            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+        )
+    }
+}
+
+extension PreplannedMapModel.Status: Equatable {
+    public static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
+        return switch (lhs, rhs) {
+        case (.notLoaded, .notLoaded),
+            (.loading, .loading),
+            (.loadFailure, .loadFailure),
+            (.packaged, .packaged),
+            (.packaging, .packaging),
+            (.packageFailure, .packageFailure),
+            (.downloading, .downloading),
+            (.downloaded, .downloaded),
+            (.downloadFailure, .downloadFailure),
+            (.mmpkLoadFailure, .mmpkLoadFailure):
+            true
+        default:
+            false
         }
     }
 }

@@ -24,7 +24,7 @@ struct PreplannedListItemView: View {
     /// The closure to perform when the map selection changes.
     var onMapSelectionChanged: ((Map) -> Void)?
     
-    public var body: some View {
+    var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
             VStack(alignment: .leading, spacing: 4) {
@@ -133,15 +133,6 @@ struct PreplannedListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
-    }
-    
-    /// Sets the closure to call when the map selection changes.
-    public func onMapSelectionChanged(
-        perform action: @escaping (_ newMap: Map) -> Void
-    ) -> Self {
-        var copy = self
-        copy.onMapSelectionChanged = action
-        return copy
     }
 }
 

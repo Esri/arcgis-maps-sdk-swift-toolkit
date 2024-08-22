@@ -29,18 +29,18 @@ public struct OfflineMapAreasView: View {
     @State private var isReloadingPreplannedMapAreas = false
     
     /// The currently selected map.
-    private var selectedMap: Binding<Map?>
+    @Binding private var selectedMap: Map?
     
-    /// Creates an `OfflineMapAreasView` with a given web map.
+    /// Creates a view with a given web map.
     /// - Parameters:
-    ///   - onlineMap: The web map.
-    ///   - selectedMap: A binding to the currently selected map.
+    ///   - online: The web map to be taken offline.
+    ///   - selection: A binding to the currently selected map.
     public init(
-        onlineMap: Map,
-        selectedMap: Binding<Map?>
+        online: Map,
+        selection: Binding<Map?>
     ) {
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
-        self.selectedMap = selectedMap
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
+        _selectedMap = selection
     }
     
     public var body: some View {
@@ -91,9 +91,8 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
                         model: preplannedMapModel
-                    )
-                    .onMapSelectionChanged { newMap in
-                        selectedMap.wrappedValue = newMap
+                    ) { newMap in
+                        selectedMap = newMap
                         dismiss()
                     }
                 }
@@ -133,13 +132,13 @@ public struct OfflineMapAreasView: View {
         
         var body: some View {
             OfflineMapAreasView(
-                onlineMap: Map(
+                online: Map(
                     item: PortalItem(
                         portal: .arcGISOnline(connection: .anonymous),
                         id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
                     )
                 ),
-                selectedMap: $map
+                selection: $map
             )
         }
     }
