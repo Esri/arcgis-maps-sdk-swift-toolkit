@@ -74,9 +74,7 @@ struct MarkdownView: View {
         let isInOrderedList = listItem.parent is OrderedList
         var output = AttributedString()
         listItem.children.forEach { child in
-            if child is ListItemContainer {
-                ()
-            } else {
+            if !(child is ListItemContainer) {
                 output.append(AttributedString("\n"))
                 output.append(AttributedString(String(repeating: "\t", count: listItem.depth)))
                 if isInOrderedList {
