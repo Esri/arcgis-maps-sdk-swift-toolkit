@@ -35,10 +35,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - online: The web map to be taken offline.
 ***REMOVED******REMOVED***/   - selection: A binding to the currently selected map.
-***REMOVED***public init(
-***REMOVED******REMOVED***online: Map,
-***REMOVED******REMOVED***selection: Binding<Map?>
-***REMOVED***) {
+***REMOVED***public init(online: Map, selection: Binding<Map?>) {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
@@ -89,9 +86,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***case .success(let models):
 ***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { newMap in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel) { newMap in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = newMap
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
