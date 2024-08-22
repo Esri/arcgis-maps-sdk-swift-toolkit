@@ -133,6 +133,8 @@ extension FeatureFormView {
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
 ***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { makeFieldElement($0) ***REMOVED***)
+***REMOVED******REMOVED***case let element as TextFormElement:
+***REMOVED******REMOVED******REMOVED***TextFormElementView(element: element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
