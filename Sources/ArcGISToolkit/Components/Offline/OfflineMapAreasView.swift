@@ -95,7 +95,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedModels,
+***REMOVED******REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels,
 ***REMOVED******REMOVED******REMOVED***   !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(

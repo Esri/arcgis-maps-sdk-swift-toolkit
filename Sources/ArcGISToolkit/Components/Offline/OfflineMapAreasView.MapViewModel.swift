@@ -31,7 +31,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The offline preplanned map information sourced from downloaded mobile map packages.
-***REMOVED******REMOVED***@Published private(set) var offlinePreplannedModels: [PreplannedMapModel]?
+***REMOVED******REMOVED***@Published private(set) var offlinePreplannedMapModels: [PreplannedMapModel]?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -63,7 +63,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Makes offline preplanned map models with infomation from the downloaded mobile map pacakges
+***REMOVED******REMOVED******REMOVED***/ Makes offline preplanned map models with infomation from the downloaded mobile map packages
 ***REMOVED******REMOVED******REMOVED***/ for the online map.
 ***REMOVED******REMOVED***func makeOfflinePreplannedMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
@@ -84,7 +84,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***offlinePreplannedModels = mapAreas.map { mapArea in
+***REMOVED******REMOVED******REMOVED***offlinePreplannedMapModels = mapAreas.map { mapArea in
 ***REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
