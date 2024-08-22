@@ -74,9 +74,7 @@ struct MarkdownView: View {
 ***REMOVED******REMOVED***let isInOrderedList = listItem.parent is OrderedList
 ***REMOVED******REMOVED***var output = AttributedString()
 ***REMOVED******REMOVED***listItem.children.forEach { child in
-***REMOVED******REMOVED******REMOVED***if child is ListItemContainer {
-***REMOVED******REMOVED******REMOVED******REMOVED***()
-***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***if !(child is ListItemContainer) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString("\n"))
 ***REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString(String(repeating: "\t", count: listItem.depth)))
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isInOrderedList {
