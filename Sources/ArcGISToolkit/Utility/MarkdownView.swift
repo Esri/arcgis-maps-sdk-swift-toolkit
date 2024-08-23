@@ -74,10 +74,10 @@ struct MarkdownView: View {
         let isInOrderedList = listItem.parent is OrderedList
         var output = AttributedString()
         listItem.children.forEach { child in
-            if child is ListItemContainer {
-                ()
-            } else {
-                output.append(AttributedString("\n"))
+            if !(child is ListItemContainer) {
+                if listItem.includeLineBreak {
+                    output.append(AttributedString("\n"))
+                }
                 output.append(AttributedString(String(repeating: "\t", count: listItem.depth)))
                 if isInOrderedList {
                     output.append(AttributedString("\(listItem.indexInParent + 1). "))
@@ -195,6 +195,11 @@ private extension ListItem {
         }
         return 0
     }
+    
+    var includeLineBreak: Bool {
+        (parent is OrderedList || parent is UnorderedList)
+        && (indexInParent > 0 || depth > 0)
+    }
 }
 
 private extension ListItemContainer {
@@ -227,6 +232,8 @@ private extension ListItemContainer {
     1. 2nd item
     1. 3rd item
        1. 4th item
+          1. 5th item
+          1. 6th item
     
     ~Strikethrough~
     
@@ -235,6 +242,7 @@ private extension ListItemContainer {
     - 3rd item
       - 4th item
         - 5th item
+        - 6th item
     """
     )
 }
