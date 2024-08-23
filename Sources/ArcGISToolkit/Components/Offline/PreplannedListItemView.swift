@@ -66,13 +66,11 @@ struct PreplannedListItemView: View {
                 }
             } label: {
                 Text("Open")
-                    .font(.system(.headline, weight: .bold))
-                    .foregroundStyle(Color.accentColor)
-                    .frame(width: 76, height: 32)
-                    .background(Color(.tertiarySystemFill))
-                    .clipShape(.rect(cornerRadius: 16))
+                    .font(.footnote)
+                    .fontWeight(.bold)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.bordered)
+            .buttonBorderShape(.capsule)
         case .downloading:
             if let job = model.job {
                 ProgressView(job.progress)
