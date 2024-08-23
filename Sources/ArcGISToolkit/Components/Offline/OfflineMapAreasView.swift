@@ -98,11 +98,8 @@ public struct OfflineMapAreasView: View {
             if let models = mapViewModel.offlinePreplannedMapModels,
                !models.isEmpty {
                 List(models) { preplannedMapModel in
-                    PreplannedListItemView(
-                        model: preplannedMapModel
-                    )
-                    .onMapSelectionChanged { newMap in
-                        onMapSelectionChanged?(newMap)
+                    PreplannedListItemView(model: preplannedMapModel) { newMap in
+                        selectedMap = newMap
                         dismiss()
                     }
                 }
