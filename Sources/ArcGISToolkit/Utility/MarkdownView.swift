@@ -74,10 +74,10 @@ struct MarkdownView: View {
 ***REMOVED******REMOVED***let isInOrderedList = listItem.parent is OrderedList
 ***REMOVED******REMOVED***var output = AttributedString()
 ***REMOVED******REMOVED***listItem.children.forEach { child in
-***REMOVED******REMOVED******REMOVED***if child is ListItemContainer {
-***REMOVED******REMOVED******REMOVED******REMOVED***()
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString("\n"))
+***REMOVED******REMOVED******REMOVED***if !(child is ListItemContainer) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if listItem.includeLineBreak {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString("\n"))
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString(String(repeating: "\t", count: listItem.depth)))
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isInOrderedList {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***output.append(AttributedString("\(listItem.indexInParent + 1). "))
@@ -196,6 +196,11 @@ private extension ListItem {
 ***REMOVED******REMOVED***return 0
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var includeLineBreak: Bool {
+***REMOVED******REMOVED***(parent is OrderedList || parent is UnorderedList)
+***REMOVED******REMOVED***&& (indexInParent > 0 || depth > 0)
+***REMOVED***
+***REMOVED***
 
 private extension ListItemContainer {
 ***REMOVED***var depth: Int {
@@ -227,6 +232,8 @@ private extension ListItemContainer {
 ***REMOVED***1. 2nd item
 ***REMOVED***1. 3rd item
 ***REMOVED***   1. 4th item
+***REMOVED******REMOVED***  1. 5th item
+***REMOVED******REMOVED***  1. 6th item
 ***REMOVED***
 ***REMOVED***~Strikethrough~
 ***REMOVED***
@@ -235,6 +242,7 @@ private extension ListItemContainer {
 ***REMOVED***- 3rd item
 ***REMOVED***  - 4th item
 ***REMOVED******REMOVED***- 5th item
+***REMOVED******REMOVED***- 6th item
 ***REMOVED***"""
 ***REMOVED***)
 ***REMOVED***
