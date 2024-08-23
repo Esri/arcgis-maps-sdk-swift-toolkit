@@ -66,13 +66,11 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(.headline, weight: .bold))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 76, height: 32)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(.tertiarySystemFill))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 16))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
 ***REMOVED******REMOVED***case .downloading:
 ***REMOVED******REMOVED******REMOVED***if let job = model.job {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
