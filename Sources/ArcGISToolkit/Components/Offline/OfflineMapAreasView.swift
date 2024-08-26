@@ -25,9 +25,6 @@ public struct OfflineMapAreasView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
-    /// A Boolean value indicating whether the preplanned map areas are being reloaded.
-    @State private var isReloadingPreplannedMapAreas = false
-    
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     
@@ -46,22 +43,7 @@ public struct OfflineMapAreasView: View {
                 Section {
                     preplannedMapAreaViews
                 } header: {
-                    HStack {
-                        Text("Preplanned Map Areas").bold()
-                        Spacer()
-                        Button {
-                            Task {
-                                isReloadingPreplannedMapAreas = true
-                                await mapViewModel.makePreplannedOfflineMapModels()
-                                isReloadingPreplannedMapAreas = false
-                            }
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                        }
-                        .controlSize(.mini)
-                        .disabled(isReloadingPreplannedMapAreas)
-                    }
-                    .frame(maxWidth: .infinity)
+                    Text("Preplanned").bold()
                 }
                 .textCase(nil)
             }
@@ -78,6 +60,9 @@ public struct OfflineMapAreasView: View {
             }
             .navigationTitle("Offline Maps")
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .refreshable {
+            await mapViewModel.makePreplannedOfflineMapModels()
         }
     }
     
