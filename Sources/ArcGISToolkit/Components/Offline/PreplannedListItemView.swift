@@ -21,6 +21,9 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
+    /// A Boolean value indicating whether the metadata view is presented.
+    @State private var detailsViewIsPresented = false
+    
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
@@ -36,6 +39,12 @@ public struct PreplannedListItemView: View {
         }
         .swipeActions {
             deleteButton
+            detailsButton
+        }
+        .sheet(isPresented: $detailsViewIsPresented) {
+            NavigationStack {
+                MetadataDetailView(model: model)
+            }
         }
         .task {
             await model.load()
@@ -65,6 +74,16 @@ public struct PreplannedListItemView: View {
                 Label("Remove Area", systemImage: "trash")
             }
             .tint(.red)
+        }
+    }
+    
+    @ViewBuilder private var detailsButton: some View {
+        if case .downloaded = model.status {
+            Button {
+                detailsViewIsPresented = true
+            } label: {
+                Label("View Details", systemImage: "ellipsis")
+            }
         }
     }
     
