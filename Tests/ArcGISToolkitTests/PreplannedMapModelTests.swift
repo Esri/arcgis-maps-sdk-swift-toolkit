@@ -310,7 +310,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         await model.load()
         
-        // Start downloading
+        // Start downloading.
         await model.downloadPreplannedMapArea()
         
         // Wait for job to finish.
