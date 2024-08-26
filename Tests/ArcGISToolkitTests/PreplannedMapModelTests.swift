@@ -310,7 +310,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Start downloading
+***REMOVED******REMOVED******REMOVED*** Start downloading.
 ***REMOVED******REMOVED***await model.downloadPreplannedMapArea()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for job to finish.
