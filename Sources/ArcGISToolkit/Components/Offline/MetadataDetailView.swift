@@ -1,0 +1,126 @@
+***REMOVED*** Copyright 2024 Esri
+***REMOVED***
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+***REMOVED***
+
+struct MetadataDetailView: View {
+***REMOVED******REMOVED***/ The view model for the preplanned map.
+***REMOVED***@ObservedObject var model: PreplannedMapModel
+***REMOVED***
+***REMOVED******REMOVED***/ The action to dismiss the view.
+***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***Form {
+***REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = model.preplannedMapArea.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Thumbnail")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Description")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Size")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("0")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.medium)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.removeDownloadedPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Delete Map Area")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.navigationTitle(model.preplannedMapArea.title)
+***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED***.navigationBarBackButtonHidden()
+***REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+#Preview {
+***REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
+***REMOVED******REMOVED***var title: String = "Mock Preplanned Map Area"
+***REMOVED******REMOVED***var description: String = "This is the description text"
+***REMOVED******REMOVED***var thumbnail: LoadableImage? = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
+***REMOVED******REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***return MetadataDetailView(
+***REMOVED******REMOVED***model: PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
+***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
+***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
+***REMOVED******REMOVED***)
+***REMOVED***)
+***REMOVED***
