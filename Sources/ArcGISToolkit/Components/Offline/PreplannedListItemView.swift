@@ -21,6 +21,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
+***REMOVED***@State private var detailsViewIsPresented = false
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
@@ -36,6 +39,12 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.swipeActions {
 ***REMOVED******REMOVED******REMOVED***deleteButton
+***REMOVED******REMOVED******REMOVED***detailsButton
+***REMOVED***
+***REMOVED******REMOVED***.sheet(isPresented: $detailsViewIsPresented) {
+***REMOVED******REMOVED******REMOVED***NavigationStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***MetadataDetailView(model: model)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***await model.load()
@@ -65,6 +74,16 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label("Remove Area", systemImage: "trash")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.tint(.red)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var detailsButton: some View {
+***REMOVED******REMOVED***if case .downloaded = model.status {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***detailsViewIsPresented = true
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("View Details", systemImage: "ellipsis")
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
