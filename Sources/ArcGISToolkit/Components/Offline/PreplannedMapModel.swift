@@ -292,12 +292,15 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***
 
-extension FileManager {
-***REMOVED***private static let mmpkPathExtension: String = "mmpk"
-***REMOVED***private static let offlineMapAreasPath: String = "OfflineMapAreas"
-***REMOVED***private static let packageDirectoryPath: String = "Package"
-***REMOVED***private static let preplannedDirectoryPath: String = "Preplanned"
+private enum Strings {
+***REMOVED***static var metadataJSON: String { "metadata.json" ***REMOVED***
+***REMOVED***static var thumbnail: String { "thumbnail.jpg" ***REMOVED***
+***REMOVED***static var offlineMapAreasPath: String { "OfflineMapAreas" ***REMOVED***
+***REMOVED***static var packageDirectoryPath: String { "Package" ***REMOVED***
+***REMOVED***static var preplannedDirectoryPath: String { "Preplanned" ***REMOVED***
 ***REMOVED***
+
+extension FileManager {
 ***REMOVED******REMOVED***/ The path to the documents folder.
 ***REMOVED***private var documentsDirectory: URL {
 ***REMOVED******REMOVED***URL.documentsDirectory
@@ -307,7 +310,7 @@ extension FileManager {
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas`
 ***REMOVED***private var offlineMapAreasDirectory: URL {
 ***REMOVED******REMOVED***documentsDirectory.appending(
-***REMOVED******REMOVED******REMOVED***path: Self.offlineMapAreasPath,
+***REMOVED******REMOVED******REMOVED***path: Strings.offlineMapAreasPath,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -328,7 +331,7 @@ extension FileManager {
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
+***REMOVED******REMOVED******REMOVED******REMOVED***path: Strings.preplannedDirectoryPath,
 ***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.appending(
