@@ -292,12 +292,15 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     }
 }
 
+private enum Strings {
+    static var metadataJSON: String { "metadata.json" }
+    static var thumbnail: String { "thumbnail.jpg" }
+    static var offlineMapAreasPath: String { "OfflineMapAreas" }
+    static var packageDirectoryPath: String { "Package" }
+    static var preplannedDirectoryPath: String { "Preplanned" }
+}
+
 extension FileManager {
-    private static let mmpkPathExtension: String = "mmpk"
-    private static let offlineMapAreasPath: String = "OfflineMapAreas"
-    private static let packageDirectoryPath: String = "Package"
-    private static let preplannedDirectoryPath: String = "Preplanned"
-    
     /// The path to the documents folder.
     private var documentsDirectory: URL {
         URL.documentsDirectory
@@ -307,7 +310,7 @@ extension FileManager {
     /// `Documents/OfflineMapAreas`
     private var offlineMapAreasDirectory: URL {
         documentsDirectory.appending(
-            path: Self.offlineMapAreasPath,
+            path: Strings.offlineMapAreasPath,
             directoryHint: .isDirectory
         )
     }
@@ -328,7 +331,7 @@ extension FileManager {
     ) -> URL {
         portalItemDirectory(forPortalItemID: portalItemID)
             .appending(
-                path: Self.preplannedDirectoryPath,
+                path: Strings.preplannedDirectoryPath,
                 directoryHint: .isDirectory
             )
             .appending(
