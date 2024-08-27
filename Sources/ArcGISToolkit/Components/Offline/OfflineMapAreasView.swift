@@ -28,10 +28,16 @@ public struct OfflineMapAreasView: View {
     /// A Boolean value indicating whether the preplanned map areas are being reloaded.
     @State private var isReloadingPreplannedMapAreas = false
     
-    /// Creates an `OfflineMapAreasView` with a given web map.
-    /// - Parameter map: The web map.
-    public init(map: Map) {
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
+    /// The currently selected map.
+    @Binding private var selectedMap: Map?
+    
+    /// Creates a view with a given web map.
+    /// - Parameters:
+    ///   - online: The web map to be taken offline.
+    ///   - selection: A binding to the currently selected map.
+    public init(online: Map, selection: Binding<Map?>) {
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
+        _selectedMap = selection
     }
     
     public var body: some View {
@@ -80,9 +86,10 @@ public struct OfflineMapAreasView: View {
         case .success(let models):
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
-                    PreplannedListItemView(
-                        model: preplannedMapModel
-                    )
+                    PreplannedListItemView(model: preplannedMapModel) { newMap in
+                        selectedMap = newMap
+                        dismiss()
+                    }
                 }
             } else {
                 emptyPreplannedMapAreasView
@@ -114,12 +121,21 @@ public struct OfflineMapAreasView: View {
 }
 
 #Preview {
-    OfflineMapAreasView(
-        map: Map(
-            item: PortalItem(
-                portal: .arcGISOnline(connection: .anonymous),
-                id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+    @MainActor
+    struct OfflineMapAreasViewPreview: View {
+        @State private var map: Map?
+        
+        var body: some View {
+            OfflineMapAreasView(
+                online: Map(
+                    item: PortalItem(
+                        portal: .arcGISOnline(connection: .anonymous),
+                        id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+                    )
+                ),
+                selection: $map
             )
-        )
-    )
+        }
+    }
+    return OfflineMapAreasViewPreview()
 }
