@@ -27,6 +27,9 @@ struct PreplannedListItemView: View {
     /// The closure to perform when the map selection changes.
     let onMapSelectionChanged: (Map) -> Void
     
+    /// The closure to perform when the map is removed from local disk.
+    let onMapDeletion: (() -> Void)?
+    
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
@@ -183,6 +186,6 @@ struct PreplannedListItemView: View {
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!
         )
-    ) { _ in }
+    ) { _ in } onMapDeletion: { }
     .padding()
 }
