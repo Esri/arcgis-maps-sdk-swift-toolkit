@@ -1571,6 +1571,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let losAngelesText = app.staticTexts["Title of the map is Los Angeles ."]
+***REMOVED******REMOVED***let redlandsText = app.staticTexts["Title of the map is Redlands ."]
+***REMOVED******REMOVED***let titleClearButton = app.buttons["Title Clear Button"]
+***REMOVED******REMOVED***let titleTextField = app.textFields["Title Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -1584,6 +1588,25 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***titleTextField.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The text field wasn't found after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***titleTextField.value as? String,
+***REMOVED******REMOVED******REMOVED***"Redlands"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(redlandsText.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***titleClearButton.tap()
+***REMOVED******REMOVED***titleTextField.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***titleTextField.typeText("Los Angeles")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(losAngelesText.exists)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test plain text
@@ -1591,6 +1614,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let plainText = app.staticTexts["#### **A Bold and Large Heading**"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -1604,6 +1628,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(plainText.exists)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test markdown content
