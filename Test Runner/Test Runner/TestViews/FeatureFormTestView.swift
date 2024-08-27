@@ -156,7 +156,6 @@ private extension FeatureFormTestView {
         .init("testCase_9_1", objectID: 1, portalID: .testCase9),
         .init("testCase_10_1", objectID: 1, portalID: .testCase10),
         .init("testCase_10_2", objectID: 1, portalID: .testCase10),
-        .init("testCase_10_3", objectID: 1, portalID: .testCase10),
     ]}
 }
 

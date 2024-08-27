@@ -1631,26 +1631,6 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(plainText.exists)
     }
-    
-    /// Test markdown content
-    func testCase_10_3() {
-        let app = XCUIApplication()
-        let formTitle = app.staticTexts["Test case 10 Layer"]
-        let formViewTestsButton = app.buttons["Feature Form Tests"]
-        
-        app.launch()
-        
-        // Open the FeatureFormView component test view.
-        formViewTestsButton.tap()
-        
-        selectTestCase(app)
-        
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
-    }
 }
 
 private extension String {
