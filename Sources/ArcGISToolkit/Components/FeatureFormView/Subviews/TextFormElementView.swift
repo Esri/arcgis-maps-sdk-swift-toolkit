@@ -22,7 +22,7 @@ struct TextFormElementView: View {
     
     var body: some View {
         Group {
-            switch element.textFormat {
+            switch element.format {
             case .markdown:
                 MarkdownView(markdown: text)
             case .plainText:
