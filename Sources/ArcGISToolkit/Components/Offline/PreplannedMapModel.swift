@@ -43,6 +43,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
 ***REMOVED***let showsUserNotificationOnCompletion: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The file size of the preplanned map area.
+***REMOVED***var directorySize: Int? {
+***REMOVED******REMOVED***FileManager.default.sizeOfDirectory(at: mmpkDirectory)
+***REMOVED***
+***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
@@ -320,6 +325,21 @@ extension FileManager {
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
 ***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
 ***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Calculates the size of a directory and all its contents.
+***REMOVED******REMOVED***/ - Parameter url: The directory's URL.
+***REMOVED******REMOVED***/ - Returns: The total size in bytes.
+***REMOVED***func sizeOfDirectory(at url: URL) -> Int? {
+***REMOVED******REMOVED***guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return nil ***REMOVED***
+***REMOVED******REMOVED***var size = 0
+***REMOVED******REMOVED***for case let fileURL as URL in enumerator {
+***REMOVED******REMOVED******REMOVED***guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+***REMOVED******REMOVED******REMOVED******REMOVED***continue
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***size += fileSize
+***REMOVED***
+***REMOVED******REMOVED***return size
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
