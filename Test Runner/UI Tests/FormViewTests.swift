@@ -1571,6 +1571,10 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test case 10 Layer"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let losAngelesText = app.staticTexts["Title of the map is Los Angeles ."]
+        let redlandsText = app.staticTexts["Title of the map is Redlands ."]
+        let titleClearButton = app.buttons["Title Clear Button"]
+        let titleTextField = app.textFields["Title Text Input"]
         
         app.launch()
         
@@ -1584,6 +1588,25 @@ final class FeatureFormViewTests: XCTestCase {
             formTitle.waitForExistence(timeout: 10),
             "The form failed to open after 10 seconds."
         )
+        
+        XCTAssertTrue(
+            titleTextField.waitForExistence(timeout: 10),
+            "The text field wasn't found after 10 seconds."
+        )
+        
+        XCTAssertEqual(
+            titleTextField.value as? String,
+            "Redlands"
+        )
+        
+        XCTAssertTrue(redlandsText.exists)
+        
+        titleClearButton.tap()
+        titleTextField.tap()
+        
+        titleTextField.typeText("Los Angeles")
+        
+        XCTAssertTrue(losAngelesText.exists)
     }
     
     /// Test plain text
@@ -1591,6 +1614,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test case 10 Layer"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let plainText = app.staticTexts["#### **A Bold and Large Heading**"]
         
         app.launch()
         
@@ -1604,6 +1628,8 @@ final class FeatureFormViewTests: XCTestCase {
             formTitle.waitForExistence(timeout: 10),
             "The form failed to open after 10 seconds."
         )
+        
+        XCTAssertTrue(plainText.exists)
     }
     
     /// Test markdown content
