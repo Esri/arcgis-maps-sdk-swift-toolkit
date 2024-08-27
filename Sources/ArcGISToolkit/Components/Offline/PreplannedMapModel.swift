@@ -122,6 +122,19 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***return MobileMapPackage.init(fileURL: fileURL)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Loads the mobile map package and updates the status.
+***REMOVED******REMOVED***/ - Returns: The mobile map package map.
+***REMOVED***func loadMobileMapPackage() async -> Map? {
+***REMOVED******REMOVED***guard let mobileMapPackage else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await mobileMapPackage.load()
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
+***REMOVED***
+***REMOVED******REMOVED***return mobileMapPackage.maps.first
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
@@ -186,12 +199,14 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***case downloaded
 ***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
+***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
+***REMOVED******REMOVED***case mmpkLoadFailure(Error)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
 ***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
 ***REMOVED******REMOVED***var needsToBeLoaded: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded:
+***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
@@ -202,7 +217,7 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***var allowsDownload: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED******REMOVED***case .packaged, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true

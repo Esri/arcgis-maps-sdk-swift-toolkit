@@ -17,11 +17,14 @@
 
 @MainActor
 @preconcurrency
-public struct PreplannedListItemView: View {
+struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
-***REMOVED***public var body: some View {
+***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
+***REMOVED***let onMapSelectionChanged: (Map) -> Void
+***REMOVED***
+***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
@@ -55,8 +58,19 @@ public struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
 ***REMOVED******REMOVED***switch model.status {
 ***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.loadMobileMapPackage() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged(map)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
 ***REMOVED******REMOVED***case .downloading:
 ***REMOVED******REMOVED******REMOVED***if let job = model.job {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
@@ -73,7 +87,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -95,7 +109,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***switch model.status {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
-***REMOVED******REMOVED******REMOVED***case .loadFailure:
+***REMOVED******REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
 ***REMOVED******REMOVED******REMOVED***case .packaging:
@@ -140,6 +154,6 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
 ***REMOVED******REMOVED***)
-***REMOVED***)
+***REMOVED***) { _ in ***REMOVED***
 ***REMOVED***.padding()
 ***REMOVED***

@@ -28,10 +28,16 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map areas are being reloaded.
 ***REMOVED***@State private var isReloadingPreplannedMapAreas = false
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates an `OfflineMapAreasView` with a given web map.
-***REMOVED******REMOVED***/ - Parameter map: The web map.
-***REMOVED***public init(map: Map) {
-***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
+***REMOVED******REMOVED***/ The currently selected map.
+***REMOVED***@Binding private var selectedMap: Map?
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view with a given web map.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - online: The web map to be taken offline.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected map.
+***REMOVED***public init(online: Map, selection: Binding<Map?>) {
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
+***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -80,9 +86,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***case .success(let models):
 ***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel) { newMap in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = newMap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
@@ -114,12 +121,21 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 
 #Preview {
-***REMOVED***OfflineMapAreasView(
-***REMOVED******REMOVED***map: Map(
-***REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED***@MainActor
+***REMOVED***struct OfflineMapAreasViewPreview: View {
+***REMOVED******REMOVED***@State private var map: Map?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***OfflineMapAreasView(
+***REMOVED******REMOVED******REMOVED******REMOVED***online: Map(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***selection: $map
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***return OfflineMapAreasViewPreview()
 ***REMOVED***

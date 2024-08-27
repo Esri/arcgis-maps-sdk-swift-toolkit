@@ -17,27 +17,31 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 class PreplannedMapModelStatusTests: XCTestCase {
+***REMOVED***private typealias Status = PreplannedMapModel.Status
+***REMOVED***
 ***REMOVED***func testNeedsToBeLoaded() {
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.loading.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.packaging.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.packaged.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloading.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloaded.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.notLoaded.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.loadFailure(NSError()).needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.packageFailure.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.loading.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.packaging.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.packaged.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloading.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloaded.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertTrue(Status.notLoaded.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertTrue(Status.downloadFailure(CancellationError()).needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertTrue(Status.loadFailure(CancellationError()).needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertTrue(Status.packageFailure.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testAllowsDownload() {
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.notLoaded.allowsDownload)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.loading.allowsDownload)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.loadFailure(NSError()).allowsDownload)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.packaging.allowsDownload)
-***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.packaged.allowsDownload)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.packageFailure.allowsDownload)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloading.allowsDownload)
-***REMOVED******REMOVED***XCTAssertFalse(PreplannedMapModel.Status.downloaded.allowsDownload)
-***REMOVED******REMOVED***XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.notLoaded.allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.loading.allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.loadFailure(CancellationError()).allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.packaging.allowsDownload)
+***REMOVED******REMOVED***XCTAssertTrue(Status.packaged.allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.packageFailure.allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloading.allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloaded.allowsDownload)
+***REMOVED******REMOVED***XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
 ***REMOVED***
 ***REMOVED***
