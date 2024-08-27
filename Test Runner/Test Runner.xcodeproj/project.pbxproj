@@ -27,6 +27,7 @@
 		8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */; ***REMOVED***;
 		8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F42B86896300000DD6 /* UI Tests.xctestplan */; ***REMOVED***;
 		8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */; ***REMOVED***;
+		8A836B0F2C7D448D004EC961 /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 8A836B0E2C7D448D004EC961 /* Markdown */; ***REMOVED***;
 		8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */; ***REMOVED***;
 		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; ***REMOVED***;
 		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; ***REMOVED***;
@@ -88,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A836B0F2C7D448D004EC961 /* Markdown in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		***REMOVED***;
@@ -102,6 +104,7 @@
 				7552A7522A573CBB0023DA5A /* Test Runner */,
 				7552A76A2A573DFB0023DA5A /* UI Tests */,
 				7552A7512A573CBB0023DA5A /* Products */,
+				8A836B072C7D4335004EC961 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		***REMOVED***;
@@ -192,6 +195,13 @@
 			path = "Test Plans";
 			sourceTree = "<group>";
 		***REMOVED***;
+		8A836B072C7D4335004EC961 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		***REMOVED***;
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -229,6 +239,9 @@
 				7552A7702A573DFB0023DA5A /* PBXTargetDependency */,
 			);
 			name = UITests;
+			packageProductDependencies = (
+				8A836B0E2C7D448D004EC961 /* Markdown */,
+			);
 			productName = UITests;
 			productReference = 7552A7692A573DFB0023DA5A /* UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -261,6 +274,9 @@
 				Base,
 			);
 			mainGroup = 7552A7472A573CBB0023DA5A;
+			packageReferences = (
+				8A836B062C7D4303004EC961 /* XCRemoteSwiftPackageReference "swift-markdown" */,
+			);
 			productRefGroup = 7552A7512A573CBB0023DA5A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -598,10 +614,26 @@
 		***REMOVED***;
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		8A836B062C7D4303004EC961 /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https:***REMOVED***github.com/swiftlang/swift-markdown.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.4.0;
+			***REMOVED***;
+		***REMOVED***;
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		7552A7752A573E900023DA5A /* ArcGISToolkit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ArcGISToolkit;
+		***REMOVED***;
+		8A836B0E2C7D448D004EC961 /* Markdown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A836B062C7D4303004EC961 /* XCRemoteSwiftPackageReference "swift-markdown" */;
+			productName = Markdown;
 		***REMOVED***;
 /* End XCSwiftPackageProductDependency section */
 	***REMOVED***;
