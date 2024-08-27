@@ -40,9 +40,13 @@ struct PreplannedListItemView: View {
                 statusView
             }
         }
-        .swipeActions(allowsFullSwipe: false) {
+        .swipeActions {
             deleteButton
-            detailsButton
+        }
+        .onTapGesture {
+            if case .downloaded = model.status {
+                detailsViewIsPresented = true
+            }
         }
         .sheet(isPresented: $detailsViewIsPresented) {
             NavigationStack {
@@ -77,16 +81,6 @@ struct PreplannedListItemView: View {
                 Label("Remove Area", systemImage: "trash")
             }
             .tint(.red)
-        }
-    }
-    
-    @ViewBuilder private var detailsButton: some View {
-        if case .downloaded = model.status {
-            Button {
-                detailsViewIsPresented = true
-            } label: {
-                Label("View Details", systemImage: "ellipsis")
-            }
         }
     }
     
