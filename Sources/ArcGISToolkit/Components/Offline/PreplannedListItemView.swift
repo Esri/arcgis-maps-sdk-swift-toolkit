@@ -40,7 +40,7 @@ struct PreplannedListItemView: View {
                 statusView
             }
         }
-        .swipeActions {
+        .swipeActions(allowsFullSwipe: false) {
             deleteButton
             detailsButton
         }
