@@ -156,7 +156,6 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_9_1", objectID: 1, portalID: .testCase9),
 ***REMOVED******REMOVED***.init("testCase_10_1", objectID: 1, portalID: .testCase10),
 ***REMOVED******REMOVED***.init("testCase_10_2", objectID: 1, portalID: .testCase10),
-***REMOVED******REMOVED***.init("testCase_10_3", objectID: 1, portalID: .testCase10),
 ***REMOVED***]***REMOVED***
 ***REMOVED***
 

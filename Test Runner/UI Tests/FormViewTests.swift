@@ -1632,26 +1632,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(plainText.exists)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Test markdown content
-***REMOVED***func testCase_10_3() {
-***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
