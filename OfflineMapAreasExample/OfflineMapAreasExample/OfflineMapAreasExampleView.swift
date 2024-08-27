@@ -19,13 +19,16 @@ import SwiftUI
 @MainActor
 struct OfflineMapAreasExampleView: View {
     /// The map of the Naperville water network.
-    @State private var map = Map(item: PortalItem.naperville())
+    @State private var onlineMap = Map(item: PortalItem.naperville())
+    
+    /// The selected map.
+    @State private var selectedMap: Map?
     
     /// A Boolean value indicating whether the offline map ares view should be presented.
     @State private var isShowingOfflineMapAreasView = false
     
     var body: some View {
-        MapView(map: map)
+        MapView(map: selectedMap ?? onlineMap)
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Offline Maps") {
@@ -34,7 +37,7 @@ struct OfflineMapAreasExampleView: View {
                 }
             }
             .sheet(isPresented: $isShowingOfflineMapAreasView) {
-                OfflineMapAreasView(map: map)
+                OfflineMapAreasView(online: onlineMap, selection: $selectedMap)
             }
     }
 }

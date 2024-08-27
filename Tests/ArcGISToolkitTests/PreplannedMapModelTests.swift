@@ -27,7 +27,7 @@ private extension PreplannedMapAreaProtocol {
     
     func retryLoad() async throws { }
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-        throw NSError()
+        throw CancellationError()
     }
 }
 
@@ -47,7 +47,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        model.status.assertExpectedValue(.notLoaded)
+        XCTAssertEqual(model.status, .notLoaded)
     }
     
     @MainActor
@@ -62,7 +62,7 @@ class PreplannedMapModelTests: XCTestCase {
         // When the preplanned map area finishes loading, if its
         // packaging status is `nil`, we consider it as completed.
         await model.load()
-        model.status.assertExpectedValue(.packaged)
+        XCTAssertEqual(model.status, .packaged)
     }
     
     @MainActor
@@ -78,7 +78,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.loadFailure(MappingError.notLoaded(details: "")))
+        XCTAssertEqual(model.status, .loadFailure(MappingError.notLoaded(details: "")))
     }
     
     @MainActor
@@ -98,7 +98,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packaging)
+        XCTAssertEqual(model.status, .packaging)
     }
     
     @MainActor
@@ -118,7 +118,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packaged)
+        XCTAssertEqual(model.status, .packaged)
     }
     
     @MainActor
@@ -139,7 +139,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packageFailure)
+        XCTAssertEqual(model.status, .packageFailure)
     }
     
     @MainActor
@@ -157,7 +157,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
         await model.load()
-        model.status.assertExpectedValue(.packageFailure)
+        XCTAssertEqual(model.status, .packageFailure)
     }
     
     /// This tests that the initial status is "downloading" if there is a matching job
@@ -197,7 +197,7 @@ class PreplannedMapModelTests: XCTestCase {
             showsUserNotificationOnCompletion: false
         )
         
-        model.status.assertExpectedValue(.downloading)
+        XCTAssertEqual(model.status, .downloading)
         
         // Cancel the job to be a good citizen.
         await job.cancel()
@@ -244,7 +244,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         await model.load()
         
-        // Start downloading
+        // Start downloading.
         await model.downloadPreplannedMapArea()
         
         // Wait for job to finish.
@@ -253,25 +253,11 @@ class PreplannedMapModelTests: XCTestCase {
         // Give the final status some time to be updated.
         try? await Task.sleep(nanoseconds: 1_000_000)
         
-        // Verify statuses
-        let expectedStatusCount = 6
-        guard statuses.count == expectedStatusCount else {
-            XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
-            return
-        }
-        
-        let expected: [PreplannedMapModel.Status] = [
-            .notLoaded,
-            .loading,
-            .packaged,
-            .downloading,
-            .downloading,
-            .downloaded
-        ]
-        
-        for (status, expected) in zip(statuses, expected) {
-            status.assertExpectedValue(expected)
-        }
+        // Verify statuses.
+        XCTAssertEqual(
+            statuses,
+            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+        )
         
         // Now test that creating a new matching model will have the status set to
         // downloaded as there is a mmpk downloaded at the appropriate location.
@@ -282,39 +268,86 @@ class PreplannedMapModelTests: XCTestCase {
             preplannedMapAreaID: areaID
         )
         
-        model2.status.assertExpectedValue(.downloaded)
+        XCTAssertEqual(model2.status, .downloaded)
+    }
+    
+    @MainActor
+    func testLoadMobileMapPackage() async throws {
+        let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let task = OfflineMapTask(portalItem: portalItem)
+        let areas = try await task.preplannedMapAreas
+        let area = try XCTUnwrap(areas.first)
+        let areaID = try XCTUnwrap(area.portalItem.id)
+        
+        defer {
+            // Clean up JobManager.
+            OfflineManager.shared.jobManager.jobs.removeAll()
+            
+            // Clean up folder.
+            let directory = FileManager.default.preplannedDirectory(
+                forPortalItemID: portalItem.id!,
+                preplannedMapAreaID: areaID
+            )
+            try? FileManager.default.removeItem(at: directory)
+        }
+        
+        let model = PreplannedMapModel(
+            offlineMapTask: task,
+            mapArea: area,
+            portalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID,
+            // User notifications in unit tests are not supported, must pass false here
+            // or the test process will crash.
+            showsUserNotificationOnCompletion: false
+        )
+        
+        var statuses: [PreplannedMapModel.Status] = []
+        var subscriptions = Set<AnyCancellable>()
+        model.$status
+            .receive(on: DispatchQueue.main)
+            .sink { statuses.append($0) }
+            .store(in: &subscriptions)
+        
+        await model.load()
+        
+        // Start downloading.
+        await model.downloadPreplannedMapArea()
+        
+        // Wait for job to finish.
+        _ = await model.job?.result
+        
+        // Verify that mobile map package can be loaded.
+        let map = await model.loadMobileMapPackage()
+        XCTAssertNotNil(map)
+        
+        // Give the final status some time to be updated.
+        try? await Task.sleep(nanoseconds: 1_000_000)
+        
+        // Verify statuses.
+        XCTAssertEqual(
+            statuses,
+            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+        )
     }
 }
 
-private extension PreplannedMapModel.Status {
-    /// Checks if another value is equivalent to this value ignoring
-    /// any associated values.
-    private func isMatch(for other: Self) -> Bool {
-        switch self {
-        case .notLoaded:
-            if case .notLoaded = other { true } else { false }
-        case .loading:
-            if case .loading = other { true } else { false }
-        case .loadFailure:
-            if case .loadFailure = other { true } else { false }
-        case .packaged:
-            if case .packaged = other { true } else { false }
-        case .packaging:
-            if case .packaging = other { true } else { false }
-        case .packageFailure:
-            if case .packageFailure = other { true } else { false }
-        case .downloading:
-            if case .downloading = other { true } else { false }
-        case .downloaded:
-            if case .downloaded = other { true } else { false }
-        case .downloadFailure:
-            if case .downloadFailure = other { true } else { false }
+extension PreplannedMapModel.Status: Equatable {
+    public static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
+        return switch (lhs, rhs) {
+        case (.notLoaded, .notLoaded),
+            (.loading, .loading),
+            (.loadFailure, .loadFailure),
+            (.packaged, .packaged),
+            (.packaging, .packaging),
+            (.packageFailure, .packageFailure),
+            (.downloading, .downloading),
+            (.downloaded, .downloaded),
+            (.downloadFailure, .downloadFailure),
+            (.mmpkLoadFailure, .mmpkLoadFailure):
+            true
+        default:
+            false
         }
-    }
-    
-    func assertExpectedValue(_ expected: Self, file: StaticString = #filePath, line: UInt = #line) {
-        guard !isMatch(for: expected) else { return }
-        XCTFail("Status '\(self)' does not match expected status of '\(expected)'", file: file, line: line)
     }
 }
 

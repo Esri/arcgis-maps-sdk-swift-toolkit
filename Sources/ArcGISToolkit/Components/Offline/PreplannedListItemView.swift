@@ -17,11 +17,14 @@ import ArcGIS
 
 @MainActor
 @preconcurrency
-public struct PreplannedListItemView: View {
+struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    public var body: some View {
+    /// The closure to perform when the map selection changes.
+    let onMapSelectionChanged: (Map) -> Void
+    
+    var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
             VStack(alignment: .leading, spacing: 4) {
@@ -55,8 +58,19 @@ public struct PreplannedListItemView: View {
     @ViewBuilder private var downloadButton: some View {
         switch model.status {
         case .downloaded:
-            Image(systemName: "checkmark.circle")
-                .foregroundStyle(.secondary)
+            Button {
+                Task {
+                    if let map = await model.loadMobileMapPackage() {
+                        onMapSelectionChanged(map)
+                    }
+                }
+            } label: {
+                Text("Open")
+                    .font(.footnote)
+                    .fontWeight(.bold)
+            }
+            .buttonStyle(.bordered)
+            .buttonBorderShape(.capsule)
         case .downloading:
             if let job = model.job {
                 ProgressView(job.progress)
@@ -73,7 +87,7 @@ public struct PreplannedListItemView: View {
             }
             .buttonStyle(.plain)
             .disabled(!model.status.allowsDownload)
-            .foregroundColor(.accentColor)
+            .foregroundStyle(Color.accentColor)
         }
     }
     
@@ -95,7 +109,7 @@ public struct PreplannedListItemView: View {
             switch model.status {
             case .notLoaded, .loading:
                 Text("Loading")
-            case .loadFailure:
+            case .loadFailure, .mmpkLoadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Loading failed")
             case .packaging:
@@ -140,6 +154,6 @@ public struct PreplannedListItemView: View {
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!
         )
-    )
+    ) { _ in }
     .padding()
 }

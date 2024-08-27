@@ -17,27 +17,31 @@ import ArcGIS
 @testable import ArcGISToolkit
 
 class PreplannedMapModelStatusTests: XCTestCase {
+    private typealias Status = PreplannedMapModel.Status
+    
     func testNeedsToBeLoaded() {
-        XCTAssertFalse(PreplannedMapModel.Status.loading.needsToBeLoaded)
-        XCTAssertFalse(PreplannedMapModel.Status.packaging.needsToBeLoaded)
-        XCTAssertFalse(PreplannedMapModel.Status.packaged.needsToBeLoaded)
-        XCTAssertFalse(PreplannedMapModel.Status.downloading.needsToBeLoaded)
-        XCTAssertFalse(PreplannedMapModel.Status.downloaded.needsToBeLoaded)
-        XCTAssertTrue(PreplannedMapModel.Status.notLoaded.needsToBeLoaded)
-        XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).needsToBeLoaded)
-        XCTAssertTrue(PreplannedMapModel.Status.loadFailure(NSError()).needsToBeLoaded)
-        XCTAssertTrue(PreplannedMapModel.Status.packageFailure.needsToBeLoaded)
+        XCTAssertFalse(Status.loading.needsToBeLoaded)
+        XCTAssertFalse(Status.packaging.needsToBeLoaded)
+        XCTAssertFalse(Status.packaged.needsToBeLoaded)
+        XCTAssertFalse(Status.downloading.needsToBeLoaded)
+        XCTAssertFalse(Status.downloaded.needsToBeLoaded)
+        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).needsToBeLoaded)
+        XCTAssertTrue(Status.notLoaded.needsToBeLoaded)
+        XCTAssertTrue(Status.downloadFailure(CancellationError()).needsToBeLoaded)
+        XCTAssertTrue(Status.loadFailure(CancellationError()).needsToBeLoaded)
+        XCTAssertTrue(Status.packageFailure.needsToBeLoaded)
     }
     
     func testAllowsDownload() {
-        XCTAssertFalse(PreplannedMapModel.Status.notLoaded.allowsDownload)
-        XCTAssertFalse(PreplannedMapModel.Status.loading.allowsDownload)
-        XCTAssertFalse(PreplannedMapModel.Status.loadFailure(NSError()).allowsDownload)
-        XCTAssertFalse(PreplannedMapModel.Status.packaging.allowsDownload)
-        XCTAssertTrue(PreplannedMapModel.Status.packaged.allowsDownload)
-        XCTAssertFalse(PreplannedMapModel.Status.packageFailure.allowsDownload)
-        XCTAssertFalse(PreplannedMapModel.Status.downloading.allowsDownload)
-        XCTAssertFalse(PreplannedMapModel.Status.downloaded.allowsDownload)
-        XCTAssertTrue(PreplannedMapModel.Status.downloadFailure(NSError()).allowsDownload)
+        XCTAssertFalse(Status.notLoaded.allowsDownload)
+        XCTAssertFalse(Status.loading.allowsDownload)
+        XCTAssertFalse(Status.loadFailure(CancellationError()).allowsDownload)
+        XCTAssertFalse(Status.packaging.allowsDownload)
+        XCTAssertTrue(Status.packaged.allowsDownload)
+        XCTAssertFalse(Status.packageFailure.allowsDownload)
+        XCTAssertFalse(Status.downloading.allowsDownload)
+        XCTAssertFalse(Status.downloaded.allowsDownload)
+        XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsDownload)
+        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
     }
 }
