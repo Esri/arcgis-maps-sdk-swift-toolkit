@@ -22,6 +22,15 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
+    /// The locally stored thumbnail for the preplanned map area.
+    private var thumbnail: UIImage?
+    
+    /// The locally stored metadata for the preplanned map area.
+    private var metadata: PreplannedMapMetadata?
+    
+    /// The mobile map package directory.
+    private let mmpkDirectory: URL
+    
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
@@ -59,6 +68,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         preplannedMapArea = mapArea
         self.portalItemID = portalItemID
         self.preplannedMapAreaID = preplannedMapAreaID
+        mmpkDirectory = FileManager.default.preplannedDirectory(
+            forPortalItemID: portalItemID,
+            preplannedMapAreaID: preplannedMapAreaID
+        )
         self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
@@ -68,6 +81,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
             self.mobileMapPackage = mmpk
             self.status = .downloaded
+            self.metadata = readMetadata()
+            self.thumbnail = readThumbnail()
         }
     }
     
@@ -135,10 +150,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         
         do {
             let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
-            let mmpkDirectory = FileManager.default.preplannedDirectory(
-                forPortalItemID: portalItemID,
-                preplannedMapAreaID: preplannedMapAreaID
-            )
             try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
             
             // Create the download preplanned offline map job.
@@ -154,11 +165,47 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    func removeDownloadedPreplannedMapArea() async {
-        let mmpkDirectory = FileManager.default.preplannedDirectory(
-            forPortalItemID: portalItemID,
-            preplannedMapAreaID: preplannedMapAreaID
+    /// Reads metadata from local disk.
+    /// - Returns: The metadata of a downloaded preplanned map area.
+    private func readMetadata() -> PreplannedMapMetadata? {
+        if let data = try? Data(contentsOf: mmpkDirectory.appending(path: Strings.metadataJSON, directoryHint: .notDirectory)),
+           let metadata = try? JSONDecoder().decode(PreplannedMapMetadata.self, from: data) {
+            return metadata
+        } else {
+            return nil
+        }
+    }
+    
+    /// Reads thumbnail from local disk.
+    /// - Returns: The thumbnail image of a downloaded preplanned map area.
+    private func readThumbnail() -> UIImage? {
+        if let data = try? Data(contentsOf: mmpkDirectory.appending(path: Strings.thumbnail, directoryHint: .notDirectory)) {
+            return UIImage(data: data)
+        } else {
+            return nil
+        }
+    }
+    
+    /// Writes metadata to local disk.
+    private func writeMetadata() {
+        let metadata = PreplannedMapMetadata(
+            title: preplannedMapArea.title,
+            description: preplannedMapArea.description
         )
+        if let metadataJSON = try? JSONEncoder().encode(metadata) {
+            try? metadataJSON.write(to: mmpkDirectory.appending(path: Strings.metadataJSON, directoryHint: .notDirectory))
+        }
+    }
+    
+    /// Writes thumbnail image to local disk.
+    private func writeThumbnail() {
+        if let image = preplannedMapArea.thumbnail?.image {
+            try? image.pngData()?.write(to: mmpkDirectory.appending(path: Strings.thumbnail, directoryHint: .notDirectory))
+        }
+    }
+    
+    /// Removes the downloaded preplanned map area from disk and reset status.
+    func removeDownloadedPreplannedMapArea() async {
         try? FileManager.default.removeItem(at: mmpkDirectory)
         // Reload the model after local files removal.
         status = .notLoaded
@@ -175,6 +222,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             let result = await job.result
             guard let self else { return }
             self.updateDownloadStatus(for: result)
+            if case .downloaded = status {
+                self.writeMetadata()
+                self.writeThumbnail()
+            }
             self.mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
             self.job = nil
         }
@@ -299,13 +350,13 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 
 private enum Strings {
     static var metadataJSON: String { "metadata.json" }
-    static var thumbnail: String { "thumbnail.jpg" }
+    static var thumbnail: String { "thumbnail.png" }
     static var offlineMapAreasPath: String { "OfflineMapAreas" }
     static var packageDirectoryPath: String { "Package" }
     static var preplannedDirectoryPath: String { "Preplanned" }
 }
 
-extension FileManager {
+private extension FileManager {
     /// The path to the documents folder.
     private var documentsDirectory: URL {
         URL.documentsDirectory
