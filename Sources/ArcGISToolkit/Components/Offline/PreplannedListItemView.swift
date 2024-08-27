@@ -40,7 +40,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.swipeActions {
+***REMOVED******REMOVED***.swipeActions(allowsFullSwipe: false) {
 ***REMOVED******REMOVED******REMOVED***deleteButton
 ***REMOVED******REMOVED******REMOVED***detailsButton
 ***REMOVED***
