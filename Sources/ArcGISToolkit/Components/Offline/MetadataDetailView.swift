@@ -35,8 +35,8 @@ struct MetadataDetailView: View {
                                 .clipShape(.rect(cornerRadius: 10))
                                 .padding(.vertical, 10)
                         }
+                        Divider()
                     }
-                    Divider()
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Name")
                             .font(.caption)
@@ -53,12 +53,14 @@ struct MetadataDetailView: View {
                             .font(.subheadline)
                     }
                     Divider()
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("Size")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("0")
-                            .font(.subheadline)
+                    if let size = model.directorySize {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("Size")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text(size.formatted(.byteCount(style: .file, allowedUnits: [.kb, .mb])))
+                                .font(.subheadline)
+                        }
                     }
                 }
             }
@@ -74,9 +76,9 @@ struct MetadataDetailView: View {
                             .imageScale(.medium)
                     }
                     Button {
+                        dismiss()
                         Task {
                             await model.removeDownloadedPreplannedMapArea()
-                            dismiss()
                         }
                     } label: {
                         Text("Delete Map Area")

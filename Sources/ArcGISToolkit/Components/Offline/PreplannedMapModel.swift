@@ -43,6 +43,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// A Boolean value indicating if a user notification should be shown when a job completes.
     let showsUserNotificationOnCompletion: Bool
     
+    /// The file size of the preplanned map area.
+    var directorySize: Int? {
+        FileManager.default.sizeOfDirectory(at: mmpkDirectory)
+    }
+    
     init(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
@@ -320,6 +325,21 @@ extension FileManager {
     /// - Parameter portalItemID: The ID of the web map portal item.
     private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
         offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
+    }
+    
+    /// Calculates the size of a directory and all its contents.
+    /// - Parameter url: The directory's URL.
+    /// - Returns: The total size in bytes.
+    func sizeOfDirectory(at url: URL) -> Int? {
+        guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return nil }
+        var size = 0
+        for case let fileURL as URL in enumerator {
+            guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+                continue
+            }
+            size += fileSize
+        }
+        return size
     }
     
     /// The path to the preplanned map areas directory for a specific portal item.
