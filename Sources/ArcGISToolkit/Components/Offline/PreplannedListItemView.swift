@@ -27,6 +27,9 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
 ***REMOVED***let onMapSelectionChanged: (Map) -> Void
 ***REMOVED***
+***REMOVED******REMOVED***/ The closure to perform when the map is removed from local disk.
+***REMOVED***let onMapDeletion: (() -> Void)?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
@@ -183,6 +186,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
 ***REMOVED******REMOVED***)
-***REMOVED***) { _ in ***REMOVED***
+***REMOVED***) { _ in ***REMOVED*** onMapDeletion: { ***REMOVED***
 ***REMOVED***.padding()
 ***REMOVED***

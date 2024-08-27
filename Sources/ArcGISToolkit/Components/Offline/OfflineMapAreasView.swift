@@ -89,6 +89,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel) { newMap in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = newMap
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED*** onMapDeletion: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
