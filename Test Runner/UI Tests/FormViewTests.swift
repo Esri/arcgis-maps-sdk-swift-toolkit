@@ -1565,6 +1565,66 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertEqual(maxExceededString.label, "Maximum 5 characters")
         XCTAssertEqual(numericalRange.label, "Value must be from 2 to 5")
     }
+    
+    /// Test substitution
+    func testCase_10_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test case 10 Layer"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+    }
+    
+    /// Test plain text
+    func testCase_10_2() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test case 10 Layer"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+    }
+    
+    /// Test markdown content
+    func testCase_10_3() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test case 10 Layer"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+    }
 }
 
 private extension String {
