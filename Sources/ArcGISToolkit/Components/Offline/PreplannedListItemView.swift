@@ -40,9 +40,13 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.swipeActions(allowsFullSwipe: false) {
+***REMOVED******REMOVED***.swipeActions {
 ***REMOVED******REMOVED******REMOVED***deleteButton
-***REMOVED******REMOVED******REMOVED***detailsButton
+***REMOVED***
+***REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED***if case .downloaded = model.status {
+***REMOVED******REMOVED******REMOVED******REMOVED***detailsViewIsPresented = true
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $detailsViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
@@ -77,16 +81,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label("Remove Area", systemImage: "trash")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.tint(.red)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var detailsButton: some View {
-***REMOVED******REMOVED***if case .downloaded = model.status {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***detailsViewIsPresented = true
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("View Details", systemImage: "ellipsis")
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
