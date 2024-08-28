@@ -153,7 +153,9 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_6_2", objectID: 2, portalID: .groupElementMapID),
 ***REMOVED******REMOVED***.init("testCase_7_1", objectID: 2, portalID: .readOnlyMapID),
 ***REMOVED******REMOVED***.init("testCase_8_1", objectID: 1, portalID: .attachmentMapID),
-***REMOVED******REMOVED***.init("testCase_9_1", objectID: 1, portalID: .testCase9)
+***REMOVED******REMOVED***.init("testCase_9_1", objectID: 1, portalID: .testCase9),
+***REMOVED******REMOVED***.init("testCase_10_1", objectID: 1, portalID: .testCase10),
+***REMOVED******REMOVED***.init("testCase_10_2", objectID: 1, portalID: .testCase10),
 ***REMOVED***]***REMOVED***
 ***REMOVED***
 
@@ -168,4 +170,5 @@ private extension String {
 ***REMOVED***static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
 ***REMOVED***static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
 ***REMOVED***static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
+***REMOVED***static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
 ***REMOVED***

@@ -1566,6 +1566,72 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(numericalRange.label, "Value must be from 2 to 5")
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test substitution
+***REMOVED***func testCase_10_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let losAngelesText = app.staticTexts["Title of the map is Los Angeles ."]
+***REMOVED******REMOVED***let redlandsText = app.staticTexts["Title of the map is Redlands ."]
+***REMOVED******REMOVED***let titleClearButton = app.buttons["Title Clear Button"]
+***REMOVED******REMOVED***let titleTextField = app.textFields["Title Text Input"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***titleTextField.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The text field wasn't found after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***titleTextField.value as? String,
+***REMOVED******REMOVED******REMOVED***"Redlands"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(redlandsText.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***titleClearButton.tap()
+***REMOVED******REMOVED***titleTextField.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***titleTextField.typeText("Los Angeles")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(losAngelesText.exists)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test plain text
+***REMOVED***func testCase_10_2() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let plainText = app.staticTexts["#### **A Bold and Large Heading**"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(plainText.exists)
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
