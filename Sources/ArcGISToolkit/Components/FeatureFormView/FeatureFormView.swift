@@ -27,9 +27,11 @@ import SwiftUI
 /// the Map Viewer or Field Maps Designer, including:
 ///
 /// - Field Element - used to edit a single field of a feature with a specific "input type".
-/// - Group Element - used to group field elements together. Group Elements
-/// can be expanded, to show all enclosed field elements, or collapsed, hiding
-/// the field elements it contains.
+/// - Group Element - used to group elements together. Group Elements
+/// can be expanded, to show all enclosed elements, or collapsed, hiding
+/// the elements it contains.
+/// - Text Element - used to display read-only plain or Markdown-formatted text.
+/// - Attachments Element - used to display and edit attachments.
 ///
 /// A Field Element has a single input type object. The following are the supported input types:
 ///
