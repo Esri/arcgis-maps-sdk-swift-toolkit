@@ -22,7 +22,7 @@ struct PreplannedListItemView: View {
     @ObservedObject var model: PreplannedMapModel
     
     /// A Boolean value indicating whether the metadata view is presented.
-    @State private var detailsViewIsPresented = false
+    @State private var metadataViewIsPresented = false
     
     /// The closure to perform when the map selection changes.
     let onMapSelectionChanged: (Map) -> Void
@@ -48,10 +48,10 @@ struct PreplannedListItemView: View {
         }
         .onTapGesture {
             if case .downloaded = model.status {
-                detailsViewIsPresented = true
+                metadataViewIsPresented = true
             }
         }
-        .sheet(isPresented: $detailsViewIsPresented) {
+        .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
                 MetadataDetailView(model: model)
             }
