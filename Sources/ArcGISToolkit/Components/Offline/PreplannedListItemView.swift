@@ -47,7 +47,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***deleteButton
 ***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***if case .downloaded = model.status {
+***REMOVED******REMOVED******REMOVED***if model.status.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED***

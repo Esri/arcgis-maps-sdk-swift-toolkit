@@ -235,7 +235,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.updateDownloadStatus(for: result)
-***REMOVED******REMOVED******REMOVED***if case .downloaded = status {
+***REMOVED******REMOVED******REMOVED***if status.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.writeMetadata()
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.writeThumbnail()
 ***REMOVED******REMOVED***
@@ -299,6 +299,11 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area is downloaded.
+***REMOVED******REMOVED***var isDownloaded: Bool {
+***REMOVED******REMOVED******REMOVED***if case .downloaded = self { true ***REMOVED*** else { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
