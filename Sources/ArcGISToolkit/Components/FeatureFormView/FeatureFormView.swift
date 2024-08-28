@@ -26,12 +26,12 @@
 ***REMOVED***/ `FeatureFormView` supports the display of form elements created by
 ***REMOVED***/ the Map Viewer or Field Maps Designer, including:
 ***REMOVED***/
+***REMOVED***/ - Attachments Element - used to display and edit attachments.
 ***REMOVED***/ - Field Element - used to edit a single field of a feature with a specific "input type".
 ***REMOVED***/ - Group Element - used to group elements together. Group Elements
 ***REMOVED***/ can be expanded, to show all enclosed elements, or collapsed, hiding
 ***REMOVED***/ the elements it contains.
 ***REMOVED***/ - Text Element - used to display read-only plain or Markdown-formatted text.
-***REMOVED***/ - Attachments Element - used to display and edit attachments.
 ***REMOVED***/
 ***REMOVED***/ A Field Element has a single input type object. The following are the supported input types:
 ***REMOVED***/
