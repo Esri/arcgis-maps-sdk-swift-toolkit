@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-struct MetadataDetailView: View {
+struct MetadataView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
@@ -117,7 +117,7 @@ struct MetadataDetailView: View {
         }
     }
     
-    return MetadataDetailView(
+    return MetadataView(
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
