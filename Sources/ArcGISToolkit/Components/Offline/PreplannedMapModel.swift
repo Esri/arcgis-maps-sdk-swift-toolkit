@@ -318,8 +318,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 }
 
 private enum Strings {
-    static var metadataJSON: String { "metadata.json" }
-    static var thumbnail: String { "thumbnail.png" }
     static var offlineMapAreasPath: String { "OfflineMapAreas" }
     static var packageDirectoryPath: String { "Package" }
     static var preplannedDirectoryPath: String { "Preplanned" }
