@@ -49,8 +49,14 @@ struct PreplannedMetadataView: View {
                         Text("Description")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text(model.preplannedMapArea.description)
-                            .font(.subheadline)
+                        if model.preplannedMapArea.description.isEmpty {
+                            Text("This area has no description.")
+                                .font(.subheadline)
+                                .foregroundStyle(.tertiary)
+                        } else {
+                            Text(model.preplannedMapArea.description)
+                                .font(.subheadline)
+                        }
                     }
                     Divider()
                     if let size = model.directorySize {
