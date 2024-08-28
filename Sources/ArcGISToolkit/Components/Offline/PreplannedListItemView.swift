@@ -22,7 +22,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
-***REMOVED***@State private var detailsViewIsPresented = false
+***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
 ***REMOVED***let onMapSelectionChanged: (Map) -> Void
@@ -48,10 +48,10 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***if case .downloaded = model.status {
-***REMOVED******REMOVED******REMOVED******REMOVED***detailsViewIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $detailsViewIsPresented) {
+***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***MetadataDetailView(model: model)
 ***REMOVED******REMOVED***
