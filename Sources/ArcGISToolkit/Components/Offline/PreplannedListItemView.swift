@@ -28,7 +28,7 @@ struct PreplannedListItemView: View {
     let onMapSelectionChanged: (Map) -> Void
     
     /// The closure to perform when the map is removed from local disk.
-    let onMapDeletion: (() -> Void)?
+    let onMapDeletion: () -> Void
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -79,6 +79,7 @@ struct PreplannedListItemView: View {
             Button {
                 Task {
                     await model.removeDownloadedPreplannedMapArea()
+                    onMapDeletion()
                 }
             } label: {
                 Label("Remove Area", systemImage: "trash")
