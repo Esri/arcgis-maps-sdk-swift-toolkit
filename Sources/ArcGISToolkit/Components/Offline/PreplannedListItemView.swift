@@ -53,7 +53,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***MetadataDetailView(model: model)
+***REMOVED******REMOVED******REMOVED******REMOVED***MetadataView(model: model)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {

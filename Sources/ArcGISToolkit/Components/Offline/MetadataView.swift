@@ -15,7 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
-struct MetadataDetailView: View {
+struct MetadataView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
@@ -117,7 +117,7 @@ struct MetadataDetailView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***return MetadataDetailView(
+***REMOVED***return MetadataView(
 ***REMOVED******REMOVED***model: PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
