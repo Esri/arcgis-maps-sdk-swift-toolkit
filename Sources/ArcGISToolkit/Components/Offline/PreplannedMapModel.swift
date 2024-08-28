@@ -22,12 +22,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
-***REMOVED******REMOVED***/ The locally stored thumbnail for the preplanned map area.
-***REMOVED***private var thumbnail: UIImage?
-***REMOVED***
-***REMOVED******REMOVED***/ The locally stored metadata for the preplanned map area.
-***REMOVED***private var metadata: PreplannedMapMetadata?
-***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package directory.
 ***REMOVED***private let mmpkDirectory: URL
 ***REMOVED***
@@ -81,8 +75,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***self.status = .downloaded
-***REMOVED******REMOVED******REMOVED***self.metadata = readMetadata()
-***REMOVED******REMOVED******REMOVED***self.thumbnail = readThumbnail()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -178,45 +170,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Reads metadata from local disk.
-***REMOVED******REMOVED***/ - Returns: The metadata of a downloaded preplanned map area.
-***REMOVED***private func readMetadata() -> PreplannedMapMetadata? {
-***REMOVED******REMOVED***if let data = try? Data(contentsOf: mmpkDirectory.appending(path: Strings.metadataJSON, directoryHint: .notDirectory)),
-***REMOVED******REMOVED***   let metadata = try? JSONDecoder().decode(PreplannedMapMetadata.self, from: data) {
-***REMOVED******REMOVED******REMOVED***return metadata
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Reads thumbnail from local disk.
-***REMOVED******REMOVED***/ - Returns: The thumbnail image of a downloaded preplanned map area.
-***REMOVED***private func readThumbnail() -> UIImage? {
-***REMOVED******REMOVED***if let data = try? Data(contentsOf: mmpkDirectory.appending(path: Strings.thumbnail, directoryHint: .notDirectory)) {
-***REMOVED******REMOVED******REMOVED***return UIImage(data: data)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Writes metadata to local disk.
-***REMOVED***private func writeMetadata() {
-***REMOVED******REMOVED***let metadata = PreplannedMapMetadata(
-***REMOVED******REMOVED******REMOVED***title: preplannedMapArea.title,
-***REMOVED******REMOVED******REMOVED***description: preplannedMapArea.description
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***if let metadataJSON = try? JSONEncoder().encode(metadata) {
-***REMOVED******REMOVED******REMOVED***try? metadataJSON.write(to: mmpkDirectory.appending(path: Strings.metadataJSON, directoryHint: .notDirectory))
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Writes thumbnail image to local disk.
-***REMOVED***private func writeThumbnail() {
-***REMOVED******REMOVED***if let image = preplannedMapArea.thumbnail?.image {
-***REMOVED******REMOVED******REMOVED***try? image.pngData()?.write(to: mmpkDirectory.appending(path: Strings.thumbnail, directoryHint: .notDirectory))
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Removes the downloaded preplanned map area from disk and reset status.
 ***REMOVED***func removeDownloadedPreplannedMapArea() async {
 ***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectory)
@@ -235,10 +188,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.updateDownloadStatus(for: result)
-***REMOVED******REMOVED******REMOVED***if status.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.writeMetadata()
-***REMOVED******REMOVED******REMOVED******REMOVED***self.writeThumbnail()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
 ***REMOVED******REMOVED******REMOVED***self.job = nil
 ***REMOVED***
