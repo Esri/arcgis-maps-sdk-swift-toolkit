@@ -235,7 +235,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             let result = await job.result
             guard let self else { return }
             self.updateDownloadStatus(for: result)
-            if case .downloaded = status {
+            if status.isDownloaded {
                 self.writeMetadata()
                 self.writeThumbnail()
             }
@@ -299,6 +299,11 @@ extension PreplannedMapModel {
             default:
                 false
             }
+        }
+        
+        /// A Boolean value indicating whether the preplanned map area is downloaded.
+        var isDownloaded: Bool {
+            if case .downloaded = self { true } else { false }
         }
     }
 }

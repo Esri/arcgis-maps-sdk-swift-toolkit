@@ -47,7 +47,7 @@ struct PreplannedListItemView: View {
             deleteButton
         }
         .onTapGesture {
-            if case .downloaded = model.status {
+            if model.status.isDownloaded {
                 metadataViewIsPresented = true
             }
         }
