@@ -170,7 +170,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Removes the downloaded preplanned map area from disk and reset status.
+    /// Removes the downloaded preplanned map area from disk and resets the status.
     func removeDownloadedPreplannedMapArea() {
         try? FileManager.default.removeItem(at: mmpkDirectory)
         // Reload the model after local files removal.
