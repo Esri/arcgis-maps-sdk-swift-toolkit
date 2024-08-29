@@ -169,10 +169,14 @@ class PreplannedMapModelTests: XCTestCase {
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
         let areaID = try XCTUnwrap(area.portalItem.id)
-        let mmpkDirectory = FileManager.default.preplannedDirectory(
-            forPortalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
-        )
+        let mmpkDirectory = URL.documentsDirectory
+            .appending(path: "OfflineMapAreas")
+            .appending(path: portalItem.id!.rawValue)
+            .appending(path: "Preplanned")
+            .appending(
+                path: areaID.rawValue,
+                directoryHint: .isDirectory
+            )
         
         defer {
             // Clean up JobManager.
@@ -211,18 +215,6 @@ class PreplannedMapModelTests: XCTestCase {
         let area = try XCTUnwrap(areas.first)
         let areaID = try XCTUnwrap(area.portalItem.id)
         
-        defer {
-            // Clean up JobManager.
-            OfflineManager.shared.jobManager.jobs.removeAll()
-            
-            // Clean up folder.
-            let directory = FileManager.default.preplannedDirectory(
-                forPortalItemID: portalItem.id!,
-                preplannedMapAreaID: areaID
-            )
-            try? FileManager.default.removeItem(at: directory)
-        }
-        
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
@@ -232,6 +224,14 @@ class PreplannedMapModelTests: XCTestCase {
             // or the test process will crash.
             showsUserNotificationOnCompletion: false
         )
+        
+        defer {
+            // Clean up JobManager.
+            OfflineManager.shared.jobManager.jobs.removeAll()
+            
+            // Clean up folder.
+            model.removeDownloadedPreplannedMapArea()
+        }
         
         var statuses = [PreplannedMapModel.Status]()
         var subscriptions = Set<AnyCancellable>()
@@ -279,18 +279,6 @@ class PreplannedMapModelTests: XCTestCase {
         let area = try XCTUnwrap(areas.first)
         let areaID = try XCTUnwrap(area.portalItem.id)
         
-        defer {
-            // Clean up JobManager.
-            OfflineManager.shared.jobManager.jobs.removeAll()
-            
-            // Clean up folder.
-            let directory = FileManager.default.preplannedDirectory(
-                forPortalItemID: portalItem.id!,
-                preplannedMapAreaID: areaID
-            )
-            try? FileManager.default.removeItem(at: directory)
-        }
-        
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
@@ -300,6 +288,14 @@ class PreplannedMapModelTests: XCTestCase {
             // or the test process will crash.
             showsUserNotificationOnCompletion: false
         )
+        
+        defer {
+            // Clean up JobManager.
+            OfflineManager.shared.jobManager.jobs.removeAll()
+            
+            // Clean up folder.
+            model.removeDownloadedPreplannedMapArea()
+        }
         
         var statuses: [PreplannedMapModel.Status] = []
         var subscriptions = Set<AnyCancellable>()
@@ -327,6 +323,52 @@ class PreplannedMapModelTests: XCTestCase {
         XCTAssertEqual(
             statuses,
             [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+        )
+    }
+    
+    @MainActor
+    func testRemoveDownloadedPreplannedMapArea() async throws {
+        let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let task = OfflineMapTask(portalItem: portalItem)
+        let areas = try await task.preplannedMapAreas
+        let area = try XCTUnwrap(areas.first)
+        let areaID = try XCTUnwrap(area.portalItem.id)
+        
+        let model = PreplannedMapModel(
+            offlineMapTask: task,
+            mapArea: area,
+            portalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID,
+            // User notifications in unit tests are not supported, must pass false here
+            // or the test process will crash.
+            showsUserNotificationOnCompletion: false
+        )
+        
+        var statuses: [PreplannedMapModel.Status] = []
+        var subscriptions = Set<AnyCancellable>()
+        model.$status
+            .receive(on: DispatchQueue.main)
+            .sink { statuses.append($0) }
+            .store(in: &subscriptions)
+        
+        await model.load()
+        
+        // Start downloading.
+        await model.downloadPreplannedMapArea()
+        
+        // Wait for job to finish.
+        _ = await model.job?.result
+        
+        // Clean up folder.
+        model.removeDownloadedPreplannedMapArea()
+        
+        // Give the final status some time to be updated.
+        try? await Task.sleep(nanoseconds: 1_000_000)
+        
+        // Verify statuses.
+        XCTAssertEqual(
+            statuses,
+            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded]
         )
     }
 }
