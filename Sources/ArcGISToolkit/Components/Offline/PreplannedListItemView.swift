@@ -43,6 +43,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED***.swipeActions {
 ***REMOVED******REMOVED******REMOVED***deleteButton
 ***REMOVED***
