@@ -89,7 +89,7 @@ public struct OfflineMapAreasView: View {
                     PreplannedListItemView(model: preplannedMapModel) { newMap in
                         selectedMap = newMap
                         dismiss()
-                    } onMapDeletion: {
+                    } onDelete: {
                         selectedMap = nil
                     }
                 }
