@@ -242,7 +242,7 @@ extension PreplannedMapModel {
         /// A Boolean value indicating whether the local files can be removed.
         var allowsRemoval: Bool {
             switch self {
-            case .downloaded, .downloadFailure, .loadFailure, .packageFailure:
+            case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
                 true
             default:
                 false
