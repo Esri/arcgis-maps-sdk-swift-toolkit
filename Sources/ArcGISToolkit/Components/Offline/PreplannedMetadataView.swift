@@ -72,25 +72,16 @@ struct PreplannedMetadataView: View {
             }
             Section {
                 HStack {
-                    ZStack {
-                        Image(systemName: "circle.fill")
-                            .foregroundStyle(.secondary)
-                            .opacity(0.1)
-                            .font(.title)
-                        Image(systemName: "trash.fill")
-                            .foregroundStyle(.red)
-                            .imageScale(.medium)
-                    }
-                    Button {
+                    Image(systemName: "trash.circle.fill")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.red, .gray.opacity(0.1))
+                        .font(.title)
+                    Button("Delete Map Area", role: .destructive) {
                         dismiss()
                         model.removeDownloadedPreplannedMapArea()
                         Task {
                             await model.load()
                         }
-                    } label: {
-                        Text("Delete Map Area")
-                            .font(.subheadline)
-                            .foregroundColor(.red)
                     }
                 }
             }
