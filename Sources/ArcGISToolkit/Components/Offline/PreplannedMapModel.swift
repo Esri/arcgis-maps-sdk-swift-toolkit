@@ -242,7 +242,7 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the local files can be removed.
 ***REMOVED******REMOVED***var allowsRemoval: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .downloaded, .downloadFailure, .loadFailure, .packageFailure:
+***REMOVED******REMOVED******REMOVED***case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
