@@ -83,8 +83,9 @@ struct PreplannedMetadataView: View {
                     }
                     Button {
                         dismiss()
+                        model.removeDownloadedPreplannedMapArea()
                         Task {
-                            await model.removeDownloadedPreplannedMapArea()
+                            await model.load()
                         }
                     } label: {
                         Text("Delete Map Area")
