@@ -25,18 +25,17 @@ struct PreplannedMetadataView: View {
     public var body: some View {
         Form {
             Section {
-                VStack(alignment: .leading) {
-                    if let image = model.preplannedMapArea.thumbnail {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Thumbnail")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            LoadableImageView(loadableImage: image)
-                                .clipShape(.rect(cornerRadius: 10))
-                                .padding(.vertical, 10)
-                        }
-                        Divider()
+                if let image = model.preplannedMapArea.thumbnail {
+                    HStack {
+                        Spacer()
+                        LoadableImageView(loadableImage: image)
+                            .clipShape(.rect(cornerRadius: 10))
+                            .padding(.vertical, 10)
+                            .shadow(radius: 10)
+                        Spacer()
                     }
+                }
+                VStack(alignment: .leading) {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Name")
                             .font(.caption)
