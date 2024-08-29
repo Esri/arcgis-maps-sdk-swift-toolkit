@@ -77,9 +77,10 @@ struct PreplannedListItemView: View {
     @ViewBuilder private var deleteButton: some View {
         if model.status.allowsRemoval {
             Button("Delete") {
+                onMapDeletion()
+                model.removeDownloadedPreplannedMapArea()
                 Task {
-                    await model.removeDownloadedPreplannedMapArea()
-                    onMapDeletion()
+                    await model.load()
                 }
             }
             .tint(.red)
