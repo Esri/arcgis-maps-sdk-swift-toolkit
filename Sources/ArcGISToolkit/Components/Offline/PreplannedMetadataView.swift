@@ -31,7 +31,7 @@ struct PreplannedMetadataView: View {
                         LoadableImageView(loadableImage: image)
                             .clipShape(.rect(cornerRadius: 10))
                             .padding(.vertical, 10)
-                            .shadow(radius: 10)
+                            .shadow(radius: 5)
                         Spacer()
                     }
                 }
