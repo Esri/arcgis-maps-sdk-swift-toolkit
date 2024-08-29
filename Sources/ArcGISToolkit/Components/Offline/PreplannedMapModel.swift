@@ -319,7 +319,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 
 private enum Strings {
 ***REMOVED***static var offlineMapAreasPath: String { "OfflineMapAreas" ***REMOVED***
-***REMOVED***static var packageDirectoryPath: String { "Package" ***REMOVED***
 ***REMOVED***static var preplannedDirectoryPath: String { "Preplanned" ***REMOVED***
 ***REMOVED***
 
