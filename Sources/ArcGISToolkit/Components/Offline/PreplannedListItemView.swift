@@ -43,6 +43,7 @@ struct PreplannedListItemView: View {
                 statusView
             }
         }
+        .contentShape(.rect)
         .swipeActions {
             deleteButton
         }
