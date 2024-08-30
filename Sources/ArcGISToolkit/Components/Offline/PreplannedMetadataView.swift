@@ -54,14 +54,12 @@ struct PreplannedMetadataView: View {
                             .font(.subheadline)
                     }
                 }
-                if let size = model.directorySize {
-                    VStack(alignment: .leading) {
-                        Text("Size")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(size.formatted(.byteCount(style: .file, allowedUnits: [.kb, .mb])))
-                            .font(.subheadline)
-                    }
+                VStack(alignment: .leading) {
+                    Text("Size")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(model.directorySize.formatted(.byteCount(style: .file, allowedUnits: [.kb, .mb])))
+                        .font(.subheadline)
                 }
             }
             Section {
