@@ -12,7 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Markdown
+@_implementationOnly import Markdown
 ***REMOVED***
 
 ***REMOVED***/ Rendered Markdown text content.
