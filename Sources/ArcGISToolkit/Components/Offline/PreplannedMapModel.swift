@@ -47,7 +47,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     let showsUserNotificationOnCompletion: Bool
     
     /// The file size of the preplanned map area.
-    var directorySize: Int? {
+    var directorySize: Int {
         FileManager.default.sizeOfDirectory(at: mmpkDirectory)
     }
     
@@ -346,8 +346,8 @@ private extension FileManager {
     /// Calculates the size of a directory and all its contents.
     /// - Parameter url: The directory's URL.
     /// - Returns: The total size in bytes.
-    func sizeOfDirectory(at url: URL) -> Int? {
-        guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return nil }
+    func sizeOfDirectory(at url: URL) -> Int {
+        guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 }
         var size = 0
         for case let fileURL as URL in enumerator {
             guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
