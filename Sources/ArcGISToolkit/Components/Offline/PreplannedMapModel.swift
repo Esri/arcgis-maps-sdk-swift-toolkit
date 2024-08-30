@@ -22,8 +22,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
-***REMOVED******REMOVED***/ The mobile map package directory.
-***REMOVED***private let mmpkDirectory: URL
+***REMOVED******REMOVED***/ The mobile map package directory URL.
+***REMOVED***private let mmpkDirectoryURL: URL
 ***REMOVED***
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***private let offlineMapTask: OfflineMapTask
@@ -48,7 +48,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The file size of the preplanned map area.
 ***REMOVED***var directorySize: Int {
-***REMOVED******REMOVED***FileManager.default.sizeOfDirectory(at: mmpkDirectory)
+***REMOVED******REMOVED***FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***init(
@@ -62,7 +62,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
-***REMOVED******REMOVED***mmpkDirectory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED***mmpkDirectoryURL = FileManager.default.preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
@@ -155,12 +155,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
-***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
+***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create the download preplanned offline map job.
 ***REMOVED******REMOVED******REMOVED***let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
 ***REMOVED******REMOVED******REMOVED******REMOVED***parameters: parameters,
-***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectory
+***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectoryURL
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job)
@@ -172,7 +172,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes the downloaded preplanned map area from disk and resets the status.
 ***REMOVED***func removeDownloadedPreplannedMapArea() {
-***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectory)
+***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED******REMOVED*** Reload the model after local files removal.
 ***REMOVED******REMOVED***status = .notLoaded
 ***REMOVED***
