@@ -22,8 +22,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
-    /// The mobile map package directory.
-    private let mmpkDirectory: URL
+    /// The mobile map package directory URL.
+    private let mmpkDirectoryURL: URL
     
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
@@ -48,7 +48,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// The file size of the preplanned map area.
     var directorySize: Int {
-        FileManager.default.sizeOfDirectory(at: mmpkDirectory)
+        FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
     }
     
     init(
@@ -62,7 +62,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         preplannedMapArea = mapArea
         self.portalItemID = portalItemID
         self.preplannedMapAreaID = preplannedMapAreaID
-        mmpkDirectory = FileManager.default.preplannedDirectory(
+        mmpkDirectoryURL = FileManager.default.preplannedDirectory(
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
@@ -155,12 +155,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         
         do {
             let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
-            try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
             
             // Create the download preplanned offline map job.
             let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
                 parameters: parameters,
-                downloadDirectory: mmpkDirectory
+                downloadDirectory: mmpkDirectoryURL
             )
             
             OfflineManager.shared.start(job: job)
@@ -172,7 +172,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Removes the downloaded preplanned map area from disk and resets the status.
     func removeDownloadedPreplannedMapArea() {
-        try? FileManager.default.removeItem(at: mmpkDirectory)
+        try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         // Reload the model after local files removal.
         status = .notLoaded
     }
