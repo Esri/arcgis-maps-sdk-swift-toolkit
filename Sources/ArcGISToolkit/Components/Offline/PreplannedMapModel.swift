@@ -348,14 +348,14 @@ private extension FileManager {
 ***REMOVED******REMOVED***/ - Returns: The total size in bytes.
 ***REMOVED***func sizeOfDirectory(at url: URL) -> Int {
 ***REMOVED******REMOVED***guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 ***REMOVED***
-***REMOVED******REMOVED***var size = 0
+***REMOVED******REMOVED***var accumulatedSize = 0
 ***REMOVED******REMOVED***for case let fileURL as URL in enumerator {
-***REMOVED******REMOVED******REMOVED***guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+***REMOVED******REMOVED******REMOVED***guard let size = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***continue
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***size += fileSize
+***REMOVED******REMOVED******REMOVED***accumulatedSize += size
 ***REMOVED***
-***REMOVED******REMOVED***return size
+***REMOVED******REMOVED***return accumulatedSize
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
