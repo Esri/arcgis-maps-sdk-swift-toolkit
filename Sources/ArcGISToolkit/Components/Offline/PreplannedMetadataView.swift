@@ -20,9 +20,9 @@ struct PreplannedMetadataView: View {
     @ObservedObject var model: PreplannedMapModel
     
     /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss: DismissAction
+    @Environment(\.dismiss) private var dismiss
     
-    public var body: some View {
+    var body: some View {
         Form {
             Section {
                 if let image = model.preplannedMapArea.thumbnail {
@@ -31,41 +31,36 @@ struct PreplannedMetadataView: View {
                         LoadableImageView(loadableImage: image)
                             .clipShape(.rect(cornerRadius: 10))
                             .padding(.vertical, 10)
-                            .shadow(radius: 5)
                         Spacer()
                     }
                 }
                 VStack(alignment: .leading) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("Name")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(model.preplannedMapArea.title)
+                    Text("Name")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(model.preplannedMapArea.title)
+                        .font(.subheadline)
+                }
+                VStack(alignment: .leading) {
+                    Text("Description")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    if model.preplannedMapArea.description.isEmpty {
+                        Text("This area has no description.")
+                            .font(.subheadline)
+                            .foregroundStyle(.tertiary)
+                    } else {
+                        Text(model.preplannedMapArea.description)
                             .font(.subheadline)
                     }
-                    Divider()
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("Description")
+                }
+                if let size = model.directorySize {
+                    VStack(alignment: .leading) {
+                        Text("Size")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        if model.preplannedMapArea.description.isEmpty {
-                            Text("This area has no description.")
-                                .font(.subheadline)
-                                .foregroundStyle(.tertiary)
-                        } else {
-                            Text(model.preplannedMapArea.description)
-                                .font(.subheadline)
-                        }
-                    }
-                    Divider()
-                    if let size = model.directorySize {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Size")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            Text(size.formatted(.byteCount(style: .file, allowedUnits: [.kb, .mb])))
-                                .font(.subheadline)
-                        }
+                        Text(size.formatted(.byteCount(style: .file, allowedUnits: [.kb, .mb])))
+                            .font(.subheadline)
                     }
                 }
             }
