@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Markdown
+@_implementationOnly import Markdown
 import SwiftUI
 
 /// Rendered Markdown text content.
