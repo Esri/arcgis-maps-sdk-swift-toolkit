@@ -348,14 +348,14 @@ private extension FileManager {
     /// - Returns: The total size in bytes.
     func sizeOfDirectory(at url: URL) -> Int {
         guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 }
-        var size = 0
+        var accumulatedSize = 0
         for case let fileURL as URL in enumerator {
-            guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+            guard let size = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
                 continue
             }
-            size += fileSize
+            accumulatedSize += size
         }
-        return size
+        return accumulatedSize
     }
     
     /// The path to the preplanned map areas directory for a specific portal item.
