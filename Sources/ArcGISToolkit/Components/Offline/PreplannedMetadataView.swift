@@ -58,7 +58,7 @@ struct PreplannedMetadataView: View {
                     Text("Size")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text(model.directorySize.formatted(.byteCount(style: .file, allowedUnits: [.kb, .mb])))
+                    Text(model.directorySize, format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
                         .font(.subheadline)
                 }
             }
