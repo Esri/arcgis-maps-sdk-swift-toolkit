@@ -58,7 +58,7 @@ struct PreplannedMetadataView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Size")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.directorySize.formatted(.byteCount(style: .file, allowedUnits: [.kb, .mb])))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.directorySize, format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
