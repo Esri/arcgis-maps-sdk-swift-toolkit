@@ -58,7 +58,7 @@ struct PreplannedMetadataView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Size")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.directorySize, format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -80,7 +80,6 @@ struct PreplannedMetadataView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationTitle(model.preplannedMapArea.title)
 ***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED***.navigationBarBackButtonHidden()
 ***REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
