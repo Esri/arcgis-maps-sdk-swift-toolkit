@@ -58,7 +58,7 @@ struct PreplannedMetadataView: View {
                     Text("Size")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text(model.directorySize, format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+                    Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
                         .font(.subheadline)
                 }
             }
@@ -80,7 +80,6 @@ struct PreplannedMetadataView: View {
         }
         .navigationTitle(model.preplannedMapArea.title)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button {
