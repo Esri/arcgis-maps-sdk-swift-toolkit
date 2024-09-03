@@ -316,11 +316,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     }
 }
 
-private enum Strings {
-    static var offlineMapAreasPath: String { "OfflineMapAreas" }
-    static var preplannedDirectoryPath: String { "Preplanned" }
-}
-
 private extension FileManager {
     /// The path to the documents folder.
     private var documentsDirectory: URL {
@@ -328,12 +323,9 @@ private extension FileManager {
     }
     
     /// The path to the offline map areas directory within the documents directory.
-    /// `Documents/OfflineMapAreas`
+    /// `Documents/OfflineMapAreas/`
     private var offlineMapAreasDirectory: URL {
-        documentsDirectory.appending(
-            path: Strings.offlineMapAreasPath,
-            directoryHint: .isDirectory
-        )
+        documentsDirectory.appending(component: "OfflineMapAreas/")
     }
     
     /// The path to the web map directory for a specific portal item.
@@ -359,17 +351,14 @@ private extension FileManager {
     }
     
     /// The path to the preplanned map areas directory for a specific portal item.
-    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
+    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
     func preplannedDirectory(
         forPortalItemID portalItemID: PortalItem.ID,
         preplannedMapAreaID: PortalItem.ID
     ) -> URL {
         portalItemDirectory(forPortalItemID: portalItemID)
-            .appending(
-                path: Strings.preplannedDirectoryPath,
-                directoryHint: .isDirectory
-            )
+            .appending(path: "Preplanned/")
             .appending(
                 path: preplannedMapAreaID.rawValue,
                 directoryHint: .isDirectory
