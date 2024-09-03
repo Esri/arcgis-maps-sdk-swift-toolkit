@@ -316,11 +316,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***
 
-private enum Strings {
-***REMOVED***static var offlineMapAreasPath: String { "OfflineMapAreas" ***REMOVED***
-***REMOVED***static var preplannedDirectoryPath: String { "Preplanned" ***REMOVED***
-***REMOVED***
-
 private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the documents folder.
 ***REMOVED***private var documentsDirectory: URL {
@@ -328,12 +323,9 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the offline map areas directory within the documents directory.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas`
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/`
 ***REMOVED***private var offlineMapAreasDirectory: URL {
-***REMOVED******REMOVED***documentsDirectory.appending(
-***REMOVED******REMOVED******REMOVED***path: Strings.offlineMapAreasPath,
-***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***documentsDirectory.appending(component: "OfflineMapAreas/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
@@ -359,17 +351,14 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
 ***REMOVED***func preplannedDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: Strings.preplannedDirectoryPath,
-***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.appending(path: "Preplanned/")
 ***REMOVED******REMOVED******REMOVED***.appending(
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: preplannedMapAreaID.rawValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
