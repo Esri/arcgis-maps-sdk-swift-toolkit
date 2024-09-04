@@ -79,7 +79,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
 ***REMOVED***func load() async {
-***REMOVED******REMOVED***guard needsToBeLoaded else { return ***REMOVED***
+***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
 ***REMOVED******REMOVED******REMOVED***status = .loading
@@ -149,7 +149,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
-***REMOVED******REMOVED***precondition(allowsDownload)
+***REMOVED******REMOVED***precondition(status.allowsDownload)
 ***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -218,43 +218,43 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***case downloadFailure(Error)
 ***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
+***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
+***REMOVED******REMOVED***var needsToBeLoaded: Bool {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if download is allowed for this status.
+***REMOVED******REMOVED***var allowsDownload: Bool {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded, .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED******REMOVED***case .packaged, .downloadFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
-***REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
-***REMOVED***var needsToBeLoaded: Bool {
-***REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the local files can be removed.
+***REMOVED******REMOVED***var allowsRemoval: Bool {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area is downloaded.
+***REMOVED******REMOVED***var isDownloaded: Bool {
+***REMOVED******REMOVED******REMOVED***if case .downloaded = self { true ***REMOVED*** else { false ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if download is allowed for this status.
-***REMOVED***var allowsDownload: Bool {
-***REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED***case .packaged, .downloadFailure:
-***REMOVED******REMOVED******REMOVED***true
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the local files can be removed.
-***REMOVED***var allowsRemoval: Bool {
-***REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED***case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
-***REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area is downloaded.
-***REMOVED***var isDownloaded: Bool {
-***REMOVED******REMOVED***if case .downloaded = status { true ***REMOVED*** else { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
