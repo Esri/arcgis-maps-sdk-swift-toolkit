@@ -37,6 +37,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
 ***REMOVED***private(set) var mobileMapPackage: MobileMapPackage?
 ***REMOVED***
+***REMOVED******REMOVED***/ The file size of the preplanned map area.
+***REMOVED***private(set) var directorySize = 0
+***REMOVED***
 ***REMOVED******REMOVED***/ The currently running download job.
 ***REMOVED***@Published private(set) var job: DownloadPreplannedOfflineMapJob?
 ***REMOVED***
@@ -45,11 +48,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
 ***REMOVED***let showsUserNotificationOnCompletion: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The file size of the preplanned map area.
-***REMOVED***var directorySize: Int {
-***REMOVED******REMOVED***FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
@@ -187,7 +185,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.updateDownloadStatus(for: result)
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
+***REMOVED******REMOVED******REMOVED***if isDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackage = try? result.get().mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED***self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.job = nil
 ***REMOVED***
 ***REMOVED***
