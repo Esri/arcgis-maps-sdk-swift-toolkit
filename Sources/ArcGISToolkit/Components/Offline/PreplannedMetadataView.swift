@@ -82,12 +82,7 @@ struct PreplannedMetadataView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Done")
-                        .bold()
-                }
+                Button("Done") { dismiss() }
             }
         }
     }
