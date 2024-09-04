@@ -63,8 +63,8 @@ extension OfflineMapAreasView {
             }
         }
         
-        /// Makes offline preplanned map models with infomation from the downloaded mobile map packages
-        /// for the online map.
+        /// Makes offline preplanned map models with infomation from the downloaded mobile map 
+        /// packages for the online map.
         func makeOfflinePreplannedMapModels() async {
             guard let portalItemID else { return }
             
@@ -95,9 +95,6 @@ extension OfflineMapAreasView {
             .sorted(using: KeyPathComparator(\.preplannedMapArea.title))
         }
         
-        /// Creates the offline preplanned map areas by using the preplanned map area IDs found in the
-        /// preplanned map areas directory to create preplanned map models.
-        ///
         /// Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
         /// downloaded mobile map package. If the mobile map package is not found then `nil` is returned.
         /// - Parameters:
@@ -116,10 +113,9 @@ extension OfflineMapAreasView {
             // Make sure the directory is not empty because the directory will exist as soon as the
             // job starts, so if the job fails, it will look like the mmpk was downloaded.
             guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
-            let mmpk =  MobileMapPackage.init(fileURL: fileURL)
+            let mmpk = MobileMapPackage.init(fileURL: fileURL)
             
             try? await mmpk.load()
-            
             guard let item = mmpk.item else { return nil }
             
             return OfflinePreplannedMapArea(
@@ -134,19 +130,14 @@ extension OfflineMapAreasView {
 
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var packagingStatus: PreplannedMapArea.PackagingStatus?
-    
     var title: String
-    
     var description: String
-    
     var thumbnail: LoadableImage?
-    
     var id: PortalItem.ID?
     
     func retryLoad() async throws {}
-    
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-        DownloadPreplannedOfflineMapParameters()
+        throw CancellationError()
     }
     
     init(
