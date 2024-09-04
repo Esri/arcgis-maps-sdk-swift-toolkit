@@ -168,10 +168,10 @@ struct PreplannedListItemView: View {
 
 #Preview {
 ***REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
-***REMOVED******REMOVED***var title: String = "Mock Preplanned Map Area"
-***REMOVED******REMOVED***var description: String = "This is the description text"
-***REMOVED******REMOVED***var thumbnail: LoadableImage? = nil
+***REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { .complete ***REMOVED***
+***REMOVED******REMOVED***var title: String { "Mock Preplanned Map Area" ***REMOVED***
+***REMOVED******REMOVED***var description: String { "This is the description text" ***REMOVED***
+***REMOVED******REMOVED***var thumbnail: LoadableImage? { nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
 ***REMOVED******REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
