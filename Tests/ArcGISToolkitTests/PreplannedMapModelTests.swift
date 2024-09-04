@@ -170,11 +170,11 @@ class PreplannedMapModelTests: XCTestCase {
         let area = try XCTUnwrap(areas.first)
         let areaID = try XCTUnwrap(area.portalItem.id)
         let mmpkDirectory = URL.documentsDirectory
-            .appending(path: "OfflineMapAreas")
-            .appending(path: portalItem.id!.rawValue)
-            .appending(path: "Preplanned")
             .appending(
-                path: areaID.rawValue,
+                components: "OfflineMapAreas",
+                "\(portalItem.id!)",
+                "Preplanned",
+                "\(areaID)",
                 directoryHint: .isDirectory
             )
         
