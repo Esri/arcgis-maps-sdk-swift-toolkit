@@ -170,11 +170,11 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
 ***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.portalItem.id)
 ***REMOVED******REMOVED***let mmpkDirectory = URL.documentsDirectory
-***REMOVED******REMOVED******REMOVED***.appending(path: "OfflineMapAreas")
-***REMOVED******REMOVED******REMOVED***.appending(path: portalItem.id!.rawValue)
-***REMOVED******REMOVED******REMOVED***.appending(path: "Preplanned")
 ***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: areaID.rawValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***components: "OfflineMapAreas",
+***REMOVED******REMOVED******REMOVED******REMOVED***"\(portalItem.id!)",
+***REMOVED******REMOVED******REMOVED******REMOVED***"Preplanned",
+***REMOVED******REMOVED******REMOVED******REMOVED***"\(areaID)",
 ***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
