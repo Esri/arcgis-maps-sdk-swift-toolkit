@@ -37,6 +37,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
     
+    /// The file size of the preplanned map area.
+    private(set) var directorySize = 0
+    
     /// The currently running download job.
     @Published private(set) var job: DownloadPreplannedOfflineMapJob?
     
@@ -45,11 +48,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// A Boolean value indicating if a user notification should be shown when a job completes.
     let showsUserNotificationOnCompletion: Bool
-    
-    /// The file size of the preplanned map area.
-    var directorySize: Int {
-        FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
-    }
     
     init(
         offlineMapTask: OfflineMapTask,
@@ -187,7 +185,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             let result = await job.result
             guard let self else { return }
             self.updateDownloadStatus(for: result)
-            self.mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
+            if isDownloaded {
+                self.mobileMapPackage = try? result.get().mobileMapPackage
+                self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            }
             self.job = nil
         }
     }
