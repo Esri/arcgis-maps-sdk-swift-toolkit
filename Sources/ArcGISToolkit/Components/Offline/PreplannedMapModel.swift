@@ -79,7 +79,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Loads the preplanned map area and updates the status.
     func load() async {
-        guard needsToBeLoaded else { return }
+        guard status.needsToBeLoaded else { return }
         do {
             // Load preplanned map area to obtain packaging status.
             status = .loading
@@ -149,7 +149,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// Downloads the preplanned map area.
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
-        precondition(allowsDownload)
+        precondition(status.allowsDownload)
         status = .downloading
         
         do {
@@ -218,43 +218,43 @@ extension PreplannedMapModel {
         case downloadFailure(Error)
         /// Downloaded mobile map package failed to load.
         case mmpkLoadFailure(Error)
-    }
-    
-    /// A Boolean value indicating whether the model is in a state
-    /// where it needs to be loaded or reloaded.
-    var needsToBeLoaded: Bool {
-        switch status {
-        case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
-            false
-        default:
-            true
+        
+        /// A Boolean value indicating whether the model is in a state
+        /// where it needs to be loaded or reloaded.
+        var needsToBeLoaded: Bool {
+            switch self {
+            case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
+                false
+            default:
+                true
+            }
         }
-    }
-    
-    /// A Boolean value indicating if download is allowed for this status.
-    var allowsDownload: Bool {
-        switch status {
-        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-                .downloading, .downloaded, .mmpkLoadFailure:
-            false
-        case .packaged, .downloadFailure:
-            true
+        
+        /// A Boolean value indicating if download is allowed for this status.
+        var allowsDownload: Bool {
+            switch self {
+            case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+                    .downloading, .downloaded, .mmpkLoadFailure:
+                false
+            case .packaged, .downloadFailure:
+                true
+            }
         }
-    }
-    
-    /// A Boolean value indicating whether the local files can be removed.
-    var allowsRemoval: Bool {
-        switch status {
-        case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
-            true
-        default:
-            false
+        
+        /// A Boolean value indicating whether the local files can be removed.
+        var allowsRemoval: Bool {
+            switch self {
+            case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
+                true
+            default:
+                false
+            }
         }
-    }
-    
-    /// A Boolean value indicating whether the preplanned map area is downloaded.
-    var isDownloaded: Bool {
-        if case .downloaded = status { true } else { false }
+        
+        /// A Boolean value indicating whether the preplanned map area is downloaded.
+        var isDownloaded: Bool {
+            if case .downloaded = self { true } else { false }
+        }
     }
 }
 
