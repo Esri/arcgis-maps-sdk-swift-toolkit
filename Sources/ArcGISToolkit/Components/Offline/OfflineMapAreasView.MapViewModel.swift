@@ -63,8 +63,8 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Makes offline preplanned map models with infomation from the downloaded mobile map packages
-***REMOVED******REMOVED******REMOVED***/ for the online map.
+***REMOVED******REMOVED******REMOVED***/ Makes offline preplanned map models with infomation from the downloaded mobile map 
+***REMOVED******REMOVED******REMOVED***/ packages for the online map.
 ***REMOVED******REMOVED***func makeOfflinePreplannedMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -95,9 +95,6 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.preplannedMapArea.title))
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates the offline preplanned map areas by using the preplanned map area IDs found in the
-***REMOVED******REMOVED******REMOVED***/ preplanned map areas directory to create preplanned map models.
-***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
 ***REMOVED******REMOVED******REMOVED***/ downloaded mobile map package. If the mobile map package is not found then `nil` is returned.
 ***REMOVED******REMOVED******REMOVED***/ - Parameters:
@@ -116,10 +113,9 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Make sure the directory is not empty because the directory will exist as soon as the
 ***REMOVED******REMOVED******REMOVED******REMOVED*** job starts, so if the job fails, it will look like the mmpk was downloaded.
 ***REMOVED******REMOVED******REMOVED***guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED***let mmpk =  MobileMapPackage.init(fileURL: fileURL)
+***REMOVED******REMOVED******REMOVED***let mmpk = MobileMapPackage.init(fileURL: fileURL)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***try? await mmpk.load()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***guard let item = mmpk.item else { return nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return OfflinePreplannedMapArea(
@@ -134,19 +130,14 @@ extension OfflineMapAreasView {
 
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus?
-***REMOVED***
 ***REMOVED***var title: String
-***REMOVED***
 ***REMOVED***var description: String
-***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage?
-***REMOVED***
 ***REMOVED***var id: PortalItem.ID?
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws {***REMOVED***
-***REMOVED***
 ***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-***REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+***REMOVED******REMOVED***throw CancellationError()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***init(
