@@ -53,7 +53,7 @@ struct FeatureFormExampleView: View {
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
-                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                       let formDefinition = feature.featureFormDefinition {
                         model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
                     }
                 }
