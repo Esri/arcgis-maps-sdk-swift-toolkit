@@ -47,7 +47,7 @@ struct PreplannedListItemView: View {
             deleteButton
         }
         .onTapGesture {
-            if model.isDownloaded {
+            if model.status.isDownloaded {
                 metadataViewIsPresented = true
             }
         }
@@ -75,7 +75,7 @@ struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var deleteButton: some View {
-        if model.allowsRemoval {
+        if model.status.allowsRemoval {
             Button("Delete") {
                 model.removeDownloadedPreplannedMapArea()
                 onDeletion()
@@ -118,7 +118,7 @@ struct PreplannedListItemView: View {
                 Image(systemName: "arrow.down.circle")
             }
             .buttonStyle(.plain)
-            .disabled(!model.allowsDownload)
+            .disabled(!model.status.allowsDownload)
             .foregroundStyle(Color.accentColor)
         }
     }
