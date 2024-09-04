@@ -95,10 +95,10 @@ struct PreplannedMetadataView: View {
 
 #Preview {
     struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-        var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
-        var title: String = "Mock Preplanned Map Area"
-        var description: String = "This is the description text"
-        var thumbnail: LoadableImage? = nil
+        var packagingStatus: PreplannedMapArea.PackagingStatus? { .complete }
+        var title: String { "Mock Preplanned Map Area" }
+        var description: String { "This is the description text" }
+        var thumbnail: LoadableImage? { nil }
         
         func retryLoad() async throws { }
         func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
