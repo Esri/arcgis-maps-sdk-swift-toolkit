@@ -71,8 +71,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-            self.mobileMapPackage = mmpk
-            self.status = .downloaded
+            mobileMapPackage = mmpk
+            directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            status = .downloaded
         }
     }
     
@@ -185,7 +186,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             let result = await job.result
             guard let self else { return }
             self.updateDownloadStatus(for: result)
-            if isDownloaded {
+            if status.isDownloaded {
                 self.mobileMapPackage = try? result.get().mobileMapPackage
                 self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             }
