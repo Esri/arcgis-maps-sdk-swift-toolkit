@@ -71,8 +71,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
-***REMOVED******REMOVED******REMOVED***self.status = .downloaded
+***REMOVED******REMOVED******REMOVED***mobileMapPackage = mmpk
+***REMOVED******REMOVED******REMOVED***directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -185,7 +186,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.updateDownloadStatus(for: result)
-***REMOVED******REMOVED******REMOVED***if isDownloaded {
+***REMOVED******REMOVED******REMOVED***if status.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackage = try? result.get().mobileMapPackage
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED***
