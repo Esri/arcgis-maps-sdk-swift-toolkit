@@ -1571,8 +1571,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let losAngelesText = app.staticTexts["Title of the map is Los Angeles ."]
-***REMOVED******REMOVED***let redlandsText = app.staticTexts["Title of the map is Redlands ."]
+***REMOVED******REMOVED***let losAngelesText = app.staticTexts["Title of the map is Los Angeles."]
+***REMOVED******REMOVED***let redlandsText = app.staticTexts["Title of the map is Redlands."]
 ***REMOVED******REMOVED***let titleClearButton = app.buttons["Title Clear Button"]
 ***REMOVED******REMOVED***let titleTextField = app.textFields["Title Text Input"]
 ***REMOVED******REMOVED***
