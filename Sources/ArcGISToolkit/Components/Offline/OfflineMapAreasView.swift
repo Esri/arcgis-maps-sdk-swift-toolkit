@@ -95,13 +95,17 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            if let models = mapViewModel.offlinePreplannedMapModels,
-               !models.isEmpty {
-                List(models) { preplannedMapModel in
-                    PreplannedListItemView(model: preplannedMapModel) { newMap in
-                        selectedMap = newMap
-                        dismiss()
+            if error.localizedDescription == "The Internet connection appears to be offline." {
+                if let models = mapViewModel.offlinePreplannedMapModels,
+                   !models.isEmpty {
+                    List(models) { preplannedMapModel in
+                        PreplannedListItemView(model: preplannedMapModel) { newMap in
+                            selectedMap = newMap
+                            dismiss()
+                        }
                     }
+                } else {
+                    emptyOfflinePreplannedMapAreasView
                 }
             } else {
                 VStack(alignment: .center) {
@@ -123,6 +127,17 @@ public struct OfflineMapAreasView: View {
             Text("No offline map areas")
                 .bold()
             Text("You don't have any offline map areas yet.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    @ViewBuilder private var emptyOfflinePreplannedMapAreasView: some View {
+        VStack(alignment: .center) {
+            Text("No offline map areas")
+                .bold()
+            Text("You don't have any downloaded offline map areas yet.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
