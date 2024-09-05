@@ -95,13 +95,17 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels,
-***REMOVED******REMOVED******REMOVED***   !models.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel) { newMap in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = newMap
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED***if error.localizedDescription == "The Internet connection appears to be offline." {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels,
+***REMOVED******REMOVED******REMOVED******REMOVED***   !models.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel) { newMap in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = newMap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflinePreplannedMapAreasView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
@@ -123,6 +127,17 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***Text("No offline map areas")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED***Text("You don't have any offline map areas yet.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED***
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var emptyOfflinePreplannedMapAreasView: some View {
+***REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED***Text("No offline map areas")
+***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED***Text("You don't have any downloaded offline map areas yet.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
