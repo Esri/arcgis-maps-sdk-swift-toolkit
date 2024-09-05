@@ -298,7 +298,7 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         var statuses: [PreplannedMapModel.Status] = []
-        var subscriptions = Set<AnyCancellable>()
+        var subscriptions: Set<AnyCancellable> = []
         model.$status
             .receive(on: DispatchQueue.main)
             .sink { statuses.append($0) }
@@ -328,7 +328,10 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testRemoveDownloadedPreplannedMapArea() async throws {
-        let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let portalItem = PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: .init("acc027394bc84c2fb04d1ed317aac674")!
+        )
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
