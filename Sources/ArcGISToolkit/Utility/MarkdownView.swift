@@ -238,6 +238,8 @@ private extension ListItemContainer {
 ***REMOVED***
 ***REMOVED***~Strikethrough~
 ***REMOVED***
+***REMOVED*****Bold with _italic_ and ~_italic_ strikethrough~.**
+***REMOVED***
 ***REMOVED***- 1st item
 ***REMOVED***- 2nd item
 ***REMOVED***- 3rd item
