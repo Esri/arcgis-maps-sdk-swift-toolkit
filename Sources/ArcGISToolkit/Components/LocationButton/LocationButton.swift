@@ -27,7 +27,7 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED***self.autoPanMode = locationDisplay.autoPanMode
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var body: some View {
+***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED******REMOVED***case .stopped, .failedToStart:
