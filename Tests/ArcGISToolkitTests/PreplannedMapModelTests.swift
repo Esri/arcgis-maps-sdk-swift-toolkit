@@ -298,7 +298,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var statuses: [PreplannedMapModel.Status] = []
-***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
+***REMOVED******REMOVED***var subscriptions: Set<AnyCancellable> = []
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
 ***REMOVED******REMOVED******REMOVED***.sink { statuses.append($0) ***REMOVED***
@@ -328,7 +328,10 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testRemoveDownloadedPreplannedMapArea() async throws {
-***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+***REMOVED******REMOVED***let portalItem = PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED***id: .init("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
