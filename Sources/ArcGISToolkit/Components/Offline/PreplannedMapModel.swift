@@ -109,14 +109,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status based on the download result of the mobile map package.
-    func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>?) {
+    func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
         switch downloadResult {
         case .success:
             status = .downloaded
         case .failure(let error):
             status = .downloadFailure(error)
-        case .none:
-            return
         }
     }
     
