@@ -27,7 +27,7 @@ public struct LocationButton: View {
         self.autoPanMode = locationDisplay.autoPanMode
     }
     
-    var body: some View {
+    public var body: some View {
         Button {
             switch status {
             case .stopped, .failedToStart:
