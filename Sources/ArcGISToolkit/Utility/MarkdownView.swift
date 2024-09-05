@@ -238,6 +238,8 @@ private extension ListItemContainer {
     
     ~Strikethrough~
     
+    **Bold with _italic_ and ~_italic_ strikethrough~.**
+    
     - 1st item
     - 2nd item
     - 3rd item
