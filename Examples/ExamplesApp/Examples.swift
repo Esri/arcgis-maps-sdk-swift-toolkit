@@ -51,6 +51,7 @@ extension ExampleList {
 ***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Location Button", content: LocationButtonExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView()),
