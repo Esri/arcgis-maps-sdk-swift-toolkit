@@ -112,7 +112,7 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED***.disabled(status == .starting || status == .stopping)
 ***REMOVED******REMOVED***.onReceive(locationDisplay.dataSource.$status) { status = $0 ***REMOVED***
 ***REMOVED******REMOVED***.onReceive(locationDisplay.$autoPanMode) { autoPanMode = $0 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: autoPanMode) { _, autoPanMode in
+***REMOVED******REMOVED***.onChange(of: autoPanMode) { autoPanMode in
 ***REMOVED******REMOVED******REMOVED***if autoPanMode != locationDisplay.autoPanMode {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = autoPanMode
 ***REMOVED******REMOVED******REMOVED******REMOVED***if autoPanMode != .off {
