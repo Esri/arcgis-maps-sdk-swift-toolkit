@@ -37,15 +37,11 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
-    @State private var viewpoint: Viewpoint?
-    
     var body: some View {
         GeometryReader { geometryProxy in
             MapViewReader { mapViewProxy in
                 MapView(
                     map: map,
-                    viewpoint: viewpoint,
                     graphicsOverlays: [resultGraphicsOverlay]
                 )
                 .onAttributionBarHeightChanged {
@@ -53,9 +49,6 @@ struct UtilityNetworkTraceExampleView: View {
                 }
                 .onSingleTapGesture { _, mapPoint in
                     self.mapPoint = mapPoint
-                }
-                .onViewpointChanged(kind: .centerAndScale) {
-                    viewpoint = $0
                 }
                 .task {
                     let publicSample = try? await ArcGISCredential.publicSample
@@ -72,8 +65,7 @@ struct UtilityNetworkTraceExampleView: View {
                         graphicsOverlay: $resultGraphicsOverlay,
                         map: map,
                         mapPoint: $mapPoint,
-                        mapViewProxy: mapViewProxy,
-                        viewpoint: $viewpoint
+                        mapViewProxy: mapViewProxy
                     )
                     .floatingPanelDetent($activeDetent)
                     // Manually account for a device's bottom safe area when using a Floating Panel.
