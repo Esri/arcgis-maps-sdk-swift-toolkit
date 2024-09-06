@@ -20,6 +20,7 @@ import SwiftUI
 struct LocationButtonExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(basemapStyle: .arcGISImagery)
+    
     @State private var locationDisplay = {
         let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
         locationDisplay.autoPanMode = .recenter
@@ -29,6 +30,7 @@ struct LocationButtonExampleView: View {
     
     var body: some View {
         MapView(map: map)
+            .locationDisplay(locationDisplay)
             .overlay(alignment: .topTrailing) {
                 LocationButton(locationDisplay: locationDisplay)
                     .padding()

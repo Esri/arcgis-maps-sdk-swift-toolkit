@@ -17,7 +17,7 @@ import CoreLocation
 import SwiftUI
 
 public struct LocationButton: View {
-    @State var locationDisplay: LocationDisplay
+    @State private var locationDisplay: LocationDisplay
     @State private var status: LocationDataSource.Status = .stopped
     @State private var autoPanMode: LocationDisplay.AutoPanMode = .off
     @State private var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode?
