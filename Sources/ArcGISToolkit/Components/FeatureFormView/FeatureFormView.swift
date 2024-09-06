@@ -44,7 +44,7 @@ import SwiftUI
 ///
 /// **Features**
 ///
-/// - Display a form editing view for a feature based on the feature form definition defined in a web map.
+/// - Display a form editing view for a feature based on the feature form definition defined in a web map and obtained from either an `ArcGISFeature`, `ArcGISFeatureTable`, `FeatureLayer` or `SubtypeSublayer`.
 /// - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 /// - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
 /// - Add, delete, or rename feature attachments.
