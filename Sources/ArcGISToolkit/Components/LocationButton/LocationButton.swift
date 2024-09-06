@@ -27,13 +27,27 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED***/ The autopan mode of the location display.
 ***REMOVED***@State private var autoPanMode: LocationDisplay.AutoPanMode = .off
 ***REMOVED******REMOVED***/ The last selected autopan mode by the user.
-***REMOVED***@State private var lastSelectedAutoPanMode = LocationDisplay.AutoPanMode.recenter
+***REMOVED***@State private var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
+***REMOVED******REMOVED***/ The auto pan options that the user can choose from the context menu of the button.
+***REMOVED***private let autoPanOptions: Set<LocationDisplay.AutoPanMode>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a location button with a location display.
 ***REMOVED******REMOVED***/ - Parameter locationDisplay: The location display that the button will control.
-***REMOVED***public init(locationDisplay: LocationDisplay) {
+***REMOVED***public init(
+***REMOVED******REMOVED***locationDisplay: LocationDisplay,
+***REMOVED******REMOVED***autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+***REMOVED***) {
 ***REMOVED******REMOVED***self.locationDisplay = locationDisplay
 ***REMOVED******REMOVED***self.autoPanMode = locationDisplay.autoPanMode
+***REMOVED******REMOVED***self.autoPanOptions = autoPanOptions
+***REMOVED******REMOVED***if autoPanOptions.isEmpty || (autoPanOptions.count == 1 && autoPanOptions.first == .off) {
+***REMOVED******REMOVED******REMOVED***lastSelectedAutoPanMode = .off
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***lastSelectedAutoPanMode = LocationDisplay.AutoPanMode.orderedOptions
+***REMOVED******REMOVED******REMOVED******REMOVED***.lazy
+***REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0 != .off ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.first { autoPanOptions.contains($0) ***REMOVED*** ?? .recenter
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -52,6 +66,8 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED******REMOVED***if autoPanMode != locationDisplay.autoPanMode {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = autoPanMode
 ***REMOVED******REMOVED******REMOVED******REMOVED***if autoPanMode != .off {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Do not update the last selected autopan mode here if
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `off` was selected by the user.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastSelectedAutoPanMode = autoPanMode
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -69,8 +85,9 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CLLocationManager.shared.requestWhenInUseAuthorization()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Start the datasource.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Start the datasource, set initial auto pan mode.
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = lastSelectedAutoPanMode
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await locationDisplay.dataSource.start()
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Error starting location display: \(error)")
@@ -127,12 +144,15 @@ public struct LocationButton: View {
 ***REMOVED***@ViewBuilder
 ***REMOVED***private func contextMenuContent() -> some View {
 ***REMOVED******REMOVED***if status == .started {
-***REMOVED******REMOVED******REMOVED***Section("Autopan") {
-***REMOVED******REMOVED******REMOVED******REMOVED***Picker("Autopan", selection: $autoPanMode) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Autopan Off").tag(LocationDisplay.AutoPanMode.off)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Recenter").tag(LocationDisplay.AutoPanMode.recenter)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Compass").tag(LocationDisplay.AutoPanMode.compassNavigation)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Navigation").tag(LocationDisplay.AutoPanMode.navigation)
+***REMOVED******REMOVED******REMOVED***if autoPanOptions.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Autopan") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Autopan", selection: $autoPanMode) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(LocationDisplay.AutoPanMode.orderedOptions, id: \.self) { autoPanMode in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if autoPanOptions.contains(autoPanMode) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(autoPanMode.pickerText).tag(autoPanMode)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -143,6 +163,27 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label("Stop Location", systemImage: "location.slash")
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension LocationDisplay.AutoPanMode {
+***REMOVED******REMOVED***/ The options that will appear in the picker, in order.
+***REMOVED***static let orderedOptions: [Self] = [.off, .recenter, .compassNavigation, .navigation]
+***REMOVED***
+***REMOVED******REMOVED***/ The label that should appear in the picker.
+***REMOVED***var pickerText: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .off:
+***REMOVED******REMOVED******REMOVED***"Auto Pan Off"
+***REMOVED******REMOVED***case .recenter:
+***REMOVED******REMOVED******REMOVED***"Recenter"
+***REMOVED******REMOVED***case .compassNavigation:
+***REMOVED******REMOVED******REMOVED***"Compass"
+***REMOVED******REMOVED***case .navigation:
+***REMOVED******REMOVED******REMOVED***"Navigation"
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
