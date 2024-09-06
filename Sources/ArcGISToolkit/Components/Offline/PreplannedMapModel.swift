@@ -352,17 +352,16 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
-***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area portal item.
+***REMOVED******REMOVED***/ - Returns: A URL to the preplanned map area directory.
 ***REMOVED***func preplannedDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***.appending(path: "Preplanned/")
-***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: preplannedMapAreaID.rawValue,
-***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.appending(components: "Preplanned", "\(preplannedMapAreaID)/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating if the specified directory is empty.
