@@ -135,6 +135,7 @@ public struct LocationButton: View {
             }
         case .failedToStart:
             Image(systemName: "exclamationmark.triangle")
+                .tint(.secondary)
         @unknown default:
             fatalError()
         }
