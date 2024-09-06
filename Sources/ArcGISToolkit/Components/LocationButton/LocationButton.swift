@@ -16,12 +16,21 @@
 import CoreLocation
 ***REMOVED***
 
+***REMOVED***/ A button that allows a user to show their location on a map view.
+***REMOVED***/ Gives the user a variety of options to set the auto pan mode or stop the
+***REMOVED***/ location datasource.
 public struct LocationButton: View {
+***REMOVED******REMOVED***/ The location display which the button controls.
 ***REMOVED***@State private var locationDisplay: LocationDisplay
+***REMOVED******REMOVED***/ The current status of the location display's datasource.
 ***REMOVED***@State private var status: LocationDataSource.Status = .stopped
+***REMOVED******REMOVED***/ The autopan mode of the location display.
 ***REMOVED***@State private var autoPanMode: LocationDisplay.AutoPanMode = .off
-***REMOVED***@State private var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode?
+***REMOVED******REMOVED***/ The last selected autopan mode by the user.
+***REMOVED***@State private var lastSelectedAutoPanMode = LocationDisplay.AutoPanMode.recenter
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a location button with a location display.
+***REMOVED******REMOVED***/ - Parameter locationDisplay: The location display that the button will control.
 ***REMOVED***public init(locationDisplay: LocationDisplay) {
 ***REMOVED******REMOVED***self.locationDisplay = locationDisplay
 ***REMOVED******REMOVED***self.autoPanMode = locationDisplay.autoPanMode
@@ -29,85 +38,12 @@ public struct LocationButton: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED******REMOVED***case .stopped, .failedToStart:
-***REMOVED******REMOVED******REMOVED******REMOVED***if locationDisplay.dataSource is SystemLocationDataSource,
-***REMOVED******REMOVED******REMOVED******REMOVED***   CLLocationManager.shared.authorizationStatus == .notDetermined {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CLLocationManager.shared.requestWhenInUseAuthorization()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await locationDisplay.dataSource.start()
-***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Error starting location display: \(error)")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .started:
-***REMOVED******REMOVED******REMOVED******REMOVED***switch autoPanMode {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .compassNavigation, .navigation, .recenter:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = .off
-***REMOVED******REMOVED******REMOVED******REMOVED***case .off:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let lastSelectedAutoPanMode, lastSelectedAutoPanMode != .off {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = lastSelectedAutoPanMode
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = .recenter
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .starting, .stopping:
-***REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***buttonAction()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .stopped:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.slash")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .starting, .stopping:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED***case .started:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch autoPanMode {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .compassNavigation:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.north.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .navigation:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.north.line.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .recenter:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .off:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failedToStart:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.triangle")
-***REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***buttonLabel()
 ***REMOVED***
 ***REMOVED******REMOVED***.contextMenu(
-***REMOVED******REMOVED******REMOVED***ContextMenu {
-***REMOVED******REMOVED******REMOVED******REMOVED***if status == .started {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("Autopan") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Autopan", selection: $autoPanMode) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Autopan Off").tag(LocationDisplay.AutoPanMode.off)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Recenter").tag(LocationDisplay.AutoPanMode.recenter)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Compass").tag(LocationDisplay.AutoPanMode.compassNavigation)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Navigation").tag(LocationDisplay.AutoPanMode.navigation)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await locationDisplay.dataSource.stop()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Stop Location", systemImage: "location.slash")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ContextMenu { contextMenuContent() ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.disabled(status == .starting || status == .stopping)
 ***REMOVED******REMOVED***.onReceive(locationDisplay.dataSource.$status) { status = $0 ***REMOVED***
@@ -118,6 +54,93 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if autoPanMode != .off {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastSelectedAutoPanMode = autoPanMode
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***private func buttonAction() {
+***REMOVED******REMOVED******REMOVED*** Decide the button behavior based on the status.
+***REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED***case .stopped, .failedToStart:
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the datasource is a system location datasource, then request authorization.
+***REMOVED******REMOVED******REMOVED***if locationDisplay.dataSource is SystemLocationDataSource,
+***REMOVED******REMOVED******REMOVED***   CLLocationManager.shared.authorizationStatus == .notDetermined {
+***REMOVED******REMOVED******REMOVED******REMOVED***CLLocationManager.shared.requestWhenInUseAuthorization()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Start the datasource.
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await locationDisplay.dataSource.start()
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Error starting location display: \(error)")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .started:
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the datasource is started then decide what to do based
+***REMOVED******REMOVED******REMOVED******REMOVED*** on the autopan mode.
+***REMOVED******REMOVED******REMOVED***switch autoPanMode {
+***REMOVED******REMOVED******REMOVED***case .off:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If autopan is off, then set it to the last selected autopan mode.
+***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = lastSelectedAutoPanMode
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise set it to off.
+***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = .off
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .starting, .stopping:
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private func buttonLabel() -> some View {
+***REMOVED******REMOVED******REMOVED*** Decide what what image is in the button based on the status
+***REMOVED******REMOVED******REMOVED*** and autopan mode.
+***REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED***case .stopped:
+***REMOVED******REMOVED******REMOVED***Image(systemName: "location.slash")
+***REMOVED******REMOVED***case .starting, .stopping:
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED***case .started:
+***REMOVED******REMOVED******REMOVED***switch autoPanMode {
+***REMOVED******REMOVED******REMOVED***case .compassNavigation:
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.north.circle")
+***REMOVED******REMOVED******REMOVED***case .navigation:
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.north.line.fill")
+***REMOVED******REMOVED******REMOVED***case .recenter:
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.fill")
+***REMOVED******REMOVED******REMOVED***case .off:
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location")
+***REMOVED******REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failedToStart:
+***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.triangle")
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***private func contextMenuContent() -> some View {
+***REMOVED******REMOVED***if status == .started {
+***REMOVED******REMOVED******REMOVED***Section("Autopan") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Picker("Autopan", selection: $autoPanMode) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Autopan Off").tag(LocationDisplay.AutoPanMode.off)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Recenter").tag(LocationDisplay.AutoPanMode.recenter)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Compass").tag(LocationDisplay.AutoPanMode.compassNavigation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Navigation").tag(LocationDisplay.AutoPanMode.navigation)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await locationDisplay.dataSource.stop()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Stop Location", systemImage: "location.slash")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
