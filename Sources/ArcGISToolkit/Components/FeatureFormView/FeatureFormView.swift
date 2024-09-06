@@ -44,7 +44,7 @@
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
-***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map.
+***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map and obtained from either an `ArcGISFeature`, `ArcGISFeatureTable`, `FeatureLayer` or `SubtypeSublayer`.
 ***REMOVED***/ - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 ***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
 ***REMOVED***/ - Add, delete, or rename feature attachments.
