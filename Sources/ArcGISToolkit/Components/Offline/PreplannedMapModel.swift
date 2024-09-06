@@ -352,17 +352,16 @@ private extension FileManager {
     
     /// The path to the preplanned map areas directory for a specific portal item.
     /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
-    /// - Parameter portalItemID: The ID of the web map portal item.
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - preplannedMapAreaID: The ID of the preplanned map area portal item.
+    /// - Returns: A URL to the preplanned map area directory.
     func preplannedDirectory(
         forPortalItemID portalItemID: PortalItem.ID,
         preplannedMapAreaID: PortalItem.ID
     ) -> URL {
         portalItemDirectory(forPortalItemID: portalItemID)
-            .appending(path: "Preplanned/")
-            .appending(
-                path: preplannedMapAreaID.rawValue,
-                directoryHint: .isDirectory
-            )
+            .appending(components: "Preplanned", "\(preplannedMapAreaID)/")
     }
     
     /// Returns a Boolean value indicating if the specified directory is empty.
