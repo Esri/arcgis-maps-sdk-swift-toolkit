@@ -27,13 +27,27 @@ public struct LocationButton: View {
     /// The autopan mode of the location display.
     @State private var autoPanMode: LocationDisplay.AutoPanMode = .off
     /// The last selected autopan mode by the user.
-    @State private var lastSelectedAutoPanMode = LocationDisplay.AutoPanMode.recenter
+    @State private var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
+    /// The auto pan options that the user can choose from the context menu of the button.
+    private let autoPanOptions: Set<LocationDisplay.AutoPanMode>
     
     /// Creates a location button with a location display.
     /// - Parameter locationDisplay: The location display that the button will control.
-    public init(locationDisplay: LocationDisplay) {
+    public init(
+        locationDisplay: LocationDisplay,
+        autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+    ) {
         self.locationDisplay = locationDisplay
         self.autoPanMode = locationDisplay.autoPanMode
+        self.autoPanOptions = autoPanOptions
+        if autoPanOptions.isEmpty || (autoPanOptions.count == 1 && autoPanOptions.first == .off) {
+            lastSelectedAutoPanMode = .off
+        } else {
+            lastSelectedAutoPanMode = LocationDisplay.AutoPanMode.orderedOptions
+                .lazy
+                .filter { $0 != .off }
+                .first { autoPanOptions.contains($0) } ?? .recenter
+        }
     }
     
     public var body: some View {
@@ -52,6 +66,8 @@ public struct LocationButton: View {
             if autoPanMode != locationDisplay.autoPanMode {
                 locationDisplay.autoPanMode = autoPanMode
                 if autoPanMode != .off {
+                    // Do not update the last selected autopan mode here if
+                    // `off` was selected by the user.
                     lastSelectedAutoPanMode = autoPanMode
                 }
             }
@@ -69,8 +85,9 @@ public struct LocationButton: View {
                 CLLocationManager.shared.requestWhenInUseAuthorization()
             }
             Task {
-                // Start the datasource.
+                // Start the datasource, set initial auto pan mode.
                 do {
+                    locationDisplay.autoPanMode = lastSelectedAutoPanMode
                     try await locationDisplay.dataSource.start()
                 } catch {
                     print("Error starting location display: \(error)")
@@ -127,12 +144,15 @@ public struct LocationButton: View {
     @ViewBuilder
     private func contextMenuContent() -> some View {
         if status == .started {
-            Section("Autopan") {
-                Picker("Autopan", selection: $autoPanMode) {
-                    Text("Autopan Off").tag(LocationDisplay.AutoPanMode.off)
-                    Text("Recenter").tag(LocationDisplay.AutoPanMode.recenter)
-                    Text("Compass").tag(LocationDisplay.AutoPanMode.compassNavigation)
-                    Text("Navigation").tag(LocationDisplay.AutoPanMode.navigation)
+            if autoPanOptions.count > 1 {
+                Section("Autopan") {
+                    Picker("Autopan", selection: $autoPanMode) {
+                        ForEach(LocationDisplay.AutoPanMode.orderedOptions, id: \.self) { autoPanMode in
+                            if autoPanOptions.contains(autoPanMode) {
+                                Text(autoPanMode.pickerText).tag(autoPanMode)
+                            }
+                        }
+                    }
                 }
             }
             
@@ -143,6 +163,27 @@ public struct LocationButton: View {
             } label: {
                 Label("Stop Location", systemImage: "location.slash")
             }
+        }
+    }
+}
+
+private extension LocationDisplay.AutoPanMode {
+    /// The options that will appear in the picker, in order.
+    static let orderedOptions: [Self] = [.off, .recenter, .compassNavigation, .navigation]
+    
+    /// The label that should appear in the picker.
+    var pickerText: String {
+        switch self {
+        case .off:
+            "Auto Pan Off"
+        case .recenter:
+            "Recenter"
+        case .compassNavigation:
+            "Compass"
+        case .navigation:
+            "Navigation"
+        @unknown default:
+            fatalError()
         }
     }
 }
