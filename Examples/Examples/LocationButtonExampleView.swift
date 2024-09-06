@@ -21,6 +21,7 @@ struct LocationButtonExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(basemapStyle: .arcGISImagery)
     
+    /// The location display to set on the map view.
     @State private var locationDisplay = {
         let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
         locationDisplay.autoPanMode = .recenter

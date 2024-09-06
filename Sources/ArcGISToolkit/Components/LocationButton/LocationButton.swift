@@ -94,7 +94,8 @@ public struct LocationButton: View {
         }
     }
     
-    @ViewBuilder private func buttonLabel() -> some View {
+    @ViewBuilder
+    private func buttonLabel() -> some View {
         // Decide what what image is in the button based on the status
         // and autopan mode.
         switch status {
