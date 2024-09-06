@@ -17,7 +17,7 @@ import CoreLocation
 ***REMOVED***
 
 public struct LocationButton: View {
-***REMOVED***@State var locationDisplay: LocationDisplay
+***REMOVED***@State private var locationDisplay: LocationDisplay
 ***REMOVED***@State private var status: LocationDataSource.Status = .stopped
 ***REMOVED***@State private var autoPanMode: LocationDisplay.AutoPanMode = .off
 ***REMOVED***@State private var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode?

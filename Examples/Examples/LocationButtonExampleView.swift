@@ -20,6 +20,7 @@
 struct LocationButtonExampleView: View {
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***
 ***REMOVED***@State private var locationDisplay = {
 ***REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
 ***REMOVED******REMOVED***locationDisplay.autoPanMode = .recenter
@@ -29,6 +30,7 @@ struct LocationButtonExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.locationDisplay(locationDisplay)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***LocationButton(locationDisplay: locationDisplay)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
