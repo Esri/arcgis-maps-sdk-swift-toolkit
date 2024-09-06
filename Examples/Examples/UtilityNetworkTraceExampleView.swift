@@ -37,9 +37,6 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    /// Provides the ability to detect tap locations in the context of the screen.
-    @State private var screenPoint: CGPoint?
-    
     /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
     @State private var viewpoint: Viewpoint?
     
@@ -54,8 +51,7 @@ struct UtilityNetworkTraceExampleView: View {
                 .onAttributionBarHeightChanged {
                     attributionBarHeight = $0
                 }
-                .onSingleTapGesture { screenPoint, mapPoint in
-                    self.screenPoint = screenPoint
+                .onSingleTapGesture { _, mapPoint in
                     self.mapPoint = mapPoint
                 }
                 .onViewpointChanged(kind: .centerAndScale) {
@@ -76,7 +72,6 @@ struct UtilityNetworkTraceExampleView: View {
                         graphicsOverlay: $resultGraphicsOverlay,
                         map: map,
                         mapPoint: $mapPoint,
-                        screenPoint: $screenPoint,
                         mapViewProxy: mapViewProxy,
                         viewpoint: $viewpoint
                     )
