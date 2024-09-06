@@ -94,7 +94,8 @@ public struct LocationButton: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private func buttonLabel() -> some View {
+***REMOVED***@ViewBuilder
+***REMOVED***private func buttonLabel() -> some View {
 ***REMOVED******REMOVED******REMOVED*** Decide what what image is in the button based on the status
 ***REMOVED******REMOVED******REMOVED*** and autopan mode.
 ***REMOVED******REMOVED***switch status {
