@@ -135,6 +135,7 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failedToStart:
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.triangle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.tint(.secondary)
 ***REMOVED******REMOVED***@unknown default:
 ***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
