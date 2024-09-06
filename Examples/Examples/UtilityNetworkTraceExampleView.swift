@@ -37,9 +37,6 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
-***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the screen.
-***REMOVED***@State private var screenPoint: CGPoint?
-***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
@@ -54,8 +51,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, mapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.screenPoint = screenPoint
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { _, mapPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
@@ -76,7 +72,6 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: $screenPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)

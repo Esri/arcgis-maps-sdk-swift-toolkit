@@ -119,18 +119,18 @@ import Foundation
 ***REMOVED***
 ***REMOVED******REMOVED***/ Adds new starting points to the pending trace.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - screenPoint: A point on the map in screen coordinates.
 ***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
 ***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ An identify operation will run on each layer in the network. Every element returned from
 ***REMOVED******REMOVED***/ each layer will be added as a new starting point.
-***REMOVED***func addStartingPoints(at screenPoint: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
+***REMOVED***func addStartingPoints(mapPoint: Point, with proxy: MapViewProxy) async {
 ***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { [weak self] taskGroup in
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***for layer in network?.layers ?? [] {
 ***REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let screenPoint = proxy.screenPoint(fromLocation: mapPoint),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for element in result.geoElements {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.processAndAdd(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
