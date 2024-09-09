@@ -231,6 +231,26 @@ enum MarkdownResult {
 ***REMOVED***
 ***REMOVED***
 
+struct Visitor: MarkupVisitor {
+***REMOVED***typealias Result = MarkdownResult
+***REMOVED***
+***REMOVED***func visitText(_ text: Markdown.Text) -> MarkdownResult {
+***REMOVED******REMOVED***.text(SwiftUI.Text(text.plainText))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func defaultVisit(_ markup: any Markdown.Markup) -> MarkdownResult {
+***REMOVED******REMOVED***visit(markup)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitDocument(_ document: Document) -> MarkdownResult {
+***REMOVED******REMOVED***visit(document.child(at: 0)!)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitParagraph(_ paragraph: Paragraph) -> MarkdownResult {
+***REMOVED******REMOVED***visit(paragraph.child(at: 0)!)
+***REMOVED***
+***REMOVED***
+
 #Preview {
 ***REMOVED***MarkdownView(markdown: """
 ***REMOVED****Emphasis*
