@@ -294,6 +294,15 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***mutating func visitParagraph(_ paragraph: Paragraph) -> MarkdownResult {
 ***REMOVED******REMOVED***visit(paragraph.child(at: 0)!)
+***REMOVED***mutating func visitStrong(_ strong: Strong) -> MarkdownResult {
+***REMOVED******REMOVED***let children = visitChildren(strong.children)
+***REMOVED******REMOVED***if let text = children.text {
+***REMOVED******REMOVED******REMOVED***return .text(text.bold())
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return children
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
