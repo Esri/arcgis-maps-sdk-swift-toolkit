@@ -41,6 +41,15 @@ enum MarkdownResult {
 ***REMOVED***case other(AnyView)
 ***REMOVED***case text(SwiftUI.Text)
 ***REMOVED***
+***REMOVED***var text: SwiftUI.Text? {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .other(_):
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***case .text(let text):
+***REMOVED******REMOVED******REMOVED***return text
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***func resolve() -> AnyView {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .text(let text):
