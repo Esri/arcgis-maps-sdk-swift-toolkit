@@ -286,6 +286,56 @@ struct Visitor: MarkupVisitor {
             )
         )
     }
+    
+    mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
+        .text(Text("\(#function)"))
+    }
+    
+    mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
+        visitChildren(codeBlock.children)
+    }
+    
+    mutating func visitDocument(_ document: Document) -> Result {
+        visitChildren(document.children)
+    }
+    
+    mutating func visitEmphasis(_ emphasis: Emphasis) -> MarkdownResult {
+        let children = visitChildren(emphasis.children)
+        if let text = children.text {
+            return .text(text.italic())
+        } else {
+            return children
+        }
+    }
+    
+    mutating func visitHeading(_ heading: Heading) -> MarkdownResult {
+        .text(Text("\(#function)"))
+    }
+    
+    mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
+        .text(Text("\(#function)"))
+    }
+    
+    mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
+        .text(Text("\(#function)"))
+    }
+    
+    mutating func visitParagraph(_ paragraph: Paragraph) -> Result {
+        let children = visitChildren(paragraph.children)
+        if let text = children.text {
+            return .text(text + SwiftUI.Text("\n"))
+        } else {
+            return children
+        }
+    }
+    
+    mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> MarkdownResult {
+        let children = visitChildren(strikethrough.children)
+        if let text = children.text {
+            return .text(text.strikethrough())
+        } else {
+            return children
+        }
     }
     
     mutating func visitDocument(_ document: Document) -> MarkdownResult {
