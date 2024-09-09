@@ -217,6 +217,17 @@ private extension ListItemContainer {
 ***REMOVED***
 ***REMOVED***
 
+struct MarkdownView: View {
+***REMOVED***let markdown: String
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***let document = Document(parsing: markdown)
+***REMOVED******REMOVED***var visitor = Visitor()
+***REMOVED******REMOVED***let content = visitor.visitDocument(document)
+***REMOVED******REMOVED***content.resolve()
+***REMOVED***
+***REMOVED***
+
 enum MarkdownResult {
 ***REMOVED***case other(AnyView)
 ***REMOVED***case text(SwiftUI.Text)
