@@ -245,12 +245,10 @@ enum MarkdownResult {
 struct Visitor: MarkupVisitor {
 ***REMOVED***typealias Result = MarkdownResult
 ***REMOVED***
-***REMOVED***func visitText(_ text: Markdown.Text) -> MarkdownResult {
-***REMOVED******REMOVED***.text(SwiftUI.Text(text.plainText))
-***REMOVED***
-***REMOVED***
-***REMOVED***mutating func defaultVisit(_ markup: any Markdown.Markup) -> MarkdownResult {
+***REMOVED***mutating func defaultVisit(_ markup: any Markdown.Markup) -> Result {
 ***REMOVED******REMOVED***visit(markup)
+***REMOVED***
+***REMOVED***
 ***REMOVED***mutating func visitChildren(_ children: MarkupChildren) -> Result {
 ***REMOVED******REMOVED***var results = [Result]()
 ***REMOVED******REMOVED***var combinedText = SwiftUI.Text("")
@@ -338,12 +336,10 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitDocument(_ document: Document) -> MarkdownResult {
-***REMOVED******REMOVED***visit(document.child(at: 0)!)
+***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
+***REMOVED******REMOVED***.text(Text("\(#function)"))
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitParagraph(_ paragraph: Paragraph) -> MarkdownResult {
-***REMOVED******REMOVED***visit(paragraph.child(at: 0)!)
 ***REMOVED***mutating func visitStrong(_ strong: Strong) -> MarkdownResult {
 ***REMOVED******REMOVED***let children = visitChildren(strong.children)
 ***REMOVED******REMOVED***if let text = children.text {
@@ -353,6 +349,8 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***mutating func visitText(_ text: Markdown.Text) -> Result {
+***REMOVED******REMOVED***.text(SwiftUI.Text(text.plainText))
 ***REMOVED***
 ***REMOVED***
 
