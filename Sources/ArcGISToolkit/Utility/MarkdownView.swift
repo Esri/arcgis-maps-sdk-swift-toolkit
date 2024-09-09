@@ -217,6 +217,20 @@ private extension ListItemContainer {
 ***REMOVED***
 ***REMOVED***
 
+enum MarkdownResult {
+***REMOVED***case other(AnyView)
+***REMOVED***case text(SwiftUI.Text)
+***REMOVED***
+***REMOVED***func resolve() -> AnyView {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .text(let text):
+***REMOVED******REMOVED******REMOVED***return AnyView(text)
+***REMOVED******REMOVED***case .other(let view):
+***REMOVED******REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 #Preview {
 ***REMOVED***MarkdownView(markdown: """
 ***REMOVED****Emphasis*
