@@ -103,10 +103,6 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
-***REMOVED******REMOVED***.text(Text("\(#function)"))
-***REMOVED***
-***REMOVED***
 ***REMOVED***mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
 ***REMOVED******REMOVED***visitChildren(codeBlock.children)
 ***REMOVED***
@@ -125,6 +121,19 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitHeading(_ heading: Heading) -> MarkdownResult {
+***REMOVED******REMOVED***let children = visitChildren(heading.children)
+***REMOVED******REMOVED***if let text = children.text {
+***REMOVED******REMOVED******REMOVED***return .other(
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(text + Text("\n")).font(Font.fontForHeading(level: heading.level))
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return children
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
 ***REMOVED******REMOVED***.text(Text("\(#function)"))
 ***REMOVED***
 ***REMOVED***
@@ -154,10 +163,6 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
-***REMOVED******REMOVED***.text(Text("\(#function)"))
-***REMOVED***
-***REMOVED***
 ***REMOVED***mutating func visitStrong(_ strong: Strong) -> MarkdownResult {
 ***REMOVED******REMOVED***let children = visitChildren(strong.children)
 ***REMOVED******REMOVED***if let text = children.text {
@@ -171,6 +176,60 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED***.text(SwiftUI.Text(text.plainText))
 ***REMOVED***
 ***REMOVED***
+***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
+***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED***
+***REMOVED***
+
+***REMOVED***private extension Color {
+***REMOVED******REMOVED***static var codeBackground: Self {
+***REMOVED******REMOVED******REMOVED***.gray.opacity(0.5)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+
+private extension Font {
+***REMOVED***static func fontForHeading(level: Int) -> Self {
+***REMOVED******REMOVED***switch level {
+***REMOVED******REMOVED***case 1: .largeTitle
+***REMOVED******REMOVED***case 2: .title
+***REMOVED******REMOVED***case 3: .title2
+***REMOVED******REMOVED***case 4: .title3
+***REMOVED******REMOVED***default: .body
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***private extension ListItem {
+***REMOVED******REMOVED***var depth: Int {
+***REMOVED******REMOVED******REMOVED***var current = parent
+***REMOVED******REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let container = current as? ListItemContainer {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return container.depth
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***current = current?.parent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return 0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var includeLineBreak: Bool {
+***REMOVED******REMOVED******REMOVED***(parent is OrderedList || parent is UnorderedList)
+***REMOVED******REMOVED******REMOVED***&& (indexInParent > 0 || depth > 0)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+
+***REMOVED***private extension ListItemContainer {
+***REMOVED******REMOVED***var depth: Int {
+***REMOVED******REMOVED******REMOVED***var index = 0
+***REMOVED******REMOVED******REMOVED***var current = parent
+***REMOVED******REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***if current is ListItemContainer {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***index += 1
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***current = current!.parent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return index
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
 
 #Preview {
 ***REMOVED***MarkdownView(markdown: """
