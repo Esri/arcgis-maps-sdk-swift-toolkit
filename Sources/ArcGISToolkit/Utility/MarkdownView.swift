@@ -251,6 +251,41 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***mutating func defaultVisit(_ markup: any Markdown.Markup) -> MarkdownResult {
 ***REMOVED******REMOVED***visit(markup)
+***REMOVED***mutating func visitChildren(_ children: MarkupChildren) -> Result {
+***REMOVED******REMOVED***var results = [Result]()
+***REMOVED******REMOVED***var combinedText = SwiftUI.Text("")
+***REMOVED******REMOVED***var isContinuousText = true
+***REMOVED******REMOVED***var containsBreak = false
+***REMOVED******REMOVED***children.forEach {
+***REMOVED******REMOVED******REMOVED***let child = visit($0)
+***REMOVED******REMOVED******REMOVED***if let text = child.text {
+***REMOVED******REMOVED******REMOVED******REMOVED***combinedText = combinedText + text
+***REMOVED******REMOVED******REMOVED******REMOVED***isContinuousText = true
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***isContinuousText = false
+***REMOVED******REMOVED******REMOVED******REMOVED***if isContinuousText {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results.append(.text(combinedText))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***combinedText = SwiftUI.Text("")
+***REMOVED******REMOVED******REMOVED******REMOVED***results.append(child)
+***REMOVED******REMOVED******REMOVED******REMOVED***containsBreak = true
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***if isContinuousText && !containsBreak {
+***REMOVED******REMOVED******REMOVED***return .text(combinedText)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***results.append(.text(combinedText))
+***REMOVED***
+***REMOVED******REMOVED***return .other(
+***REMOVED******REMOVED******REMOVED***AnyView(
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results.indices, id: \.self) { index in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results[index].resolve()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitDocument(_ document: Document) -> MarkdownResult {
