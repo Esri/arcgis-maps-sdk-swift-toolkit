@@ -41,6 +41,15 @@ enum MarkdownResult {
     case other(AnyView)
     case text(SwiftUI.Text)
     
+    var text: SwiftUI.Text? {
+        switch self {
+        case .other(_):
+            return nil
+        case .text(let text):
+            return text
+        }
+    }
+    
     func resolve() -> AnyView {
         switch self {
         case .text(let text):
