@@ -287,6 +287,56 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
+***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
+***REMOVED******REMOVED***visitChildren(codeBlock.children)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitDocument(_ document: Document) -> Result {
+***REMOVED******REMOVED***visitChildren(document.children)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitEmphasis(_ emphasis: Emphasis) -> MarkdownResult {
+***REMOVED******REMOVED***let children = visitChildren(emphasis.children)
+***REMOVED******REMOVED***if let text = children.text {
+***REMOVED******REMOVED******REMOVED***return .text(text.italic())
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return children
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitHeading(_ heading: Heading) -> MarkdownResult {
+***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
+***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
+***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitParagraph(_ paragraph: Paragraph) -> Result {
+***REMOVED******REMOVED***let children = visitChildren(paragraph.children)
+***REMOVED******REMOVED***if let text = children.text {
+***REMOVED******REMOVED******REMOVED***return .text(text + SwiftUI.Text("\n"))
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return children
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> MarkdownResult {
+***REMOVED******REMOVED***let children = visitChildren(strikethrough.children)
+***REMOVED******REMOVED***if let text = children.text {
+***REMOVED******REMOVED******REMOVED***return .text(text.strikethrough())
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return children
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitDocument(_ document: Document) -> MarkdownResult {
 ***REMOVED******REMOVED***visit(document.child(at: 0)!)
