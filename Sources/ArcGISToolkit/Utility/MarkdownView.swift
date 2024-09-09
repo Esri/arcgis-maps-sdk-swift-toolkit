@@ -245,12 +245,10 @@ enum MarkdownResult {
 struct Visitor: MarkupVisitor {
     typealias Result = MarkdownResult
     
-    func visitText(_ text: Markdown.Text) -> MarkdownResult {
-        .text(SwiftUI.Text(text.plainText))
+    mutating func defaultVisit(_ markup: any Markdown.Markup) -> Result {
+        visit(markup)
     }
     
-    mutating func defaultVisit(_ markup: any Markdown.Markup) -> MarkdownResult {
-        visit(markup)
     mutating func visitChildren(_ children: MarkupChildren) -> Result {
         var results = [Result]()
         var combinedText = SwiftUI.Text("")
@@ -338,12 +336,10 @@ struct Visitor: MarkupVisitor {
         }
     }
     
-    mutating func visitDocument(_ document: Document) -> MarkdownResult {
-        visit(document.child(at: 0)!)
+    mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
+        .text(Text("\(#function)"))
     }
     
-    mutating func visitParagraph(_ paragraph: Paragraph) -> MarkdownResult {
-        visit(paragraph.child(at: 0)!)
     mutating func visitStrong(_ strong: Strong) -> MarkdownResult {
         let children = visitChildren(strong.children)
         if let text = children.text {
@@ -353,6 +349,8 @@ struct Visitor: MarkupVisitor {
         }
     }
     
+    mutating func visitText(_ text: Markdown.Text) -> Result {
+        .text(SwiftUI.Text(text.plainText))
     }
 }
 
