@@ -103,10 +103,6 @@ struct Visitor: MarkupVisitor {
         )
     }
     
-    mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
-        .text(Text("\(#function)"))
-    }
-    
     mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
         visitChildren(codeBlock.children)
     }
@@ -125,6 +121,19 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitHeading(_ heading: Heading) -> MarkdownResult {
+        let children = visitChildren(heading.children)
+        if let text = children.text {
+            return .other(
+                AnyView(
+                    (text + Text("\n")).font(Font.fontForHeading(level: heading.level))
+                )
+            )
+        } else {
+            return children
+        }
+    }
+    
+    mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
         .text(Text("\(#function)"))
     }
     
@@ -154,10 +163,6 @@ struct Visitor: MarkupVisitor {
         }
     }
     
-    mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
-        .text(Text("\(#function)"))
-    }
-    
     mutating func visitStrong(_ strong: Strong) -> MarkdownResult {
         let children = visitChildren(strong.children)
         if let text = children.text {
@@ -170,7 +175,61 @@ struct Visitor: MarkupVisitor {
     mutating func visitText(_ text: Markdown.Text) -> Result {
         .text(SwiftUI.Text(text.plainText))
     }
+    
+    mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
+        .text(Text("\(#function)"))
+    }
 }
+
+//private extension Color {
+//    static var codeBackground: Self {
+//        .gray.opacity(0.5)
+//    }
+//}
+
+private extension Font {
+    static func fontForHeading(level: Int) -> Self {
+        switch level {
+        case 1: .largeTitle
+        case 2: .title
+        case 3: .title2
+        case 4: .title3
+        default: .body
+        }
+    }
+}
+
+//private extension ListItem {
+//    var depth: Int {
+//        var current = parent
+//        while current != nil {
+//            if let container = current as? ListItemContainer {
+//                return container.depth
+//            }
+//            current = current?.parent
+//        }
+//        return 0
+//    }
+//    
+//    var includeLineBreak: Bool {
+//        (parent is OrderedList || parent is UnorderedList)
+//        && (indexInParent > 0 || depth > 0)
+//    }
+//}
+
+//private extension ListItemContainer {
+//    var depth: Int {
+//        var index = 0
+//        var current = parent
+//        while current != nil {
+//            if current is ListItemContainer {
+//                index += 1
+//            }
+//            current = current!.parent
+//        }
+//        return index
+//    }
+//}
 
 #Preview {
     MarkdownView(markdown: """
