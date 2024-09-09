@@ -251,6 +251,41 @@ struct Visitor: MarkupVisitor {
     
     mutating func defaultVisit(_ markup: any Markdown.Markup) -> MarkdownResult {
         visit(markup)
+    mutating func visitChildren(_ children: MarkupChildren) -> Result {
+        var results = [Result]()
+        var combinedText = SwiftUI.Text("")
+        var isContinuousText = true
+        var containsBreak = false
+        children.forEach {
+            let child = visit($0)
+            if let text = child.text {
+                combinedText = combinedText + text
+                isContinuousText = true
+            } else {
+                isContinuousText = false
+                if isContinuousText {
+                    results.append(.text(combinedText))
+                }
+                combinedText = SwiftUI.Text("")
+                results.append(child)
+                containsBreak = true
+            }
+        }
+        if isContinuousText && !containsBreak {
+            return .text(combinedText)
+        } else {
+            results.append(.text(combinedText))
+        }
+        return .other(
+            AnyView(
+                VStack(alignment: .leading) {
+                    ForEach(results.indices, id: \.self) { index in
+                        results[index].resolve()
+                    }
+                }
+            )
+        )
+    }
     }
     
     mutating func visitDocument(_ document: Document) -> MarkdownResult {
