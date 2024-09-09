@@ -231,6 +231,26 @@ enum MarkdownResult {
     }
 }
 
+struct Visitor: MarkupVisitor {
+    typealias Result = MarkdownResult
+    
+    func visitText(_ text: Markdown.Text) -> MarkdownResult {
+        .text(SwiftUI.Text(text.plainText))
+    }
+    
+    mutating func defaultVisit(_ markup: any Markdown.Markup) -> MarkdownResult {
+        visit(markup)
+    }
+    
+    mutating func visitDocument(_ document: Document) -> MarkdownResult {
+        visit(document.child(at: 0)!)
+    }
+    
+    mutating func visitParagraph(_ paragraph: Paragraph) -> MarkdownResult {
+        visit(paragraph.child(at: 0)!)
+    }
+}
+
 #Preview {
     MarkdownView(markdown: """
     *Emphasis*
