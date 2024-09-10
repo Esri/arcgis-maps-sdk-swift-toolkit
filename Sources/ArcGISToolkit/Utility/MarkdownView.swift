@@ -134,7 +134,10 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
-***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED******REMOVED***var attributedString = AttributedString(inlineCode.code)
+***REMOVED******REMOVED***attributedString.font = Font.system(.body).monospaced()
+***REMOVED******REMOVED***attributedString.backgroundColor = Color.codeBackground
+***REMOVED******REMOVED***return .text(SwiftUI.Text(attributedString))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
@@ -186,11 +189,11 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***private extension Color {
-***REMOVED******REMOVED***static var codeBackground: Self {
-***REMOVED******REMOVED******REMOVED***.gray.opacity(0.5)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
+private extension Color {
+***REMOVED***static var codeBackground: Self {
+***REMOVED******REMOVED***.gray.opacity(0.5)
+***REMOVED***
+***REMOVED***
 
 private extension Font {
 ***REMOVED***static func fontForHeading(level: Int) -> Self {
@@ -259,7 +262,9 @@ private extension Markdown.Text {
 ***REMOVED***### Heading 3
 ***REMOVED***#### [Heading 4 as a ***~link~***](www.esri.com)
 ***REMOVED***
-***REMOVED***`Inline code`
+***REMOVED***`Code`
+***REMOVED***
+***REMOVED***Sentence with `inline code`.
 ***REMOVED***
 ***REMOVED***[Link](https:***REMOVED***www.esri.com)
 ***REMOVED***
