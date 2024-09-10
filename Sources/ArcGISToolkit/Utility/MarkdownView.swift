@@ -70,24 +70,24 @@ struct Visitor: MarkupVisitor {
     mutating func visitChildren(_ children: MarkupChildren) -> Result {
         var results = [Result]()
         var combinedText = SwiftUI.Text("")
-        var isContinuousText = true
+        var isPureText = false
         var containsBreak = false
         children.forEach {
             let child = visit($0)
             if let text = child.text {
                 combinedText = combinedText + text
-                isContinuousText = true
+                isPureText = true
             } else {
-                isContinuousText = false
-                if isContinuousText {
+                containsBreak = true
+                if isPureText {
                     results.append(.text(combinedText))
                 }
                 combinedText = SwiftUI.Text("")
+                isPureText = false
                 results.append(child)
-                containsBreak = true
             }
         }
-        if isContinuousText && !containsBreak {
+        if isPureText && !containsBreak {
             return .text(combinedText)
         } else {
             results.append(.text(combinedText))
