@@ -249,37 +249,37 @@ private extension Font {
     }
 }
 
-//private extension ListItem {
-//    var depth: Int {
-//        var current = parent
-//        while current != nil {
-//            if let container = current as? ListItemContainer {
-//                return container.depth
-//            }
-//            current = current?.parent
-//        }
-//        return 0
-//    }
-//    
-//    var includeLineBreak: Bool {
-//        (parent is OrderedList || parent is UnorderedList)
-//        && (indexInParent > 0 || depth > 0)
-//    }
-//}
+private extension ListItem {
+    var depth: Int {
+        var current = parent
+        while current != nil {
+            if let container = current as? ListItemContainer {
+                return container.depth
+            }
+            current = current?.parent
+        }
+        return 0
+    }
+    
+    var includeLineBreak: Bool {
+        (parent is OrderedList || parent is UnorderedList)
+        && (indexInParent > 0 || depth > 0)
+    }
+}
 
-//private extension ListItemContainer {
-//    var depth: Int {
-//        var index = 0
-//        var current = parent
-//        while current != nil {
-//            if current is ListItemContainer {
-//                index += 1
-//            }
-//            current = current!.parent
-//        }
-//        return index
-//    }
-//}
+private extension ListItemContainer {
+    var depth: Int {
+        var index = 0
+        var current = parent
+        while current != nil {
+            if current is ListItemContainer {
+                index += 1
+            }
+            current = current!.parent
+        }
+        return index
+    }
+}
 
 private extension Markdown.Text {
     var linkAncestor: Markdown.Link? {
