@@ -257,7 +257,7 @@ private extension Markdown.Text {
     # Heading 1
     ## Heading 2
     ### Heading 3
-    #### [Heading 4 with a ***~link~***](www.esri.com)
+    #### [Heading 4 as a ***~link~***](www.esri.com)
     
     `Inline code`
     
