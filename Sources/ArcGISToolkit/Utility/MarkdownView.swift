@@ -105,7 +105,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
+***REMOVED***mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> Result {
 ***REMOVED******REMOVED***var attributedString = AttributedString(codeBlock.code.dropLast())
 ***REMOVED******REMOVED***attributedString.font = Font.system(.body).monospaced()
 ***REMOVED******REMOVED***return .other(
@@ -121,7 +121,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED***visitChildren(document.children)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitEmphasis(_ emphasis: Emphasis) -> MarkdownResult {
+***REMOVED***mutating func visitEmphasis(_ emphasis: Emphasis) -> Result {
 ***REMOVED******REMOVED***let children = visitChildren(emphasis.children)
 ***REMOVED******REMOVED***if let text = children.text {
 ***REMOVED******REMOVED******REMOVED***return .text(text.italic())
@@ -130,7 +130,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitHeading(_ heading: Heading) -> MarkdownResult {
+***REMOVED***mutating func visitHeading(_ heading: Heading) -> Result {
 ***REMOVED******REMOVED***let children = visitChildren(heading.children)
 ***REMOVED******REMOVED***if let text = children.text {
 ***REMOVED******REMOVED******REMOVED***return .other(
@@ -141,22 +141,26 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
+***REMOVED***mutating func visitInlineCode(_ inlineCode: InlineCode) -> Result {
 ***REMOVED******REMOVED***var attributedString = AttributedString(inlineCode.code)
 ***REMOVED******REMOVED***attributedString.font = Font.system(.body).monospaced()
 ***REMOVED******REMOVED***attributedString.backgroundColor = Color.codeBackground
 ***REMOVED******REMOVED***return .text(SwiftUI.Text(attributedString))
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
+***REMOVED***mutating func visitLineBreak(_ lineBreak: LineBreak) -> Result {
+***REMOVED******REMOVED***.text(SwiftUI.Text("\n"))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitLink(_ link: Markdown.Link) -> Result {
 ***REMOVED******REMOVED***visitChildren(link.children)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitListItem(_ listItem: ListItem) -> MarkdownResult {
+***REMOVED***mutating func visitListItem(_ listItem: ListItem) -> Result {
 ***REMOVED******REMOVED***visitChildren(listItem.children)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
+***REMOVED***mutating func visitOrderedList(_ orderedList: OrderedList) -> Result {
 ***REMOVED******REMOVED***var results = [Result]()
 ***REMOVED******REMOVED***orderedList.listItems.forEach { listItem in
 ***REMOVED******REMOVED******REMOVED***let result = visit(listItem)
@@ -191,7 +195,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> MarkdownResult {
+***REMOVED***mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> Result {
 ***REMOVED******REMOVED***let children = visitChildren(strikethrough.children)
 ***REMOVED******REMOVED***if let text = children.text {
 ***REMOVED******REMOVED******REMOVED***return .text(text.strikethrough())
@@ -200,7 +204,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitStrong(_ strong: Strong) -> MarkdownResult {
+***REMOVED***mutating func visitStrong(_ strong: Strong) -> Result {
 ***REMOVED******REMOVED***let children = visitChildren(strong.children)
 ***REMOVED******REMOVED***if let text = children.text {
 ***REMOVED******REMOVED******REMOVED***return .text(text.bold())
@@ -218,11 +222,11 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitThematicBreak(_ thematicBreak: ThematicBreak) -> MarkdownResult {
+***REMOVED***mutating func visitThematicBreak(_ thematicBreak: ThematicBreak) -> Result {
 ***REMOVED******REMOVED***.other(AnyView(Divider()))
 ***REMOVED***
 ***REMOVED***
-***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
+***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> Result {
 ***REMOVED******REMOVED***var results = [Result]()
 ***REMOVED******REMOVED***unorderedList.listItems.forEach { listItem in
 ***REMOVED******REMOVED******REMOVED***let result = visit(listItem)
@@ -237,11 +241,11 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 0:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 1:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle().stroke(.black)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle().stroke()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 2:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle().stroke(.black)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle().stroke()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 8, height: 8)
