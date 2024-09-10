@@ -104,7 +104,10 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
-***REMOVED******REMOVED***visitChildren(codeBlock.children)
+***REMOVED******REMOVED***var attributedString = AttributedString(codeBlock.code)
+***REMOVED******REMOVED***attributedString.font = Font.system(.body).monospaced()
+***REMOVED******REMOVED***attributedString.backgroundColor = Color.codeBackground
+***REMOVED******REMOVED***return .text(SwiftUI.Text(attributedString))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitDocument(_ document: Document) -> Result {
@@ -184,6 +187,10 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***mutating func visitThematicBreak(_ thematicBreak: ThematicBreak) -> MarkdownResult {
+***REMOVED******REMOVED***.other(AnyView(Divider()))
+***REMOVED***
+***REMOVED***
 ***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
 ***REMOVED******REMOVED***.text(Text("\(#function)"))
 ***REMOVED***
@@ -261,6 +268,13 @@ private extension Markdown.Text {
 ***REMOVED***## Heading 2
 ***REMOVED***### Heading 3
 ***REMOVED***#### [Heading 4 as a ***~link~***](www.esri.com)
+***REMOVED***
+***REMOVED***
+***REMOVED***```
+***REMOVED***func showCodeBlock() {
+***REMOVED***
+***REMOVED***
+***REMOVED***```
 ***REMOVED***
 ***REMOVED***`Code`
 ***REMOVED***
