@@ -257,7 +257,7 @@ private extension Markdown.Text {
 ***REMOVED***# Heading 1
 ***REMOVED***## Heading 2
 ***REMOVED***### Heading 3
-***REMOVED***#### [Heading 4 with a ***~link~***](www.esri.com)
+***REMOVED***#### [Heading 4 as a ***~link~***](www.esri.com)
 ***REMOVED***
 ***REMOVED***`Inline code`
 ***REMOVED***
