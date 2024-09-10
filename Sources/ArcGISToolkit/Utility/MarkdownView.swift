@@ -138,7 +138,17 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
-        .text(Text("\(#function)"))
+        if let destination = link.destination, let url = URL(string: destination) {
+            .other(
+                AnyView(
+                    Link(destination: url) {
+                        AnyView(visitChildren(link.children).resolve())
+                    }
+                )
+            )
+        } else {
+            .other(AnyView(visitChildren(link.children).resolve()))
+        }
     }
     
     mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
