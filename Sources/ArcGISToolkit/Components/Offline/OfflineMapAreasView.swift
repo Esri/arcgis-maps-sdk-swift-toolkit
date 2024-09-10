@@ -43,7 +43,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaViews
 ***REMOVED******REMOVED******REMOVED*** header: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Preplanned").bold()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Preplanned")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
