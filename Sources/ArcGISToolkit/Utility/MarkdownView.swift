@@ -225,8 +225,19 @@ struct Visitor: MarkupVisitor {
             AnyView(
                 ForEach(results.indices, id: \.self) { index in
                     HStack(alignment: .firstTextBaseline) {
-                        Rectangle()
-                            .frame(width: 8, height: 8)
+                        Group {
+                            switch unorderedList.depth {
+                            case 0:
+                                Circle()
+                            case 1:
+                                Circle().fill(.clear).border(.black)
+                            case 2:
+                                Rectangle()
+                            default:
+                                Rectangle().fill(.clear).border(.black)
+                            }
+                        }
+                        .frame(width: 8, height: 8)
                         results[index].resolve()
                     }
                     .padding(.leading, CGFloat((unorderedList.depth + 1) * 20))
@@ -254,24 +265,6 @@ private extension Font {
     }
 }
 
-private extension ListItem {
-    var depth: Int {
-        var current = parent
-        while current != nil {
-            if let container = current as? ListItemContainer {
-                return container.depth
-            }
-            current = current?.parent
-        }
-        return 0
-    }
-    
-    var includeLineBreak: Bool {
-        (parent is OrderedList || parent is UnorderedList)
-        && (indexInParent > 0 || depth > 0)
-    }
-}
-
 private extension ListItemContainer {
     var depth: Int {
         var index = 0
@@ -280,7 +273,7 @@ private extension ListItemContainer {
             if current is ListItemContainer {
                 index += 1
             }
-            current = current!.parent
+            current = current?.parent
         }
         return index
     }
