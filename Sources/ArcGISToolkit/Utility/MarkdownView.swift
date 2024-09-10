@@ -138,16 +138,13 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
-***REMOVED******REMOVED***if let destination = link.destination, let url = URL(string: destination) {
-***REMOVED******REMOVED******REMOVED***.other(
-***REMOVED******REMOVED******REMOVED******REMOVED***AnyView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Link(destination: url) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(visitChildren(link.children).resolve())
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***if var attributedString = try? AttributedString(markdown: link.plainText) {
+***REMOVED******REMOVED******REMOVED***if let destination = link.destination, let url = URL(string: destination) {
+***REMOVED******REMOVED******REMOVED******REMOVED***attributedString.link = url
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(attributedString))
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***.other(AnyView(visitChildren(link.children).resolve()))
+***REMOVED******REMOVED******REMOVED***return .other(AnyView(visitChildren(link.children).resolve()))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
