@@ -225,8 +225,19 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED***AnyView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results.indices, id: \.self) { index in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 8, height: 8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch unorderedList.depth {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 0:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 1:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle().fill(.clear).border(.black)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 2:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle().fill(.clear).border(.black)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 8, height: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results[index].resolve()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, CGFloat((unorderedList.depth + 1) * 20))
@@ -254,24 +265,6 @@ private extension Font {
 ***REMOVED***
 ***REMOVED***
 
-private extension ListItem {
-***REMOVED***var depth: Int {
-***REMOVED******REMOVED***var current = parent
-***REMOVED******REMOVED***while current != nil {
-***REMOVED******REMOVED******REMOVED***if let container = current as? ListItemContainer {
-***REMOVED******REMOVED******REMOVED******REMOVED***return container.depth
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***current = current?.parent
-***REMOVED***
-***REMOVED******REMOVED***return 0
-***REMOVED***
-***REMOVED***
-***REMOVED***var includeLineBreak: Bool {
-***REMOVED******REMOVED***(parent is OrderedList || parent is UnorderedList)
-***REMOVED******REMOVED***&& (indexInParent > 0 || depth > 0)
-***REMOVED***
-***REMOVED***
-
 private extension ListItemContainer {
 ***REMOVED***var depth: Int {
 ***REMOVED******REMOVED***var index = 0
@@ -280,7 +273,7 @@ private extension ListItemContainer {
 ***REMOVED******REMOVED******REMOVED***if current is ListItemContainer {
 ***REMOVED******REMOVED******REMOVED******REMOVED***index += 1
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***current = current!.parent
+***REMOVED******REMOVED******REMOVED***current = current?.parent
 ***REMOVED***
 ***REMOVED******REMOVED***return index
 ***REMOVED***
