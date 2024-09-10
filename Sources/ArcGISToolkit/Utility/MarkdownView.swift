@@ -249,37 +249,37 @@ private extension Font {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***private extension ListItem {
-***REMOVED******REMOVED***var depth: Int {
-***REMOVED******REMOVED******REMOVED***var current = parent
-***REMOVED******REMOVED******REMOVED***while current != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let container = current as? ListItemContainer {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return container.depth
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***current = current?.parent
+private extension ListItem {
+***REMOVED***var depth: Int {
+***REMOVED******REMOVED***var current = parent
+***REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED***if let container = current as? ListItemContainer {
+***REMOVED******REMOVED******REMOVED******REMOVED***return container.depth
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return 0
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var includeLineBreak: Bool {
-***REMOVED******REMOVED******REMOVED***(parent is OrderedList || parent is UnorderedList)
-***REMOVED******REMOVED******REMOVED***&& (indexInParent > 0 || depth > 0)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***current = current?.parent
+***REMOVED***
+***REMOVED******REMOVED***return 0
+***REMOVED***
+***REMOVED***
+***REMOVED***var includeLineBreak: Bool {
+***REMOVED******REMOVED***(parent is OrderedList || parent is UnorderedList)
+***REMOVED******REMOVED***&& (indexInParent > 0 || depth > 0)
+***REMOVED***
+***REMOVED***
 
-***REMOVED***private extension ListItemContainer {
-***REMOVED******REMOVED***var depth: Int {
-***REMOVED******REMOVED******REMOVED***var index = 0
-***REMOVED******REMOVED******REMOVED***var current = parent
-***REMOVED******REMOVED******REMOVED***while current != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***if current is ListItemContainer {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***index += 1
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***current = current!.parent
+private extension ListItemContainer {
+***REMOVED***var depth: Int {
+***REMOVED******REMOVED***var index = 0
+***REMOVED******REMOVED***var current = parent
+***REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED***if current is ListItemContainer {
+***REMOVED******REMOVED******REMOVED******REMOVED***index += 1
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return index
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***current = current!.parent
+***REMOVED***
+***REMOVED******REMOVED***return index
+***REMOVED***
+***REMOVED***
 
 private extension Markdown.Text {
 ***REMOVED***var linkAncestor: Markdown.Link? {
