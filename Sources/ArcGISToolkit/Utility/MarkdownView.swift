@@ -147,8 +147,27 @@ struct Visitor: MarkupVisitor {
         visitChildren(link.children)
     }
     
+    mutating func visitListItem(_ listItem: ListItem) -> MarkdownResult {
+        visitChildren(listItem.children)
+    }
+    
     mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
-        .text(Text("\(#function)"))
+        var results = [Result]()
+        orderedList.listItems.forEach { listItem in
+            let result = visit(listItem)
+            results.append(result)
+        }
+        return .other(
+            AnyView(
+                ForEach(results.indices, id: \.self) { index in
+                    HStack(alignment: .firstTextBaseline) {
+                        Text((index + 1).description) + Text(".")
+                        results[index].resolve()
+                    }
+                    .padding(.leading, CGFloat((orderedList.depth + 1) * 20))
+                }
+            )
+        )
     }
     
     mutating func visitParagraph(_ paragraph: Paragraph) -> Result {
@@ -192,7 +211,23 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
-        .text(Text("\(#function)"))
+        var results = [Result]()
+        unorderedList.listItems.forEach { listItem in
+            let result = visit(listItem)
+            results.append(result)
+        }
+        return .other(
+            AnyView(
+                ForEach(results.indices, id: \.self) { index in
+                    HStack(alignment: .firstTextBaseline) {
+                        Rectangle()
+                            .frame(width: 8, height: 8)
+                        results[index].resolve()
+                    }
+                    .padding(.leading, CGFloat((unorderedList.depth + 1) * 20))
+                }
+            )
+        )
     }
 }
 
