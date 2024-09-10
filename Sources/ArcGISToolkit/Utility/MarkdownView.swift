@@ -63,6 +63,8 @@ enum MarkdownResult {
 struct Visitor: MarkupVisitor {
 ***REMOVED***typealias Result = MarkdownResult
 ***REMOVED***
+***REMOVED***static let listIndentation: CGFloat = 10
+***REMOVED***
 ***REMOVED***mutating func defaultVisit(_ markup: any Markdown.Markup) -> Result {
 ***REMOVED******REMOVED***visit(markup)
 ***REMOVED***
@@ -132,9 +134,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED***let children = visitChildren(heading.children)
 ***REMOVED******REMOVED***if let text = children.text {
 ***REMOVED******REMOVED******REMOVED***return .other(
-***REMOVED******REMOVED******REMOVED******REMOVED***AnyView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(text + Text("\n")).font(Font.fontForHeading(level: heading.level))
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyView(text.font(Font.fontForHeading(level: heading.level)).padding(.bottom))
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return children
@@ -169,7 +169,10 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((index + 1).description) + Text(".")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results[index].resolve()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, CGFloat((orderedList.depth + 1) * 20))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGFloat(orderedList.depth + 1) * Visitor.listIndentation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -178,7 +181,11 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***mutating func visitParagraph(_ paragraph: Paragraph) -> Result {
 ***REMOVED******REMOVED***let children = visitChildren(paragraph.children)
 ***REMOVED******REMOVED***if let text = children.text {
-***REMOVED******REMOVED******REMOVED***return .text(text + SwiftUI.Text("\n"))
+***REMOVED******REMOVED******REMOVED***if paragraph.isInList {
+***REMOVED******REMOVED******REMOVED******REMOVED***return .text(text)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return .text(text + SwiftUI.Text("\n"))
+***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return children
 ***REMOVED***
@@ -230,17 +237,20 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 0:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 1:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle().fill(.clear).border(.black)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle().stroke(.black)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case 2:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle().fill(.clear).border(.black)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle().stroke(.black)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 8, height: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results[index].resolve()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, CGFloat((unorderedList.depth + 1) * 20))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGFloat(unorderedList.depth + 1) * Visitor.listIndentation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -290,6 +300,19 @@ private extension Markdown.Text {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+
+private extension Markup {
+***REMOVED***var isInList: Bool {
+***REMOVED******REMOVED***var current = parent
+***REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED***if current is ListItemContainer {
+***REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***current = current?.parent
+***REMOVED***
+***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
 
