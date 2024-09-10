@@ -138,16 +138,13 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
-        if let destination = link.destination, let url = URL(string: destination) {
-            .other(
-                AnyView(
-                    Link(destination: url) {
-                        AnyView(visitChildren(link.children).resolve())
-                    }
-                )
-            )
+        if var attributedString = try? AttributedString(markdown: link.plainText) {
+            if let destination = link.destination, let url = URL(string: destination) {
+                attributedString.link = url
+            }
+            return .text(SwiftUI.Text(attributedString))
         } else {
-            .other(AnyView(visitChildren(link.children).resolve()))
+            return .other(AnyView(visitChildren(link.children).resolve()))
         }
     }
     
