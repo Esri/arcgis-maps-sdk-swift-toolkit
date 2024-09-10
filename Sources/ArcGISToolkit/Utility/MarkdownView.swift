@@ -138,14 +138,7 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
-        if var attributedString = try? AttributedString(markdown: link.plainText) {
-            if let destination = link.destination, let url = URL(string: destination) {
-                attributedString.link = url
-            }
-            return .text(SwiftUI.Text(attributedString))
-        } else {
-            return .other(AnyView(visitChildren(link.children).resolve()))
-        }
+        visitChildren(link.children)
     }
     
     mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
@@ -180,7 +173,12 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitText(_ text: Markdown.Text) -> Result {
-        .text(SwiftUI.Text(text.plainText))
+        if let link = text.linkAncestor {
+            let wrappedLink = "[\(text.plainText)](\(link.destination ?? ""))"
+            return .text(SwiftUI.Text(.init(wrappedLink)))
+        } else {
+            return .text(SwiftUI.Text(text.plainText))
+        }
     }
     
     mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
@@ -238,6 +236,20 @@ private extension Font {
 //    }
 //}
 
+private extension Markdown.Text {
+    var linkAncestor: Markdown.Link? {
+        var current: Markup? = self
+        while current != nil {
+            if let link = current as? Markdown.Link {
+                return link
+            } else {
+                current = current?.parent
+            }
+        }
+        return nil
+    }
+}
+
 #Preview {
     MarkdownView(markdown: """
     *Emphasis*
@@ -245,6 +257,7 @@ private extension Font {
     # Heading 1
     ## Heading 2
     ### Heading 3
+    #### [Heading 4 with a ***~link~***](www.esri.com)
     
     `Inline code`
     
