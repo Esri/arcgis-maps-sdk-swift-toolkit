@@ -321,44 +321,46 @@ private extension Markup {
 }
 
 #Preview {
-    MarkdownView(markdown: """
-    *Emphasis*
-    
-    # Heading 1
-    ## Heading 2
-    ### Heading 3
-    #### [Heading 4 as a ***~link~***](www.esri.com)
-    
-    
-    ```
-    func showCodeBlock() {
-    
+    ScrollView {
+        MarkdownView(markdown: """
+        *Emphasis*
+        
+        # Heading 1
+        ## Heading 2
+        ### Heading 3
+        #### [Heading 4 as a ***~link~***](www.esri.com)
+        
+        
+        ```
+        func showCodeBlock() {
+        
+        }
+        ```
+        
+        `Code`
+        
+        Sentence with `inline code`.
+        
+        [Link](https://www.esri.com)
+        
+        1. 1st item
+        1. 2nd item
+        1. 3rd item
+           1. 4th item
+              1. 5th item
+              1. 6th item
+        
+        ~Strikethrough~
+        
+        **Bold with _italic_ and ~_italic_ strikethrough~.**
+        
+        - 1st item
+        - 2nd item
+        - 3rd item
+          - 4th item
+            - 5th item
+            - 6th item
+        """
+        )
     }
-    ```
-    
-    `Code`
-    
-    Sentence with `inline code`.
-    
-    [Link](https://www.esri.com)
-    
-    1. 1st item
-    1. 2nd item
-    1. 3rd item
-       1. 4th item
-          1. 5th item
-          1. 6th item
-    
-    ~Strikethrough~
-    
-    **Bold with _italic_ and ~_italic_ strikethrough~.**
-    
-    - 1st item
-    - 2nd item
-    - 3rd item
-      - 4th item
-        - 5th item
-        - 6th item
-    """
-    )
 }
