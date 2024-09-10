@@ -147,8 +147,27 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED***visitChildren(link.children)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***mutating func visitListItem(_ listItem: ListItem) -> MarkdownResult {
+***REMOVED******REMOVED***visitChildren(listItem.children)
+***REMOVED***
+***REMOVED***
 ***REMOVED***mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
-***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED******REMOVED***var results = [Result]()
+***REMOVED******REMOVED***orderedList.listItems.forEach { listItem in
+***REMOVED******REMOVED******REMOVED***let result = visit(listItem)
+***REMOVED******REMOVED******REMOVED***results.append(result)
+***REMOVED***
+***REMOVED******REMOVED***return .other(
+***REMOVED******REMOVED******REMOVED***AnyView(
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results.indices, id: \.self) { index in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((index + 1).description) + Text(".")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results[index].resolve()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, CGFloat((orderedList.depth + 1) * 20))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitParagraph(_ paragraph: Paragraph) -> Result {
@@ -192,7 +211,23 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
-***REMOVED******REMOVED***.text(Text("\(#function)"))
+***REMOVED******REMOVED***var results = [Result]()
+***REMOVED******REMOVED***unorderedList.listItems.forEach { listItem in
+***REMOVED******REMOVED******REMOVED***let result = visit(listItem)
+***REMOVED******REMOVED******REMOVED***results.append(result)
+***REMOVED***
+***REMOVED******REMOVED***return .other(
+***REMOVED******REMOVED******REMOVED***AnyView(
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results.indices, id: \.self) { index in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 8, height: 8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results[index].resolve()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, CGFloat((unorderedList.depth + 1) * 20))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
