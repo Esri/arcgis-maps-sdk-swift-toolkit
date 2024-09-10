@@ -104,10 +104,15 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
-        var attributedString = AttributedString(codeBlock.code)
+        var attributedString = AttributedString(codeBlock.code.dropLast())
         attributedString.font = Font.system(.body).monospaced()
-        attributedString.backgroundColor = Color.codeBackground
-        return .text(SwiftUI.Text(attributedString))
+        return .other(
+            AnyView (
+                SwiftUI.Text(attributedString)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.codeBackground)
+            )
+        )
     }
     
     mutating func visitDocument(_ document: Document) -> Result {
