@@ -33,7 +33,7 @@ struct MarkdownView: View {
 ***REMOVED******REMOVED***let document = Document(parsing: markdown)
 ***REMOVED******REMOVED***var visitor = Visitor()
 ***REMOVED******REMOVED***let content = visitor.visitDocument(document)
-***REMOVED******REMOVED***content.resolve()
+***REMOVED******REMOVED***VStack { content.resolve() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
