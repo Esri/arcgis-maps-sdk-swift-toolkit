@@ -138,14 +138,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
-***REMOVED******REMOVED***if var attributedString = try? AttributedString(markdown: link.plainText) {
-***REMOVED******REMOVED******REMOVED***if let destination = link.destination, let url = URL(string: destination) {
-***REMOVED******REMOVED******REMOVED******REMOVED***attributedString.link = url
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(attributedString))
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return .other(AnyView(visitChildren(link.children).resolve()))
-***REMOVED***
+***REMOVED******REMOVED***visitChildren(link.children)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
@@ -180,7 +173,12 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitText(_ text: Markdown.Text) -> Result {
-***REMOVED******REMOVED***.text(SwiftUI.Text(text.plainText))
+***REMOVED******REMOVED***if let link = text.linkAncestor {
+***REMOVED******REMOVED******REMOVED***let wrappedLink = "[\(text.plainText)](\(link.destination ?? ""))"
+***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(.init(wrappedLink)))
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(text.plainText))
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
@@ -238,6 +236,20 @@ private extension Font {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 
+private extension Markdown.Text {
+***REMOVED***var linkAncestor: Markdown.Link? {
+***REMOVED******REMOVED***var current: Markup? = self
+***REMOVED******REMOVED***while current != nil {
+***REMOVED******REMOVED******REMOVED***if let link = current as? Markdown.Link {
+***REMOVED******REMOVED******REMOVED******REMOVED***return link
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***current = current?.parent
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+
 #Preview {
 ***REMOVED***MarkdownView(markdown: """
 ***REMOVED****Emphasis*
@@ -245,6 +257,7 @@ private extension Font {
 ***REMOVED***# Heading 1
 ***REMOVED***## Heading 2
 ***REMOVED***### Heading 3
+***REMOVED***#### [Heading 4 with a ***~link~***](www.esri.com)
 ***REMOVED***
 ***REMOVED***`Inline code`
 ***REMOVED***
