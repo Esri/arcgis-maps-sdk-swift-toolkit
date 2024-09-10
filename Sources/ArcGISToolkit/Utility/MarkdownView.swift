@@ -105,7 +105,7 @@ struct Visitor: MarkupVisitor {
         )
     }
     
-    mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> MarkdownResult {
+    mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> Result {
         var attributedString = AttributedString(codeBlock.code.dropLast())
         attributedString.font = Font.system(.body).monospaced()
         return .other(
@@ -121,7 +121,7 @@ struct Visitor: MarkupVisitor {
         visitChildren(document.children)
     }
     
-    mutating func visitEmphasis(_ emphasis: Emphasis) -> MarkdownResult {
+    mutating func visitEmphasis(_ emphasis: Emphasis) -> Result {
         let children = visitChildren(emphasis.children)
         if let text = children.text {
             return .text(text.italic())
@@ -130,7 +130,7 @@ struct Visitor: MarkupVisitor {
         }
     }
     
-    mutating func visitHeading(_ heading: Heading) -> MarkdownResult {
+    mutating func visitHeading(_ heading: Heading) -> Result {
         let children = visitChildren(heading.children)
         if let text = children.text {
             return .other(
@@ -141,22 +141,26 @@ struct Visitor: MarkupVisitor {
         }
     }
     
-    mutating func visitInlineCode(_ inlineCode: InlineCode) -> MarkdownResult {
+    mutating func visitInlineCode(_ inlineCode: InlineCode) -> Result {
         var attributedString = AttributedString(inlineCode.code)
         attributedString.font = Font.system(.body).monospaced()
         attributedString.backgroundColor = Color.codeBackground
         return .text(SwiftUI.Text(attributedString))
     }
     
-    mutating func visitLink(_ link: Markdown.Link) -> MarkdownResult {
+    mutating func visitLineBreak(_ lineBreak: LineBreak) -> Result {
+        .text(SwiftUI.Text("\n"))
+    }
+    
+    mutating func visitLink(_ link: Markdown.Link) -> Result {
         visitChildren(link.children)
     }
     
-    mutating func visitListItem(_ listItem: ListItem) -> MarkdownResult {
+    mutating func visitListItem(_ listItem: ListItem) -> Result {
         visitChildren(listItem.children)
     }
     
-    mutating func visitOrderedList(_ orderedList: OrderedList) -> MarkdownResult {
+    mutating func visitOrderedList(_ orderedList: OrderedList) -> Result {
         var results = [Result]()
         orderedList.listItems.forEach { listItem in
             let result = visit(listItem)
@@ -191,7 +195,7 @@ struct Visitor: MarkupVisitor {
         }
     }
     
-    mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> MarkdownResult {
+    mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> Result {
         let children = visitChildren(strikethrough.children)
         if let text = children.text {
             return .text(text.strikethrough())
@@ -200,7 +204,7 @@ struct Visitor: MarkupVisitor {
         }
     }
     
-    mutating func visitStrong(_ strong: Strong) -> MarkdownResult {
+    mutating func visitStrong(_ strong: Strong) -> Result {
         let children = visitChildren(strong.children)
         if let text = children.text {
             return .text(text.bold())
@@ -218,11 +222,11 @@ struct Visitor: MarkupVisitor {
         }
     }
     
-    mutating func visitThematicBreak(_ thematicBreak: ThematicBreak) -> MarkdownResult {
+    mutating func visitThematicBreak(_ thematicBreak: ThematicBreak) -> Result {
         .other(AnyView(Divider()))
     }
     
-    mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> MarkdownResult {
+    mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> Result {
         var results = [Result]()
         unorderedList.listItems.forEach { listItem in
             let result = visit(listItem)
@@ -237,11 +241,11 @@ struct Visitor: MarkupVisitor {
                             case 0:
                                 Circle()
                             case 1:
-                                Circle().stroke(.black)
+                                Circle().stroke()
                             case 2:
                                 Rectangle()
                             default:
-                                Rectangle().stroke(.black)
+                                Rectangle().stroke()
                             }
                         }
                         .frame(width: 8, height: 8)
