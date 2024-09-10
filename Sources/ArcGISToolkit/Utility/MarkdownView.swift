@@ -63,6 +63,8 @@ enum MarkdownResult {
 struct Visitor: MarkupVisitor {
     typealias Result = MarkdownResult
     
+    static let listIndentation: CGFloat = 10
+    
     mutating func defaultVisit(_ markup: any Markdown.Markup) -> Result {
         visit(markup)
     }
@@ -132,9 +134,7 @@ struct Visitor: MarkupVisitor {
         let children = visitChildren(heading.children)
         if let text = children.text {
             return .other(
-                AnyView(
-                    (text + Text("\n")).font(Font.fontForHeading(level: heading.level))
-                )
+                AnyView(text.font(Font.fontForHeading(level: heading.level)).padding(.bottom))
             )
         } else {
             return children
@@ -169,7 +169,10 @@ struct Visitor: MarkupVisitor {
                         Text((index + 1).description) + Text(".")
                         results[index].resolve()
                     }
-                    .padding(.leading, CGFloat((orderedList.depth + 1) * 20))
+                    .padding(
+                        .leading,
+                        CGFloat(orderedList.depth + 1) * Visitor.listIndentation
+                    )
                 }
             )
         )
@@ -178,7 +181,11 @@ struct Visitor: MarkupVisitor {
     mutating func visitParagraph(_ paragraph: Paragraph) -> Result {
         let children = visitChildren(paragraph.children)
         if let text = children.text {
-            return .text(text + SwiftUI.Text("\n"))
+            if paragraph.isInList {
+                return .text(text)
+            } else {
+                return .text(text + SwiftUI.Text("\n"))
+            }
         } else {
             return children
         }
@@ -230,17 +237,20 @@ struct Visitor: MarkupVisitor {
                             case 0:
                                 Circle()
                             case 1:
-                                Circle().fill(.clear).border(.black)
+                                Circle().stroke(.black)
                             case 2:
                                 Rectangle()
                             default:
-                                Rectangle().fill(.clear).border(.black)
+                                Rectangle().stroke(.black)
                             }
                         }
                         .frame(width: 8, height: 8)
                         results[index].resolve()
                     }
-                    .padding(.leading, CGFloat((unorderedList.depth + 1) * 20))
+                    .padding(
+                        .leading,
+                        CGFloat(unorderedList.depth + 1) * Visitor.listIndentation
+                    )
                 }
             )
         )
@@ -290,6 +300,19 @@ private extension Markdown.Text {
             }
         }
         return nil
+    }
+}
+
+private extension Markup {
+    var isInList: Bool {
+        var current = parent
+        while current != nil {
+            if current is ListItemContainer {
+                return true
+            }
+            current = current?.parent
+        }
+        return false
     }
 }
 
