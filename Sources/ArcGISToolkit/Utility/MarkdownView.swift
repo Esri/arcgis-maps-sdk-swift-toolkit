@@ -70,24 +70,24 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***mutating func visitChildren(_ children: MarkupChildren) -> Result {
 ***REMOVED******REMOVED***var results = [Result]()
 ***REMOVED******REMOVED***var combinedText = SwiftUI.Text("")
-***REMOVED******REMOVED***var isContinuousText = true
+***REMOVED******REMOVED***var isPureText = false
 ***REMOVED******REMOVED***var containsBreak = false
 ***REMOVED******REMOVED***children.forEach {
 ***REMOVED******REMOVED******REMOVED***let child = visit($0)
 ***REMOVED******REMOVED******REMOVED***if let text = child.text {
 ***REMOVED******REMOVED******REMOVED******REMOVED***combinedText = combinedText + text
-***REMOVED******REMOVED******REMOVED******REMOVED***isContinuousText = true
+***REMOVED******REMOVED******REMOVED******REMOVED***isPureText = true
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***isContinuousText = false
-***REMOVED******REMOVED******REMOVED******REMOVED***if isContinuousText {
+***REMOVED******REMOVED******REMOVED******REMOVED***containsBreak = true
+***REMOVED******REMOVED******REMOVED******REMOVED***if isPureText {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results.append(.text(combinedText))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***combinedText = SwiftUI.Text("")
+***REMOVED******REMOVED******REMOVED******REMOVED***isPureText = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***results.append(child)
-***REMOVED******REMOVED******REMOVED******REMOVED***containsBreak = true
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***if isContinuousText && !containsBreak {
+***REMOVED******REMOVED***if isPureText && !containsBreak {
 ***REMOVED******REMOVED******REMOVED***return .text(combinedText)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***results.append(.text(combinedText))
