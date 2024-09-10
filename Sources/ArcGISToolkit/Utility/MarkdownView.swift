@@ -33,7 +33,7 @@ struct MarkdownView: View {
         let document = Document(parsing: markdown)
         var visitor = Visitor()
         let content = visitor.visitDocument(document)
-        content.resolve()
+        VStack { content.resolve() }
     }
 }
 
