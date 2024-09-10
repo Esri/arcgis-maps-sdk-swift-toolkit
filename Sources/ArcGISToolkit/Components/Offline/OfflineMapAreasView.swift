@@ -43,7 +43,8 @@ public struct OfflineMapAreasView: View {
                 Section {
                     preplannedMapAreaViews
                 } header: {
-                    Text("Preplanned").bold()
+                    Text("Preplanned")
+                        .bold()
                 }
                 .textCase(nil)
             }
