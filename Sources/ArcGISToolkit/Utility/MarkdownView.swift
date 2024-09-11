@@ -19,13 +19,16 @@ internal import Markdown
 ***REMOVED***/ Rendered Markdown text content.
 ***REMOVED***/
 ***REMOVED***/ Supports the following Markdown tags:
+***REMOVED***/  - Code Block
 ***REMOVED***/  - Emphasis
 ***REMOVED***/  - Heading
-***REMOVED***/  - Inline code
-***REMOVED***/  - Links
-***REMOVED***/  - Ordered lists
+***REMOVED***/***REMOVED***Horizontal Rule
+***REMOVED***/  - Image
+***REMOVED***/  - Inline Code
+***REMOVED***/  - Link
+***REMOVED***/  - Ordered List
 ***REMOVED***/  - Strikethrough
-***REMOVED***/  - Unordered lists
+***REMOVED***/  - Unordered List
 struct MarkdownView: View {
 ***REMOVED***let markdown: String
 ***REMOVED***
@@ -138,6 +141,24 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return children
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitImage(_ image: Markdown.Image) -> MarkdownResult {
+***REMOVED******REMOVED***if let source = image.source, let url = URL(string: source) {
+***REMOVED******REMOVED******REMOVED***return .other(
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AsyncImage(url: url) { image in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***image
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaledToFit()
+***REMOVED******REMOVED******REMOVED******REMOVED*** placeholder: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.Text(image.plainText)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(image.plainText))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -360,6 +381,8 @@ private extension Markup {
 ***REMOVED******REMOVED***  - 4th item
 ***REMOVED******REMOVED******REMOVED***- 5th item
 ***REMOVED******REMOVED******REMOVED***- 6th item
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***![Esri](https:***REMOVED***www.esri.com/content/dam/esrisites/en-us/newsroom/media-relations/assets-and-guidelines/assets/b-roll-card-1.jpg)
 ***REMOVED******REMOVED***"""
 ***REMOVED******REMOVED***)
 ***REMOVED***
