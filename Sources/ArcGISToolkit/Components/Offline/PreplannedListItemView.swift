@@ -29,8 +29,6 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
 ***REMOVED***let onMapSelectionChanged: () -> Void
-***REMOVED******REMOVED***/ The closure to perform when the map is removed from local disk.
-***REMOVED***let onDeletion: () -> Void
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
@@ -88,7 +86,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***   !selectedMapFromThisModel {
 ***REMOVED******REMOVED******REMOVED***Button("Delete") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED******REMOVED***onDeletion()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED******REMOVED***
@@ -199,6 +196,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***selectedMap: .constant(nil)
-***REMOVED***) { ***REMOVED*** onDeletion: { ***REMOVED***
+***REMOVED***) { ***REMOVED***
 ***REMOVED***.padding()
 ***REMOVED***
