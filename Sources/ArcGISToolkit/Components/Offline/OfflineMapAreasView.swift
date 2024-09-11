@@ -63,7 +63,7 @@ public struct OfflineMapAreasView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .refreshable {
-            await mapViewModel.makePreplannedOfflineMapModels()
+            await makePreplannedMapModels()
         }
     }
     
