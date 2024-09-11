@@ -22,6 +22,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
+    /// The ID of the preplanned map area.
+    let preplannedMapAreaID: PortalItem.ID
+    
     /// The mobile map package directory URL.
     private let mmpkDirectoryURL: URL
     
@@ -30,9 +33,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// The ID of the web map.
     private let portalItemID: PortalItem.ID
-    
-    /// The ID of the preplanned map area.
-    private let preplannedMapAreaID: PortalItem.ID
     
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
@@ -141,7 +141,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         } catch {
             status = .mmpkLoadFailure(error)
         }
-        return mobileMapPackage.maps.first
+        if let map = mobileMapPackage.maps.first {
+            // Add the preplanned map area ID as a tag to differentiate between
+            // local map areas.
+            map.item!.addTag(preplannedMapAreaID.rawValue)
+            return map
+        } else {
+            return nil
+        }
     }
     
     /// Downloads the preplanned map area.

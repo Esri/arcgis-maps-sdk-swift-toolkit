@@ -21,13 +21,22 @@ struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
+    /// The currently selected map.
+    @Binding var selectedMap: Map?
+    
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
     /// The closure to perform when the map selection changes.
-    let onMapSelectionChanged: (Map) -> Void
+    let onMapSelectionChanged: () -> Void
     /// The closure to perform when the map is removed from local disk.
     let onDeletion: () -> Void
+    
+    /// A Boolean value indicating whether the selected map area is the same
+    /// as the map area from this model.
+    var selectedMapFromThisModel: Bool {
+        selectedMap?.item?.tags.contains(model.preplannedMapAreaID.rawValue) ?? false
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -75,7 +84,8 @@ struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var deleteButton: some View {
-        if model.status.allowsRemoval {
+        if model.status.allowsRemoval,
+           !selectedMapFromThisModel {
             Button("Delete") {
                 model.removeDownloadedPreplannedMapArea()
                 onDeletion()
@@ -93,7 +103,8 @@ struct PreplannedListItemView: View {
             Button {
                 Task {
                     if let map = await model.loadMobileMapPackage() {
-                        onMapSelectionChanged(map)
+                        selectedMap = map
+                        onMapSelectionChanged()
                     }
                 }
             } label: {
@@ -103,6 +114,7 @@ struct PreplannedListItemView: View {
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
+            .disabled(selectedMapFromThisModel)
         case .downloading:
             if let job = model.job {
                 ProgressView(job.progress)
@@ -185,7 +197,8 @@ struct PreplannedListItemView: View {
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!
-        )
-    ) { _ in } onDeletion: { }
+        ),
+        selectedMap: .constant(nil)
+    ) { } onDeletion: { }
     .padding()
 }
