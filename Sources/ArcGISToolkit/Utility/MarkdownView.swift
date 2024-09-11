@@ -373,6 +373,8 @@ private extension Markup {
         
         ~Strikethrough~
         
+        ---
+        
         **Bold with _italic_ and ~_italic_ strikethrough~.**
         
         - 1st item
