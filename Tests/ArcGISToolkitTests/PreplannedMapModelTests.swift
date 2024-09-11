@@ -371,7 +371,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded]
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded, .loading, .packaged]
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
