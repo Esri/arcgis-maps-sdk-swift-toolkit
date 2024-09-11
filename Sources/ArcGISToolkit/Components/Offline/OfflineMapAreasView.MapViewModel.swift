@@ -48,6 +48,10 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***func makePreplannedMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if offlineMapTask.loadStatus == .failed {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await offlineMapTask.retryLoad()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result { @MainActor in
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await offlineMapTask.preplannedMapAreas
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.portalItem.id != nil ***REMOVED***
