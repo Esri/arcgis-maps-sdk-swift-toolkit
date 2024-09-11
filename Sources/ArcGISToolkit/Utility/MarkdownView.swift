@@ -373,6 +373,8 @@ private extension Markup {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***~Strikethrough~
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***---
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED*****Bold with _italic_ and ~_italic_ strikethrough~.**
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***- 1st item
