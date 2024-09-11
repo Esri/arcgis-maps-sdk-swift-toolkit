@@ -19,13 +19,16 @@ internal import Markdown
 /// Rendered Markdown text content.
 ///
 /// Supports the following Markdown tags:
+///  - Code Block
 ///  - Emphasis
 ///  - Heading
-///  - Inline code
-///  - Links
-///  - Ordered lists
+///    Horizontal Rule
+///  - Image
+///  - Inline Code
+///  - Link
+///  - Ordered List
 ///  - Strikethrough
-///  - Unordered lists
+///  - Unordered List
 struct MarkdownView: View {
     let markdown: String
     
@@ -138,6 +141,24 @@ struct Visitor: MarkupVisitor {
             )
         } else {
             return children
+        }
+    }
+    
+    mutating func visitImage(_ image: Markdown.Image) -> MarkdownResult {
+        if let source = image.source, let url = URL(string: source) {
+            return .other(
+                AnyView(
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        SwiftUI.Text(image.plainText)
+                    }
+                )
+            )
+        } else {
+            return .text(SwiftUI.Text(image.plainText))
         }
     }
     
@@ -360,6 +381,8 @@ private extension Markup {
           - 4th item
             - 5th item
             - 6th item
+        
+        ![Esri](https://www.esri.com/content/dam/esrisites/en-us/newsroom/media-relations/assets-and-guidelines/assets/b-roll-card-1.jpg)
         """
         )
     }
