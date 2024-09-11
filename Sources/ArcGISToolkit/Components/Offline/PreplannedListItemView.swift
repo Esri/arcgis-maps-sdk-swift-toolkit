@@ -79,9 +79,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Button("Delete") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDeletion()
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.tint(.red)
 ***REMOVED***
