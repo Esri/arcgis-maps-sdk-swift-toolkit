@@ -1524,7 +1524,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The form failed to open after 10 seconds."
         )
         
-        XCTAssertTrue(attachmentElementTitle.exists)
+        XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
         XCTAssertTrue(placeholderImage.exists)
         XCTAssertTrue(attachmentName.exists)
         XCTAssertTrue(sizeLabel.exists)
