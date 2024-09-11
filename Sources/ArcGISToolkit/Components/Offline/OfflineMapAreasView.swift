@@ -88,7 +88,7 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap) {
                         dismiss()
-                    } onDeletion: { }
+                    }
                 }
             } else {
                 emptyPreplannedMapAreasView
