@@ -27,8 +27,25 @@ struct OfflineMapAreasExampleView: View {
     /// A Boolean value indicating whether the offline map ares view should be presented.
     @State private var isShowingOfflineMapAreasView = false
     
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight = 0.0
+    
     var body: some View {
         MapView(map: selectedMap ?? onlineMap)
+            .onAttributionBarHeightChanged { newHeight in
+                withAnimation { attributionBarHeight = newHeight }
+            }
+            .overlay(alignment: .bottom) {
+                if selectedMap != nil {
+                    Button("Go Online") {
+                        selectedMap = nil
+                    }
+                    .padding()
+                    .background(.regularMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.vertical, 10 + attributionBarHeight)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Offline Maps") {
