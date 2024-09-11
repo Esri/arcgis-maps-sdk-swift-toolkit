@@ -179,6 +179,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         // Reload the model after local files removal.
         status = .notLoaded
+        Task { await load() }
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and

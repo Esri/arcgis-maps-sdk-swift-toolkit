@@ -371,7 +371,7 @@ class PreplannedMapModelTests: XCTestCase {
         // Verify statuses.
         XCTAssertEqual(
             statuses,
-            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded]
+            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded, .loading, .packaged]
         )
     }
 }
