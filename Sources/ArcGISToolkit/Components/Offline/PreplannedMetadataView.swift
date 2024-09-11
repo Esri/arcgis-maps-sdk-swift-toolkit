@@ -71,9 +71,6 @@ struct PreplannedMetadataView: View {
                     Button("Delete Map Area", role: .destructive) {
                         dismiss()
                         model.removeDownloadedPreplannedMapArea()
-                        Task {
-                            await model.load()
-                        }
                     }
                 }
             }
