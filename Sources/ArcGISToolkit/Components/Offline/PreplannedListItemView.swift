@@ -21,13 +21,22 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The currently selected map.
+***REMOVED***@Binding var selectedMap: Map?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
-***REMOVED***let onMapSelectionChanged: (Map) -> Void
+***REMOVED***let onMapSelectionChanged: () -> Void
 ***REMOVED******REMOVED***/ The closure to perform when the map is removed from local disk.
 ***REMOVED***let onDeletion: () -> Void
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
+***REMOVED******REMOVED***/ as the map area from this model.
+***REMOVED***var selectedMapFromThisModel: Bool {
+***REMOVED******REMOVED***selectedMap?.item?.tags.contains(model.preplannedMapAreaID.rawValue) ?? false
+***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -75,7 +84,8 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var deleteButton: some View {
-***REMOVED******REMOVED***if model.status.allowsRemoval {
+***REMOVED******REMOVED***if model.status.allowsRemoval,
+***REMOVED******REMOVED***   !selectedMapFromThisModel {
 ***REMOVED******REMOVED******REMOVED***Button("Delete") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDeletion()
@@ -93,7 +103,8 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.loadMobileMapPackage() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged(map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -103,6 +114,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
+***REMOVED******REMOVED******REMOVED***.disabled(selectedMapFromThisModel)
 ***REMOVED******REMOVED***case .downloading:
 ***REMOVED******REMOVED******REMOVED***if let job = model.job {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
@@ -185,7 +197,8 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
-***REMOVED******REMOVED***)
-***REMOVED***) { _ in ***REMOVED*** onDeletion: { ***REMOVED***
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***selectedMap: .constant(nil)
+***REMOVED***) { ***REMOVED*** onDeletion: { ***REMOVED***
 ***REMOVED***.padding()
 ***REMOVED***

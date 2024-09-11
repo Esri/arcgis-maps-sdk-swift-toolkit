@@ -22,6 +22,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
+***REMOVED******REMOVED***/ The ID of the preplanned map area.
+***REMOVED***let preplannedMapAreaID: PortalItem.ID
+***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package directory URL.
 ***REMOVED***private let mmpkDirectoryURL: URL
 ***REMOVED***
@@ -30,9 +33,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the web map.
 ***REMOVED***private let portalItemID: PortalItem.ID
-***REMOVED***
-***REMOVED******REMOVED***/ The ID of the preplanned map area.
-***REMOVED***private let preplannedMapAreaID: PortalItem.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
 ***REMOVED***private(set) var mobileMapPackage: MobileMapPackage?
@@ -141,7 +141,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
 ***REMOVED***
-***REMOVED******REMOVED***return mobileMapPackage.maps.first
+***REMOVED******REMOVED***if let map = mobileMapPackage.maps.first {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Add the preplanned map area ID as a tag to differentiate between
+***REMOVED******REMOVED******REMOVED******REMOVED*** local map areas.
+***REMOVED******REMOVED******REMOVED***map.item!.addTag(preplannedMapAreaID.rawValue)
+***REMOVED******REMOVED******REMOVED***return map
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
