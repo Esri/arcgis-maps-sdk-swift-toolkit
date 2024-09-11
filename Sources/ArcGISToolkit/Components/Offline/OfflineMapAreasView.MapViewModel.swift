@@ -67,7 +67,7 @@ extension OfflineMapAreasView {
             }
         }
         
-        /// Makes offline preplanned map models with infomation from the downloaded mobile map 
+        /// Makes offline preplanned map models with information from the downloaded mobile map
         /// packages for the online map.
         func makeOfflinePreplannedMapModels() async {
             guard let portalItemID else { return }
