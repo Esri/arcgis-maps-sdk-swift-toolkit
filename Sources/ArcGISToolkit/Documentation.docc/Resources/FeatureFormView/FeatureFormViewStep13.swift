@@ -35,7 +35,7 @@ struct FeatureFormExampleView: View {
                     }
                     .task(id: identifyScreenPoint) {
                         if let feature = await identifyFeature(with: mapViewProxy),
-                           let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                           let formDefinition = feature.featureFormDefinition {
                             model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
                         }
                     }
@@ -65,7 +65,7 @@ extension FeatureFormExampleView {
         )
             .first(where: { result in
                 if let feature = result.geoElements.first as? ArcGISFeature,
-                   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
+                   feature.featureFormDefinition != nil {
                     return true
                 } else {
                     return false
