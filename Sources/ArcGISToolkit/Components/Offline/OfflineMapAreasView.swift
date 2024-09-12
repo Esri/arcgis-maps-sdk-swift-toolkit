@@ -80,8 +80,8 @@ public struct OfflineMapAreasView: View {
             } else {
                 emptyPreplannedMapAreasView
             }
-        case .failure(let error):
-            if error.localizedDescription == "The Internet connection appears to be offline." {
+        case .failure(let error as URLError):
+            if error.code == .notConnectedToInternet {
                 if let models = mapViewModel.offlinePreplannedMapModels,
                    !models.isEmpty {
                     List(models) { preplannedMapModel in
@@ -94,14 +94,10 @@ public struct OfflineMapAreasView: View {
                     emptyOfflinePreplannedMapAreasView
                 }
             } else {
-                VStack(alignment: .center) {
-                    Image(systemName: "exclamationmark.circle")
-                        .imageScale(.large)
-                        .foregroundStyle(.red)
-                    Text(error.localizedDescription)
-                }
-                .frame(maxWidth: .infinity)
+                errorView(error)
             }
+        case .failure(let error):
+            errorView(error)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
@@ -129,7 +125,17 @@ public struct OfflineMapAreasView: View {
         }
         .frame(maxWidth: .infinity)
     }
-
+    
+    @ViewBuilder private func errorView(_ error: Error) -> some View {
+        VStack(alignment: .center) {
+            Image(systemName: "exclamationmark.circle")
+                .imageScale(.large)
+                .foregroundStyle(.red)
+            Text(error.localizedDescription)
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
     /// Makes the preplanned map models.
     private func makePreplannedMapModels() async {
         await mapViewModel.makePreplannedMapModels()
