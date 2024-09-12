@@ -73,7 +73,7 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
 ***REMOVED***@State private var evaluation: Evaluation?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>?
 ***REMOVED***
