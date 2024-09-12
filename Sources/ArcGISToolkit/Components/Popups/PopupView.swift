@@ -73,7 +73,7 @@ public struct PopupView: View {
     
     /// The result of evaluating the popup expressions.
     @State private var evaluation: Evaluation?
-
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
     
