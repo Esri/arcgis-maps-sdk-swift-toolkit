@@ -35,7 +35,7 @@ extension FeatureFormExampleView {
         )
             .first(where: { result in
                 if let feature = result.geoElements.first as? ArcGISFeature,
-                   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
+                   feature.featureFormDefinition != nil {
                     return true
                 } else {
                     return false
