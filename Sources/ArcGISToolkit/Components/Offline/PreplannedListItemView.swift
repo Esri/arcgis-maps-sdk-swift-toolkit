@@ -27,9 +27,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when the map selection changes.
-***REMOVED***let onMapSelectionChanged: () -> Void
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
 ***REMOVED***var selectedMapFromThisModel: Bool {
@@ -98,7 +95,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.loadMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onMapSelectionChanged()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -193,6 +189,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***selectedMap: .constant(nil)
-***REMOVED***) { ***REMOVED***
+***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
