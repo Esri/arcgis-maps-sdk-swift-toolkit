@@ -33,7 +33,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task(id: identifyScreenPoint) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = feature.featureFormDefinition {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -51,7 +51,7 @@ extension FeatureFormExampleView {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.first(where: { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = result.geoElements.first as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED******REMOVED***   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***   feature.featureFormDefinition != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
