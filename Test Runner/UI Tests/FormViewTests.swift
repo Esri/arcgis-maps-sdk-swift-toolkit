@@ -1524,7 +1524,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.exists)
+***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
 ***REMOVED******REMOVED***XCTAssertTrue(placeholderImage.exists)
 ***REMOVED******REMOVED***XCTAssertTrue(attachmentName.exists)
 ***REMOVED******REMOVED***XCTAssertTrue(sizeLabel.exists)
