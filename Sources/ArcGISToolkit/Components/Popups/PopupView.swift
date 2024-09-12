@@ -55,8 +55,8 @@
 @preconcurrency
 public struct PopupView: View {
 ***REMOVED******REMOVED***/ Creates a `PopupView` with the given popup.
-***REMOVED******REMOVED***/ - Parameters
-***REMOVED******REMOVED***/***REMOVED*** popup: The popup to display.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - popup: The popup to display.
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED***public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
 ***REMOVED******REMOVED***self.popup = popup
