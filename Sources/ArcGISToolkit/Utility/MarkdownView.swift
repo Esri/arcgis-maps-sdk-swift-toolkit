@@ -19,151 +19,266 @@ internal import Markdown
 /// Rendered Markdown text content.
 ///
 /// Supports the following Markdown tags:
+///  - Code Block
 ///  - Emphasis
 ///  - Heading
-///  - Inline code
-///  - Links
-///  - Ordered lists
+///    Horizontal Rule
+///  - Image
+///  - Inline Code
+///  - Link
+///  - Ordered List
 ///  - Strikethrough
-///  - Unordered lists
+///  - Unordered List
 struct MarkdownView: View {
     let markdown: String
     
     var body: some View {
         let document = Document(parsing: markdown)
-        VStack(alignment: .leading) {
-            ForEach(Array(document.children), id: \.indexInParent) { markup in
-                Text(stringFor(markup))
+        var visitor = Visitor()
+        let content = visitor.visitDocument(document)
+        VStack { content.resolve() }
+    }
+}
+
+enum MarkdownResult {
+    case other(AnyView)
+    case text(SwiftUI.Text)
+    
+    var text: SwiftUI.Text? {
+        switch self {
+        case .other(_):
+            return nil
+        case .text(let text):
+            return text
+        }
+    }
+    
+    func resolve() -> AnyView {
+        switch self {
+        case .text(let text):
+            return AnyView(text)
+        case .other(let view):
+            return view
+        }
+    }
+}
+
+struct Visitor: MarkupVisitor {
+    typealias Result = MarkdownResult
+    
+    static let listIndentation: CGFloat = 10
+    
+    mutating func defaultVisit(_ markup: any Markdown.Markup) -> Result {
+        visit(markup)
+    }
+    
+    mutating func visitChildren(_ children: MarkupChildren) -> Result {
+        var results = [Result]()
+        var combinedText = SwiftUI.Text("")
+        var isPureText = false
+        var containsBreak = false
+        children.forEach {
+            let child = visit($0)
+            if let text = child.text {
+                combinedText = combinedText + text
+                isPureText = true
+            } else {
+                containsBreak = true
+                if isPureText {
+                    results.append(.text(combinedText))
+                }
+                combinedText = SwiftUI.Text("")
+                isPureText = false
+                results.append(child)
             }
         }
-    }
-    
-    func stringFor(_ emphasis: Emphasis) -> AttributedString {
-        var attributedString = stringFor(emphasis.children)
-        if let currentFont = attributedString.font {
-            attributedString.font = currentFont.italic()
+        if isPureText && !containsBreak {
+            return .text(combinedText)
         } else {
-            attributedString.font = Font.system(.body).italic()
+            results.append(.text(combinedText))
         }
-        return attributedString
+        return .other(
+            AnyView(
+                VStack(alignment: .leading) {
+                    ForEach(results.indices, id: \.self) { index in
+                        results[index].resolve()
+                    }
+                }
+            )
+        )
     }
     
-    func stringFor(_ heading: Heading) -> AttributedString {
-        var attributedString = AttributedString(heading.plainText)
-        attributedString.font = Font.fontForHeading(level: heading.level)
-        return attributedString
+    mutating func visitCodeBlock(_ codeBlock: CodeBlock) -> Result {
+        var attributedString = AttributedString(codeBlock.code.dropLast())
+        attributedString.font = Font.system(.body).monospaced()
+        return .other(
+            AnyView (
+                SwiftUI.Text(attributedString)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.codeBackground)
+            )
+        )
     }
     
-    func stringFor(_ image: Markdown.Image) -> AttributedString {
-        .init(image.plainText)
+    mutating func visitDocument(_ document: Document) -> Result {
+        visitChildren(document.children)
     }
     
-    func stringFor(_ inlineCode: InlineCode) -> AttributedString {
+    mutating func visitEmphasis(_ emphasis: Emphasis) -> Result {
+        let children = visitChildren(emphasis.children)
+        if let text = children.text {
+            return .text(text.italic())
+        } else {
+            return children
+        }
+    }
+    
+    mutating func visitHeading(_ heading: Heading) -> Result {
+        let children = visitChildren(heading.children)
+        if let text = children.text {
+            return .other(
+                AnyView(text.font(Font.fontForHeading(level: heading.level)).padding(.bottom))
+            )
+        } else {
+            return children
+        }
+    }
+    
+    mutating func visitImage(_ image: Markdown.Image) -> MarkdownResult {
+        if let source = image.source, let url = URL(string: source) {
+            return .other(
+                AnyView(
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        SwiftUI.Text(image.plainText)
+                    }
+                )
+            )
+        } else {
+            return .text(SwiftUI.Text(image.plainText))
+        }
+    }
+    
+    mutating func visitInlineCode(_ inlineCode: InlineCode) -> Result {
         var attributedString = AttributedString(inlineCode.code)
         attributedString.font = Font.system(.body).monospaced()
         attributedString.backgroundColor = Color.codeBackground
-        return attributedString
+        return .text(SwiftUI.Text(attributedString))
     }
     
-    func stringFor(_ link: Markdown.Link) -> AttributedString {
-        var attributedString = stringFor(link.children)
-        attributedString.link = URL(string: link.destination ?? "")
-        return attributedString
+    mutating func visitLineBreak(_ lineBreak: LineBreak) -> Result {
+        .text(SwiftUI.Text("\n"))
     }
     
-    func stringFor(_ listItem: ListItem) -> AttributedString {
-        let isInOrderedList = listItem.parent is OrderedList
-        var output = AttributedString()
-        listItem.children.forEach { child in
-            if !(child is ListItemContainer) {
-                if listItem.includeLineBreak {
-                    output.append(AttributedString("\n"))
-                }
-                output.append(AttributedString(String(repeating: "\t", count: listItem.depth)))
-                if isInOrderedList {
-                    output.append(AttributedString("\(listItem.indexInParent + 1). "))
-                } else {
-                    switch listItem.depth {
-                    case 0: output.append(AttributedString("•"))
-                    case 1: output.append(AttributedString("⚬"))
-                    default: output.append(AttributedString("▪︎︎"))
+    mutating func visitLink(_ link: Markdown.Link) -> Result {
+        visitChildren(link.children)
+    }
+    
+    mutating func visitListItem(_ listItem: ListItem) -> Result {
+        visitChildren(listItem.children)
+    }
+    
+    mutating func visitOrderedList(_ orderedList: OrderedList) -> Result {
+        var results = [Result]()
+        orderedList.listItems.forEach { listItem in
+            let result = visit(listItem)
+            results.append(result)
+        }
+        return .other(
+            AnyView(
+                ForEach(results.indices, id: \.self) { index in
+                    HStack(alignment: .firstTextBaseline) {
+                        Text((index + 1).description) + Text(".")
+                        results[index].resolve()
                     }
+                    .padding(
+                        .leading,
+                        CGFloat(orderedList.depth + 1) * Visitor.listIndentation
+                    )
                 }
-                output.append(stringFor(listItem.children))
+            )
+        )
+    }
+    
+    mutating func visitParagraph(_ paragraph: Paragraph) -> Result {
+        let children = visitChildren(paragraph.children)
+        if let text = children.text {
+            if paragraph.isInList {
+                return .text(text)
+            } else {
+                return .text(text + SwiftUI.Text("\n"))
             }
-        }
-        return output
-    }
-    
-    func stringFor(_ markup: Markup) -> AttributedString {
-        switch markup {
-        case let markup as Emphasis:
-            stringFor(markup)
-        case let markup as Heading:
-            stringFor(markup)
-        case let markup as Markdown.Image:
-            stringFor(markup)
-        case let markup as InlineCode:
-            stringFor(markup)
-        case let markup as Markdown.Link:
-            stringFor(markup)
-        case let markup as ListItem:
-            stringFor(markup)
-        case let markup as OrderedList:
-            stringFor(markup)
-        case let markup as Paragraph:
-            stringFor(markup)
-        case let markup as Strikethrough:
-            stringFor(markup)
-        case let markup as Strong:
-            stringFor(markup)
-        case let markup as Markdown.Text:
-            stringFor(markup)
-        case let markup as UnorderedList:
-            stringFor(markup)
-        default:
-            AttributedString()
-        }
-    }
-    
-    func stringFor(_ markupChildren: MarkupChildren) -> AttributedString {
-        var attributedString = AttributedString()
-        markupChildren.forEach { markup in
-            attributedString.append(stringFor(markup))
-        }
-        return attributedString
-    }
-    
-    func stringFor(_ orderedList: OrderedList) -> AttributedString {
-        stringFor(orderedList.children)
-    }
-    
-    func stringFor(_ paragraph: Paragraph) -> AttributedString {
-        stringFor(paragraph.children)
-    }
-    
-    func stringFor(_ strikethrough: Strikethrough) -> AttributedString {
-        var attributedString = stringFor(strikethrough.children)
-        attributedString.strikethroughStyle = .single
-        return attributedString
-    }
-    
-    func stringFor(_ strong: Strong) -> AttributedString {
-        var attributedString = stringFor(strong.children)
-        if let currentFont = attributedString.font {
-            attributedString.font = currentFont.bold()
         } else {
-            attributedString.font = Font.system(.body).bold()
+            return children
         }
-        return attributedString
     }
     
-    func stringFor(_ text: Markdown.Text) -> AttributedString {
-        .init(text.string)
+    mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> Result {
+        let children = visitChildren(strikethrough.children)
+        if let text = children.text {
+            return .text(text.strikethrough())
+        } else {
+            return children
+        }
     }
     
-    func stringFor(_ unorderedList: UnorderedList) -> AttributedString {
-        stringFor(unorderedList.children)
+    mutating func visitStrong(_ strong: Strong) -> Result {
+        let children = visitChildren(strong.children)
+        if let text = children.text {
+            return .text(text.bold())
+        } else {
+            return children
+        }
+    }
+    
+    mutating func visitText(_ text: Markdown.Text) -> Result {
+        if let link = text.linkAncestor {
+            let wrappedLink = "[\(text.plainText)](\(link.destination ?? ""))"
+            return .text(SwiftUI.Text(.init(wrappedLink)))
+        } else {
+            return .text(SwiftUI.Text(text.plainText))
+        }
+    }
+    
+    mutating func visitThematicBreak(_ thematicBreak: ThematicBreak) -> Result {
+        .other(AnyView(Divider()))
+    }
+    
+    mutating func visitUnorderedList(_ unorderedList: UnorderedList) -> Result {
+        var results = [Result]()
+        unorderedList.listItems.forEach { listItem in
+            let result = visit(listItem)
+            results.append(result)
+        }
+        return .other(
+            AnyView(
+                ForEach(results.indices, id: \.self) { index in
+                    HStack(alignment: .firstTextBaseline) {
+                        Group {
+                            switch unorderedList.depth {
+                            case 0:
+                                Circle()
+                            case 1:
+                                Circle().stroke()
+                            case 2:
+                                Rectangle()
+                            default:
+                                Rectangle().stroke()
+                            }
+                        }
+                        .frame(width: 8, height: 8)
+                        results[index].resolve()
+                    }
+                    .padding(
+                        .leading,
+                        CGFloat(unorderedList.depth + 1) * Visitor.listIndentation
+                    )
+                }
+            )
+        )
     }
 }
 
@@ -185,24 +300,6 @@ private extension Font {
     }
 }
 
-private extension ListItem {
-    var depth: Int {
-        var current = parent
-        while current != nil {
-            if let container = current as? ListItemContainer {
-                return container.depth
-            }
-            current = current?.parent
-        }
-        return 0
-    }
-    
-    var includeLineBreak: Bool {
-        (parent is OrderedList || parent is UnorderedList)
-        && (indexInParent > 0 || depth > 0)
-    }
-}
-
 private extension ListItemContainer {
     var depth: Int {
         var index = 0
@@ -211,39 +308,84 @@ private extension ListItemContainer {
             if current is ListItemContainer {
                 index += 1
             }
-            current = current!.parent
+            current = current?.parent
         }
         return index
     }
 }
 
+private extension Markdown.Text {
+    var linkAncestor: Markdown.Link? {
+        var current: Markup? = self
+        while current != nil {
+            if let link = current as? Markdown.Link {
+                return link
+            } else {
+                current = current?.parent
+            }
+        }
+        return nil
+    }
+}
+
+private extension Markup {
+    var isInList: Bool {
+        var current = parent
+        while current != nil {
+            if current is ListItemContainer {
+                return true
+            }
+            current = current?.parent
+        }
+        return false
+    }
+}
+
 #Preview {
-    MarkdownView(markdown: """
-    *Emphasis*
-    
-    # Heading 1
-    ## Heading 2
-    ### Heading 3
-    
-    `Inline code`
-    
-    [Link](https://www.esri.com)
-    
-    1. 1st item
-    1. 2nd item
-    1. 3rd item
-       1. 4th item
-          1. 5th item
-          1. 6th item
-    
-    ~Strikethrough~
-    
-    - 1st item
-    - 2nd item
-    - 3rd item
-      - 4th item
-        - 5th item
-        - 6th item
-    """
-    )
+    ScrollView {
+        MarkdownView(markdown: """
+        *Emphasis*
+        
+        # Heading 1
+        ## Heading 2
+        ### Heading 3
+        #### [Heading 4 as a ***~link~***](www.esri.com)
+        
+        
+        ```
+        func showCodeBlock() {
+        
+        }
+        ```
+        
+        `Code`
+        
+        Sentence with `inline code`.
+        
+        [Link](https://www.esri.com)
+        
+        1. 1st item
+        1. 2nd item
+        1. 3rd item
+           1. 4th item
+              1. 5th item
+              1. 6th item
+        
+        ~Strikethrough~
+        
+        ---
+        
+        **Bold with _italic_ and ~_italic_ strikethrough~.**
+        
+        - 1st item
+        - 2nd item
+        - 3rd item
+          - 4th item
+            - 5th item
+            - 6th item
+        
+        ![Esri](https://www.esri.com/content/dam/esrisites/en-us/newsroom/media-relations/assets-and-guidelines/assets/b-roll-card-1.jpg)
+        """
+        )
+    }
 }
