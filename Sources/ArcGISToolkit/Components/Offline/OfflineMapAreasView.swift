@@ -80,8 +80,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***if error.localizedDescription == "The Internet connection appears to be offline." {
+***REMOVED******REMOVED***case .failure(let error as URLError):
+***REMOVED******REMOVED******REMOVED***if error.code == .notConnectedToInternet {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
@@ -94,14 +94,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflinePreplannedMapAreasView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED***errorView(error)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***errorView(error)
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
@@ -129,7 +125,17 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
-
+***REMOVED***
+***REMOVED***@ViewBuilder private func errorView(_ error: Error) -> some View {
+***REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
+***REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
+***REMOVED***
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Makes the preplanned map models.
 ***REMOVED***private func makePreplannedMapModels() async {
 ***REMOVED******REMOVED***await mapViewModel.makePreplannedMapModels()
