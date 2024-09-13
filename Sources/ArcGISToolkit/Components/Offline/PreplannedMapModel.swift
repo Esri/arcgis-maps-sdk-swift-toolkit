@@ -322,7 +322,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     }
 }
 
-private extension FileManager {
+extension FileManager {
     /// The path to the documents folder.
     private var documentsDirectory: URL {
         URL.documentsDirectory
