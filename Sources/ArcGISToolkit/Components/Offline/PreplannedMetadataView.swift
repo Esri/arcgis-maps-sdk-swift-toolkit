@@ -65,8 +65,7 @@ struct PreplannedMetadataView: View {
                         .font(.subheadline)
                 }
             }
-            if model.status.allowsRemoval,
-               !isSelected {
+            if !isSelected {
                 Section {
                     HStack {
                         Image(systemName: "trash.circle.fill")
