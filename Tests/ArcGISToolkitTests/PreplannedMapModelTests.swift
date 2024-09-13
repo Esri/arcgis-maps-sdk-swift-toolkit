@@ -313,7 +313,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***_ = await model.job?.result
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that mobile map package can be loaded.
-***REMOVED******REMOVED***let map = await model.loadMobileMapPackage()
+***REMOVED******REMOVED***let map = await model.map
 ***REMOVED******REMOVED***XCTAssertNotNil(map)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Give the final status some time to be updated.
