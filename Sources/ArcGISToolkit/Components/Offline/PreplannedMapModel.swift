@@ -35,7 +35,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private let portalItemID: PortalItem.ID
     
     /// The mobile map package for the preplanned map area.
-    private(set) var mobileMapPackage: MobileMapPackage?
+    private var mobileMapPackage: MobileMapPackage?
     
     /// The file size of the preplanned map area.
     private(set) var directorySize = 0
@@ -48,6 +48,23 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// A Boolean value indicating if a user notification should be shown when a job completes.
     let showsUserNotificationOnCompletion: Bool
+    
+    var map: Map? { 
+        get async {
+            if let mobileMapPackage {
+                if mobileMapPackage.loadStatus != .loaded {
+                    do {
+                        try await mobileMapPackage.load()
+                    } catch {
+                        status = .mmpkLoadFailure(error)
+                    }
+                }
+                return mobileMapPackage.maps.first
+            } else {
+                return nil
+            }
+        }
+    }
     
     init(
         offlineMapTask: OfflineMapTask,
@@ -129,26 +146,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         // job starts, so if the job fails, it will look like the mmpk was downloaded.
         guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
         return MobileMapPackage.init(fileURL: fileURL)
-    }
-    
-    /// Loads the mobile map package and updates the status.
-    /// - Returns: The mobile map package map.
-    func loadMobileMapPackage() async -> Map? {
-        guard let mobileMapPackage else { return nil }
-        
-        do {
-            try await mobileMapPackage.load()
-        } catch {
-            status = .mmpkLoadFailure(error)
-        }
-        if let map = mobileMapPackage.maps.first {
-            // Add the preplanned map area ID as a tag to differentiate between
-            // local map areas.
-            map.item!.addTag(preplannedMapAreaID.rawValue)
-            return map
-        } else {
-            return nil
-        }
     }
     
     /// Downloads the preplanned map area.
