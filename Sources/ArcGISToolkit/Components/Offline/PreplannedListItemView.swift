@@ -31,7 +31,7 @@ struct PreplannedListItemView: View {
     /// as the map area from this model.
     /// The title of a preplanned map area is guaranteed to be unique when it
     /// is created.
-    var selectedMapFromThisModel: Bool {
+    var isSelected: Bool {
         selectedMap?.item?.title == model.preplannedMapArea.title
     }
     
@@ -82,7 +82,7 @@ struct PreplannedListItemView: View {
     
     @ViewBuilder private var deleteButton: some View {
         if model.status.allowsRemoval,
-           !selectedMapFromThisModel {
+           !isSelected {
             Button("Delete") {
                 model.removeDownloadedPreplannedMapArea()
             }
@@ -106,7 +106,7 @@ struct PreplannedListItemView: View {
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
-            .disabled(selectedMapFromThisModel)
+            .disabled(isSelected)
         case .downloading:
             if let job = model.job {
                 ProgressView(job.progress)
