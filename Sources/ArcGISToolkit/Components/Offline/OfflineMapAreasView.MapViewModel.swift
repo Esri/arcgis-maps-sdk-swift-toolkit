@@ -97,6 +97,7 @@ extension OfflineMapAreasView {
                 )
             }
             .sorted(using: KeyPathComparator(\.preplannedMapArea.title))
+            .filter({ $0.status.isDownloaded })
         }
         
         /// Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
