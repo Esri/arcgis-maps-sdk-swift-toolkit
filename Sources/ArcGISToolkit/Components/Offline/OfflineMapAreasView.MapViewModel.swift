@@ -97,6 +97,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.preplannedMapArea.title))
+***REMOVED******REMOVED******REMOVED***.filter({ $0.status.isDownloaded ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
