@@ -49,6 +49,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// A Boolean value indicating if a user notification should be shown when a job completes.
     let showsUserNotificationOnCompletion: Bool
     
+    /// The first map from the mobile map package.
     var map: Map? { 
         get async {
             if let mobileMapPackage {
