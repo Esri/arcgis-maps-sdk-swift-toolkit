@@ -55,8 +55,8 @@ import ArcGIS
 @preconcurrency
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
-    /// - Parameters
-    ///     popup: The popup to display.
+    /// - Parameters:
+    ///   - popup: The popup to display.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = popup
@@ -73,7 +73,7 @@ public struct PopupView: View {
     
     /// The result of evaluating the popup expressions.
     @State private var evaluation: Evaluation?
-
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
     
