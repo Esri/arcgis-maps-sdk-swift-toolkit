@@ -21,13 +21,19 @@ struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
+    /// The currently selected map.
+    @Binding var selectedMap: Map?
+    
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
-    /// The closure to perform when the map selection changes.
-    let onMapSelectionChanged: (Map) -> Void
-    /// The closure to perform when the map is removed from local disk.
-    let onDeletion: () -> Void
+    /// A Boolean value indicating whether the selected map area is the same
+    /// as the map area from this model.
+    /// The title of a preplanned map area is guaranteed to be unique when it
+    /// is created.
+    var isSelected: Bool {
+        selectedMap?.item?.title == model.preplannedMapArea.title
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -75,10 +81,10 @@ struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var deleteButton: some View {
-        if model.status.allowsRemoval {
+        if model.status.allowsRemoval,
+           !isSelected {
             Button("Delete") {
                 model.removeDownloadedPreplannedMapArea()
-                onDeletion()
             }
             .tint(.red)
         }
@@ -89,8 +95,8 @@ struct PreplannedListItemView: View {
         case .downloaded:
             Button {
                 Task {
-                    if let map = await model.loadMobileMapPackage() {
-                        onMapSelectionChanged(map)
+                    if let map = await model.map {
+                        selectedMap = map
                     }
                 }
             } label: {
@@ -100,6 +106,7 @@ struct PreplannedListItemView: View {
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
+            .disabled(isSelected)
         case .downloading:
             if let job = model.job {
                 ProgressView(job.progress)
@@ -182,7 +189,8 @@ struct PreplannedListItemView: View {
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!
-        )
-    ) { _ in } onDeletion: { }
+        ),
+        selectedMap: .constant(nil)
+    )
     .padding()
 }

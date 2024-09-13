@@ -22,6 +22,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
+    /// The ID of the preplanned map area.
+    let preplannedMapAreaID: PortalItem.ID
+    
     /// The mobile map package directory URL.
     private let mmpkDirectoryURL: URL
     
@@ -31,11 +34,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The ID of the web map.
     private let portalItemID: PortalItem.ID
     
-    /// The ID of the preplanned map area.
-    private let preplannedMapAreaID: PortalItem.ID
-    
     /// The mobile map package for the preplanned map area.
-    private(set) var mobileMapPackage: MobileMapPackage?
+    private var mobileMapPackage: MobileMapPackage?
     
     /// The file size of the preplanned map area.
     private(set) var directorySize = 0
@@ -48,6 +48,24 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// A Boolean value indicating if a user notification should be shown when a job completes.
     let showsUserNotificationOnCompletion: Bool
+    
+    /// The first map from the mobile map package.
+    var map: Map? { 
+        get async {
+            if let mobileMapPackage {
+                if mobileMapPackage.loadStatus != .loaded {
+                    do {
+                        try await mobileMapPackage.load()
+                    } catch {
+                        status = .mmpkLoadFailure(error)
+                    }
+                }
+                return mobileMapPackage.maps.first
+            } else {
+                return nil
+            }
+        }
+    }
     
     init(
         offlineMapTask: OfflineMapTask,
@@ -129,19 +147,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         // job starts, so if the job fails, it will look like the mmpk was downloaded.
         guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
         return MobileMapPackage.init(fileURL: fileURL)
-    }
-    
-    /// Loads the mobile map package and updates the status.
-    /// - Returns: The mobile map package map.
-    func loadMobileMapPackage() async -> Map? {
-        guard let mobileMapPackage else { return nil }
-        
-        do {
-            try await mobileMapPackage.load()
-        } catch {
-            status = .mmpkLoadFailure(error)
-        }
-        return mobileMapPackage.maps.first
     }
     
     /// Downloads the preplanned map area.
