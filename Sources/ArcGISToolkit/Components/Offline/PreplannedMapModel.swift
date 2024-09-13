@@ -22,17 +22,23 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
+***REMOVED******REMOVED***/ The ID of the preplanned map area.
+***REMOVED***let preplannedMapAreaID: PortalItem.ID
+***REMOVED***
+***REMOVED******REMOVED***/ The mobile map package directory URL.
+***REMOVED***private let mmpkDirectoryURL: URL
+***REMOVED***
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the web map.
 ***REMOVED***private let portalItemID: PortalItem.ID
 ***REMOVED***
-***REMOVED******REMOVED***/ The ID of the preplanned map area.
-***REMOVED***private let preplannedMapAreaID: PortalItem.ID
-***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
-***REMOVED***private(set) var mobileMapPackage: MobileMapPackage?
+***REMOVED***private var mobileMapPackage: MobileMapPackage?
+***REMOVED***
+***REMOVED******REMOVED***/ The file size of the preplanned map area.
+***REMOVED***private(set) var directorySize = 0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently running download job.
 ***REMOVED***@Published private(set) var job: DownloadPreplannedOfflineMapJob?
@@ -42,6 +48,24 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
 ***REMOVED***let showsUserNotificationOnCompletion: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The first map from the mobile map package.
+***REMOVED***var map: Map? { 
+***REMOVED******REMOVED***get async {
+***REMOVED******REMOVED******REMOVED***if let mobileMapPackage {
+***REMOVED******REMOVED******REMOVED******REMOVED***if mobileMapPackage.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await mobileMapPackage.load()
+***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***return mobileMapPackage.maps.first
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
@@ -54,6 +78,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
+***REMOVED******REMOVED***mmpkDirectoryURL = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
@@ -61,8 +89,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
-***REMOVED******REMOVED******REMOVED***self.status = .downloaded
+***REMOVED******REMOVED******REMOVED***mobileMapPackage = mmpk
+***REMOVED******REMOVED******REMOVED***directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -98,14 +127,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
-***REMOVED***func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>?) {
+***REMOVED***func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
 ***REMOVED******REMOVED***switch downloadResult {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
-***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -122,19 +149,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***return MobileMapPackage.init(fileURL: fileURL)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the mobile map package and updates the status.
-***REMOVED******REMOVED***/ - Returns: The mobile map package map.
-***REMOVED***func loadMobileMapPackage() async -> Map? {
-***REMOVED******REMOVED***guard let mobileMapPackage else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await mobileMapPackage.load()
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
-***REMOVED***
-***REMOVED******REMOVED***return mobileMapPackage.maps.first
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
@@ -143,16 +157,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
-***REMOVED******REMOVED******REMOVED***let mmpkDirectory = FileManager.default.preplannedDirectory(
-***REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
+***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create the download preplanned offline map job.
 ***REMOVED******REMOVED******REMOVED***let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
 ***REMOVED******REMOVED******REMOVED******REMOVED***parameters: parameters,
-***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectory
+***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectoryURL
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job)
@@ -160,6 +170,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Removes the downloaded preplanned map area from disk and resets the status.
+***REMOVED***func removeDownloadedPreplannedMapArea() {
+***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+***REMOVED******REMOVED******REMOVED*** Reload the model after local files removal.
+***REMOVED******REMOVED***status = .notLoaded
+***REMOVED******REMOVED***Task { await load() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
@@ -172,7 +190,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.updateDownloadStatus(for: result)
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
+***REMOVED******REMOVED******REMOVED***if status.isDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackage = try? result.get().mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED***self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.job = nil
 ***REMOVED***
 ***REMOVED***
@@ -222,6 +243,21 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***case .packaged, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the local files can be removed.
+***REMOVED******REMOVED***var allowsRemoval: Bool {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area is downloaded.
+***REMOVED******REMOVED***var isDownloaded: Bool {
+***REMOVED******REMOVED******REMOVED***if case .downloaded = self { true ***REMOVED*** else { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -286,64 +322,61 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***
 
-extension FileManager {
-***REMOVED***private static let mmpkPathExtension: String = "mmpk"
-***REMOVED***private static let offlineMapAreasPath: String = "OfflineMapAreas"
-***REMOVED***private static let packageDirectoryPath: String = "Package"
-***REMOVED***private static let preplannedDirectoryPath: String = "Preplanned"
-***REMOVED***
+private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the documents folder.
 ***REMOVED***private var documentsDirectory: URL {
 ***REMOVED******REMOVED***URL.documentsDirectory
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the offline map areas directory within the documents directory.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas`
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/`
 ***REMOVED***private var offlineMapAreasDirectory: URL {
-***REMOVED******REMOVED***documentsDirectory.appending(
-***REMOVED******REMOVED******REMOVED***path: Self.offlineMapAreasPath,
-***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***documentsDirectory.appending(component: "OfflineMapAreas/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>`
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
 ***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
+***REMOVED******REMOVED***offlineMapAreasDirectory.appending(components: "\(portalItemID)/")
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Calculates the size of a directory and all its contents.
+***REMOVED******REMOVED***/ - Parameter url: The directory's URL.
+***REMOVED******REMOVED***/ - Returns: The total size in bytes.
+***REMOVED***func sizeOfDirectory(at url: URL) -> Int {
+***REMOVED******REMOVED***guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 ***REMOVED***
+***REMOVED******REMOVED***var accumulatedSize = 0
+***REMOVED******REMOVED***for case let fileURL as URL in enumerator {
+***REMOVED******REMOVED******REMOVED***guard let size = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+***REMOVED******REMOVED******REMOVED******REMOVED***continue
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***accumulatedSize += size
+***REMOVED***
+***REMOVED******REMOVED***return accumulatedSize
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned`
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
 ***REMOVED***func preplannedDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID
 ***REMOVED***) -> URL {
-***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
-***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
-***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area portal item.
+***REMOVED******REMOVED***/ - Returns: A URL to the preplanned map area directory.
 ***REMOVED***func preplannedDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
-***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: preplannedMapAreaID.rawValue,
-***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.appending(components: "Preplanned", "\(preplannedMapAreaID)/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating if the specified directory is empty.

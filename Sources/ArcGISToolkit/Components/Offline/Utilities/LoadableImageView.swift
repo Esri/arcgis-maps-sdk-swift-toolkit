@@ -38,6 +38,8 @@ struct LoadableImageView: View {
 ***REMOVED******REMOVED******REMOVED***case .success(let image):
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaledToFit()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: image.size.width * 1.5, maxHeight: image.size.height * 1.5)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
