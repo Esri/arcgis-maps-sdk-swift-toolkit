@@ -338,7 +338,7 @@ extension FileManager {
     /// `Documents/OfflineMapAreas/<Portal Item ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
     private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-        offlineMapAreasDirectory.appending(components: "\(portalItemID)/")
+        offlineMapAreasDirectory.appending(component: "\(portalItemID)/")
     }
     
     /// Calculates the size of a directory and all its contents.
@@ -362,7 +362,7 @@ extension FileManager {
     func preplannedDirectory(
         forPortalItemID portalItemID: PortalItem.ID
     ) -> URL {
-        portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned/")
+        portalItemDirectory(forPortalItemID: portalItemID).appending(component: "Preplanned/")
     }
     
     /// The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
