@@ -44,4 +44,30 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsDownload)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
     }
+    
+    func testIsDownloaded() {
+        XCTAssertFalse(Status.notLoaded.isDownloaded)
+        XCTAssertFalse(Status.loading.isDownloaded)
+        XCTAssertFalse(Status.loadFailure(CancellationError()).isDownloaded)
+        XCTAssertFalse(Status.packaging.isDownloaded)
+        XCTAssertFalse(Status.packaged.isDownloaded)
+        XCTAssertFalse(Status.packageFailure.isDownloaded)
+        XCTAssertFalse(Status.downloading.isDownloaded)
+        XCTAssertTrue(Status.downloaded.isDownloaded)
+        XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
+        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
+    }
+    
+    func testAllowsRemoval() {
+        XCTAssertFalse(Status.notLoaded.allowsRemoval)
+        XCTAssertFalse(Status.loading.allowsRemoval)
+        XCTAssertTrue(Status.loadFailure(CancellationError()).allowsRemoval)
+        XCTAssertFalse(Status.packaging.allowsRemoval)
+        XCTAssertFalse(Status.packaged.allowsRemoval)
+        XCTAssertTrue(Status.packageFailure.allowsRemoval)
+        XCTAssertFalse(Status.downloading.allowsRemoval)
+        XCTAssertTrue(Status.downloaded.allowsRemoval)
+        XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsRemoval)
+        XCTAssertTrue(Status.mmpkLoadFailure(CancellationError()).allowsRemoval)
+    }
 }

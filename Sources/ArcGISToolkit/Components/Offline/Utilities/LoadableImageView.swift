@@ -38,6 +38,8 @@ struct LoadableImageView: View {
             case .success(let image):
                 Image(uiImage: image)
                     .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: image.size.width * 1.5, maxHeight: image.size.height * 1.5)
             }
         }
         .task {
