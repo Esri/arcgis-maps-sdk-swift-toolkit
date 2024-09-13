@@ -85,10 +85,10 @@ public struct OfflineMapAreasView: View {
                 if let models = mapViewModel.offlinePreplannedMapModels,
                    !models.isEmpty {
                     List(models) { preplannedMapModel in
-                        PreplannedListItemView(model: preplannedMapModel) { newMap in
-                            selectedMap = newMap
-                            dismiss()
-                        }
+                        PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+                            .onChange(of: selectedMap) { _ in
+                                dismiss()
+                            }
                     }
                 } else {
                     emptyOfflinePreplannedMapAreasView
