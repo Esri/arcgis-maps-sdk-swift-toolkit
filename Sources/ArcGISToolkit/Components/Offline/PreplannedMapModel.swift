@@ -49,6 +49,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
 ***REMOVED***let showsUserNotificationOnCompletion: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The first map from the mobile map package.
 ***REMOVED***var map: Map? { 
 ***REMOVED******REMOVED***get async {
 ***REMOVED******REMOVED******REMOVED***if let mobileMapPackage {
