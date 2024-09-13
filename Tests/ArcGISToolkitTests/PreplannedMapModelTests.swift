@@ -313,7 +313,7 @@ class PreplannedMapModelTests: XCTestCase {
         _ = await model.job?.result
         
         // Verify that mobile map package can be loaded.
-        let map = await model.loadMobileMapPackage()
+        let map = await model.map
         XCTAssertNotNil(map)
         
         // Give the final status some time to be updated.

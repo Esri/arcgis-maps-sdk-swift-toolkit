@@ -29,8 +29,10 @@ struct PreplannedListItemView: View {
     
     /// A Boolean value indicating whether the selected map area is the same
     /// as the map area from this model.
+    /// The title of a preplanned map area is guaranteed to be unique when it
+    /// is created.
     var selectedMapFromThisModel: Bool {
-        selectedMap?.item?.tags.contains(model.preplannedMapAreaID.rawValue) ?? false
+        selectedMap?.item?.title == model.preplannedMapArea.title
     }
     
     var body: some View {
@@ -93,7 +95,7 @@ struct PreplannedListItemView: View {
         case .downloaded:
             Button {
                 Task {
-                    if let map = await model.loadMobileMapPackage() {
+                    if let map = await model.map {
                         selectedMap = map
                     }
                 }
