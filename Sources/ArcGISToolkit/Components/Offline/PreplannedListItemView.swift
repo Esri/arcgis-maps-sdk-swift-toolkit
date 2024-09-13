@@ -29,8 +29,10 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
+***REMOVED******REMOVED***/ The title of a preplanned map area is guaranteed to be unique when it
+***REMOVED******REMOVED***/ is created.
 ***REMOVED***var selectedMapFromThisModel: Bool {
-***REMOVED******REMOVED***selectedMap?.item?.tags.contains(model.preplannedMapAreaID.rawValue) ?? false
+***REMOVED******REMOVED***selectedMap?.item?.title == model.preplannedMapArea.title
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -93,7 +95,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.loadMobileMapPackage() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
