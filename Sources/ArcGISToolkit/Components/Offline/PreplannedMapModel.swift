@@ -322,7 +322,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***
 
-private extension FileManager {
+extension FileManager {
 ***REMOVED******REMOVED***/ The path to the documents folder.
 ***REMOVED***private var documentsDirectory: URL {
 ***REMOVED******REMOVED***URL.documentsDirectory
