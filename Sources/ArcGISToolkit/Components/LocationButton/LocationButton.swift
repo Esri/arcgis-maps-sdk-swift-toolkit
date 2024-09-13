@@ -162,7 +162,7 @@ public struct LocationButton: View {
                     await locationDisplay.dataSource.stop()
                 }
             } label: {
-                Label("Stop Location", systemImage: "location.slash")
+                Label("Hide Location", systemImage: "location.slash")
             }
         }
     }
