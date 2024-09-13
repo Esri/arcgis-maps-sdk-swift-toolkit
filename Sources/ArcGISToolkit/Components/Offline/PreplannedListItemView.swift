@@ -21,8 +21,19 @@ struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    /// The closure to perform when the map selection changes.
-    let onMapSelectionChanged: (Map) -> Void
+    /// The currently selected map.
+    @Binding var selectedMap: Map?
+    
+    /// A Boolean value indicating whether the metadata view is presented.
+    @State private var metadataViewIsPresented = false
+    
+    /// A Boolean value indicating whether the selected map area is the same
+    /// as the map area from this model.
+    /// The title of a preplanned map area is guaranteed to be unique when it
+    /// is created.
+    var isSelected: Bool {
+        selectedMap?.item?.title == model.preplannedMapArea.title
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -35,6 +46,20 @@ struct PreplannedListItemView: View {
                 }
                 descriptionView
                 statusView
+            }
+        }
+        .contentShape(.rect)
+        .swipeActions {
+            deleteButton
+        }
+        .onTapGesture {
+            if model.status.isDownloaded {
+                metadataViewIsPresented = true
+            }
+        }
+        .sheet(isPresented: $metadataViewIsPresented) {
+            NavigationStack {
+                PreplannedMetadataView(model: model)
             }
         }
         .task {
@@ -55,13 +80,23 @@ struct PreplannedListItemView: View {
             .font(.body)
     }
     
+    @ViewBuilder private var deleteButton: some View {
+        if model.status.allowsRemoval,
+           !isSelected {
+            Button("Delete") {
+                model.removeDownloadedPreplannedMapArea()
+            }
+            .tint(.red)
+        }
+    }
+    
     @ViewBuilder private var downloadButton: some View {
         switch model.status {
         case .downloaded:
             Button {
                 Task {
-                    if let map = await model.loadMobileMapPackage() {
-                        onMapSelectionChanged(map)
+                    if let map = await model.map {
+                        selectedMap = map
                     }
                 }
             } label: {
@@ -71,6 +106,7 @@ struct PreplannedListItemView: View {
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
+            .disabled(isSelected)
         case .downloading:
             if let job = model.job {
                 ProgressView(job.progress)
@@ -136,10 +172,10 @@ struct PreplannedListItemView: View {
 
 #Preview {
     struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-        var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
-        var title: String = "Mock Preplanned Map Area"
-        var description: String = "This is the description text"
-        var thumbnail: LoadableImage? = nil
+        var packagingStatus: PreplannedMapArea.PackagingStatus? { .complete }
+        var title: String { "Mock Preplanned Map Area" }
+        var description: String { "This is the description text" }
+        var thumbnail: LoadableImage? { nil }
         
         func retryLoad() async throws { }
         func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
@@ -153,7 +189,8 @@ struct PreplannedListItemView: View {
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!
-        )
-    ) { _ in }
+        ),
+        selectedMap: .constant(nil)
+    )
     .padding()
 }
