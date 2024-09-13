@@ -338,7 +338,7 @@ extension FileManager {
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
 ***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-***REMOVED******REMOVED***offlineMapAreasDirectory.appending(components: "\(portalItemID)/")
+***REMOVED******REMOVED***offlineMapAreasDirectory.appending(component: "\(portalItemID)/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the size of a directory and all its contents.
@@ -362,7 +362,7 @@ extension FileManager {
 ***REMOVED***func preplannedDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID
 ***REMOVED***) -> URL {
-***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned/")
+***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(component: "Preplanned/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
