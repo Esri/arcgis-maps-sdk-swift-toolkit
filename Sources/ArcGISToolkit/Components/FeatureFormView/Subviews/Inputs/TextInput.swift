@@ -126,7 +126,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: keyboardOrBottomOrnament) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -161,6 +161,16 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A toolbar item placement that will either be on the keyboard or bottom
+***REMOVED******REMOVED***/ ornament depending on the platform.
+***REMOVED***private var keyboardOrBottomOrnament: ToolbarItemPlacement {
+#if !os(visionOS)
+***REMOVED******REMOVED***.keyboard
+#else
+***REMOVED******REMOVED***.bottomOrnament
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
