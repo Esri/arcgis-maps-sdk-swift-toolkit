@@ -15,10 +15,14 @@
 import ARKit
 import SwiftUI
 import ArcGIS
+#if os(visionOS)
+import CoreLocation
+#endif
 
 /// A scene view that provides an augmented reality world scale experience.
 @MainActor
 @preconcurrency
+@available(visionOS, unavailable)
 public struct WorldScaleSceneView: View {
     /// The clipping distance of the scene view.
     let clippingDistance: Double?
@@ -30,8 +34,10 @@ public struct WorldScaleSceneView: View {
     var calibrationButtonAlignment: Alignment = .bottom
     /// A Boolean value that indicates whether the calibration view is hidden.
     var calibrationViewIsHidden = false
+#if !os(visionOS)
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
+#endif
     /// The view model for the calibration view.
     @StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
     /// A Boolean value that indicates whether the geo-tracking configuration is available.
@@ -49,10 +55,11 @@ public struct WorldScaleSceneView: View {
     /// The closure to perform when the `isCalibrating` property has changed.
     private var onCalibratingChangedAction: ((Bool) -> Void)?
     /// The closure to perform when the camera tracking state changes.
+#if !os(visionOS)
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
     private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
-    
+#endif
     /// Creates a world scale scene view.
     /// - Parameters:
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
@@ -75,6 +82,7 @@ public struct WorldScaleSceneView: View {
     
     public var body: some View {
         Group {
+#if !os(visionOS)
             switch trackingMode {
             case .preferGeoTracking:
                 // By default we try the geo-tracking configuration. If it is not available at
@@ -89,11 +97,12 @@ public struct WorldScaleSceneView: View {
             case .worldTracking:
                 worldTrackingSceneView
             }
+#endif
         }
         .onAppear {
             calibrationViewModel.cameraController.clippingDistance = clippingDistance
         }
-        .onChange(of: clippingDistance) { newClippingDistance in
+        .onChange(clippingDistance) { newClippingDistance in
             calibrationViewModel.cameraController.clippingDistance = newClippingDistance
         }
         .onDisappear {
@@ -117,6 +126,7 @@ public struct WorldScaleSceneView: View {
                 self.error = error
             }
         }
+#if !os(visionOS)
         .task {
             do {
                 geoTrackingIsAvailable = try await checkGeoTrackingAvailability()
@@ -124,6 +134,7 @@ public struct WorldScaleSceneView: View {
                 self.error = error
             }
         }
+#endif
         .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
         .overlay(alignment: calibrationButtonAlignment) {
             if !calibrationViewIsHidden && !isCalibrating {
@@ -149,11 +160,12 @@ public struct WorldScaleSceneView: View {
             }
         }
         .animation(.default.speed(0.25), value: initialCameraIsSet)
-        .onChange(of: isCalibrating) { value in
+        .onChange(isCalibrating) { value in
             onCalibratingChangedAction?(value)
         }
     }
     
+#if !os(visionOS)
     /// A world scale geo-tracking scene view.
     @ViewBuilder private var geoTrackingSceneView: some View {
         GeoTrackingSceneView(
@@ -203,6 +215,7 @@ public struct WorldScaleSceneView: View {
         let scenePoint = arScreenToLocation(screenPoint: tapPoint)
         onSingleTapGestureAction?(tapPoint, scenePoint)
     }
+#endif
     
     /// Sets the visibility of the calibration view for the AR experience.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
@@ -232,7 +245,7 @@ public struct WorldScaleSceneView: View {
         view.onCalibratingChangedAction = action
         return view
     }
-    
+#if !os(visionOS)
     /// Sets a closure to perform when the camera tracking state changes.
     /// - Parameter action: The closure to perform when the camera tracking state has changed.
     public func onCameraTrackingStateChanged(
@@ -256,6 +269,7 @@ public struct WorldScaleSceneView: View {
         view.onGeoTrackingStatusChangedAction = action
         return view
     }
+#endif
     
     /// Checks if GPS is providing the most accurate location and heading.
     /// - Parameter locationManager: The location manager to determine the accuracy authorization.
@@ -273,6 +287,7 @@ public struct WorldScaleSceneView: View {
         return headingAvailable && fullAccuracy
     }
     
+#if !os(visionOS)
     /// Checks if the hardware and the current location supports geo-tracking.
     /// - Returns: A Boolean value that indicates whether geo-tracking is available.
     private func checkGeoTrackingAvailability() async throws -> Bool {
@@ -282,8 +297,10 @@ public struct WorldScaleSceneView: View {
         }
         return try await ARGeoTrackingConfiguration.checkAvailability()
     }
+#endif
 }
 
+@available(visionOS, unavailable)
 public extension WorldScaleSceneView {
     /// The type of tracking configuration used by the view.
     enum TrackingMode {
@@ -296,6 +313,7 @@ public extension WorldScaleSceneView {
     }
 }
 
+#if !os(visionOS)
 private extension ARGeoTrackingConfiguration {
     /// Determines the availability of geo tracking at the current location.
     /// - Returns: A Boolean that indicates whether geo-tracking is available at the current
@@ -313,7 +331,9 @@ private extension ARGeoTrackingConfiguration {
         }
     }
 }
+#endif
 
+@available(visionOS, unavailable)
 private extension WorldScaleSceneView {
     var calibrateLabel: String {
         String(
@@ -326,7 +346,9 @@ private extension WorldScaleSceneView {
     }
 }
 
+@available(visionOS, unavailable)
 public extension WorldScaleSceneView {
+#if !os(visionOS)
     /// Determines the scene point for the given screen point.
     ///
     /// If the raycast fails due to certain reasons, this method returns `nil`.
@@ -340,6 +362,7 @@ public extension WorldScaleSceneView {
         // Create a camera from transformationMatrix and return its location.
         return Camera(transformationMatrix: scenePointMatrix).location
     }
+#endif
     
     /// Sets a closure to perform when a single tap occurs on the view.
     func onSingleTapGesture(

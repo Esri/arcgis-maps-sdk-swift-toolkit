@@ -209,7 +209,7 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
-        .onChange(of: selection?.wrappedValue) { newValue in
+        .onChange(selection?.wrappedValue) { newValue in
             // Prevent a double-set if the view model triggered the original change.
             guard newValue != viewModel.selection else { return }
             switch newValue {
@@ -219,12 +219,12 @@ public struct FloorFilter: View {
             case .none: viewModel.clearSelection()
             }
         }
-        .onChange(of: viewModel.selection) { newValue in
+        .onChange(viewModel.selection) { newValue in
             // Prevent a double-set if the user triggered the original change.
             guard selection?.wrappedValue != newValue else { return }
             selection?.wrappedValue = newValue
         }
-        .onChange(of: viewpoint.wrappedValue) { newViewpoint in
+        .onChange(viewpoint.wrappedValue) { newViewpoint in
             guard isNavigating.wrappedValue else { return }
             if let newViewpoint {
                 viewModel.onViewpointChanged(newViewpoint)
