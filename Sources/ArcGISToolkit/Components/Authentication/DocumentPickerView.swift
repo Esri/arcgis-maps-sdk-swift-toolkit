@@ -15,22 +15,6 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
-public struct DocumentPicker: View {
-***REMOVED***let contentTypes: [UTType]
-***REMOVED***let onPickDocument: (URL) -> Void
-***REMOVED***let onCancel: () -> Void
-***REMOVED***
-***REMOVED***public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
-***REMOVED******REMOVED***self.contentTypes = contentTypes
-***REMOVED******REMOVED***self.onPickDocument = onPickDocument
-***REMOVED******REMOVED***self.onCancel = onCancel
-***REMOVED***
-***REMOVED***
-***REMOVED***public var body: some View {
-***REMOVED******REMOVED***DocumentPickerView(contentTypes: contentTypes, onPickDocument: onPickDocument, onCancel: onCancel)
-***REMOVED***
-***REMOVED***
-
 ***REMOVED***/ A view that allows the user to browse to and select a document.
 ***REMOVED***/ This view wraps a `UIDocumentPickerViewController`.
 struct DocumentPickerView: UIViewControllerRepresentable {
@@ -75,5 +59,21 @@ extension DocumentPickerView {
 
 ***REMOVED******REMOVED******REMOVED***onPickDocument(firstURL)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+public struct DocumentPicker: View {
+***REMOVED***let contentTypes: [UTType]
+***REMOVED***let onPickDocument: (URL) -> Void
+***REMOVED***let onCancel: () -> Void
+***REMOVED***
+***REMOVED***public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+***REMOVED******REMOVED***self.contentTypes = contentTypes
+***REMOVED******REMOVED***self.onPickDocument = onPickDocument
+***REMOVED******REMOVED***self.onCancel = onCancel
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***DocumentPickerView(contentTypes: contentTypes, onPickDocument: onPickDocument, onCancel: onCancel)
 ***REMOVED***
 ***REMOVED***
