@@ -14,6 +14,7 @@
 
 ***REMOVED***
 ***REMOVED***
+import Network
 
 ***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 @MainActor
@@ -21,6 +22,9 @@
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ The network monitor.
+***REMOVED***@StateObject private var networkMonitor = NetworkMonitor()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
@@ -41,7 +45,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaViews
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if networkMonitor.isConnected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** header: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Preplanned")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
@@ -53,6 +61,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.requestUserNotificationAuthorization()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: networkMonitor.isConnected) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await makePreplannedMapModels()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -67,7 +80,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private var preplannedMapAreaViews: some View {
+***REMOVED***@ViewBuilder private var preplannedMapAreasView: some View {
 ***REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
 ***REMOVED******REMOVED***case .success(let models):
 ***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
@@ -80,29 +93,27 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(let error as URLError):
-***REMOVED******REMOVED******REMOVED***if error.code == .notConnectedToInternet {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels,
-***REMOVED******REMOVED******REMOVED******REMOVED***   !models.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await makePreplannedMapModels() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflinePreplannedMapAreasView
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***errorView(error)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***errorView(error)
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var offlinePreplannedMapAreasView: some View {
+***REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels,
+***REMOVED******REMOVED***   !models.isEmpty {
+***REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
+***REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await makePreplannedMapModels() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***emptyOfflinePreplannedMapAreasView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -138,10 +149,13 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Makes the preplanned map models.
+***REMOVED******REMOVED***/ Makes the appropriate preplanned map models depending on the device network connection.
 ***REMOVED***private func makePreplannedMapModels() async {
-***REMOVED******REMOVED***await mapViewModel.makePreplannedMapModels()
-***REMOVED******REMOVED***await mapViewModel.makeOfflinePreplannedMapModels()
+***REMOVED******REMOVED***if networkMonitor.isConnected {
+***REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedMapModels()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***await mapViewModel.makeOfflinePreplannedMapModels()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -163,4 +177,27 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***return OfflineMapAreasViewPreview()
+***REMOVED***
+
+@MainActor
+private class NetworkMonitor: ObservableObject {
+***REMOVED******REMOVED***/ The path mointor to observe network changes.
+***REMOVED***private let monitor = NWPathMonitor()
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the device has an internet connection.
+***REMOVED***@Published var isConnected = true
+***REMOVED***
+***REMOVED***init() {
+***REMOVED******REMOVED***monitor.pathUpdateHandler = { path in
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.isConnected = path.status == .satisfied
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***let queue = DispatchQueue(label: "NetworkMonitor")
+***REMOVED******REMOVED***monitor.start(queue: queue)
+***REMOVED***
+***REMOVED***
+***REMOVED***deinit {
+***REMOVED******REMOVED***monitor.cancel()
+***REMOVED***
 ***REMOVED***
