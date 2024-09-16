@@ -61,3 +61,13 @@ private extension SupportedPlatform {
 #endif
     }
 }
+
+private extension SupportedPlatform {
+    static var visionOSV2: Self {
+#if swift(>=6)
+        .visionOS(.v2)
+#else
+        .visionOS("2.0.0")
+#endif
+    }
+}
