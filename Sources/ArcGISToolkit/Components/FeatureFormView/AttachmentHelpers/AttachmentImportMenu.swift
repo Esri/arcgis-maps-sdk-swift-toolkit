@@ -197,6 +197,7 @@ struct AttachmentImportMenu: View {
                 importState = .errored(.system(error.localizedDescription))
             }
         }
+#if !os(visionOS)
         .fullScreenCover(isPresented: $cameraIsShowing) {
             AttachmentCameraController(
                 importState: $importState
@@ -215,6 +216,7 @@ struct AttachmentImportMenu: View {
                 }
             }
         }
+#endif
         .modifier(
             AttachmentPhotoPicker(
                 importState: $importState,

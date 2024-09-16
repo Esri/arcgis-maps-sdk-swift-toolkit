@@ -21,7 +21,8 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v16),
-        .macCatalyst(.v16)
+        .macCatalyst(.v16),
+        .visionOSV2
     ],
     products: [
         .library(
@@ -59,4 +60,14 @@ for target in package.targets {
         // Upcoming Features.
         .enableUpcomingFeature("DisableOutwardActorInference")
     ]
+}
+
+private extension SupportedPlatform {
+    static var visionOSV2: Self {
+#if swift(>=6)
+        .visionOS(.v2)
+#else
+        .visionOS("2.0.0")
+#endif
+    }
 }
