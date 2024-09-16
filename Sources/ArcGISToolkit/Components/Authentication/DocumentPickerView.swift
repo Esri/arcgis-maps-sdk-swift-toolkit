@@ -52,12 +52,6 @@ struct DocumentPickerView: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
-    
-    init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
-        self.contentTypes = contentTypes
-        self.onPickDocument = onPickDocument
-        self.onCancel = onCancel
-    }
 }
 
 extension DocumentPickerView {
