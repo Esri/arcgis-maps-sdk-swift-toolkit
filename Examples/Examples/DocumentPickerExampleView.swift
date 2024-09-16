@@ -15,7 +15,7 @@ struct DocumentPickerExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.item]) { url in
+***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPicker(contentTypes: [.item]) { url in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.url = url
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED*** onCancel: {

@@ -15,9 +15,25 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
+public struct DocumentPicker: View {
+***REMOVED***let contentTypes: [UTType]
+***REMOVED***let onPickDocument: (URL) -> Void
+***REMOVED***let onCancel: () -> Void
+***REMOVED***
+***REMOVED***public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+***REMOVED******REMOVED***self.contentTypes = contentTypes
+***REMOVED******REMOVED***self.onPickDocument = onPickDocument
+***REMOVED******REMOVED***self.onCancel = onCancel
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***DocumentPickerView(contentTypes: contentTypes, onPickDocument: onPickDocument, onCancel: onCancel)
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A view that allows the user to browse to and select a document.
 ***REMOVED***/ This view wraps a `UIDocumentPickerViewController`.
-public struct DocumentPickerView: UIViewControllerRepresentable {
+struct DocumentPickerView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The content types that are allowed to be selected.
 ***REMOVED***var contentTypes: [UTType]
 ***REMOVED******REMOVED***/ The closure called when a document is selected.
@@ -25,19 +41,19 @@ public struct DocumentPickerView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The closure called when the user cancels.
 ***REMOVED***var onCancel: () -> Void
 ***REMOVED***
-***REMOVED***public func makeCoordinator() -> Coordinator {
+***REMOVED***func makeCoordinator() -> Coordinator {
 ***REMOVED******REMOVED***Coordinator(onPickDocument: onPickDocument, onCancel: onCancel)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+***REMOVED***func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
 ***REMOVED******REMOVED***let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes)
 ***REMOVED******REMOVED***documentPicker.delegate = context.coordinator
 ***REMOVED******REMOVED***return documentPicker
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {***REMOVED***
+***REMOVED***func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {***REMOVED***
 ***REMOVED***
-***REMOVED***public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+***REMOVED***init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
 ***REMOVED******REMOVED***self.contentTypes = contentTypes
 ***REMOVED******REMOVED***self.onPickDocument = onPickDocument
 ***REMOVED******REMOVED***self.onCancel = onCancel
@@ -47,7 +63,7 @@ public struct DocumentPickerView: UIViewControllerRepresentable {
 extension DocumentPickerView {
 ***REMOVED******REMOVED***/ The coordinator for the document picker view that acts as a delegate to the underlying
 ***REMOVED******REMOVED***/ `UIDocumentPickerViewController`.
-***REMOVED***public final class Coordinator: NSObject, UIDocumentPickerDelegate {
+***REMOVED***final class Coordinator: NSObject, UIDocumentPickerDelegate {
 ***REMOVED******REMOVED***var onPickDocument: (URL) -> Void
 ***REMOVED******REMOVED***var onCancel: () -> Void
 ***REMOVED******REMOVED***
@@ -56,11 +72,11 @@ extension DocumentPickerView {
 ***REMOVED******REMOVED******REMOVED***self.onCancel = onCancel
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+***REMOVED******REMOVED***func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
 ***REMOVED******REMOVED******REMOVED***onCancel()
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+***REMOVED******REMOVED***func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 ***REMOVED******REMOVED******REMOVED***let url = urls.first!
 ***REMOVED******REMOVED******REMOVED***if url.startAccessingSecurityScopedResource() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***onPickDocument(url)
