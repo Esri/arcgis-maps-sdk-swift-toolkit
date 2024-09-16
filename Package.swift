@@ -21,7 +21,8 @@ let package = Package(
 ***REMOVED***defaultLocalization: "en",
 ***REMOVED***platforms: [
 ***REMOVED******REMOVED***.iOS(.v16),
-***REMOVED******REMOVED***.macCatalyst(.v16)
+***REMOVED******REMOVED***.macCatalyst(.v16),
+***REMOVED******REMOVED***.visionOSV2
 ***REMOVED***],
 ***REMOVED***products: [
 ***REMOVED******REMOVED***.library(
@@ -50,3 +51,13 @@ let package = Package(
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 )
+
+private extension SupportedPlatform {
+***REMOVED***static var visionOSV2: Self {
+#if swift(>=6)
+***REMOVED******REMOVED***.visionOS(.v2)
+#else
+***REMOVED******REMOVED***.visionOS("2.0.0")
+#endif
+***REMOVED***
+***REMOVED***

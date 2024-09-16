@@ -59,20 +59,20 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
 ***REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: text) { text in
+***REMOVED******REMOVED******REMOVED***.onChange(text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
@@ -123,7 +123,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: keyboardOrBottomOrnament) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -157,6 +157,16 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A toolbar item placement that will either be on the keyboard or bottom
+***REMOVED******REMOVED***/ ornament depending on the platform.
+***REMOVED***private var keyboardOrBottomOrnament: ToolbarItemPlacement {
+#if !os(visionOS)
+***REMOVED******REMOVED***.keyboard
+#else
+***REMOVED******REMOVED***.bottomOrnament
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.

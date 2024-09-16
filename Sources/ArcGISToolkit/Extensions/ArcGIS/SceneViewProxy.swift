@@ -17,6 +17,7 @@ import Foundation
 import ARKit
 ***REMOVED***
 
+#if !os(visionOS)
 extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Updates the scene view's camera for a given augmented reality frame.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -108,3 +109,4 @@ private extension ARCamera {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+#endif

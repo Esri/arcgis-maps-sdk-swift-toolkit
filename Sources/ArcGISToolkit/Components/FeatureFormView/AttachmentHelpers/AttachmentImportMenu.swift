@@ -180,6 +180,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED***.fullScreenCover(isPresented: $cameraIsShowing) {
 ***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
@@ -198,6 +199,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+#endif
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState,

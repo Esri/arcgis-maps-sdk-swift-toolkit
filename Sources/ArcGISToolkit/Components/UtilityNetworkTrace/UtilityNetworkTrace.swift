@@ -692,7 +692,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(of: screenPoint) { newScreenPoint in
+***REMOVED******REMOVED***.onChange(screenPoint) { newScreenPoint in
 ***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
@@ -709,7 +709,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: externalStartingPoints) { _ in
+***REMOVED******REMOVED***.onChange(externalStartingPoints) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.externalStartingPoints = externalStartingPoints
 ***REMOVED***
 ***REMOVED******REMOVED***.alert(

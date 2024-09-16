@@ -116,7 +116,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
+***REMOVED******REMOVED***.onChange(selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***

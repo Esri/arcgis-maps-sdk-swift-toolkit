@@ -95,7 +95,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|| (input.noValueOption == .hide && !element.formattedValue.isEmpty)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
+***REMOVED******REMOVED******REMOVED***.onChange(selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***

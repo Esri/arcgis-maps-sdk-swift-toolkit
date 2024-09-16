@@ -84,7 +84,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(opacity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size, height: size)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: heading) { newHeading in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(heading) { newHeading in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard opacity != newOpacity else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {

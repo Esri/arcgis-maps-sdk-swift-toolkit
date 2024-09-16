@@ -110,7 +110,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -119,7 +119,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
+#endif
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED***
 ***REMOVED***
