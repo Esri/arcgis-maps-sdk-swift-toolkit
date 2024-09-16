@@ -53,12 +53,6 @@ struct DocumentPickerView: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {***REMOVED***
 ***REMOVED***
-***REMOVED***init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
-***REMOVED******REMOVED***self.contentTypes = contentTypes
-***REMOVED******REMOVED***self.onPickDocument = onPickDocument
-***REMOVED******REMOVED***self.onCancel = onCancel
-***REMOVED***
-***REMOVED***
 
 extension DocumentPickerView {
 ***REMOVED******REMOVED***/ The coordinator for the document picker view that acts as a delegate to the underlying
