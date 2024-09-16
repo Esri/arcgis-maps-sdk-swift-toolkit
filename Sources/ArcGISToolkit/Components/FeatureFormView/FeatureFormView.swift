@@ -110,7 +110,7 @@ public struct FeatureFormView: View {
                     }
                 }
             }
-            .onChange(of: model.focusedElement) { _ in
+            .onChange(model.focusedElement) { _ in
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
@@ -119,7 +119,9 @@ public struct FeatureFormView: View {
                 title = newTitle
             }
         }
+#if !os(visionOS)
         .scrollDismissesKeyboard(.immediately)
+#endif
         .environmentObject(model)
     }
 }

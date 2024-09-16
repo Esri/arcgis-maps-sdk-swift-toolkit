@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !os(visionOS)
 import ArcGIS
 import ARKit
 import SwiftUI
@@ -228,3 +229,4 @@ extension ARSwiftUIViewProxy {
         return raycastMatrix
     }
 }
+#endif

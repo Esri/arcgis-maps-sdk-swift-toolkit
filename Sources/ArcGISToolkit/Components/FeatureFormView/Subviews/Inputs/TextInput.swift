@@ -59,20 +59,20 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onChange(of: isFocused) { isFocused in
+            .onChange(isFocused) { isFocused in
                 if isFocused {
                     model.focusedElement = element
                 } else if model.focusedElement == element {
                     model.focusedElement = nil
                 }
             }
-            .onChange(of: model.focusedElement) { focusedElement in
+            .onChange(model.focusedElement) { focusedElement in
                 // Another form input took focus
                 if focusedElement != element {
                     isFocused  = false
                 }
             }
-            .onChange(of: text) { text in
+            .onChange(text) { text in
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
@@ -123,7 +123,7 @@ private extension TextInput {
             .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
             .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
+                ToolbarItemGroup(placement: keyboardOrBottomOrnament) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
                         positiveNegativeButton
                         Spacer()
@@ -157,6 +157,16 @@ private extension TextInput {
             }
         }
         .formInputStyle()
+    }
+    
+    /// A toolbar item placement that will either be on the keyboard or bottom
+    /// ornament depending on the platform.
+    private var keyboardOrBottomOrnament: ToolbarItemPlacement {
+#if !os(visionOS)
+        .keyboard
+#else
+        .bottomOrnament
+#endif
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
