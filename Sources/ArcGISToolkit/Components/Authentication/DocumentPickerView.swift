@@ -15,22 +15,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-public struct DocumentPicker: View {
-    let contentTypes: [UTType]
-    let onPickDocument: (URL) -> Void
-    let onCancel: () -> Void
-    
-    public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
-        self.contentTypes = contentTypes
-        self.onPickDocument = onPickDocument
-        self.onCancel = onCancel
-    }
-    
-    public var body: some View {
-        DocumentPickerView(contentTypes: contentTypes, onPickDocument: onPickDocument, onCancel: onCancel)
-    }
-}
-
 /// A view that allows the user to browse to and select a document.
 /// This view wraps a `UIDocumentPickerViewController`.
 struct DocumentPickerView: UIViewControllerRepresentable {
@@ -75,5 +59,21 @@ extension DocumentPickerView {
 
             onPickDocument(firstURL)
         }
+    }
+}
+
+public struct DocumentPicker: View {
+    let contentTypes: [UTType]
+    let onPickDocument: (URL) -> Void
+    let onCancel: () -> Void
+    
+    public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+        self.contentTypes = contentTypes
+        self.onPickDocument = onPickDocument
+        self.onCancel = onCancel
+    }
+    
+    public var body: some View {
+        DocumentPickerView(contentTypes: contentTypes, onPickDocument: onPickDocument, onCancel: onCancel)
     }
 }
