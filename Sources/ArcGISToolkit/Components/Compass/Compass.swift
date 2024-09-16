@@ -84,7 +84,7 @@ public struct Compass: View {
                 .opacity(opacity)
                 .frame(width: size, height: size)
                 .onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 }
-                .onChange(of: heading) { newHeading in
+                .onChange(heading) { newHeading in
                     let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
                     guard opacity != newOpacity else { return }
                     withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {

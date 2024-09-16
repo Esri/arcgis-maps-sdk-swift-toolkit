@@ -18,21 +18,26 @@ import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience using geo-tracking.
 @preconcurrency
+@available(visionOS, unavailable)
 public struct GeoTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
     @Binding var initialCameraIsSet: Bool
     /// The view model for the calibration view.
     @ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
+#if !os(visionOS)
     /// The geo-tracking configuration for the AR session.
     private let configuration = ARGeoTrackingConfiguration()
+#endif
     /// A Boolean value that indicates if the user is calibrating.
     private let calibrationViewIsPresented: Bool
     /// The location datasource that is used to access the device location.
     private let locationDataSource: LocationDataSource
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+#if !os(visionOS)
     /// The proxy for the ARSwiftUIView.
     private let arViewProxy: ARSwiftUIViewProxy
+#endif
     /// The camera controller that will be set on the scene view.
     private let cameraController: TransformationMatrixCameraController
     /// A Boolean value that indicates whether the coaching overlay view is active.
@@ -43,6 +48,7 @@ public struct GeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+#if !os(visionOS)
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
@@ -80,10 +86,12 @@ public struct GeoTrackingSceneView: View {
         
         sceneViewBuilder = sceneView
     }
+#endif
     
     public var body: some View {
         SceneViewReader { sceneViewProxy in
             ZStack {
+#if !os(visionOS)
                 ARSwiftUIView(proxy: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation, initialCameraIsSet else { return }
@@ -106,10 +114,12 @@ public struct GeoTrackingSceneView: View {
                     .onCameraDidChangeTrackingState { _, trackingState in
                         onCameraTrackingStateChangedAction?(trackingState)
                     }
+#endif
                 sceneViewBuilder(sceneViewProxy)
                     .worldScaleSetup(cameraController: cameraController)
                     .opacity(initialCameraIsSet ? 1 : 0)
             }
+#if !os(visionOS)
             .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
@@ -125,14 +135,17 @@ public struct GeoTrackingSceneView: View {
                     }
                     .allowsHitTesting(false)
             }
+#endif
         }
         .observingInterfaceOrientation($interfaceOrientation)
+#if !os(visionOS)
         .onAppear {
             arViewProxy.session.run(configuration)
         }
         .onDisappear {
             arViewProxy.session.pause()
         }
+#endif
         .task {
             for await location in locationDataSource.locations {
                 currentLocation = location
@@ -164,6 +177,7 @@ public struct GeoTrackingSceneView: View {
         cameraController.transformationMatrix = .identity
     }
     
+#if os(iOS)
     private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
         switch status.state {
         case .notAvailable, .initializing, .localizing:
@@ -209,4 +223,5 @@ public struct GeoTrackingSceneView: View {
         view.onGeoTrackingStatusChangedAction = action
         return view
     }
+#endif
 }
