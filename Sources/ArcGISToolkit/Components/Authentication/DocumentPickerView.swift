@@ -71,11 +71,9 @@ extension DocumentPickerView {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-***REMOVED******REMOVED******REMOVED***let url = urls.first!
-***REMOVED******REMOVED******REMOVED***if url.startAccessingSecurityScopedResource() {
-***REMOVED******REMOVED******REMOVED******REMOVED***onPickDocument(url)
-***REMOVED******REMOVED******REMOVED******REMOVED***url.stopAccessingSecurityScopedResource()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let firstURL = urls.first else { return ***REMOVED***
+
+***REMOVED******REMOVED******REMOVED***onPickDocument(firstURL)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
