@@ -14,6 +14,7 @@
 
 import SwiftUI
 import ArcGIS
+import Network
 
 /// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 @MainActor
@@ -21,6 +22,9 @@ import ArcGIS
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
+    
+    /// The network monitor.
+    @StateObject private var networkMonitor = NetworkMonitor()
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
@@ -41,7 +45,11 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 Section {
-                    preplannedMapAreaViews
+                    if networkMonitor.isConnected {
+                        preplannedMapAreasView
+                    } else {
+                        offlinePreplannedMapAreasView
+                    }
                 } header: {
                     Text("Preplanned")
                         .bold()
@@ -53,6 +61,11 @@ public struct OfflineMapAreasView: View {
             }
             .task {
                 await mapViewModel.requestUserNotificationAuthorization()
+            }
+            .onChange(of: networkMonitor.isConnected) { _ in
+                Task {
+                    await makePreplannedMapModels()
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -67,7 +80,7 @@ public struct OfflineMapAreasView: View {
         }
     }
     
-    @ViewBuilder private var preplannedMapAreaViews: some View {
+    @ViewBuilder private var preplannedMapAreasView: some View {
         switch mapViewModel.preplannedMapModels {
         case .success(let models):
             if !models.isEmpty {
@@ -80,29 +93,27 @@ public struct OfflineMapAreasView: View {
             } else {
                 emptyPreplannedMapAreasView
             }
-        case .failure(let error as URLError):
-            if error.code == .notConnectedToInternet {
-                if let models = mapViewModel.offlinePreplannedMapModels,
-                   !models.isEmpty {
-                    List(models) { preplannedMapModel in
-                        PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap) {
-                            Task { await makePreplannedMapModels() }
-                        }
-                        .onChange(of: selectedMap) { _ in
-                            dismiss()
-                        }
-                    }
-                } else {
-                    emptyOfflinePreplannedMapAreasView
-                }
-            } else {
-                errorView(error)
-            }
         case .failure(let error):
             errorView(error)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
+        }
+    }
+    
+    @ViewBuilder private var offlinePreplannedMapAreasView: some View {
+        if let models = mapViewModel.offlinePreplannedMapModels,
+           !models.isEmpty {
+            List(models) { preplannedMapModel in
+                PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap) {
+                    Task { await makePreplannedMapModels() }
+                }
+                .onChange(of: selectedMap) { _ in
+                    dismiss()
+                }
+            }
+        } else {
+            emptyOfflinePreplannedMapAreasView
         }
     }
     
@@ -138,10 +149,13 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    /// Makes the preplanned map models.
+    /// Makes the appropriate preplanned map models depending on the device network connection.
     private func makePreplannedMapModels() async {
-        await mapViewModel.makePreplannedMapModels()
-        await mapViewModel.makeOfflinePreplannedMapModels()
+        if networkMonitor.isConnected {
+            await mapViewModel.makePreplannedMapModels()
+        } else {
+            await mapViewModel.makeOfflinePreplannedMapModels()
+        }
     }
 }
 
@@ -163,4 +177,27 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
+}
+
+@MainActor
+private class NetworkMonitor: ObservableObject {
+    /// The path mointor to observe network changes.
+    private let monitor = NWPathMonitor()
+    
+    /// A Boolean value indicating whether the device has an internet connection.
+    @Published var isConnected = true
+    
+    init() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                self.isConnected = path.status == .satisfied
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    deinit {
+        monitor.cancel()
+    }
 }
