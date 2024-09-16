@@ -49,7 +49,7 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-               await makePreplannedMapModels()
+                await makePreplannedMapModels()
             }
             .task {
                 await mapViewModel.requestUserNotificationAuthorization()
