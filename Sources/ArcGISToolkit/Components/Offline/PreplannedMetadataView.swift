@@ -22,6 +22,9 @@ struct PreplannedMetadataView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
+    /// A Boolean value indicating whether the current map area is selected.
+    let isSelected: Bool
+    
     var body: some View {
         Form {
             Section {
@@ -62,15 +65,17 @@ struct PreplannedMetadataView: View {
                         .font(.subheadline)
                 }
             }
-            Section {
-                HStack {
-                    Image(systemName: "trash.circle.fill")
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.red, .gray.opacity(0.1))
-                        .font(.title)
-                    Button("Delete Map Area", role: .destructive) {
-                        dismiss()
-                        model.removeDownloadedPreplannedMapArea()
+            if !isSelected {
+                Section {
+                    HStack {
+                        Image(systemName: "trash.circle.fill")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.red, .gray.opacity(0.1))
+                            .font(.title)
+                        Button("Delete Map Area", role: .destructive) {
+                            dismiss()
+                            model.removeDownloadedPreplannedMapArea()
+                        }
                     }
                 }
             }
@@ -104,6 +109,7 @@ struct PreplannedMetadataView: View {
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!
-        )
+        ),
+        isSelected: false
     )
 }
