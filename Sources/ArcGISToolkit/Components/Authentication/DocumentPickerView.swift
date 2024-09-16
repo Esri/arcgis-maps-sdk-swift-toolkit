@@ -71,11 +71,9 @@ extension DocumentPickerView {
         }
         
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            let url = urls.first!
-            if url.startAccessingSecurityScopedResource() {
-                onPickDocument(url)
-                url.stopAccessingSecurityScopedResource()
-            }
+            guard let firstURL = urls.first else { return }
+
+            onPickDocument(firstURL)
         }
     }
 }
