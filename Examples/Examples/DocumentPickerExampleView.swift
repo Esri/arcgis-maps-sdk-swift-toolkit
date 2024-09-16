@@ -15,7 +15,7 @@ struct DocumentPickerExampleView: View {
                 isPresented = true
             }
             .sheet(isPresented: $isPresented) {
-                DocumentPickerView(contentTypes: [.item]) { url in
+                DocumentPicker(contentTypes: [.item]) { url in
                     self.url = url
                     isPresented = false
                 } onCancel: {

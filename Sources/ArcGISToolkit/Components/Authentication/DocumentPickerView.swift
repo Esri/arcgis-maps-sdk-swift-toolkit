@@ -15,9 +15,25 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+public struct DocumentPicker: View {
+    let contentTypes: [UTType]
+    let onPickDocument: (URL) -> Void
+    let onCancel: () -> Void
+    
+    public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+        self.contentTypes = contentTypes
+        self.onPickDocument = onPickDocument
+        self.onCancel = onCancel
+    }
+    
+    public var body: some View {
+        DocumentPickerView(contentTypes: contentTypes, onPickDocument: onPickDocument, onCancel: onCancel)
+    }
+}
+
 /// A view that allows the user to browse to and select a document.
 /// This view wraps a `UIDocumentPickerViewController`.
-public struct DocumentPickerView: UIViewControllerRepresentable {
+struct DocumentPickerView: UIViewControllerRepresentable {
     /// The content types that are allowed to be selected.
     var contentTypes: [UTType]
     /// The closure called when a document is selected.
@@ -25,19 +41,19 @@ public struct DocumentPickerView: UIViewControllerRepresentable {
     /// The closure called when the user cancels.
     var onCancel: () -> Void
     
-    public func makeCoordinator() -> Coordinator {
+    func makeCoordinator() -> Coordinator {
         Coordinator(onPickDocument: onPickDocument, onCancel: onCancel)
     }
     
-    public func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
         let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes)
         documentPicker.delegate = context.coordinator
         return documentPicker
     }
     
-    public func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
     
-    public init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+    init(contentTypes: [UTType], onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
         self.contentTypes = contentTypes
         self.onPickDocument = onPickDocument
         self.onCancel = onCancel
@@ -47,7 +63,7 @@ public struct DocumentPickerView: UIViewControllerRepresentable {
 extension DocumentPickerView {
     /// The coordinator for the document picker view that acts as a delegate to the underlying
     /// `UIDocumentPickerViewController`.
-    public final class Coordinator: NSObject, UIDocumentPickerDelegate {
+    final class Coordinator: NSObject, UIDocumentPickerDelegate {
         var onPickDocument: (URL) -> Void
         var onCancel: () -> Void
         
@@ -56,11 +72,11 @@ extension DocumentPickerView {
             self.onCancel = onCancel
         }
         
-        public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
             onCancel()
         }
         
-        public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
             let url = urls.first!
             if url.startAccessingSecurityScopedResource() {
                 onPickDocument(url)
