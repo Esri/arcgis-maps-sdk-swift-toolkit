@@ -141,11 +141,11 @@ extension FeatureFormExampleView {
     /// - Returns: The first identified feature in a layer.
     func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
         guard let identifyScreenPoint else { return nil }
-        let identifyResults = try? await proxy.identifyLayers(
+        let identifyLayerResults = try? await proxy.identifyLayers(
             screenPoint: identifyScreenPoint,
             tolerance: 10
         )
-        return identifyResults?.compactMap { result in
+        return identifyLayerResults?.compactMap { result in
             result.geoElements.compactMap { element in
                 element as? ArcGISFeature
             }.first
