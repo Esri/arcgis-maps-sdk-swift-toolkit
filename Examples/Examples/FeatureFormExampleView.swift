@@ -141,11 +141,11 @@ extension FeatureFormExampleView {
 ***REMOVED******REMOVED***/ - Returns: The first identified feature in a layer.
 ***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
 ***REMOVED******REMOVED***guard let identifyScreenPoint else { return nil ***REMOVED***
-***REMOVED******REMOVED***let identifyResults = try? await proxy.identifyLayers(
+***REMOVED******REMOVED***let identifyLayerResults = try? await proxy.identifyLayers(
 ***REMOVED******REMOVED******REMOVED***screenPoint: identifyScreenPoint,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***return identifyResults?.compactMap { result in
+***REMOVED******REMOVED***return identifyLayerResults?.compactMap { result in
 ***REMOVED******REMOVED******REMOVED***result.geoElements.compactMap { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element as? ArcGISFeature
 ***REMOVED******REMOVED***.first
