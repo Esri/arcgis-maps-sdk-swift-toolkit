@@ -70,6 +70,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***cameraRequester.request {
@@ -107,7 +108,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***Menu {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Show photo/video and library picker.
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***takePhotoOrVideoButton()
+#endif
 ***REMOVED******REMOVED******REMOVED***chooseFromLibraryButton()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Always show file picker, no matter the input type.
 ***REMOVED******REMOVED******REMOVED***chooseFromFilesButton()
