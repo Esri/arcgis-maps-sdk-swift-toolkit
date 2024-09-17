@@ -55,9 +55,8 @@ import SwiftUI
 /// The feature form view can be embedded in any type of container view including, as demonstrated in the
 /// example, the Toolkit's `FloatingPanel`.
 ///
-/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
-/// and refer to
-/// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
+/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FeatureFormExampleView.swift)
 /// in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
 ///
 /// - Note: In order to capture video and photos as form attachments, your application will need
