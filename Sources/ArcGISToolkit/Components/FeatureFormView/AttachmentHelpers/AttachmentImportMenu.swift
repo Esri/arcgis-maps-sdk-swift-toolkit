@@ -71,6 +71,7 @@ struct AttachmentImportMenu: View {
         }
     }
     
+    @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
             cameraRequester.request {
@@ -108,7 +109,9 @@ struct AttachmentImportMenu: View {
         }
         Menu {
             // Show photo/video and library picker.
+#if !os(visionOS)
             takePhotoOrVideoButton()
+#endif
             chooseFromLibraryButton()
             // Always show file picker, no matter the input type.
             chooseFromFilesButton()
