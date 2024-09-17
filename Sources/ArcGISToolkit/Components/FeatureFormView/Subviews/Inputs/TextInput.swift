@@ -106,14 +106,16 @@ private extension TextInput {
             }
             .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
+#if !os(visionOS)
             .toolbar {
-                ToolbarItemGroup(placement: keyboardOrBottomOrnament) {
+                ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
                         positiveNegativeButton
                         Spacer()
                     }
                 }
             }
+#endif
             .scrollContentBackground(.hidden)
             if !text.isEmpty {
                 ClearButton {
@@ -129,16 +131,6 @@ private extension TextInput {
             }
         }
         .formInputStyle()
-    }
-    
-    /// A toolbar item placement that will either be on the keyboard or bottom
-    /// ornament depending on the platform.
-    private var keyboardOrBottomOrnament: ToolbarItemPlacement {
-#if !os(visionOS)
-        .keyboard
-#else
-        .bottomOrnament
-#endif
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
