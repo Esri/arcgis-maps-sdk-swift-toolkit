@@ -210,65 +210,58 @@ struct CredentialInputSheetView: View {
     }
     
     var body: some View {
-        GeometryReader { proxy in
-            VStack {
-                VStack(alignment: .center) {
-                    VStack(spacing: 8) {
-                        Text(title)
-                            .font(.title)
-                            .multilineTextAlignment(.center)
-                        Text(message)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.vertical)
-                    VStack {
-                        switch fields {
-                        case .password:
-                            passwordTextField
-                        case .usernamePassword:
-                            usernameTextField
-                            Divider()
-                            passwordTextField
+        NavigationStack {
+            GeometryReader { proxy in
+                VStack {
+                    VStack(alignment: .center) {
+                        VStack(spacing: 8) {
+                            Text(title)
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                            Text(message)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
                         }
-                        Divider()
-                    }
-                    .padding([.bottom, .horizontal])
-                    HStack {
-                        Spacer()
-                        Button(role: .cancel) {
-                            cancelAction.handler("", "")
-                        } label: {
-                            Text(cancelAction.title)
-                                .padding(.horizontal)
+                        .padding(.vertical)
+                        Form {
+                            switch fields {
+                            case .password:
+                                passwordTextField
+                            case .usernamePassword:
+                                usernameTextField
+                                passwordTextField
+                            }
                         }
-                        .buttonStyle(.bordered)
-                        Spacer()
-                        Button {
-                            isPresented.wrappedValue = false
-                            continueAction.handler(username, password)
-                        } label: {
-                            Text(continueAction.title)
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(!isContinueEnabled)
-                        Spacer()
                     }
-                    Spacer()
                 }
-                .padding()
-                Spacer()
             }
-        }
-        .onAppear {
-            // Set initial focus of text field.
-            switch fields {
-            case .usernamePassword:
-                usernameFieldIsFocused = true
-            case .password:
-                passwordFieldIsFocused = true
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(role: .cancel) {
+                        cancelAction.handler("", "")
+                    } label: {
+                        Text(cancelAction.title)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isPresented.wrappedValue = false
+                        continueAction.handler(username, password)
+                    } label: {
+                        Text(continueAction.title)
+                    }
+                    .disabled(!isContinueEnabled)
+                }
+            }
+            .onAppear {
+                // Set initial focus of text field.
+                switch fields {
+                case .usernamePassword:
+                    usernameFieldIsFocused = true
+                case .password:
+                    passwordFieldIsFocused = true
+                }
             }
         }
     }
