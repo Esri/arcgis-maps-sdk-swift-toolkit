@@ -35,6 +35,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the device has an internet connection.
 ***REMOVED***@State private var isConnected = true
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the offline banner should be presented.
+***REMOVED***@State private var offlineBannerIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view with a given web map.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - online: The web map to be taken offline.
@@ -65,6 +68,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await makePreplannedMapModels()
 ***REMOVED******REMOVED******REMOVED******REMOVED***isConnected = networkMonitor.isConnected
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task(id: networkMonitor.isConnected) {
+***REMOVED******REMOVED******REMOVED******REMOVED***offlineBannerIsPresented = !networkMonitor.isConnected
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if offlineBannerIsPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineBannerView
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -142,6 +153,15 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***
+***REMOVED***private var offlineBannerView: some View {
+***REMOVED******REMOVED***Text("Network Offline")
+***REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+***REMOVED******REMOVED******REMOVED***.background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func errorView(_ error: Error) -> some View {
