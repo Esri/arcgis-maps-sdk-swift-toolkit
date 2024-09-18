@@ -146,7 +146,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         // Make sure the directory is not empty because the directory will exist as soon as the
         // job starts, so if the job fails, it will look like the mmpk was downloaded.
         guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
-        return MobileMapPackage.init(fileURL: fileURL)
+        return MobileMapPackage(fileURL: fileURL)
     }
     
     /// Downloads the preplanned map area.
