@@ -33,6 +33,8 @@ extension OfflineMapAreasView {
         /// The offline preplanned map information sourced from downloaded mobile map packages.
         @Published private(set) var offlinePreplannedMapModels: [PreplannedMapModel]?
         
+        /// Creates an offline map areas view model for a given web map.
+        /// - Parameter map: The web map.
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
             portalItemID = map.item?.id
@@ -80,7 +82,7 @@ extension OfflineMapAreasView {
             
             for mapAreaID in mapAreaIDs {
                 if let preplannedMapAreaID = PortalItem.ID(mapAreaID),
-                   let mapArea = await createMapArea(
+                   let mapArea = await makeMapArea(
                     for: portalItemID,
                     preplannedMapAreaID: preplannedMapAreaID
                    ) {
@@ -106,7 +108,7 @@ extension OfflineMapAreasView {
         ///   - portalItemID: The portal item ID.
         ///   - preplannedMapAreaID: The preplanned map area ID.
         /// - Returns: The preplanned map area.
-        private func createMapArea(
+        private func makeMapArea(
             for portalItemID: PortalItem.ID,
             preplannedMapAreaID: PortalItem.ID
         ) async -> OfflinePreplannedMapArea? {
@@ -118,7 +120,7 @@ extension OfflineMapAreasView {
             // Make sure the directory is not empty because the directory will exist as soon as the
             // job starts, so if the job fails, it will look like the mmpk was downloaded.
             guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
-            let mmpk = MobileMapPackage.init(fileURL: fileURL)
+            let mmpk = MobileMapPackage(fileURL: fileURL)
             
             try? await mmpk.load()
             guard let item = mmpk.item else { return nil }

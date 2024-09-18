@@ -32,6 +32,9 @@ public struct OfflineMapAreasView: View {
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     
+    /// A Boolean value indicating whether the device has an internet connection.
+    @State private var isConnected = true
+    
     /// Creates a view with a given web map.
     /// - Parameters:
     ///   - online: The web map to be taken offline.
@@ -45,7 +48,7 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 Section {
-                    if networkMonitor.isConnected {
+                    if isConnected {
                         preplannedMapAreasView
                     } else {
                         offlinePreplannedMapAreasView
@@ -57,15 +60,11 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-                await makePreplannedMapModels()
-            }
-            .task {
                 await mapViewModel.requestUserNotificationAuthorization()
             }
-            .onChange(of: networkMonitor.isConnected) { _ in
-                Task {
-                    await makePreplannedMapModels()
-                }
+            .task {
+                await makePreplannedMapModels()
+                isConnected = networkMonitor.isConnected
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -77,6 +76,7 @@ public struct OfflineMapAreasView: View {
         }
         .refreshable {
             await makePreplannedMapModels()
+            isConnected = networkMonitor.isConnected
         }
     }
     
@@ -102,22 +102,27 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var offlinePreplannedMapAreasView: some View {
-        if let models = mapViewModel.offlinePreplannedMapModels,
-           !models.isEmpty {
-            List(models) { preplannedMapModel in
-                PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap) {
-                    Task { await makePreplannedMapModels() }
+        if let models = mapViewModel.offlinePreplannedMapModels {
+            if !models.isEmpty {
+                List(models) { preplannedMapModel in
+                    PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap, onDeletion: {
+                        Task { await makePreplannedMapModels() }
+                    })
+                    .onChange(of: selectedMap) { _ in
+                        dismiss()
+                    }
                 }
-                .onChange(of: selectedMap) { _ in
-                    dismiss()
-                }
+            } else {
+                emptyOfflinePreplannedMapAreasView
             }
         } else {
-            emptyOfflinePreplannedMapAreasView
+            // Models are loading.
+            ProgressView()
+                .frame(maxWidth: .infinity)
         }
     }
     
-    @ViewBuilder private var emptyPreplannedMapAreasView: some View {
+    private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
             Text("No offline map areas")
                 .bold()
@@ -128,7 +133,7 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    @ViewBuilder private var emptyOfflinePreplannedMapAreasView: some View {
+    private var emptyOfflinePreplannedMapAreasView: some View {
         VStack(alignment: .center) {
             Text("No offline map areas")
                 .bold()
@@ -139,7 +144,7 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    @ViewBuilder private func errorView(_ error: Error) -> some View {
+    private func errorView(_ error: Error) -> some View {
         VStack(alignment: .center) {
             Image(systemName: "exclamationmark.circle")
                 .imageScale(.large)
@@ -151,11 +156,8 @@ public struct OfflineMapAreasView: View {
     
     /// Makes the appropriate preplanned map models depending on the device network connection.
     private func makePreplannedMapModels() async {
-        if networkMonitor.isConnected {
-            await mapViewModel.makePreplannedMapModels()
-        } else {
-            await mapViewModel.makeOfflinePreplannedMapModels()
-        }
+        await mapViewModel.makePreplannedMapModels()
+        await mapViewModel.makeOfflinePreplannedMapModels()
     }
 }
 
@@ -185,10 +187,10 @@ private class NetworkMonitor: ObservableObject {
     private let monitor = NWPathMonitor()
     
     /// A Boolean value indicating whether the device has an internet connection.
-    @Published var isConnected = true
+    @Published private(set) var isConnected = true
     
     init() {
-        monitor.pathUpdateHandler = { path in
+        monitor.pathUpdateHandler = { [unowned self] path in
             DispatchQueue.main.async {
                 self.isConnected = path.status == .satisfied
             }
