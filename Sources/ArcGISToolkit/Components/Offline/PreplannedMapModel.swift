@@ -146,7 +146,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED*** Make sure the directory is not empty because the directory will exist as soon as the
 ***REMOVED******REMOVED******REMOVED*** job starts, so if the job fails, it will look like the mmpk was downloaded.
 ***REMOVED******REMOVED***guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil ***REMOVED***
-***REMOVED******REMOVED***return MobileMapPackage.init(fileURL: fileURL)
+***REMOVED******REMOVED***return MobileMapPackage(fileURL: fileURL)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.

@@ -33,6 +33,8 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The offline preplanned map information sourced from downloaded mobile map packages.
 ***REMOVED******REMOVED***@Published private(set) var offlinePreplannedMapModels: [PreplannedMapModel]?
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Creates an offline map areas view model for a given web map.
+***REMOVED******REMOVED******REMOVED***/ - Parameter map: The web map.
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
 ***REMOVED******REMOVED******REMOVED***portalItemID = map.item?.id
@@ -80,7 +82,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***for mapAreaID in mapAreaIDs {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let preplannedMapAreaID = PortalItem.ID(mapAreaID),
-***REMOVED******REMOVED******REMOVED******REMOVED***   let mapArea = await createMapArea(
+***REMOVED******REMOVED******REMOVED******REMOVED***   let mapArea = await makeMapArea(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: portalItemID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED******REMOVED******REMOVED***   ) {
@@ -106,7 +108,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/   - portalItemID: The portal item ID.
 ***REMOVED******REMOVED******REMOVED***/   - preplannedMapAreaID: The preplanned map area ID.
 ***REMOVED******REMOVED******REMOVED***/ - Returns: The preplanned map area.
-***REMOVED******REMOVED***private func createMapArea(
+***REMOVED******REMOVED***private func makeMapArea(
 ***REMOVED******REMOVED******REMOVED***for portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED******REMOVED***) async -> OfflinePreplannedMapArea? {
@@ -118,7 +120,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Make sure the directory is not empty because the directory will exist as soon as the
 ***REMOVED******REMOVED******REMOVED******REMOVED*** job starts, so if the job fails, it will look like the mmpk was downloaded.
 ***REMOVED******REMOVED******REMOVED***guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED***let mmpk = MobileMapPackage.init(fileURL: fileURL)
+***REMOVED******REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: fileURL)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***try? await mmpk.load()
 ***REMOVED******REMOVED******REMOVED***guard let item = mmpk.item else { return nil ***REMOVED***
