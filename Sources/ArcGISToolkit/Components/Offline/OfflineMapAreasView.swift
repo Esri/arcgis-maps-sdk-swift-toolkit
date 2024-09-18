@@ -35,6 +35,9 @@ public struct OfflineMapAreasView: View {
     /// A Boolean value indicating whether the device has an internet connection.
     @State private var isConnected = true
     
+    /// A Boolean value indicating whether the offline banner should be presented.
+    @State private var offlineBannerIsPresented = false
+    
     /// Creates a view with a given web map.
     /// - Parameters:
     ///   - online: The web map to be taken offline.
@@ -65,6 +68,14 @@ public struct OfflineMapAreasView: View {
             .task {
                 await makePreplannedMapModels()
                 isConnected = networkMonitor.isConnected
+            }
+            .task(id: networkMonitor.isConnected) {
+                offlineBannerIsPresented = !networkMonitor.isConnected
+            }
+            .overlay(alignment: .bottom) {
+                if offlineBannerIsPresented {
+                    offlineBannerView
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -142,6 +153,15 @@ public struct OfflineMapAreasView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+    }
+    
+    private var offlineBannerView: some View {
+        Text("Network Offline")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity)
+            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+            .background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
     }
     
     private func errorView(_ error: Error) -> some View {
