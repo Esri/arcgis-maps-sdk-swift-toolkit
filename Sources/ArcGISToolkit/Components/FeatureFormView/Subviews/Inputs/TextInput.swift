@@ -164,7 +164,23 @@ private extension TextInput {
     /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
         guard let fieldType = element.fieldType else { return .default }
-        return fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+        
+        if fieldType.isNumeric {
+#if os(visionOS)
+            // The 'positiveNegativeButton' doesn't show on visionOS
+            // so we need to show this keyboard so the user can type
+            // a negative number.
+            return .numbersAndPunctuation
+#else
+            if fieldType.isFloatingPoint {
+                return .decimalPad
+            } else {
+                return .numberPad
+            }
+#endif
+        } else {
+            return .default
+        }
     }
     
     /// The button that allows a user to switch the numeric value between positive and negative.
