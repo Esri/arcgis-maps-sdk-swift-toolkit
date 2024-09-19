@@ -50,11 +50,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaViews
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** header: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Preplanned")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
@@ -67,7 +63,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") { dismiss() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Offline Maps")
+***REMOVED******REMOVED******REMOVED***.navigationTitle("Map Areas")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED******REMOVED***.refreshable {
@@ -104,9 +100,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var emptyPreplannedMapAreasView: some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text("No offline map areas")
+***REMOVED******REMOVED******REMOVED***Text("No map areas")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("You don't have any offline map areas yet.")
+***REMOVED******REMOVED******REMOVED***Text("You don't have any map areas yet.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
