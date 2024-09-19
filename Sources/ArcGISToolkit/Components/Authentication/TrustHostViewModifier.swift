@@ -30,25 +30,20 @@ struct TrustHostViewModifier: ViewModifier {
     /// A Boolean value indicating whether or not the prompt is displayed.
     @State var isPresented: Bool = false
     
-    var title: some View {
-        Text(
-            "Certificate Trust Warning",
+    var title: String {
+        String(
+            localized: "Certificate Trust Warning",
             bundle: .toolkitModule,
             comment: "A label indicating that the remote host's certificate is not trusted."
         )
-        .font(.title)
-        .multilineTextAlignment(.center)
     }
     
-    var message: some View {
-        Text(
-            "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+    var message: String {
+        String(
+            localized: "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
             bundle: .toolkitModule,
             comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
         )
-        .multilineTextAlignment(.center)
-        .font(.subheadline)
-        .foregroundColor(.secondary)
     }
     
     func body(content: Content) -> some View {
@@ -60,42 +55,28 @@ struct TrustHostViewModifier: ViewModifier {
                 // it doesn't show.
                 isPresented = true
             }
-            .sheet(isPresented: $isPresented) {
-                VStack(alignment: .center) {
-                    title
-                        .padding(.vertical)
-                    message
-                        .padding(.bottom)
-                    HStack {
-                        Spacer()
-                        Button(role: .cancel) {
-                            isPresented = false
-                            challenge.resume(with: .cancel)
-                        } label: {
-                            Text(String.cancel)
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(.bordered)
-                        Spacer()
-                        Button(role: .destructive) {
-                            isPresented = false
-                            challenge.resume(with: .continueWithCredential(.serverTrust))
-                        } label: {
-                            Text(
-                                "Allow",
-                                bundle: .toolkitModule,
-                                comment: "A button indicating the user accepts a potentially dangerous action."
-                            )
-                            .padding(.horizontal)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        Spacer()
+            .alert(
+                title,
+                isPresented: $isPresented,
+                actions: {
+                    Button(role: .destructive) {
+                        isPresented = false
+                        challenge.resume(with: .continueWithCredential(.serverTrust))
+                    } label: {
+                        Text(
+                            "Allow",
+                            bundle: .toolkitModule,
+                            comment: "A button indicating the user accepts a potentially dangerous action."
+                        )
                     }
-                    Spacer()
-                }
-                .padding()
-                .presentationDetents([.medium])
-                .interactiveDismissDisabled()
-            }
+                    Button(role: .cancel) {
+                        isPresented = false
+                        challenge.resume(with: .cancel)
+                    } label: {
+                        Text(String.cancel)
+                    }
+                }, message: {
+                    Text(message)
+                })
     }
 }
