@@ -58,6 +58,10 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(item.hasError ? .secondary : .primary)
 ***REMOVED******REMOVED***
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: 12))
+***REMOVED******REMOVED******REMOVED***.hoverEffect()
+#endif
 ***REMOVED***)
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.disabled(item.isBasemapLoading)
