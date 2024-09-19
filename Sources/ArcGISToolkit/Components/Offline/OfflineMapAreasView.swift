@@ -50,11 +50,7 @@ public struct OfflineMapAreasView: View {
                     } else {
                         preplannedMapAreaViews
                     }
-                } header: {
-                    Text("Preplanned")
-                        .bold()
                 }
-                .textCase(nil)
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
@@ -67,7 +63,7 @@ public struct OfflineMapAreasView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .navigationTitle("Offline Maps")
+            .navigationTitle("Map Areas")
             .navigationBarTitleDisplayMode(.inline)
         }
         .refreshable {
@@ -104,9 +100,9 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
-            Text("No offline map areas")
+            Text("No map areas")
                 .bold()
-            Text("You don't have any offline map areas yet.")
+            Text("You don't have any map areas yet.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
