@@ -237,14 +237,14 @@ struct CredentialInputSheetView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         cancelAction.handler("", "")
                     } label: {
                         Text(cancelAction.title)
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button {
                         isPresented.wrappedValue = false
                         continueAction.handler(username, password)
