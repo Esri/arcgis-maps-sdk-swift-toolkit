@@ -146,9 +146,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***private var emptyOfflinePreplannedMapAreasView: some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text("No offline map areas")
+***REMOVED******REMOVED******REMOVED***Text("No map areas")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("You don't have any downloaded offline map areas yet.")
+***REMOVED******REMOVED******REMOVED***Text("You don't have any downloaded map areas yet.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
