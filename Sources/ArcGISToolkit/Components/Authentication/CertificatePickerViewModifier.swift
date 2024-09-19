@@ -230,14 +230,6 @@ private extension UTType {
 }
 
 private extension View {
-    var title: String {
-        String(
-            localized: "Certificate Required",
-            bundle: .toolkitModule,
-            comment: "A label indicating that a certificate is required to proceed."
-        )
-    }
-    
     /// Displays a prompt to the user to let them know that picking a certificate is required.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
@@ -246,39 +238,59 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        alert(
-            title,
-            isPresented: isPresented,
-            actions: {
-                Button(role: .cancel) {
-                    isPresented.wrappedValue = false
-                    viewModel.cancel()
-                } label: {
-                    Text(String.cancel)
-                }
-                Button {
-                    isPresented.wrappedValue = false
-                    viewModel.proceedToPicker()
-                } label: {
-                    Text(
-                        "Browse",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to open the system file browser."
-                    )
-                }
-            }, message: {
+        sheet(isPresented: isPresented) {
+            VStack(alignment: .center) {
                 Text(
-                    String(
-                        localized: "A certificate is required to access content on \(viewModel.challengingHost).",
-                        bundle: .toolkitModule,
-                        comment: """
-                         An alert message indicating that a certificate is required to access
-                         content on a remote host. The variable is the host that prompted the challenge.
-                         """
-                    )
+                    "Certificate Required",
+                    bundle: .toolkitModule,
+                    comment: "A label indicating that a certificate is required to proceed."
                 )
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding(.vertical)
+                Text(
+                    "A certificate is required to access content on \(viewModel.challengingHost).",
+                    bundle: .toolkitModule,
+                    comment: """
+                             An alert message indicating that a certificate is required to access
+                             content on a remote host. The variable is the host that prompted the challenge.
+                             """
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.bottom)
+                HStack {
+                    Spacer()
+                    Button(role: .cancel) {
+                        isPresented.wrappedValue = false
+                        viewModel.cancel()
+                    } label: {
+                        Text(String.cancel)
+                            .padding(.horizontal)
+                    }
+                    .buttonStyle(.bordered)
+                    Spacer()
+                    Button(role: .cancel) {
+                        isPresented.wrappedValue = false
+                        viewModel.proceedToPicker()
+                    } label: {
+                        Text(
+                            "Browse",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to open the system file browser."
+                        )
+                        .padding(.horizontal)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Spacer()
+                }
+                Spacer()
             }
-        )
+            .interactiveDismissDisabled()
+            .presentationDetents([.medium])
+            .padding()
+        }
     }
 }
 
