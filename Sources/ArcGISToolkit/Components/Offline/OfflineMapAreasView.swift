@@ -58,10 +58,9 @@ public struct OfflineMapAreasView: View {
                     if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
                         offlineDisabledView
                     } else if isConnected {
-                        preplannedMapAreaViews
+                        preplannedMapAreasView
                     } else {
                         offlinePreplannedMapAreasView
-                    }
                     }
                 } header: {
                     Text("Preplanned")
@@ -161,7 +160,7 @@ public struct OfflineMapAreasView: View {
         }
         .frame(maxWidth: .infinity)
     }
-
+    
     private var offlineDisabledView: some View {
         VStack(alignment: .center) {
             Text("Offline disabled")
