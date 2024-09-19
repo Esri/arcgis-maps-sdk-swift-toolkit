@@ -22,6 +22,9 @@ struct PreplannedMetadataView: View {
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the current map area is selected.
+***REMOVED***let isSelected: Bool
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED***Section {
@@ -62,15 +65,17 @@ struct PreplannedMetadataView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolRenderingMode(.palette)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red, .gray.opacity(0.1))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete Map Area", role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED***if !isSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolRenderingMode(.palette)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red, .gray.opacity(0.1))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete Map Area", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -104,6 +109,7 @@ struct PreplannedMetadataView: View {
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***isSelected: false
 ***REMOVED***)
 ***REMOVED***

@@ -29,6 +29,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED***
+***REMOVED******REMOVED***/ The web map to be taken offline.
+***REMOVED***private let onlineMap: Map
+***REMOVED***
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding private var selectedMap: Map?
 ***REMOVED***
@@ -44,6 +47,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/   - selection: A binding to the currently selected map.
 ***REMOVED***public init(online: Map, selection: Binding<Map?>) {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
+***REMOVED******REMOVED***onlineMap = online
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
@@ -51,10 +55,13 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isConnected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineDisabledView
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if isConnected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaViews
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** header: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Preplanned")
@@ -149,6 +156,17 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***Text("No map areas")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED***Text("You don't have any downloaded map areas yet.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED***
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+
+***REMOVED***private var offlineDisabledView: some View {
+***REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED***Text("Offline disabled")
+***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED***Text("Please ensure the web map is offline enabled.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
