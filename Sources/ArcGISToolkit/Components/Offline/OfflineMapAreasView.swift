@@ -25,6 +25,9 @@ public struct OfflineMapAreasView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
+    /// The web map to be taken offline.
+    private let onlineMap: Map
+    
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     
@@ -34,6 +37,7 @@ public struct OfflineMapAreasView: View {
     ///   - selection: A binding to the currently selected map.
     public init(online: Map, selection: Binding<Map?>) {
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
+        onlineMap = online
         _selectedMap = selection
     }
     
@@ -41,7 +45,11 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 Section {
-                    preplannedMapAreaViews
+                    if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
+                        offlineDisabledView
+                    } else {
+                        preplannedMapAreaViews
+                    }
                 }
             }
             .task {
@@ -95,6 +103,17 @@ public struct OfflineMapAreasView: View {
             Text("No map areas")
                 .bold()
             Text("You don't have any map areas yet.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var offlineDisabledView: some View {
+        VStack(alignment: .center) {
+            Text("Offline disabled")
+                .bold()
+            Text("Please ensure the web map is offline enabled.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
