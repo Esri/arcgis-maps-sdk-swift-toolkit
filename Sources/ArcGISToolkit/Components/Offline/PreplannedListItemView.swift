@@ -62,7 +62,7 @@ struct PreplannedListItemView: View {
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
-                PreplannedMetadataView(model: model)
+                PreplannedMetadataView(model: model, isSelected: isSelected)
             }
         }
         .task {
