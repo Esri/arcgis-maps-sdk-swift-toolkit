@@ -60,10 +60,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") { dismiss() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.done
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Map Areas")
+***REMOVED******REMOVED******REMOVED***.navigationTitle(mapAreasLabel)
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if mapIsOfflineDisabled {
@@ -125,9 +129,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***private var emptyPreplannedMapAreasView: some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text("No map areas")
+***REMOVED******REMOVED******REMOVED***Text(noMapAreasTitleLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("There are no map areas defined for this web map.")
+***REMOVED******REMOVED******REMOVED***Text(noMapAreasSubtitleLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
@@ -170,15 +174,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var offlineBannerView: some View {
-***REMOVED******REMOVED***Text("Network Offline")
-***REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-***REMOVED******REMOVED******REMOVED***.background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
-***REMOVED***
-***REMOVED***
 ***REMOVED***private func view(for error: Error) -> some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
@@ -216,4 +211,46 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***return OfflineMapAreasViewPreview()
+***REMOVED***
+
+private extension OfflineMapAreasView {
+***REMOVED***var mapAreasLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Map Areas",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for the map areas view."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var noMapAreasTitleLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "No map areas",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that the map has no map areas."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var noMapAreasSubtitleLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "There are no map areas defined for this web map.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that there are no map areas defined for the web map."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var offlineDisabledTitleLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Offline disabled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that the web map is offline disabled."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var offlineDisabledSubtitleLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Please ensure the web map is offline enabled.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that the user should check that the web map is offline enabled."
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
