@@ -190,12 +190,16 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+#endif
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
 #endif
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
