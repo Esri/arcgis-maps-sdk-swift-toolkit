@@ -109,7 +109,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var deleteButton: some View {
 ***REMOVED******REMOVED***if model.status.allowsRemoval,
 ***REMOVED******REMOVED***   !isSelected {
-***REMOVED******REMOVED******REMOVED***Button("Delete") {
+***REMOVED******REMOVED******REMOVED***Button(deleteLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDeletion?()
 ***REMOVED******REMOVED***
@@ -127,7 +127,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(openLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED***
@@ -161,7 +161,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Text("This area has no description.")
+***REMOVED******REMOVED******REMOVED***Text(noDescriptionLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
@@ -179,25 +179,25 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
 ***REMOVED******REMOVED******REMOVED***switch model.status {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(loadingLabel)
 ***REMOVED******REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(loadingFailedLabel)
 ***REMOVED******REMOVED******REMOVED***case .packaging:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(packagingLabel)
 ***REMOVED******REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Ready to download")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(packagedLabel)
 ***REMOVED******REMOVED******REMOVED***case .packageFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging failed")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(packageFailureLabel)
 ***REMOVED******REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloading")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(downloadingLabel)
 ***REMOVED******REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(downloadedLabel)
 ***REMOVED******REMOVED******REMOVED***case .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Download failed")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(downloadFailureLabel)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
@@ -240,4 +240,94 @@ private extension PreplannedListItemView.DownloadState {
 ***REMOVED******REMOVED***selectedMap: .constant(nil)
 ***REMOVED***)
 ***REMOVED***.padding()
+***REMOVED***
+
+private extension PreplannedListItemView {
+***REMOVED***var openLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Open",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to open the map area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var deleteLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Delete",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to delete the map area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var noDescriptionLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "This area has no description.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that the map area has no description."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var loadingLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Loading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area is loading."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var loadingFailedLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Loading failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area failed to load."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var packagingLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Packaging",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area is packaging."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var packagedLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Ready to download",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area is packaged."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var packageFailureLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Packaging failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area packaging failed."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var downloadingLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Downloading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area mobile map package is downloading."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var downloadedLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Downloaded",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area mobile map package is downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var downloadFailureLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Download failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment:  "A status message indicating that the map area mobile map package download failed."
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
