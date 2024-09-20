@@ -219,7 +219,7 @@ public struct OfflineMapAreasView: View {
 
 @MainActor
 private class NetworkMonitor: ObservableObject {
-    /// The path mointor to observe network changes.
+    /// The path monitor to observe network changes.
     private let monitor = NWPathMonitor()
     
     /// A Boolean value indicating whether the device has an internet connection.
