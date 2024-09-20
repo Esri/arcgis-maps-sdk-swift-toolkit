@@ -50,7 +50,7 @@ extension OfflineMapAreasView {
         func makePreplannedMapModels() async {
             guard let portalItemID else { return }
             
-            if offlineMapTask.loadStatus == .failed {
+            if offlineMapTask.loadStatus != .loaded {
                 try? await offlineMapTask.retryLoad()
             }
             
