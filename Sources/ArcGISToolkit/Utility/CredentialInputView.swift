@@ -233,6 +233,7 @@ struct CredentialInputSheetView: View {
                                 passwordTextField
                             }
                         }
+                        .scrollContentBackground(.hidden)
                     }
                 }
             }
