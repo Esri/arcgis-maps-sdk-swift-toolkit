@@ -109,7 +109,7 @@ struct PreplannedListItemView: View {
     @ViewBuilder private var deleteButton: some View {
         if model.status.allowsRemoval,
            !isSelected {
-            Button("Delete") {
+            Button(deleteLabel) {
                 model.removeDownloadedPreplannedMapArea()
                 onDeletion?()
             }
@@ -127,7 +127,7 @@ struct PreplannedListItemView: View {
                     }
                 }
             } label: {
-                Text("Open")
+                Text(openLabel)
                     .font(.footnote)
                     .fontWeight(.bold)
             }
@@ -161,7 +161,7 @@ struct PreplannedListItemView: View {
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
         } else {
-            Text("This area has no description.")
+            Text(noDescriptionLabel)
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
         }
@@ -179,25 +179,25 @@ struct PreplannedListItemView: View {
         HStack(spacing: 4) {
             switch model.status {
             case .notLoaded, .loading:
-                Text("Loading")
+                Text(loadingLabel)
             case .loadFailure, .mmpkLoadFailure:
                 Image(systemName: "exclamationmark.circle")
-                Text("Loading failed")
+                Text(loadingFailedLabel)
             case .packaging:
                 Image(systemName: "clock.badge.xmark")
-                Text("Packaging")
+                Text(packagingLabel)
             case .packaged:
-                Text("Ready to download")
+                Text(packagedLabel)
             case .packageFailure:
                 Image(systemName: "exclamationmark.circle")
-                Text("Packaging failed")
+                Text(packageFailureLabel)
             case .downloading:
-                Text("Downloading")
+                Text(downloadingLabel)
             case .downloaded:
-                Text("Downloaded")
+                Text(downloadedLabel)
             case .downloadFailure:
                 Image(systemName: "exclamationmark.circle")
-                Text("Download failed")
+                Text(downloadFailureLabel)
             }
         }
         .font(.caption2)
@@ -240,4 +240,94 @@ private extension PreplannedListItemView.DownloadState {
         selectedMap: .constant(nil)
     )
     .padding()
+}
+
+private extension PreplannedListItemView {
+    var openLabel: String {
+        .init(
+            localized: "Open",
+            bundle: .toolkitModule,
+            comment: "A label for a button to open the map area."
+        )
+    }
+    
+    var deleteLabel: String {
+        .init(
+            localized: "Delete",
+            bundle: .toolkitModule,
+            comment: "A label for a button to delete the map area."
+        )
+    }
+    
+    var noDescriptionLabel: String {
+        .init(
+            localized: "This area has no description.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the map area has no description."
+        )
+    }
+    
+    var loadingLabel: String {
+        .init(
+            localized: "Loading",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area is loading."
+        )
+    }
+    
+    var loadingFailedLabel: String {
+        .init(
+            localized: "Loading failed",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area failed to load."
+        )
+    }
+    
+    var packagingLabel: String {
+        .init(
+            localized: "Packaging",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area is packaging."
+        )
+    }
+    
+    var packagedLabel: String {
+        .init(
+            localized: "Ready to download",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area is packaged."
+        )
+    }
+    
+    var packageFailureLabel: String {
+        .init(
+            localized: "Packaging failed",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area packaging failed."
+        )
+    }
+    
+    var downloadingLabel: String {
+        .init(
+            localized: "Downloading",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area mobile map package is downloading."
+        )
+    }
+    
+    var downloadedLabel: String {
+        .init(
+            localized: "Downloaded",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area mobile map package is downloaded."
+        )
+    }
+    
+    var downloadFailureLabel: String {
+        .init(
+            localized: "Download failed",
+            bundle: .toolkitModule,
+            comment:  "A status message indicating that the map area mobile map package download failed."
+        )
+    }
 }
