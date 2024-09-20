@@ -60,10 +60,14 @@ public struct OfflineMapAreasView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text.done
+                    }
                 }
             }
-            .navigationTitle("Map Areas")
+            .navigationTitle(mapAreasLabel)
             .navigationBarTitleDisplayMode(.inline)
             .overlay {
                 if mapIsOfflineDisabled {
@@ -125,9 +129,9 @@ public struct OfflineMapAreasView: View {
     
     private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
-            Text("No map areas")
+            Text(noMapAreasTitleLabel)
                 .bold()
-            Text("There are no map areas defined for this web map.")
+            Text(noMapAreasSubtitleLabel)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -170,15 +174,6 @@ public struct OfflineMapAreasView: View {
         }
     }
     
-    private var offlineBannerView: some View {
-        Text("Network Offline")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity)
-            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-            .background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
-    }
-    
     private func view(for error: Error) -> some View {
         VStack(alignment: .center) {
             Image(systemName: "exclamationmark.circle")
@@ -216,4 +211,46 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
+}
+
+private extension OfflineMapAreasView {
+    var mapAreasLabel: String {
+        .init(
+            localized: "Map Areas",
+            bundle: .toolkitModule,
+            comment: "A label for the map areas view."
+        )
+    }
+    
+    var noMapAreasTitleLabel: String {
+        .init(
+            localized: "No map areas",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the map has no map areas."
+        )
+    }
+    
+    var noMapAreasSubtitleLabel: String {
+        .init(
+            localized: "There are no map areas defined for this web map.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that there are no map areas defined for the web map."
+        )
+    }
+    
+    var offlineDisabledTitleLabel: String {
+        .init(
+            localized: "Offline disabled",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the web map is offline disabled."
+        )
+    }
+    
+    var offlineDisabledSubtitleLabel: String {
+        .init(
+            localized: "Please ensure the web map is offline enabled.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the user should check that the web map is offline enabled."
+        )
+    }
 }
