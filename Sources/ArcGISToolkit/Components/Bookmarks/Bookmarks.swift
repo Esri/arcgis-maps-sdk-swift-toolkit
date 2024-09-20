@@ -191,12 +191,16 @@ extension Bookmarks {
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
+#endif
 #if targetEnvironment(macCatalyst)
                 .listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
 #endif
             }
+#if !os(visionOS)
             .listStyle(.plain)
+#endif
         }
     }
     
