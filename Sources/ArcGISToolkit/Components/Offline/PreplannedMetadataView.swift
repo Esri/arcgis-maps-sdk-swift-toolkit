@@ -38,18 +38,18 @@ struct PreplannedMetadataView: View {
                     }
                 }
                 VStack(alignment: .leading) {
-                    Text("Name")
+                    Text(nameLabel)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(model.preplannedMapArea.title)
                         .font(.subheadline)
                 }
                 VStack(alignment: .leading) {
-                    Text("Description")
+                    Text(descriptionLabel)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     if model.preplannedMapArea.description.isEmpty {
-                        Text("This area has no description.")
+                        Text(noDescriptionLabel)
                             .font(.subheadline)
                             .foregroundStyle(.tertiary)
                     } else {
@@ -58,7 +58,7 @@ struct PreplannedMetadataView: View {
                     }
                 }
                 VStack(alignment: .leading) {
-                    Text("Size")
+                    Text(sizeLabel)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
@@ -72,7 +72,7 @@ struct PreplannedMetadataView: View {
                             .symbolRenderingMode(.palette)
                             .foregroundStyle(.red, .gray.opacity(0.1))
                             .font(.title)
-                        Button("Delete Map Area", role: .destructive) {
+                        Button(deleteLabel, role: .destructive) {
                             dismiss()
                             model.removeDownloadedPreplannedMapArea()
                         }
@@ -84,7 +84,11 @@ struct PreplannedMetadataView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") { dismiss() }
+                Button {
+                    dismiss()
+                } label: {
+                    Text.done
+                }
             }
         }
     }
@@ -112,4 +116,46 @@ struct PreplannedMetadataView: View {
         ),
         isSelected: false
     )
+}
+
+private extension PreplannedMetadataView {
+    var nameLabel: String {
+        .init(
+            localized: "Name",
+            bundle: .toolkitModule,
+            comment: "A label for the name of the map area."
+        )
+    }
+    
+    var descriptionLabel: String {
+        .init(
+            localized: "Description",
+            bundle: .toolkitModule,
+            comment: "A label for the description of the map area."
+        )
+    }
+    
+    var noDescriptionLabel: String {
+        .init(
+            localized: "This area has no description.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the map area has no description."
+        )
+    }
+    
+    var sizeLabel: String {
+        .init(
+            localized: "Size",
+            bundle: .toolkitModule,
+            comment: "A label for the file size of the map area."
+        )
+    }
+    
+    var deleteLabel: String {
+        .init(
+            localized: "Delete Map Area",
+            bundle: .toolkitModule,
+            comment: "A label for the button to delete a map area."
+        )
+    }
 }
