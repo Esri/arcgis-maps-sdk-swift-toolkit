@@ -69,9 +69,8 @@ public struct OfflineMapAreasView: View {
             }
             .task {
                 await makePreplannedMapModels()
-                isConnected = networkMonitor.isConnected
             }
-            .task(id: networkMonitor.isConnected) {
+            .onChange(of: networkMonitor.isConnected) { _ in
                 offlineBannerIsPresented = !networkMonitor.isConnected
             }
             .overlay(alignment: .bottom) {
@@ -89,7 +88,6 @@ public struct OfflineMapAreasView: View {
         }
         .refreshable {
             await makePreplannedMapModels()
-            isConnected = networkMonitor.isConnected
         }
     }
     
@@ -129,7 +127,7 @@ public struct OfflineMapAreasView: View {
                 emptyOfflinePreplannedMapAreasView
             }
         } else {
-            // Models are loading.
+            // Models are loading map areas from disk.
             ProgressView()
                 .frame(maxWidth: .infinity)
         }
@@ -139,7 +137,7 @@ public struct OfflineMapAreasView: View {
         VStack(alignment: .center) {
             Text("No map areas")
                 .bold()
-            Text("You don't have any map areas yet.")
+            Text("The web map doesn't contain specified offline map areas.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -187,10 +185,15 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    /// Makes the appropriate preplanned map models depending on the device network connection.
+    /// Makes the appropriate preplanned map models depending on the updated device network connection.
     private func makePreplannedMapModels() async {
-        await mapViewModel.makePreplannedMapModels()
-        await mapViewModel.makeOfflinePreplannedMapModels()
+        isConnected = networkMonitor.isConnected
+        
+        if isConnected {
+            await mapViewModel.makePreplannedMapModels()
+        } else {
+            await mapViewModel.makeOfflinePreplannedMapModels()
+        }
     }
 }
 
