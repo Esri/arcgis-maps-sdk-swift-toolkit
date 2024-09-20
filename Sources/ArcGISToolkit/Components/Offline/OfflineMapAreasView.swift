@@ -69,9 +69,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await makePreplannedMapModels()
-***REMOVED******REMOVED******REMOVED******REMOVED***isConnected = networkMonitor.isConnected
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task(id: networkMonitor.isConnected) {
+***REMOVED******REMOVED******REMOVED***.onChange(of: networkMonitor.isConnected) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***offlineBannerIsPresented = !networkMonitor.isConnected
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
@@ -89,7 +88,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.refreshable {
 ***REMOVED******REMOVED******REMOVED***await makePreplannedMapModels()
-***REMOVED******REMOVED******REMOVED***isConnected = networkMonitor.isConnected
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -129,7 +127,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflinePreplannedMapAreasView
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Models are loading.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Models are loading map areas from disk.
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
@@ -139,7 +137,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***Text("No map areas")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("You don't have any map areas yet.")
+***REMOVED******REMOVED******REMOVED***Text("The web map doesn't contain specified offline map areas.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
@@ -187,10 +185,15 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Makes the appropriate preplanned map models depending on the device network connection.
+***REMOVED******REMOVED***/ Makes the appropriate preplanned map models depending on the updated device network connection.
 ***REMOVED***private func makePreplannedMapModels() async {
-***REMOVED******REMOVED***await mapViewModel.makePreplannedMapModels()
-***REMOVED******REMOVED***await mapViewModel.makeOfflinePreplannedMapModels()
+***REMOVED******REMOVED***isConnected = networkMonitor.isConnected
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if isConnected {
+***REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedMapModels()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***await mapViewModel.makeOfflinePreplannedMapModels()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
