@@ -23,7 +23,7 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED******REMOVED***id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
 ***REMOVED******REMOVED***)
 ***REMOVED***)
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
