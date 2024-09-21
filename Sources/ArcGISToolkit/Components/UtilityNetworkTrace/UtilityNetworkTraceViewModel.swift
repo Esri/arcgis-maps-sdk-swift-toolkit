@@ -129,7 +129,7 @@ import Foundation
 ***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { [weak self] taskGroup in
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***for layer in network?.layers ?? [] {
-***REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask { @MainActor @Sendable in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for element in result.geoElements {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.processAndAdd(
