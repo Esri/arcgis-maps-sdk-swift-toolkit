@@ -81,7 +81,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 extension AttachmentCameraController {
 ***REMOVED******REMOVED***/ Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
 ***REMOVED******REMOVED***/ - Parameter action: The new camera capture mode.
-***REMOVED***func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
+***REMOVED***func onCameraCaptureModeChanged(perform action: @Sendable @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
 ***REMOVED******REMOVED***self.controller.action = action
 ***REMOVED******REMOVED***return self
 ***REMOVED***
