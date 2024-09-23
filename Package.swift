@@ -50,13 +50,3 @@ let package = Package(
         )
     ]
 )
-
-for target in package.targets {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        // Experimental Features.
-        .enableExperimentalFeature("AccessLevelOnImport"),
-        .enableExperimentalFeature("StrictConcurrency"),
-        // Upcoming Features.
-        .enableUpcomingFeature("DisableOutwardActorInference")
-    ]
-}
