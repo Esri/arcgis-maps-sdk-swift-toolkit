@@ -291,10 +291,12 @@ private extension Color {
 private extension Font {
 ***REMOVED***static func fontForHeading(level: Int) -> Self {
 ***REMOVED******REMOVED***switch level {
-***REMOVED******REMOVED***case 1: .largeTitle
-***REMOVED******REMOVED***case 2: .title
-***REMOVED******REMOVED***case 3: .title2
-***REMOVED******REMOVED***case 4: .title3
+***REMOVED******REMOVED***case 1: .largeTitle.bold()
+***REMOVED******REMOVED***case 2: .title.bold()
+***REMOVED******REMOVED***case 3: .title2.bold()
+***REMOVED******REMOVED***case 4: .title3.bold()
+***REMOVED******REMOVED***case 5: .headline.bold()
+***REMOVED******REMOVED***case 6: .subheadline.bold()
 ***REMOVED******REMOVED***default: .body
 ***REMOVED***
 ***REMOVED***
@@ -350,7 +352,8 @@ private extension Markup {
 ***REMOVED******REMOVED***## Heading 2
 ***REMOVED******REMOVED***### Heading 3
 ***REMOVED******REMOVED***#### [Heading 4 as a ***~link~***](www.esri.com)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***##### Heading 5
+***REMOVED******REMOVED***###### Heading 6
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***```
 ***REMOVED******REMOVED***func showCodeBlock() {
