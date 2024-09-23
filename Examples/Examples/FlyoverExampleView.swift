@@ -32,7 +32,7 @@ struct FlyoverExampleView: View {
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
-                    Task.detached { @MainActor in
+                    Task { @MainActor in
                         let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
                         print("\(results.count) identify result(s).")
                     }
