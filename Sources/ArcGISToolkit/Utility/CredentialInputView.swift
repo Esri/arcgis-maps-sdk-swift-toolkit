@@ -210,62 +210,60 @@ struct CredentialInputSheetView: View {
     }
     
     var body: some View {
-        GeometryReader { proxy in
-            VStack {
-                VStack(alignment: .center) {
-                    VStack(spacing: 8) {
-                        Text(title)
-                            .font(.title)
-                            .multilineTextAlignment(.center)
-                        Text(message)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.vertical)
-                    Form {
-                        Section {
-                            switch fields {
-                            case .password:
-                                passwordTextField
-                            case .usernamePassword:
-                                usernameTextField
-                                passwordTextField
-                            }
-                        } footer: {
-                            // Adding the buttons to the footer or the
-                            // form will push the buttons to the bottom of
-                            // the sheet when we want the buttons
-                            // below the text fields.
-                            HStack {
-                                Spacer()
-                                Button(role: .cancel) {
-                                    cancelAction.handler("", "")
-                                } label: {
-                                    Text(cancelAction.title)
-                                        .padding(.horizontal)
-                                }
-                                .buttonStyle(.bordered)
-                                Spacer()
-                                Button {
-                                    isPresented.wrappedValue = false
-                                    continueAction.handler(username, password)
-                                } label: {
-                                    Text(continueAction.title)
-                                        .padding(.horizontal)
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .disabled(!isContinueEnabled)
-                                Spacer()
-                            }
-                            .padding(.top)
-                        }
-                    }
-                    .scrollContentBackground(.hidden)
+        VStack {
+            VStack(alignment: .center) {
+                VStack(spacing: 8) {
+                    Text(title)
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+                    Text(message)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
                 }
+                .padding(.vertical)
+                Form {
+                    Section {
+                        switch fields {
+                        case .password:
+                            passwordTextField
+                        case .usernamePassword:
+                            usernameTextField
+                            passwordTextField
+                        }
+                    } footer: {
+                        // Adding the buttons to the footer or the
+                        // form will push the buttons to the bottom of
+                        // the sheet when we want the buttons
+                        // below the text fields.
+                        HStack {
+                            Spacer()
+                            Button(role: .cancel) {
+                                cancelAction.handler("", "")
+                            } label: {
+                                Text(cancelAction.title)
+                                    .padding(.horizontal)
+                            }
+                            .buttonStyle(.bordered)
+                            Spacer()
+                            Button {
+                                isPresented.wrappedValue = false
+                                continueAction.handler(username, password)
+                            } label: {
+                                Text(continueAction.title)
+                                    .padding(.horizontal)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(!isContinueEnabled)
+                            Spacer()
+                        }
+                        .padding(.top)
+                    }
+                }
+                .scrollContentBackground(.hidden)
             }
-            .padding()
         }
+        .padding()
         .onAppear {
             // Set initial focus of text field.
             switch fields {
