@@ -61,42 +61,41 @@ struct TrustHostViewModifier: ViewModifier {
                 isPresented = true
             }
             .sheet(isPresented: $isPresented) {
-                NavigationStack {
-                    VStack(alignment: .center) {
-                        title
-                            .padding(.vertical)
-                        message
-                            .padding(.bottom)
-                    }
-                    .padding()
-                    .presentationDetents([.medium])
-                    .interactiveDismissDisabled()
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button(role: .cancel) {
-                                isPresented = false
-                                challenge.resume(with: .cancel)
-                            } label: {
-                                Text(String.cancel)
-                            }
-                            .buttonStyle(.bordered)
+                VStack(alignment: .center) {
+                    title
+                        .padding(.vertical)
+                    message
+                        .padding(.bottom)
+                    HStack {
+                        Spacer()
+                        Button(role: .cancel) {
+                            isPresented = false
+                            challenge.resume(with: .cancel)
+                        } label: {
+                            Text(String.cancel)
+                                .padding(.horizontal)
                         }
-                        
-                        ToolbarItem(placement: .destructiveAction) {
-                            Button(role: .destructive) {
-                                isPresented = false
-                                challenge.resume(with: .continueWithCredential(.serverTrust))
-                            } label: {
-                                Text(
-                                    "Allow",
-                                    bundle: .toolkitModule,
-                                    comment: "A button indicating the user accepts a potentially dangerous action."
-                                )
-                            }
-                            .buttonStyle(.borderedProminent)
+                        .buttonStyle(.bordered)
+                        Spacer()
+                        Button(role: .destructive) {
+                            isPresented = false
+                            challenge.resume(with: .continueWithCredential(.serverTrust))
+                        } label: {
+                            Text(
+                                "Allow",
+                                bundle: .toolkitModule,
+                                comment: "A button indicating the user accepts a potentially dangerous action."
+                            )
+                            .padding(.horizontal)
                         }
+                        .buttonStyle(.borderedProminent)
+                        Spacer()
                     }
+                    Spacer()
                 }
+                .padding()
+                .presentationDetents([.medium])
+                .interactiveDismissDisabled()
             }
     }
 }

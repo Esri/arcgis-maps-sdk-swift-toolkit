@@ -239,57 +239,57 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         sheet(isPresented: isPresented) {
-            NavigationStack {
-                VStack(alignment: .center) {
-                    Text(
-                        "Certificate Required",
-                        bundle: .toolkitModule,
-                        comment: "A label indicating that a certificate is required to proceed."
-                    )
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical)
-                    Text(
-                        "A certificate is required to access content on \(viewModel.challengingHost).",
-                        bundle: .toolkitModule,
-                        comment: """
-                                 An alert message indicating that a certificate is required to access
-                                 content on a remote host. The variable is the host that prompted the challenge.
-                                 """
-                    )
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom)
-                }
-                .interactiveDismissDisabled()
-                .presentationDetents([.medium])
-                .padding()
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(role: .cancel) {
-                            isPresented.wrappedValue = false
-                            viewModel.cancel()
-                        } label: {
-                            Text(String.cancel)
-                        }
-                        .buttonStyle(.bordered)
+            VStack(alignment: .center) {
+                Text(
+                    "Certificate Required",
+                    bundle: .toolkitModule,
+                    comment: "A label indicating that a certificate is required to proceed."
+                )
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding(.vertical)
+                Text(
+                    "A certificate is required to access content on \(viewModel.challengingHost).",
+                    bundle: .toolkitModule,
+                    comment: """
+                             An alert message indicating that a certificate is required to access
+                             content on a remote host. The variable is the host that prompted the challenge.
+                             """
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.bottom)
+                HStack {
+                    Spacer()
+                    Button(role: .cancel) {
+                        isPresented.wrappedValue = false
+                        viewModel.cancel()
+                    } label: {
+                        Text(String.cancel)
+                            .padding(.horizontal)
                     }
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            isPresented.wrappedValue = false
-                            viewModel.proceedToPicker()
-                        } label: {
-                            Text(
-                                "Browse",
-                                bundle: .toolkitModule,
-                                comment: "A label for a button to open the system file browser."
-                            )
-                        }
-                        .buttonStyle(.borderedProminent)
+                    .buttonStyle(.bordered)
+                    Spacer()
+                    Button(role: .cancel) {
+                        isPresented.wrappedValue = false
+                        viewModel.proceedToPicker()
+                    } label: {
+                        Text(
+                            "Browse",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to open the system file browser."
+                        )
+                        .padding(.horizontal)
                     }
+                    .buttonStyle(.borderedProminent)
+                    Spacer()
                 }
+                Spacer()
             }
+            .interactiveDismissDisabled()
+            .presentationDetents([.medium])
+            .padding()
         }
     }
 }
