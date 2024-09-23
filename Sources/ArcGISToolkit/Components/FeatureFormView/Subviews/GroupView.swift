@@ -61,7 +61,7 @@ struct GroupView<Content>: View where Content: View {
         .onAppear {
             isExpanded = element.initialState == .expanded
             for element in element.elements {
-                let newTask = Task.detached { @MainActor [self] in
+                let newTask = Task { @MainActor [self] in
                     for await _ in element.$isVisible {
                         self.updateVisibleElements()
                     }
