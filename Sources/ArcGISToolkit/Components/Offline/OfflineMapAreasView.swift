@@ -148,9 +148,10 @@ public struct OfflineMapAreasView: View {
         VStack(alignment: .center) {
             Text("No map areas")
                 .bold()
-            Text("You don't have any downloaded map areas yet.")
+            Text("There are no downloaded map areas for this web map.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
     }
