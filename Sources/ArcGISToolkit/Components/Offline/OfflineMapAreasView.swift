@@ -31,6 +31,11 @@ public struct OfflineMapAreasView: View {
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     
+    /// A Boolean value indicating whether the web map is offline disabled.
+    private var mapIsOfflineDisabled: Bool {
+        onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+    }
+    
     /// Creates a view with a given web map.
     /// - Parameters:
     ///   - online: The web map to be taken offline.
@@ -45,9 +50,7 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 Section {
-                    if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
-                        offlineDisabledView
-                    } else {
+                    if !mapIsOfflineDisabled {
                         preplannedMapAreaViews
                     }
                 }
@@ -65,6 +68,11 @@ public struct OfflineMapAreasView: View {
             }
             .navigationTitle("Map Areas")
             .navigationBarTitleDisplayMode(.inline)
+            .overlay {
+                if mapIsOfflineDisabled {
+                    offlineDisabledView
+                }
+            }
         }
         .refreshable {
             await mapViewModel.makePreplannedOfflineMapModels()
@@ -111,14 +119,24 @@ public struct OfflineMapAreasView: View {
     }
     
     private var offlineDisabledView: some View {
-        VStack(alignment: .center) {
-            Text("Offline disabled")
-                .bold()
-            Text("Please ensure the web map is offline enabled.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+        if #available(iOS 17, *) {
+            return ContentUnavailableView {
+                Text("Offline Disabled")
+                    .bold()
+            } description: {
+                Text("Please ensure the web map is offline enabled.")
+            }
+        } else {
+            return VStack(alignment: .center) {
+                Text("Offline Disabled")
+                    .bold()
+                    .font(.title2)
+                Text("Please ensure the web map is offline enabled.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
 }
 
