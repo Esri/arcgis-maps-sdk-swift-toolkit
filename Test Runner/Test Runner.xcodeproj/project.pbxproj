@@ -272,6 +272,7 @@
 			mainGroup = 7552A7472A573CBB0023DA5A;
 			packageReferences = (
 			);
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 7552A7512A573CBB0023DA5A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
