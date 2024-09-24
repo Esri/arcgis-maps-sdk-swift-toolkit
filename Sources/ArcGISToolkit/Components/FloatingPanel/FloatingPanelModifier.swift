@@ -66,8 +66,8 @@ public extension View {
     /// - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
     /// environments and a popover otherwise.
     @available(visionOS 2.0, *)
-    @available(iOS, unavailable, message: "Use 'floatingPanel(attributionBarHeight:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
-    @available(macCatalyst, unavailable, message: "Use 'floatingPanel(attributionBarHeight:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
+    @available(iOS, unavailable, message: "Use 'floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
+    @available(macCatalyst, unavailable, message: "Use 'floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
     func floatingPanel<Content>(
         attributionBarHeight: CGFloat = 0,
         selectedDetent: Binding<FloatingPanelDetent>? = nil,
