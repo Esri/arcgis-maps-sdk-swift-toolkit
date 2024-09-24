@@ -15,7 +15,7 @@
 import ArcGIS
 
 /// Defines the contract for a search result provider.
-public protocol SearchSource {
+public protocol SearchSource: Sendable {
     /// Name to show when presenting this source in the UI.
     var name: String { get set }
     
