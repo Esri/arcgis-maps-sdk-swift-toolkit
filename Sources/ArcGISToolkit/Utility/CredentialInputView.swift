@@ -210,58 +210,60 @@ struct CredentialInputSheetView: View {
     }
     
     var body: some View {
-        GeometryReader { proxy in
-            VStack {
-                VStack(alignment: .center) {
-                    VStack(spacing: 8) {
-                        Text(title)
-                            .font(.title)
-                            .multilineTextAlignment(.center)
-                        Text(message)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.vertical)
-                    VStack {
+        VStack {
+            VStack(alignment: .center) {
+                VStack(spacing: 8) {
+                    Text(title)
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+                    Text(message)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.vertical)
+                Form {
+                    Section {
                         switch fields {
                         case .password:
                             passwordTextField
                         case .usernamePassword:
                             usernameTextField
-                            Divider()
                             passwordTextField
                         }
-                        Divider()
-                    }
-                    .padding([.bottom, .horizontal])
-                    HStack {
-                        Spacer()
-                        Button(role: .cancel) {
-                            cancelAction.handler("", "")
-                        } label: {
-                            Text(cancelAction.title)
-                                .padding(.horizontal)
+                    } footer: {
+                        // Adding the buttons to the footer or the
+                        // form will push the buttons to the bottom of
+                        // the sheet when we want the buttons
+                        // below the text fields.
+                        HStack {
+                            Spacer()
+                            Button(role: .cancel) {
+                                cancelAction.handler("", "")
+                            } label: {
+                                Text(cancelAction.title)
+                                    .padding(.horizontal)
+                            }
+                            .buttonStyle(.bordered)
+                            Spacer()
+                            Button {
+                                isPresented.wrappedValue = false
+                                continueAction.handler(username, password)
+                            } label: {
+                                Text(continueAction.title)
+                                    .padding(.horizontal)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(!isContinueEnabled)
+                            Spacer()
                         }
-                        .buttonStyle(.bordered)
-                        Spacer()
-                        Button {
-                            isPresented.wrappedValue = false
-                            continueAction.handler(username, password)
-                        } label: {
-                            Text(continueAction.title)
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(!isContinueEnabled)
-                        Spacer()
+                        .padding(.top)
                     }
-                    Spacer()
                 }
-                .padding()
-                Spacer()
+                .scrollContentBackground(.hidden)
             }
         }
+        .padding()
         .onAppear {
             // Set initial focus of text field.
             switch fields {
