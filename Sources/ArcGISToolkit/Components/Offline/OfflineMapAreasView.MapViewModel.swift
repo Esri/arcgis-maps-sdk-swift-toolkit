@@ -78,28 +78,28 @@ extension OfflineMapAreasView {
             
             guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return }
             
-            var mapAreas: [OfflinePreplannedMapArea] = []
+            var preplannedMapModels: [PreplannedMapModel] = []
             
             for mapAreaID in mapAreaIDs {
-                if let preplannedMapAreaID = PortalItem.ID(mapAreaID),
-                   let mapArea = await makeMapArea(
-                    for: portalItemID,
-                    preplannedMapAreaID: preplannedMapAreaID
-                   ) {
-                    mapAreas.append(mapArea)
+                guard let preplannedMapAreaID = PortalItem.ID(mapAreaID),
+                      let mapArea = await makeMapArea(
+                        portalItemID: portalItemID,
+                        preplannedMapAreaID: preplannedMapAreaID
+                      ) else {
+                    continue
                 }
-            }
-            
-            offlinePreplannedMapModels = mapAreas.map { mapArea in
-                PreplannedMapModel(
+                let model = PreplannedMapModel(
                     offlineMapTask: offlineMapTask,
                     mapArea: mapArea,
                     portalItemID: portalItemID,
                     preplannedMapAreaID: mapArea.id!
                 )
+                preplannedMapModels.append(model)
             }
-            .sorted(using: KeyPathComparator(\.preplannedMapArea.title))
-            .filter(\.status.isDownloaded)
+            
+            offlinePreplannedMapModels = preplannedMapModels
+                .filter(\.status.isDownloaded)
+                .sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title })
         }
         
         /// Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
@@ -109,7 +109,7 @@ extension OfflineMapAreasView {
         ///   - preplannedMapAreaID: The preplanned map area ID.
         /// - Returns: The preplanned map area.
         private func makeMapArea(
-            for portalItemID: PortalItem.ID,
+            portalItemID: PortalItem.ID,
             preplannedMapAreaID: PortalItem.ID
         ) async -> OfflinePreplannedMapArea? {
             let fileURL = FileManager.default.preplannedDirectory(
@@ -125,7 +125,7 @@ extension OfflineMapAreasView {
             try? await mmpk.load()
             guard let item = mmpk.item else { return nil }
             
-            return OfflinePreplannedMapArea(
+            return .init(
                 title: item.title,
                 description: item.description,
                 id: preplannedMapAreaID,
@@ -136,26 +136,15 @@ extension OfflineMapAreasView {
 }
 
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
-    var packagingStatus: PreplannedMapArea.PackagingStatus?
     var title: String
     var description: String
-    var thumbnail: LoadableImage?
     var id: PortalItem.ID?
+    var packagingStatus: PreplannedMapArea.PackagingStatus?
+    var thumbnail: LoadableImage?
     
     func retryLoad() async throws {}
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-        throw CancellationError()
-    }
     
-    init(
-        title: String,
-        description: String,
-        id: PortalItem.ID,
-        thumbnail: LoadableImage? = nil
-    ) {
-        self.title = title
-        self.description = description
-        self.id = id
-        self.thumbnail = thumbnail
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        fatalError()
     }
 }
