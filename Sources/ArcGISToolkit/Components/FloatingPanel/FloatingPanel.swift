@@ -212,6 +212,7 @@ private struct Handle: View {
         RoundedRectangle(cornerRadius: 4.0)
             .foregroundColor(color)
             .frame(width: 100, height: 8.0)
+            .hoverEffect()
     }
 }
 
