@@ -131,6 +131,7 @@
 				Base,
 			);
 			mainGroup = 88140D502A8BD940003F55D4;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 88140D5A2A8BD940003F55D4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
