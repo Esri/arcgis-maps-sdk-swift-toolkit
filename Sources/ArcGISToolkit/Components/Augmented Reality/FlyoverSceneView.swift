@@ -20,7 +20,7 @@ import ArcGIS
 @preconcurrency
 @available(visionOS, unavailable)
 public struct FlyoverSceneView: View {
-#if !os(visionOS)
+#if os(iOS)
     /// The AR session.
     @StateObject private var session = ObservableARSession()
 #endif
@@ -136,7 +136,7 @@ public struct FlyoverSceneView: View {
         SceneViewReader { sceneViewProxy in
             sceneViewBuilder(sceneViewProxy)
                 .cameraController(cameraController)
-#if !os(visionOS)
+#if os(iOS)
                 .onAppear {
                     let configuration = ARPositionalTrackingConfiguration()
                     if shouldOrientToCompass {
@@ -165,7 +165,7 @@ public struct FlyoverSceneView: View {
     }
 }
 
-#if !os(visionOS)
+#if os(iOS)
 /// An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
     /// The backing AR session.

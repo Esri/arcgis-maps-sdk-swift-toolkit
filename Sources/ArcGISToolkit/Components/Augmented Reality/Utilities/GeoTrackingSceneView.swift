@@ -24,7 +24,7 @@ public struct GeoTrackingSceneView: View {
     @Binding var initialCameraIsSet: Bool
     /// The view model for the calibration view.
     @ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
-#if !os(visionOS)
+#if os(iOS)
     /// The geo-tracking configuration for the AR session.
     private let configuration = ARGeoTrackingConfiguration()
 #endif
@@ -34,7 +34,7 @@ public struct GeoTrackingSceneView: View {
     private let locationDataSource: LocationDataSource
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-#if !os(visionOS)
+#if os(iOS)
     /// The proxy for the ARSwiftUIView.
     private let arViewProxy: ARSwiftUIViewProxy
 #endif
@@ -48,7 +48,7 @@ public struct GeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
-#if !os(visionOS)
+#if os(iOS)
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
@@ -91,7 +91,7 @@ public struct GeoTrackingSceneView: View {
     public var body: some View {
         SceneViewReader { sceneViewProxy in
             ZStack {
-#if !os(visionOS)
+#if os(iOS)
                 ARSwiftUIView(proxy: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation, initialCameraIsSet else { return }
@@ -119,7 +119,7 @@ public struct GeoTrackingSceneView: View {
                     .worldScaleSetup(cameraController: cameraController)
                     .opacity(initialCameraIsSet ? 1 : 0)
             }
-#if !os(visionOS)
+#if os(iOS)
             .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
@@ -138,7 +138,7 @@ public struct GeoTrackingSceneView: View {
 #endif
         }
         .observingInterfaceOrientation($interfaceOrientation)
-#if !os(visionOS)
+#if os(iOS)
         .onAppear {
             arViewProxy.session.run(configuration)
         }
