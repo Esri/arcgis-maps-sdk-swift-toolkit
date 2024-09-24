@@ -124,7 +124,6 @@
 				};
 			};
 			buildConfigurationList = 88140D542A8BD940003F55D4 /* Build configuration list for PBXProject "JobManagerExample" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
