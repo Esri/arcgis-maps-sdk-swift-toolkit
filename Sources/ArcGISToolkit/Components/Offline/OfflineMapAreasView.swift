@@ -22,22 +22,16 @@ import Network
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
-    
     /// The network monitor.
     @StateObject private var networkMonitor = NetworkMonitor()
-    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
-    
     /// The web map to be taken offline.
     private let onlineMap: Map
-    
     /// The currently selected map.
     @Binding private var selectedMap: Map?
-    
     /// A Boolean value indicating whether the device has an internet connection.
     @State private var isConnected = true
-    
     /// A Boolean value indicating whether the offline banner should be presented.
     @State private var offlineBannerIsPresented = false
     
@@ -70,8 +64,13 @@ public struct OfflineMapAreasView: View {
             .task {
                 await makePreplannedMapModels()
             }
-            .onChange(of: networkMonitor.isConnected) { _ in
-                offlineBannerIsPresented = !networkMonitor.isConnected
+            .onAppear {
+                networkMonitor.startMonitoring { isConnected in
+                    offlineBannerIsPresented = !isConnected
+                }
+            }
+            .onDisappear {
+                networkMonitor.stopMonitoring()
             }
             .overlay(alignment: .bottom) {
                 if offlineBannerIsPresented {
@@ -105,7 +104,7 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            errorView(error)
+            view(for: error)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
@@ -176,7 +175,7 @@ public struct OfflineMapAreasView: View {
             .background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
     }
     
-    private func errorView(_ error: Error) -> some View {
+    private func view(for error: Error) -> some View {
         VStack(alignment: .center) {
             Image(systemName: "exclamationmark.circle")
                 .imageScale(.large)
@@ -188,7 +187,7 @@ public struct OfflineMapAreasView: View {
     
     /// Makes the appropriate preplanned map models depending on the updated device network connection.
     private func makePreplannedMapModels() async {
-        isConnected = networkMonitor.isConnected
+        isConnected = !offlineBannerIsPresented
         
         if isConnected {
             await mapViewModel.makePreplannedMapModels()
@@ -223,20 +222,16 @@ private class NetworkMonitor: ObservableObject {
     /// The path monitor to observe network changes.
     private let monitor = NWPathMonitor()
     
-    /// A Boolean value indicating whether the device has an internet connection.
-    @Published private(set) var isConnected = true
-    
-    init() {
-        monitor.pathUpdateHandler = { [unowned self] path in
-            DispatchQueue.main.async {
-                self.isConnected = path.status == .satisfied
-            }
+    func startMonitoring(_ onChange: @MainActor @Sendable @escaping (_ isConnected: Bool) -> Void) {
+        monitor.pathUpdateHandler = { path in
+            let isConnected = path.status == .satisfied
+            MainActor.assumeIsolated { onChange(isConnected) }
         }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
+        monitor.start(queue: .main)
     }
     
-    deinit {
+    func stopMonitoring() {
         monitor.cancel()
+        monitor.pathUpdateHandler = nil
     }
 }
