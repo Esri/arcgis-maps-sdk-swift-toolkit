@@ -318,7 +318,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     }
     
     var description: String {
-        portalItem.description
+        // Remove HTML tags from description.
+        portalItem.description.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
     }
 }
 
