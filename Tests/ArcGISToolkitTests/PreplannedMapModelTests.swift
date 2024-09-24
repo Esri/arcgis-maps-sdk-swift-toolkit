@@ -374,6 +374,34 @@ class PreplannedMapModelTests: XCTestCase {
             [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded, .loading, .packaged]
         )
     }
+    
+    @MainActor
+    func testPreplannedMapModelDescription() async throws {
+        let portalItem = PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: .init("acc027394bc84c2fb04d1ed317aac674")!
+        )
+        let task = OfflineMapTask(portalItem: portalItem)
+        let areas = try await task.preplannedMapAreas
+        let area = try XCTUnwrap(areas.first { $0.title == "Country Commons Area" })
+        let areaID = try XCTUnwrap(area.portalItem.id)
+
+        let model = PreplannedMapModel(
+            offlineMapTask: task,
+            mapArea: area,
+            portalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID,
+            // User notifications in unit tests are not supported, must pass false here
+            // or the test process will crash.
+            showsUserNotificationOnCompletion: false
+        )
+        
+        // Verify description does not contain HTML tags.
+        XCTAssertEqual(model.preplannedMapArea.description,
+        """
+        A map that contains stormwater network within Naperville, IL, USA with cartography designed for web and mobile devices. This is a demo map to demonstrate offline capabilities with ArcGIS Runtime and is based on ArcGIS Solutions for Stormwater.
+        """)
+    }
 }
 
 extension PreplannedMapModel.Status: Equatable {
