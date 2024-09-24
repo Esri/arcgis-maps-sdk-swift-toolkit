@@ -141,7 +141,6 @@
 				***REMOVED***;
 			***REMOVED***;
 			buildConfigurationList = 88AD13702834355000500B2E /* Build configuration list for PBXProject "AuthenticationExample" */;
-			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
