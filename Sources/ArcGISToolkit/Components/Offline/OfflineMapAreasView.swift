@@ -62,7 +62,7 @@ public struct OfflineMapAreasView: View {
                 await mapViewModel.requestUserNotificationAuthorization()
             }
             .task {
-                await makePreplannedMapModels()
+                await loadPreplannedMapModels()
             }
             .onAppear {
                 networkMonitor.startMonitoring { isConnected in
@@ -86,7 +86,7 @@ public struct OfflineMapAreasView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .refreshable {
-            await makePreplannedMapModels()
+            await loadPreplannedMapModels()
         }
     }
     
@@ -116,7 +116,7 @@ public struct OfflineMapAreasView: View {
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap, onDeletion: {
-                        Task { await makePreplannedMapModels() }
+                        Task { await loadPreplannedMapModels() }
                     })
                     .onChange(of: selectedMap) { _ in
                         dismiss()
@@ -185,14 +185,14 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    /// Makes the appropriate preplanned map models depending on the updated device network connection.
-    private func makePreplannedMapModels() async {
+    /// Loads the appropriate preplanned map models depending on the updated device network connection.
+    private func loadPreplannedMapModels() async {
         isConnected = !offlineBannerIsPresented
         
         if isConnected {
-            await mapViewModel.makePreplannedMapModels()
+            await mapViewModel.loadPreplannedMapModels()
         } else {
-            await mapViewModel.makeOfflinePreplannedMapModels()
+            await mapViewModel.loadOfflinePreplannedMapModels()
         }
     }
 }

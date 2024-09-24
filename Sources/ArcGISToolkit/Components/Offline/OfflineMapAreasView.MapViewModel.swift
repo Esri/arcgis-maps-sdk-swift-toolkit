@@ -46,8 +46,8 @@ extension OfflineMapAreasView {
                 .requestAuthorization(options: [.alert, .sound])
         }
         
-        /// Gets the preplanned map areas from the offline map task and creates the map models.
-        func makePreplannedMapModels() async {
+        /// Gets the preplanned map areas from the offline map task and loads the map models.
+        func loadPreplannedMapModels() async {
             guard let portalItemID else { return }
             
             if offlineMapTask.loadStatus != .loaded {
@@ -69,9 +69,9 @@ extension OfflineMapAreasView {
             }
         }
         
-        /// Makes offline preplanned map models with information from the downloaded mobile map
+        /// Loads the offline preplanned map models with information from the downloaded mobile map
         /// packages for the online map.
-        func makeOfflinePreplannedMapModels() async {
+        func loadOfflinePreplannedMapModels() async {
             guard let portalItemID else { return }
             
             let preplannedDirectory = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
