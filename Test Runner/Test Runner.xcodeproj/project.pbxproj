@@ -263,7 +263,6 @@
 				};
 			};
 			buildConfigurationList = 7552A74B2A573CBB0023DA5A /* Build configuration list for PBXProject "Test Runner" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
