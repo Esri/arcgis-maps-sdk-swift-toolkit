@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***continueAfterFailure = false
