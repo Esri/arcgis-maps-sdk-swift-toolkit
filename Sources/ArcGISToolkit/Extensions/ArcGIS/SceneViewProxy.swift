@@ -17,7 +17,7 @@ import ArcGIS
 import ARKit
 import SwiftUI
 
-#if !os(visionOS)
+#if os(iOS)
 extension SceneViewProxy {
     /// Updates the scene view's camera for a given augmented reality frame.
     /// - Parameters:

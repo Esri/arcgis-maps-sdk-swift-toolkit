@@ -21,7 +21,7 @@ import ArcGIS
 @preconcurrency
 @available(visionOS, unavailable)
 public struct TableTopSceneView: View {
-#if !os(visionOS)
+#if os(iOS)
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
 #endif
@@ -39,7 +39,7 @@ public struct TableTopSceneView: View {
     var coachingOverlayIsHidden: Bool = false
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-#if !os(visionOS)
+#if os(iOS)
     /// The configuration for the AR session.
     private let configuration: ARWorldTrackingConfiguration
 #endif
@@ -81,7 +81,7 @@ public struct TableTopSceneView: View {
         cameraController.clippingDistance = clippingDistance
         _cameraController = .init(initialValue: cameraController)
         
-#if !os(visionOS)
+#if os(iOS)
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
         configuration.planeDetection = [.horizontal]
@@ -91,7 +91,7 @@ public struct TableTopSceneView: View {
     public var body: some View {
         SceneViewReader { sceneViewProxy in
             ZStack {
-#if !os(visionOS)
+#if os(iOS)
                 ARSwiftUIView(proxy: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation else { return }
@@ -167,7 +167,7 @@ public struct TableTopSceneView: View {
         .observingInterfaceOrientation($interfaceOrientation)
     }
     
-#if !os(visionOS)
+#if os(iOS)
     /// Visualizes a new node added to the scene as an AR Plane.
     /// - Parameters:
     ///   - renderer: The renderer for the scene.
@@ -239,7 +239,7 @@ public struct TableTopSceneView: View {
     }
 }
 
-#if !os(visionOS)
+#if os(iOS)
 private extension SceneViewProxy {
     /// Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
     /// via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.

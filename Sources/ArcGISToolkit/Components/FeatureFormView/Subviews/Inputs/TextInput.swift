@@ -123,7 +123,7 @@ private extension TextInput {
             }
             .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
-#if !os(visionOS)
+#if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
