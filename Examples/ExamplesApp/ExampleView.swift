@@ -24,7 +24,3 @@ struct ExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
-
-extension ExampleView: Identifiable {
-***REMOVED***var id: String { example.name ***REMOVED***
-***REMOVED***
