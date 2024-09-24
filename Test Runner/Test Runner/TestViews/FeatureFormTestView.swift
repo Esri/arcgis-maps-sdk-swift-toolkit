@@ -64,9 +64,8 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await feature.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureLayer?.selectFeature(feature)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature, definition: formDefinition)
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
