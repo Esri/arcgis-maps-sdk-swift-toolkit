@@ -183,7 +183,7 @@ struct AttachmentImportMenu: View {
                 importState = .errored(.system(error.localizedDescription))
             }
         }
-#if !os(visionOS)
+#if os(iOS)
         .fullScreenCover(isPresented: $cameraIsShowing) {
             AttachmentCameraController(
                 importState: $importState
