@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED***override func setUpWithError() throws {
 ***REMOVED******REMOVED***continueAfterFailure = true
