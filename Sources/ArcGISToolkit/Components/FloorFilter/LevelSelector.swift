@@ -122,7 +122,7 @@ extension LevelSelector {
             }
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
-            .onChange(of: isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
+            .onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
         }
     }
     

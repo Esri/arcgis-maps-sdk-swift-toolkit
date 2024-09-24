@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if os(iOS)
 import ARKit
 import SwiftUI
 import ArcGIS
@@ -248,3 +249,4 @@ struct WorldTrackingSceneView: View {
         return view
     }
 }
+#endif

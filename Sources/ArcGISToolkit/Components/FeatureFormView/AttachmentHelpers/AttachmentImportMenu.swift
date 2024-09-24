@@ -71,6 +71,7 @@ struct AttachmentImportMenu: View {
         }
     }
     
+    @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
             if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
@@ -117,7 +118,9 @@ struct AttachmentImportMenu: View {
         }
         Menu {
             // Show photo/video and library picker.
+#if !os(visionOS)
             takePhotoOrVideoButton()
+#endif
             chooseFromLibraryButton()
             // Always show file picker, no matter the input type.
             chooseFromFilesButton()
@@ -197,6 +200,7 @@ struct AttachmentImportMenu: View {
                 importState = .errored(.system(error.localizedDescription))
             }
         }
+#if os(iOS)
         .fullScreenCover(isPresented: $cameraIsShowing) {
             AttachmentCameraController(
                 importState: $importState
@@ -215,6 +219,7 @@ struct AttachmentImportMenu: View {
                 }
             }
         }
+#endif
         .modifier(
             AttachmentPhotoPicker(
                 importState: $importState,

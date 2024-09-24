@@ -19,9 +19,12 @@ import ArcGIS
 /// A scene view that provides an augmented reality table top experience.
 @MainActor
 @preconcurrency
+@available(visionOS, unavailable)
 public struct TableTopSceneView: View {
+#if os(iOS)
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
+#endif
     /// The initial transformation for the scene's camera controller.
     @State private var initialTransformation: TransformationMatrix? = nil
     /// The camera controller that will be set on the scene view.
@@ -36,8 +39,10 @@ public struct TableTopSceneView: View {
     var coachingOverlayIsHidden: Bool = false
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+#if os(iOS)
     /// The configuration for the AR session.
     private let configuration: ARWorldTrackingConfiguration
+#endif
     /// A Boolean value indicating that the scene's initial transformation has been set.
     var initialTransformationIsSet: Bool { initialTransformation != nil }
     /// The anchor point for the scene view.
@@ -76,14 +81,17 @@ public struct TableTopSceneView: View {
         cameraController.clippingDistance = clippingDistance
         _cameraController = .init(initialValue: cameraController)
         
+#if os(iOS)
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
         configuration.planeDetection = [.horizontal]
+#endif
     }
     
     public var body: some View {
         SceneViewReader { sceneViewProxy in
             ZStack {
+#if os(iOS)
                 ARSwiftUIView(proxy: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation else { return }
@@ -138,7 +146,7 @@ public struct TableTopSceneView: View {
                             }
                         }
                 }
-                
+#endif
                 sceneViewBuilder(sceneViewProxy)
                     .cameraController(cameraController)
                     .attributionBarHidden(true)
@@ -147,18 +155,19 @@ public struct TableTopSceneView: View {
                     .opacity(initialTransformationIsSet ? 1 : 0)
             }
         }
-        .onChange(of: anchorPoint) { anchorPoint in
+        .onChange(anchorPoint) { anchorPoint in
             cameraController.originCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
         }
-        .onChange(of: translationFactor) { translationFactor in
+        .onChange(translationFactor) { translationFactor in
             cameraController.translationFactor = translationFactor
         }
-        .onChange(of: clippingDistance) { clippingDistance in
+        .onChange(clippingDistance) { clippingDistance in
             cameraController.clippingDistance = clippingDistance
         }
         .observingInterfaceOrientation($interfaceOrientation)
     }
     
+#if os(iOS)
     /// Visualizes a new node added to the scene as an AR Plane.
     /// - Parameters:
     ///   - renderer: The renderer for the scene.
@@ -218,6 +227,7 @@ public struct TableTopSceneView: View {
             helpText = .planeFound
         }
     }
+#endif
     
     /// Sets the visibility of the coaching overlay view for the AR experince.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
@@ -229,6 +239,7 @@ public struct TableTopSceneView: View {
     }
 }
 
+#if os(iOS)
 private extension SceneViewProxy {
     /// Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
     /// via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
@@ -250,6 +261,7 @@ private extension SceneViewProxy {
         return initialTransformation
     }
 }
+#endif
 
 private extension String {
     static var planeFound: String {
