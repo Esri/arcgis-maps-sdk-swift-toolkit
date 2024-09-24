@@ -291,10 +291,12 @@ private extension Color {
 private extension Font {
     static func fontForHeading(level: Int) -> Self {
         switch level {
-        case 1: .largeTitle
-        case 2: .title
-        case 3: .title2
-        case 4: .title3
+        case 1: .largeTitle.bold()
+        case 2: .title.bold()
+        case 3: .title2.bold()
+        case 4: .title3.bold()
+        case 5: .headline.bold()
+        case 6: .subheadline.bold()
         default: .body
         }
     }
@@ -350,7 +352,8 @@ private extension Markup {
         ## Heading 2
         ### Heading 3
         #### [Heading 4 as a ***~link~***](www.esri.com)
-        
+        ##### Heading 5
+        ###### Heading 6
         
         ```
         func showCodeBlock() {
