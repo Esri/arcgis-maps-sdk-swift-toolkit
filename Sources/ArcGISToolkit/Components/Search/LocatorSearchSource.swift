@@ -18,7 +18,7 @@ import Foundation
 
 /// Uses a Locator to provide search and suggest results. Most configuration should be done on the
 /// `GeocodeParameters` directly.
-public class LocatorSearchSource: ObservableObject, SearchSource {
+public class LocatorSearchSource: ObservableObject, SearchSource, @unchecked Sendable {
     /// Creates a locator search source.
     /// - Parameters:
     ///   - name: The name to show when presenting this source in the UI.
