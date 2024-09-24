@@ -133,6 +133,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             status = .downloaded
         case .failure(let error):
             status = .downloadFailure(error)
+            // Remove contents of mmpk directory when download fails.
+            try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         }
     }
     
@@ -143,9 +145,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             preplannedMapAreaID: preplannedMapAreaID
         )
         guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil }
-        // Make sure the directory is not empty because the directory will exist as soon as the
-        // job starts, so if the job fails, it will look like the mmpk was downloaded.
-        guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
         return MobileMapPackage.init(fileURL: fileURL)
     }
     
