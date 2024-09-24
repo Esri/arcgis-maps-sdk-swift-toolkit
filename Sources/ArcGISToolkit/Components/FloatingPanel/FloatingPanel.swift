@@ -25,7 +25,7 @@ struct FloatingPanel<Content>: View where Content: View {
     /// attribution bar.
     let attributionBarHeight: CGFloat
     /// The background color of the floating panel.
-    let backgroundColor: Color
+    let backgroundColor: Color?
     /// A binding to the currently selected detent.
     @Binding var selectedDetent: FloatingPanelDetent
     /// A binding to a Boolean value that determines whether the view is presented.
@@ -73,7 +73,12 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             // Set frame width to infinity to prevent horizontal shrink on dismissal.
             .frame(maxWidth: .infinity)
+#if os(visionOS)
+            .background(.regularMaterial)
+            .compositingGroup()
+#else
             .background(backgroundColor)
+#endif
             .clipShape(
                 RoundedCorners(
                     corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
@@ -207,6 +212,7 @@ private struct Handle: View {
         RoundedRectangle(cornerRadius: 4.0)
             .foregroundColor(color)
             .frame(width: 100, height: 8.0)
+            .hoverEffect()
     }
 }
 
