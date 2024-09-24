@@ -28,7 +28,9 @@ import Foundation
 ***REMOVED***func setValue(_ value: Value) {
 ***REMOVED******REMOVED***guard _value == nil else { return ***REMOVED***
 ***REMOVED******REMOVED***_value = value
-***REMOVED******REMOVED***continuation?.resume(returning: value)
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***continuation?.resume(returning: value)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value. This property supports only one consumer.
