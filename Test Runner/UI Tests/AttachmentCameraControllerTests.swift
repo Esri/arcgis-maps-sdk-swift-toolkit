@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class AttachmentCameraControllerTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = true
