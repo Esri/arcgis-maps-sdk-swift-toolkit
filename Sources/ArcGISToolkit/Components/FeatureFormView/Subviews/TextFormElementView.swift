@@ -27,8 +27,6 @@ struct TextFormElementView: View {
                 MarkdownView(markdown: text)
             case .plainText:
                 Text(text)
-            default:
-                EmptyView()
             }
         }
         .task {
