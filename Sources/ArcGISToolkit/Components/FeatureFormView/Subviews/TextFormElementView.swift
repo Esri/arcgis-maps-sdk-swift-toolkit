@@ -27,8 +27,6 @@ struct TextFormElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***MarkdownView(markdown: text)
 ***REMOVED******REMOVED******REMOVED***case .plainText:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
