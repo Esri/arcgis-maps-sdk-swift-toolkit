@@ -121,7 +121,7 @@ public struct FeatureFormView: View {
                 title = newTitle
             }
         }
-#if !os(visionOS)
+#if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
         .environmentObject(model)

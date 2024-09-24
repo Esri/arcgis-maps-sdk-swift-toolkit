@@ -15,9 +15,7 @@
 import ARKit
 import SwiftUI
 import ArcGIS
-#if os(visionOS)
 import CoreLocation
-#endif
 
 /// A scene view that provides an augmented reality world scale experience.
 @MainActor
@@ -34,7 +32,7 @@ public struct WorldScaleSceneView: View {
     var calibrationButtonAlignment: Alignment = .bottom
     /// A Boolean value that indicates whether the calibration view is hidden.
     var calibrationViewIsHidden = false
-#if !os(visionOS)
+#if os(iOS)
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
 #endif
@@ -55,7 +53,7 @@ public struct WorldScaleSceneView: View {
     /// The closure to perform when the `isCalibrating` property has changed.
     private var onCalibratingChangedAction: ((Bool) -> Void)?
     /// The closure to perform when the camera tracking state changes.
-#if !os(visionOS)
+#if os(iOS)
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
     private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
@@ -82,7 +80,7 @@ public struct WorldScaleSceneView: View {
     
     public var body: some View {
         Group {
-#if !os(visionOS)
+#if os(iOS)
             switch trackingMode {
             case .preferGeoTracking:
                 // By default we try the geo-tracking configuration. If it is not available at
@@ -126,7 +124,7 @@ public struct WorldScaleSceneView: View {
                 self.error = error
             }
         }
-#if !os(visionOS)
+#if os(iOS)
         .task {
             do {
                 geoTrackingIsAvailable = try await checkGeoTrackingAvailability()
@@ -165,7 +163,7 @@ public struct WorldScaleSceneView: View {
         }
     }
     
-#if !os(visionOS)
+#if os(iOS)
     /// A world scale geo-tracking scene view.
     @ViewBuilder private var geoTrackingSceneView: some View {
         GeoTrackingSceneView(
@@ -245,7 +243,7 @@ public struct WorldScaleSceneView: View {
         view.onCalibratingChangedAction = action
         return view
     }
-#if !os(visionOS)
+#if os(iOS)
     /// Sets a closure to perform when the camera tracking state changes.
     /// - Parameter action: The closure to perform when the camera tracking state has changed.
     public func onCameraTrackingStateChanged(
@@ -287,7 +285,7 @@ public struct WorldScaleSceneView: View {
         return headingAvailable && fullAccuracy
     }
     
-#if !os(visionOS)
+#if os(iOS)
     /// Checks if the hardware and the current location supports geo-tracking.
     /// - Returns: A Boolean value that indicates whether geo-tracking is available.
     private func checkGeoTrackingAvailability() async throws -> Bool {
@@ -313,7 +311,7 @@ public extension WorldScaleSceneView {
     }
 }
 
-#if !os(visionOS)
+#if os(iOS)
 private extension ARGeoTrackingConfiguration {
     /// Determines the availability of geo tracking at the current location.
     /// - Returns: A Boolean that indicates whether geo-tracking is available at the current
@@ -348,7 +346,7 @@ private extension WorldScaleSceneView {
 
 @available(visionOS, unavailable)
 public extension WorldScaleSceneView {
-#if !os(visionOS)
+#if os(iOS)
     /// Determines the scene point for the given screen point.
     ///
     /// If the raycast fails due to certain reasons, this method returns `nil`.
