@@ -28,7 +28,9 @@ import Foundation
     func setValue(_ value: Value) {
         guard _value == nil else { return }
         _value = value
-        continuation?.resume(returning: value)
+        Task {
+            continuation?.resume(returning: value)
+        }
     }
     
     /// The value. This property supports only one consumer.
