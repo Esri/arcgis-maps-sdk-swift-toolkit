@@ -143,14 +143,15 @@ extension ARSwiftUIView {
 ***REMOVED***
 
 ***REMOVED***/ A proxy for the ARSwiftUIView.
-class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
+@MainActor
+class ARSwiftUIViewProxy: NSObject, @preconcurrency ARSessionProviding, Sendable {
 ***REMOVED******REMOVED***/ The underlying AR view.
 ***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
 ***REMOVED***fileprivate var arView: ARViewType!
 ***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@objc dynamic var session: ARSession {
-***REMOVED******REMOVED***MainActor.runUnsafely { arView.session ***REMOVED***
+***REMOVED******REMOVED***arView.session
 ***REMOVED***
 ***REMOVED***
 
