@@ -18,7 +18,7 @@ import Foundation
 
 ***REMOVED***/ Uses a Locator to provide search and suggest results. Most configuration should be done on the
 ***REMOVED***/ `GeocodeParameters` directly.
-public class LocatorSearchSource: ObservableObject, SearchSource {
+public class LocatorSearchSource: ObservableObject, SearchSource, @unchecked Sendable {
 ***REMOVED******REMOVED***/ Creates a locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - name: The name to show when presenting this source in the UI.
