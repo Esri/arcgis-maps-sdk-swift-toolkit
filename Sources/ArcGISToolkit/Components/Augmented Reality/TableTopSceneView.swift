@@ -19,7 +19,7 @@ import ARKit
 ***REMOVED***/ A scene view that provides an augmented reality table top experience.
 @available(visionOS, unavailable)
 public struct TableTopSceneView: View {
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 #endif
@@ -37,7 +37,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***var coachingOverlayIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ The configuration for the AR session.
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 #endif
@@ -79,7 +79,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED******REMOVED***configuration.planeDetection = [.horizontal]
@@ -89,7 +89,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***ZStack {
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let interfaceOrientation else { return ***REMOVED***
@@ -165,7 +165,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED***
 ***REMOVED***
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ Visualizes a new node added to the scene as an AR Plane.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - renderer: The renderer for the scene.
@@ -237,7 +237,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***
 
-#if !os(visionOS)
+#if os(iOS)
 private extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
 ***REMOVED******REMOVED***/ via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.

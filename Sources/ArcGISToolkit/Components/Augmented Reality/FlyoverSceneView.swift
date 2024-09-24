@@ -20,7 +20,7 @@ import ARKit
 @preconcurrency
 @available(visionOS, unavailable)
 public struct FlyoverSceneView: View {
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@StateObject private var session = ObservableARSession()
 #endif
@@ -136,7 +136,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = ARPositionalTrackingConfiguration()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldOrientToCompass {
@@ -165,7 +165,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED***
 ***REMOVED***
 
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED***/ An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
 ***REMOVED******REMOVED***/ The backing AR session.

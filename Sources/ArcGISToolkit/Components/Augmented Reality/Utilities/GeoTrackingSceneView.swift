@@ -24,7 +24,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***@Binding var initialCameraIsSet: Bool
 ***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ The geo-tracking configuration for the AR session.
 ***REMOVED***private let configuration = ARGeoTrackingConfiguration()
 #endif
@@ -34,7 +34,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***private let locationDataSource: LocationDataSource
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***private let arViewProxy: ARSwiftUIViewProxy
 #endif
@@ -48,7 +48,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
 ***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
@@ -91,7 +91,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***ZStack {
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let interfaceOrientation, initialCameraIsSet else { return ***REMOVED***
@@ -119,7 +119,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.worldScaleSetup(cameraController: cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialCameraIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .geoTracking)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
@@ -138,7 +138,7 @@ public struct GeoTrackingSceneView: View {
 #endif
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration)
 ***REMOVED***

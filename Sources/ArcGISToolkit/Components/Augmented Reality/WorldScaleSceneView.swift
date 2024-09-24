@@ -15,9 +15,7 @@
 import ARKit
 ***REMOVED***
 ***REMOVED***
-#if os(visionOS)
 import CoreLocation
-#endif
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
 @preconcurrency
@@ -33,7 +31,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***var calibrationButtonAlignment: Alignment = .bottom
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
 ***REMOVED***var calibrationViewIsHidden = false
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 #endif
@@ -54,7 +52,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The closure to perform when the `isCalibrating` property has changed.
 ***REMOVED***private var onCalibratingChangedAction: ((Bool) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
 ***REMOVED***private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
@@ -81,7 +79,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED***switch trackingMode {
 ***REMOVED******REMOVED******REMOVED***case .preferGeoTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** By default we try the geo-tracking configuration. If it is not available at
@@ -125,7 +123,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
 ***REMOVED***
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***geoTrackingIsAvailable = try await checkGeoTrackingAvailability()
@@ -164,7 +162,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ A world scale geo-tracking scene view.
 ***REMOVED***@ViewBuilder private var geoTrackingSceneView: some View {
 ***REMOVED******REMOVED***GeoTrackingSceneView(
@@ -244,7 +242,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***view.onCalibratingChangedAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ Sets a closure to perform when the camera tracking state changes.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the camera tracking state has changed.
 ***REMOVED***public func onCameraTrackingStateChanged(
@@ -286,7 +284,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return headingAvailable && fullAccuracy
 ***REMOVED***
 ***REMOVED***
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ Checks if the hardware and the current location supports geo-tracking.
 ***REMOVED******REMOVED***/ - Returns: A Boolean value that indicates whether geo-tracking is available.
 ***REMOVED***private func checkGeoTrackingAvailability() async throws -> Bool {
@@ -312,7 +310,7 @@ public extension WorldScaleSceneView {
 ***REMOVED***
 ***REMOVED***
 
-#if !os(visionOS)
+#if os(iOS)
 private extension ARGeoTrackingConfiguration {
 ***REMOVED******REMOVED***/ Determines the availability of geo tracking at the current location.
 ***REMOVED******REMOVED***/ - Returns: A Boolean that indicates whether geo-tracking is available at the current
@@ -347,7 +345,7 @@ private extension WorldScaleSceneView {
 
 @available(visionOS, unavailable)
 public extension WorldScaleSceneView {
-#if !os(visionOS)
+#if os(iOS)
 ***REMOVED******REMOVED***/ Determines the scene point for the given screen point.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ If the raycast fails due to certain reasons, this method returns `nil`.
