@@ -62,7 +62,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.requestUserNotificationAuthorization()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await makePreplannedMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***networkMonitor.startMonitoring { isConnected in
@@ -86,7 +86,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED******REMOVED***.refreshable {
-***REMOVED******REMOVED******REMOVED***await makePreplannedMapModels()
+***REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -116,7 +116,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap, onDeletion: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await makePreplannedMapModels() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadPreplannedMapModels() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
@@ -185,14 +185,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Makes the appropriate preplanned map models depending on the updated device network connection.
-***REMOVED***private func makePreplannedMapModels() async {
+***REMOVED******REMOVED***/ Loads the appropriate preplanned map models depending on the updated device network connection.
+***REMOVED***private func loadPreplannedMapModels() async {
 ***REMOVED******REMOVED***isConnected = !offlineBannerIsPresented
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if isConnected {
-***REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedMapModels()
+***REMOVED******REMOVED******REMOVED***await mapViewModel.loadPreplannedMapModels()
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***await mapViewModel.makeOfflinePreplannedMapModels()
+***REMOVED******REMOVED******REMOVED***await mapViewModel.loadOfflinePreplannedMapModels()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -46,8 +46,8 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the map models.
-***REMOVED******REMOVED***func makePreplannedMapModels() async {
+***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and loads the map models.
+***REMOVED******REMOVED***func loadPreplannedMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if offlineMapTask.loadStatus != .loaded {
@@ -69,9 +69,9 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Makes offline preplanned map models with information from the downloaded mobile map
+***REMOVED******REMOVED******REMOVED***/ Loads the offline preplanned map models with information from the downloaded mobile map
 ***REMOVED******REMOVED******REMOVED***/ packages for the online map.
-***REMOVED******REMOVED***func makeOfflinePreplannedMapModels() async {
+***REMOVED******REMOVED***func loadOfflinePreplannedMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let preplannedDirectory = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
