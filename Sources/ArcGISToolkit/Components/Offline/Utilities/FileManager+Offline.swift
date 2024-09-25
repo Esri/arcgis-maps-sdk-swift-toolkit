@@ -16,24 +16,6 @@
 import Foundation
 
 extension FileManager {
-***REMOVED******REMOVED***/ The path to the documents folder.
-***REMOVED***private var documentsDirectory: URL {
-***REMOVED******REMOVED***URL.documentsDirectory
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The path to the offline map areas directory within the documents directory.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/`
-***REMOVED***private var offlineMapAreasDirectory: URL {
-***REMOVED******REMOVED***documentsDirectory.appending(component: "OfflineMapAreas/")
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
-***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-***REMOVED******REMOVED***offlineMapAreasDirectory.appending(component: "\(portalItemID)/")
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the size of a directory and all its contents.
 ***REMOVED******REMOVED***/ - Parameter url: The directory's URL.
 ***REMOVED******REMOVED***/ - Returns: The total size in bytes.
@@ -49,13 +31,11 @@ extension FileManager {
 ***REMOVED******REMOVED***return accumulatedSize
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/`
+***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***func preplannedDirectory(
-***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID
-***REMOVED***) -> URL {
-***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(component: "Preplanned/")
+***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
+***REMOVED******REMOVED***URL.documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
@@ -66,10 +46,13 @@ extension FileManager {
 ***REMOVED******REMOVED***/ - Returns: A URL to the preplanned map area directory.
 ***REMOVED***func preplannedDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID? = nil
 ***REMOVED***) -> URL {
-***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***.appending(components: "Preplanned", "\(preplannedMapAreaID)/")
+***REMOVED******REMOVED***if let preplannedMapAreaID {
+***REMOVED******REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned", "\(preplannedMapAreaID)/")
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned/")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating if the specified directory is empty.
