@@ -36,7 +36,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the map is removed from local disk.
-***REMOVED***let onDeletion: () -> Void
+***REMOVED***var onDeletion: (() -> Void)?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -86,10 +86,11 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var deleteButton: some View {
 ***REMOVED******REMOVED***if model.status.allowsRemoval,
 ***REMOVED******REMOVED***   !isSelected {
-***REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
+***REMOVED******REMOVED******REMOVED***Button("Delete") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED******REMOVED***onDeletion()
+***REMOVED******REMOVED******REMOVED******REMOVED***onDeletion?()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.tint(.red)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -194,6 +195,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***selectedMap: .constant(nil)
-***REMOVED***) {***REMOVED***
+***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
