@@ -78,7 +78,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
-***REMOVED******REMOVED***mmpkDirectoryURL = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED***mmpkDirectoryURL = URL.preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
@@ -140,7 +140,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Looks up the mobile map package directory for locally downloaded package.
 ***REMOVED***private func lookupMobileMapPackage() -> MobileMapPackage? {
-***REMOVED******REMOVED***let fileURL = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED***let fileURL = URL.preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
