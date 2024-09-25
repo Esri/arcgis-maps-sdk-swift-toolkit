@@ -102,10 +102,29 @@ protocol ScannerViewControllerDelegate: AnyObject {
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
+***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
+***REMOVED***
 ***REMOVED***private var previewLayer: AVCaptureVideoPreviewLayer!
 ***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
+***REMOVED***
+***REMOVED***override func viewDidLayoutSubviews() {
+***REMOVED******REMOVED***previewLayer.frame = view.bounds
+***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
+***REMOVED******REMOVED***switch deviceOrientation {
+***REMOVED******REMOVED***case .landscapeLeft:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeRight
+***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeLeft
+***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portraitUpsideDown
+***REMOVED******REMOVED***case .portrait:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portrait
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portrait
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewDidLoad() {
 ***REMOVED******REMOVED***super.viewDidLoad()
