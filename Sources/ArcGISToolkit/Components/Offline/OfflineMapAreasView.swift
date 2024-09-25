@@ -67,7 +67,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***networkMonitor.startMonitoring { isConnected in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineBannerIsPresented = !isConnected
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isConnected = isConnected
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: isConnected) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadPreplannedMapModels() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***networkMonitor.stopMonitoring()
