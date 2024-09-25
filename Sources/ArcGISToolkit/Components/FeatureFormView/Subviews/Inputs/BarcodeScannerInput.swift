@@ -102,10 +102,29 @@ protocol ScannerViewControllerDelegate: AnyObject {
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     weak var delegate: ScannerViewControllerDelegate?
+    
     private let captureSession = AVCaptureSession()
+    
     private var previewLayer: AVCaptureVideoPreviewLayer!
     
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
+    
+    override func viewDidLayoutSubviews() {
+        previewLayer.frame = view.bounds
+        let deviceOrientation = UIDevice.current.orientation
+        switch deviceOrientation {
+        case .landscapeLeft:
+            previewLayer.connection!.videoOrientation = .landscapeRight
+        case .landscapeRight:
+            previewLayer.connection!.videoOrientation = .landscapeLeft
+        case .portraitUpsideDown:
+            previewLayer.connection!.videoOrientation = .portraitUpsideDown
+        case .portrait:
+            previewLayer.connection!.videoOrientation = .portrait
+        default:
+            previewLayer.connection!.videoOrientation = .portrait
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
