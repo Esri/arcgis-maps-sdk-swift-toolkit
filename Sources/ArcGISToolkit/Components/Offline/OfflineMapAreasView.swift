@@ -95,7 +95,7 @@ public struct OfflineMapAreasView: View {
         case .success(let models):
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
-                    PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap) {}
+                    PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
                         .onChange(of: selectedMap) { _ in
                             dismiss()
                         }
