@@ -35,9 +35,9 @@ struct BarcodeScannerInput: View {
         self.input = element.input as! BarcodeScannerFormInput
     }
     
-    @State private var scannedCode: String?
-    
     var body: some View {
         Text("\(BarcodeScannerFormInput.self)")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .formInputStyle()
     }
 }
