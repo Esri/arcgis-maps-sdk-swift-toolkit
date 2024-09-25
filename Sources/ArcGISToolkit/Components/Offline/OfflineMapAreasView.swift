@@ -67,7 +67,11 @@ public struct OfflineMapAreasView: View {
             .onAppear {
                 networkMonitor.startMonitoring { isConnected in
                     offlineBannerIsPresented = !isConnected
+                    self.isConnected = isConnected
                 }
+            }
+            .onChange(of: isConnected) { _ in
+                Task { await loadPreplannedMapModels() }
             }
             .onDisappear {
                 networkMonitor.stopMonitoring()
