@@ -59,7 +59,7 @@ struct BarcodeScannerInput: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .formInputStyle()
         .onChange(of: value) { value in
-            element.updateValue(value)
+            element.convertAndUpdateValue(value)
             model.evaluateExpressions()
         }
         .onTapGesture {
