@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import AVFoundation
+@preconcurrency import AVFoundation
 import SwiftUI
 
 struct BarcodeScannerInput: View {
@@ -22,6 +22,12 @@ struct BarcodeScannerInput: View {
     
     /// The input configuration of the field.
     private let input: BarcodeScannerFormInput
+    
+    /// A Boolean value indicating whether the code scanner is presented.
+    @State private var scannerIsPresented = false
+    
+    /// The current barcode value.
+    @State private var value = ""
     
     /// Creates a view for a barcode scanner input.
     /// - Parameters:
@@ -36,8 +42,155 @@ struct BarcodeScannerInput: View {
     }
     
     var body: some View {
-        Text("\(BarcodeScannerFormInput.self)")
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .formInputStyle()
+        HStack {
+            Text(value.isEmpty ? String.noValue : value)
+            Spacer()
+            if !value.isEmpty {
+                ClearButton {
+                    value.removeAll()
+                }
+            }
+            Image(systemName: "barcode.viewfinder")
+                .foregroundStyle(.tint)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .formInputStyle()
+        .onTapGesture {
+            scannerIsPresented = true
+        }
+        .sheet(isPresented: $scannerIsPresented) {
+            ScannerView(scanOutput: $value, scannerIsPresented: $scannerIsPresented)
+        }
+    }
+}
+
+struct ScannerView: UIViewControllerRepresentable {
+    @Binding var scanOutput: String
+    @Binding var scannerIsPresented: Bool
+    
+    func makeUIViewController(context: Context) -> ScannerViewController {
+        let scannerViewController = ScannerViewController()
+        scannerViewController.delegate = context.coordinator
+        return scannerViewController
+    }
+    
+    func updateUIViewController(_ uiViewController: ScannerViewController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(scannedCode: $scanOutput, isShowingScanner: $scannerIsPresented)
+    }
+    
+    class Coordinator: NSObject, ScannerViewControllerDelegate {
+        @Binding var scanOutput: String
+        @Binding var scannerIsPresented: Bool
+        
+        init(scannedCode: Binding<String>, isShowingScanner: Binding<Bool>) {
+            _scanOutput = scannedCode
+            _scannerIsPresented = isShowingScanner
+        }
+        
+        func didScanCode(_ code: String) {
+            scanOutput = code
+            scannerIsPresented = false
+        }
+    }
+}
+
+protocol ScannerViewControllerDelegate: AnyObject {
+    func didScanCode(_ code: String)
+}
+
+class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+    weak var delegate: ScannerViewControllerDelegate?
+    private let captureSession = AVCaptureSession()
+    private var previewLayer: AVCaptureVideoPreviewLayer!
+    
+    private let sessionQueue = DispatchQueue(label: "ScannerViewController")
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
+        let videoInput: AVCaptureDeviceInput
+        
+        do {
+            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+        } catch {
+            return
+        }
+        
+        if captureSession.canAddInput(videoInput) {
+            captureSession.addInput(videoInput)
+        } else {
+            return
+        }
+        
+        let metadataOutput = AVCaptureMetadataOutput()
+        
+        if captureSession.canAddOutput(metadataOutput) {
+            captureSession.addOutput(metadataOutput)
+            
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [
+                // Barcodes
+                .codabar,
+                .code39,
+                .code39Mod43,
+                .code93,
+                .code128,
+                .ean8,
+                .ean13,
+                .gs1DataBar,
+                .gs1DataBarExpanded,
+                .gs1DataBarLimited,
+                .interleaved2of5,
+                .itf14,
+                .upce,
+                
+                // 2D Codes
+                .aztec,
+                .dataMatrix,
+                .microPDF417,
+                .microQR,
+                .pdf417,
+                .qr,
+            ]
+        } else {
+            return
+        }
+        
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.frame = view.layer.bounds
+        previewLayer.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(previewLayer)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if captureSession.isRunning == false {
+            sessionQueue.async { [captureSession] in
+                captureSession.startRunning()
+            }
+        }
+    }
+    
+    func finish(stringValue: String) {
+        captureSession.stopRunning()
+        delegate?.didScanCode(stringValue)
+    }
+    
+    nonisolated func metadataOutput(
+        _ output: AVCaptureMetadataOutput,
+        didOutput metadataObjects: [AVMetadataObject],
+        from connection: AVCaptureConnection
+    ) {
+        if let metadataObject = metadataObjects.first {
+            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
+            guard let stringValue = readableObject.stringValue else { return }
+            Task {
+                await finish(stringValue: stringValue)
+            }
+        }
     }
 }
