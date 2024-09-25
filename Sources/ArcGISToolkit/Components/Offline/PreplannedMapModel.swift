@@ -130,7 +130,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
         switch downloadResult {
         case .success:
-            status = .downloaded
+            withAnimation(.easeInOut) {
+                status = .downloaded
+            }
         case .failure(let error):
             status = .downloadFailure(error)
         }
