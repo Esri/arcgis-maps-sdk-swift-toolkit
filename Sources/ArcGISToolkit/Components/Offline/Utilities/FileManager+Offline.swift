@@ -16,24 +16,6 @@ import ArcGIS
 import Foundation
 
 extension FileManager {
-    /// The path to the documents folder.
-    private var documentsDirectory: URL {
-        URL.documentsDirectory
-    }
-    
-    /// The path to the offline map areas directory within the documents directory.
-    /// `Documents/OfflineMapAreas/`
-    private var offlineMapAreasDirectory: URL {
-        documentsDirectory.appending(component: "OfflineMapAreas/")
-    }
-    
-    /// The path to the web map directory for a specific portal item.
-    /// `Documents/OfflineMapAreas/<Portal Item ID>/`
-    /// - Parameter portalItemID: The ID of the web map portal item.
-    private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-        offlineMapAreasDirectory.appending(component: "\(portalItemID)/")
-    }
-    
     /// Calculates the size of a directory and all its contents.
     /// - Parameter url: The directory's URL.
     /// - Returns: The total size in bytes.
@@ -49,13 +31,11 @@ extension FileManager {
         return accumulatedSize
     }
     
-    /// The path to the preplanned map areas directory for a specific portal item.
-    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/`
+    /// The path to the web map directory for a specific portal item.
+    /// `Documents/OfflineMapAreas/<Portal Item ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
-    func preplannedDirectory(
-        forPortalItemID portalItemID: PortalItem.ID
-    ) -> URL {
-        portalItemDirectory(forPortalItemID: portalItemID).appending(component: "Preplanned/")
+    private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
+        URL.documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
     }
     
     /// The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
@@ -66,10 +46,13 @@ extension FileManager {
     /// - Returns: A URL to the preplanned map area directory.
     func preplannedDirectory(
         forPortalItemID portalItemID: PortalItem.ID,
-        preplannedMapAreaID: PortalItem.ID
+        preplannedMapAreaID: PortalItem.ID? = nil
     ) -> URL {
-        portalItemDirectory(forPortalItemID: portalItemID)
-            .appending(components: "Preplanned", "\(preplannedMapAreaID)/")
+        if let preplannedMapAreaID {
+            portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned", "\(preplannedMapAreaID)/")
+        } else {
+            portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned/")
+        }
     }
     
     /// Returns a Boolean value indicating if the specified directory is empty.
