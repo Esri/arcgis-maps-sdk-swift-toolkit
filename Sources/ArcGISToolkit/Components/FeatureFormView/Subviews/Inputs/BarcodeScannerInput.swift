@@ -59,7 +59,7 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***.onChange(of: value) { value in
-***REMOVED******REMOVED******REMOVED***element.updateValue(value)
+***REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(value)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
