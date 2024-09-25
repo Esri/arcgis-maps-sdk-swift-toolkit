@@ -31,10 +31,18 @@ extension FileManager {
         return accumulatedSize
     }
     
+    /// Returns a Boolean value indicating if the specified directory is empty.
+    /// - Parameter path: The path to check.
+    func isDirectoryEmpty(atPath path: URL) -> Bool {
+        (try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
+    }
+}
+
+extension URL {
     /// The path to the web map directory for a specific portal item.
     /// `Documents/OfflineMapAreas/<Portal Item ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
-    private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
+    private static func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
         URL.documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
     }
     
@@ -44,7 +52,7 @@ extension FileManager {
     ///   - portalItemID: The ID of the web map portal item.
     ///   - preplannedMapAreaID: The ID of the preplanned map area portal item.
     /// - Returns: A URL to the preplanned map area directory.
-    func preplannedDirectory(
+    static func preplannedDirectory(
         forPortalItemID portalItemID: PortalItem.ID,
         preplannedMapAreaID: PortalItem.ID? = nil
     ) -> URL {
@@ -53,11 +61,5 @@ extension FileManager {
         } else {
             portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned/")
         }
-    }
-    
-    /// Returns a Boolean value indicating if the specified directory is empty.
-    /// - Parameter path: The path to check.
-    func isDirectoryEmpty(atPath path: URL) -> Bool {
-        (try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
     }
 }

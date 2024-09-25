@@ -74,7 +74,7 @@ extension OfflineMapAreasView {
         func loadOfflinePreplannedMapModels() async {
             guard let portalItemID else { return }
             
-            let preplannedDirectory = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
+            let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
             
             guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return }
             
@@ -112,7 +112,7 @@ extension OfflineMapAreasView {
             portalItemID: PortalItem.ID,
             preplannedMapAreaID: PortalItem.ID
         ) async -> OfflinePreplannedMapArea? {
-            let fileURL = FileManager.default.preplannedDirectory(
+            let fileURL = URL.preplannedDirectory(
                 forPortalItemID: portalItemID,
                 preplannedMapAreaID: preplannedMapAreaID
             )
