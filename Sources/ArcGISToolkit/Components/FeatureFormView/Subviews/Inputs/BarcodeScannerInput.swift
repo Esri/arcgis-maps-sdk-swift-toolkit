@@ -17,6 +17,9 @@
 ***REMOVED***
 
 struct BarcodeScannerInput: View {
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
@@ -55,6 +58,10 @@ struct BarcodeScannerInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED***.onChange(of: value) { value in
+***REMOVED******REMOVED******REMOVED***element.updateValue(value)
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***scannerIsPresented = true
 ***REMOVED***
