@@ -17,6 +17,9 @@ import ArcGIS
 import SwiftUI
 
 struct BarcodeScannerInput: View {
+    /// The view model for the form.
+    @EnvironmentObject var model: FormViewModel
+    
     /// The element the input belongs to.
     private let element: FieldFormElement
     
@@ -55,6 +58,10 @@ struct BarcodeScannerInput: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .formInputStyle()
+        .onChange(of: value) { value in
+            element.updateValue(value)
+            model.evaluateExpressions()
+        }
         .onTapGesture {
             scannerIsPresented = true
         }
