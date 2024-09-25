@@ -199,32 +199,6 @@ private extension TextInput {
     }
 }
 
-private extension FieldFormElement {
-    /// Attempts to convert the value to a type suitable for the element's field type and then update
-    /// the element with the converted value.
-    func convertAndUpdateValue(_ value: String) {
-        if fieldType == .text {
-            updateValue(value)
-        } else if let fieldType {
-            if fieldType.isNumeric && value.isEmpty {
-                updateValue(nil)
-            } else if fieldType == .int16, let value = Int16(value) {
-                updateValue(value)
-            } else if fieldType == .int32, let value = Int32(value) {
-                updateValue(value)
-            } else if fieldType == .int64, let value = Int64(value) {
-                updateValue(value)
-            } else if fieldType == .float32, let value = Float32(value) {
-                updateValue(value)
-            } else if fieldType == .float64, let value = Float64(value) {
-                updateValue(value)
-            } else {
-                updateValue(value)
-            }
-        }
-    }
-}
-
 private extension View {
     /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
     /// not monitor value changes.
