@@ -127,6 +127,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
     
+    private var setupResult: SessionSetupResult?
+    
     override func viewDidLayoutSubviews() {
         previewLayer.frame = view.bounds
         let deviceOrientation = UIDevice.current.orientation
@@ -144,6 +146,21 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            setupResult = .success
+        case .notDetermined:
+            sessionQueue.suspend()
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if !granted {
+                    self.setupResult = .notAuthorized
+                }
+                self.sessionQueue.resume()
+            }
+        default:
+            setupResult = .notAuthorized
+        }
         
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
         let videoInput: AVCaptureDeviceInput
