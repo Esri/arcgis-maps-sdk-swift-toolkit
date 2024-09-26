@@ -80,18 +80,6 @@ struct ScannerView: UIViewControllerRepresentable {
     @Binding var scanOutput: String
     @Binding var scannerIsPresented: Bool
     
-    func makeUIViewController(context: Context) -> ScannerViewController {
-        let scannerViewController = ScannerViewController()
-        scannerViewController.delegate = context.coordinator
-        return scannerViewController
-    }
-    
-    func updateUIViewController(_ uiViewController: ScannerViewController, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(scannedCode: $scanOutput, isShowingScanner: $scannerIsPresented)
-    }
-    
     class Coordinator: NSObject, ScannerViewControllerDelegate {
         @Binding var scanOutput: String
         @Binding var scannerIsPresented: Bool
@@ -106,6 +94,18 @@ struct ScannerView: UIViewControllerRepresentable {
             scannerIsPresented = false
         }
     }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(scannedCode: $scanOutput, isShowingScanner: $scannerIsPresented)
+    }
+    
+    func makeUIViewController(context: Context) -> ScannerViewController {
+        let scannerViewController = ScannerViewController()
+        scannerViewController.delegate = context.coordinator
+        return scannerViewController
+    }
+    
+    func updateUIViewController(_ uiViewController: ScannerViewController, context: Context) {}
 }
 
 protocol ScannerViewControllerDelegate: AnyObject {
