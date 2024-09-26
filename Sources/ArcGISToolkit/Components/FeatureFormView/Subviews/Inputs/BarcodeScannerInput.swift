@@ -47,6 +47,8 @@ struct BarcodeScannerInput: View {
     var body: some View {
         HStack {
             Text(value.isEmpty ? String.noValue : value)
+                .lineLimit(1)
+                .truncationMode(.tail)
             Spacer()
             if !value.isEmpty {
                 ClearButton {
