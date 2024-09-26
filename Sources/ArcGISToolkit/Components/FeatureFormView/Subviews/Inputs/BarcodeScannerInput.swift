@@ -129,8 +129,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeLeft
 ***REMOVED******REMOVED***case .portraitUpsideDown:
 ***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portraitUpsideDown
-***REMOVED******REMOVED***case .portrait:
-***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portrait
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portrait
 ***REMOVED***
