@@ -218,10 +218,32 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED***
 ***REMOVED***override func viewWillAppear(_ animated: Bool) {
 ***REMOVED******REMOVED***super.viewWillAppear(animated)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if captureSession.isRunning == false {
-***REMOVED******REMOVED******REMOVED***sessionQueue.async { [captureSession] in
+***REMOVED******REMOVED***sessionQueue.async { [captureSession, setupResult] in
+***REMOVED******REMOVED******REMOVED***guard let setupResult else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***switch setupResult {
+***REMOVED******REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED******REMOVED***captureSession.startRunning()
+***REMOVED******REMOVED******REMOVED***case .notAuthorized:
+***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let alertController = UIAlertController(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String.cameraAccessAlertTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: String.cameraAccessAlertTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredStyle: .alert
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertController.addAction(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAlertAction(title: String.cancel, style: .cancel, handler: nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertController.addAction(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAlertAction(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String.settings,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .`default`,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.present(alertController, animated: true, completion: nil)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
