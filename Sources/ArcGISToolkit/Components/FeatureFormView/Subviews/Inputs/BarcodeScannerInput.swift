@@ -65,6 +65,9 @@ struct BarcodeScannerInput: View {
         .onTapGesture {
             scannerIsPresented = true
         }
+        .onValueChange(of: element) { newValue, newFormattedValue in
+            value = newFormattedValue
+        }
         .sheet(isPresented: $scannerIsPresented) {
             ScannerView(scanOutput: $value, scannerIsPresented: $scannerIsPresented)
         }
