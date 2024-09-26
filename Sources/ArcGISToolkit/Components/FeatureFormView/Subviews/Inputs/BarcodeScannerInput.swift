@@ -127,6 +127,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
 ***REMOVED***
+***REMOVED***private var setupResult: SessionSetupResult?
+***REMOVED***
 ***REMOVED***override func viewDidLayoutSubviews() {
 ***REMOVED******REMOVED***previewLayer.frame = view.bounds
 ***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
@@ -144,6 +146,21 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED***
 ***REMOVED***override func viewDidLoad() {
 ***REMOVED******REMOVED***super.viewDidLoad()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch AVCaptureDevice.authorizationStatus(for: .video) {
+***REMOVED******REMOVED***case .authorized:
+***REMOVED******REMOVED******REMOVED***setupResult = .success
+***REMOVED******REMOVED***case .notDetermined:
+***REMOVED******REMOVED******REMOVED***sessionQueue.suspend()
+***REMOVED******REMOVED******REMOVED***AVCaptureDevice.requestAccess(for: .video) { granted in
+***REMOVED******REMOVED******REMOVED******REMOVED***if !granted {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.setupResult = .notAuthorized
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***self.sessionQueue.resume()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***setupResult = .notAuthorized
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***let videoInput: AVCaptureDeviceInput
