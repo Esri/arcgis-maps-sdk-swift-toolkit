@@ -80,18 +80,6 @@ struct ScannerView: UIViewControllerRepresentable {
 ***REMOVED***@Binding var scanOutput: String
 ***REMOVED***@Binding var scannerIsPresented: Bool
 ***REMOVED***
-***REMOVED***func makeUIViewController(context: Context) -> ScannerViewController {
-***REMOVED******REMOVED***let scannerViewController = ScannerViewController()
-***REMOVED******REMOVED***scannerViewController.delegate = context.coordinator
-***REMOVED******REMOVED***return scannerViewController
-***REMOVED***
-***REMOVED***
-***REMOVED***func updateUIViewController(_ uiViewController: ScannerViewController, context: Context) {***REMOVED***
-***REMOVED***
-***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(scannedCode: $scanOutput, isShowingScanner: $scannerIsPresented)
-***REMOVED***
-***REMOVED***
 ***REMOVED***class Coordinator: NSObject, ScannerViewControllerDelegate {
 ***REMOVED******REMOVED***@Binding var scanOutput: String
 ***REMOVED******REMOVED***@Binding var scannerIsPresented: Bool
@@ -106,6 +94,18 @@ struct ScannerView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***scannerIsPresented = false
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***func makeCoordinator() -> Coordinator {
+***REMOVED******REMOVED***Coordinator(scannedCode: $scanOutput, isShowingScanner: $scannerIsPresented)
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeUIViewController(context: Context) -> ScannerViewController {
+***REMOVED******REMOVED***let scannerViewController = ScannerViewController()
+***REMOVED******REMOVED***scannerViewController.delegate = context.coordinator
+***REMOVED******REMOVED***return scannerViewController
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateUIViewController(_ uiViewController: ScannerViewController, context: Context) {***REMOVED***
 ***REMOVED***
 
 protocol ScannerViewControllerDelegate: AnyObject {
