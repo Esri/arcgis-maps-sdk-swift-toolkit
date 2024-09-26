@@ -78,7 +78,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         preplannedMapArea = mapArea
         self.portalItemID = portalItemID
         self.preplannedMapAreaID = preplannedMapAreaID
-        mmpkDirectoryURL = URL.preplannedDirectory(
+        mmpkDirectoryURL = .preplannedDirectory(
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
