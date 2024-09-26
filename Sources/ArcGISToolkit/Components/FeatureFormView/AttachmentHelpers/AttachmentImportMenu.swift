@@ -127,13 +127,13 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(5)
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
-***REMOVED******REMOVED***.alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+***REMOVED******REMOVED***.alert(String.cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
 #if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED***appSettingsButton
 #endif
 ***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) { ***REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(cameraAccessAlertMessage)
+***REMOVED******REMOVED******REMOVED***Text(String.cameraAccessAlertMessage)
 ***REMOVED***
 ***REMOVED******REMOVED***.alert(importFailureAlertTitle, isPresented: errorIsPresented) { ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(importFailureAlertMessage)
@@ -230,24 +230,6 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***Button(String.settings) {
 ***REMOVED******REMOVED******REMOVED***Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A message for an alert requesting camera access.
-***REMOVED***var cameraAccessAlertMessage: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Please enable camera access in settings.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A message for an alert requesting camera access."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A title for an alert that camera access is disabled.
-***REMOVED***var cameraAccessAlertTitle: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Camera access is disabled",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A title for an alert that camera access is disabled."
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A label for a button to capture a new photo or video.
