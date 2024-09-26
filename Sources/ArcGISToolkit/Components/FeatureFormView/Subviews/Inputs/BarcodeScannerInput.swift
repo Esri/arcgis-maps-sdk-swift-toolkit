@@ -71,14 +71,15 @@ struct BarcodeScannerInput: View {
             value = newFormattedValue
         }
         .sheet(isPresented: $scannerIsPresented) {
-            ScannerView(scanOutput: $value, scannerIsPresented: $scannerIsPresented)
+            ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
         }
     }
 }
 
 struct ScannerView: UIViewControllerRepresentable {
-    @Binding var scanOutput: String
     @Binding var scannerIsPresented: Bool
+    
+    @Binding var scanOutput: String
     
     class Coordinator: NSObject, ScannerViewControllerDelegate {
         @Binding var scanOutput: String
