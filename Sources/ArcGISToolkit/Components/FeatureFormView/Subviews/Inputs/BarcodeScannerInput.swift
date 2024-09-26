@@ -210,7 +210,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
 ***REMOVED******REMOVED***previewLayer.frame = view.layer.bounds
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
