@@ -30,6 +30,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding private var selectedMap: Map?
+***REMOVED******REMOVED***/ A Boolean value indicating whether the device connection has been determined.
+***REMOVED***@State private var connectionIsDetermined = false
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the device has an internet connection.
 ***REMOVED***@State private var isConnected = true
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the offline banner should be presented.
@@ -51,27 +53,29 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineDisabledView
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if isConnected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if connectionIsDetermined {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isConnected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.requestUserNotificationAuthorization()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***networkMonitor.startMonitoring { isConnected in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineBannerIsPresented = !isConnected
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isConnected = isConnected
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionIsDetermined = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: isConnected) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadPreplannedMapModels() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.task(id: connectionIsDetermined) {
+***REMOVED******REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***networkMonitor.stopMonitoring()
