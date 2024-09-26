@@ -31,35 +31,3 @@ extension FileManager {
 ***REMOVED******REMOVED***return accumulatedSize
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns a Boolean value indicating if the specified directory is empty.
-***REMOVED******REMOVED***/ - Parameter path: The path to check.
-***REMOVED***func isDirectoryEmpty(atPath path: URL) -> Bool {
-***REMOVED******REMOVED***(try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
-***REMOVED***
-***REMOVED***
-
-extension URL {
-***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
-***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***private static func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-***REMOVED******REMOVED***URL.documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
-***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area portal item.
-***REMOVED******REMOVED***/ - Returns: A URL to the preplanned map area directory.
-***REMOVED***static func preplannedDirectory(
-***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID? = nil
-***REMOVED***) -> URL {
-***REMOVED******REMOVED***if let preplannedMapAreaID {
-***REMOVED******REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned", "\(preplannedMapAreaID)/")
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID).appending(components: "Preplanned/")
-***REMOVED***
-***REMOVED***
-***REMOVED***
