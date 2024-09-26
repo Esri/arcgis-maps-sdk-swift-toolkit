@@ -218,10 +218,32 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if captureSession.isRunning == false {
-            sessionQueue.async { [captureSession] in
+        sessionQueue.async { [captureSession, setupResult] in
+            guard let setupResult else { return }
+            switch setupResult {
+            case .success:
                 captureSession.startRunning()
+            case .notAuthorized:
+                DispatchQueue.main.async {
+                    let alertController = UIAlertController(
+                        title: String.cameraAccessAlertTitle,
+                        message: String.cameraAccessAlertTitle,
+                        preferredStyle: .alert
+                    )
+                    alertController.addAction(
+                        UIAlertAction(title: String.cancel, style: .cancel, handler: nil)
+                    )
+                    alertController.addAction(
+                        UIAlertAction(
+                            title: String.settings,
+                            style: .`default`,
+                            handler: { _ in
+                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                            }
+                        )
+                    )
+                    self.present(alertController, animated: true, completion: nil)
+                }
             }
         }
     }
