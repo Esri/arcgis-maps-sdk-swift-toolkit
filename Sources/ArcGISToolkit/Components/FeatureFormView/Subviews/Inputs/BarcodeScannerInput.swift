@@ -20,17 +20,17 @@ struct BarcodeScannerInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The element the input belongs to.
-    private let element: FieldFormElement
-    
-    /// The input configuration of the field.
-    private let input: BarcodeScannerFormInput
-    
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
     /// The current barcode value.
     @State private var value = ""
+    
+    /// The element the input belongs to.
+    private let element: FieldFormElement
+    
+    /// The input configuration of the field.
+    private let input: BarcodeScannerFormInput
     
     /// Creates a view for a barcode scanner input.
     /// - Parameters:
