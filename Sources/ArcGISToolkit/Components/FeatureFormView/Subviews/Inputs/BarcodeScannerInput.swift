@@ -129,8 +129,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             previewLayer.connection!.videoOrientation = .landscapeLeft
         case .portraitUpsideDown:
             previewLayer.connection!.videoOrientation = .portraitUpsideDown
-        case .portrait:
-            previewLayer.connection!.videoOrientation = .portrait
         default:
             previewLayer.connection!.videoOrientation = .portrait
         }
