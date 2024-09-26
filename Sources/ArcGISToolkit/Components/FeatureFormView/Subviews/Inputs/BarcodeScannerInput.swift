@@ -71,14 +71,15 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED******REMOVED***value = newFormattedValue
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
-***REMOVED******REMOVED******REMOVED***ScannerView(scanOutput: $value, scannerIsPresented: $scannerIsPresented)
+***REMOVED******REMOVED******REMOVED***ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 struct ScannerView: UIViewControllerRepresentable {
-***REMOVED***@Binding var scanOutput: String
 ***REMOVED***@Binding var scannerIsPresented: Bool
+***REMOVED***
+***REMOVED***@Binding var scanOutput: String
 ***REMOVED***
 ***REMOVED***class Coordinator: NSObject, ScannerViewControllerDelegate {
 ***REMOVED******REMOVED***@Binding var scanOutput: String
