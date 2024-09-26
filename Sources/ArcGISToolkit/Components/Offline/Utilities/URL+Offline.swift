@@ -20,7 +20,7 @@ extension URL {
     /// `Documents/OfflineMapAreas/<Portal Item ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
     static private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-        URL.documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
+        return .documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
     }
     
     /// The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
