@@ -320,3 +320,20 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         portalItem.description
     }
 }
+
+private extension FileManager {
+    /// Calculates the size of a directory and all its contents.
+    /// - Parameter url: The directory's URL.
+    /// - Returns: The total size in bytes.
+    func sizeOfDirectory(at url: URL) -> Int {
+        guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 }
+        var accumulatedSize = 0
+        for case let fileURL as URL in enumerator {
+            guard let size = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+                continue
+            }
+            accumulatedSize += size
+        }
+        return accumulatedSize
+    }
+}
