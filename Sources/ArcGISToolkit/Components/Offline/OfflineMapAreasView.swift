@@ -30,6 +30,8 @@ public struct OfflineMapAreasView: View {
     private let onlineMap: Map
     /// The currently selected map.
     @Binding private var selectedMap: Map?
+    /// A Boolean value indicating whether the device connection has been determined.
+    @State private var connectionIsDetermined = false
     /// A Boolean value indicating whether the device has an internet connection.
     @State private var isConnected = true
     /// A Boolean value indicating whether the offline banner should be presented.
@@ -51,27 +53,29 @@ public struct OfflineMapAreasView: View {
                 Section {
                     if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
                         offlineDisabledView
-                    } else if isConnected {
-                        preplannedMapAreasView
+                    } else if connectionIsDetermined {
+                        if isConnected {
+                            preplannedMapAreasView
+                        } else {
+                            offlinePreplannedMapAreasView
+                        }
                     } else {
-                        offlinePreplannedMapAreasView
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
                     }
                 }
             }
             .task {
                 await mapViewModel.requestUserNotificationAuthorization()
             }
-            .task {
-                await loadPreplannedMapModels()
-            }
             .onAppear {
                 networkMonitor.startMonitoring { isConnected in
                     offlineBannerIsPresented = !isConnected
-                    self.isConnected = isConnected
+                    connectionIsDetermined = true
                 }
             }
-            .onChange(of: isConnected) { _ in
-                Task { await loadPreplannedMapModels() }
+            .task(id: connectionIsDetermined) {
+                await loadPreplannedMapModels()
             }
             .onDisappear {
                 networkMonitor.stopMonitoring()
