@@ -24,6 +24,24 @@ extension String {
         )
     }
     
+    /// A message for an alert requesting camera access.
+    static var cameraAccessAlertMessage: String {
+        .init(
+            localized: "Please enable camera access in settings.",
+            bundle: .toolkitModule,
+            comment: "A message for an alert requesting camera access."
+        )
+    }
+    
+    /// A title for an alert that camera access is disabled.
+    static var cameraAccessAlertTitle: String {
+        .init(
+            localized: "Camera access is disabled",
+            bundle: .toolkitModule,
+            comment: "A title for an alert that camera access is disabled."
+        )
+    }
+    
     /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
     static var emptyAttachmentDownloadErrorMessage: Self {
         .init(
