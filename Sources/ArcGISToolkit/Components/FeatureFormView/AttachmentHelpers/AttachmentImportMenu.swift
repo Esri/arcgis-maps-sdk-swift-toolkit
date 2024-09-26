@@ -127,13 +127,13 @@ struct AttachmentImportMenu: View {
                 .padding(5)
         }
         .disabled(importState.importInProgress)
-        .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
+        .alert(String.cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
 #if !targetEnvironment(macCatalyst)
             appSettingsButton
 #endif
             Button(String.cancel, role: .cancel) { }
         } message: {
-            Text(cameraAccessAlertMessage)
+            Text(String.cameraAccessAlertMessage)
         }
         .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
             Text(importFailureAlertMessage)
@@ -230,24 +230,6 @@ private extension AttachmentImportMenu {
         Button(String.settings) {
             Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
         }
-    }
-    
-    /// A message for an alert requesting camera access.
-    var cameraAccessAlertMessage: String {
-        .init(
-            localized: "Please enable camera access in settings.",
-            bundle: .toolkitModule,
-            comment: "A message for an alert requesting camera access."
-        )
-    }
-    
-    /// A title for an alert that camera access is disabled.
-    var cameraAccessAlertTitle: String {
-        .init(
-            localized: "Camera access is disabled",
-            bundle: .toolkitModule,
-            comment: "A title for an alert that camera access is disabled."
-        )
     }
     
     /// A label for a button to capture a new photo or video.
