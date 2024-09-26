@@ -47,6 +47,8 @@ struct BarcodeScannerInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Text(value.isEmpty ? String.noValue : value)
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if !value.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
