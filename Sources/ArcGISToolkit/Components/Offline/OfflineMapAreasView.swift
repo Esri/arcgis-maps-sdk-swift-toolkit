@@ -231,9 +231,14 @@ private class NetworkMonitor: ObservableObject {
 ***REMOVED***private let monitor = NWPathMonitor()
 ***REMOVED***
 ***REMOVED***func startMonitoring(_ onChange: @MainActor @Sendable @escaping (_ isConnected: Bool) -> Void) {
+***REMOVED******REMOVED***var previousIsConnected: Bool?
 ***REMOVED******REMOVED***monitor.pathUpdateHandler = { path in
-***REMOVED******REMOVED******REMOVED***let isConnected = path.status == .satisfied
-***REMOVED******REMOVED******REMOVED***MainActor.assumeIsolated { onChange(isConnected) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***MainActor.assumeIsolated {
+***REMOVED******REMOVED******REMOVED******REMOVED***let isConnected = path.status == .satisfied
+***REMOVED******REMOVED******REMOVED******REMOVED***guard isConnected != previousIsConnected else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***onChange(isConnected)
+***REMOVED******REMOVED******REMOVED******REMOVED***previousIsConnected = isConnected
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***monitor.start(queue: .main)
 ***REMOVED***
