@@ -114,6 +114,11 @@ protocol ScannerViewControllerDelegate: AnyObject {
 ***REMOVED***
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+***REMOVED***enum SessionSetupResult {
+***REMOVED******REMOVED***case success
+***REMOVED******REMOVED***case notAuthorized
+***REMOVED***
+***REMOVED***
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
