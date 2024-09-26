@@ -117,9 +117,6 @@ extension OfflineMapAreasView {
                 preplannedMapAreaID: preplannedMapAreaID
             )
             guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil }
-            // Make sure the directory is not empty because the directory will exist as soon as the
-            // job starts, so if the job fails, it will look like the mmpk was downloaded.
-            guard !FileManager.default.isDirectoryEmpty(atPath: fileURL) else { return nil }
             let mmpk = MobileMapPackage(fileURL: fileURL)
             
             try? await mmpk.load()
