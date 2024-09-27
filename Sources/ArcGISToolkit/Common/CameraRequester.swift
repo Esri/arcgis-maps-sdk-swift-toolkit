@@ -15,6 +15,38 @@
 import AVFoundation
 import SwiftUI
 
+/// Performs camera authorization request handling.
+///
+/// Ensures that access is granted before launching the system camera.
+@MainActor final class CameraRequester: ObservableObject {
+    enum Result {
+        case granted
+        case denied
+    }
+    
+    @Published var alertIsPresented = false
+    
+    var onAccessDenied: (() -> Void)?
+    
+    func request(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) {
+        self.onAccessDenied = onAccessDenied
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            onAccessGranted()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if granted {
+                    onAccessGranted()
+                } else {
+                    self.alertIsPresented = true
+                }
+            }
+        default:
+            alertIsPresented = true
+        }
+    }
+}
+
 private struct CameraRequesterModifier: ViewModifier {
     @ObservedObject var requester: CameraRequester
     
@@ -58,39 +90,5 @@ private extension CameraRequesterModifier {
             bundle: .toolkitModule,
             comment: "A title for an alert that camera access is disabled."
         )
-    }
-}
-
-private protocol CameraAccessDelegate {
-    var onAccessDenied: (() -> Void)? { get }
-    func requestAccess(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void)
-}
-
-final class CameraRequester: ObservableObject, CameraAccessDelegate {
-    enum Result {
-        case granted
-        case denied
-    }
-    
-    @Published var alertIsPresented = false
-    
-    var onAccessDenied: (() -> Void)?
-    
-    func requestAccess(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) {
-        self.onAccessDenied = onAccessDenied
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .authorized:
-            onAccessGranted()
-        case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-                if granted {
-                    onAccessGranted()
-                } else {
-                    self?.alertIsPresented = true
-                }
-            }
-        default:
-            alertIsPresented = true
-        }
     }
 }

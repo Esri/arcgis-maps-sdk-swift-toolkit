@@ -48,7 +48,7 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
-    /// <#Description#>
+    /// Performs camera authorization request handling.
     @StateObject private var cameraRequester = CameraRequester()
     
     /// The maximum attachment size limit.
@@ -73,7 +73,7 @@ struct AttachmentImportMenu: View {
     
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
-            cameraRequester.requestAccess {
+            cameraRequester.request {
                 cameraIsShowing = true
             } onAccessDenied: { }
         } label: {
