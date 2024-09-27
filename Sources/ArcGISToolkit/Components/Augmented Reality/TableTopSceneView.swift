@@ -219,7 +219,7 @@ public struct TableTopSceneView: View {
         }
     }
     
-    /// Sets the visibility of the coaching overlay view for the AR experince.
+    /// Sets the visibility of the coaching overlay view for the AR experience.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
     ///  coaching overlay view.
     public func coachingOverlayHidden(_ hidden: Bool) -> Self {
