@@ -33,7 +33,9 @@ import SwiftUI
                 if granted {
                     onAccessGranted()
                 } else {
-                    self.alertIsPresented = true
+                    Task { @MainActor in
+                        self.alertIsPresented = true
+                    }
                 }
             }
         default:
