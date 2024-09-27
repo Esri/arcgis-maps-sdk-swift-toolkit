@@ -118,20 +118,22 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var offlineDisabledView: some View {
+***REMOVED***@ViewBuilder private var offlineDisabledView: some View {
+***REMOVED******REMOVED***let labelText = Text("Offline Disabled")
+***REMOVED******REMOVED***let descriptionText = Text("Please ensure the web map is offline enabled.")
 ***REMOVED******REMOVED***if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED***return ContentUnavailableView {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Offline Disabled")
+***REMOVED******REMOVED******REMOVED***ContentUnavailableView {
+***REMOVED******REMOVED******REMOVED******REMOVED***labelText
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED*** description: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Please ensure the web map is offline enabled.")
+***REMOVED******REMOVED******REMOVED******REMOVED***descriptionText
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Offline Disabled")
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***labelText
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Please ensure the web map is offline enabled.")
+***REMOVED******REMOVED******REMOVED******REMOVED***descriptionText
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
