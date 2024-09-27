@@ -67,6 +67,7 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(value)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
+***REMOVED******REMOVED***.cameraRequester(cameraRequester)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***cameraRequester.requestAccess {
 ***REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
@@ -123,8 +124,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
-***REMOVED***
-***REMOVED***private var previewLayer: AVCaptureVideoPreviewLayer!
 ***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
 ***REMOVED***
