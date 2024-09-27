@@ -14,7 +14,7 @@
 
 ***REMOVED***
 import OSLog
-***REMOVED***
+import Combine
 
 ***REMOVED***/ An object that encapsulates state about a preplanned map.
 @MainActor
@@ -130,9 +130,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
 ***REMOVED******REMOVED***switch downloadResult {
 ***REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED***withAnimation(.easeInOut) {
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED***
