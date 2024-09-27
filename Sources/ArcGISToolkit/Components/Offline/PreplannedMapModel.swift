@@ -14,7 +14,7 @@
 
 import ArcGIS
 import OSLog
-import SwiftUI
+import Combine
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor
@@ -130,9 +130,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
         switch downloadResult {
         case .success:
-            withAnimation(.easeInOut) {
-                status = .downloaded
-            }
+            status = .downloaded
         case .failure(let error):
             status = .downloadFailure(error)
         }
