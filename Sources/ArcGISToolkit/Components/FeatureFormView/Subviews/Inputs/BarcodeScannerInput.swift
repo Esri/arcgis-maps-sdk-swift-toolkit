@@ -20,6 +20,10 @@ struct BarcodeScannerInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
+    /// A Boolean value indicating whether a ``TextInput`` should be used instead.
+    /// This will be `true` if the device camera is inaccessible.
+    @State private var fallbackToTextInput = false
+    
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
@@ -48,37 +52,42 @@ struct BarcodeScannerInput: View {
     }
     
     var body: some View {
-        HStack {
-            Text(value.isEmpty ? String.noValue : value)
-                .lineLimit(1)
-                .truncationMode(.tail)
-            Spacer()
-            if !value.isEmpty {
-                ClearButton {
-                    value.removeAll()
+        if fallbackToTextInput {
+            TextInput(element: element)
+        } else {
+            HStack {
+                Text(value.isEmpty ? String.noValue : value)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                Spacer()
+                if !value.isEmpty {
+                    ClearButton {
+                        value.removeAll()
+                    }
+                }
+                Image(systemName: "barcode.viewfinder")
+                    .foregroundStyle(.tint)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .formInputStyle()
+            .onChange(of: value) { value in
+                element.convertAndUpdateValue(value)
+                model.evaluateExpressions()
+            }
+            .cameraRequester(cameraRequester)
+            .onTapGesture {
+                cameraRequester.request {
+                    scannerIsPresented = true
+                } onAccessDenied: {
+                    fallbackToTextInput = true
                 }
             }
-            Image(systemName: "barcode.viewfinder")
-                .foregroundStyle(.tint)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .formInputStyle()
-        .onChange(of: value) { value in
-            element.convertAndUpdateValue(value)
-            model.evaluateExpressions()
-        }
-        .cameraRequester(cameraRequester)
-        .onTapGesture {
-            cameraRequester.request {
-                scannerIsPresented = true
-            } onAccessDenied: {
+            .onValueChange(of: element) { newValue, newFormattedValue in
+                value = newFormattedValue
             }
-        }
-        .onValueChange(of: element) { newValue, newFormattedValue in
-            value = newFormattedValue
-        }
-        .sheet(isPresented: $scannerIsPresented) {
-            ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
+            .sheet(isPresented: $scannerIsPresented) {
+                ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
+            }
         }
     }
 }
