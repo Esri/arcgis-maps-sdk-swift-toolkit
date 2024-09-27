@@ -88,6 +88,18 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
