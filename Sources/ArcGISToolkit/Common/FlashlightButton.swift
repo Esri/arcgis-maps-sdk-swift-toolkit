@@ -16,7 +16,7 @@ import AVFoundation
 import SwiftUI
 
 struct FlashlightButton: View {
-    @Binding var flashIsOn: Bool
+    @State private var flashIsOn = false
     
     var device: AVCaptureDevice? {
         .default(for: .video)
@@ -56,8 +56,6 @@ struct FlashlightButton: View {
     }
 }
 
-@available(iOS 17.0, *)
 #Preview {
-    @Previewable @State var flashlightIsOn = false
-    FlashlightButton(flashIsOn: $flashlightIsOn)
+    FlashlightButton()
 }
