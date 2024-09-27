@@ -14,7 +14,6 @@
 
 ***REMOVED***
 ***REMOVED***
-import Network
 
 ***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 @MainActor
@@ -82,14 +81,13 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(let error as URLError):
-***REMOVED******REMOVED******REMOVED***if error.code == .notConnectedToInternet {
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***if let urlError = error as? URLError,
+***REMOVED******REMOVED******REMOVED***   urlError.code == .notConnectedToInternet {
 ***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***view(for: error)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***view(for: error)
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
