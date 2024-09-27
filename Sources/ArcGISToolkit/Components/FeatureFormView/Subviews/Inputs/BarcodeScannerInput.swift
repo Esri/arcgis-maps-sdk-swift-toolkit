@@ -26,6 +26,9 @@ struct BarcodeScannerInput: View {
     /// The current barcode value.
     @State private var value = ""
     
+    /// <#Description#>
+    @StateObject private var cameraRequester = CameraRequester()
+    
     /// The element the input belongs to.
     private let element: FieldFormElement
     
@@ -65,7 +68,10 @@ struct BarcodeScannerInput: View {
             model.evaluateExpressions()
         }
         .onTapGesture {
-            scannerIsPresented = true
+            cameraRequester.requestAccess {
+                scannerIsPresented = true
+            } onAccessDenied: {
+            }
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
             value = newFormattedValue
@@ -114,11 +120,6 @@ protocol ScannerViewControllerDelegate: AnyObject {
 }
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
-    enum SessionSetupResult {
-        case success
-        case notAuthorized
-    }
-    
     weak var delegate: ScannerViewControllerDelegate?
     
     private let captureSession = AVCaptureSession()
@@ -127,7 +128,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
     
-    private var setupResult: SessionSetupResult?
+    private var previewLayer: AVCaptureVideoPreviewLayer!
     
     override func viewDidLayoutSubviews() {
         previewLayer.frame = view.bounds
@@ -146,21 +147,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .authorized:
-            setupResult = .success
-        case .notDetermined:
-            sessionQueue.suspend()
-            AVCaptureDevice.requestAccess(for: .video) { granted in
-                if !granted {
-                    self.setupResult = .notAuthorized
-                }
-                self.sessionQueue.resume()
-            }
-        default:
-            setupResult = .notAuthorized
-        }
         
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
         let videoInput: AVCaptureDeviceInput
@@ -218,33 +204,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        sessionQueue.async { [captureSession, setupResult] in
-            guard let setupResult else { return }
-            switch setupResult {
-            case .success:
-                captureSession.startRunning()
-            case .notAuthorized:
-                DispatchQueue.main.async {
-                    let alertController = UIAlertController(
-                        title: String.cameraAccessAlertTitle,
-                        message: String.cameraAccessAlertTitle,
-                        preferredStyle: .alert
-                    )
-                    alertController.addAction(
-                        UIAlertAction(title: String.cancel, style: .cancel, handler: nil)
-                    )
-                    alertController.addAction(
-                        UIAlertAction(
-                            title: String.settings,
-                            style: .`default`,
-                            handler: { _ in
-                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                            }
-                        )
-                    )
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }
+        sessionQueue.async { [captureSession] in
+            captureSession.startRunning()
         }
     }
     
