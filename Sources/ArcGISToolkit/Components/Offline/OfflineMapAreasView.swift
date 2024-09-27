@@ -118,20 +118,22 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    private var offlineDisabledView: some View {
+    @ViewBuilder private var offlineDisabledView: some View {
+        let labelText = Text("Offline Disabled")
+        let descriptionText = Text("Please ensure the web map is offline enabled.")
         if #available(iOS 17, *) {
-            return ContentUnavailableView {
-                Text("Offline Disabled")
+            ContentUnavailableView {
+                labelText
                     .bold()
             } description: {
-                Text("Please ensure the web map is offline enabled.")
+                descriptionText
             }
         } else {
-            return VStack(alignment: .center) {
-                Text("Offline Disabled")
+            VStack(alignment: .center) {
+                labelText
                     .bold()
                     .font(.title2)
-                Text("Please ensure the web map is offline enabled.")
+                descriptionText
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
