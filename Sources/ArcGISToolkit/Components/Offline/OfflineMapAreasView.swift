@@ -22,20 +22,12 @@ import Network
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
-***REMOVED******REMOVED***/ The network monitor.
-***REMOVED***@StateObject private var networkMonitor = NetworkMonitor()
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED******REMOVED***/ The web map to be taken offline.
 ***REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding private var selectedMap: Map?
-***REMOVED******REMOVED***/ A Boolean value indicating whether the device connection has been determined.
-***REMOVED***@State private var connectionIsDetermined = false
-***REMOVED******REMOVED***/ A Boolean value indicating whether the device has an internet connection.
-***REMOVED***@State private var isConnected = true
-***REMOVED******REMOVED***/ A Boolean value indicating whether the offline banner should be presented.
-***REMOVED***@State private var offlineBannerIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view with a given web map.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -53,37 +45,16 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineDisabledView
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if connectionIsDetermined {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isConnected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.requestUserNotificationAuthorization()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***networkMonitor.startMonitoring { isConnected in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineBannerIsPresented = !isConnected
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionIsDetermined = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task(id: connectionIsDetermined) {
+***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED***networkMonitor.stopMonitoring()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if offlineBannerIsPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineBannerView
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -110,6 +81,12 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure(let error as URLError):
+***REMOVED******REMOVED******REMOVED***if error.code == .notConnectedToInternet {
+***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***view(for: error)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***view(for: error)
@@ -193,15 +170,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the appropriate preplanned map models depending on the updated device network connection.
+***REMOVED******REMOVED***/ Loads the online and offline preplanned map models.
 ***REMOVED***private func loadPreplannedMapModels() async {
-***REMOVED******REMOVED***isConnected = !offlineBannerIsPresented
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if isConnected {
-***REMOVED******REMOVED******REMOVED***await mapViewModel.loadPreplannedMapModels()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***await mapViewModel.loadOfflinePreplannedMapModels()
-***REMOVED***
+***REMOVED******REMOVED***await mapViewModel.loadPreplannedMapModels()
+***REMOVED******REMOVED***await mapViewModel.loadOfflinePreplannedMapModels()
 ***REMOVED***
 ***REMOVED***
 
@@ -223,28 +195,4 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***return OfflineMapAreasViewPreview()
-***REMOVED***
-
-@MainActor
-private class NetworkMonitor: ObservableObject {
-***REMOVED******REMOVED***/ The path monitor to observe network changes.
-***REMOVED***private let monitor = NWPathMonitor()
-***REMOVED***
-***REMOVED***func startMonitoring(_ onChange: @MainActor @Sendable @escaping (_ isConnected: Bool) -> Void) {
-***REMOVED******REMOVED***var previousIsConnected: Bool?
-***REMOVED******REMOVED***monitor.pathUpdateHandler = { path in
-***REMOVED******REMOVED******REMOVED***MainActor.assumeIsolated {
-***REMOVED******REMOVED******REMOVED******REMOVED***let isConnected = path.status == .satisfied
-***REMOVED******REMOVED******REMOVED******REMOVED***guard isConnected != previousIsConnected else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***onChange(isConnected)
-***REMOVED******REMOVED******REMOVED******REMOVED***previousIsConnected = isConnected
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***monitor.start(queue: .main)
-***REMOVED***
-***REMOVED***
-***REMOVED***func stopMonitoring() {
-***REMOVED******REMOVED***monitor.cancel()
-***REMOVED******REMOVED***monitor.pathUpdateHandler = nil
-***REMOVED***
 ***REMOVED***
