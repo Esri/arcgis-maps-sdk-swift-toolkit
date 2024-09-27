@@ -20,6 +20,10 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether a ``TextInput`` should be used instead.
+***REMOVED******REMOVED***/ This will be `true` if the device camera is inaccessible.
+***REMOVED***@State private var fallbackToTextInput = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the code scanner is presented.
 ***REMOVED***@State private var scannerIsPresented = false
 ***REMOVED***
@@ -48,37 +52,42 @@ struct BarcodeScannerInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(value.isEmpty ? String.noValue : value)
-***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if !value.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value.removeAll()
+***REMOVED******REMOVED***if fallbackToTextInput {
+***REMOVED******REMOVED******REMOVED***TextInput(element: element)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(value.isEmpty ? String.noValue : value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***if !value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED******REMOVED***.onChange(of: value) { value in
+***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.cameraRequester(cameraRequester)
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraRequester.request {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
+***REMOVED******REMOVED******REMOVED*** onAccessDenied: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToTextInput = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
-***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED***.formInputStyle()
-***REMOVED******REMOVED***.onChange(of: value) { value in
-***REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(value)
-***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
-***REMOVED***
-***REMOVED******REMOVED***.cameraRequester(cameraRequester)
-***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***cameraRequester.request {
-***REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
-***REMOVED******REMOVED*** onAccessDenied: {
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***value = newFormattedValue
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED***value = newFormattedValue
-***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
-***REMOVED******REMOVED******REMOVED***ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
