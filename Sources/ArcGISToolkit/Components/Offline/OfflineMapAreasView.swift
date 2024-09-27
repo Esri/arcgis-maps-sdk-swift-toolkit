@@ -22,20 +22,12 @@ import Network
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
-    /// The network monitor.
-    @StateObject private var networkMonitor = NetworkMonitor()
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     /// The web map to be taken offline.
     private let onlineMap: Map
     /// The currently selected map.
     @Binding private var selectedMap: Map?
-    /// A Boolean value indicating whether the device connection has been determined.
-    @State private var connectionIsDetermined = false
-    /// A Boolean value indicating whether the device has an internet connection.
-    @State private var isConnected = true
-    /// A Boolean value indicating whether the offline banner should be presented.
-    @State private var offlineBannerIsPresented = false
     
     /// Creates a view with a given web map.
     /// - Parameters:
@@ -53,37 +45,16 @@ public struct OfflineMapAreasView: View {
                 Section {
                     if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
                         offlineDisabledView
-                    } else if connectionIsDetermined {
-                        if isConnected {
-                            preplannedMapAreasView
-                        } else {
-                            offlinePreplannedMapAreasView
-                        }
                     } else {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
+                        preplannedMapAreasView
                     }
                 }
             }
             .task {
                 await mapViewModel.requestUserNotificationAuthorization()
             }
-            .onAppear {
-                networkMonitor.startMonitoring { isConnected in
-                    offlineBannerIsPresented = !isConnected
-                    connectionIsDetermined = true
-                }
-            }
-            .task(id: connectionIsDetermined) {
+            .task {
                 await loadPreplannedMapModels()
-            }
-            .onDisappear {
-                networkMonitor.stopMonitoring()
-            }
-            .overlay(alignment: .bottom) {
-                if offlineBannerIsPresented {
-                    offlineBannerView
-                }
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -110,6 +81,12 @@ public struct OfflineMapAreasView: View {
                 }
             } else {
                 emptyPreplannedMapAreasView
+            }
+        case .failure(let error as URLError):
+            if error.code == .notConnectedToInternet {
+                offlinePreplannedMapAreasView
+            } else {
+                view(for: error)
             }
         case .failure(let error):
             view(for: error)
@@ -193,15 +170,10 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    /// Loads the appropriate preplanned map models depending on the updated device network connection.
+    /// Loads the online and offline preplanned map models.
     private func loadPreplannedMapModels() async {
-        isConnected = !offlineBannerIsPresented
-        
-        if isConnected {
-            await mapViewModel.loadPreplannedMapModels()
-        } else {
-            await mapViewModel.loadOfflinePreplannedMapModels()
-        }
+        await mapViewModel.loadPreplannedMapModels()
+        await mapViewModel.loadOfflinePreplannedMapModels()
     }
 }
 
@@ -223,28 +195,4 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
-}
-
-@MainActor
-private class NetworkMonitor: ObservableObject {
-    /// The path monitor to observe network changes.
-    private let monitor = NWPathMonitor()
-    
-    func startMonitoring(_ onChange: @MainActor @Sendable @escaping (_ isConnected: Bool) -> Void) {
-        var previousIsConnected: Bool?
-        monitor.pathUpdateHandler = { path in
-            MainActor.assumeIsolated {
-                let isConnected = path.status == .satisfied
-                guard isConnected != previousIsConnected else { return }
-                onChange(isConnected)
-                previousIsConnected = isConnected
-            }
-        }
-        monitor.start(queue: .main)
-    }
-    
-    func stopMonitoring() {
-        monitor.cancel()
-        monitor.pathUpdateHandler = nil
-    }
 }
