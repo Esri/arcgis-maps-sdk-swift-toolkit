@@ -36,9 +36,10 @@ struct TextInput: View {
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
     ///   - element: The input's parent element.
+    /// - Note: `BarcodeScannerInput` uses `TextInput` for fallback when the device camera is unavailable.
     init(element: FieldFormElement) {
         precondition(
-            element.input is TextAreaFormInput || element.input is TextBoxFormInput,
+            element.input is TextAreaFormInput || element.input is TextBoxFormInput || element.input is BarcodeScannerFormInput,
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
         )
         self.element = element
