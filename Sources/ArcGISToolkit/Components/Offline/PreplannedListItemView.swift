@@ -27,6 +27,19 @@ struct PreplannedListItemView: View {
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
+    /// The download state of the preplanned map model.
+    private enum DownloadState {
+        case notDownloaded, downloading, downloaded
+        
+        init(_ state: PreplannedMapModel.Status) {
+            self = switch state {
+            case .downloaded: .downloaded
+            case .downloading: .downloading
+            default: .notDownloaded
+            }
+        }
+    }
+    
     /// The current download state of the preplanned map model.
     @State private var downloadState: DownloadState = .notDownloaded
     
@@ -181,21 +194,6 @@ struct PreplannedListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
-    }
-}
-
-private extension PreplannedListItemView {
-    /// The download state of the preplanned map model.
-    enum DownloadState {
-        case notDownloaded, downloading, downloaded
-        
-        init(_ state: PreplannedMapModel.Status) {
-            self = switch state {
-            case .downloaded: .downloaded
-            case .downloading: .downloading
-            default: .notDownloaded
-            }
-        }
     }
 }
 
