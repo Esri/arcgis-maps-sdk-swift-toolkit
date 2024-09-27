@@ -26,7 +26,7 @@ struct BarcodeScannerInput: View {
     /// The current barcode value.
     @State private var value = ""
     
-    /// <#Description#>
+    /// Performs camera authorization request handling.
     @StateObject private var cameraRequester = CameraRequester()
     
     /// The element the input belongs to.
@@ -69,7 +69,7 @@ struct BarcodeScannerInput: View {
         }
         .cameraRequester(cameraRequester)
         .onTapGesture {
-            cameraRequester.requestAccess {
+            cameraRequester.request {
                 scannerIsPresented = true
             } onAccessDenied: {
             }
