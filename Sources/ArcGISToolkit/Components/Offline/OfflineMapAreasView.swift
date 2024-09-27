@@ -14,7 +14,6 @@
 
 import SwiftUI
 import ArcGIS
-import Network
 
 /// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 @MainActor
@@ -82,14 +81,13 @@ public struct OfflineMapAreasView: View {
             } else {
                 emptyPreplannedMapAreasView
             }
-        case .failure(let error as URLError):
-            if error.code == .notConnectedToInternet {
+        case .failure(let error):
+            if let urlError = error as? URLError,
+               urlError.code == .notConnectedToInternet {
                 offlinePreplannedMapAreasView
             } else {
                 view(for: error)
             }
-        case .failure(let error):
-            view(for: error)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
