@@ -28,16 +28,8 @@ struct PreplannedListItemView: View {
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The download state of the preplanned map model.
-***REMOVED***private enum DownloadState {
+***REMOVED***enum DownloadState {
 ***REMOVED******REMOVED***case notDownloaded, downloading, downloaded
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(_ state: PreplannedMapModel.Status) {
-***REMOVED******REMOVED******REMOVED***self = switch state {
-***REMOVED******REMOVED******REMOVED***case .downloaded: .downloaded
-***REMOVED******REMOVED******REMOVED***case .downloading: .downloading
-***REMOVED******REMOVED******REMOVED***default: .notDownloaded
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current download state of the preplanned map model.
@@ -194,6 +186,18 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
+
+private extension PreplannedListItemView.DownloadState {
+***REMOVED******REMOVED***/ Creates an instance.
+***REMOVED******REMOVED***/ - Parameter state: The preplanned map model download state.
+***REMOVED***init(_ state: PreplannedMapModel.Status) {
+***REMOVED******REMOVED***self = switch state {
+***REMOVED******REMOVED***case .downloaded: .downloaded
+***REMOVED******REMOVED***case .downloading: .downloading
+***REMOVED******REMOVED***default: .notDownloaded
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
