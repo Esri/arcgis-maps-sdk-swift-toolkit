@@ -76,6 +76,7 @@ struct BarcodeScannerInput: View {
             }
             .cameraRequester(cameraRequester)
             .onTapGesture {
+                model.focusedElement = element
                 cameraRequester.request {
                     scannerIsPresented = true
                 } onAccessDenied: {
