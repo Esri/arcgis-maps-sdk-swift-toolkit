@@ -16,7 +16,7 @@ import AVFoundation
 ***REMOVED***
 
 struct FlashlightButton: View {
-***REMOVED***@Binding var flashIsOn: Bool
+***REMOVED***@State private var flashIsOn = false
 ***REMOVED***
 ***REMOVED***var device: AVCaptureDevice? {
 ***REMOVED******REMOVED***.default(for: .video)
@@ -56,8 +56,6 @@ struct FlashlightButton: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(iOS 17.0, *)
 #Preview {
-***REMOVED***@Previewable @State var flashlightIsOn = false
-***REMOVED***FlashlightButton(flashIsOn: $flashlightIsOn)
+***REMOVED***FlashlightButton()
 ***REMOVED***
