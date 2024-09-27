@@ -15,6 +15,38 @@
 import AVFoundation
 ***REMOVED***
 
+***REMOVED***/ Performs camera authorization request handling.
+***REMOVED***/
+***REMOVED***/ Ensures that access is granted before launching the system camera.
+@MainActor final class CameraRequester: ObservableObject {
+***REMOVED***enum Result {
+***REMOVED******REMOVED***case granted
+***REMOVED******REMOVED***case denied
+***REMOVED***
+***REMOVED***
+***REMOVED***@Published var alertIsPresented = false
+***REMOVED***
+***REMOVED***var onAccessDenied: (() -> Void)?
+***REMOVED***
+***REMOVED***func request(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) {
+***REMOVED******REMOVED***self.onAccessDenied = onAccessDenied
+***REMOVED******REMOVED***switch AVCaptureDevice.authorizationStatus(for: .video) {
+***REMOVED******REMOVED***case .authorized:
+***REMOVED******REMOVED******REMOVED***onAccessGranted()
+***REMOVED******REMOVED***case .notDetermined:
+***REMOVED******REMOVED******REMOVED***AVCaptureDevice.requestAccess(for: .video) { granted in
+***REMOVED******REMOVED******REMOVED******REMOVED***if granted {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessGranted()
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.alertIsPresented = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***alertIsPresented = true
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 private struct CameraRequesterModifier: ViewModifier {
 ***REMOVED***@ObservedObject var requester: CameraRequester
 ***REMOVED***
@@ -58,39 +90,5 @@ private extension CameraRequesterModifier {
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A title for an alert that camera access is disabled."
 ***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
-private protocol CameraAccessDelegate {
-***REMOVED***var onAccessDenied: (() -> Void)? { get ***REMOVED***
-***REMOVED***func requestAccess(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void)
-***REMOVED***
-
-final class CameraRequester: ObservableObject, CameraAccessDelegate {
-***REMOVED***enum Result {
-***REMOVED******REMOVED***case granted
-***REMOVED******REMOVED***case denied
-***REMOVED***
-***REMOVED***
-***REMOVED***@Published var alertIsPresented = false
-***REMOVED***
-***REMOVED***var onAccessDenied: (() -> Void)?
-***REMOVED***
-***REMOVED***func requestAccess(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) {
-***REMOVED******REMOVED***self.onAccessDenied = onAccessDenied
-***REMOVED******REMOVED***switch AVCaptureDevice.authorizationStatus(for: .video) {
-***REMOVED******REMOVED***case .authorized:
-***REMOVED******REMOVED******REMOVED***onAccessGranted()
-***REMOVED******REMOVED***case .notDetermined:
-***REMOVED******REMOVED******REMOVED***AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-***REMOVED******REMOVED******REMOVED******REMOVED***if granted {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessGranted()
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.alertIsPresented = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***alertIsPresented = true
-***REMOVED***
 ***REMOVED***
 ***REMOVED***

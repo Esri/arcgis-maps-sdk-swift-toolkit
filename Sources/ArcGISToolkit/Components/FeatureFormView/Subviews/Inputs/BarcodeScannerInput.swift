@@ -26,7 +26,7 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED***/ The current barcode value.
 ***REMOVED***@State private var value = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ Performs camera authorization request handling.
 ***REMOVED***@StateObject private var cameraRequester = CameraRequester()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The element the input belongs to.
@@ -69,7 +69,7 @@ struct BarcodeScannerInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.cameraRequester(cameraRequester)
 ***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***cameraRequester.requestAccess {
+***REMOVED******REMOVED******REMOVED***cameraRequester.request {
 ***REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
 ***REMOVED******REMOVED*** onAccessDenied: {
 ***REMOVED******REMOVED***

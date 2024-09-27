@@ -48,7 +48,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ Performs camera authorization request handling.
 ***REMOVED***@StateObject private var cameraRequester = CameraRequester()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment size limit.
@@ -73,7 +73,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***cameraRequester.requestAccess {
+***REMOVED******REMOVED******REMOVED***cameraRequester.request {
 ***REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
 ***REMOVED******REMOVED*** onAccessDenied: { ***REMOVED***
 ***REMOVED*** label: {
