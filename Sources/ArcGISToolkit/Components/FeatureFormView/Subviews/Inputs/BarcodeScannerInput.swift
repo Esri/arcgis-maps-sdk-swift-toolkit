@@ -142,14 +142,28 @@ protocol ScannerViewControllerDelegate: AnyObject {
     func didScanCode(_ code: String)
 }
 
-class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
     weak var delegate: ScannerViewControllerDelegate?
     
     private let captureSession = AVCaptureSession()
     
+    private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
+    
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
     
+    private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
+    
     private var previewLayer: AVCaptureVideoPreviewLayer!
+    
+    private var removeMetadataObjectOverlayLayersTimer: Timer?
+    
+    private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+        UITapGestureRecognizer(target: self, action: #selector(selectRecognizedCode(with:)))
+    }()
+    
+    private class MetadataObjectLayer: CAShapeLayer {
+        var metadataObject: AVMetadataObject?
+    }
     
     override func viewDidLayoutSubviews() {
         previewLayer.frame = view.bounds
@@ -220,6 +234,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.frame = view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
+        view.addGestureRecognizer(tapGestureRecognizer)
         view.layer.addSublayer(previewLayer)
     }
     
@@ -230,22 +245,135 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
     }
     
-    func finish(stringValue: String) {
-        captureSession.stopRunning()
-        delegate?.didScanCode(stringValue)
-    }
-    
-    nonisolated func metadataOutput(
+    func metadataOutput(
         _ output: AVCaptureMetadataOutput,
         didOutput metadataObjects: [AVMetadataObject],
         from connection: AVCaptureConnection
     ) {
-        if let metadataObject = metadataObjects.first {
-            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
-            guard let stringValue = readableObject.stringValue else { return }
-            Task {
-                await finish(stringValue: stringValue)
+        if metadataObjectsOverlayLayersDrawingSemaphore.wait(timeout: .now()) == .success {
+            DispatchQueue.main.async {
+                self.removeMetadataObjectOverlayLayers()
+                var metadataObjectOverlayLayers = [MetadataObjectLayer]()
+                for metadataObject in metadataObjects {
+                    let metadataObjectOverlayLayer = self.createMetadataObjectOverlayWithMetadataObject(metadataObject)
+                    metadataObjectOverlayLayers.append(metadataObjectOverlayLayer)
+                }
+                self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
+                self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
             }
         }
+    }
+    
+    private func addMetadataObjectOverlayLayersToVideoPreviewView(_ metadataObjectOverlayLayers: [MetadataObjectLayer]) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for metadataObjectOverlayLayer in metadataObjectOverlayLayers {
+            previewLayer.addSublayer(metadataObjectOverlayLayer)
+        }
+        CATransaction.commit()
+        self.metadataObjectOverlayLayers = metadataObjectOverlayLayers
+        removeMetadataObjectOverlayLayersTimer = Timer.scheduledTimer(
+            timeInterval: 1,
+            target: self,
+            selector: #selector(removeMetadataObjectOverlayLayers),
+            userInfo: nil,
+            repeats: false
+        )
+    }
+    
+    private func barcodeOverlayPathWithCorners(_ corners: [CGPoint]) -> CGMutablePath {
+        let path = CGMutablePath()
+        if let corner = corners.first {
+            path.move(to: corner, transform: .identity)
+            for corner in corners[1..<corners.count] {
+                path.addLine(to: corner)
+            }
+            path.closeSubpath()
+        }
+        return path
+    }
+    
+    private func createMetadataObjectOverlayWithMetadataObject(_ metadataObject: AVMetadataObject) -> MetadataObjectLayer {
+        let transformedMetadataObject = previewLayer.transformedMetadataObject(for: metadataObject)
+        let metadataObjectOverlayLayer = MetadataObjectLayer()
+        metadataObjectOverlayLayer.metadataObject = transformedMetadataObject
+        metadataObjectOverlayLayer.lineJoin = .round
+        metadataObjectOverlayLayer.lineWidth = 7.0
+        metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(0.7).cgColor
+        metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.3).cgColor
+        guard let barcodeMetadataObject = transformedMetadataObject as? AVMetadataMachineReadableCodeObject else {
+            return metadataObjectOverlayLayer
+        }
+        let barcodeOverlayPath = barcodeOverlayPathWithCorners(barcodeMetadataObject.corners)
+        metadataObjectOverlayLayer.path = barcodeOverlayPath
+        let textLayerString: String?
+        if let stringValue = barcodeMetadataObject.stringValue, !stringValue.isEmpty {
+            textLayerString = "\(String.tapToScan) \(stringValue)"
+        } else {
+            textLayerString = String.tapToScan
+        }
+        if let textLayerString {
+            let barcodeOverlayBoundingBox = barcodeOverlayPath.boundingBox
+            let fontSize: CGFloat = 19
+            let minimumTextLayerHeight: CGFloat = fontSize + 4
+            let textLayerHeight: CGFloat
+            if barcodeOverlayBoundingBox.size.height < minimumTextLayerHeight {
+                textLayerHeight = minimumTextLayerHeight
+            } else {
+                textLayerHeight = barcodeOverlayBoundingBox.size.height
+            }
+            let textLayer = CATextLayer()
+            textLayer.alignmentMode = .center
+            textLayer.bounds = CGRect(x: .zero, y: .zero, width: barcodeOverlayBoundingBox.size.width, height: textLayerHeight)
+            textLayer.contentsScale = UIScreen.main.scale
+            textLayer.font = UIFont.boldSystemFont(ofSize: 19).fontName as CFString
+            textLayer.position = CGPoint(x: barcodeOverlayBoundingBox.midX, y: barcodeOverlayBoundingBox.midY)
+            textLayer.string = NSAttributedString(
+                string: textLayerString,
+                attributes: [
+                    .font: UIFont.boldSystemFont(ofSize: fontSize),
+                    .foregroundColor: UIColor.white.cgColor,
+                    .strokeWidth: -5.0,
+                    .strokeColor: UIColor.black.cgColor
+                ]
+            )
+            textLayer.isWrapped = true
+            textLayer.transform = previewLayer.transform
+            metadataObjectOverlayLayer.addSublayer(textLayer)
+        }
+        return metadataObjectOverlayLayer
+    }
+    
+    @objc
+    private func removeMetadataObjectOverlayLayers() {
+        for sublayer in metadataObjectOverlayLayers {
+            sublayer.removeFromSuperlayer()
+        }
+        metadataObjectOverlayLayers = []
+        removeMetadataObjectOverlayLayersTimer?.invalidate()
+        removeMetadataObjectOverlayLayersTimer = nil
+    }
+    
+    @objc
+    private func selectRecognizedCode(with tapGestureRecognizer: UITapGestureRecognizer) {
+        let point = tapGestureRecognizer.location(in: view)
+        metadataObjectOverlayLayers.forEach { metadataObjectLayer in
+            if metadataObjectLayer.path?.contains(point) ?? false {
+                if let metadataObject = metadataObjectLayer.metadataObject as? AVMetadataMachineReadableCodeObject,
+                   let stringValue = metadataObject.stringValue {
+                    delegate?.didScanCode(stringValue)
+                }
+            }
+        }
+    }
+}
+
+private extension String {
+    static var tapToScan: Self {
+        .init(
+            localized: "Tap to scan",
+            bundle: .toolkitModule,
+            comment: "A label for a button to select a code identified with the barcode scanner."
+        )
     }
 }
