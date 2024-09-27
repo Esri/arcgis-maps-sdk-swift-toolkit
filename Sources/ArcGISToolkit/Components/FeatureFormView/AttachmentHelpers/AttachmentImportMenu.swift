@@ -33,9 +33,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the camera access alert is presented.
-***REMOVED***@State private var cameraAccessAlertIsPresented = false
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment camera controller is presented.
 ***REMOVED***@State private var cameraIsShowing = false
 ***REMOVED***
@@ -50,6 +47,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@StateObject private var cameraRequester = CameraRequester()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment size limit.
 ***REMOVED***let attachmentUploadSizeLimit = Measurement(
@@ -73,18 +73,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+***REMOVED******REMOVED******REMOVED***cameraRequester.requestAccess {
 ***REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let granted = await AVCaptureDevice.requestAccess(for: .video)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if granted {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraAccessAlertIsPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** onAccessDenied: { ***REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
@@ -127,14 +118,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(5)
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
-***REMOVED******REMOVED***.alert(String.cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
-#if !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED***appSettingsButton
-#endif
-***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) { ***REMOVED***
-***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(String.cameraAccessAlertMessage)
-***REMOVED***
+***REMOVED******REMOVED***.cameraRequester(cameraRequester)
 ***REMOVED******REMOVED***.alert(importFailureAlertTitle, isPresented: errorIsPresented) { ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(importFailureAlertMessage)
 ***REMOVED***

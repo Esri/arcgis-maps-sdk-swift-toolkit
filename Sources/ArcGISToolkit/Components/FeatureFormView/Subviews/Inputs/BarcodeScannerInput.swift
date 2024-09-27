@@ -26,6 +26,9 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED***/ The current barcode value.
 ***REMOVED***@State private var value = ""
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@StateObject private var cameraRequester = CameraRequester()
+***REMOVED***
 ***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
@@ -65,7 +68,10 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***scannerIsPresented = true
+***REMOVED******REMOVED******REMOVED***cameraRequester.requestAccess {
+***REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
+***REMOVED******REMOVED*** onAccessDenied: {
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***value = newFormattedValue
@@ -114,11 +120,6 @@ protocol ScannerViewControllerDelegate: AnyObject {
 ***REMOVED***
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
-***REMOVED***enum SessionSetupResult {
-***REMOVED******REMOVED***case success
-***REMOVED******REMOVED***case notAuthorized
-***REMOVED***
-***REMOVED***
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
@@ -127,7 +128,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
 ***REMOVED***
-***REMOVED***private var setupResult: SessionSetupResult?
+***REMOVED***private var previewLayer: AVCaptureVideoPreviewLayer!
 ***REMOVED***
 ***REMOVED***override func viewDidLayoutSubviews() {
 ***REMOVED******REMOVED***previewLayer.frame = view.bounds
@@ -146,21 +147,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED***
 ***REMOVED***override func viewDidLoad() {
 ***REMOVED******REMOVED***super.viewDidLoad()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch AVCaptureDevice.authorizationStatus(for: .video) {
-***REMOVED******REMOVED***case .authorized:
-***REMOVED******REMOVED******REMOVED***setupResult = .success
-***REMOVED******REMOVED***case .notDetermined:
-***REMOVED******REMOVED******REMOVED***sessionQueue.suspend()
-***REMOVED******REMOVED******REMOVED***AVCaptureDevice.requestAccess(for: .video) { granted in
-***REMOVED******REMOVED******REMOVED******REMOVED***if !granted {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.setupResult = .notAuthorized
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.sessionQueue.resume()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***setupResult = .notAuthorized
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***let videoInput: AVCaptureDeviceInput
@@ -218,33 +204,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 ***REMOVED***
 ***REMOVED***override func viewWillAppear(_ animated: Bool) {
 ***REMOVED******REMOVED***super.viewWillAppear(animated)
-***REMOVED******REMOVED***sessionQueue.async { [captureSession, setupResult] in
-***REMOVED******REMOVED******REMOVED***guard let setupResult else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***switch setupResult {
-***REMOVED******REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED******REMOVED***captureSession.startRunning()
-***REMOVED******REMOVED******REMOVED***case .notAuthorized:
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let alertController = UIAlertController(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String.cameraAccessAlertTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: String.cameraAccessAlertTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredStyle: .alert
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertController.addAction(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAlertAction(title: String.cancel, style: .cancel, handler: nil)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertController.addAction(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAlertAction(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String.settings,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .`default`,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.present(alertController, animated: true, completion: nil)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***sessionQueue.async { [captureSession] in
+***REMOVED******REMOVED******REMOVED***captureSession.startRunning()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
