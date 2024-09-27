@@ -22,7 +22,13 @@ struct BarcodeScannerInput: View {
     
     /// A Boolean value indicating whether a ``TextInput`` should be used instead.
     /// This will be `true` if the device camera is inaccessible.
-    @State private var fallbackToTextInput = false
+    @State private var fallbackToTextInput: Bool = {
+#if targetEnvironment(simulator)
+        return true
+#else
+        return false
+#endif
+    }()
     
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
