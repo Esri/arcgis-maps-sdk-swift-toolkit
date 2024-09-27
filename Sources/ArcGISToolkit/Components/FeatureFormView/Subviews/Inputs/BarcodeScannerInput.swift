@@ -88,6 +88,18 @@ struct BarcodeScannerInput: View {
             }
             .sheet(isPresented: $scannerIsPresented) {
                 ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
+                    .overlay(alignment:.topTrailing) {
+                        Button(String.cancel, role: .cancel) {
+                            scannerIsPresented = false
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding()
+                    }
+                    .overlay(alignment: .bottomTrailing) {
+                        FlashlightButton()
+                            .font(.title)
+                            .padding()
+                    }
             }
         }
     }
