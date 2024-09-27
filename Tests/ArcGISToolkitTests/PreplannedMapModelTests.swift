@@ -397,10 +397,10 @@ class PreplannedMapModelTests: XCTestCase {
         )
         
         // Verify description does not contain HTML tags.
-        XCTAssertEqual(model.preplannedMapArea.description,
-        """
-        A map that contains stormwater network within Naperville, IL, USA with cartography designed for web and mobile devices. This is a demo map to demonstrate offline capabilities with ArcGIS Runtime and is based on ArcGIS Solutions for Stormwater.
-        """)
+        XCTAssertEqual(
+            model.preplannedMapArea.description,
+            "A map that contains stormwater network within Naperville, IL, USA with cartography designed for web and mobile devices. This is a demo map to demonstrate offline capabilities with ArcGIS Runtime and is based on ArcGIS Solutions for Stormwater."
+        )
     }
 }
 
