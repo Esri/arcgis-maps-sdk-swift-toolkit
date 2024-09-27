@@ -19,11 +19,6 @@ import SwiftUI
 ///
 /// Ensures that access is granted before launching the system camera.
 @MainActor final class CameraRequester: ObservableObject {
-    enum Result {
-        case granted
-        case denied
-    }
-    
     @Published var alertIsPresented = false
     
     var onAccessDenied: (() -> Void)?
