@@ -24,24 +24,6 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message for an alert requesting camera access.
-***REMOVED***static var cameraAccessAlertMessage: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Please enable camera access in settings.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A message for an alert requesting camera access."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A title for an alert that camera access is disabled.
-***REMOVED***static var cameraAccessAlertTitle: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Camera access is disabled",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A title for an alert that camera access is disabled."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
 ***REMOVED***static var emptyAttachmentDownloadErrorMessage: Self {
 ***REMOVED******REMOVED***.init(
