@@ -19,11 +19,6 @@ import AVFoundation
 ***REMOVED***/
 ***REMOVED***/ Ensures that access is granted before launching the system camera.
 @MainActor final class CameraRequester: ObservableObject {
-***REMOVED***enum Result {
-***REMOVED******REMOVED***case granted
-***REMOVED******REMOVED***case denied
-***REMOVED***
-***REMOVED***
 ***REMOVED***@Published var alertIsPresented = false
 ***REMOVED***
 ***REMOVED***var onAccessDenied: (() -> Void)?
