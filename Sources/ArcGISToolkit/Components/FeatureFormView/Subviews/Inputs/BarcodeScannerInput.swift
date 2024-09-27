@@ -22,7 +22,13 @@ struct BarcodeScannerInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a ``TextInput`` should be used instead.
 ***REMOVED******REMOVED***/ This will be `true` if the device camera is inaccessible.
-***REMOVED***@State private var fallbackToTextInput = false
+***REMOVED***@State private var fallbackToTextInput: Bool = {
+#if targetEnvironment(simulator)
+***REMOVED******REMOVED***return true
+#else
+***REMOVED******REMOVED***return false
+#endif
+***REMOVED***()
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the code scanner is presented.
 ***REMOVED***@State private var scannerIsPresented = false
