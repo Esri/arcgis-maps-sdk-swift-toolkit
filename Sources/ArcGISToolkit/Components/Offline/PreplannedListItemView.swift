@@ -29,7 +29,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The download state of the preplanned map model.
 ***REMOVED***fileprivate enum DownloadState {
-***REMOVED******REMOVED***case notDownloaded, downloading, downloaded
+***REMOVED******REMOVED***case notDownloaded, downloading, downloaded, opened
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current download state of the preplanned map model.
@@ -118,7 +118,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
 ***REMOVED******REMOVED***switch downloadState {
-***REMOVED******REMOVED***case .downloaded:
+***REMOVED******REMOVED***case .downloaded, .opened:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.map {
