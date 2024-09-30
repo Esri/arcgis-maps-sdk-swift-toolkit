@@ -171,7 +171,13 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ Loads the online and offline preplanned map models.
 ***REMOVED***private func loadPreplannedMapModels() async {
 ***REMOVED******REMOVED***await mapViewModel.loadPreplannedMapModels()
-***REMOVED******REMOVED***await mapViewModel.loadOfflinePreplannedMapModels()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
+***REMOVED******REMOVED***case .failure(_):
+***REMOVED******REMOVED******REMOVED***await mapViewModel.loadOfflinePreplannedMapModels()
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
