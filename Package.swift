@@ -55,6 +55,7 @@ for target in package.targets {
 ***REMOVED******REMOVED***.enableExperimentalFeature("AccessLevelOnImport"),
 ***REMOVED******REMOVED***.enableExperimentalFeature("StrictConcurrency"),
 ***REMOVED******REMOVED******REMOVED*** Upcoming Features.
+***REMOVED******REMOVED***.enableUpcomingFeature("BareSlashRegexLiterals"),
 ***REMOVED******REMOVED***.enableUpcomingFeature("DisableOutwardActorInference")
 ***REMOVED***]
 ***REMOVED***

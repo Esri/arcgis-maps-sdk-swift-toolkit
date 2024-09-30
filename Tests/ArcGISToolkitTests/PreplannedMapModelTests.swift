@@ -375,6 +375,34 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testPreplannedMapModelDescription() async throws {
+***REMOVED******REMOVED***let portalItem = PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED***id: .init("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
+***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
+***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first { $0.title == "Country Commons Area" ***REMOVED***)
+***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.portalItem.id)
+
+***REMOVED******REMOVED***let model = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
+***REMOVED******REMOVED******REMOVED***mapArea: area,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
+***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
+***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
+***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify description does not contain HTML tags.
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***model.preplannedMapArea.description,
+***REMOVED******REMOVED******REMOVED***"A map that contains stormwater network within Naperville, IL, USA with cartography designed for web and mobile devices. This is a demo map to demonstrate offline capabilities with ArcGIS Runtime and is based on ArcGIS Solutions for Stormwater."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 
 extension PreplannedMapModel.Status: Equatable {
 ***REMOVED***public static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {

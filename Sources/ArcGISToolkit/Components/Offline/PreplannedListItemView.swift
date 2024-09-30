@@ -27,6 +27,14 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The download state of the preplanned map model.
+***REMOVED***fileprivate enum DownloadState {
+***REMOVED******REMOVED***case notDownloaded, downloading, downloaded
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The current download state of the preplanned map model.
+***REMOVED***@State private var downloadState: DownloadState = .notDownloaded
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
 ***REMOVED******REMOVED***/ The title of a preplanned map area is guaranteed to be unique when it
@@ -65,6 +73,17 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***await model.load()
 ***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
+***REMOVED***
+***REMOVED******REMOVED***.onReceive(model.$status) { status in
+***REMOVED******REMOVED******REMOVED***let downloadState = DownloadState(status)
+***REMOVED******REMOVED******REMOVED***withAnimation(
+***REMOVED******REMOVED******REMOVED******REMOVED***downloadState == .downloaded ? .easeInOut : nil
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.downloadState = downloadState
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
@@ -91,7 +110,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
-***REMOVED******REMOVED***switch model.status {
+***REMOVED******REMOVED***switch downloadState {
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
@@ -112,7 +131,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
+***REMOVED******REMOVED***case .notDownloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
@@ -167,6 +186,18 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
+
+private extension PreplannedListItemView.DownloadState {
+***REMOVED******REMOVED***/ Creates an instance.
+***REMOVED******REMOVED***/ - Parameter state: The preplanned map model download state.
+***REMOVED***init(_ state: PreplannedMapModel.Status) {
+***REMOVED******REMOVED***self = switch state {
+***REMOVED******REMOVED***case .downloaded: .downloaded
+***REMOVED******REMOVED***case .downloading: .downloading
+***REMOVED******REMOVED***default: .notDownloaded
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

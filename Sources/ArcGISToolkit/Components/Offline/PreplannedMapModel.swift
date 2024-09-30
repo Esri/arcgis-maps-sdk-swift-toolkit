@@ -13,8 +13,10 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import OSLog
-***REMOVED***
+import Combine
+import Foundation
+
+internal import os
 
 ***REMOVED***/ An object that encapsulates state about a preplanned map.
 @MainActor
@@ -317,7 +319,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var description: String {
-***REMOVED******REMOVED***portalItem.description
+***REMOVED******REMOVED******REMOVED*** Remove HTML tags from description.
+***REMOVED******REMOVED***portalItem.description.replacing(/<[^>]+>/, with: "")
 ***REMOVED***
 ***REMOVED***
 
