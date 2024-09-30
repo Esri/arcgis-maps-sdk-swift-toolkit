@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
-import OSLog
 import Combine
+import Foundation
+
+internal import os
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor
