@@ -72,7 +72,7 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED***.formInputStyle()
