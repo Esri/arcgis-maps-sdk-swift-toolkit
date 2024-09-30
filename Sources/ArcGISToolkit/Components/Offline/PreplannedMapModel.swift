@@ -80,7 +80,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
-***REMOVED******REMOVED***mmpkDirectoryURL = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED***mmpkDirectoryURL = .preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
@@ -142,12 +142,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Looks up the mobile map package directory for locally downloaded package.
 ***REMOVED***private func lookupMobileMapPackage() -> MobileMapPackage? {
-***REMOVED******REMOVED***let fileURL = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED***let fileURL = URL.preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil ***REMOVED***
-***REMOVED******REMOVED***return MobileMapPackage.init(fileURL: fileURL)
+***REMOVED******REMOVED***return MobileMapPackage(fileURL: fileURL)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
@@ -325,24 +325,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 
 private extension FileManager {
-***REMOVED******REMOVED***/ The path to the documents folder.
-***REMOVED***private var documentsDirectory: URL {
-***REMOVED******REMOVED***URL.documentsDirectory
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The path to the offline map areas directory within the documents directory.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/`
-***REMOVED***private var offlineMapAreasDirectory: URL {
-***REMOVED******REMOVED***documentsDirectory.appending(component: "OfflineMapAreas/")
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>`
-***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the size of a directory and all its contents.
 ***REMOVED******REMOVED***/ - Parameter url: The directory's URL.
 ***REMOVED******REMOVED***/ - Returns: The total size in bytes.
@@ -356,25 +338,5 @@ private extension FileManager {
 ***REMOVED******REMOVED******REMOVED***accumulatedSize += size
 ***REMOVED***
 ***REMOVED******REMOVED***return accumulatedSize
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
-***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area portal item.
-***REMOVED******REMOVED***/ - Returns: A URL to the preplanned map area directory.
-***REMOVED***func preplannedDirectory(
-***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
-***REMOVED***) -> URL {
-***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***.appending(components: "Preplanned", "\(preplannedMapAreaID)/")
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Returns a Boolean value indicating if the specified directory is empty.
-***REMOVED******REMOVED***/ - Parameter path: The path to check.
-***REMOVED***func isDirectoryEmpty(atPath path: URL) -> Bool {
-***REMOVED******REMOVED***(try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
 ***REMOVED***
 ***REMOVED***
