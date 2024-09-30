@@ -29,7 +29,7 @@ struct PreplannedListItemView: View {
     
     /// The download state of the preplanned map model.
     fileprivate enum DownloadState {
-        case notDownloaded, downloading, downloaded
+        case notDownloaded, downloading, downloaded, opened
     }
     
     /// The current download state of the preplanned map model.
@@ -118,7 +118,7 @@ struct PreplannedListItemView: View {
     
     @ViewBuilder private var downloadButton: some View {
         switch downloadState {
-        case .downloaded:
+        case .downloaded, .opened:
             Button {
                 Task {
                     if let map = await model.map {
