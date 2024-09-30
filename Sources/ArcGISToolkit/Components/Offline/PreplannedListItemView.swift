@@ -28,7 +28,7 @@ struct PreplannedListItemView: View {
     @State private var metadataViewIsPresented = false
     
     /// The download state of the preplanned map model.
-    enum DownloadState {
+    fileprivate enum DownloadState {
         case notDownloaded, downloading, downloaded
     }
     
