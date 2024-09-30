@@ -192,12 +192,8 @@ public struct OfflineMapAreasView: View {
     /// Loads the online and offline preplanned map models.
     private func loadPreplannedMapModels() async {
         await mapViewModel.loadPreplannedMapModels()
-        
-        switch mapViewModel.preplannedMapModels {
-        case .failure(_):
+        if case .failure = mapViewModel.preplannedMapModels {
             await mapViewModel.loadOfflinePreplannedMapModels()
-        default:
-            return
         }
     }
 }
