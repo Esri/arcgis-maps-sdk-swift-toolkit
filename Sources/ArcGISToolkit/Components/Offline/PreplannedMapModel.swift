@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
-import OSLog
-import SwiftUI
+import Combine
+import Foundation
+
+internal import os
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor
@@ -317,7 +319,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     }
     
     var description: String {
-        portalItem.description
+        // Remove HTML tags from description.
+        portalItem.description.replacing(/<[^>]+>/, with: "")
     }
 }
 

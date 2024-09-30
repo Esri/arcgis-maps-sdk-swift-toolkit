@@ -27,6 +27,14 @@ struct PreplannedListItemView: View {
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
+    /// The download state of the preplanned map model.
+    fileprivate enum DownloadState {
+        case notDownloaded, downloading, downloaded
+    }
+    
+    /// The current download state of the preplanned map model.
+    @State private var downloadState: DownloadState = .notDownloaded
+    
     /// A Boolean value indicating whether the selected map area is the same
     /// as the map area from this model.
     /// The title of a preplanned map area is guaranteed to be unique when it
@@ -68,6 +76,17 @@ struct PreplannedListItemView: View {
         .task {
             await model.load()
         }
+        .onAppear {
+            downloadState = .init(model.status)
+        }
+        .onReceive(model.$status) { status in
+            let downloadState = DownloadState(status)
+            withAnimation(
+                downloadState == .downloaded ? .easeInOut : nil
+            ) {
+                self.downloadState = downloadState
+            }
+        }
     }
     
     @ViewBuilder private var thumbnailView: some View {
@@ -95,7 +114,7 @@ struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var downloadButton: some View {
-        switch model.status {
+        switch downloadState {
         case .downloaded:
             Button {
                 Task {
@@ -116,7 +135,7 @@ struct PreplannedListItemView: View {
                 ProgressView(job.progress)
                     .progressViewStyle(.gauge)
             }
-        default:
+        case .notDownloaded:
             Button {
                 Task {
                     // Download preplanned map area.
@@ -171,6 +190,18 @@ struct PreplannedListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
+    }
+}
+
+private extension PreplannedListItemView.DownloadState {
+    /// Creates an instance.
+    /// - Parameter state: The preplanned map model download state.
+    init(_ state: PreplannedMapModel.Status) {
+        self = switch state {
+        case .downloaded: .downloaded
+        case .downloading: .downloading
+        default: .notDownloaded
+        }
     }
 }
 
