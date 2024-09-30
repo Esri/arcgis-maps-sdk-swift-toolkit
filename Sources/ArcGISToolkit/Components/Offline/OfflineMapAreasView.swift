@@ -48,7 +48,7 @@ public struct OfflineMapAreasView: View {
             Form {
                 Section {
                     if !mapIsOfflineDisabled {
-                        preplannedMapAreaViews
+                        preplannedMapAreasView
                     }
                 }
             }
