@@ -64,7 +64,7 @@ struct PreplannedListItemView: View {
             deleteButton
         }
         .onTapGesture {
-            if model.status.isDownloaded {
+            if model.status.isDownloaded || model.status.isOpened {
                 metadataViewIsPresented = true
             }
         }
@@ -75,6 +75,9 @@ struct PreplannedListItemView: View {
         }
         .task {
             await model.load()
+            if isSelected {
+                model.openPreplannedMapArea()
+            }
         }
         .onAppear {
             downloadState = .init(model.status)
@@ -120,6 +123,7 @@ struct PreplannedListItemView: View {
                 Task {
                     if let map = await model.map {
                         selectedMap = map
+                        model.openPreplannedMapArea()
                     }
                 }
             } label: {
@@ -175,7 +179,7 @@ struct PreplannedListItemView: View {
                 Image(systemName: "clock.badge.xmark")
                 Text("Packaging")
             case .packaged:
-                Text("Package ready for download")
+                Text("Ready to download")
             case .packageFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Packaging failed")
@@ -186,6 +190,8 @@ struct PreplannedListItemView: View {
             case .downloadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Download failed")
+            case .opened:
+                Text("Currently open")
             }
         }
         .font(.caption2)
