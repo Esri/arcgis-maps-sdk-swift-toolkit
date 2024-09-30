@@ -21,13 +21,10 @@ import ArcGIS
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
-    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
-    
     /// The web map to be taken offline.
     private let onlineMap: Map
-    
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     
@@ -51,15 +48,15 @@ public struct OfflineMapAreasView: View {
             Form {
                 Section {
                     if !mapIsOfflineDisabled {
-                        preplannedMapAreaViews
+                        preplannedMapAreasView
                     }
                 }
             }
             .task {
-                await mapViewModel.makePreplannedOfflineMapModels()
+                await mapViewModel.requestUserNotificationAuthorization()
             }
             .task {
-                await mapViewModel.requestUserNotificationAuthorization()
+                await loadPreplannedMapModels()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -75,11 +72,11 @@ public struct OfflineMapAreasView: View {
             }
         }
         .refreshable {
-            await mapViewModel.makePreplannedOfflineMapModels()
+            await loadPreplannedMapModels()
         }
     }
     
-    @ViewBuilder private var preplannedMapAreaViews: some View {
+    @ViewBuilder private var preplannedMapAreasView: some View {
         switch mapViewModel.preplannedMapModels {
         case .success(let models):
             if !models.isEmpty {
@@ -93,24 +90,56 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            VStack(alignment: .center) {
-                Image(systemName: "exclamationmark.circle")
-                    .imageScale(.large)
-                    .foregroundStyle(.red)
-                Text(error.localizedDescription)
+            if let urlError = error as? URLError,
+               urlError.code == .notConnectedToInternet {
+                offlinePreplannedMapAreasView
+            } else {
+                view(for: error)
             }
-            .frame(maxWidth: .infinity)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
         }
     }
     
-    @ViewBuilder private var emptyPreplannedMapAreasView: some View {
+    @ViewBuilder private var offlinePreplannedMapAreasView: some View {
+        if let models = mapViewModel.offlinePreplannedMapModels {
+            if !models.isEmpty {
+                List(models) { preplannedMapModel in
+                    PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap, onDeletion: {
+                        Task { await loadPreplannedMapModels() }
+                    })
+                    .onChange(of: selectedMap) { _ in
+                        dismiss()
+                    }
+                }
+            } else {
+                emptyOfflinePreplannedMapAreasView
+            }
+        } else {
+            // Models are loading map areas from disk.
+            ProgressView()
+                .frame(maxWidth: .infinity)
+        }
+    }
+    
+    private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
             Text("No map areas")
                 .bold()
             Text("There are no map areas defined for this web map.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var emptyOfflinePreplannedMapAreasView: some View {
+        VStack(alignment: .center) {
+            Text("No map areas")
+                .bold()
+            Text("There are no downloaded map areas for this web map.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -138,6 +167,33 @@ public struct OfflineMapAreasView: View {
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
+        }
+    }
+    
+    private var offlineBannerView: some View {
+        Text("Network Offline")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity)
+            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+            .background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
+    }
+    
+    private func view(for error: Error) -> some View {
+        VStack(alignment: .center) {
+            Image(systemName: "exclamationmark.circle")
+                .imageScale(.large)
+                .foregroundStyle(.red)
+            Text(error.localizedDescription)
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    /// Loads the online and offline preplanned map models.
+    private func loadPreplannedMapModels() async {
+        await mapViewModel.loadPreplannedMapModels()
+        if case .failure = mapViewModel.preplannedMapModels {
+            await mapViewModel.loadOfflinePreplannedMapModels()
         }
     }
 }

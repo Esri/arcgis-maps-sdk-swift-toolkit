@@ -80,7 +80,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         preplannedMapArea = mapArea
         self.portalItemID = portalItemID
         self.preplannedMapAreaID = preplannedMapAreaID
-        mmpkDirectoryURL = FileManager.default.preplannedDirectory(
+        mmpkDirectoryURL = .preplannedDirectory(
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
@@ -142,12 +142,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Looks up the mobile map package directory for locally downloaded package.
     private func lookupMobileMapPackage() -> MobileMapPackage? {
-        let fileURL = FileManager.default.preplannedDirectory(
+        let fileURL = URL.preplannedDirectory(
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
         guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil }
-        return MobileMapPackage.init(fileURL: fileURL)
+        return MobileMapPackage(fileURL: fileURL)
     }
     
     /// Downloads the preplanned map area.
@@ -325,24 +325,6 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 }
 
 private extension FileManager {
-    /// The path to the documents folder.
-    private var documentsDirectory: URL {
-        URL.documentsDirectory
-    }
-    
-    /// The path to the offline map areas directory within the documents directory.
-    /// `Documents/OfflineMapAreas/`
-    private var offlineMapAreasDirectory: URL {
-        documentsDirectory.appending(component: "OfflineMapAreas/")
-    }
-    
-    /// The path to the web map directory for a specific portal item.
-    /// `Documents/OfflineMapAreas/<Portal Item ID>`
-    /// - Parameter portalItemID: The ID of the web map portal item.
-    private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
-        offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
-    }
-    
     /// Calculates the size of a directory and all its contents.
     /// - Parameter url: The directory's URL.
     /// - Returns: The total size in bytes.
@@ -356,25 +338,5 @@ private extension FileManager {
             accumulatedSize += size
         }
         return accumulatedSize
-    }
-    
-    /// The path to the preplanned map areas directory for a specific portal item.
-    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
-    /// - Parameters:
-    ///   - portalItemID: The ID of the web map portal item.
-    ///   - preplannedMapAreaID: The ID of the preplanned map area portal item.
-    /// - Returns: A URL to the preplanned map area directory.
-    func preplannedDirectory(
-        forPortalItemID portalItemID: PortalItem.ID,
-        preplannedMapAreaID: PortalItem.ID
-    ) -> URL {
-        portalItemDirectory(forPortalItemID: portalItemID)
-            .appending(components: "Preplanned", "\(preplannedMapAreaID)/")
-    }
-    
-    /// Returns a Boolean value indicating if the specified directory is empty.
-    /// - Parameter path: The path to check.
-    func isDirectoryEmpty(atPath path: URL) -> Bool {
-        (try? FileManager.default.contentsOfDirectory(atPath: path.path()).isEmpty) ?? true
     }
 }
