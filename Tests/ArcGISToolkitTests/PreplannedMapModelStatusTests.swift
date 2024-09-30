@@ -30,6 +30,7 @@ class PreplannedMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(Status.downloadFailure(CancellationError()).needsToBeLoaded)
 ***REMOVED******REMOVED***XCTAssertTrue(Status.loadFailure(CancellationError()).needsToBeLoaded)
 ***REMOVED******REMOVED***XCTAssertTrue(Status.packageFailure.needsToBeLoaded)
+***REMOVED******REMOVED***XCTAssertTrue(Status.opened.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testAllowsDownload() {
@@ -43,6 +44,7 @@ class PreplannedMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(Status.downloaded.allowsDownload)
 ***REMOVED******REMOVED***XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsDownload)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.opened.allowsDownload)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testIsDownloaded() {
@@ -56,6 +58,21 @@ class PreplannedMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(Status.downloaded.isDownloaded)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.opened.isDownloaded)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testIsOpened() {
+***REMOVED******REMOVED***XCTAssertFalse(Status.notLoaded.isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.loading.isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.loadFailure(CancellationError()).isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.packaging.isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.packaged.isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.packageFailure.isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloading.isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloaded.isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloadFailure(CancellationError()).isOpened)
+***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isOpened)
+***REMOVED******REMOVED***XCTAssertTrue(Status.opened.isOpened)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testAllowsRemoval() {
@@ -69,5 +86,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(Status.downloaded.allowsRemoval)
 ***REMOVED******REMOVED***XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsRemoval)
 ***REMOVED******REMOVED***XCTAssertTrue(Status.mmpkLoadFailure(CancellationError()).allowsRemoval)
+***REMOVED******REMOVED***XCTAssertFalse(Status.opened.allowsRemoval)
 ***REMOVED***
 ***REMOVED***
