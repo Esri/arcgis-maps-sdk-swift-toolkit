@@ -13,8 +13,10 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import OSLog
 import Combine
+import Foundation
+
+internal import os
 
 ***REMOVED***/ An object that encapsulates state about a preplanned map.
 @MainActor
