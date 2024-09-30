@@ -48,7 +48,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !mapIsOfflineDisabled {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaViews
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
