@@ -55,6 +55,7 @@ for target in package.targets {
         .enableExperimentalFeature("AccessLevelOnImport"),
         .enableExperimentalFeature("StrictConcurrency"),
         // Upcoming Features.
+        .enableUpcomingFeature("BareSlashRegexLiterals"),
         .enableUpcomingFeature("DisableOutwardActorInference")
     ]
 }

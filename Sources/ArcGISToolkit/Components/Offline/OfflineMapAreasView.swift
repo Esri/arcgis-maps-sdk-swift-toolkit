@@ -28,6 +28,11 @@ public struct OfflineMapAreasView: View {
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     
+    /// A Boolean value indicating whether the web map is offline disabled.
+    private var mapIsOfflineDisabled: Bool {
+        onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+    }
+    
     /// Creates a view with a given web map.
     /// - Parameters:
     ///   - online: The web map to be taken offline.
@@ -42,10 +47,8 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 Section {
-                    if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
-                        offlineDisabledView
-                    } else {
-                        preplannedMapAreasView
+                    if !mapIsOfflineDisabled {
+                        preplannedMapAreaViews
                     }
                 }
             }
@@ -62,6 +65,11 @@ public struct OfflineMapAreasView: View {
             }
             .navigationTitle("Map Areas")
             .navigationBarTitleDisplayMode(.inline)
+            .overlay {
+                if mapIsOfflineDisabled {
+                    offlineDisabledView
+                }
+            }
         }
         .refreshable {
             await loadPreplannedMapModels()
@@ -119,9 +127,10 @@ public struct OfflineMapAreasView: View {
         VStack(alignment: .center) {
             Text("No map areas")
                 .bold()
-            Text("The web map doesn't contain specified offline map areas.")
+            Text("There are no map areas defined for this web map.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
     }
@@ -138,15 +147,27 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    private var offlineDisabledView: some View {
-        VStack(alignment: .center) {
-            Text("Offline disabled")
-                .bold()
-            Text("Please ensure the web map is offline enabled.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+    @ViewBuilder private var offlineDisabledView: some View {
+        let labelText = Text("Offline Disabled")
+        let descriptionText = Text("Please ensure the web map is offline enabled.")
+        if #available(iOS 17, *) {
+            ContentUnavailableView {
+                labelText
+                    .bold()
+            } description: {
+                descriptionText
+            }
+        } else {
+            VStack(alignment: .center) {
+                labelText
+                    .bold()
+                    .font(.title2)
+                descriptionText
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
     
     private var offlineBannerView: some View {
