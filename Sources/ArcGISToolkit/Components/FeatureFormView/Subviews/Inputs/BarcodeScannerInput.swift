@@ -72,7 +72,7 @@ struct BarcodeScannerInput: View {
                     }
                 }
                 Image(systemName: "barcode.viewfinder")
-                    .foregroundStyle(.tint)
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .formInputStyle()
