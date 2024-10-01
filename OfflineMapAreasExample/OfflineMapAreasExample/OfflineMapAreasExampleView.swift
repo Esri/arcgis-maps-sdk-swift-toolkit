@@ -15,6 +15,7 @@
 ***REMOVED***
 ***REMOVED***Toolkit
 ***REMOVED***
+import UserNotifications
 
 @MainActor
 struct OfflineMapAreasExampleView: View {
