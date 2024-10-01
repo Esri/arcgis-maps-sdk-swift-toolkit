@@ -15,7 +15,6 @@
 import ArcGIS
 import Combine
 import Foundation
-import UserNotifications
 
 extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
@@ -38,12 +37,6 @@ extension OfflineMapAreasView {
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
             portalItemID = map.item?.id
-        }
-        
-        /// Requests authorization to show notifications.
-        nonisolated func requestUserNotificationAuthorization() async {
-            _ = try? await UNUserNotificationCenter.current()
-                .requestAuthorization(options: [.alert, .sound])
         }
         
         /// Gets the preplanned map areas from the offline map task and loads the map models.
