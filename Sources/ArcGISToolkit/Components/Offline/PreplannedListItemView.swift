@@ -56,7 +56,11 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***downloadButton
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
-***REMOVED******REMOVED******REMOVED******REMOVED***statusView
+***REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.contentShape(.rect)
@@ -163,6 +167,14 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private var openStatusView: some View {
+***REMOVED******REMOVED***HStack(spacing: 4) {
+***REMOVED******REMOVED******REMOVED***Text("Currently open")
+***REMOVED***
+***REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
 ***REMOVED***@ViewBuilder private var statusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
 ***REMOVED******REMOVED******REMOVED***switch model.status {
@@ -175,7 +187,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging")
 ***REMOVED******REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Package ready for download")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Ready to download")
 ***REMOVED******REMOVED******REMOVED***case .packageFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging failed")
