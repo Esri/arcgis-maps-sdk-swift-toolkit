@@ -31,6 +31,8 @@ struct InputWrapper: View {
             InputHeader(element: element)
             if isEditable {
                 switch element.input {
+                case is BarcodeScannerFormInput:
+                    BarcodeScannerInput(element: element)
                 case is ComboBoxFormInput:
                     ComboBoxInput(element: element)
                 case is DateTimePickerFormInput:

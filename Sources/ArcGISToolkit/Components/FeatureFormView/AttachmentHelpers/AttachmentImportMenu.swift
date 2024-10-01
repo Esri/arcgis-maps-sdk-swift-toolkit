@@ -33,9 +33,6 @@ struct AttachmentImportMenu: View {
         self.onAdd = onAdd
     }
     
-    /// A Boolean value indicating whether the camera access alert is presented.
-    @State private var cameraAccessAlertIsPresented = false
-    
     /// A Boolean value indicating whether the attachment camera controller is presented.
     @State private var cameraIsShowing = false
     
@@ -50,6 +47,9 @@ struct AttachmentImportMenu: View {
     
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
+    
+    /// Performs camera authorization request handling.
+    @StateObject private var cameraRequester = CameraRequester()
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
@@ -73,18 +73,9 @@ struct AttachmentImportMenu: View {
     
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
-            if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+            cameraRequester.request {
                 cameraIsShowing = true
-            } else {
-                Task {
-                    let granted = await AVCaptureDevice.requestAccess(for: .video)
-                    if granted {
-                        cameraIsShowing = true
-                    } else {
-                        cameraAccessAlertIsPresented = true
-                    }
-                }
-            }
+            } onAccessDenied: { }
         } label: {
             Text(cameraButtonLabel)
             Image(systemName: "camera")
@@ -127,14 +118,7 @@ struct AttachmentImportMenu: View {
                 .padding(5)
         }
         .disabled(importState.importInProgress)
-        .alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
-#if !targetEnvironment(macCatalyst)
-            appSettingsButton
-#endif
-            Button(String.cancel, role: .cancel) { }
-        } message: {
-            Text(cameraAccessAlertMessage)
-        }
+        .cameraRequester(cameraRequester)
         .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
             Text(importFailureAlertMessage)
         }
@@ -230,24 +214,6 @@ private extension AttachmentImportMenu {
         Button(String.settings) {
             Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
         }
-    }
-    
-    /// A message for an alert requesting camera access.
-    var cameraAccessAlertMessage: String {
-        .init(
-            localized: "Please enable camera access in settings.",
-            bundle: .toolkitModule,
-            comment: "A message for an alert requesting camera access."
-        )
-    }
-    
-    /// A title for an alert that camera access is disabled.
-    var cameraAccessAlertTitle: String {
-        .init(
-            localized: "Camera access is disabled",
-            bundle: .toolkitModule,
-            comment: "A title for an alert that camera access is disabled."
-        )
     }
     
     /// A label for a button to capture a new photo or video.
