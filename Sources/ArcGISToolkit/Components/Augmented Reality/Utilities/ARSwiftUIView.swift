@@ -144,7 +144,7 @@ extension ARSwiftUIView {
 
 ***REMOVED***/ A proxy for the ARSwiftUIView.
 @MainActor
-class ARSwiftUIViewProxy: NSObject, @preconcurrency ARSessionProviding, Sendable {
+class ARSwiftUIViewProxy: NSObject, @preconcurrency ARSessionProviding {
 ***REMOVED******REMOVED***/ The underlying AR view.
 ***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
 ***REMOVED***fileprivate var arView: ARViewType!
