@@ -40,12 +40,6 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***portalItemID = map.item?.id
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Requests authorization to show notifications.
-***REMOVED******REMOVED***nonisolated func requestUserNotificationAuthorization() async {
-***REMOVED******REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
-***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and loads the map models.
 ***REMOVED******REMOVED***func loadPreplannedMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***

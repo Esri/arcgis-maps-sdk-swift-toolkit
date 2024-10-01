@@ -55,7 +55,16 @@ struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingOfflineMapAreasView) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView(online: onlineMap, selection: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await requestUserNotificationAuthorization()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Requests authorization to show notifications.
+***REMOVED***private func requestUserNotificationAuthorization() async {
+***REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
+***REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
 ***REMOVED***
 ***REMOVED***
 
