@@ -64,7 +64,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***deleteButton
 ***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***if model.status.isDownloaded || model.status.isOpened {
+***REMOVED******REMOVED******REMOVED***if model.status.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -75,9 +75,6 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.openPreplannedMapArea()
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
@@ -123,7 +120,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.openPreplannedMapArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -179,7 +175,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging")
 ***REMOVED******REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Ready to download")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Package ready for download")
 ***REMOVED******REMOVED******REMOVED***case .packageFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging failed")
@@ -190,8 +186,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***case .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Download failed")
-***REMOVED******REMOVED******REMOVED***case .opened:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Currently open")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)

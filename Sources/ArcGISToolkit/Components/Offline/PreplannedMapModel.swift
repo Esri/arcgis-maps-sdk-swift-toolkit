@@ -181,11 +181,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***Task { await load() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the status to opened.
-***REMOVED***func openPreplannedMapArea() {
-***REMOVED******REMOVED***status = .opened
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
 ***REMOVED******REMOVED***/ when it's done, updates the status, removes the job from the job manager,
 ***REMOVED******REMOVED***/ and fires a user notification.
@@ -228,8 +223,6 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***case downloadFailure(Error)
 ***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
-***REMOVED******REMOVED******REMOVED***/ Preplanned map area is currently open.
-***REMOVED******REMOVED***case opened
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
 ***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
@@ -246,7 +239,7 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***var allowsDownload: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded, .mmpkLoadFailure, .opened:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED******REMOVED***case .packaged, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
@@ -266,11 +259,6 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area is downloaded.
 ***REMOVED******REMOVED***var isDownloaded: Bool {
 ***REMOVED******REMOVED******REMOVED***if case .downloaded = self { true ***REMOVED*** else { false ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area is opened.
-***REMOVED******REMOVED***var isOpened: Bool {
-***REMOVED******REMOVED******REMOVED***if case .opened = self { true ***REMOVED*** else { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
