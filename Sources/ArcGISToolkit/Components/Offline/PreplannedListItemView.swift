@@ -169,7 +169,7 @@ struct PreplannedListItemView: View {
     
     private var openStatusView: some View {
         HStack(spacing: 4) {
-            Text("Currently open")
+            Text(currentlyOpenLabel)
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
@@ -328,6 +328,14 @@ private extension PreplannedListItemView {
             localized: "Download failed",
             bundle: .toolkitModule,
             comment:  "A status message indicating that the map area mobile map package download failed."
+        )
+    }
+    
+    var currentlyOpenLabel: String {
+        .init(
+            localized: "Currently open",
+            bundle: .toolkitModule,
+            comment: "A status message indicating that the map area is currently open."
         )
     }
 }
