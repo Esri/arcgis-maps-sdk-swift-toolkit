@@ -15,7 +15,6 @@
 ***REMOVED***
 import Combine
 import Foundation
-import UserNotifications
 
 extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ The model class for the offline map areas view.
