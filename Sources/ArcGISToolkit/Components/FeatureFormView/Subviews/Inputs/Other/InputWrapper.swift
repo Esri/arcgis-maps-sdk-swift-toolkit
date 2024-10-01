@@ -31,6 +31,8 @@ struct InputWrapper: View {
 ***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***if isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch element.input {
+***REMOVED******REMOVED******REMOVED******REMOVED***case is BarcodeScannerFormInput:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BarcodeScannerInput(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case is ComboBoxFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case is DateTimePickerFormInput:

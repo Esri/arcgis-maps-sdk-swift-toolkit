@@ -25,3 +25,27 @@ extension FieldFormElement {
 ***REMOVED******REMOVED***input is TextAreaFormInput
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Attempts to convert the value to a type suitable for the element's field type and then update
+***REMOVED******REMOVED***/ the element with the converted value.
+***REMOVED***func convertAndUpdateValue(_ value: String) {
+***REMOVED******REMOVED***if fieldType == .text {
+***REMOVED******REMOVED******REMOVED***updateValue(value)
+***REMOVED*** else if let fieldType {
+***REMOVED******REMOVED******REMOVED***if fieldType.isNumeric && value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
+***REMOVED******REMOVED*** else if fieldType == .int16, let value = Int16(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .int32, let value = Int32(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .int64, let value = Int64(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .float32, let value = Float32(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***

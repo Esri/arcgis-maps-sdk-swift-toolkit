@@ -36,9 +36,10 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/ - Note: `BarcodeScannerInput` uses `TextInput` for fallback when the device camera is unavailable.
 ***REMOVED***init(element: FieldFormElement) {
 ***REMOVED******REMOVED***precondition(
-***REMOVED******REMOVED******REMOVED***element.input is TextAreaFormInput || element.input is TextBoxFormInput,
+***REMOVED******REMOVED******REMOVED***element.input is TextAreaFormInput || element.input is TextBoxFormInput || element.input is BarcodeScannerFormInput,
 ***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.element = element
@@ -195,32 +196,6 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension FieldFormElement {
-***REMOVED******REMOVED***/ Attempts to convert the value to a type suitable for the element's field type and then update
-***REMOVED******REMOVED***/ the element with the converted value.
-***REMOVED***func convertAndUpdateValue(_ value: String) {
-***REMOVED******REMOVED***if fieldType == .text {
-***REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED*** else if let fieldType {
-***REMOVED******REMOVED******REMOVED***if fieldType.isNumeric && value.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
-***REMOVED******REMOVED*** else if fieldType == .int16, let value = Int16(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .int32, let value = Int32(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .int64, let value = Int64(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .float32, let value = Float32(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

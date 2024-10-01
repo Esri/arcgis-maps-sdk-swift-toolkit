@@ -1,0 +1,385 @@
+***REMOVED*** Copyright 2024 Esri
+***REMOVED***
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+@preconcurrency import AVFoundation
+***REMOVED***
+
+struct BarcodeScannerInput: View {
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether a ``TextInput`` should be used instead.
+***REMOVED******REMOVED***/ This will be `true` if the device camera is inaccessible.
+***REMOVED***@State private var fallbackToTextInput: Bool = {
+#if targetEnvironment(simulator)
+***REMOVED******REMOVED***return true
+#else
+***REMOVED******REMOVED***return false
+#endif
+***REMOVED***()
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the code scanner is presented.
+***REMOVED***@State private var scannerIsPresented = false
+***REMOVED***
+***REMOVED******REMOVED***/ The current barcode value.
+***REMOVED***@State private var value = ""
+***REMOVED***
+***REMOVED******REMOVED***/ Performs camera authorization request handling.
+***REMOVED***@StateObject private var cameraRequester = CameraRequester()
+***REMOVED***
+***REMOVED******REMOVED***/ The element the input belongs to.
+***REMOVED***private let element: FieldFormElement
+***REMOVED***
+***REMOVED******REMOVED***/ The input configuration of the field.
+***REMOVED***private let input: BarcodeScannerFormInput
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view for a barcode scanner input.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED***init(element: FieldFormElement) {
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***element.input is BarcodeScannerFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(BarcodeScannerFormInput.self)."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.input = element.input as! BarcodeScannerFormInput
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***if fallbackToTextInput {
+***REMOVED******REMOVED******REMOVED***TextInput(element: element)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(value.isEmpty ? String.noValue : value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***if !value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED******REMOVED***.onChange(of: value) { value in
+***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.cameraRequester(cameraRequester)
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraRequester.request {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
+***REMOVED******REMOVED******REMOVED*** onAccessDenied: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToTextInput = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***value = newFormattedValue
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct ScannerView: UIViewControllerRepresentable {
+***REMOVED***@Binding var scannerIsPresented: Bool
+***REMOVED***
+***REMOVED***@Binding var scanOutput: String
+***REMOVED***
+***REMOVED***class Coordinator: NSObject, ScannerViewControllerDelegate {
+***REMOVED******REMOVED***@Binding var scanOutput: String
+***REMOVED******REMOVED***@Binding var scannerIsPresented: Bool
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(scannedCode: Binding<String>, isShowingScanner: Binding<Bool>) {
+***REMOVED******REMOVED******REMOVED***_scanOutput = scannedCode
+***REMOVED******REMOVED******REMOVED***_scannerIsPresented = isShowingScanner
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func didScanCode(_ code: String) {
+***REMOVED******REMOVED******REMOVED***scanOutput = code
+***REMOVED******REMOVED******REMOVED***scannerIsPresented = false
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeCoordinator() -> Coordinator {
+***REMOVED******REMOVED***Coordinator(scannedCode: $scanOutput, isShowingScanner: $scannerIsPresented)
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeUIViewController(context: Context) -> ScannerViewController {
+***REMOVED******REMOVED***let scannerViewController = ScannerViewController()
+***REMOVED******REMOVED***scannerViewController.delegate = context.coordinator
+***REMOVED******REMOVED***return scannerViewController
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateUIViewController(_ uiViewController: ScannerViewController, context: Context) {***REMOVED***
+***REMOVED***
+
+protocol ScannerViewControllerDelegate: AnyObject {
+***REMOVED***func didScanCode(_ code: String)
+***REMOVED***
+
+class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
+***REMOVED***weak var delegate: ScannerViewControllerDelegate?
+***REMOVED***
+***REMOVED***private let captureSession = AVCaptureSession()
+***REMOVED***
+***REMOVED***private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
+***REMOVED***
+***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
+***REMOVED***
+***REMOVED***private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
+***REMOVED***
+***REMOVED***private var previewLayer: AVCaptureVideoPreviewLayer!
+***REMOVED***
+***REMOVED***private var removeMetadataObjectOverlayLayersTimer: Timer?
+***REMOVED***
+***REMOVED***private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+***REMOVED******REMOVED***UITapGestureRecognizer(target: self, action: #selector(selectRecognizedCode(with:)))
+***REMOVED***()
+***REMOVED***
+***REMOVED***private class MetadataObjectLayer: CAShapeLayer {
+***REMOVED******REMOVED***var metadataObject: AVMetadataObject?
+***REMOVED***
+***REMOVED***
+***REMOVED***override func viewDidLayoutSubviews() {
+***REMOVED******REMOVED***previewLayer.frame = view.bounds
+***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
+***REMOVED******REMOVED***switch deviceOrientation {
+***REMOVED******REMOVED***case .landscapeLeft:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeRight
+***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeLeft
+***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portraitUpsideDown
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portrait
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***override func viewDidLoad() {
+***REMOVED******REMOVED***super.viewDidLoad()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
+***REMOVED******REMOVED***let videoInput: AVCaptureDeviceInput
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if captureSession.canAddInput(videoInput) {
+***REMOVED******REMOVED******REMOVED***captureSession.addInput(videoInput)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let metadataOutput = AVCaptureMetadataOutput()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if captureSession.canAddOutput(metadataOutput) {
+***REMOVED******REMOVED******REMOVED***captureSession.addOutput(metadataOutput)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***metadataOutput.metadataObjectTypes = [
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Barcodes
+***REMOVED******REMOVED******REMOVED******REMOVED***.codabar,
+***REMOVED******REMOVED******REMOVED******REMOVED***.code39,
+***REMOVED******REMOVED******REMOVED******REMOVED***.code39Mod43,
+***REMOVED******REMOVED******REMOVED******REMOVED***.code93,
+***REMOVED******REMOVED******REMOVED******REMOVED***.code128,
+***REMOVED******REMOVED******REMOVED******REMOVED***.ean8,
+***REMOVED******REMOVED******REMOVED******REMOVED***.ean13,
+***REMOVED******REMOVED******REMOVED******REMOVED***.gs1DataBar,
+***REMOVED******REMOVED******REMOVED******REMOVED***.gs1DataBarExpanded,
+***REMOVED******REMOVED******REMOVED******REMOVED***.gs1DataBarLimited,
+***REMOVED******REMOVED******REMOVED******REMOVED***.interleaved2of5,
+***REMOVED******REMOVED******REMOVED******REMOVED***.itf14,
+***REMOVED******REMOVED******REMOVED******REMOVED***.upce,
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** 2D Codes
+***REMOVED******REMOVED******REMOVED******REMOVED***.aztec,
+***REMOVED******REMOVED******REMOVED******REMOVED***.dataMatrix,
+***REMOVED******REMOVED******REMOVED******REMOVED***.microPDF417,
+***REMOVED******REMOVED******REMOVED******REMOVED***.microQR,
+***REMOVED******REMOVED******REMOVED******REMOVED***.pdf417,
+***REMOVED******REMOVED******REMOVED******REMOVED***.qr,
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+***REMOVED******REMOVED***previewLayer.frame = view.layer.bounds
+***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
+***REMOVED******REMOVED***view.addGestureRecognizer(tapGestureRecognizer)
+***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
+***REMOVED***
+***REMOVED***
+***REMOVED***override func viewWillAppear(_ animated: Bool) {
+***REMOVED******REMOVED***super.viewWillAppear(animated)
+***REMOVED******REMOVED***sessionQueue.async { [captureSession] in
+***REMOVED******REMOVED******REMOVED***captureSession.startRunning()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func metadataOutput(
+***REMOVED******REMOVED***_ output: AVCaptureMetadataOutput,
+***REMOVED******REMOVED***didOutput metadataObjects: [AVMetadataObject],
+***REMOVED******REMOVED***from connection: AVCaptureConnection
+***REMOVED***) {
+***REMOVED******REMOVED***if metadataObjectsOverlayLayersDrawingSemaphore.wait(timeout: .now()) == .success {
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.removeMetadataObjectOverlayLayers()
+***REMOVED******REMOVED******REMOVED******REMOVED***var metadataObjectOverlayLayers = [MetadataObjectLayer]()
+***REMOVED******REMOVED******REMOVED******REMOVED***for metadataObject in metadataObjects {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let metadataObjectOverlayLayer = self.createMetadataObjectOverlayWithMetadataObject(metadataObject)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayers.append(metadataObjectOverlayLayer)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
+***REMOVED******REMOVED******REMOVED******REMOVED***self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func addMetadataObjectOverlayLayersToVideoPreviewView(_ metadataObjectOverlayLayers: [MetadataObjectLayer]) {
+***REMOVED******REMOVED***CATransaction.begin()
+***REMOVED******REMOVED***CATransaction.setDisableActions(true)
+***REMOVED******REMOVED***for metadataObjectOverlayLayer in metadataObjectOverlayLayers {
+***REMOVED******REMOVED******REMOVED***previewLayer.addSublayer(metadataObjectOverlayLayer)
+***REMOVED***
+***REMOVED******REMOVED***CATransaction.commit()
+***REMOVED******REMOVED***self.metadataObjectOverlayLayers = metadataObjectOverlayLayers
+***REMOVED******REMOVED***removeMetadataObjectOverlayLayersTimer = Timer.scheduledTimer(
+***REMOVED******REMOVED******REMOVED***timeInterval: 1,
+***REMOVED******REMOVED******REMOVED***target: self,
+***REMOVED******REMOVED******REMOVED***selector: #selector(removeMetadataObjectOverlayLayers),
+***REMOVED******REMOVED******REMOVED***userInfo: nil,
+***REMOVED******REMOVED******REMOVED***repeats: false
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***private func barcodeOverlayPathWithCorners(_ corners: [CGPoint]) -> CGMutablePath {
+***REMOVED******REMOVED***let path = CGMutablePath()
+***REMOVED******REMOVED***if let corner = corners.first {
+***REMOVED******REMOVED******REMOVED***path.move(to: corner, transform: .identity)
+***REMOVED******REMOVED******REMOVED***for corner in corners[1..<corners.count] {
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: corner)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***path.closeSubpath()
+***REMOVED***
+***REMOVED******REMOVED***return path
+***REMOVED***
+***REMOVED***
+***REMOVED***private func createMetadataObjectOverlayWithMetadataObject(_ metadataObject: AVMetadataObject) -> MetadataObjectLayer {
+***REMOVED******REMOVED***let transformedMetadataObject = previewLayer.transformedMetadataObject(for: metadataObject)
+***REMOVED******REMOVED***let metadataObjectOverlayLayer = MetadataObjectLayer()
+***REMOVED******REMOVED***metadataObjectOverlayLayer.metadataObject = transformedMetadataObject
+***REMOVED******REMOVED***metadataObjectOverlayLayer.lineJoin = .round
+***REMOVED******REMOVED***metadataObjectOverlayLayer.lineWidth = 7.0
+***REMOVED******REMOVED***metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(0.7).cgColor
+***REMOVED******REMOVED***metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.3).cgColor
+***REMOVED******REMOVED***guard let barcodeMetadataObject = transformedMetadataObject as? AVMetadataMachineReadableCodeObject else {
+***REMOVED******REMOVED******REMOVED***return metadataObjectOverlayLayer
+***REMOVED***
+***REMOVED******REMOVED***let barcodeOverlayPath = barcodeOverlayPathWithCorners(barcodeMetadataObject.corners)
+***REMOVED******REMOVED***metadataObjectOverlayLayer.path = barcodeOverlayPath
+***REMOVED******REMOVED***let textLayerString: String?
+***REMOVED******REMOVED***if let stringValue = barcodeMetadataObject.stringValue, !stringValue.isEmpty {
+***REMOVED******REMOVED******REMOVED***textLayerString = "\(String.tapToScan) \(stringValue)"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***textLayerString = String.tapToScan
+***REMOVED***
+***REMOVED******REMOVED***if let textLayerString {
+***REMOVED******REMOVED******REMOVED***let barcodeOverlayBoundingBox = barcodeOverlayPath.boundingBox
+***REMOVED******REMOVED******REMOVED***let fontSize: CGFloat = 19
+***REMOVED******REMOVED******REMOVED***let minimumTextLayerHeight: CGFloat = fontSize + 4
+***REMOVED******REMOVED******REMOVED***let textLayerHeight: CGFloat
+***REMOVED******REMOVED******REMOVED***if barcodeOverlayBoundingBox.size.height < minimumTextLayerHeight {
+***REMOVED******REMOVED******REMOVED******REMOVED***textLayerHeight = minimumTextLayerHeight
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***textLayerHeight = barcodeOverlayBoundingBox.size.height
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let textLayer = CATextLayer()
+***REMOVED******REMOVED******REMOVED***textLayer.alignmentMode = .center
+***REMOVED******REMOVED******REMOVED***textLayer.bounds = CGRect(x: .zero, y: .zero, width: barcodeOverlayBoundingBox.size.width, height: textLayerHeight)
+***REMOVED******REMOVED******REMOVED***textLayer.contentsScale = UIScreen.main.scale
+***REMOVED******REMOVED******REMOVED***textLayer.font = UIFont.boldSystemFont(ofSize: 19).fontName as CFString
+***REMOVED******REMOVED******REMOVED***textLayer.position = CGPoint(x: barcodeOverlayBoundingBox.midX, y: barcodeOverlayBoundingBox.midY)
+***REMOVED******REMOVED******REMOVED***textLayer.string = NSAttributedString(
+***REMOVED******REMOVED******REMOVED******REMOVED***string: textLayerString,
+***REMOVED******REMOVED******REMOVED******REMOVED***attributes: [
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.boldSystemFont(ofSize: fontSize),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white.cgColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.strokeWidth: -5.0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.strokeColor: UIColor.black.cgColor
+***REMOVED******REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***textLayer.isWrapped = true
+***REMOVED******REMOVED******REMOVED***textLayer.transform = previewLayer.transform
+***REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(textLayer)
+***REMOVED***
+***REMOVED******REMOVED***return metadataObjectOverlayLayer
+***REMOVED***
+***REMOVED***
+***REMOVED***@objc
+***REMOVED***private func removeMetadataObjectOverlayLayers() {
+***REMOVED******REMOVED***for sublayer in metadataObjectOverlayLayers {
+***REMOVED******REMOVED******REMOVED***sublayer.removeFromSuperlayer()
+***REMOVED***
+***REMOVED******REMOVED***metadataObjectOverlayLayers = []
+***REMOVED******REMOVED***removeMetadataObjectOverlayLayersTimer?.invalidate()
+***REMOVED******REMOVED***removeMetadataObjectOverlayLayersTimer = nil
+***REMOVED***
+***REMOVED***
+***REMOVED***@objc
+***REMOVED***private func selectRecognizedCode(with tapGestureRecognizer: UITapGestureRecognizer) {
+***REMOVED******REMOVED***let point = tapGestureRecognizer.location(in: view)
+***REMOVED******REMOVED***metadataObjectOverlayLayers.forEach { metadataObjectLayer in
+***REMOVED******REMOVED******REMOVED***if metadataObjectLayer.path?.contains(point) ?? false {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let metadataObject = metadataObjectLayer.metadataObject as? AVMetadataMachineReadableCodeObject,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let stringValue = metadataObject.stringValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED***static var tapToScan: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Tap to scan",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to select a code identified with the barcode scanner."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
