@@ -206,7 +206,6 @@ private extension PreplannedListItemView.DownloadState {
         self = switch state {
         case .downloaded: .downloaded
         case .downloading: .downloading
-        case .opened: .opened
         default: .notDownloaded
         }
     }
