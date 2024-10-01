@@ -15,7 +15,6 @@
 import ArcGIS
 import Combine
 import Foundation
-import UserNotifications
 
 extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
