@@ -55,7 +55,16 @@ struct OfflineMapAreasExampleView: View {
             }
             .sheet(isPresented: $isShowingOfflineMapAreasView) {
                 OfflineMapAreasView(online: onlineMap, selection: $selectedMap)
+                    .task {
+                        await requestUserNotificationAuthorization()
+                    }
             }
+    }
+    
+    /// Requests authorization to show notifications.
+    private func requestUserNotificationAuthorization() async {
+        _ = try? await UNUserNotificationCenter.current()
+            .requestAuthorization(options: [.alert, .sound])
     }
 }
 

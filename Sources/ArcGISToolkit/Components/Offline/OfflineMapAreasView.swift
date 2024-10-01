@@ -53,9 +53,6 @@ public struct OfflineMapAreasView: View {
                 }
             }
             .task {
-                await mapViewModel.requestUserNotificationAuthorization()
-            }
-            .task {
                 await loadPreplannedMapModels()
             }
             .toolbar {
