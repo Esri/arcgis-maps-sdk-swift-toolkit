@@ -30,7 +30,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertTrue(Status.downloadFailure(CancellationError()).needsToBeLoaded)
         XCTAssertTrue(Status.loadFailure(CancellationError()).needsToBeLoaded)
         XCTAssertTrue(Status.packageFailure.needsToBeLoaded)
-        XCTAssertTrue(Status.opened.needsToBeLoaded)
     }
     
     func testAllowsDownload() {
@@ -44,7 +43,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertFalse(Status.downloaded.allowsDownload)
         XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsDownload)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
-        XCTAssertFalse(Status.opened.allowsDownload)
     }
     
     func testIsDownloaded() {
@@ -58,21 +56,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertTrue(Status.downloaded.isDownloaded)
         XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
-        XCTAssertFalse(Status.opened.isDownloaded)
-    }
-    
-    func testIsOpened() {
-        XCTAssertFalse(Status.notLoaded.isOpened)
-        XCTAssertFalse(Status.loading.isOpened)
-        XCTAssertFalse(Status.loadFailure(CancellationError()).isOpened)
-        XCTAssertFalse(Status.packaging.isOpened)
-        XCTAssertFalse(Status.packaged.isOpened)
-        XCTAssertFalse(Status.packageFailure.isOpened)
-        XCTAssertFalse(Status.downloading.isOpened)
-        XCTAssertFalse(Status.downloaded.isOpened)
-        XCTAssertFalse(Status.downloadFailure(CancellationError()).isOpened)
-        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isOpened)
-        XCTAssertTrue(Status.opened.isOpened)
     }
     
     func testAllowsRemoval() {
@@ -86,6 +69,5 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertTrue(Status.downloaded.allowsRemoval)
         XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsRemoval)
         XCTAssertTrue(Status.mmpkLoadFailure(CancellationError()).allowsRemoval)
-        XCTAssertFalse(Status.opened.allowsRemoval)
     }
 }
