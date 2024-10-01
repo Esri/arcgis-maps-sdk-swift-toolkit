@@ -15,6 +15,7 @@
 import ArcGIS
 import ArcGISToolkit
 import SwiftUI
+import UserNotifications
 
 @MainActor
 struct OfflineMapAreasExampleView: View {
