@@ -129,9 +129,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***private var emptyPreplannedMapAreasView: some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text(noMapAreasTitleLabel)
+***REMOVED******REMOVED******REMOVED***Text(noMapAreasTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text(noMapAreasSubtitleLabel)
+***REMOVED******REMOVED******REMOVED***Text(noMapAreasSubtitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
@@ -141,9 +141,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***private var emptyOfflinePreplannedMapAreasView: some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text("No map areas")
+***REMOVED******REMOVED******REMOVED***Text(noMapAreasTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("There are no downloaded map areas for this web map.")
+***REMOVED******REMOVED******REMOVED***Text(noDownloadedMapAreasSubtitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
@@ -152,8 +152,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var offlineDisabledView: some View {
-***REMOVED******REMOVED***let labelText = Text("Offline Disabled")
-***REMOVED******REMOVED***let descriptionText = Text("Please ensure the web map is offline enabled.")
+***REMOVED******REMOVED***let labelText = Text(offlineDisabledTitle)
+***REMOVED******REMOVED***let descriptionText = Text(offlineDisabledSubtitle)
 ***REMOVED******REMOVED***if #available(iOS 17, *) {
 ***REMOVED******REMOVED******REMOVED***ContentUnavailableView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***labelText
@@ -222,7 +222,7 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var noMapAreasTitleLabel: String {
+***REMOVED***var noMapAreasTitle: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "No map areas",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -230,7 +230,7 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var noMapAreasSubtitleLabel: String {
+***REMOVED***var noMapAreasSubtitle: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "There are no map areas defined for this web map.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -238,7 +238,15 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var offlineDisabledTitleLabel: String {
+***REMOVED***var noDownloadedMapAreasSubtitle: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "There are no downloaded map areas for this web map.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that there are no downloaded map areas for the web map."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var offlineDisabledTitle: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Offline disabled",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -246,7 +254,7 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var offlineDisabledSubtitleLabel: String {
+***REMOVED***var offlineDisabledSubtitle: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Please ensure the web map is offline enabled.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,

@@ -169,7 +169,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***private var openStatusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***Text("Currently open")
+***REMOVED******REMOVED******REMOVED***Text(currentlyOpenLabel)
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
@@ -328,6 +328,14 @@ private extension PreplannedListItemView {
 ***REMOVED******REMOVED******REMOVED***localized: "Download failed",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment:  "A status message indicating that the map area mobile map package download failed."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var currentlyOpenLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Currently open",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A status message indicating that the map area is currently open."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
