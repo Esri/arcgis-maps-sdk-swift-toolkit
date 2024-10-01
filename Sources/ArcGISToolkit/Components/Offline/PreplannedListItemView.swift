@@ -56,7 +56,11 @@ struct PreplannedListItemView: View {
                     downloadButton
                 }
                 descriptionView
-                statusView
+                if isSelected {
+                    openStatusView
+                } else {
+                    statusView
+                }
             }
         }
         .contentShape(.rect)
@@ -163,6 +167,14 @@ struct PreplannedListItemView: View {
         }
     }
     
+    private var openStatusView: some View {
+        HStack(spacing: 4) {
+            Text("Currently open")
+        }
+        .font(.caption2)
+        .foregroundStyle(.tertiary)
+    }
+    
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
             switch model.status {
@@ -175,7 +187,7 @@ struct PreplannedListItemView: View {
                 Image(systemName: "clock.badge.xmark")
                 Text("Packaging")
             case .packaged:
-                Text("Package ready for download")
+                Text("Ready to download")
             case .packageFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Packaging failed")
