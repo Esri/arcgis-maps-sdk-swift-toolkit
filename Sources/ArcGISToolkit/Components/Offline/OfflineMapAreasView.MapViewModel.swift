@@ -40,12 +40,6 @@ extension OfflineMapAreasView {
             portalItemID = map.item?.id
         }
         
-        /// Requests authorization to show notifications.
-        nonisolated func requestUserNotificationAuthorization() async {
-            _ = try? await UNUserNotificationCenter.current()
-                .requestAuthorization(options: [.alert, .sound])
-        }
-        
         /// Gets the preplanned map areas from the offline map task and loads the map models.
         func loadPreplannedMapModels() async {
             guard let portalItemID else { return }
