@@ -181,11 +181,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         Task { await load() }
     }
     
-    /// Sets the status to opened.
-    func openPreplannedMapArea() {
-        status = .opened
-    }
-    
     /// Sets the job property of this instance, starts the job, observes it, and
     /// when it's done, updates the status, removes the job from the job manager,
     /// and fires a user notification.
@@ -228,8 +223,6 @@ extension PreplannedMapModel {
         case downloadFailure(Error)
         /// Downloaded mobile map package failed to load.
         case mmpkLoadFailure(Error)
-        /// Preplanned map area is currently open.
-        case opened
         
         /// A Boolean value indicating whether the model is in a state
         /// where it needs to be loaded or reloaded.
@@ -246,7 +239,7 @@ extension PreplannedMapModel {
         var allowsDownload: Bool {
             switch self {
             case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-                    .downloading, .downloaded, .mmpkLoadFailure, .opened:
+                    .downloading, .downloaded, .mmpkLoadFailure:
                 false
             case .packaged, .downloadFailure:
                 true
@@ -266,11 +259,6 @@ extension PreplannedMapModel {
         /// A Boolean value indicating whether the preplanned map area is downloaded.
         var isDownloaded: Bool {
             if case .downloaded = self { true } else { false }
-        }
-        
-        /// A Boolean value indicating whether the preplanned map area is opened.
-        var isOpened: Bool {
-            if case .opened = self { true } else { false }
         }
     }
 }
