@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that allows a consumer to await on a value and a provider to provide a value
 ***REMOVED***/ asynchronously. This is effectively a continuation that holds a value.
-@MainActor class ValueContinuation<Value> {
+@MainActor class ValueContinuation<Value: Sendable> {
 ***REMOVED******REMOVED***/ The value.
 ***REMOVED***private var _value: Value?
 ***REMOVED***
@@ -28,9 +28,7 @@ import Foundation
 ***REMOVED***func setValue(_ value: Value) {
 ***REMOVED******REMOVED***guard _value == nil else { return ***REMOVED***
 ***REMOVED******REMOVED***_value = value
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***continuation?.resume(returning: value)
-***REMOVED***
+***REMOVED******REMOVED***continuation?.resume(returning: value)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value. This property supports only one consumer.
