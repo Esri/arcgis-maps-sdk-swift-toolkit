@@ -72,7 +72,7 @@ struct PreplannedMetadataView: View {
                             .symbolRenderingMode(.palette)
                             .foregroundStyle(.red, .gray.opacity(0.1))
                             .font(.title)
-                        Button("Delete Map Area", role: .destructive) {
+                        Button("Remove Download", role: .destructive) {
                             dismiss()
                             model.removeDownloadedPreplannedMapArea()
                         }
