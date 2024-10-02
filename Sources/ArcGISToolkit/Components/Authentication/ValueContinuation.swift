@@ -16,7 +16,7 @@ import Foundation
 
 /// An object that allows a consumer to await on a value and a provider to provide a value
 /// asynchronously. This is effectively a continuation that holds a value.
-@MainActor class ValueContinuation<Value> {
+@MainActor class ValueContinuation<Value: Sendable> {
     /// The value.
     private var _value: Value?
     
@@ -28,9 +28,7 @@ import Foundation
     func setValue(_ value: Value) {
         guard _value == nil else { return }
         _value = value
-        Task {
-            continuation?.resume(returning: value)
-        }
+        continuation?.resume(returning: value)
     }
     
     /// The value. This property supports only one consumer.
