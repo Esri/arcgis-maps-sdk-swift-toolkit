@@ -104,9 +104,9 @@ public struct OfflineMapAreasView: View {
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-                    .onChange(of: selectedMap) { _ in
-                        dismiss()
-                    }
+                        .onChange(of: selectedMap) { _ in
+                            dismiss()
+                        }
                 }
             } else {
                 emptyOfflinePreplannedMapAreasView
