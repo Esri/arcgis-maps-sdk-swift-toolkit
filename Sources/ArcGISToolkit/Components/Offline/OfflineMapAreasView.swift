@@ -103,12 +103,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels {
 ***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap, onDeletion: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadPreplannedMapModels() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflinePreplannedMapAreasView
