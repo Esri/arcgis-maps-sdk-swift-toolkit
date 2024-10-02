@@ -72,7 +72,7 @@ struct PreplannedMetadataView: View {
                             .symbolRenderingMode(.palette)
                             .foregroundStyle(.red, .gray.opacity(0.1))
                             .font(.title)
-                        Button(deleteLabel, role: .destructive) {
+                        Button(removeDownloadLabel, role: .destructive) {
                             dismiss()
                             model.removeDownloadedPreplannedMapArea()
                         }
@@ -151,11 +151,11 @@ private extension PreplannedMetadataView {
         )
     }
     
-    var deleteLabel: String {
+    var removeDownloadLabel: String {
         .init(
-            localized: "Delete Map Area",
+            localized: "Remove Download",
             bundle: .toolkitModule,
-            comment: "A label for the button to delete a map area."
+            comment: "A label for the button to remove a downloaded map area."
         )
     }
 }
