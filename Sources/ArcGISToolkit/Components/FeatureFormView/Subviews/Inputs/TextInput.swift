@@ -111,7 +111,7 @@ struct TextInput: View {
 private extension TextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
-***REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
