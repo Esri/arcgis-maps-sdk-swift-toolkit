@@ -173,7 +173,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     weak var delegate: ScannerViewControllerDelegate?
     
     private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-        UITapGestureRecognizer(target: self, action: #selector(selectRecognizedCode(with:)))
+        UITapGestureRecognizer(target: self, action: #selector(userDidTap(with:)))
     }()
     
     private class MetadataObjectLayer: CAShapeLayer {
@@ -376,7 +376,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     }
     
     @objc
-    private func selectRecognizedCode(with tapGestureRecognizer: UITapGestureRecognizer) {
+    private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
         let point = tapGestureRecognizer.location(in: view)
         metadataObjectOverlayLayers.forEach { metadataObjectLayer in
             if metadataObjectLayer.path?.contains(point) ?? false {
