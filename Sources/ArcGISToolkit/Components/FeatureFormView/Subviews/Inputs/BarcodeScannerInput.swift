@@ -62,9 +62,13 @@ struct BarcodeScannerInput: View {
 ***REMOVED******REMOVED******REMOVED***TextInput(element: element)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(value.isEmpty ? String.noValue : value)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
+***REMOVED******REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $value,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(String.noValue).foregroundColor(.secondary),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: .horizontal
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !value.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
