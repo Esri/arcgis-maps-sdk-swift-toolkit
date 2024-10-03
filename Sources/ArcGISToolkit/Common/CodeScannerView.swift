@@ -15,8 +15,8 @@
 @preconcurrency import AVFoundation
 ***REMOVED***
 
-
-struct ScannerView: UIViewControllerRepresentable {
+***REMOVED***/ Scans machine readable information like QR codes and barcodes.
+struct CodeScannerView: UIViewControllerRepresentable {
 ***REMOVED***@Binding var scannerIsPresented: Bool
 ***REMOVED***
 ***REMOVED***@Binding var scanOutput: String
