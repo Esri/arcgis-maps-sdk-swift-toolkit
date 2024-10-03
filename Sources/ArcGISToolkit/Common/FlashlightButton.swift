@@ -26,24 +26,29 @@ struct FlashlightButton: View {
 ***REMOVED******REMOVED***device?.hasTorch ?? false
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var icon: String {
+***REMOVED******REMOVED***switch (hasTorch, torchIsOn) {
+***REMOVED******REMOVED***case (false, _):
+***REMOVED******REMOVED******REMOVED***"flashlight.slash"
+***REMOVED******REMOVED***case (_, true):
+***REMOVED******REMOVED******REMOVED***"flashlight.on.fill"
+***REMOVED******REMOVED***case (_, false):
+***REMOVED******REMOVED******REMOVED***"flashlight.off.fill"
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***torchIsOn.toggle()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !hasTorch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "flashlight.slash")
-***REMOVED******REMOVED******REMOVED*** else if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentTransition(.symbolEffect(.replace))
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
-***REMOVED******REMOVED******REMOVED***.clipShape(Circle())
+***REMOVED******REMOVED******REMOVED***Image(systemName: icon)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(torchIsOn ? .white : .black)
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentTransition(.interpolate)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(.tint)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(Circle())
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.disabled(!hasTorch)
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***torchIsOn = false
