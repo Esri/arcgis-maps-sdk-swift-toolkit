@@ -154,11 +154,15 @@ protocol ScannerViewControllerDelegate: AnyObject {
 
 class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
 ***REMOVED***
+***REMOVED******REMOVED*** MARK: Constants
+***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
 ***REMOVED***
 ***REMOVED***private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
 ***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Variables
 ***REMOVED***
 ***REMOVED***private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
 ***REMOVED***
@@ -175,6 +179,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***private class MetadataObjectLayer: CAShapeLayer {
 ***REMOVED******REMOVED***var metadataObject: AVMetadataObject?
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** MARK: UIViewController methods
 ***REMOVED***
 ***REMOVED***override func viewDidLayoutSubviews() {
 ***REMOVED******REMOVED***previewLayer.frame = view.bounds
@@ -256,6 +262,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** MARK: AVCaptureMetadataOutputObjectsDelegate methods
+***REMOVED***
 ***REMOVED***func metadataOutput(
 ***REMOVED******REMOVED***_ output: AVCaptureMetadataOutput,
 ***REMOVED******REMOVED***didOutput metadataObjects: [AVMetadataObject],
@@ -274,6 +282,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Scan handling methods
 ***REMOVED***
 ***REMOVED***private func addMetadataObjectOverlayLayersToVideoPreviewView(_ metadataObjectOverlayLayers: [MetadataObjectLayer]) {
 ***REMOVED******REMOVED***CATransaction.begin()
