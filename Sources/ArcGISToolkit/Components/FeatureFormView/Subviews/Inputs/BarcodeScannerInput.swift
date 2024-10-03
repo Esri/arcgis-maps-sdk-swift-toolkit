@@ -156,6 +156,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     // MARK: Constants
     
+    private let autoScanDelay = 1.0
+    
     private let captureSession = AVCaptureSession()
     
     private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
@@ -163,6 +165,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
     
     // MARK: Variables
+    
+    private var autoScanTimer: Timer?
     
     private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
     
