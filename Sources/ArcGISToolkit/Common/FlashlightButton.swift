@@ -16,7 +16,7 @@ import AVFoundation
 import SwiftUI
 
 struct FlashlightButton: View {
-    @State private var flashIsOn = false
+    @State private var torchIsOn = false
     
     var device: AVCaptureDevice? {
         .default(for: .video)
@@ -28,16 +28,16 @@ struct FlashlightButton: View {
     
     var body: some View {
         Button {
-            flashIsOn.toggle()
+            torchIsOn.toggle()
         } label: {
             Group {
                 if !hasTorch {
                     Image(systemName: "flashlight.slash")
                 } else if #available(iOS 17, *) {
-                    Image(systemName: flashIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                    Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
                         .contentTransition(.symbolEffect(.replace))
                 } else {
-                    Image(systemName: flashIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                    Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
                 }
             }
             .padding()
@@ -46,9 +46,9 @@ struct FlashlightButton: View {
         }
         .disabled(!hasTorch)
         .onDisappear {
-            flashIsOn = false
+            torchIsOn = false
         }
-        .onChange(of: flashIsOn) { isOn in
+        .onChange(of: torchIsOn) { isOn in
             try? device?.lockForConfiguration()
             device?.torchMode = isOn ? .on : .off
             device?.unlockForConfiguration()
