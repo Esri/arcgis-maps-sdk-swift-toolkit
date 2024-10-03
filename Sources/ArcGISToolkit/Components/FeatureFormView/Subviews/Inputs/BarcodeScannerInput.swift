@@ -62,9 +62,13 @@ struct BarcodeScannerInput: View {
             TextInput(element: element)
         } else {
             HStack {
-                Text(value.isEmpty ? String.noValue : value)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
+                TextField(
+                    element.label,
+                    text: $value,
+                    prompt: Text(String.noValue).foregroundColor(.secondary),
+                    axis: .horizontal
+                )
+                .truncationMode(.middle)
                 Spacer()
                 if !value.isEmpty {
                     ClearButton {
