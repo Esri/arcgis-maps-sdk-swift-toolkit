@@ -26,24 +26,29 @@ struct FlashlightButton: View {
         device?.hasTorch ?? false
     }
     
+    var icon: String {
+        switch (hasTorch, torchIsOn) {
+        case (false, _):
+            "flashlight.slash"
+        case (_, true):
+            "flashlight.on.fill"
+        case (_, false):
+            "flashlight.off.fill"
+        }
+    }
+    
     var body: some View {
         Button {
             torchIsOn.toggle()
         } label: {
-            Group {
-                if !hasTorch {
-                    Image(systemName: "flashlight.slash")
-                } else if #available(iOS 17, *) {
-                    Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
-                        .contentTransition(.symbolEffect(.replace))
-                } else {
-                    Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
-                }
-            }
-            .padding()
-            .background(.regularMaterial)
-            .clipShape(Circle())
+            Image(systemName: icon)
+                .padding()
+                .foregroundStyle(torchIsOn ? .white : .black)
+                .contentTransition(.interpolate)
+                .background(.tint)
+                .clipShape(Circle())
         }
+        .buttonStyle(.plain)
         .disabled(!hasTorch)
         .onDisappear {
             torchIsOn = false
