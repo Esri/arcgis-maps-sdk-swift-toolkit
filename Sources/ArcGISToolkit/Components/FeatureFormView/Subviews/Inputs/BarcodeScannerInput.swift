@@ -153,7 +153,6 @@ protocol ScannerViewControllerDelegate: AnyObject {
 }
 
 class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
-    weak var delegate: ScannerViewControllerDelegate?
     
     private let captureSession = AVCaptureSession()
     
@@ -166,6 +165,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     private var previewLayer: AVCaptureVideoPreviewLayer!
     
     private var removeMetadataObjectOverlayLayersTimer: Timer?
+    
+    weak var delegate: ScannerViewControllerDelegate?
     
     private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         UITapGestureRecognizer(target: self, action: #selector(selectRecognizedCode(with:)))
