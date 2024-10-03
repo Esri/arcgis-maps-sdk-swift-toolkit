@@ -16,7 +16,7 @@ import AVFoundation
 ***REMOVED***
 
 struct FlashlightButton: View {
-***REMOVED***@State private var flashIsOn = false
+***REMOVED***@State private var torchIsOn = false
 ***REMOVED***
 ***REMOVED***var device: AVCaptureDevice? {
 ***REMOVED******REMOVED***.default(for: .video)
@@ -28,16 +28,16 @@ struct FlashlightButton: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***flashIsOn.toggle()
+***REMOVED******REMOVED******REMOVED***torchIsOn.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !hasTorch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "flashlight.slash")
 ***REMOVED******REMOVED******REMOVED*** else if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: flashIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentTransition(.symbolEffect(.replace))
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: flashIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: torchIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
@@ -46,9 +46,9 @@ struct FlashlightButton: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(!hasTorch)
 ***REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED***flashIsOn = false
+***REMOVED******REMOVED******REMOVED***torchIsOn = false
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: flashIsOn) { isOn in
+***REMOVED******REMOVED***.onChange(of: torchIsOn) { isOn in
 ***REMOVED******REMOVED******REMOVED***try? device?.lockForConfiguration()
 ***REMOVED******REMOVED******REMOVED***device?.torchMode = isOn ? .on : .off
 ***REMOVED******REMOVED******REMOVED***device?.unlockForConfiguration()
