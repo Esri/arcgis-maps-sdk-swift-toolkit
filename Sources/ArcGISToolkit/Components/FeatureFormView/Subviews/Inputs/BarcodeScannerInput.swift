@@ -379,6 +379,15 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***removeMetadataObjectOverlayLayersTimer = nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Triggers the delegated scan method.
+***REMOVED******REMOVED***/ - Parameter metadataObject: The machine readable code.
+***REMOVED***private func scan(_ metadataObject: AVMetadataObject) {
+***REMOVED******REMOVED***if let machineReadableCodeObject = metadataObject as? AVMetadataMachineReadableCodeObject,
+***REMOVED******REMOVED***   let stringValue = machineReadableCodeObject.stringValue {
+***REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***@objc
 ***REMOVED***private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
 ***REMOVED******REMOVED***let point = tapGestureRecognizer.location(in: view)
