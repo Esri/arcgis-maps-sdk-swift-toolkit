@@ -154,11 +154,15 @@ protocol ScannerViewControllerDelegate: AnyObject {
 
 class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
     
+    // MARK: Constants
+    
     private let captureSession = AVCaptureSession()
     
     private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
     
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
+    
+    // MARK: Variables
     
     private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
     
@@ -175,6 +179,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     private class MetadataObjectLayer: CAShapeLayer {
         var metadataObject: AVMetadataObject?
     }
+    
+    // MARK: UIViewController methods
     
     override func viewDidLayoutSubviews() {
         previewLayer.frame = view.bounds
@@ -256,6 +262,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         }
     }
     
+    // MARK: AVCaptureMetadataOutputObjectsDelegate methods
+    
     func metadataOutput(
         _ output: AVCaptureMetadataOutput,
         didOutput metadataObjects: [AVMetadataObject],
@@ -274,6 +282,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             }
         }
     }
+    
+    // MARK: Scan handling methods
     
     private func addMetadataObjectOverlayLayersToVideoPreviewView(_ metadataObjectOverlayLayers: [MetadataObjectLayer]) {
         CATransaction.begin()
