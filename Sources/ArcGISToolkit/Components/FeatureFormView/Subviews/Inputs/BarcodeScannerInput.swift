@@ -284,6 +284,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
                 self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
                 self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
             }
+            evaluateOutputForAutoScan(metadataObjects)
         }
     }
     
@@ -367,6 +368,24 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             metadataObjectOverlayLayer.addSublayer(textLayer)
         }
         return metadataObjectOverlayLayer
+    }
+    
+    /// <#Description#>
+    /// - Parameter output: The sect of scanned codes.
+    private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
+        if !output.isEmpty {
+            if output.count > 1 {
+                self.autoScanTimer?.invalidate()
+            } else {
+                if !(self.autoScanTimer?.isValid ?? false), let metadataObject = output.first {
+                    self.autoScanTimer = Timer.scheduledTimer(withTimeInterval: autoScanDelay, repeats: false) { _ in
+                        Task { @MainActor in
+                            self.scan(metadataObject)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     @objc
