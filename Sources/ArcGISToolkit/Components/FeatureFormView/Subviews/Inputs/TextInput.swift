@@ -27,8 +27,23 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the full screen text input is presented.
 ***REMOVED***@State private var fullScreenTextInputIsPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the code scanner is presented.
+***REMOVED***@State private var scannerIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
+***REMOVED***
+***REMOVED******REMOVED***/ Performs camera authorization request handling.
+***REMOVED***@StateObject private var cameraRequester = CameraRequester()
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the device camera is accessible for scanning.
+***REMOVED***private let cameraIsDisabled: Bool = {
+#if targetEnvironment(simulator)
+***REMOVED******REMOVED***return true
+#else
+***REMOVED******REMOVED***return false
+#endif
+***REMOVED***()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
@@ -36,11 +51,12 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The input's parent element.
-***REMOVED******REMOVED***/ - Note: `BarcodeScannerInput` uses `TextInput` for fallback when the device camera is unavailable.
 ***REMOVED***init(element: FieldFormElement) {
 ***REMOVED******REMOVED***precondition(
-***REMOVED******REMOVED******REMOVED***element.input is TextAreaFormInput || element.input is TextBoxFormInput || element.input is BarcodeScannerFormInput,
-***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
+***REMOVED******REMOVED******REMOVED***element.input is TextAreaFormInput
+***REMOVED******REMOVED******REMOVED***|| element.input is TextBoxFormInput
+***REMOVED******REMOVED******REMOVED***|| element.input is BarcodeScannerFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED***
@@ -70,9 +86,25 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***CodeScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.cameraRequester(cameraRequester)
 ***REMOVED***
 ***REMOVED***
 
@@ -98,7 +130,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: .horizontal
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
@@ -127,6 +159,20 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text.removeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if element.input is BarcodeScannerFormInput {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraRequester.request {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** onAccessDenied: {
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(cameraIsDisabled)
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
