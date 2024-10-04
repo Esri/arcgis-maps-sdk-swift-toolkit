@@ -262,6 +262,25 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             textLayer.transform = previewLayer.transform
             metadataObjectOverlayLayer.addSublayer(textLayer)
         }
+        
+        let guideTextLayer = CATextLayer()
+        let guideTextString = NSAttributedString(
+            string: String.tapToScan,
+            attributes: [
+                .font: UIFont.systemFont(ofSize: fontSize),
+                .foregroundColor: UIColor.white,
+            ]
+        )
+        guideTextLayer.alignmentMode = .center
+        guideTextLayer.bounds = guideTextString.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: .usesLineFragmentOrigin, context: nil)
+        guideTextLayer.contentsScale = UIScreen.main.scale
+        guideTextLayer.position = CGPoint(x: barcodeOverlayPath.boundingBox.midX, y: barcodeOverlayPath.boundingBox.minY - 8)
+        guideTextLayer.string = guideTextString
+        guideTextLayer.shadowColor = UIColor.black.cgColor
+        guideTextLayer.shadowOffset = CGSizeZero
+        guideTextLayer.shadowOpacity = 1.0
+        metadataObjectOverlayLayer.addSublayer(guideTextLayer)
+        
         return metadataObjectOverlayLayer
     }
     
