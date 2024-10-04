@@ -58,9 +58,22 @@ struct FlashlightButton: View {
 ***REMOVED******REMOVED******REMOVED***device?.torchMode = isOn ? .on : .off
 ***REMOVED******REMOVED******REMOVED***device?.unlockForConfiguration()
 ***REMOVED***
+***REMOVED******REMOVED***.torchFeedback(trigger: torchIsOn)
 ***REMOVED***
 ***REMOVED***
 
 #Preview {
 ***REMOVED***FlashlightButton()
+***REMOVED***
+
+private extension View {
+***REMOVED***@ViewBuilder
+***REMOVED***func torchFeedback(trigger: Bool) -> some View {
+***REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED******REMOVED******REMOVED******REMOVED***.sensoryFeedback(.selection, trigger: trigger)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED***
+***REMOVED***
 ***REMOVED***
