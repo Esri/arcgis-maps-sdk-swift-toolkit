@@ -37,33 +37,41 @@ struct FlashlightButton: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var isHiddenIfUnavailable = false
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***torchIsOn.toggle()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: icon)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(torchIsOn ? .white : .black)
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentTransition(.interpolate)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(.tint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(Circle())
+***REMOVED******REMOVED***if isHiddenIfUnavailable && !hasTorch {
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***torchIsOn.toggle()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: icon)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(torchIsOn ? .white : .black)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentTransition(.interpolate)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.tint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(Circle())
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.disabled(!hasTorch)
+***REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED***torchIsOn = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: torchIsOn) { isOn in
+***REMOVED******REMOVED******REMOVED******REMOVED***try? device?.lockForConfiguration()
+***REMOVED******REMOVED******REMOVED******REMOVED***device?.torchMode = isOn ? .on : .off
+***REMOVED******REMOVED******REMOVED******REMOVED***device?.unlockForConfiguration()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.torchFeedback(trigger: torchIsOn)
 ***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***.disabled(!hasTorch)
-***REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED***torchIsOn = false
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: torchIsOn) { isOn in
-***REMOVED******REMOVED******REMOVED***try? device?.lockForConfiguration()
-***REMOVED******REMOVED******REMOVED***device?.torchMode = isOn ? .on : .off
-***REMOVED******REMOVED******REMOVED***device?.unlockForConfiguration()
-***REMOVED***
-***REMOVED******REMOVED***.torchFeedback(trigger: torchIsOn)
 ***REMOVED***
 ***REMOVED***
-
-#Preview {
-***REMOVED***FlashlightButton()
+***REMOVED***func hiddenIfUnavailable() -> some View {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.isHiddenIfUnavailable = true
+***REMOVED******REMOVED***return copy
+***REMOVED***
 ***REMOVED***
 
 private extension View {
@@ -76,4 +84,8 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+#Preview {
+***REMOVED***FlashlightButton()
 ***REMOVED***
