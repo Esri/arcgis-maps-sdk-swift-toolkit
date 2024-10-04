@@ -332,10 +332,11 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     @objc
     private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
         let point = tapGestureRecognizer.location(in: view)
-        metadataObjectOverlayLayers.forEach { metadataObjectLayer in
-            if metadataObjectLayer.path?.contains(point) ?? false,
-               let metadataObject = metadataObjectLayer.metadataObject {
+        for metadataObjectOverlayLayer in metadataObjectOverlayLayers {
+            if metadataObjectOverlayLayer.path?.contains(point) ?? false,
+               let metadataObject = metadataObjectOverlayLayer.metadataObject {
                 scan(metadataObject)
+                break
             }
         }
     }
