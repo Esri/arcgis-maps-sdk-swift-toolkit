@@ -289,18 +289,16 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     ///
     /// - Parameter output: The sect of scanned codes.
     private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
-        if !output.isEmpty {
-            if output.count > 1 {
-                self.autoScanTimer?.invalidate()
-            } else {
-                if !(self.autoScanTimer?.isValid ?? false), let metadataObject = output.first {
-                    self.autoScanTimer = Timer.scheduledTimer(withTimeInterval: autoScanDelay, repeats: false) { _ in
-                        Task { @MainActor in
-                            self.scan(metadataObject)
-                        }
+        if output.count == 1 {
+            if !(self.autoScanTimer?.isValid ?? false), let metadataObject = output.first {
+                self.autoScanTimer = Timer.scheduledTimer(withTimeInterval: autoScanDelay, repeats: false) { _ in
+                    Task { @MainActor in
+                        self.scan(metadataObject)
                     }
                 }
             }
+        } else {
+            self.autoScanTimer?.invalidate()
         }
     }
     
