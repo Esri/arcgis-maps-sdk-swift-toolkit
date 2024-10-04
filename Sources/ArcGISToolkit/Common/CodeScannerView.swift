@@ -61,6 +61,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private let captureSession = AVCaptureSession()
     
+    private let feedbackGenerator = UIImpactFeedbackGenerator()
+    
     private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
     
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
@@ -305,6 +307,14 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         if let machineReadableCodeObject = metadataObject as? AVMetadataMachineReadableCodeObject,
            let stringValue = machineReadableCodeObject.stringValue {
             delegate?.didScanCode(stringValue)
+            if #available(iOS 17.5, *) {
+                self.feedbackGenerator.impactOccurred(
+                    at: CGPoint(
+                        x: metadataObject.bounds.midX,
+                        y: metadataObject.bounds.midY
+                    )
+                )
+            }
         }
     }
     
