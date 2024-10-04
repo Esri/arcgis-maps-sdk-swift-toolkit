@@ -37,33 +37,41 @@ struct FlashlightButton: View {
         }
     }
     
+    var isHiddenIfUnavailable = false
+    
     var body: some View {
-        Button {
-            torchIsOn.toggle()
-        } label: {
-            Image(systemName: icon)
-                .padding()
-                .foregroundStyle(torchIsOn ? .white : .black)
-                .contentTransition(.interpolate)
-                .background(.tint)
-                .clipShape(Circle())
+        if isHiddenIfUnavailable && !hasTorch {
+            EmptyView()
+        } else {
+            Button {
+                torchIsOn.toggle()
+            } label: {
+                Image(systemName: icon)
+                    .padding()
+                    .foregroundStyle(torchIsOn ? .white : .black)
+                    .contentTransition(.interpolate)
+                    .background(.tint)
+                    .clipShape(Circle())
+            }
+            .buttonStyle(.plain)
+            .disabled(!hasTorch)
+            .onDisappear {
+                torchIsOn = false
+            }
+            .onChange(of: torchIsOn) { isOn in
+                try? device?.lockForConfiguration()
+                device?.torchMode = isOn ? .on : .off
+                device?.unlockForConfiguration()
+            }
+            .torchFeedback(trigger: torchIsOn)
         }
-        .buttonStyle(.plain)
-        .disabled(!hasTorch)
-        .onDisappear {
-            torchIsOn = false
-        }
-        .onChange(of: torchIsOn) { isOn in
-            try? device?.lockForConfiguration()
-            device?.torchMode = isOn ? .on : .off
-            device?.unlockForConfiguration()
-        }
-        .torchFeedback(trigger: torchIsOn)
     }
-}
-
-#Preview {
-    FlashlightButton()
+    
+    func hiddenIfUnavailable() -> some View {
+        var copy = self
+        copy.isHiddenIfUnavailable = true
+        return copy
+    }
 }
 
 private extension View {
@@ -76,4 +84,8 @@ private extension View {
             self
         }
     }
+}
+
+#Preview {
+    FlashlightButton()
 }

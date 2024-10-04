@@ -97,6 +97,7 @@ struct TextInput: View {
                     }
                     .overlay(alignment: .bottom) {
                         FlashlightButton()
+                            .hiddenIfUnavailable()
                             .font(.title)
                             .padding()
                     }
