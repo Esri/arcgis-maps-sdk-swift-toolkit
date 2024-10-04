@@ -16,7 +16,30 @@
 import SwiftUI
 
 /// Scans machine readable information like QR codes and barcodes.
-struct CodeScannerView: UIViewControllerRepresentable {
+struct CodeScanner: View {
+    @Binding var code: String
+    
+    @Binding var isPresented: Bool
+    
+    var body: some View {
+        CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+            .overlay(alignment:.topTrailing) {
+                Button(String.cancel, role: .cancel) {
+                    isPresented = false
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+            }
+            .overlay(alignment: .bottom) {
+                FlashlightButton()
+                    .hiddenIfUnavailable()
+                    .font(.title)
+                    .padding()
+            }
+    }
+}
+
+struct CodeScannerRepresentable: UIViewControllerRepresentable {
     @Binding var scannerIsPresented: Bool
     
     @Binding var scanOutput: String

@@ -87,20 +87,7 @@ struct TextInput: View {
                 }
             }
             .sheet(isPresented: $scannerIsPresented) {
-                CodeScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $text)
-                    .overlay(alignment:.topTrailing) {
-                        Button(String.cancel, role: .cancel) {
-                            scannerIsPresented = false
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .padding()
-                    }
-                    .overlay(alignment: .bottom) {
-                        FlashlightButton()
-                            .hiddenIfUnavailable()
-                            .font(.title)
-                            .padding()
-                    }
+                CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
             .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
                 text = newFormattedValue
