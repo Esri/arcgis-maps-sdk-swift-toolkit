@@ -308,7 +308,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Checks the scanned contents for the number of codes recognized. If only a single code is
-***REMOVED******REMOVED***/ recognized, `autoScanTimer` is started, otherwise the `autoScanTimer` is invalidated.
+***REMOVED******REMOVED***/ recognized, `autoScanTimer` is started, otherwise `autoScanTimer` is invalidated.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Parameter output: The sect of scanned codes.
 ***REMOVED***private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
