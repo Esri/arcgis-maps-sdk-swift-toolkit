@@ -16,7 +16,6 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-@MainActor
 struct FeatureFormTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
@@ -51,7 +50,7 @@ private extension FeatureFormTestView {
     /// - Parameters:
     ///   - map: The map under test.
     ///   - testCase: The test definition.
-    @MainActor func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
+    func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
         MapView(map: map)
             .onAttributionBarHeightChanged {
                 attributionBarHeight = $0

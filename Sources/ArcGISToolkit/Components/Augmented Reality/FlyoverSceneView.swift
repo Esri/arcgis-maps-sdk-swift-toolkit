@@ -17,7 +17,6 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality fly over experience.
-@MainActor
 @preconcurrency
 public struct FlyoverSceneView: View {
     /// The AR session.

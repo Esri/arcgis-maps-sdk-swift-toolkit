@@ -20,7 +20,6 @@ import SwiftUI
 /// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 /// of your current location. Because this is an example that can be run from anywhere,
 /// it places a red circle around your initial location which can be explored.
-@MainActor
 struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {
         // Creates an elevation source from Terrain3D REST service.

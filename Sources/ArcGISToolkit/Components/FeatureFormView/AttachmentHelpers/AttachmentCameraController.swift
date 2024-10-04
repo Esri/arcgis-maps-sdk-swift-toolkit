@@ -16,7 +16,6 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 /// A UIImagePickerController wrapper to provide a native photo capture experience.
-@MainActor
 struct AttachmentCameraController: UIViewControllerRepresentable {
     @Environment(\.dismiss) private var dismiss
     

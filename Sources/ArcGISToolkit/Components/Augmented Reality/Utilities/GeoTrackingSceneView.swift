@@ -17,7 +17,6 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience using geo-tracking.
-@MainActor
 @preconcurrency
 public struct GeoTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
@@ -165,7 +164,6 @@ public struct GeoTrackingSceneView: View {
         cameraController.transformationMatrix = .identity
     }
     
-    @MainActor
     private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
         switch status.state {
         case .notAvailable, .initializing, .localizing:
