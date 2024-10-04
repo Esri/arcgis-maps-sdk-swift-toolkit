@@ -227,7 +227,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         let metadataObjectOverlayLayer = MetadataObjectLayer()
         metadataObjectOverlayLayer.metadataObject = transformedMetadataObject
         metadataObjectOverlayLayer.lineJoin = .round
-        metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(0.7).cgColor
         metadataObjectOverlayLayer.lineWidth = 2.5
         metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.25).cgColor
         metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(1).cgColor
