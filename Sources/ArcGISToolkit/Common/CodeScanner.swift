@@ -308,7 +308,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     }
     
     /// Checks the scanned contents for the number of codes recognized. If only a single code is
-    /// recognized, `autoScanTimer` is started, otherwise the `autoScanTimer` is invalidated.
+    /// recognized, `autoScanTimer` is started, otherwise `autoScanTimer` is invalidated.
     ///
     /// - Parameter output: The sect of scanned codes.
     private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
