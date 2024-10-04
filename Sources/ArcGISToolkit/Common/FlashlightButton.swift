@@ -58,9 +58,22 @@ struct FlashlightButton: View {
             device?.torchMode = isOn ? .on : .off
             device?.unlockForConfiguration()
         }
+        .torchFeedback(trigger: torchIsOn)
     }
 }
 
 #Preview {
     FlashlightButton()
+}
+
+private extension View {
+    @ViewBuilder
+    func torchFeedback(trigger: Bool) -> some View {
+        if #available(iOS 17.0, *) {
+            self
+                .sensoryFeedback(.selection, trigger: trigger)
+        } else {
+            self
+        }
+    }
 }
