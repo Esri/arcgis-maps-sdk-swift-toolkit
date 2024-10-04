@@ -18,7 +18,6 @@ import OSLog
 import SwiftUI
 import UserNotifications
 
-@MainActor
 struct JobManagerExampleView: View {
     /// The job manager used by this view.
     @ObservedObject var jobManager = JobManager.shared

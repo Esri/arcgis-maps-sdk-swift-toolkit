@@ -20,7 +20,6 @@ import UniformTypeIdentifiers
 internal import os
 
 /// The context menu shown when the new attachment button is pressed.
-@MainActor
 struct AttachmentImportMenu: View {
     /// The attachment form element displaying the menu.
     private let element: AttachmentsFormElement
