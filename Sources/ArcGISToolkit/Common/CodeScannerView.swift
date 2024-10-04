@@ -236,14 +236,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED******REMOVED***let barcodeOverlayPath = barcodeOverlayPathWithCorners(barcodeMetadataObject.corners)
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.path = barcodeOverlayPath
-***REMOVED******REMOVED***let textLayerString: String?
 ***REMOVED******REMOVED***let fontSize = 12.0
 ***REMOVED******REMOVED***if let stringValue = barcodeMetadataObject.stringValue, !stringValue.isEmpty {
-***REMOVED******REMOVED******REMOVED***textLayerString = "\(String.tapToScan) \(stringValue)"
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***textLayerString = String.tapToScan
-***REMOVED***
-***REMOVED******REMOVED***if let textLayerString {
 ***REMOVED******REMOVED******REMOVED***let barcodeOverlayBoundingBox = barcodeOverlayPath.boundingBox
 ***REMOVED******REMOVED******REMOVED***let minimumTextLayerHeight: CGFloat = fontSize + 4
 ***REMOVED******REMOVED******REMOVED***let textLayerHeight: CGFloat
@@ -259,7 +253,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***textLayer.font = UIFont.boldSystemFont(ofSize: 19).fontName as CFString
 ***REMOVED******REMOVED******REMOVED***textLayer.position = CGPoint(x: barcodeOverlayBoundingBox.midX, y: barcodeOverlayBoundingBox.midY)
 ***REMOVED******REMOVED******REMOVED***textLayer.string = NSAttributedString(
-***REMOVED******REMOVED******REMOVED******REMOVED***string: textLayerString,
+***REMOVED******REMOVED******REMOVED******REMOVED***string: stringValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributes: [
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.boldSystemFont(ofSize: fontSize),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white.cgColor,
