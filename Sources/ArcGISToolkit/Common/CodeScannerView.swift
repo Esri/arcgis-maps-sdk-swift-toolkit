@@ -186,8 +186,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
+***REMOVED******REMOVED******REMOVED******REMOVED***self.evaluateOutputForAutoScan(metadataObjects)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***evaluateOutputForAutoScan(metadataObjects)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
