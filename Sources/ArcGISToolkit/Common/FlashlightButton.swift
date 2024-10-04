@@ -16,7 +16,7 @@ import AVFoundation
 import SwiftUI
 
 struct FlashlightButton: View {
-    @State private var flashIsOn = false
+    @State private var torchIsOn = false
     
     var device: AVCaptureDevice? {
         .default(for: .video)
@@ -26,32 +26,62 @@ struct FlashlightButton: View {
         device?.hasTorch ?? false
     }
     
+    var icon: String {
+        switch (hasTorch, torchIsOn) {
+        case (false, _):
+            "flashlight.slash"
+        case (_, true):
+            "flashlight.on.fill"
+        case (_, false):
+            "flashlight.off.fill"
+        }
+    }
+    
+    var isHiddenIfUnavailable = false
+    
     var body: some View {
-        Button {
-            flashIsOn.toggle()
-        } label: {
-            Group {
-                if !hasTorch {
-                    Image(systemName: "flashlight.slash")
-                } else if #available(iOS 17, *) {
-                    Image(systemName: flashIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
-                        .contentTransition(.symbolEffect(.replace))
-                } else {
-                    Image(systemName: flashIsOn ? "flashlight.on.fill" : "flashlight.off.fill")
-                }
+        if isHiddenIfUnavailable && !hasTorch {
+            EmptyView()
+        } else {
+            Button {
+                torchIsOn.toggle()
+            } label: {
+                Image(systemName: icon)
+                    .padding()
+                    .foregroundStyle(torchIsOn ? .white : .black)
+                    .contentTransition(.interpolate)
+                    .background(.tint)
+                    .clipShape(Circle())
             }
-            .padding()
-            .background(.regularMaterial)
-            .clipShape(Circle())
+            .buttonStyle(.plain)
+            .disabled(!hasTorch)
+            .onDisappear {
+                torchIsOn = false
+            }
+            .onChange(of: torchIsOn) { isOn in
+                try? device?.lockForConfiguration()
+                device?.torchMode = isOn ? .on : .off
+                device?.unlockForConfiguration()
+            }
+            .torchFeedback(trigger: torchIsOn)
         }
-        .disabled(!hasTorch)
-        .onDisappear {
-            flashIsOn = false
-        }
-        .onChange(of: flashIsOn) { isOn in
-            try? device?.lockForConfiguration()
-            device?.torchMode = isOn ? .on : .off
-            device?.unlockForConfiguration()
+    }
+    
+    func hiddenIfUnavailable() -> some View {
+        var copy = self
+        copy.isHiddenIfUnavailable = true
+        return copy
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func torchFeedback(trigger: Bool) -> some View {
+        if #available(iOS 17.0, *) {
+            self
+                .sensoryFeedback(.selection, trigger: trigger)
+        } else {
+            self
         }
     }
 }
