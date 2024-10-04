@@ -237,6 +237,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         let barcodeOverlayPath = barcodeOverlayPathWithCorners(barcodeMetadataObject.corners)
         metadataObjectOverlayLayer.path = barcodeOverlayPath
         let textLayerString: String?
+        let fontSize = 12.0
         if let stringValue = barcodeMetadataObject.stringValue, !stringValue.isEmpty {
             textLayerString = "\(String.tapToScan) \(stringValue)"
         } else {
@@ -244,7 +245,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         }
         if let textLayerString {
             let barcodeOverlayBoundingBox = barcodeOverlayPath.boundingBox
-            let fontSize: CGFloat = 19
             let minimumTextLayerHeight: CGFloat = fontSize + 4
             let textLayerHeight: CGFloat
             if barcodeOverlayBoundingBox.size.height < minimumTextLayerHeight {
