@@ -249,15 +249,13 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             textLayer.alignmentMode = .center
             textLayer.bounds = CGRect(x: .zero, y: .zero, width: barcodeOverlayBoundingBox.size.width, height: textLayerHeight)
             textLayer.contentsScale = UIScreen.main.scale
-            textLayer.font = UIFont.boldSystemFont(ofSize: 19).fontName as CFString
+            textLayer.font = UIFont.systemFont(ofSize: fontSize)
             textLayer.position = CGPoint(x: barcodeOverlayBoundingBox.midX, y: barcodeOverlayBoundingBox.midY)
             textLayer.string = NSAttributedString(
                 string: stringValue,
                 attributes: [
-                    .font: UIFont.boldSystemFont(ofSize: fontSize),
-                    .foregroundColor: UIColor.white.cgColor,
-                    .strokeWidth: -5.0,
-                    .strokeColor: UIColor.black.cgColor
+                    .font: UIFont.systemFont(ofSize: fontSize),
+                    .foregroundColor: UIColor.white
                 ]
             )
             textLayer.isWrapped = true
