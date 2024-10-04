@@ -42,11 +42,9 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Note: The iOS 18 version currently uses `legacyImplementation` as
-***REMOVED******REMOVED***/ `iOS18Implementation` contains symbols not available in Xcode 15.4.
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if #available(iOS 18.0, *) {
-***REMOVED******REMOVED******REMOVED***legacyImplementation
+***REMOVED******REMOVED******REMOVED***iOS18Implementation
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***legacyImplementation
 ***REMOVED***
@@ -71,22 +69,20 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***.frame(height: cellSize.height)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***The iOS 18 implementation is commented as it contains symbols not
-***REMOVED******REMOVED***available in Xcode 15.4.
-***REMOVED******REMOVED***@available(iOS 18.0, *)
-***REMOVED******REMOVED***var iOS18Implementation: some View {
-***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 10)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED***@available(iOS 18.0, *)
+***REMOVED***var iOS18Implementation: some View {
+***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 10)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry.containerSize.width
-***REMOVED******REMOVED*** action: { _, newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(newValue)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
+***REMOVED******REMOVED******REMOVED***geometry.containerSize.width
+***REMOVED*** action: { _, newValue in
+***REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(newValue)
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
 ***REMOVED******REMOVED***HStack(spacing: cellSpacing) {
