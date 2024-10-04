@@ -12,106 +12,34 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
 @preconcurrency import AVFoundation
 ***REMOVED***
 
-struct BarcodeScannerInput: View {
-***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***/ Scans machine readable information like QR codes and barcodes.
+struct CodeScanner: View {
+***REMOVED***@Binding var code: String
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a ``TextInput`` should be used instead.
-***REMOVED******REMOVED***/ This will be `true` if the device camera is inaccessible.
-***REMOVED***@State private var fallbackToTextInput: Bool = {
-#if targetEnvironment(simulator)
-***REMOVED******REMOVED***return true
-#else
-***REMOVED******REMOVED***return false
-#endif
-***REMOVED***()
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the code scanner is presented.
-***REMOVED***@State private var scannerIsPresented = false
-***REMOVED***
-***REMOVED******REMOVED***/ The current barcode value.
-***REMOVED***@State private var value = ""
-***REMOVED***
-***REMOVED******REMOVED***/ Performs camera authorization request handling.
-***REMOVED***@StateObject private var cameraRequester = CameraRequester()
-***REMOVED***
-***REMOVED******REMOVED***/ The element the input belongs to.
-***REMOVED***private let element: FieldFormElement
-***REMOVED***
-***REMOVED******REMOVED***/ The input configuration of the field.
-***REMOVED***private let input: BarcodeScannerFormInput
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a view for a barcode scanner input.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - element: The input's parent element.
-***REMOVED***init(element: FieldFormElement) {
-***REMOVED******REMOVED***precondition(
-***REMOVED******REMOVED******REMOVED***element.input is BarcodeScannerFormInput,
-***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(BarcodeScannerFormInput.self)."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***self.input = element.input as! BarcodeScannerFormInput
-***REMOVED***
+***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if fallbackToTextInput {
-***REMOVED******REMOVED******REMOVED***TextInput(element: element)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(value.isEmpty ? String.noValue : value)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***if !value.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value.removeAll()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED***.formInputStyle()
-***REMOVED******REMOVED******REMOVED***.onChange(of: value) { value in
-***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(value)
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hiddenIfUnavailable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.cameraRequester(cameraRequester)
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraRequester.request {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
-***REMOVED******REMOVED******REMOVED*** onAccessDenied: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToTextInput = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***value = newFormattedValue
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $value)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-struct ScannerView: UIViewControllerRepresentable {
+struct CodeScannerRepresentable: UIViewControllerRepresentable {
 ***REMOVED***@Binding var scannerIsPresented: Bool
 ***REMOVED***
 ***REMOVED***@Binding var scanOutput: String
@@ -149,13 +77,22 @@ protocol ScannerViewControllerDelegate: AnyObject {
 ***REMOVED***
 
 class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
-***REMOVED***weak var delegate: ScannerViewControllerDelegate?
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Constants
+***REMOVED***
+***REMOVED***private let autoScanDelay = 1.0
 ***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
+***REMOVED***
+***REMOVED***private let feedbackGenerator = UISelectionFeedbackGenerator()
 ***REMOVED***
 ***REMOVED***private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
 ***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Variables
+***REMOVED***
+***REMOVED***private var autoScanTimer: Timer?
 ***REMOVED***
 ***REMOVED***private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
 ***REMOVED***
@@ -163,13 +100,17 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private var removeMetadataObjectOverlayLayersTimer: Timer?
 ***REMOVED***
+***REMOVED***weak var delegate: ScannerViewControllerDelegate?
+***REMOVED***
 ***REMOVED***private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-***REMOVED******REMOVED***UITapGestureRecognizer(target: self, action: #selector(selectRecognizedCode(with:)))
+***REMOVED******REMOVED***UITapGestureRecognizer(target: self, action: #selector(userDidTap(with:)))
 ***REMOVED***()
 ***REMOVED***
 ***REMOVED***private class MetadataObjectLayer: CAShapeLayer {
 ***REMOVED******REMOVED***var metadataObject: AVMetadataObject?
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** MARK: UIViewController methods
 ***REMOVED***
 ***REMOVED***override func viewDidLayoutSubviews() {
 ***REMOVED******REMOVED***previewLayer.frame = view.bounds
@@ -251,6 +192,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** MARK: AVCaptureMetadataOutputObjectsDelegate methods
+***REMOVED***
 ***REMOVED***func metadataOutput(
 ***REMOVED******REMOVED***_ output: AVCaptureMetadataOutput,
 ***REMOVED******REMOVED***didOutput metadataObjects: [AVMetadataObject],
@@ -266,9 +209,12 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
+***REMOVED******REMOVED******REMOVED******REMOVED***self.evaluateOutputForAutoScan(metadataObjects)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Scan handling methods
 ***REMOVED***
 ***REMOVED***private func addMetadataObjectOverlayLayersToVideoPreviewView(_ metadataObjectOverlayLayers: [MetadataObjectLayer]) {
 ***REMOVED******REMOVED***CATransaction.begin()
@@ -304,23 +250,17 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***let metadataObjectOverlayLayer = MetadataObjectLayer()
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.metadataObject = transformedMetadataObject
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.lineJoin = .round
-***REMOVED******REMOVED***metadataObjectOverlayLayer.lineWidth = 7.0
-***REMOVED******REMOVED***metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(0.7).cgColor
-***REMOVED******REMOVED***metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.3).cgColor
+***REMOVED******REMOVED***metadataObjectOverlayLayer.lineWidth = 2.5
+***REMOVED******REMOVED***metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.25).cgColor
+***REMOVED******REMOVED***metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(1).cgColor
 ***REMOVED******REMOVED***guard let barcodeMetadataObject = transformedMetadataObject as? AVMetadataMachineReadableCodeObject else {
 ***REMOVED******REMOVED******REMOVED***return metadataObjectOverlayLayer
 ***REMOVED***
 ***REMOVED******REMOVED***let barcodeOverlayPath = barcodeOverlayPathWithCorners(barcodeMetadataObject.corners)
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.path = barcodeOverlayPath
-***REMOVED******REMOVED***let textLayerString: String?
+***REMOVED******REMOVED***let fontSize = 12.0
 ***REMOVED******REMOVED***if let stringValue = barcodeMetadataObject.stringValue, !stringValue.isEmpty {
-***REMOVED******REMOVED******REMOVED***textLayerString = "\(String.tapToScan) \(stringValue)"
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***textLayerString = String.tapToScan
-***REMOVED***
-***REMOVED******REMOVED***if let textLayerString {
 ***REMOVED******REMOVED******REMOVED***let barcodeOverlayBoundingBox = barcodeOverlayPath.boundingBox
-***REMOVED******REMOVED******REMOVED***let fontSize: CGFloat = 19
 ***REMOVED******REMOVED******REMOVED***let minimumTextLayerHeight: CGFloat = fontSize + 4
 ***REMOVED******REMOVED******REMOVED***let textLayerHeight: CGFloat
 ***REMOVED******REMOVED******REMOVED***if barcodeOverlayBoundingBox.size.height < minimumTextLayerHeight {
@@ -332,22 +272,57 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***textLayer.alignmentMode = .center
 ***REMOVED******REMOVED******REMOVED***textLayer.bounds = CGRect(x: .zero, y: .zero, width: barcodeOverlayBoundingBox.size.width, height: textLayerHeight)
 ***REMOVED******REMOVED******REMOVED***textLayer.contentsScale = UIScreen.main.scale
-***REMOVED******REMOVED******REMOVED***textLayer.font = UIFont.boldSystemFont(ofSize: 19).fontName as CFString
+***REMOVED******REMOVED******REMOVED***textLayer.font = UIFont.systemFont(ofSize: fontSize)
 ***REMOVED******REMOVED******REMOVED***textLayer.position = CGPoint(x: barcodeOverlayBoundingBox.midX, y: barcodeOverlayBoundingBox.midY)
 ***REMOVED******REMOVED******REMOVED***textLayer.string = NSAttributedString(
-***REMOVED******REMOVED******REMOVED******REMOVED***string: textLayerString,
+***REMOVED******REMOVED******REMOVED******REMOVED***string: stringValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributes: [
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.boldSystemFont(ofSize: fontSize),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white.cgColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.strokeWidth: -5.0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.strokeColor: UIColor.black.cgColor
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.systemFont(ofSize: fontSize),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white
 ***REMOVED******REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***textLayer.isWrapped = true
 ***REMOVED******REMOVED******REMOVED***textLayer.transform = previewLayer.transform
 ***REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(textLayer)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let guideTextLayer = CATextLayer()
+***REMOVED******REMOVED***let guideTextString = NSAttributedString(
+***REMOVED******REMOVED******REMOVED***string: String.tapToScan,
+***REMOVED******REMOVED******REMOVED***attributes: [
+***REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.systemFont(ofSize: fontSize),
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white,
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***guideTextLayer.alignmentMode = .center
+***REMOVED******REMOVED***guideTextLayer.bounds = guideTextString.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: .usesLineFragmentOrigin, context: nil)
+***REMOVED******REMOVED***guideTextLayer.contentsScale = UIScreen.main.scale
+***REMOVED******REMOVED***guideTextLayer.position = CGPoint(x: barcodeOverlayPath.boundingBox.midX, y: barcodeOverlayPath.boundingBox.minY - 8)
+***REMOVED******REMOVED***guideTextLayer.string = guideTextString
+***REMOVED******REMOVED***guideTextLayer.shadowColor = UIColor.black.cgColor
+***REMOVED******REMOVED***guideTextLayer.shadowOffset = CGSizeZero
+***REMOVED******REMOVED***guideTextLayer.shadowOpacity = 1.0
+***REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(guideTextLayer)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return metadataObjectOverlayLayer
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Checks the scanned contents for the number of codes recognized. If only a single code is
+***REMOVED******REMOVED***/ recognized, `autoScanTimer` is started, otherwise `autoScanTimer` is invalidated.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Parameter output: The sect of scanned codes.
+***REMOVED***private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
+***REMOVED******REMOVED***if output.count == 1 {
+***REMOVED******REMOVED******REMOVED***if !(self.autoScanTimer?.isValid ?? false), let metadataObject = output.first {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.autoScanTimer = Timer.scheduledTimer(withTimeInterval: autoScanDelay, repeats: false) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scan(metadataObject)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self.autoScanTimer?.invalidate()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@objc
@@ -360,15 +335,31 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***removeMetadataObjectOverlayLayersTimer = nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Triggers the delegated scan method.
+***REMOVED******REMOVED***/ - Parameter metadataObject: The machine readable code.
+***REMOVED***private func scan(_ metadataObject: AVMetadataObject) {
+***REMOVED******REMOVED***if let machineReadableCodeObject = metadataObject as? AVMetadataMachineReadableCodeObject,
+***REMOVED******REMOVED***   let stringValue = machineReadableCodeObject.stringValue {
+***REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
+***REMOVED******REMOVED******REMOVED***if #available(iOS 17.5, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.feedbackGenerator.selectionChanged(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: CGPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: metadataObject.bounds.midX,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: metadataObject.bounds.midY
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***@objc
-***REMOVED***private func selectRecognizedCode(with tapGestureRecognizer: UITapGestureRecognizer) {
+***REMOVED***private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
 ***REMOVED******REMOVED***let point = tapGestureRecognizer.location(in: view)
-***REMOVED******REMOVED***metadataObjectOverlayLayers.forEach { metadataObjectLayer in
-***REMOVED******REMOVED******REMOVED***if metadataObjectLayer.path?.contains(point) ?? false {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let metadataObject = metadataObjectLayer.metadataObject as? AVMetadataMachineReadableCodeObject,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let stringValue = metadataObject.stringValue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***for metadataObjectOverlayLayer in metadataObjectOverlayLayers {
+***REMOVED******REMOVED******REMOVED***if metadataObjectOverlayLayer.path?.contains(point) ?? false,
+***REMOVED******REMOVED******REMOVED***   let metadataObject = metadataObjectOverlayLayer.metadataObject {
+***REMOVED******REMOVED******REMOVED******REMOVED***scan(metadataObject)
+***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
