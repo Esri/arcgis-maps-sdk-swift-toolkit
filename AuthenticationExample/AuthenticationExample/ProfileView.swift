@@ -17,7 +17,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view that displays the profile of a user.
-@MainActor
 struct ProfileView: View {
 ***REMOVED******REMOVED***/ The portal that the user is signed in to.
 ***REMOVED***let portal: Portal

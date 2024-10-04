@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ Displays a group form element and manages the visibility of the elements within the group.
-@MainActor
 struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the group is expanded or collapsed.
 ***REMOVED***@State private var isExpanded = false

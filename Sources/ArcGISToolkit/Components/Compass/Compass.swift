@@ -30,7 +30,6 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [CompassExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `Compass` see the <doc:CompassTutorial>.
-@MainActor
 @preconcurrency
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.

@@ -17,7 +17,6 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality table top experience.
-@MainActor
 @preconcurrency
 public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.

@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the bottom of a field element in a form.
-@MainActor
 struct InputFooter: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***

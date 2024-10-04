@@ -64,7 +64,6 @@
 ***REMOVED***/ `Info.plist` file.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
-@MainActor
 @preconcurrency
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.

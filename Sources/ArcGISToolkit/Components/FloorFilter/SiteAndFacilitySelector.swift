@@ -18,7 +18,6 @@
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 ***REMOVED***/
 ***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
-@MainActor
 struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding var isPresented: Bool

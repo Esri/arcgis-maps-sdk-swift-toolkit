@@ -16,7 +16,6 @@
 import UniformTypeIdentifiers
 
 ***REMOVED***/ A UIImagePickerController wrapper to provide a native photo capture experience.
-@MainActor
 struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***

@@ -18,7 +18,6 @@ import OSLog
 ***REMOVED***
 import UserNotifications
 
-@MainActor
 struct JobManagerExampleView: View {
 ***REMOVED******REMOVED***/ The job manager used by this view.
 ***REMOVED***@ObservedObject var jobManager = JobManager.shared
