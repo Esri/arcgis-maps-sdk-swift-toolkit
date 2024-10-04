@@ -27,8 +27,23 @@ struct TextInput: View {
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
     
+    /// A Boolean value indicating whether the code scanner is presented.
+    @State private var scannerIsPresented = false
+    
     /// The current text value.
     @State private var text = ""
+    
+    /// Performs camera authorization request handling.
+    @StateObject private var cameraRequester = CameraRequester()
+    
+    /// A Boolean value indicating whether the device camera is accessible for scanning.
+    private let cameraIsDisabled: Bool = {
+#if targetEnvironment(simulator)
+        return true
+#else
+        return false
+#endif
+    }()
     
     /// The element the input belongs to.
     private let element: FieldFormElement
@@ -36,11 +51,12 @@ struct TextInput: View {
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
     ///   - element: The input's parent element.
-    /// - Note: `BarcodeScannerInput` uses `TextInput` for fallback when the device camera is unavailable.
     init(element: FieldFormElement) {
         precondition(
-            element.input is TextAreaFormInput || element.input is TextBoxFormInput || element.input is BarcodeScannerFormInput,
-            "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
+            element.input is TextAreaFormInput
+            || element.input is TextBoxFormInput
+            || element.input is BarcodeScannerFormInput,
+            "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
         )
         self.element = element
     }
@@ -70,16 +86,20 @@ struct TextInput: View {
                     model.focusedElement = element
                 }
             }
+            .sheet(isPresented: $scannerIsPresented) {
+                CodeScanner(code: $text, isPresented: $scannerIsPresented)
+            }
             .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
                 text = newFormattedValue
             }
+            .cameraRequester(cameraRequester)
     }
 }
 
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
-        HStack(alignment: .bottom) {
+        HStack(alignment: .firstTextBaseline) {
             Group {
                 if element.isMultiline {
                     Text(text)
@@ -98,7 +118,7 @@ private extension TextInput {
                     TextField(
                         element.label,
                         text: $text,
-                        prompt: Text(element.hint).foregroundColor(.secondary),
+                        prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
                         axis: .horizontal
                     )
                     .accessibilityIdentifier("\(element.label) Text Input")
@@ -127,6 +147,20 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
+            }
+            if element.input is BarcodeScannerFormInput {
+                Button {
+                    model.focusedElement = element
+                    cameraRequester.request {
+                        scannerIsPresented = true
+                    } onAccessDenied: {
+                    }
+                } label: {
+                    Image(systemName: "barcode.viewfinder")
+                        .foregroundStyle(.secondary)
+                }
+                .disabled(cameraIsDisabled)
+                .buttonStyle(.plain)
             }
         }
         .formInputStyle()
