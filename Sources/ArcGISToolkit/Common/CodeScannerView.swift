@@ -249,15 +249,13 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***textLayer.alignmentMode = .center
 ***REMOVED******REMOVED******REMOVED***textLayer.bounds = CGRect(x: .zero, y: .zero, width: barcodeOverlayBoundingBox.size.width, height: textLayerHeight)
 ***REMOVED******REMOVED******REMOVED***textLayer.contentsScale = UIScreen.main.scale
-***REMOVED******REMOVED******REMOVED***textLayer.font = UIFont.boldSystemFont(ofSize: 19).fontName as CFString
+***REMOVED******REMOVED******REMOVED***textLayer.font = UIFont.systemFont(ofSize: fontSize)
 ***REMOVED******REMOVED******REMOVED***textLayer.position = CGPoint(x: barcodeOverlayBoundingBox.midX, y: barcodeOverlayBoundingBox.midY)
 ***REMOVED******REMOVED******REMOVED***textLayer.string = NSAttributedString(
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: stringValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributes: [
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.boldSystemFont(ofSize: fontSize),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white.cgColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.strokeWidth: -5.0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.strokeColor: UIColor.black.cgColor
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.systemFont(ofSize: fontSize),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white
 ***REMOVED******REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***textLayer.isWrapped = true
