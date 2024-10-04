@@ -16,7 +16,30 @@
 ***REMOVED***
 
 ***REMOVED***/ Scans machine readable information like QR codes and barcodes.
-struct CodeScannerView: UIViewControllerRepresentable {
+struct CodeScanner: View {
+***REMOVED***@Binding var code: String
+***REMOVED***
+***REMOVED***@Binding var isPresented: Bool
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hiddenIfUnavailable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct CodeScannerRepresentable: UIViewControllerRepresentable {
 ***REMOVED***@Binding var scannerIsPresented: Bool
 ***REMOVED***
 ***REMOVED***@Binding var scanOutput: String

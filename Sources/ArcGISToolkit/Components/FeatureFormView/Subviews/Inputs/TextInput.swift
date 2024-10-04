@@ -87,20 +87,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***CodeScannerView(scannerIsPresented: $scannerIsPresented, scanOutput: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hiddenIfUnavailable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***CodeScanner(code: $text, isPresented: $scannerIsPresented)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
