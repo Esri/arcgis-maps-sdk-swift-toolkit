@@ -227,9 +227,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***let metadataObjectOverlayLayer = MetadataObjectLayer()
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.metadataObject = transformedMetadataObject
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.lineJoin = .round
-***REMOVED******REMOVED***metadataObjectOverlayLayer.lineWidth = 7.0
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(0.7).cgColor
-***REMOVED******REMOVED***metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.3).cgColor
+***REMOVED******REMOVED***metadataObjectOverlayLayer.lineWidth = 2.5
+***REMOVED******REMOVED***metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.25).cgColor
+***REMOVED******REMOVED***metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(1).cgColor
 ***REMOVED******REMOVED***guard let barcodeMetadataObject = transformedMetadataObject as? AVMetadataMachineReadableCodeObject else {
 ***REMOVED******REMOVED******REMOVED***return metadataObjectOverlayLayer
 ***REMOVED***
