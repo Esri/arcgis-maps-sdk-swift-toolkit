@@ -17,7 +17,7 @@
 
 ***REMOVED***/ Extends `LocatorSearchSource` with intelligent search behaviors; adds support for features like
 ***REMOVED***/ type-specific placemarks, repeated search, and more on the world geocode service.
-public class SmartLocatorSearchSource: LocatorSearchSource, @unchecked Sendable {
+public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ Creates a smart locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
