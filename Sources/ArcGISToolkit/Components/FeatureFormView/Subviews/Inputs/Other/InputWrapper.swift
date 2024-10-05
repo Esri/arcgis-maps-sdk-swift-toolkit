@@ -31,6 +31,8 @@ struct InputWrapper: View {
 ***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***if isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch element.input {
+***REMOVED******REMOVED******REMOVED******REMOVED***case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextInput(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case is ComboBoxFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case is DateTimePickerFormInput:
@@ -39,8 +41,6 @@ struct InputWrapper: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case is SwitchFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***case is TextAreaFormInput, is TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextInput(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED***
