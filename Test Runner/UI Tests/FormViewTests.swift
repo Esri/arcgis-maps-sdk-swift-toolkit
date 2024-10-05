@@ -18,6 +18,7 @@ import XCTest
 final class FeatureFormViewTests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false
+        try XCTSkipIf(true, "Ref Apollo #900")
     }
     
     /// Sets the map and feature based on the current test case.

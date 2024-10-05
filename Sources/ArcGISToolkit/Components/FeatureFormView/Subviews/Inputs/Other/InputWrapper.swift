@@ -31,6 +31,8 @@ struct InputWrapper: View {
             InputHeader(element: element)
             if isEditable {
                 switch element.input {
+                case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
+                    TextInput(element: element)
                 case is ComboBoxFormInput:
                     ComboBoxInput(element: element)
                 case is DateTimePickerFormInput:
@@ -39,8 +41,6 @@ struct InputWrapper: View {
                     RadioButtonsInput(element: element)
                 case is SwitchFormInput:
                     SwitchInput(element: element)
-                case is TextAreaFormInput, is TextBoxFormInput:
-                    TextInput(element: element)
                 default:
                     EmptyView()
                 }
