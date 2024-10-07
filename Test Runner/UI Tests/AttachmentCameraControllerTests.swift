@@ -83,10 +83,11 @@ final class AttachmentCameraControllerTests: XCTestCase {
 private extension AttachmentCameraControllerTests {
 ***REMOVED***var allowButton: XCUIElement {
 ***REMOVED******REMOVED***let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-***REMOVED******REMOVED***if #available(iOS 18.0, *) {
-***REMOVED******REMOVED******REMOVED***return springboard.buttons["Allow"]
+***REMOVED******REMOVED***let key = if #available(iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED***"Allow"
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return springboard.buttons["OK"]
+***REMOVED******REMOVED******REMOVED***"OK"
 ***REMOVED***
+***REMOVED******REMOVED***return springboard.buttons[key]
 ***REMOVED***
 ***REMOVED***
