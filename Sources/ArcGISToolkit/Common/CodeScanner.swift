@@ -21,21 +21,37 @@ struct CodeScanner: View {
 ***REMOVED***
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
+***REMOVED***@State private var cameraAccessIsAuthorized = false
+***REMOVED***
+***REMOVED***@StateObject private var cameraRequester = CameraRequester()
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
-***REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hiddenIfUnavailable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED***if cameraAccessIsAuthorized {
+***REMOVED******REMOVED******REMOVED***CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FlashlightButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hiddenIfUnavailable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraRequester.request {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraAccessIsAuthorized = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** onAccessDenied: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.cameraRequester(cameraRequester)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
