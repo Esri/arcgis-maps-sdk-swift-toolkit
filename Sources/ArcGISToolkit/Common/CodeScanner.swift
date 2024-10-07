@@ -21,21 +21,37 @@ struct CodeScanner: View {
     
     @Binding var isPresented: Bool
     
+    @State private var cameraAccessIsAuthorized = false
+    
+    @StateObject private var cameraRequester = CameraRequester()
+    
     var body: some View {
-        CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
-            .overlay(alignment:.topTrailing) {
-                Button(String.cancel, role: .cancel) {
-                    isPresented = false
-                }
-                .buttonStyle(.borderedProminent)
-                .padding()
-            }
-            .overlay(alignment: .bottom) {
-                FlashlightButton()
-                    .hiddenIfUnavailable()
-                    .font(.title)
+        if cameraAccessIsAuthorized {
+            CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+                .overlay(alignment:.topTrailing) {
+                    Button(String.cancel, role: .cancel) {
+                        isPresented = false
+                    }
+                    .buttonStyle(.borderedProminent)
                     .padding()
-            }
+                }
+                .overlay(alignment: .bottom) {
+                    FlashlightButton()
+                        .hiddenIfUnavailable()
+                        .font(.title)
+                        .padding()
+                }
+        } else {
+            Color.clear
+                .onAppear {
+                    cameraRequester.request {
+                        cameraAccessIsAuthorized = true
+                    } onAccessDenied: {
+                        isPresented = false
+                    }
+                }
+                .cameraRequester(cameraRequester)
+        }
     }
 }
 
