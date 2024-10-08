@@ -20,6 +20,7 @@ internal import os
 
 /// A view model representing the combination of a `FeatureAttachment` and
 /// an associated `UIImage` used as a thumbnail.
+@available(visionOS, unavailable)
 @MainActor class AttachmentModel: ObservableObject {
     /// The `FeatureAttachment`.
     nonisolated let attachment: FeatureAttachment
@@ -118,4 +119,5 @@ internal import os
     }
 }
 
+@available(visionOS, unavailable)
 extension AttachmentModel: Identifiable {}

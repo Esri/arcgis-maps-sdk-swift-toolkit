@@ -15,6 +15,7 @@
 import SwiftUI
 
 /// Models a label displayed along the edge of a scalebar
+@available(visionOS, unavailable)
 struct ScalebarLabel {
     /// The number of the label with the leftmost label ("0") starting at -1.
     let index: Int

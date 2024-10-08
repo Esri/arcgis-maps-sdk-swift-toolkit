@@ -31,6 +31,7 @@ import SwiftUI
 /// and refer to [CompassExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
 /// in the project. To learn more about using the `Compass` see the <doc:CompassTutorial>.
 @preconcurrency
+@available(visionOS, unavailable)
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
@@ -114,6 +115,7 @@ public struct Compass: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension Compass {
     /// Returns a Boolean value indicating whether the compass should hide based on the
     /// provided heading and whether the compass has been configured to automatically hide.
@@ -124,6 +126,7 @@ extension Compass {
     }
 }
 
+@available(visionOS, unavailable)
 public extension Compass {
     /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
     /// a direction toward true West, etc.).
