@@ -63,6 +63,7 @@ import SwiftUI
 /// in the project. To learn more about using the `UtilityNetworkTrace` see the <doc:UtilityNetworkTraceTutorial>.
 @MainActor
 @preconcurrency
+@available(visionOS, unavailable)
 public struct UtilityNetworkTrace: View {
     /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?

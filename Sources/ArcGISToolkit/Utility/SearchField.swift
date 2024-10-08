@@ -18,6 +18,7 @@ import SwiftUI
 /// and a button to allow users to hide/show the search results list.
 @MainActor
 @preconcurrency
+@available(visionOS, unavailable)
 public struct SearchField: View {
     /// Creates a `SearchField`.
     /// - Parameters:

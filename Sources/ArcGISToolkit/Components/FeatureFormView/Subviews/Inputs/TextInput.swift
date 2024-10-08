@@ -17,6 +17,7 @@ import SwiftUI
 
 /// A view for text input.
 @MainActor
+@available(visionOS, unavailable)
 struct TextInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -75,6 +76,7 @@ struct TextInput: View {
     }
 }
 
+@available(visionOS, unavailable)
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
@@ -167,6 +169,7 @@ private extension TextInput {
     }
 }
 
+@available(visionOS, unavailable)
 private extension TextInput {
     /// A view for displaying a multiline text input outside the body of the feature form view.
     ///

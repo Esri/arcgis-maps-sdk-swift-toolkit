@@ -21,6 +21,7 @@ internal import os
 
 /// The context menu shown when the new attachment button is pressed.
 @MainActor
+@available(visionOS, unavailable)
 struct AttachmentImportMenu: View {
     /// The attachment form element displaying the menu.
     private let element: AttachmentsFormElement
@@ -229,6 +230,7 @@ struct AttachmentImportMenu: View {
     }
 }
 
+@available(visionOS, unavailable)
 private extension AttachmentImportMenu {
     /// A button that redirects the user to the application's entry in the iOS system Settings application.
     var appSettingsButton: some View {

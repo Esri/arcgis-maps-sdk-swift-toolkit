@@ -18,6 +18,7 @@ import ArcGIS
 /// A view displaying an async image, with error display and progress view.
 @MainActor
 @preconcurrency
+@available(visionOS, unavailable)
 public struct AsyncImageView: View {
     /// The `URL` of the image.
     private var url: URL?

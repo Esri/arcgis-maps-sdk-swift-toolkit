@@ -64,6 +64,7 @@ import SwiftUI
 /// in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
 @MainActor
 @preconcurrency
+@available(visionOS, unavailable)
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?

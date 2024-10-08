@@ -67,6 +67,7 @@ import SwiftUI
 /// - Since: 200.4
 @MainActor
 @preconcurrency
+@available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
@@ -128,6 +129,7 @@ public struct FeatureFormView: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension FeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
