@@ -63,6 +63,7 @@ import SwiftUI
 /// and refer to [FloorFilterExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 /// in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
 @preconcurrency
+@available(visionOS, unavailable)
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?

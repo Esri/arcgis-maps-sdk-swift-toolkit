@@ -16,6 +16,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view which allows selection of levels represented in `FloorFacility`.
+@available(visionOS, unavailable)
 struct LevelSelector: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
@@ -49,6 +50,7 @@ struct LevelSelector: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension LevelSelector {
     /// A list of all the levels to be displayed.
     ///
