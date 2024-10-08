@@ -17,6 +17,7 @@ import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
 @MainActor
+@available(visionOS, unavailable)
 struct InputFooter: View {
     @Environment(\.formElementPadding) var elementPadding
     
@@ -74,6 +75,7 @@ struct InputFooter: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension InputFooter {
     /// Localized error text to be shown to a user depending on the type of error information available.
     var errorMessage: Text? {

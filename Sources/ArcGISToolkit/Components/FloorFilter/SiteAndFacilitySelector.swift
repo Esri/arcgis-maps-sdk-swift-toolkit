@@ -19,6 +19,7 @@ import SwiftUI
 ///
 /// If the floor aware data contains only one site, the selector opens directly to the facilities list.
 @MainActor
+@available(visionOS, unavailable)
 struct SiteAndFacilitySelector: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
@@ -214,6 +215,7 @@ struct SiteAndFacilitySelector: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension SiteAndFacilitySelector {
     /// A Boolean value indicating whether the back button in the header navigations controls is visible..
     var backButtonIsVisible: Bool {
