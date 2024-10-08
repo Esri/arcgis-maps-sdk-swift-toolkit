@@ -155,6 +155,7 @@ private extension FeatureFormTestView {
         .init("testCase_9_1", objectID: 1, portalID: .testCase9),
         .init("testCase_10_1", objectID: 1, portalID: .testCase10),
         .init("testCase_10_2", objectID: 1, portalID: .testCase10),
+        .init("testCase_11_1", objectID: 2, portalID: .testCase11),
     ]}
 }
 
@@ -170,4 +171,5 @@ private extension String {
     static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
     static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
     static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
+    static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
 }
