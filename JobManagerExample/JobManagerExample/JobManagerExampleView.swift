@@ -53,11 +53,11 @@ struct JobManagerExampleView: View {
             }
             .listStyle(.plain)
         }
-        .onAppear {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-                if let error {
-                    print(error.localizedDescription)
-                }
+        .task {
+            do {
+                _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+            } catch {
+                print(error.localizedDescription)
             }
         }
         .padding()
