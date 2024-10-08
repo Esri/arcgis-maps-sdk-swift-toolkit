@@ -38,6 +38,7 @@ struct EsriBorderViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 public extension View {
 ***REMOVED***func esriBorder(
 ***REMOVED******REMOVED***padding: EdgeInsets = .toolkitDefault

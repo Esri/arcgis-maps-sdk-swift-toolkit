@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying a `MediaPopupElement`.
+@available(visionOS, unavailable)
 struct MediaPopupElementView: View {
 ***REMOVED******REMOVED***/ The `PopupElement` to display.
 ***REMOVED***var popupElement: MediaPopupElement

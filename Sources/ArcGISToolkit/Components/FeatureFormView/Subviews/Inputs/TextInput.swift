@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for text input.
+@available(visionOS, unavailable)
 struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -91,6 +92,7 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
@@ -195,6 +197,7 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
 ***REMOVED******REMOVED***/

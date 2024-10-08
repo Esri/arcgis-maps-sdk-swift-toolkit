@@ -15,6 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying a popup media in a large format.
+@available(visionOS, unavailable)
 struct MediaDetailView : View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia

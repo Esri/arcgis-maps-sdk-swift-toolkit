@@ -14,6 +14,7 @@
 
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension AttachmentsFormElement: AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
 ***REMOVED******REMOVED***/

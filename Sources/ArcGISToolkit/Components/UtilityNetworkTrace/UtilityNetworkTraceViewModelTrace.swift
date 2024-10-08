@@ -15,6 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***/ A trace performed on a utility network.
 ***REMOVED***struct Trace {
@@ -68,6 +69,7 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED******REMOVED***/ Finds the set of utility elements returned by the trace that belong to the provided
 ***REMOVED******REMOVED***/ asset group, grouped by type.
@@ -122,6 +124,7 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel.Trace: Equatable {
 ***REMOVED***static func == (lhs: Self, rhs: Self) -> Bool {
 ***REMOVED******REMOVED***return lhs.id == rhs.id

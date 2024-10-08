@@ -60,6 +60,7 @@
 ***REMOVED***/ To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [SearchExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `SearchView` see the <doc:SearchViewTutorial>.
+@available(visionOS, unavailable)
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -268,6 +269,7 @@ public struct SearchView: View {
 ***REMOVED***
 
 ***REMOVED*** MARK: Modifiers
+@available(visionOS, unavailable)
 extension SearchView {
 ***REMOVED******REMOVED***/ Specifies whether a built-in result view will be shown. If `false`, the result display/selection
 ***REMOVED******REMOVED***/ list is not shown. Set to `false` if you want to define a custom result list. You might use a
@@ -378,6 +380,7 @@ extension SearchView {
 ***REMOVED***
 
 ***REMOVED***/ A View displaying the list of search results.
+@available(visionOS, unavailable)
 struct SearchResultList: View {
 ***REMOVED******REMOVED***/ The array of search results to display.
 ***REMOVED***var searchResults: [SearchResult]
@@ -410,6 +413,7 @@ struct SearchResultList: View {
 ***REMOVED***
 
 ***REMOVED***/ A View displaying the list of search suggestion results.
+@available(visionOS, unavailable)
 struct SearchSuggestionList: View {
 ***REMOVED******REMOVED***/ The array of suggestion results to display.
 ***REMOVED***var suggestionResults: [SearchSuggestion]
@@ -475,6 +479,7 @@ struct ResultRow: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension ResultRow {
 ***REMOVED******REMOVED***/ Creates a `ResultRow` from a search suggestion.
 ***REMOVED******REMOVED***/ - Parameter searchSuggestion: The search suggestion displayed in the row.

@@ -63,6 +63,7 @@
 ***REMOVED***/ and refer to [FloorFilterExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
 @preconcurrency
+@available(visionOS, unavailable)
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
