@@ -38,6 +38,7 @@ struct EsriBorderViewModifier: ViewModifier {
     }
 }
 
+@available(visionOS, unavailable)
 public extension View {
     func esriBorder(
         padding: EdgeInsets = .toolkitDefault

@@ -15,6 +15,7 @@
 import ArcGIS
 import SwiftUI
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
     /// A trace performed on a utility network.
     struct Trace {
@@ -68,6 +69,7 @@ extension UtilityNetworkTraceViewModel {
     }
 }
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel.Trace {
     /// Finds the set of utility elements returned by the trace that belong to the provided
     /// asset group, grouped by type.
@@ -122,6 +124,7 @@ extension UtilityNetworkTraceViewModel.Trace {
     }
 }
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel.Trace: Equatable {
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id

@@ -17,6 +17,7 @@ import SwiftUI
 
 /// A view displaying a thumbnail image for an attachment.
 @MainActor
+@available(visionOS, unavailable)
 struct ThumbnailView: View  {
     /// The model represented by the thumbnail.
     @ObservedObject var attachmentModel: AttachmentModel

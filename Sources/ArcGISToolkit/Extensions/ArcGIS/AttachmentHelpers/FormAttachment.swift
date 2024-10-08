@@ -15,6 +15,7 @@
 import ArcGIS
 import Foundation
 
+@available(visionOS, unavailable)
 extension FormAttachment: FeatureAttachment {
     /// The type of the attachment.
     public var featureAttachmentKind: FeatureAttachmentKind {

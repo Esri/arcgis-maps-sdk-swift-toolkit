@@ -15,6 +15,7 @@
 import ArcGIS
 import Foundation
 
+@available(visionOS, unavailable)
 public enum ScalebarUnits: Sendable {
     /// Imperial units (feet, miles, etc)
     case imperial
