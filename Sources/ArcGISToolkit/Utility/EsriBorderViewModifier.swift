@@ -15,6 +15,7 @@
 import SwiftUI
 
 /// A modifier which displays a 2 point width border and a shadow around a view.
+@available(visionOS, unavailable)
 struct EsriBorderViewModifier: ViewModifier {
     var padding: EdgeInsets
     
