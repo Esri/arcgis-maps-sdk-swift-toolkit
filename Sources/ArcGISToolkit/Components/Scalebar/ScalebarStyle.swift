@@ -13,6 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***/ Visual scalebar styles.
+@available(visionOS, unavailable)
 public enum ScalebarStyle: Sendable {
 ***REMOVED******REMOVED***/ Displays a single unit with segmented bars of alternating fill color.
 ***REMOVED***case alternatingBar

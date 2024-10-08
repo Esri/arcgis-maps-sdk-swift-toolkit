@@ -14,6 +14,7 @@
 
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension Scalebar {
 ***REMOVED******REMOVED***/ Renders all of the scalebar labels.
 ***REMOVED***var allLabelsView: some View {
