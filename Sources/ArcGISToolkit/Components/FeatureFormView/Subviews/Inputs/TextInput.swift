@@ -33,9 +33,6 @@ struct TextInput: View {
     /// The current text value.
     @State private var text = ""
     
-    /// Performs camera authorization request handling.
-    @StateObject private var cameraRequester = CameraRequester()
-    
     /// A Boolean value indicating whether the device camera is accessible for scanning.
     private let cameraIsDisabled: Bool = {
 #if targetEnvironment(simulator)
@@ -92,7 +89,6 @@ struct TextInput: View {
             .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
                 text = newFormattedValue
             }
-            .cameraRequester(cameraRequester)
     }
 }
 
@@ -151,10 +147,7 @@ private extension TextInput {
             if element.input is BarcodeScannerFormInput {
                 Button {
                     model.focusedElement = element
-                    cameraRequester.request {
-                        scannerIsPresented = true
-                    } onAccessDenied: {
-                    }
+                    scannerIsPresented = true
                 } label: {
                     Image(systemName: "barcode.viewfinder")
                         .foregroundStyle(.secondary)
