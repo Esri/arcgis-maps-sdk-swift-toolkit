@@ -97,11 +97,11 @@ public struct TableTopSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                    .onAddNode { renderer, node, anchor in
-                        addPlane(renderer: renderer, node: node, anchor: anchor)
+                    .onAddNode { parameters in
+                        addPlane(renderer: parameters.renderer, node: parameters.node, anchor: parameters.anchor)
                     }
-                    .onUpdateNode { _, node, anchor in
-                        updatePlane(with: node, for: anchor)
+                    .onUpdateNode { parameters in
+                        updatePlane(with: parameters.node, for: parameters.anchor)
                     }
                     .onTapGesture { screenPoint in
                         guard !initialTransformationIsSet else { return }

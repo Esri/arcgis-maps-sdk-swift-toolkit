@@ -16,6 +16,8 @@ import ArcGIS
 import ARKit
 import SwiftUI
 
+internal import os
+
 typealias ARViewType = ARSCNView
 
 /// A SwiftUI version of an AR view.
@@ -27,9 +29,9 @@ struct ARSwiftUIView {
     /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
     /// The closure to call when a node corresponding to a new anchor has been added to the view.
-    private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    private(set) var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
     /// The closure to call when a node has been updated to match it's corresponding anchor.
-    private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    private(set) var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
     
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy
@@ -72,7 +74,7 @@ struct ARSwiftUIView {
     
     /// Sets the closure to call when a new node has been added to the scene.
     func onAddNode(
-        perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+        perform action: @escaping @MainActor (SceneParameters) -> Void
     ) -> Self {
         var view = self
         view.onAddNodeAction = action
@@ -81,7 +83,7 @@ struct ARSwiftUIView {
     
     /// Sets the closure to call when the scene's nodes are updated.
     func onUpdateNode(
-        perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+        perform action: @escaping @MainActor (SceneParameters) -> Void
     ) -> Self {
         var view = self
         view.onUpdateNodeAction = action
@@ -114,11 +116,24 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
+        struct State: Sendable {
+            var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
+            var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+        }
+        
+        let state = OSAllocatedUnfairLock(initialState: State())
+        
         var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
         var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
         var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-        var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
-        var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+        var onAddNodeAction: (@MainActor (SceneParameters) -> Void)? {
+            get { state.withLock { $0.onAddNodeAction } }
+            set { state.withLock { $0.onAddNodeAction = newValue } }
+        }
+        var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)? {
+            get { state.withLock { $0.onUpdateNodeAction } }
+            set { state.withLock { $0.onUpdateNodeAction = newValue } }
+        }
         
         func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
             onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
@@ -133,13 +148,31 @@ extension ARSwiftUIView {
         }
         
         func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-            onAddNodeAction?(renderer, node, anchor)
+            let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+            Task { [onAddNodeAction] in
+                await MainActor.run {
+                    onAddNodeAction?(sceneParameters)
+                }
+            }
         }
         
         func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-            onUpdateNodeAction?(renderer, node, anchor)
+            let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+            Task { [onUpdateNodeAction] in
+                await MainActor.run {
+                    onUpdateNodeAction?(sceneParameters)
+                }
+            }
         }
     }
+}
+
+/// A temporary type to workaround this issue:
+/// https://forums.developer.apple.com/forums/thread/765644
+struct SceneParameters: @unchecked Sendable {
+    let renderer: SCNSceneRenderer
+    let node: SCNNode
+    let anchor: ARAnchor
 }
 
 /// A proxy for the ARSwiftUIView.
