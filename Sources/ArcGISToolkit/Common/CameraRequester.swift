@@ -33,9 +33,7 @@ import AVFoundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***if granted {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessGranted()
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.alertIsPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessDenied()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:

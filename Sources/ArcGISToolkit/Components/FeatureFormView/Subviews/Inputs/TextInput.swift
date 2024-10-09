@@ -33,9 +33,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ Performs camera authorization request handling.
-***REMOVED***@StateObject private var cameraRequester = CameraRequester()
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the device camera is accessible for scanning.
 ***REMOVED***private let cameraIsDisabled: Bool = {
 #if targetEnvironment(simulator)
@@ -92,7 +89,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.cameraRequester(cameraRequester)
 ***REMOVED***
 ***REMOVED***
 
@@ -151,10 +147,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***if element.input is BarcodeScannerFormInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraRequester.request {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED*** onAccessDenied: {
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
