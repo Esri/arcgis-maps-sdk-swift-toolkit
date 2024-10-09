@@ -1633,6 +1633,47 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(plainText.exists)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 11.1: Barcode Scan and Clear buttons
+***REMOVED***func testCase_11_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 11.1 Layer"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let scanButton = app.buttons["Barcode Scan Button"]
+***REMOVED******REMOVED***let clearButton = app.buttons["Barcode Clear Button"]
+***REMOVED******REMOVED***let barcodeValidationString = app.staticTexts["Barcode Footer"]
+***REMOVED******REMOVED***let fieldValue = app.textFields["Barcode Text Input"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(clearButton.exists, "The clear button exists.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***fieldValue.typeText("https:***REMOVED***esri.com")
+
+***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+***REMOVED******REMOVED***XCTAssertTrue(clearButton.exists, "The clear button doesn't exist.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***clearButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***fieldValue.typeText("https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?layers=a9155494098147b9be2fc52bcf825224")
+
+***REMOVED******REMOVED***XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text

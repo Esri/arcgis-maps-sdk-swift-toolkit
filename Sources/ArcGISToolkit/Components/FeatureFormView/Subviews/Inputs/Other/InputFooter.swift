@@ -217,11 +217,14 @@ extension InputFooter {
 ***REMOVED***var lengthRange: ClosedRange<Int>? {
 ***REMOVED******REMOVED***if let input = element.input as? TextAreaFormInput {
 ***REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
-***REMOVED*** else if let input = element.input as? TextBoxFormInput, element.fieldType == .text {
-***REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED*** else if element.fieldType == .text {
+***REMOVED******REMOVED******REMOVED***if let input = element.input as? TextBoxFormInput {
+***REMOVED******REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
+***REMOVED******REMOVED*** else if let input = element.input as? BarcodeScannerFormInput {
+***REMOVED******REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable numeric range the input.

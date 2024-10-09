@@ -161,6 +161,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(cameraIsDisabled)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Scan Button")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
