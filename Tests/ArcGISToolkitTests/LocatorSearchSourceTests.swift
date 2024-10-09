@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !os(visionOS)
 import XCTest
 import ArcGIS
 import ArcGISToolkit
@@ -57,3 +58,4 @@ final class LocatorSearchSourceTests: XCTestCase {
         XCTAssertEqual(suggestResults.count, 2)
     }
 }
+#endif
