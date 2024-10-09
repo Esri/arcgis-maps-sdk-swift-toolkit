@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if !os(visionOS)
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 import XCTest
@@ -32,3 +33,4 @@ final class FeatureAttachmentKindTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(FeatureAttachmentKind(kind: PopupAttachment.Kind.other), .other)
 ***REMOVED***
 ***REMOVED***
+#endif
