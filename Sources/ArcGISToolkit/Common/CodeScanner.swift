@@ -21,21 +21,37 @@ struct CodeScanner: View {
     
     @Binding var isPresented: Bool
     
+    @State private var cameraAccessIsAuthorized = false
+    
+    @StateObject private var cameraRequester = CameraRequester()
+    
     var body: some View {
-        CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
-            .overlay(alignment:.topTrailing) {
-                Button(String.cancel, role: .cancel) {
-                    isPresented = false
-                }
-                .buttonStyle(.borderedProminent)
-                .padding()
-            }
-            .overlay(alignment: .bottom) {
-                FlashlightButton()
-                    .hiddenIfUnavailable()
-                    .font(.title)
+        if cameraAccessIsAuthorized {
+            CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+                .overlay(alignment:.topTrailing) {
+                    Button(String.cancel, role: .cancel) {
+                        isPresented = false
+                    }
+                    .buttonStyle(.borderedProminent)
                     .padding()
-            }
+                }
+                .overlay(alignment: .bottom) {
+                    FlashlightButton()
+                        .hiddenIfUnavailable()
+                        .font(.title)
+                        .padding()
+                }
+        } else {
+            Color.clear
+                .onAppear {
+                    cameraRequester.request {
+                        cameraAccessIsAuthorized = true
+                    } onAccessDenied: {
+                        isPresented = false
+                    }
+                }
+                .cameraRequester(cameraRequester)
+        }
     }
 }
 
@@ -354,6 +370,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     @objc
     private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
+        // Check if a recognized code was tapped. If so, select it.
         let point = tapGestureRecognizer.location(in: view)
         for metadataObjectOverlayLayer in metadataObjectOverlayLayers {
             if metadataObjectOverlayLayer.path?.contains(point) ?? false,
@@ -362,6 +379,22 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
                 break
             }
         }
+        
+        // Otherwise focus on and adjust exposure on the tapped point.
+        let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+        do {
+            try device.lockForConfiguration()
+            if device.isFocusModeSupported(.autoFocus) && device.isFocusPointOfInterestSupported {
+                device.focusPointOfInterest = convertedPoint
+                device.focusMode = .autoFocus
+            }
+            if device.isExposureModeSupported(.autoExpose) && device.isExposurePointOfInterestSupported {
+                device.exposurePointOfInterest = convertedPoint
+                device.exposureMode = .autoExpose
+            }
+            device.unlockForConfiguration()
+        } catch { }
     }
 }
 
