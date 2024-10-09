@@ -161,6 +161,7 @@ private extension TextInput {
                 }
                 .disabled(cameraIsDisabled)
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("\(element.label) Scan Button")
             }
         }
         .formInputStyle()
