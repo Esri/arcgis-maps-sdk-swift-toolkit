@@ -15,6 +15,7 @@
 import AVFoundation
 ***REMOVED***
 
+@available(visionOS, unavailable)
 struct FlashlightButton: View {
 ***REMOVED***@State private var torchIsOn = false
 ***REMOVED***
@@ -58,7 +59,7 @@ struct FlashlightButton: View {
 ***REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***torchIsOn = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: torchIsOn) { isOn in
+***REMOVED******REMOVED******REMOVED***.onChange(torchIsOn) { isOn in
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? device?.lockForConfiguration()
 ***REMOVED******REMOVED******REMOVED******REMOVED***device?.torchMode = isOn ? .on : .off
 ***REMOVED******REMOVED******REMOVED******REMOVED***device?.unlockForConfiguration()
@@ -76,6 +77,7 @@ struct FlashlightButton: View {
 
 private extension View {
 ***REMOVED***@ViewBuilder
+***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***func torchFeedback(trigger: Bool) -> some View {
 ***REMOVED******REMOVED***if #available(iOS 17.0, *) {
 ***REMOVED******REMOVED******REMOVED***self
@@ -86,6 +88,8 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
+#if !os(visionOS)
 #Preview {
 ***REMOVED***FlashlightButton()
 ***REMOVED***
+#endif

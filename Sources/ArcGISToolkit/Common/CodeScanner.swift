@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ Scans machine readable information like QR codes and barcodes.
+@available(visionOS, unavailable)
 struct CodeScanner: View {
 ***REMOVED***@Binding var code: String
 ***REMOVED***
@@ -55,6 +56,7 @@ struct CodeScanner: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 struct CodeScannerRepresentable: UIViewControllerRepresentable {
 ***REMOVED***@Binding var scannerIsPresented: Bool
 ***REMOVED***
@@ -92,6 +94,7 @@ protocol ScannerViewControllerDelegate: AnyObject {
 ***REMOVED***func didScanCode(_ code: String)
 ***REMOVED***
 
+@available(visionOS, unavailable)
 class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
