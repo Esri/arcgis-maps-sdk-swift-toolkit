@@ -116,7 +116,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
-        struct State: Sendable {
+        private struct State: Sendable {
             var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
             var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
         }
