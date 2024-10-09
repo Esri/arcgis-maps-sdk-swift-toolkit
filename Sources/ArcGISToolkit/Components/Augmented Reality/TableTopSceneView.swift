@@ -17,7 +17,6 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality table top experience.
-@preconcurrency
 public struct TableTopSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
