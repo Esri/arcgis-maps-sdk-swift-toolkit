@@ -121,7 +121,7 @@ extension ARSwiftUIView {
 ***REMOVED******REMOVED******REMOVED***var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let state = OSAllocatedUnfairLock(initialState: State())
+***REMOVED******REMOVED***private let state = OSAllocatedUnfairLock(initialState: State())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
