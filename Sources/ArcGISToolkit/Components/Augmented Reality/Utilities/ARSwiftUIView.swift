@@ -16,6 +16,8 @@
 import ARKit
 ***REMOVED***
 
+internal import os
+
 typealias ARViewType = ARSCNView
 
 ***REMOVED***/ A SwiftUI version of an AR view.
@@ -27,9 +29,9 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***/ The closure to call when the session's frame updates.
 ***REMOVED***private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED******REMOVED***/ The closure to call when a node corresponding to a new anchor has been added to the view.
-***REMOVED***private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED***private(set) var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
 ***REMOVED******REMOVED***/ The closure to call when a node has been updated to match it's corresponding anchor.
-***REMOVED***private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED***private(set) var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy
@@ -72,7 +74,7 @@ struct ARSwiftUIView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the closure to call when a new node has been added to the scene.
 ***REMOVED***func onAddNode(
-***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+***REMOVED******REMOVED***perform action: @escaping @MainActor (SceneParameters) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.onAddNodeAction = action
@@ -81,7 +83,7 @@ struct ARSwiftUIView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the closure to call when the scene's nodes are updated.
 ***REMOVED***func onUpdateNode(
-***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+***REMOVED******REMOVED***perform action: @escaping @MainActor (SceneParameters) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.onUpdateNodeAction = action
@@ -114,11 +116,24 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
+***REMOVED******REMOVED***struct State: Sendable {
+***REMOVED******REMOVED******REMOVED***var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
+***REMOVED******REMOVED******REMOVED***var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let state = OSAllocatedUnfairLock(initialState: State())
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-***REMOVED******REMOVED***var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
-***REMOVED******REMOVED***var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED******REMOVED***var onAddNodeAction: (@MainActor (SceneParameters) -> Void)? {
+***REMOVED******REMOVED******REMOVED***get { state.withLock { $0.onAddNodeAction ***REMOVED*** ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set { state.withLock { $0.onAddNodeAction = newValue ***REMOVED*** ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)? {
+***REMOVED******REMOVED******REMOVED***get { state.withLock { $0.onUpdateNodeAction ***REMOVED*** ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set { state.withLock { $0.onUpdateNodeAction = newValue ***REMOVED*** ***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
 ***REMOVED******REMOVED******REMOVED***onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
@@ -133,13 +148,31 @@ extension ARSwiftUIView {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***onAddNodeAction?(renderer, node, anchor)
+***REMOVED******REMOVED******REMOVED***let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+***REMOVED******REMOVED******REMOVED***Task { [onAddNodeAction] in
+***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAddNodeAction?(sceneParameters)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***onUpdateNodeAction?(renderer, node, anchor)
+***REMOVED******REMOVED******REMOVED***let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+***REMOVED******REMOVED******REMOVED***Task { [onUpdateNodeAction] in
+***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onUpdateNodeAction?(sceneParameters)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A temporary type to workaround this issue:
+***REMOVED***/ https:***REMOVED***forums.developer.apple.com/forums/thread/765644
+struct SceneParameters: @unchecked Sendable {
+***REMOVED***let renderer: SCNSceneRenderer
+***REMOVED***let node: SCNNode
+***REMOVED***let anchor: ARAnchor
 ***REMOVED***
 
 ***REMOVED***/ A proxy for the ARSwiftUIView.
