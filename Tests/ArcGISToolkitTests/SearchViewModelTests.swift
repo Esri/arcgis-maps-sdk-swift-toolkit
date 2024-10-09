@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !os(visionOS)
 import ArcGIS
 @testable import ArcGISToolkit
 @preconcurrency import Combine
@@ -480,3 +481,4 @@ private extension SearchViewModel {
         }
     }
 }
+#endif
