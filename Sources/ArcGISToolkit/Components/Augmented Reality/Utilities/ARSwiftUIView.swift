@@ -121,7 +121,7 @@ extension ARSwiftUIView {
             var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
         }
         
-        let state = OSAllocatedUnfairLock(initialState: State())
+        private let state = OSAllocatedUnfairLock(initialState: State())
         
         var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
         var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
