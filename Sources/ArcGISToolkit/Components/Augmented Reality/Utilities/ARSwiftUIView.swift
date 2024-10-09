@@ -16,8 +16,6 @@
 import ARKit
 ***REMOVED***
 
-internal import os
-
 typealias ARViewType = ARSCNView
 
 ***REMOVED***/ A SwiftUI version of an AR view.
@@ -101,69 +99,68 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func updateUIView(_ uiView: ARViewType, context: Context) {
-***REMOVED******REMOVED***context.coordinator.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
-***REMOVED******REMOVED***context.coordinator.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
-***REMOVED******REMOVED***context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
-***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
-***REMOVED***
+***REMOVED***func updateUIView(_ uiView: ARViewType, context: Context) {***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator()
+***REMOVED******REMOVED***return .init(
+***REMOVED******REMOVED******REMOVED***onDidChangeGeoTrackingStatusAction: onDidChangeGeoTrackingStatusAction,
+***REMOVED******REMOVED******REMOVED***onCameraDidChangeTrackingStateAction: onCameraDidChangeTrackingStateAction,
+***REMOVED******REMOVED******REMOVED***onDidUpdateFrameAction: onDidUpdateFrameAction,
+***REMOVED******REMOVED******REMOVED***onAddNodeAction: onAddNodeAction,
+***REMOVED******REMOVED******REMOVED***onUpdateNodeAction: onUpdateNodeAction
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***class Coordinator: NSObject {
+***REMOVED******REMOVED***let onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+***REMOVED******REMOVED***let onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
+***REMOVED******REMOVED***let onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
+***REMOVED******REMOVED***let onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
+***REMOVED******REMOVED***let onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(
+***REMOVED******REMOVED******REMOVED***onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?,
+***REMOVED******REMOVED******REMOVED***onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?,
+***REMOVED******REMOVED******REMOVED***onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?,
+***REMOVED******REMOVED******REMOVED***onAddNodeAction: (@MainActor (SceneParameters) -> Void)?,
+***REMOVED******REMOVED******REMOVED***onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***self.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
+***REMOVED******REMOVED******REMOVED***self.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
+***REMOVED******REMOVED******REMOVED***self.onDidUpdateFrameAction = onDidUpdateFrameAction
+***REMOVED******REMOVED******REMOVED***self.onAddNodeAction = onAddNodeAction
+***REMOVED******REMOVED******REMOVED***self.onUpdateNodeAction = onUpdateNodeAction
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-extension ARSwiftUIView {
-***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
-***REMOVED******REMOVED***private struct State: Sendable {
-***REMOVED******REMOVED******REMOVED***var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
-***REMOVED******REMOVED******REMOVED***var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+extension ARSwiftUIView.Coordinator: ARSCNViewDelegate {
+***REMOVED***func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+***REMOVED******REMOVED***let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+***REMOVED******REMOVED***Task { @MainActor [onAddNodeAction] in
+***REMOVED******REMOVED******REMOVED***onAddNodeAction?(sceneParameters)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***private let state = OSAllocatedUnfairLock(initialState: State())
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-***REMOVED******REMOVED***var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
-***REMOVED******REMOVED***var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-***REMOVED******REMOVED***var onAddNodeAction: (@MainActor (SceneParameters) -> Void)? {
-***REMOVED******REMOVED******REMOVED***get { state.withLock { $0.onAddNodeAction ***REMOVED*** ***REMOVED***
-***REMOVED******REMOVED******REMOVED***set { state.withLock { $0.onAddNodeAction = newValue ***REMOVED*** ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)? {
-***REMOVED******REMOVED******REMOVED***get { state.withLock { $0.onUpdateNodeAction ***REMOVED*** ***REMOVED***
-***REMOVED******REMOVED******REMOVED***set { state.withLock { $0.onUpdateNodeAction = newValue ***REMOVED*** ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-***REMOVED******REMOVED******REMOVED***onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+***REMOVED***func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+***REMOVED******REMOVED***let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+***REMOVED******REMOVED***Task { @MainActor [onUpdateNodeAction] in
+***REMOVED******REMOVED******REMOVED***onUpdateNodeAction?(sceneParameters)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-***REMOVED******REMOVED******REMOVED***onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
-***REMOVED******REMOVED******REMOVED***onDidUpdateFrameAction?(session, frame)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
-***REMOVED******REMOVED******REMOVED***Task { [onAddNodeAction] in
-***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAddNodeAction?(sceneParameters)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+
+extension ARSwiftUIView.Coordinator: ARSessionDelegate {
+***REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+***REMOVED******REMOVED***onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
-***REMOVED******REMOVED******REMOVED***Task { [onUpdateNodeAction] in
-***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onUpdateNodeAction?(sceneParameters)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+***REMOVED******REMOVED***onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
+***REMOVED***
+***REMOVED***
+***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
+***REMOVED******REMOVED***onDidUpdateFrameAction?(session, frame)
 ***REMOVED***
 ***REMOVED***
 
