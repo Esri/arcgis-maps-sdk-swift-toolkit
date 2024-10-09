@@ -16,8 +16,6 @@ import ArcGIS
 import ARKit
 import SwiftUI
 
-internal import os
-
 typealias ARViewType = ARSCNView
 
 /// A SwiftUI version of an AR view.
@@ -101,69 +99,68 @@ extension ARSwiftUIView: UIViewRepresentable {
         return arView
     }
     
-    func updateUIView(_ uiView: ARViewType, context: Context) {
-        context.coordinator.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
-        context.coordinator.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
-        context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-        context.coordinator.onAddNodeAction = onAddNodeAction
-        context.coordinator.onUpdateNodeAction = onUpdateNodeAction
-    }
+    func updateUIView(_ uiView: ARViewType, context: Context) {}
     
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        return .init(
+            onDidChangeGeoTrackingStatusAction: onDidChangeGeoTrackingStatusAction,
+            onCameraDidChangeTrackingStateAction: onCameraDidChangeTrackingStateAction,
+            onDidUpdateFrameAction: onDidUpdateFrameAction,
+            onAddNodeAction: onAddNodeAction,
+            onUpdateNodeAction: onUpdateNodeAction
+        )
+    }
+    
+    class Coordinator: NSObject {
+        let onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+        let onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
+        let onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
+        let onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
+        let onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+        
+        init(
+            onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?,
+            onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?,
+            onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?,
+            onAddNodeAction: (@MainActor (SceneParameters) -> Void)?,
+            onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+        ) {
+            self.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
+            self.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
+            self.onDidUpdateFrameAction = onDidUpdateFrameAction
+            self.onAddNodeAction = onAddNodeAction
+            self.onUpdateNodeAction = onUpdateNodeAction
+        }
     }
 }
 
-extension ARSwiftUIView {
-    class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
-        private struct State: Sendable {
-            var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
-            var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+extension ARSwiftUIView.Coordinator: ARSCNViewDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+        Task { @MainActor [onAddNodeAction] in
+            onAddNodeAction?(sceneParameters)
         }
-        
-        private let state = OSAllocatedUnfairLock(initialState: State())
-        
-        var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-        var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
-        var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-        var onAddNodeAction: (@MainActor (SceneParameters) -> Void)? {
-            get { state.withLock { $0.onAddNodeAction } }
-            set { state.withLock { $0.onAddNodeAction = newValue } }
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+        Task { @MainActor [onUpdateNodeAction] in
+            onUpdateNodeAction?(sceneParameters)
         }
-        var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)? {
-            get { state.withLock { $0.onUpdateNodeAction } }
-            set { state.withLock { $0.onUpdateNodeAction = newValue } }
-        }
-        
-        func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-            onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
-        }
-        
-        func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-            onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
-        }
-        
-        func session(_ session: ARSession, didUpdate frame: ARFrame) {
-            onDidUpdateFrameAction?(session, frame)
-        }
-        
-        func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-            let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
-            Task { [onAddNodeAction] in
-                await MainActor.run {
-                    onAddNodeAction?(sceneParameters)
-                }
-            }
-        }
-        
-        func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-            let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
-            Task { [onUpdateNodeAction] in
-                await MainActor.run {
-                    onUpdateNodeAction?(sceneParameters)
-                }
-            }
-        }
+    }
+}
+
+extension ARSwiftUIView.Coordinator: ARSessionDelegate {
+    func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+        onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+    }
+    
+    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
+    }
+    
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        onDidUpdateFrameAction?(session, frame)
     }
 }
 
