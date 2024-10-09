@@ -1632,6 +1632,47 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(plainText.exists)
     }
+    
+    /// Test case 11.1: Barcode Scan and Clear buttons
+    func testCase_11_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test case 11.1 Layer"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let scanButton = app.buttons["Barcode Scan Button"]
+        let clearButton = app.buttons["Barcode Clear Button"]
+        let barcodeValidationString = app.staticTexts["Barcode Footer"]
+        let fieldValue = app.textFields["Barcode Text Input"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+        
+        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        
+        XCTAssertFalse(clearButton.exists, "The clear button exists.")
+        
+        fieldValue.tap()
+        fieldValue.typeText("https://esri.com")
+
+        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        XCTAssertTrue(clearButton.exists, "The clear button doesn't exist.")
+        
+        clearButton.tap()
+        
+        fieldValue.tap()
+        fieldValue.typeText("https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?layers=a9155494098147b9be2fc52bcf825224")
+
+        XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
+    }
 }
 
 private extension String {
