@@ -106,7 +106,9 @@ struct SignInView: View {
 ***REMOVED******REMOVED******REMOVED***signIn()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(signInButtonText)
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+#endif
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.controlSize(.large)
