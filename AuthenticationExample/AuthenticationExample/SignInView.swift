@@ -106,7 +106,9 @@ struct SignInView: View {
             signIn()
         } label: {
             Text(signInButtonText)
+#if !os(visionOS)
                 .frame(maxWidth: .infinity)
+#endif
         }
         .buttonStyle(.bordered)
         .controlSize(.large)
