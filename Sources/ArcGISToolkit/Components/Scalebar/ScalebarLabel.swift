@@ -15,7 +15,6 @@
 ***REMOVED***
 
 ***REMOVED***/ Models a label displayed along the edge of a scalebar
-@available(visionOS, unavailable)
 struct ScalebarLabel {
 ***REMOVED******REMOVED***/ The number of the label with the leftmost label ("0") starting at -1.
 ***REMOVED***let index: Int

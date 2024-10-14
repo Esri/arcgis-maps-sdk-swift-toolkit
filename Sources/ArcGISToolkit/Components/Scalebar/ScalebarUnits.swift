@@ -15,7 +15,6 @@
 ***REMOVED***
 import Foundation
 
-@available(visionOS, unavailable)
 public enum ScalebarUnits: Sendable {
 ***REMOVED******REMOVED***/ Imperial units (feet, miles, etc)
 ***REMOVED***case imperial

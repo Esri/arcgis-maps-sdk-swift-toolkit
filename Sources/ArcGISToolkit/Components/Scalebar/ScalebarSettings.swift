@@ -15,7 +15,6 @@
 ***REMOVED***
 
 ***REMOVED***/ Customizes scalebar appearance and behavior.
-@available(visionOS, unavailable)
 public struct ScalebarSettings: Sendable {
 ***REMOVED******REMOVED***/ Determines if the scalebar should automatically hide/show itself.
 ***REMOVED***var autoHide: Bool
@@ -83,12 +82,10 @@ public struct ScalebarSettings: Sendable {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 struct ScalebarSettingsKey: EnvironmentKey {
   static let defaultValue = ScalebarSettings()
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension EnvironmentValues {
 ***REMOVED***var scalebarSettings: ScalebarSettings {
 ***REMOVED******REMOVED***get { self[ScalebarSettingsKey.self] ***REMOVED***
