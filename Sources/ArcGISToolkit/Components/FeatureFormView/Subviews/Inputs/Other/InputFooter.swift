@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
-@MainActor
 struct InputFooter: View {
     @Environment(\.formElementPadding) var elementPadding
     

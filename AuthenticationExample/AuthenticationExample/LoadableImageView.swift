@@ -18,7 +18,6 @@ import SwiftUI
 /// A view that loads a `LoadableImage` and displays it.
 /// While the image is loading a progress view is displayed.
 /// If there is an error displaying the image a red exclamation circle is displayed.
-@MainActor
 struct LoadableImageView: View {
     /// The loadable image to display.
     let loadableImage: LoadableImage

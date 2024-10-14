@@ -17,7 +17,6 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience.
-@MainActor
 @preconcurrency
 public struct WorldScaleSceneView: View {
     /// The clipping distance of the scene view.

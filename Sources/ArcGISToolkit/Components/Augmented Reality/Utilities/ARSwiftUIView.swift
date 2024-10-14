@@ -27,9 +27,9 @@ struct ARSwiftUIView {
     /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
     /// The closure to call when a node corresponding to a new anchor has been added to the view.
-    private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    private(set) var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
     /// The closure to call when a node has been updated to match it's corresponding anchor.
-    private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    private(set) var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
     
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy
@@ -72,7 +72,7 @@ struct ARSwiftUIView {
     
     /// Sets the closure to call when a new node has been added to the scene.
     func onAddNode(
-        perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+        perform action: @escaping @MainActor (SceneParameters) -> Void
     ) -> Self {
         var view = self
         view.onAddNodeAction = action
@@ -81,7 +81,7 @@ struct ARSwiftUIView {
     
     /// Sets the closure to call when the scene's nodes are updated.
     func onUpdateNode(
-        perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+        perform action: @escaping @MainActor (SceneParameters) -> Void
     ) -> Self {
         var view = self
         view.onUpdateNodeAction = action
@@ -99,58 +99,89 @@ extension ARSwiftUIView: UIViewRepresentable {
         return arView
     }
     
-    func updateUIView(_ uiView: ARViewType, context: Context) {
-        context.coordinator.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
-        context.coordinator.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
-        context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-        context.coordinator.onAddNodeAction = onAddNodeAction
-        context.coordinator.onUpdateNodeAction = onUpdateNodeAction
-    }
+    func updateUIView(_ uiView: ARViewType, context: Context) {}
     
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        return .init(
+            onDidChangeGeoTrackingStatusAction: onDidChangeGeoTrackingStatusAction,
+            onCameraDidChangeTrackingStateAction: onCameraDidChangeTrackingStateAction,
+            onDidUpdateFrameAction: onDidUpdateFrameAction,
+            onAddNodeAction: onAddNodeAction,
+            onUpdateNodeAction: onUpdateNodeAction
+        )
+    }
+    
+    class Coordinator: NSObject {
+        let onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+        let onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
+        let onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
+        let onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
+        let onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+        
+        init(
+            onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?,
+            onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?,
+            onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?,
+            onAddNodeAction: (@MainActor (SceneParameters) -> Void)?,
+            onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+        ) {
+            self.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
+            self.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
+            self.onDidUpdateFrameAction = onDidUpdateFrameAction
+            self.onAddNodeAction = onAddNodeAction
+            self.onUpdateNodeAction = onUpdateNodeAction
+        }
     }
 }
 
-extension ARSwiftUIView {
-    class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
-        var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-        var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
-        var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-        var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
-        var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
-        
-        func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-            onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
-        }
-        
-        func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-            onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
-        }
-        
-        func session(_ session: ARSession, didUpdate frame: ARFrame) {
-            onDidUpdateFrameAction?(session, frame)
-        }
-        
-        func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-            onAddNodeAction?(renderer, node, anchor)
-        }
-        
-        func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-            onUpdateNodeAction?(renderer, node, anchor)
+extension ARSwiftUIView.Coordinator: ARSCNViewDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+        Task { @MainActor [onAddNodeAction] in
+            onAddNodeAction?(sceneParameters)
         }
     }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
+        Task { @MainActor [onUpdateNodeAction] in
+            onUpdateNodeAction?(sceneParameters)
+        }
+    }
+}
+
+extension ARSwiftUIView.Coordinator: ARSessionDelegate {
+    func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+        onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+    }
+    
+    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
+    }
+    
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        onDidUpdateFrameAction?(session, frame)
+    }
+}
+
+/// A temporary type to workaround this issue:
+/// https://forums.developer.apple.com/forums/thread/765644
+struct SceneParameters: @unchecked Sendable {
+    let renderer: SCNSceneRenderer
+    let node: SCNNode
+    let anchor: ARAnchor
 }
 
 /// A proxy for the ARSwiftUIView.
-class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
+@MainActor
+class ARSwiftUIViewProxy: NSObject, @preconcurrency ARSessionProviding {
     /// The underlying AR view.
     /// This is set by the ARSwiftUIView when it is available.
     fileprivate var arView: ARViewType!
     
     /// The AR session.
     @objc dynamic var session: ARSession {
-        MainActor.runUnsafely { arView.session }
+        arView.session
     }
 }
 
