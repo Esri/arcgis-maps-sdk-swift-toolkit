@@ -51,7 +51,6 @@ import SwiftUI
 /// in the project. To learn more about using the `Scalebar` see the <doc:ScalebarTutorial>.
 @MainActor
 @preconcurrency
-@available(visionOS, unavailable)
 public struct Scalebar: View {
     // - MARK: Internal/Private vars
     
