@@ -15,7 +15,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A row or grid element representing a basemap gallery item.
-@MainActor
 struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED***/ The displayed item.
 ***REMOVED***@ObservedObject var item: BasemapGalleryItem

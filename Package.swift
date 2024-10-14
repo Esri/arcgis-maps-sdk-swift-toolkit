@@ -1,4 +1,4 @@
-***REMOVED*** swift-tools-version:5.9
+***REMOVED*** swift-tools-version: 6.0
 ***REMOVED*** The swift-tools-version declares the minimum version of Swift required to build this package.
 ***REMOVED***
 ***REMOVED***
@@ -50,13 +50,3 @@ let package = Package(
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 )
-
-for target in package.targets {
-***REMOVED***target.swiftSettings = (target.swiftSettings ?? []) + [
-***REMOVED******REMOVED******REMOVED*** Experimental Features.
-***REMOVED******REMOVED***.enableExperimentalFeature("AccessLevelOnImport"),
-***REMOVED******REMOVED***.enableExperimentalFeature("StrictConcurrency"),
-***REMOVED******REMOVED******REMOVED*** Upcoming Features.
-***REMOVED******REMOVED***.enableUpcomingFeature("DisableOutwardActorInference")
-***REMOVED***]
-***REMOVED***

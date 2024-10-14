@@ -20,7 +20,6 @@ import CoreLocation
 ***REMOVED***/ An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 ***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,
 ***REMOVED***/ it places a red circle around your initial location which can be explored.
-@MainActor
 struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.

@@ -17,8 +17,6 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality table top experience.
-@MainActor
-@preconcurrency
 public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
@@ -98,11 +96,11 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: renderer, node: node, anchor: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { parameters in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: parameters.renderer, node: parameters.node, anchor: parameters.anchor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { _, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: node, for: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { parameters in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: parameters.node, for: parameters.anchor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { screenPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !initialTransformationIsSet else { return ***REMOVED***
@@ -219,7 +217,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experince.
+***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experience.
 ***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
 ***REMOVED******REMOVED***/  coaching overlay view.
 ***REMOVED***public func coachingOverlayHidden(_ hidden: Bool) -> Self {

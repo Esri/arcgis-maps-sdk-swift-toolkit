@@ -16,7 +16,6 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-@MainActor
 struct FeatureFormTestView: View {
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
@@ -51,7 +50,7 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - map: The map under test.
 ***REMOVED******REMOVED***/   - testCase: The test definition.
-***REMOVED***@MainActor func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
+***REMOVED***func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
 ***REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0

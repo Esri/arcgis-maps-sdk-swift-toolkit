@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ Displays a group form element and manages the visibility of the elements within the group.
-@MainActor
 struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the group is expanded or collapsed.
 ***REMOVED***@State private var isExpanded = false
@@ -61,7 +60,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***isExpanded = element.initialState == .expanded
 ***REMOVED******REMOVED******REMOVED***for element in element.elements {
-***REMOVED******REMOVED******REMOVED******REMOVED***let newTask = Task.detached { @MainActor [self] in
+***REMOVED******REMOVED******REMOVED******REMOVED***let newTask = Task { @MainActor [self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.updateVisibleElements()
 ***REMOVED******REMOVED******REMOVED******REMOVED***

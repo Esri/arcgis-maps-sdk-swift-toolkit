@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	***REMOVED***;
-	objectVersion = 55;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -133,7 +133,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					88AD13742834355000500B2E = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -141,7 +141,6 @@
 				***REMOVED***;
 			***REMOVED***;
 			buildConfigurationList = 88AD13702834355000500B2E /* Build configuration list for PBXProject "AuthenticationExample" */;
-			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -149,6 +148,7 @@
 				Base,
 			);
 			mainGroup = 88AD136C2834355000500B2E;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 88AD13762834355000500B2E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -270,6 +270,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			***REMOVED***;
 			name = Debug;
 		***REMOVED***;
@@ -325,6 +326,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			***REMOVED***;
 			name = Release;
@@ -359,7 +361,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			***REMOVED***;
 			name = Debug;
@@ -394,7 +396,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			***REMOVED***;
 			name = Release;

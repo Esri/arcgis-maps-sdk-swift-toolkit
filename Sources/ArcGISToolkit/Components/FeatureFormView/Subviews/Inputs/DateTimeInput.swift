@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for date/time input.
-@MainActor
 struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel

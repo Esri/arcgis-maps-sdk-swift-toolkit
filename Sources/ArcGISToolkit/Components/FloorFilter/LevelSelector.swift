@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view which allows selection of levels represented in `FloorFacility`.
-@MainActor
 struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel

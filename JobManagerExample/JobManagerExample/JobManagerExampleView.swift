@@ -18,7 +18,6 @@ import OSLog
 ***REMOVED***
 import UserNotifications
 
-@MainActor
 struct JobManagerExampleView: View {
 ***REMOVED******REMOVED***/ The job manager used by this view.
 ***REMOVED***@ObservedObject var jobManager = JobManager.shared
@@ -54,11 +53,11 @@ struct JobManagerExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let error {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***_ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
