@@ -13,7 +13,6 @@
 // limitations under the License.
 
 /// Visual scalebar styles.
-@available(visionOS, unavailable)
 public enum ScalebarStyle: Sendable {
     /// Displays a single unit with segmented bars of alternating fill color.
     case alternatingBar
