@@ -212,7 +212,6 @@ private extension Symbol {
     }
 }
 
-@available(visionOS, unavailable)
 private extension OverviewMap {
     @MainActor
     private class DataModel: ObservableObject {
