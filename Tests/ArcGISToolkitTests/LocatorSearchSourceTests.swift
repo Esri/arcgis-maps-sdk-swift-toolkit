@@ -16,6 +16,7 @@ import XCTest
 import ArcGIS
 import ArcGISToolkit
 
+@MainActor
 final class LocatorSearchSourceTests: XCTestCase {
     func testMaximumResults() async throws {
         let locator = LocatorSearchSource()
