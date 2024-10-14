@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class BasemapGalleryTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false

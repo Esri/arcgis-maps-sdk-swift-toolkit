@@ -51,8 +51,6 @@ import ArcGIS
 /// and refer to
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 /// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
-@MainActor
-@preconcurrency
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
     /// - Parameters:

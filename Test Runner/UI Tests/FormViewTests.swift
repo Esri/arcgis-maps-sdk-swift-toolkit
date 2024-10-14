@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class FeatureFormViewTests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false

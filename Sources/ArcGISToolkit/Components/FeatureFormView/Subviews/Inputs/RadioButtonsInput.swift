@@ -18,7 +18,6 @@ import SwiftUI
 /// A view for numerical value input.
 ///
 /// This is the preferable input type for short lists of coded value domains.
-@MainActor
 struct RadioButtonsInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel

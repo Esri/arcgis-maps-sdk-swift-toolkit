@@ -129,7 +129,7 @@ import SwiftUI
         await withTaskGroup(of: Void.self) { [weak self] taskGroup in
             guard let self else { return }
             for layer in network?.layers ?? [] {
-                taskGroup.addTask { @MainActor in
+                taskGroup.addTask { @MainActor @Sendable in
                     if let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
                         for element in result.geoElements {
                             await self.processAndAdd(

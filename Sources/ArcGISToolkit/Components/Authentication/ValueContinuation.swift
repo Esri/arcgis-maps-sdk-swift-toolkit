@@ -16,7 +16,7 @@ import Foundation
 
 /// An object that allows a consumer to await on a value and a provider to provide a value
 /// asynchronously. This is effectively a continuation that holds a value.
-@MainActor class ValueContinuation<Value> {
+@MainActor class ValueContinuation<Value: Sendable> {
     /// The value.
     private var _value: Value?
     

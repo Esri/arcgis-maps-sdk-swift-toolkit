@@ -17,8 +17,6 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality table top experience.
-@MainActor
-@preconcurrency
 public struct TableTopSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
@@ -98,11 +96,11 @@ public struct TableTopSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                    .onAddNode { renderer, node, anchor in
-                        addPlane(renderer: renderer, node: node, anchor: anchor)
+                    .onAddNode { parameters in
+                        addPlane(renderer: parameters.renderer, node: parameters.node, anchor: parameters.anchor)
                     }
-                    .onUpdateNode { _, node, anchor in
-                        updatePlane(with: node, for: anchor)
+                    .onUpdateNode { parameters in
+                        updatePlane(with: parameters.node, for: parameters.anchor)
                     }
                     .onTapGesture { screenPoint in
                         guard !initialTransformationIsSet else { return }
@@ -219,7 +217,7 @@ public struct TableTopSceneView: View {
         }
     }
     
-    /// Sets the visibility of the coaching overlay view for the AR experince.
+    /// Sets the visibility of the coaching overlay view for the AR experience.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
     ///  coaching overlay view.
     public func coachingOverlayHidden(_ hidden: Bool) -> Self {

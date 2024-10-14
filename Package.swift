@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // Copyright 2021 Esri
 //
@@ -50,13 +50,3 @@ let package = Package(
         )
     ]
 )
-
-for target in package.targets {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        // Experimental Features.
-        .enableExperimentalFeature("AccessLevelOnImport"),
-        .enableExperimentalFeature("StrictConcurrency"),
-        // Upcoming Features.
-        .enableUpcomingFeature("DisableOutwardActorInference")
-    ]
-}

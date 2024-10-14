@@ -17,7 +17,6 @@ import ArcGISToolkit
 import SwiftUI
 
 /// A view that displays the profile of a user.
-@MainActor
 struct ProfileView: View {
     /// The portal that the user is signed in to.
     let portal: Portal

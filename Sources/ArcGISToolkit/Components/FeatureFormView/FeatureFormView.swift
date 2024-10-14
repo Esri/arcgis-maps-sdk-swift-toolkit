@@ -64,7 +64,6 @@ import SwiftUI
 /// `Info.plist` file.
 ///
 /// - Since: 200.4
-@MainActor
 @preconcurrency
 public struct FeatureFormView: View {
     /// The view model for the form.
