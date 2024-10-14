@@ -16,6 +16,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
 
+@MainActor
 final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSearchResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
