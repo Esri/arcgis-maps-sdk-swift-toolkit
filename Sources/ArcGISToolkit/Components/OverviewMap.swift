@@ -49,7 +49,6 @@ import SwiftUI
 /// in the project. To learn more about using the `OverviewMap` see the <doc:OverviewMapTutorial>.
 @MainActor
 @preconcurrency
-@available(visionOS, unavailable)
 public struct OverviewMap: View {
     /// The `Viewpoint` of the main `GeoView`.
     let viewpoint: Viewpoint?
@@ -214,7 +213,6 @@ private extension Symbol {
     }
 }
 
-@available(visionOS, unavailable)
 private extension OverviewMap {
     @MainActor
     private class DataModel: ObservableObject {
