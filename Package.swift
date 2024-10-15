@@ -39,9 +39,6 @@ let package = Package(
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
                 .product(name: "Markdown", package: "swift-markdown")
-            ],
-            resources: [
-                .copy("PrivacyInfo.xcprivacy")
             ]
         ),
         .testTarget(
