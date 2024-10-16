@@ -16,6 +16,7 @@ import ArcGIS
 import Foundation
 
 /// Indicates how to display the attachments.
+@available(visionOS, unavailable)
 public enum AttachmentsFeatureElementDisplayType: Sendable {
     /// Show attachments as links.
     case list
@@ -26,6 +27,7 @@ public enum AttachmentsFeatureElementDisplayType: Sendable {
 }
 
 /// Common properties for elements which display feature attachments.
+@available(visionOS, unavailable)
 public protocol AttachmentsFeatureElement: Sendable {
     /// Indicates how to display the attachments.
     var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get }
@@ -42,6 +44,7 @@ public protocol AttachmentsFeatureElement: Sendable {
     var title: String { get }
 }
 
+@available(visionOS, unavailable)
 extension AttachmentsFeatureElementDisplayType {
     /// Creates a display type from an attachment popup element's display type.
     /// - Parameter kind: The display type of the popup element.

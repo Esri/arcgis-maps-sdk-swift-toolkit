@@ -28,6 +28,9 @@ public extension View {
     ///   - content: A closure that returns the content of the floating panel.
     /// - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
     /// environments and a popover otherwise.
+    @available(iOS 16.0, *)
+    @available(macCatalyst 16.0, *)
+    @available(visionOS, unavailable, message: "Use 'floatingPanel(attributionBarHeight:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
     func floatingPanel<Content>(
         attributionBarHeight: CGFloat = 0,
         backgroundColor: Color = Color(uiColor: .systemBackground),
@@ -41,6 +44,41 @@ public extension View {
             FloatingPanelModifier(
                 attributionBarHeight: attributionBarHeight,
                 backgroundColor: backgroundColor,
+                boundDetent: selectedDetent,
+                horizontalAlignment: horizontalAlignment,
+                isPresented: isPresented,
+                maxWidth: maxWidth,
+                panelContent: content
+            )
+        )
+    }
+    
+    /// A floating panel is a view that overlays a view and supplies view-related
+    /// content. For more information see <doc:FloatingPanel>.
+    /// - Parameters:
+    ///   - attributionBarHeight: The height of a geo-view's attribution bar.
+    ///   - selectedDetent: A binding to the currently selected detent.
+    ///   - horizontalAlignment: The horizontal alignment of the floating panel.
+    ///   - isPresented: A binding to a Boolean value that determines whether the view is presented.
+    ///   - maxWidth: The maximum width of the floating panel.
+    ///   - content: A closure that returns the content of the floating panel.
+    /// - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
+    /// environments and a popover otherwise.
+    @available(visionOS 2.0, *)
+    @available(iOS, unavailable, message: "Use 'floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
+    @available(macCatalyst, unavailable, message: "Use 'floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
+    func floatingPanel<Content>(
+        attributionBarHeight: CGFloat = 0,
+        selectedDetent: Binding<FloatingPanelDetent>? = nil,
+        horizontalAlignment: HorizontalAlignment = .trailing,
+        isPresented: Binding<Bool> = .constant(true),
+        maxWidth: CGFloat = 400,
+        @ViewBuilder _ content: @escaping () -> Content
+    ) -> some View where Content: View {
+        modifier(
+            FloatingPanelModifier(
+                attributionBarHeight: attributionBarHeight,
+                backgroundColor: nil,
                 boundDetent: selectedDetent,
                 horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
@@ -63,7 +101,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
     let attributionBarHeight: CGFloat
     
     /// The background color of the floating panel.
-    let backgroundColor: Color
+    let backgroundColor: Color?
     
     /// A user provided detent.
     let boundDetent: Binding<FloatingPanelDetent>?

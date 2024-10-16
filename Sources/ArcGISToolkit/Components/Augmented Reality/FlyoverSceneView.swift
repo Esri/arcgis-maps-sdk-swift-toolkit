@@ -17,10 +17,12 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality fly over experience.
-@preconcurrency
+@available(visionOS, unavailable)
 public struct FlyoverSceneView: View {
+#if os(iOS)
     /// The AR session.
     @StateObject private var session = ObservableARSession()
+#endif
     /// The initial camera.
     let initialCamera: Camera
     /// The translation factor.
@@ -133,6 +135,7 @@ public struct FlyoverSceneView: View {
         SceneViewReader { sceneViewProxy in
             sceneViewBuilder(sceneViewProxy)
                 .cameraController(cameraController)
+#if os(iOS)
                 .onAppear {
                     let configuration = ARPositionalTrackingConfiguration()
                     if shouldOrientToCompass {
@@ -141,7 +144,7 @@ public struct FlyoverSceneView: View {
                     session.start(configuration: configuration)
                 }
                 .onDisappear { session.pause() }
-                .onChange(of: session.currentFrame) { frame in
+                .onChange(session.currentFrame) { frame in
                     guard let frame, let interfaceOrientation else { return }
                     sceneViewProxy.updateCamera(
                         frame: frame,
@@ -149,10 +152,11 @@ public struct FlyoverSceneView: View {
                         orientation: interfaceOrientation
                     )
                 }
-                .onChange(of: initialCamera) { initialCamera in
+#endif
+                .onChange(initialCamera) { initialCamera in
                     cameraController.originCamera = initialCamera
                 }
-                .onChange(of: translationFactor) { translationFactor in
+                .onChange(translationFactor) { translationFactor in
                     cameraController.translationFactor = translationFactor
                 }
                 .observingInterfaceOrientation($interfaceOrientation)
@@ -160,6 +164,7 @@ public struct FlyoverSceneView: View {
     }
 }
 
+#if os(iOS)
 /// An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
     /// The backing AR session.
@@ -189,3 +194,4 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
         currentFrame = frame
     }
 }
+#endif

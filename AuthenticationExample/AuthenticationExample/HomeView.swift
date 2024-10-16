@@ -25,22 +25,24 @@ struct HomeView: View {
     
     var body: some View {
         if let portal = portal {
-            NavigationStack {
+            NavigationSplitView {
                 WebMapsView(portal: portal)
                     .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
+                        ToolbarItem(placement: .topBarTrailing) {
                             Button {
                                 showProfile = true
                             } label: {
                                 Image(systemName: "person.circle")
                             }
+                            .sheet(isPresented: $showProfile) {
+                                ProfileView(portal: portal) {
+                                    self.portal = nil
+                                }
+                            }
                         }
                     }
-                    .sheet(isPresented: $showProfile) {
-                        ProfileView(portal: portal) {
-                            self.portal = nil
-                        }
-                    }
+            } detail: {
+                Text("No Webmap Selected")
             }
         } else {
             SignInView(portal: $portal)

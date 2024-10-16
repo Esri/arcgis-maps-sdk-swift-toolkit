@@ -17,6 +17,7 @@ import ArcGIS
 
 /// Extends `LocatorSearchSource` with intelligent search behaviors; adds support for features like
 /// type-specific placemarks, repeated search, and more on the world geocode service.
+@available(visionOS, unavailable)
 public class SmartLocatorSearchSource: LocatorSearchSource {
     /// Creates a smart locator search source.
     /// - Parameters:

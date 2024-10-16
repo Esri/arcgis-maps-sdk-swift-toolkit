@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view for text input.
+@available(visionOS, unavailable)
 struct TextInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -59,20 +60,20 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onChange(of: isFocused) { isFocused in
+            .onChange(isFocused) { isFocused in
                 if isFocused {
                     model.focusedElement = element
                 } else if model.focusedElement == element {
                     model.focusedElement = nil
                 }
             }
-            .onChange(of: model.focusedElement) { focusedElement in
+            .onChange(model.focusedElement) { focusedElement in
                 // Another form input took focus
                 if focusedElement != element {
                     isFocused  = false
                 }
             }
-            .onChange(of: text) { text in
+            .onChange(text) { text in
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
@@ -91,6 +92,7 @@ struct TextInput: View {
     }
 }
 
+@available(visionOS, unavailable)
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
@@ -122,6 +124,7 @@ private extension TextInput {
             }
             .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
+#if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
@@ -130,6 +133,7 @@ private extension TextInput {
                     }
                 }
             }
+#endif
             .scrollContentBackground(.hidden)
             if !text.isEmpty {
                 ClearButton {
@@ -162,7 +166,19 @@ private extension TextInput {
     /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
         guard let fieldType = element.fieldType else { return .default }
-        return fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+        
+        return if fieldType.isNumeric {
+#if os(visionOS)
+            // The 'positiveNegativeButton' doesn't show on visionOS
+            // so we need to show this keyboard so the user can type
+            // a negative number.
+            .numbersAndPunctuation
+#else
+            if fieldType.isFloatingPoint { .decimalPad } else { .numberPad }
+#endif
+        } else {
+            .default
+        }
     }
     
     /// The button that allows a user to switch the numeric value between positive and negative.
@@ -181,6 +197,7 @@ private extension TextInput {
     }
 }
 
+@available(visionOS, unavailable)
 private extension TextInput {
     /// A view for displaying a multiline text input outside the body of the feature form view.
     ///

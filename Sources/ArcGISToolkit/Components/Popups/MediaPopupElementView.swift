@@ -16,6 +16,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying a `MediaPopupElement`.
+@available(visionOS, unavailable)
 struct MediaPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: MediaPopupElement

@@ -58,6 +58,10 @@ struct BasemapGalleryCell: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(item.hasError ? .secondary : .primary)
             }
+#if os(visionOS)
+            .contentShape(.hoverEffect, .rect(cornerRadius: 12))
+            .hoverEffect()
+#endif
         })
         .buttonStyle(.plain)
         .disabled(item.isBasemapLoading)

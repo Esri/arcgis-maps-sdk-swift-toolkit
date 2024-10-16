@@ -54,8 +54,10 @@ struct BookmarksHeader: View {
                 Text.done
                     .fontWeight(.semibold)
             }
+#if !os(visionOS)
             .buttonStyle(.plain)
             .foregroundStyle(.tint)
+#endif
         }
     }
 }

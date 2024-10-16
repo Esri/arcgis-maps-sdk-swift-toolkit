@@ -29,7 +29,7 @@ struct ScalebarTextModifier: ViewModifier {
             )
     }
 }
-    
+
 extension Text {
     func scalebarText() -> some View {
         modifier(

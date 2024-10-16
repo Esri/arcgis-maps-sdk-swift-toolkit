@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !os(visionOS)
 import ArcGIS
 @testable import ArcGISToolkit
 import XCTest
@@ -308,3 +309,4 @@ private extension PortalItem {
 private extension URL {
     static let sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!
 }
+#endif

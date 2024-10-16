@@ -17,6 +17,7 @@ import QuickLook
 import SwiftUI
 
 /// A view displaying an `AttachmentsFeatureElement`.
+@available(visionOS, unavailable)
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
     let featureElement: AttachmentsFeatureElement
@@ -199,6 +200,7 @@ struct AttachmentsFeatureElementView: View {
     }
 }
 
+@available(visionOS, unavailable)
 private extension AttachmentsFeatureElement {
     /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
@@ -210,6 +212,7 @@ private extension AttachmentsFeatureElement {
     }
 }
 
+@available(visionOS, unavailable)
 extension AttachmentsFeatureElementView {
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
@@ -235,6 +238,7 @@ extension AttachmentsFeatureElementView {
     }
 }
 
+@available(visionOS, unavailable)
 extension View {
     /// Modifier for watching `AttachmentsFormElement.isEditable`.
     /// - Parameters:

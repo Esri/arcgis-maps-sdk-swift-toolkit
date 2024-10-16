@@ -116,7 +116,7 @@ struct ComboBoxInput: View {
             model.focusedElement = element
             isPresented = true
         }
-        .onChange(of: selectedValue) { selectedValue in
+        .onChange(selectedValue) { selectedValue in
             element.updateValue(selectedValue?.code)
             model.evaluateExpressions()
         }

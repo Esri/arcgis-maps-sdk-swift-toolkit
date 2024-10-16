@@ -16,6 +16,7 @@
 import SwiftUI
 
 /// Scans machine readable information like QR codes and barcodes.
+@available(visionOS, unavailable)
 struct CodeScanner: View {
     @Binding var code: String
     
@@ -55,6 +56,7 @@ struct CodeScanner: View {
     }
 }
 
+@available(visionOS, unavailable)
 struct CodeScannerRepresentable: UIViewControllerRepresentable {
     @Binding var scannerIsPresented: Bool
     
@@ -92,6 +94,7 @@ protocol ScannerViewControllerDelegate: AnyObject {
     func didScanCode(_ code: String)
 }
 
+@available(visionOS, unavailable)
 class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: Constants
