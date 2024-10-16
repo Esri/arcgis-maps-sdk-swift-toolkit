@@ -55,7 +55,6 @@ public extension View {
     
     /// A floating panel is a view that overlays a view and supplies view-related
     /// content. For more information see <doc:FloatingPanel>.
-    ///
     /// - Parameters:
     ///   - attributionBarHeight: The height of a geo-view's attribution bar.
     ///   - selectedDetent: A binding to the currently selected detent.

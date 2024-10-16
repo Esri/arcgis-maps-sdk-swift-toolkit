@@ -18,7 +18,6 @@ import ArcGIS
 import CoreLocation
 
 /// A scene view that provides an augmented reality world scale experience.
-@preconcurrency
 @available(visionOS, unavailable)
 public struct WorldScaleSceneView: View {
     /// The clipping distance of the scene view.

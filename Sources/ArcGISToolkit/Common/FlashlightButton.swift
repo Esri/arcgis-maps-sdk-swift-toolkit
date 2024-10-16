@@ -76,8 +76,8 @@ struct FlashlightButton: View {
 }
 
 private extension View {
-    @ViewBuilder
     @available(visionOS, unavailable)
+    @ViewBuilder
     func torchFeedback(trigger: Bool) -> some View {
         if #available(iOS 17.0, *) {
             self
