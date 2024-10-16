@@ -403,15 +403,14 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     @objc func layout(notification: NSNotification) {
         let device = notification.object as! UIDevice
         let deviceOrientation = device.orientation
+        guard let connection = previewLayer.connection else { return }
         switch deviceOrientation {
         case .landscapeLeft:
-            previewLayer.connection!.videoOrientation = .landscapeRight
+            connection.videoOrientation = .landscapeRight
         case .landscapeRight:
-            previewLayer.connection!.videoOrientation = .landscapeLeft
-        case .portraitUpsideDown:
-            previewLayer.connection!.videoOrientation = .portraitUpsideDown
+            connection.videoOrientation = .landscapeLeft
         default:
-            previewLayer.connection!.videoOrientation = .portrait
+            connection.videoOrientation = .portrait
         }
     }
 }
