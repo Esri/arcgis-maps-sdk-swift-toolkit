@@ -15,7 +15,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A modifier which "styles" a Text element's font, shadow color and radius.
-@available(visionOS, unavailable)
 struct ScalebarTextModifier: ViewModifier {
 ***REMOVED******REMOVED***/ Appearance settings.
 ***REMOVED***@Environment(\.scalebarSettings) var settings
@@ -40,7 +39,6 @@ extension Text {
 ***REMOVED***
 
 ***REMOVED***/ A modifier which "styles" a scalebar's shadow color and radius.
-@available(visionOS, unavailable)
 struct ScalebarGroupShadowModifier: ViewModifier {
 ***REMOVED******REMOVED***/ Appearance settings.
 ***REMOVED***@Environment(\.scalebarSettings) var settings
@@ -54,8 +52,7 @@ struct ScalebarGroupShadowModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-@available(visionOS, unavailable)
+
 extension View {
 ***REMOVED***func scalebarShadow() -> some View {
 ***REMOVED******REMOVED***modifier(
