@@ -211,7 +211,6 @@ private extension Symbol {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension OverviewMap {
 ***REMOVED***@MainActor
 ***REMOVED***private class DataModel: ObservableObject {

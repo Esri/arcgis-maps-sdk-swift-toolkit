@@ -52,7 +52,7 @@ struct ScalebarGroupShadowModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 extension View {
 ***REMOVED***func scalebarShadow() -> some View {
 ***REMOVED******REMOVED***modifier(
