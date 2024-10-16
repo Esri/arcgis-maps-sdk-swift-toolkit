@@ -130,21 +130,18 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     override func viewDidLayoutSubviews() {
         previewLayer.frame = view.bounds
-        let deviceOrientation = UIDevice.current.orientation
-        switch deviceOrientation {
-        case .landscapeLeft:
-            previewLayer.connection!.videoOrientation = .landscapeRight
-        case .landscapeRight:
-            previewLayer.connection!.videoOrientation = .landscapeLeft
-        case .portraitUpsideDown:
-            previewLayer.connection!.videoOrientation = .portraitUpsideDown
-        default:
-            previewLayer.connection!.videoOrientation = .portrait
-        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(layout),
+            name: UIDevice.orientationDidChangeNotification,
+            object: nil
+        )
         
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
         let videoInput: AVCaptureDeviceInput
@@ -206,6 +203,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         sessionQueue.async { [captureSession] in
             captureSession.startRunning()
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
     }
     
     // MARK: AVCaptureMetadataOutputObjectsDelegate methods
@@ -395,6 +396,23 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             }
             device.unlockForConfiguration()
         } catch { }
+    }
+    
+    // MARK: Other methods
+    
+    @objc func layout(notification: NSNotification) {
+        let device = notification.object as! UIDevice
+        let deviceOrientation = device.orientation
+        switch deviceOrientation {
+        case .landscapeLeft:
+            previewLayer.connection!.videoOrientation = .landscapeRight
+        case .landscapeRight:
+            previewLayer.connection!.videoOrientation = .landscapeLeft
+        case .portraitUpsideDown:
+            previewLayer.connection!.videoOrientation = .portraitUpsideDown
+        default:
+            previewLayer.connection!.videoOrientation = .portrait
+        }
     }
 }
 
