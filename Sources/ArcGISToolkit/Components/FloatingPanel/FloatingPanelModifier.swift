@@ -55,7 +55,6 @@ public extension View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A floating panel is a view that overlays a view and supplies view-related
 ***REMOVED******REMOVED***/ content. For more information see <doc:FloatingPanel>.
-***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - attributionBarHeight: The height of a geo-view's attribution bar.
 ***REMOVED******REMOVED***/   - selectedDetent: A binding to the currently selected detent.

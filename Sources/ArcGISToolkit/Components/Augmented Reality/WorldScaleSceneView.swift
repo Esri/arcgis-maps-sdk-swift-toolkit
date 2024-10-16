@@ -18,7 +18,6 @@ import ARKit
 import CoreLocation
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
-@preconcurrency
 @available(visionOS, unavailable)
 public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The clipping distance of the scene view.

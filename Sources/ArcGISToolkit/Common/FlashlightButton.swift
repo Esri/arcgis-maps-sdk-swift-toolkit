@@ -76,8 +76,8 @@ struct FlashlightButton: View {
 ***REMOVED***
 
 private extension View {
-***REMOVED***@ViewBuilder
 ***REMOVED***@available(visionOS, unavailable)
+***REMOVED***@ViewBuilder
 ***REMOVED***func torchFeedback(trigger: Bool) -> some View {
 ***REMOVED******REMOVED***if #available(iOS 17.0, *) {
 ***REMOVED******REMOVED******REMOVED***self
