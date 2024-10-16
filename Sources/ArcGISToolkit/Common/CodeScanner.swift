@@ -130,21 +130,18 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     override func viewDidLayoutSubviews() {
         previewLayer.frame = view.bounds
-        let deviceOrientation = UIDevice.current.orientation
-        switch deviceOrientation {
-        case .landscapeLeft:
-            previewLayer.connection!.videoOrientation = .landscapeRight
-        case .landscapeRight:
-            previewLayer.connection!.videoOrientation = .landscapeLeft
-        case .portraitUpsideDown:
-            previewLayer.connection!.videoOrientation = .portraitUpsideDown
-        default:
-            previewLayer.connection!.videoOrientation = .portrait
-        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateVideoOrientation),
+            name: UIDevice.orientationDidChangeNotification,
+            object: nil
+        )
         
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
         let videoInput: AVCaptureDeviceInput
@@ -206,6 +203,11 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         sessionQueue.async { [captureSession] in
             captureSession.startRunning()
         }
+        updateVideoOrientation()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
     }
     
     // MARK: AVCaptureMetadataOutputObjectsDelegate methods
@@ -395,6 +397,27 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             }
             device.unlockForConfiguration()
         } catch { }
+    }
+    
+    // MARK: Other methods
+    
+    @objc func updateVideoOrientation() {
+        let deviceOrientation = UIDevice.current.orientation
+        guard let connection = previewLayer.connection else { return }
+        switch deviceOrientation {
+        case .landscapeLeft:
+            connection.videoOrientation = .landscapeRight
+        case .landscapeRight:
+            connection.videoOrientation = .landscapeLeft
+        case .portraitUpsideDown:
+            /// It is best practice to only support `portraitUpsideDown` on iPadOS.
+            /// https://developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                connection.videoOrientation = .portraitUpsideDown
+            }
+        default:
+            connection.videoOrientation = .portrait
+        }
     }
 }
 
