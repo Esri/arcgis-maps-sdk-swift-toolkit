@@ -52,7 +52,7 @@ struct ScalebarGroupShadowModifier: ViewModifier {
             )
     }
 }
-
+    
 extension View {
     func scalebarShadow() -> some View {
         modifier(
