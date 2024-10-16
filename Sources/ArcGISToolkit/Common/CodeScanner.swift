@@ -138,7 +138,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***UIDevice.current.beginGeneratingDeviceOrientationNotifications()
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(
 ***REMOVED******REMOVED******REMOVED***self,
-***REMOVED******REMOVED******REMOVED***selector: #selector(layout),
+***REMOVED******REMOVED******REMOVED***selector: #selector(updateVideoOrientation),
 ***REMOVED******REMOVED******REMOVED***name: UIDevice.orientationDidChangeNotification,
 ***REMOVED******REMOVED******REMOVED***object: nil
 ***REMOVED******REMOVED***)
@@ -400,7 +400,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Other methods
 ***REMOVED***
-***REMOVED***@objc func layout(notification: NSNotification) {
+***REMOVED***@objc func updateVideoOrientation(notification: NSNotification) {
 ***REMOVED******REMOVED***let device = notification.object as! UIDevice
 ***REMOVED******REMOVED***let deviceOrientation = device.orientation
 ***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
