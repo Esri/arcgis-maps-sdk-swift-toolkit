@@ -17,7 +17,6 @@ import Combine
 import Foundation
 
 @MainActor
-@available(visionOS, unavailable)
 final class ScalebarViewModel: ObservableObject {
     // - MARK: Published vars
     
