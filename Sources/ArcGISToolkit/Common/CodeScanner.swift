@@ -203,6 +203,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         sessionQueue.async { [captureSession] in
             captureSession.startRunning()
         }
+        updateVideoOrientation()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -400,15 +401,20 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     // MARK: Other methods
     
-    @objc func updateVideoOrientation(notification: NSNotification) {
-        let device = notification.object as! UIDevice
-        let deviceOrientation = device.orientation
+    @objc func updateVideoOrientation() {
+        let deviceOrientation = UIDevice.current.orientation
         guard let connection = previewLayer.connection else { return }
         switch deviceOrientation {
         case .landscapeLeft:
             connection.videoOrientation = .landscapeRight
         case .landscapeRight:
             connection.videoOrientation = .landscapeLeft
+        case .portraitUpsideDown:
+            /// It is best practice to only support `portraitUpsideDown` on iPadOS.
+            /// https://developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                connection.videoOrientation = .portraitUpsideDown
+            }
         default:
             connection.videoOrientation = .portrait
         }
