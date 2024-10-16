@@ -61,13 +61,3 @@ private extension SupportedPlatform {
 #endif
 ***REMOVED***
 ***REMOVED***
-
-private extension SupportedPlatform {
-***REMOVED***static var visionOSV2: Self {
-#if swift(>=6)
-***REMOVED******REMOVED***.visionOS(.v2)
-#else
-***REMOVED******REMOVED***.visionOS("2.0.0")
-#endif
-***REMOVED***
-***REMOVED***
