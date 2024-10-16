@@ -203,6 +203,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***sessionQueue.async { [captureSession] in
 ***REMOVED******REMOVED******REMOVED***captureSession.startRunning()
 ***REMOVED***
+***REMOVED******REMOVED***updateVideoOrientation()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewWillDisappear(_ animated: Bool) {
@@ -400,15 +401,20 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Other methods
 ***REMOVED***
-***REMOVED***@objc func updateVideoOrientation(notification: NSNotification) {
-***REMOVED******REMOVED***let device = notification.object as! UIDevice
-***REMOVED******REMOVED***let deviceOrientation = device.orientation
+***REMOVED***@objc func updateVideoOrientation() {
+***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
 ***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
 ***REMOVED******REMOVED***switch deviceOrientation {
 ***REMOVED******REMOVED***case .landscapeLeft:
 ***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .landscapeRight
 ***REMOVED******REMOVED***case .landscapeRight:
 ***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .landscapeLeft
+***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED******REMOVED***/ It is best practice to only support `portraitUpsideDown` on iPadOS.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations
+***REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .pad {
+***REMOVED******REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portraitUpsideDown
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portrait
 ***REMOVED***
