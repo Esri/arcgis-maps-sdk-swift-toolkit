@@ -130,21 +130,18 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***override func viewDidLayoutSubviews() {
 ***REMOVED******REMOVED***previewLayer.frame = view.bounds
-***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
-***REMOVED******REMOVED***switch deviceOrientation {
-***REMOVED******REMOVED***case .landscapeLeft:
-***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeRight
-***REMOVED******REMOVED***case .landscapeRight:
-***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeLeft
-***REMOVED******REMOVED***case .portraitUpsideDown:
-***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portraitUpsideDown
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portrait
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewDidLoad() {
 ***REMOVED******REMOVED***super.viewDidLoad()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+***REMOVED******REMOVED***NotificationCenter.default.addObserver(
+***REMOVED******REMOVED******REMOVED***self,
+***REMOVED******REMOVED******REMOVED***selector: #selector(layout),
+***REMOVED******REMOVED******REMOVED***name: UIDevice.orientationDidChangeNotification,
+***REMOVED******REMOVED******REMOVED***object: nil
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***let videoInput: AVCaptureDeviceInput
@@ -206,6 +203,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***sessionQueue.async { [captureSession] in
 ***REMOVED******REMOVED******REMOVED***captureSession.startRunning()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***override func viewWillDisappear(_ animated: Bool) {
+***REMOVED******REMOVED***UIDevice.current.endGeneratingDeviceOrientationNotifications()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: AVCaptureMetadataOutputObjectsDelegate methods
@@ -395,6 +396,23 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***device.unlockForConfiguration()
 ***REMOVED*** catch { ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Other methods
+***REMOVED***
+***REMOVED***@objc func layout(notification: NSNotification) {
+***REMOVED******REMOVED***let device = notification.object as! UIDevice
+***REMOVED******REMOVED***let deviceOrientation = device.orientation
+***REMOVED******REMOVED***switch deviceOrientation {
+***REMOVED******REMOVED***case .landscapeLeft:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeRight
+***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .landscapeLeft
+***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portraitUpsideDown
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***previewLayer.connection!.videoOrientation = .portrait
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
