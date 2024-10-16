@@ -14,7 +14,6 @@
 
 import SwiftUI
 
-@available(visionOS, unavailable)
 extension Scalebar {
     /// Renders all of the scalebar labels.
     var allLabelsView: some View {

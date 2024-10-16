@@ -15,7 +15,6 @@
 import SwiftUI
 
 /// Customizes scalebar appearance and behavior.
-@available(visionOS, unavailable)
 public struct ScalebarSettings: Sendable {
     /// Determines if the scalebar should automatically hide/show itself.
     var autoHide: Bool
@@ -83,12 +82,10 @@ public struct ScalebarSettings: Sendable {
     }
 }
 
-@available(visionOS, unavailable)
 struct ScalebarSettingsKey: EnvironmentKey {
   static let defaultValue = ScalebarSettings()
 }
 
-@available(visionOS, unavailable)
 extension EnvironmentValues {
     var scalebarSettings: ScalebarSettings {
         get { self[ScalebarSettingsKey.self] }
