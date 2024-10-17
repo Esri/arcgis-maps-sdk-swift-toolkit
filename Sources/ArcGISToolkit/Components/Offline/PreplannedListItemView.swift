@@ -98,6 +98,7 @@ struct PreplannedListItemView: View {
     @ViewBuilder private var titleView: some View {
         Text(model.preplannedMapArea.title)
             .font(.body)
+            .lineLimit(2)
     }
     
     @ViewBuilder private var downloadButton: some View {
