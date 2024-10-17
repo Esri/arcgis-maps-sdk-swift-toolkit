@@ -118,8 +118,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private var reticleLayer: CAShapeLayer?
     
-    weak var delegate: ScannerViewControllerDelegate?
     
+    weak var delegate: ScannerViewControllerDelegate?
     
     private class MetadataObjectLayer: CAShapeLayer {
         var metadataObject: AVMetadataObject?
