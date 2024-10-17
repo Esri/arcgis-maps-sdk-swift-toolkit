@@ -271,37 +271,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         }
     }
     
-    /// <#Description#>
-    func checkTargetHits() {
-        var reticleWasContainedInAOverlay = false
-        for overlayLayer in metadataObjectOverlayLayers {
-            if overlayLayer.path!.contains(self.reticleLayer!.position) {
-                reticleWasContainedInAOverlay = true
-                if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
-                    self.targetHits += 1
-                    overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
-                        UIColor.tintColor,
-                        at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
-                    )?.cgColor
-                    if self.targetHits >= self.requiredTargetHits {
-                        delegate?.didScanCode(stringValue)
-                        if #available(iOS 17.5, *), let metadataObject = overlayLayer.metadataObject {
-                            self.feedbackGenerator.selectionChanged(at: metadataObject.bounds.origin)
-                        }
-                        self.targetHits = 0
-                    }
-                } else {
-                    self.targetStringValue = overlayLayer.stringValue
-                    self.targetHits = 0
-                }
-            }
-        }
-        if !reticleWasContainedInAOverlay {
-            self.targetStringValue = nil
-            self.targetHits = 0
-        }
-    }
-    
     // MARK: Scan handling methods
     
     private func addMetadataObjectOverlayLayersToVideoPreviewView(_ metadataObjectOverlayLayers: [MetadataObjectLayer]) {
@@ -331,6 +300,37 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             path.closeSubpath()
         }
         return path
+    }
+    
+    /// <#Description#>
+    private func checkTargetHits() {
+        var reticleWasContainedInAOverlay = false
+        for overlayLayer in metadataObjectOverlayLayers {
+            if overlayLayer.path!.contains(self.reticleLayer!.position) {
+                reticleWasContainedInAOverlay = true
+                if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
+                    self.targetHits += 1
+                    overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
+                        UIColor.tintColor,
+                        at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
+                    )?.cgColor
+                    if self.targetHits >= self.requiredTargetHits {
+                        delegate?.didScanCode(stringValue)
+                        if #available(iOS 17.5, *), let metadataObject = overlayLayer.metadataObject {
+                            self.feedbackGenerator.selectionChanged(at: metadataObject.bounds.origin)
+                        }
+                        self.targetHits = 0
+                    }
+                } else {
+                    self.targetStringValue = overlayLayer.stringValue
+                    self.targetHits = 0
+                }
+            }
+        }
+        if !reticleWasContainedInAOverlay {
+            self.targetStringValue = nil
+            self.targetHits = 0
+        }
     }
     
     private func createMetadataObjectOverlayWithMetadataObject(_ metadataObject: AVMetadataObject) -> MetadataObjectLayer {
