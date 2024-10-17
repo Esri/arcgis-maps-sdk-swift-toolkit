@@ -131,6 +131,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private class MetadataObjectLayer: CAShapeLayer {
 ***REMOVED******REMOVED***var metadataObject: AVMetadataObject?
+***REMOVED******REMOVED***var stringValue: String? {
+***REMOVED******REMOVED******REMOVED***(metadataObject as? AVMetadataMachineReadableCodeObject)?.stringValue
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: UIViewController methods
