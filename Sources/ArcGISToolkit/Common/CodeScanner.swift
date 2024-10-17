@@ -104,10 +104,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
     
-    /// <#Description#>
+    /// The color of a code overlay before it's been targeted for auto-scan.
     private let normalOverlayColor = UIColor.white.withAlphaComponent(0.25)
     
-    /// <#Description#>
+    /// The number of consecutive hits required to trigger an automatic scan.
     private let requiredTargetHits = 25
     
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
@@ -124,10 +124,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private var reticleLayer: CAShapeLayer?
     
-    /// <#Description#>
+    /// The number of consecutive target hits. See also `requiredTargetHits`.
     private var targetHits = 0
     
-    /// <#Description#>
+    /// The string value of the targeted code.
     private var targetStringValue: String?
     
     weak var delegate: ScannerViewControllerDelegate?
@@ -277,7 +277,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         return path
     }
     
-    /// <#Description#>
+    /// Checks if the reticle intersects with any of the current overlays. When a code with a consistent string
+    /// value intersects with the reticle for the `requiredTargetHits` count, it is auto-scanned.
     private func checkTargetHits() {
         var reticleWasContainedInAOverlay = false
         for overlayLayer in metadataObjectOverlayLayers {
