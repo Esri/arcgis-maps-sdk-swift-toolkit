@@ -116,6 +116,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private var removeMetadataObjectOverlayLayersTimer: Timer?
     
+    private var reticleLayer: CAShapeLayer?
+    
     weak var delegate: ScannerViewControllerDelegate?
     
     private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
@@ -196,6 +198,27 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         previewLayer.videoGravity = .resizeAspectFill
         view.addGestureRecognizer(tapGestureRecognizer)
         view.layer.addSublayer(previewLayer)
+        
+        let reticleLayer = CAShapeLayer()
+        let radius: CGFloat = 5.0
+        reticleLayer.path = UIBezierPath(
+            roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius),
+            cornerRadius: radius
+        ).cgPath
+        reticleLayer.frame = CGRect(
+            origin: CGPoint(
+                x: view.frame.midX - radius,
+                y: view.frame.midY - radius
+            ),
+            size: CGSize(
+                width: radius * 2,
+                height: radius * 2
+            )
+        )
+        reticleLayer.fillColor = UIColor.tintColor.cgColor
+        reticleLayer.zPosition = .greatestFiniteMagnitude
+        previewLayer.addSublayer(reticleLayer)
+        self.reticleLayer = reticleLayer
     }
     
     override func viewWillAppear(_ animated: Bool) {
