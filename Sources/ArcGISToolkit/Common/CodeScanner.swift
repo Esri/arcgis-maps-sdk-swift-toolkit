@@ -351,19 +351,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         }
     }
     
+    /// Focus on and adjust exposure on the tapped point.
     @objc
     private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
-        // Check if a recognized code was tapped. If so, select it.
         let point = tapGestureRecognizer.location(in: view)
-        for metadataObjectOverlayLayer in metadataObjectOverlayLayers {
-            if metadataObjectOverlayLayer.path?.contains(point) ?? false,
-               let metadataObject = metadataObjectOverlayLayer.metadataObject {
-                scan(metadataObject)
-                break
-            }
-        }
-        
-        // Otherwise focus on and adjust exposure on the tapped point.
         let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
         guard let device = AVCaptureDevice.default(for: .video) else { return }
         do {
