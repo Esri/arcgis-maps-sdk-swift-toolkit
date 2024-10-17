@@ -25,11 +25,7 @@ extension UIColor {
         return (r, g, b, a)
     }
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - otherColor: <#otherColor description#>
-    ///   - percent: <#percent description#>
-    /// - Returns: <#description#>
+    /// Interpolates the color with `otherColor` at the provided `percent`.
     func interpolatedWith(_ otherColor: UIColor, at percent: CGFloat) -> UIColor? {
         let (r1, g1, b1, a1) = rgba
         let (r2, g2, b2, a2) = otherColor.rgba
