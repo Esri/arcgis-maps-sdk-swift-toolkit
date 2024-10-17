@@ -260,37 +260,47 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             DispatchQueue.main.async {
                 self.removeMetadataObjectOverlayLayers()
                 var metadataObjectOverlayLayers = [MetadataObjectLayer]()
-                var targetHit = false
                 for metadataObject in metadataObjects {
                     let overlayLayer = self.createMetadataObjectOverlayWithMetadataObject(metadataObject)
                     metadataObjectOverlayLayers.append(overlayLayer)
-                    if overlayLayer.path!.contains(self.reticleLayer!.position) {
-                        targetHit = true
-                        if let target = self.targetStringValue, target == overlayLayer.stringValue {
-                            self.targetHits += 1
-                            if self.targetHits >= self.requiredTargetHits {
-                                self.scan(overlayLayer.metadataObject!)
-                            } else {
-                                let c1 = UIColor.white.withAlphaComponent(0.25)
-                                let c2 = UIColor.tintColor
-                                overlayLayer.fillColor = c1.interpolatedWith(
-                                    c2,
-                                    at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
-                                )?.cgColor
-                            }
-                        } else {
-                            self.targetStringValue = overlayLayer.stringValue
-                            self.targetHits = 0
-                        }
-                    }
                 }
-                if !targetHit {
-                    self.targetStringValue = nil
+                self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
+                self.checkTargetHits()
+                self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
+            }
+        }
+    }
+    
+    /// <#Description#>
+    func checkTargetHits() {
+        var reticleWasContainedInAOverlay = false
+        for overlayLayer in metadataObjectOverlayLayers {
+            if overlayLayer.path!.contains(self.reticleLayer!.position) {
+                reticleWasContainedInAOverlay = true
+                if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
+                    self.targetHits += 1
+                    overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
+                        UIColor.tintColor,
+                        at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
+                    )?.cgColor
+                    if self.targetHits >= self.requiredTargetHits {
+                        delegate?.didScanCode(stringValue)
+                        if #available(iOS 17.5, *), let metadataObject = overlayLayer.metadataObject {
+                            self.feedbackGenerator.selectionChanged(at: metadataObject.bounds.origin)
+                        }
+                        self.targetHits = 0
+                    }
+                } else {
+                    self.targetStringValue = overlayLayer.stringValue
                     self.targetHits = 0
                 }
                 self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
                 self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
             }
+        }
+        if !reticleWasContainedInAOverlay {
+            self.targetStringValue = nil
+            self.targetHits = 0
         }
     }
     
@@ -375,23 +385,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         metadataObjectOverlayLayers = []
         removeMetadataObjectOverlayLayersTimer?.invalidate()
         removeMetadataObjectOverlayLayersTimer = nil
-    }
-    
-    /// Triggers the delegated scan method.
-    /// - Parameter metadataObject: The machine readable code.
-    private func scan(_ metadataObject: AVMetadataObject) {
-        if let machineReadableCodeObject = metadataObject as? AVMetadataMachineReadableCodeObject,
-           let stringValue = machineReadableCodeObject.stringValue {
-            delegate?.didScanCode(stringValue)
-            if #available(iOS 17.5, *) {
-                self.feedbackGenerator.selectionChanged(
-                    at: CGPoint(
-                        x: metadataObject.bounds.midX,
-                        y: metadataObject.bounds.midY
-                    )
-                )
-            }
-        }
     }
     
     /// Focus on and adjust exposure on the tapped point.
