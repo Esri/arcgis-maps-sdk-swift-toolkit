@@ -303,25 +303,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***textLayer.transform = previewLayer.transform
 ***REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(textLayer)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let guideTextLayer = CATextLayer()
-***REMOVED******REMOVED***let guideTextString = NSAttributedString(
-***REMOVED******REMOVED******REMOVED***string: String.tapToScan,
-***REMOVED******REMOVED******REMOVED***attributes: [
-***REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.systemFont(ofSize: fontSize),
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white,
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***guideTextLayer.alignmentMode = .center
-***REMOVED******REMOVED***guideTextLayer.bounds = guideTextString.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: .usesLineFragmentOrigin, context: nil)
-***REMOVED******REMOVED***guideTextLayer.contentsScale = UIScreen.main.scale
-***REMOVED******REMOVED***guideTextLayer.position = CGPoint(x: barcodeOverlayPath.boundingBox.midX, y: barcodeOverlayPath.boundingBox.minY - 8)
-***REMOVED******REMOVED***guideTextLayer.string = guideTextString
-***REMOVED******REMOVED***guideTextLayer.shadowColor = UIColor.black.cgColor
-***REMOVED******REMOVED***guideTextLayer.shadowOffset = CGSizeZero
-***REMOVED******REMOVED***guideTextLayer.shadowOpacity = 1.0
-***REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(guideTextLayer)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return metadataObjectOverlayLayer
 ***REMOVED***
 ***REMOVED***
@@ -418,15 +399,5 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portrait
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension String {
-***REMOVED***static var tapToScan: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Tap to scan",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button to select a code identified with the barcode scanner."
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
