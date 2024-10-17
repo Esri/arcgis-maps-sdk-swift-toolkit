@@ -227,7 +227,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
                 }
                 self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
                 self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
-                self.evaluateOutputForAutoScan(metadataObjects)
             }
         }
     }
@@ -304,24 +303,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             metadataObjectOverlayLayer.addSublayer(textLayer)
         }
         return metadataObjectOverlayLayer
-    }
-    
-    /// Checks the scanned contents for the number of codes recognized. If only a single code is
-    /// recognized, `autoScanTimer` is started, otherwise `autoScanTimer` is invalidated.
-    ///
-    /// - Parameter output: The sect of scanned codes.
-    private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
-        if output.count == 1 {
-            if !(self.autoScanTimer?.isValid ?? false), let metadataObject = output.first {
-                self.autoScanTimer = Timer.scheduledTimer(withTimeInterval: autoScanDelay, repeats: false) { _ in
-                    Task { @MainActor in
-                        self.scan(metadataObject)
-                    }
-                }
-            }
-        } else {
-            self.autoScanTimer?.invalidate()
-        }
     }
     
     @objc
