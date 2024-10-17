@@ -121,6 +121,11 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private var reticleLayer: CAShapeLayer?
     
+    /// <#Description#>
+    private var targetHits = 0
+    
+    /// <#Description#>
+    private var targetStringValue: String?
     
     weak var delegate: ScannerViewControllerDelegate?
     
