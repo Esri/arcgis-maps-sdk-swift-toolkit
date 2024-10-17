@@ -143,6 +143,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     override func viewDidLayoutSubviews() {
         previewLayer.frame = view.bounds
+        updateReticleAndAutoFocus()
     }
     
     override func viewDidLoad() {
@@ -208,33 +209,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         previewLayer.frame = view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
-        
-        let pointOfInterest = CGPoint(
-            x: view.frame.midX,
-            y: view.frame.midY
-        )
-        setupAutoFocus(for: pointOfInterest)
-        
-        let reticleLayer = CAShapeLayer()
-        let radius: CGFloat = 5.0
-        reticleLayer.path = UIBezierPath(
-            roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius),
-            cornerRadius: radius
-        ).cgPath
-        reticleLayer.frame = CGRect(
-            origin: CGPoint(
-                x: pointOfInterest.x - radius,
-                y: pointOfInterest.y - radius
-            ),
-            size: CGSize(
-                width: radius * 2,
-                height: radius * 2
-            )
-        )
-        reticleLayer.fillColor = UIColor.tintColor.cgColor
-        reticleLayer.zPosition = .greatestFiniteMagnitude
-        previewLayer.addSublayer(reticleLayer)
-        self.reticleLayer = reticleLayer
+        updateReticleAndAutoFocus()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -385,8 +360,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         removeMetadataObjectOverlayLayersTimer = nil
     }
     
-    /// Focus on and adjust exposure on the tapped point.
-    private func setupAutoFocus(for point: CGPoint) {
+    // MARK: Other methods
+    
+    /// Focus on and adjust exposure at the point of interest.
+    private func updateAutoFocus(for point: CGPoint) {
         let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
         guard let device = AVCaptureDevice.default(for: .video) else { return }
         do {
@@ -403,7 +380,39 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         } catch { }
     }
     
-    // MARK: Other methods
+    private func updateReticle(for point: CGPoint) {
+        self.reticleLayer?.removeFromSuperlayer()
+        
+        let reticleLayer = CAShapeLayer()
+        let radius: CGFloat = 5.0
+        reticleLayer.path = UIBezierPath(
+            roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius),
+            cornerRadius: radius
+        ).cgPath
+        reticleLayer.frame = CGRect(
+            origin: CGPoint(
+                x: point.x - radius,
+                y: point.y - radius
+            ),
+            size: CGSize(
+                width: radius * 2,
+                height: radius * 2
+            )
+        )
+        reticleLayer.fillColor = UIColor.tintColor.cgColor
+        reticleLayer.zPosition = .greatestFiniteMagnitude
+        previewLayer.addSublayer(reticleLayer)
+        self.reticleLayer = reticleLayer
+    }
+    
+    private func updateReticleAndAutoFocus() {
+        let pointOfInterest = CGPoint(
+            x: view.frame.midX,
+            y: view.frame.midY
+        )
+        updateAutoFocus(for: pointOfInterest)
+        updateReticle(for: pointOfInterest)
+    }
     
     @objc func updateVideoOrientation() {
         let deviceOrientation = UIDevice.current.orientation
