@@ -355,9 +355,6 @@ place an ArcGIS Scene. */
 additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
 
-/* A label for a button to select a code identified with the barcode scanner. */
-"Tap to scan" = "Tap to scan";
-
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Configuration";
 
