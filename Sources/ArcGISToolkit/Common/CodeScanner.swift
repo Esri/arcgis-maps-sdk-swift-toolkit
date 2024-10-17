@@ -131,6 +131,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private class MetadataObjectLayer: CAShapeLayer {
         var metadataObject: AVMetadataObject?
+        var stringValue: String? {
+            (metadataObject as? AVMetadataMachineReadableCodeObject)?.stringValue
+        }
     }
     
     // MARK: UIViewController methods
