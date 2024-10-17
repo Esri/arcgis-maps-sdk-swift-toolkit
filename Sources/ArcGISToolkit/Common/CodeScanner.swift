@@ -96,8 +96,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
 ***REMOVED***
-***REMOVED***private let autoScanDelay = 1.0
-***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
 ***REMOVED***
 ***REMOVED***private let feedbackGenerator = UISelectionFeedbackGenerator()
@@ -113,8 +111,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Variables
-***REMOVED***
-***REMOVED***private var autoScanTimer: Timer?
 ***REMOVED***
 ***REMOVED***private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
 ***REMOVED***
