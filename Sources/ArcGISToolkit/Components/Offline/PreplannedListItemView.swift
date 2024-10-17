@@ -98,6 +98,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var titleView: some View {
 ***REMOVED******REMOVED***Text(model.preplannedMapArea.title)
 ***REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED******REMOVED******REMOVED***.lineLimit(2)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
