@@ -271,37 +271,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***func checkTargetHits() {
-***REMOVED******REMOVED***var reticleWasContainedInAOverlay = false
-***REMOVED******REMOVED***for overlayLayer in metadataObjectOverlayLayers {
-***REMOVED******REMOVED******REMOVED***if overlayLayer.path!.contains(self.reticleLayer!.position) {
-***REMOVED******REMOVED******REMOVED******REMOVED***reticleWasContainedInAOverlay = true
-***REMOVED******REMOVED******REMOVED******REMOVED***if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits += 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIColor.tintColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)?.cgColor
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if self.targetHits >= self.requiredTargetHits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17.5, *), let metadataObject = overlayLayer.metadataObject {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.feedbackGenerator.selectionChanged(at: metadataObject.bounds.origin)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits = 0
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetStringValue = overlayLayer.stringValue
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits = 0
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***if !reticleWasContainedInAOverlay {
-***REMOVED******REMOVED******REMOVED***self.targetStringValue = nil
-***REMOVED******REMOVED******REMOVED***self.targetHits = 0
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED*** MARK: Scan handling methods
 ***REMOVED***
 ***REMOVED***private func addMetadataObjectOverlayLayersToVideoPreviewView(_ metadataObjectOverlayLayers: [MetadataObjectLayer]) {
@@ -331,6 +300,37 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***path.closeSubpath()
 ***REMOVED***
 ***REMOVED******REMOVED***return path
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***private func checkTargetHits() {
+***REMOVED******REMOVED***var reticleWasContainedInAOverlay = false
+***REMOVED******REMOVED***for overlayLayer in metadataObjectOverlayLayers {
+***REMOVED******REMOVED******REMOVED***if overlayLayer.path!.contains(self.reticleLayer!.position) {
+***REMOVED******REMOVED******REMOVED******REMOVED***reticleWasContainedInAOverlay = true
+***REMOVED******REMOVED******REMOVED******REMOVED***if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits += 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIColor.tintColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)?.cgColor
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if self.targetHits >= self.requiredTargetHits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17.5, *), let metadataObject = overlayLayer.metadataObject {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.feedbackGenerator.selectionChanged(at: metadataObject.bounds.origin)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits = 0
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetStringValue = overlayLayer.stringValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits = 0
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***if !reticleWasContainedInAOverlay {
+***REMOVED******REMOVED******REMOVED***self.targetStringValue = nil
+***REMOVED******REMOVED******REMOVED***self.targetHits = 0
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func createMetadataObjectOverlayWithMetadataObject(_ metadataObject: AVMetadataObject) -> MetadataObjectLayer {
