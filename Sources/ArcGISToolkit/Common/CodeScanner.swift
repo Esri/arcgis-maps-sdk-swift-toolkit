@@ -118,8 +118,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private var reticleLayer: CAShapeLayer?
 ***REMOVED***
-***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
+***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
 ***REMOVED***private class MetadataObjectLayer: CAShapeLayer {
 ***REMOVED******REMOVED***var metadataObject: AVMetadataObject?
