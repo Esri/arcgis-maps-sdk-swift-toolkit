@@ -120,9 +120,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     weak var delegate: ScannerViewControllerDelegate?
     
-    private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-        UITapGestureRecognizer(target: self, action: #selector(userDidTap(with:)))
-    }()
     
     private class MetadataObjectLayer: CAShapeLayer {
         var metadataObject: AVMetadataObject?
@@ -196,7 +193,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.frame = view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
-        view.addGestureRecognizer(tapGestureRecognizer)
         view.layer.addSublayer(previewLayer)
         
         let reticleLayer = CAShapeLayer()
