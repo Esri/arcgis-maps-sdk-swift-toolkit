@@ -25,11 +25,7 @@ extension UIColor {
 ***REMOVED******REMOVED***return (r, g, b, a)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - otherColor: <#otherColor description#>
-***REMOVED******REMOVED***/   - percent: <#percent description#>
-***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED******REMOVED***/ Interpolates the color with `otherColor` at the provided `percent`.
 ***REMOVED***func interpolatedWith(_ otherColor: UIColor, at percent: CGFloat) -> UIColor? {
 ***REMOVED******REMOVED***let (r1, g1, b1, a1) = rgba
 ***REMOVED******REMOVED***let (r2, g2, b2, a2) = otherColor.rgba
