@@ -305,8 +305,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***return metadataObjectOverlayLayer
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@objc
-***REMOVED***private func removeMetadataObjectOverlayLayers() {
+***REMOVED***@objc private func removeMetadataObjectOverlayLayers() {
 ***REMOVED******REMOVED***for sublayer in metadataObjectOverlayLayers {
 ***REMOVED******REMOVED******REMOVED***sublayer.removeFromSuperlayer()
 ***REMOVED***
@@ -333,8 +332,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Focus on and adjust exposure on the tapped point.
-***REMOVED***@objc
-***REMOVED***private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
+***REMOVED***@objc private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
 ***REMOVED******REMOVED***let point = tapGestureRecognizer.location(in: view)
 ***REMOVED******REMOVED***let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
 ***REMOVED******REMOVED***guard let device = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
