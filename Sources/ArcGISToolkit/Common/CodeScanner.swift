@@ -104,6 +104,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***private let requiredTargetHits = 25
+***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Variables
