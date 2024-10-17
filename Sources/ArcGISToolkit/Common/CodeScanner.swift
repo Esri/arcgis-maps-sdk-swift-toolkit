@@ -195,6 +195,12 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
 ***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let pointOfInterest = CGPoint(
+***REMOVED******REMOVED******REMOVED***x: view.frame.midX,
+***REMOVED******REMOVED******REMOVED***y: view.frame.midY
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***setupAutoFocus(for: pointOfInterest)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let reticleLayer = CAShapeLayer()
 ***REMOVED******REMOVED***let radius: CGFloat = 5.0
 ***REMOVED******REMOVED***reticleLayer.path = UIBezierPath(
@@ -203,8 +209,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***).cgPath
 ***REMOVED******REMOVED***reticleLayer.frame = CGRect(
 ***REMOVED******REMOVED******REMOVED***origin: CGPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: view.frame.midX - radius,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: view.frame.midY - radius
+***REMOVED******REMOVED******REMOVED******REMOVED***x: pointOfInterest.x - radius,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: pointOfInterest.y - radius
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***size: CGSize(
 ***REMOVED******REMOVED******REMOVED******REMOVED***width: radius * 2,
@@ -351,19 +357,18 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Focus on and adjust exposure on the tapped point.
-***REMOVED***@objc private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
-***REMOVED******REMOVED***let point = tapGestureRecognizer.location(in: view)
+***REMOVED***private func setupAutoFocus(for point: CGPoint) {
 ***REMOVED******REMOVED***let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
 ***REMOVED******REMOVED***guard let device = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try device.lockForConfiguration()
 ***REMOVED******REMOVED******REMOVED***if device.isFocusModeSupported(.autoFocus) && device.isFocusPointOfInterestSupported {
 ***REMOVED******REMOVED******REMOVED******REMOVED***device.focusPointOfInterest = convertedPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***device.focusMode = .autoFocus
+***REMOVED******REMOVED******REMOVED******REMOVED***device.focusMode = .continuousAutoFocus
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if device.isExposureModeSupported(.autoExpose) && device.isExposurePointOfInterestSupported {
 ***REMOVED******REMOVED******REMOVED******REMOVED***device.exposurePointOfInterest = convertedPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***device.exposureMode = .autoExpose
+***REMOVED******REMOVED******REMOVED******REMOVED***device.exposureMode = .continuousAutoExposure
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***device.unlockForConfiguration()
 ***REMOVED*** catch { ***REMOVED***
