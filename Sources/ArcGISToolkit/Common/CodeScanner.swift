@@ -104,10 +104,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The color of a code overlay before it's been targeted for auto-scan.
 ***REMOVED***private let normalOverlayColor = UIColor.white.withAlphaComponent(0.25)
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The number of consecutive hits required to trigger an automatic scan.
 ***REMOVED***private let requiredTargetHits = 25
 ***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
@@ -124,10 +124,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private var reticleLayer: CAShapeLayer?
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The number of consecutive target hits. See also `requiredTargetHits`.
 ***REMOVED***private var targetHits = 0
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The string value of the targeted code.
 ***REMOVED***private var targetStringValue: String?
 ***REMOVED***
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
@@ -277,7 +277,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***return path
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ Checks if the reticle intersects with any of the current overlays. When a code with a consistent string
+***REMOVED******REMOVED***/ value intersects with the reticle for the `requiredTargetHits` count, it is auto-scanned.
 ***REMOVED***private func checkTargetHits() {
 ***REMOVED******REMOVED***var reticleWasContainedInAOverlay = false
 ***REMOVED******REMOVED***for overlayLayer in metadataObjectOverlayLayers {
