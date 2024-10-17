@@ -195,6 +195,12 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
         
+        let pointOfInterest = CGPoint(
+            x: view.frame.midX,
+            y: view.frame.midY
+        )
+        setupAutoFocus(for: pointOfInterest)
+        
         let reticleLayer = CAShapeLayer()
         let radius: CGFloat = 5.0
         reticleLayer.path = UIBezierPath(
@@ -203,8 +209,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         ).cgPath
         reticleLayer.frame = CGRect(
             origin: CGPoint(
-                x: view.frame.midX - radius,
-                y: view.frame.midY - radius
+                x: pointOfInterest.x - radius,
+                y: pointOfInterest.y - radius
             ),
             size: CGSize(
                 width: radius * 2,
@@ -351,19 +357,18 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     }
     
     /// Focus on and adjust exposure on the tapped point.
-    @objc private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
-        let point = tapGestureRecognizer.location(in: view)
+    private func setupAutoFocus(for point: CGPoint) {
         let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
         guard let device = AVCaptureDevice.default(for: .video) else { return }
         do {
             try device.lockForConfiguration()
             if device.isFocusModeSupported(.autoFocus) && device.isFocusPointOfInterestSupported {
                 device.focusPointOfInterest = convertedPoint
-                device.focusMode = .autoFocus
+                device.focusMode = .continuousAutoFocus
             }
             if device.isExposureModeSupported(.autoExpose) && device.isExposurePointOfInterestSupported {
                 device.exposurePointOfInterest = convertedPoint
-                device.exposureMode = .autoExpose
+                device.exposureMode = .continuousAutoExposure
             }
             device.unlockForConfiguration()
         } catch { }
