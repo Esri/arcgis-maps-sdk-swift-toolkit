@@ -254,9 +254,33 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             DispatchQueue.main.async {
                 self.removeMetadataObjectOverlayLayers()
                 var metadataObjectOverlayLayers = [MetadataObjectLayer]()
+                var targetHit = false
                 for metadataObject in metadataObjects {
-                    let metadataObjectOverlayLayer = self.createMetadataObjectOverlayWithMetadataObject(metadataObject)
-                    metadataObjectOverlayLayers.append(metadataObjectOverlayLayer)
+                    let overlayLayer = self.createMetadataObjectOverlayWithMetadataObject(metadataObject)
+                    metadataObjectOverlayLayers.append(overlayLayer)
+                    if overlayLayer.path!.contains(self.reticleLayer!.position) {
+                        targetHit = true
+                        if let target = self.targetStringValue, target == overlayLayer.stringValue {
+                            self.targetHits += 1
+                            if self.targetHits >= self.requiredTargetHits {
+                                self.scan(overlayLayer.metadataObject!)
+                            } else {
+                                let c1 = UIColor.white.withAlphaComponent(0.25)
+                                let c2 = UIColor.tintColor
+                                overlayLayer.fillColor = c1.interpolatedWith(
+                                    c2,
+                                    at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
+                                )?.cgColor
+                            }
+                        } else {
+                            self.targetStringValue = overlayLayer.stringValue
+                            self.targetHits = 0
+                        }
+                    }
+                }
+                if !targetHit {
+                    self.targetStringValue = nil
+                    self.targetHits = 0
                 }
                 self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
                 self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
