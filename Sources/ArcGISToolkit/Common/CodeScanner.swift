@@ -143,6 +143,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***override func viewDidLayoutSubviews() {
 ***REMOVED******REMOVED***previewLayer.frame = view.bounds
+***REMOVED******REMOVED***updateReticleAndAutoFocus()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewDidLoad() {
@@ -208,33 +209,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***previewLayer.frame = view.layer.bounds
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
 ***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let pointOfInterest = CGPoint(
-***REMOVED******REMOVED******REMOVED***x: view.frame.midX,
-***REMOVED******REMOVED******REMOVED***y: view.frame.midY
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***setupAutoFocus(for: pointOfInterest)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let reticleLayer = CAShapeLayer()
-***REMOVED******REMOVED***let radius: CGFloat = 5.0
-***REMOVED******REMOVED***reticleLayer.path = UIBezierPath(
-***REMOVED******REMOVED******REMOVED***roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius),
-***REMOVED******REMOVED******REMOVED***cornerRadius: radius
-***REMOVED******REMOVED***).cgPath
-***REMOVED******REMOVED***reticleLayer.frame = CGRect(
-***REMOVED******REMOVED******REMOVED***origin: CGPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: pointOfInterest.x - radius,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: pointOfInterest.y - radius
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***size: CGSize(
-***REMOVED******REMOVED******REMOVED******REMOVED***width: radius * 2,
-***REMOVED******REMOVED******REMOVED******REMOVED***height: radius * 2
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***reticleLayer.fillColor = UIColor.tintColor.cgColor
-***REMOVED******REMOVED***reticleLayer.zPosition = .greatestFiniteMagnitude
-***REMOVED******REMOVED***previewLayer.addSublayer(reticleLayer)
-***REMOVED******REMOVED***self.reticleLayer = reticleLayer
+***REMOVED******REMOVED***updateReticleAndAutoFocus()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewWillAppear(_ animated: Bool) {
@@ -385,8 +360,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***removeMetadataObjectOverlayLayersTimer = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Focus on and adjust exposure on the tapped point.
-***REMOVED***private func setupAutoFocus(for point: CGPoint) {
+***REMOVED******REMOVED*** MARK: Other methods
+***REMOVED***
+***REMOVED******REMOVED***/ Focus on and adjust exposure at the point of interest.
+***REMOVED***private func updateAutoFocus(for point: CGPoint) {
 ***REMOVED******REMOVED***let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
 ***REMOVED******REMOVED***guard let device = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
@@ -403,7 +380,39 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED*** catch { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Other methods
+***REMOVED***private func updateReticle(for point: CGPoint) {
+***REMOVED******REMOVED***self.reticleLayer?.removeFromSuperlayer()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let reticleLayer = CAShapeLayer()
+***REMOVED******REMOVED***let radius: CGFloat = 5.0
+***REMOVED******REMOVED***reticleLayer.path = UIBezierPath(
+***REMOVED******REMOVED******REMOVED***roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius),
+***REMOVED******REMOVED******REMOVED***cornerRadius: radius
+***REMOVED******REMOVED***).cgPath
+***REMOVED******REMOVED***reticleLayer.frame = CGRect(
+***REMOVED******REMOVED******REMOVED***origin: CGPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: point.x - radius,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: point.y - radius
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***size: CGSize(
+***REMOVED******REMOVED******REMOVED******REMOVED***width: radius * 2,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: radius * 2
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***reticleLayer.fillColor = UIColor.tintColor.cgColor
+***REMOVED******REMOVED***reticleLayer.zPosition = .greatestFiniteMagnitude
+***REMOVED******REMOVED***previewLayer.addSublayer(reticleLayer)
+***REMOVED******REMOVED***self.reticleLayer = reticleLayer
+***REMOVED***
+***REMOVED***
+***REMOVED***private func updateReticleAndAutoFocus() {
+***REMOVED******REMOVED***let pointOfInterest = CGPoint(
+***REMOVED******REMOVED******REMOVED***x: view.frame.midX,
+***REMOVED******REMOVED******REMOVED***y: view.frame.midY
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***updateAutoFocus(for: pointOfInterest)
+***REMOVED******REMOVED***updateReticle(for: pointOfInterest)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***@objc func updateVideoOrientation() {
 ***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
