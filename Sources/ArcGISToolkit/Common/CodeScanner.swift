@@ -227,7 +227,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
-***REMOVED******REMOVED******REMOVED******REMOVED***self.evaluateOutputForAutoScan(metadataObjects)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -304,24 +303,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(textLayer)
 ***REMOVED***
 ***REMOVED******REMOVED***return metadataObjectOverlayLayer
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Checks the scanned contents for the number of codes recognized. If only a single code is
-***REMOVED******REMOVED***/ recognized, `autoScanTimer` is started, otherwise `autoScanTimer` is invalidated.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Parameter output: The sect of scanned codes.
-***REMOVED***private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
-***REMOVED******REMOVED***if output.count == 1 {
-***REMOVED******REMOVED******REMOVED***if !(self.autoScanTimer?.isValid ?? false), let metadataObject = output.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.autoScanTimer = Timer.scheduledTimer(withTimeInterval: autoScanDelay, repeats: false) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scan(metadataObject)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self.autoScanTimer?.invalidate()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@objc
