@@ -116,6 +116,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private var removeMetadataObjectOverlayLayersTimer: Timer?
 ***REMOVED***
+***REMOVED***private var reticleLayer: CAShapeLayer?
+***REMOVED***
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
 ***REMOVED***private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
@@ -196,6 +198,27 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
 ***REMOVED******REMOVED***view.addGestureRecognizer(tapGestureRecognizer)
 ***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let reticleLayer = CAShapeLayer()
+***REMOVED******REMOVED***let radius: CGFloat = 5.0
+***REMOVED******REMOVED***reticleLayer.path = UIBezierPath(
+***REMOVED******REMOVED******REMOVED***roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius),
+***REMOVED******REMOVED******REMOVED***cornerRadius: radius
+***REMOVED******REMOVED***).cgPath
+***REMOVED******REMOVED***reticleLayer.frame = CGRect(
+***REMOVED******REMOVED******REMOVED***origin: CGPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: view.frame.midX - radius,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: view.frame.midY - radius
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***size: CGSize(
+***REMOVED******REMOVED******REMOVED******REMOVED***width: radius * 2,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: radius * 2
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***reticleLayer.fillColor = UIColor.tintColor.cgColor
+***REMOVED******REMOVED***reticleLayer.zPosition = .greatestFiniteMagnitude
+***REMOVED******REMOVED***previewLayer.addSublayer(reticleLayer)
+***REMOVED******REMOVED***self.reticleLayer = reticleLayer
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewWillAppear(_ animated: Bool) {
