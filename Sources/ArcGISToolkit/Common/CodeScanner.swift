@@ -294,8 +294,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetStringValue = overlayLayer.stringValue
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits = 0
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
-***REMOVED******REMOVED******REMOVED******REMOVED***self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***if !reticleWasContainedInAOverlay {
