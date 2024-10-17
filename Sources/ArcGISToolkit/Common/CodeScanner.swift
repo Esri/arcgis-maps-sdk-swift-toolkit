@@ -105,6 +105,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
     
     /// <#Description#>
+    private let normalOverlayColor = UIColor.white.withAlphaComponent(0.25)
+    
+    /// <#Description#>
     private let requiredTargetHits = 25
     
     private let sessionQueue = DispatchQueue(label: "ScannerViewController")
@@ -328,7 +331,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         metadataObjectOverlayLayer.metadataObject = transformedMetadataObject
         metadataObjectOverlayLayer.lineJoin = .round
         metadataObjectOverlayLayer.lineWidth = 2.5
-        metadataObjectOverlayLayer.fillColor = UIColor.white.withAlphaComponent(0.25).cgColor
+        metadataObjectOverlayLayer.fillColor = normalOverlayColor.cgColor
         metadataObjectOverlayLayer.strokeColor = UIColor.tintColor.cgColor
         guard let barcodeMetadataObject = transformedMetadataObject as? AVMetadataMachineReadableCodeObject else {
             return metadataObjectOverlayLayer
