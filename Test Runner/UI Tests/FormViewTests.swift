@@ -18,7 +18,6 @@ import XCTest
 final class FeatureFormViewTests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false
-        try XCTSkipIf(true, "Ref Apollo #900")
     }
     
     /// Sets the map and feature based on the current test case.
@@ -1022,7 +1021,8 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 3.6: noValueOption is 'Hide'
-    func testCase_3_6() {
+    func testCase_3_6() throws {
+        try XCTSkipIf(true, "https://devtopia.esri.com/runtime/apollo/issues/927")
         let app = XCUIApplication()
         let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo No Value False"]
@@ -1437,7 +1437,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 7.1: Test read only elements
-    func testCase_7_1() {
+    func testCase_7_1() throws {
+        try XCTSkipIf(true, "https://devtopia.esri.com/runtime/apollo/issues/927")
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
