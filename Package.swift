@@ -21,7 +21,8 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v16),
-        .macCatalyst(.v16)
+        .macCatalyst(.v16),
+        .visionOS(.v2)
     ],
     products: [
         .library(

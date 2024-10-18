@@ -18,6 +18,7 @@ import Foundation
 
 /// Uses a Locator to provide search and suggest results. Most configuration should be done on the
 /// `GeocodeParameters` directly.
+@available(visionOS, unavailable)
 public class LocatorSearchSource: ObservableObject, SearchSource {
     /// Creates a locator search source.
     /// - Parameters:
@@ -131,6 +132,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     }
 }
 
+@available(visionOS, unavailable)
 private extension LocatorSearchSource {
     func internalSearch(
         _ query: String,

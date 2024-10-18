@@ -16,6 +16,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying chart popup media.
+@available(visionOS, unavailable)
 struct ChartMediaView: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
