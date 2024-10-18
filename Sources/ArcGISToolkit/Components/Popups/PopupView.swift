@@ -51,6 +51,7 @@
 ***REMOVED***/ and refer to
 ***REMOVED***/ [PopupExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
+@available(visionOS, unavailable)
 public struct PopupView: View {
 ***REMOVED******REMOVED***/ Creates a `PopupView` with the given popup.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -154,6 +155,7 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension PopupView {
 ***REMOVED***private struct PopupElementList: View {
 ***REMOVED******REMOVED***let popupElements: [PopupElement]
@@ -181,6 +183,7 @@ extension PopupView {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension PopupView {
 ***REMOVED******REMOVED***/ An object used to hold the result of evaluating the expressions of a popup.
 ***REMOVED***private final class Evaluation {
@@ -200,6 +203,7 @@ extension PopupView {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension PopupView {
 ***REMOVED******REMOVED***/ Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the `PopupView`

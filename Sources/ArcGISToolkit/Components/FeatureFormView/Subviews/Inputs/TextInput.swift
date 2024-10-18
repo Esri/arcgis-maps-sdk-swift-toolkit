@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for text input.
+@available(visionOS, unavailable)
 struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -59,20 +60,20 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
 ***REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: text) { text in
+***REMOVED******REMOVED******REMOVED***.onChange(text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
@@ -91,6 +92,7 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
@@ -122,6 +124,7 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
@@ -130,6 +133,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
@@ -162,7 +166,19 @@ private extension TextInput {
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
 ***REMOVED***var keyboardType: UIKeyboardType {
 ***REMOVED******REMOVED***guard let fieldType = element.fieldType else { return .default ***REMOVED***
-***REMOVED******REMOVED***return fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return if fieldType.isNumeric {
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED*** The 'positiveNegativeButton' doesn't show on visionOS
+***REMOVED******REMOVED******REMOVED******REMOVED*** so we need to show this keyboard so the user can type
+***REMOVED******REMOVED******REMOVED******REMOVED*** a negative number.
+***REMOVED******REMOVED******REMOVED***.numbersAndPunctuation
+#else
+***REMOVED******REMOVED******REMOVED***if fieldType.isFloatingPoint { .decimalPad ***REMOVED*** else { .numberPad ***REMOVED***
+#endif
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***.default
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The button that allows a user to switch the numeric value between positive and negative.
@@ -181,6 +197,7 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
 ***REMOVED******REMOVED***/

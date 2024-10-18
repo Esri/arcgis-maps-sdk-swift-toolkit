@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying chart popup media.
+@available(visionOS, unavailable)
 struct ChartMediaView: View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia

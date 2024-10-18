@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the bottom of a field element in a form.
+@available(visionOS, unavailable)
 struct InputFooter: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
@@ -73,6 +74,7 @@ struct InputFooter: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension InputFooter {
 ***REMOVED******REMOVED***/ Localized error text to be shown to a user depending on the type of error information available.
 ***REMOVED***var errorMessage: Text? {

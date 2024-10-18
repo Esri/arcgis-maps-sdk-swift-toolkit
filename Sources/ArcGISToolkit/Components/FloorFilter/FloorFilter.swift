@@ -62,7 +62,7 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [FloorFilterExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
-@preconcurrency
+@available(visionOS, unavailable)
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -208,7 +208,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.isLoading)
-***REMOVED******REMOVED***.onChange(of: selection?.wrappedValue) { newValue in
+***REMOVED******REMOVED***.onChange(selection?.wrappedValue) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the view model triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard newValue != viewModel.selection else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch newValue {
@@ -218,12 +218,12 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***case .none: viewModel.clearSelection()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.selection) { newValue in
+***REMOVED******REMOVED***.onChange(viewModel.selection) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the user triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { newViewpoint in
+***REMOVED******REMOVED***.onChange(viewpoint.wrappedValue) { newViewpoint in
 ***REMOVED******REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let newViewpoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged(newViewpoint)

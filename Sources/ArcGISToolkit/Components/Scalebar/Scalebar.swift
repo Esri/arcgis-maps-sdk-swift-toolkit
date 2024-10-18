@@ -173,9 +173,9 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.opacity(opacity)
-***REMOVED******REMOVED***.onChange(of: spatialReference) { viewModel.update($0) ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: unitsPerPoint) { viewModel.update($0) ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint) {
+***REMOVED******REMOVED***.onChange(spatialReference) { viewModel.update($0) ***REMOVED***
+***REMOVED******REMOVED***.onChange(unitsPerPoint) { viewModel.update($0) ***REMOVED***
+***REMOVED******REMOVED***.onChange(viewpoint) {
 ***REMOVED******REMOVED******REMOVED***viewModel.update($0)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateScale()
 ***REMOVED******REMOVED******REMOVED***if settings.autoHide {

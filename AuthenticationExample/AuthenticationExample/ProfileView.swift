@@ -27,15 +27,28 @@ struct ProfileView: View {
 ***REMOVED******REMOVED***/ The closure to call once the user has signed out.
 ***REMOVED***var signOutAction: () -> Void
 ***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if let user = portal.user {
-***REMOVED******REMOVED******REMOVED******REMOVED***UserView(user: user).padding()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***signOutButton
+***REMOVED******REMOVED***/ Dismisses the current presentation.
+***REMOVED***@Environment(\.dismiss)
+***REMOVED***private var dismiss
 ***REMOVED***
-***REMOVED******REMOVED***.padding()
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***NavigationStack {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let user = portal.user {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UserView(user: user).padding()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***signOutButton
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var signOutButton: some View {

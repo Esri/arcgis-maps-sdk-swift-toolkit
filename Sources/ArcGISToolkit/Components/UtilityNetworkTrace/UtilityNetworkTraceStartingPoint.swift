@@ -16,6 +16,7 @@
 import UIKit
 
 ***REMOVED***/ A starting point of a utility network trace.
+@available(visionOS, unavailable)
 public struct UtilityNetworkTraceStartingPoint: Sendable {
 ***REMOVED******REMOVED***/ The geo element to be used as a starting point.
 ***REMOVED***var geoElement: GeoElement
@@ -46,6 +47,7 @@ public struct UtilityNetworkTraceStartingPoint: Sendable {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceStartingPoint: Hashable {
 ***REMOVED***public static func == (lhs: UtilityNetworkTraceStartingPoint, rhs: UtilityNetworkTraceStartingPoint) -> Bool {
 ***REMOVED******REMOVED***lhs.id == rhs.id

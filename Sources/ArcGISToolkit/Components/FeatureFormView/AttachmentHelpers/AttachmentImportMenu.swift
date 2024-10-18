@@ -20,6 +20,7 @@ import UniformTypeIdentifiers
 internal import os
 
 ***REMOVED***/ The context menu shown when the new attachment button is pressed.
+@available(visionOS, unavailable)
 struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentsFormElement
@@ -70,6 +71,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***cameraRequester.request {
@@ -107,7 +109,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***Menu {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Show photo/video and library picker.
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***takePhotoOrVideoButton()
+#endif
 ***REMOVED******REMOVED******REMOVED***chooseFromLibraryButton()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Always show file picker, no matter the input type.
 ***REMOVED******REMOVED******REMOVED***chooseFromFilesButton()
@@ -180,6 +184,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***.fullScreenCover(isPresented: $cameraIsShowing) {
 ***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
@@ -198,6 +203,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+#endif
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState,
@@ -207,6 +213,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***/ A button that redirects the user to the application's entry in the iOS system Settings application.
 ***REMOVED***var appSettingsButton: some View {

@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
+@available(visionOS, unavailable)
 struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ An action which scrolls the Carousel to the front.
 ***REMOVED***@Binding var scrollToNewAttachmentAction: (() -> Void)?
@@ -243,6 +244,7 @@ struct AttachmentPreview: View {
 ***REMOVED***
 
 ***REMOVED***/ A view displaying details for popup media.
+@available(visionOS, unavailable)
 struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
@@ -272,6 +274,7 @@ struct ThumbnailViewFooter: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension AttachmentPreview.AttachmentCell {
 ***REMOVED******REMOVED***/ An error message explaining attachments larger than the provided maximum cannot be downloaded.
 ***REMOVED***var maximumSizeDownloadExceededErrorMessage: Text {

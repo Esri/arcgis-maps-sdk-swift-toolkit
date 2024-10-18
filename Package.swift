@@ -21,7 +21,8 @@ let package = Package(
 ***REMOVED***defaultLocalization: "en",
 ***REMOVED***platforms: [
 ***REMOVED******REMOVED***.iOS(.v16),
-***REMOVED******REMOVED***.macCatalyst(.v16)
+***REMOVED******REMOVED***.macCatalyst(.v16),
+***REMOVED******REMOVED***.visionOS(.v2)
 ***REMOVED***],
 ***REMOVED***products: [
 ***REMOVED******REMOVED***.library(

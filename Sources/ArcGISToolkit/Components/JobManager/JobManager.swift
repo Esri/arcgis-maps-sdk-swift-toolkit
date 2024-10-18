@@ -88,6 +88,7 @@ internal import os
 ***REMOVED***/ In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
 ***REMOVED***/ - Since: 200.3
 @MainActor
+@available(visionOS, unavailable)
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
 ***REMOVED***public static let `shared` = JobManager()
@@ -287,6 +288,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 
 ***REMOVED***/ An enum that defines a schedule for background status checks.
+@available(visionOS, unavailable)
 public enum BackgroundStatusCheckSchedule: Sendable {
 ***REMOVED******REMOVED***/ No background status checks will be requested.
 ***REMOVED***case disabled

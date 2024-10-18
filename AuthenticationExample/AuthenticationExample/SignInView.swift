@@ -43,7 +43,11 @@ struct SignInView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(URL.portal.host!)
+#if os(visionOS) || targetEnvironment(macCatalyst)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+#else
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***signInButton
 ***REMOVED******REMOVED***
@@ -106,7 +110,9 @@ struct SignInView: View {
 ***REMOVED******REMOVED******REMOVED***signIn()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(signInButtonText)
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+#endif
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.controlSize(.large)

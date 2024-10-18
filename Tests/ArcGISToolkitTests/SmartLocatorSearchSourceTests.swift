@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if !os(visionOS)
 import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
@@ -69,3 +70,4 @@ private extension Envelope {
 ***REMOVED******REMOVED***yRange: 7536778.456812576...7559866.706991681
 ***REMOVED***)
 ***REMOVED***
+#endif

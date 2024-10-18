@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view which allows selection of levels represented in `FloorFacility`.
+@available(visionOS, unavailable)
 struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
@@ -49,6 +50,7 @@ struct LevelSelector: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension LevelSelector {
 ***REMOVED******REMOVED***/ A list of all the levels to be displayed.
 ***REMOVED******REMOVED***/
@@ -121,7 +123,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear { scrollToSelectedLevel(with: proxy) ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: isCollapsed) { _ in scrollToSelectedLevel(with: proxy) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
