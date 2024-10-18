@@ -61,6 +61,7 @@ import SwiftUI
 /// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [UtilityNetworkTraceExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
 /// in the project. To learn more about using the `UtilityNetworkTrace` see the <doc:UtilityNetworkTraceTutorial>.
+@available(visionOS, unavailable)
 public struct UtilityNetworkTrace: View {
     /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?
@@ -692,7 +693,7 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(of: screenPoint) { newScreenPoint in
+        .onChange(screenPoint) { newScreenPoint in
             guard isFocused(traceCreationActivity: .addingStartingPoints),
                   let mapViewProxy = mapViewProxy,
                   let mapPoint = mapPoint,
@@ -709,7 +710,7 @@ public struct UtilityNetworkTrace: View {
                 )
             }
         }
-        .onChange(of: externalStartingPoints) { _ in
+        .onChange(externalStartingPoints) { _ in
             viewModel.externalStartingPoints = externalStartingPoints
         }
         .alert(

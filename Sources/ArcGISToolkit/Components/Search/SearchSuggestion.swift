@@ -16,6 +16,7 @@ import Foundation
 import ArcGIS
 
 /// Wraps a suggestion for display.
+@available(visionOS, unavailable)
 public struct SearchSuggestion: @unchecked Sendable {
     /// Creates a `SearchSuggestion`.
     /// - Parameters:
@@ -62,14 +63,17 @@ public struct SearchSuggestion: @unchecked Sendable {
     public let id = UUID()
 }
 
+@available(visionOS, unavailable)
 extension SearchSuggestion: Identifiable {}
 
+@available(visionOS, unavailable)
 extension SearchSuggestion: Equatable {
     public static func == (lhs: SearchSuggestion, rhs: SearchSuggestion) -> Bool {
         lhs.id == rhs.id
     }
 }
 
+@available(visionOS, unavailable)
 extension SearchSuggestion: Hashable {
     public func hash(into hasher: inout Hasher) {
         // Note: We're not hashing `suggestResult` as `SearchSuggestion` is
@@ -80,6 +84,7 @@ extension SearchSuggestion: Hashable {
     }
 }
 
+@available(visionOS, unavailable)
 extension SearchSuggestion {
     init(suggestResult: SuggestResult, searchSource: SearchSource) {
         self.init(

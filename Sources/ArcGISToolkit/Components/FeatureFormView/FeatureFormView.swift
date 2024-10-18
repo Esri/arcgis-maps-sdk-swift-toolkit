@@ -64,7 +64,7 @@ import SwiftUI
 /// `Info.plist` file.
 ///
 /// - Since: 200.4
-@preconcurrency
+@available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
@@ -110,7 +110,7 @@ public struct FeatureFormView: View {
                     }
                 }
             }
-            .onChange(of: model.focusedElement) { _ in
+            .onChange(model.focusedElement) { _ in
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
@@ -119,11 +119,14 @@ public struct FeatureFormView: View {
                 title = newTitle
             }
         }
+#if os(iOS)
         .scrollDismissesKeyboard(.immediately)
+#endif
         .environmentObject(model)
     }
 }
 
+@available(visionOS, unavailable)
 extension FeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.

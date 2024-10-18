@@ -15,6 +15,7 @@
 import AVFoundation
 import SwiftUI
 
+@available(visionOS, unavailable)
 struct FlashlightButton: View {
     @State private var torchIsOn = false
     
@@ -58,7 +59,7 @@ struct FlashlightButton: View {
             .onDisappear {
                 torchIsOn = false
             }
-            .onChange(of: torchIsOn) { isOn in
+            .onChange(torchIsOn) { isOn in
                 try? device?.lockForConfiguration()
                 device?.torchMode = isOn ? .on : .off
                 device?.unlockForConfiguration()
@@ -75,6 +76,7 @@ struct FlashlightButton: View {
 }
 
 private extension View {
+    @available(visionOS, unavailable)
     @ViewBuilder
     func torchFeedback(trigger: Bool) -> some View {
         if #available(iOS 17.0, *) {
@@ -86,6 +88,8 @@ private extension View {
     }
 }
 
+#if !os(visionOS)
 #Preview {
     FlashlightButton()
 }
+#endif

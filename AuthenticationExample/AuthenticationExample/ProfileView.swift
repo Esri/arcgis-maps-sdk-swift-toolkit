@@ -27,15 +27,28 @@ struct ProfileView: View {
     /// The closure to call once the user has signed out.
     var signOutAction: () -> Void
     
+    /// Dismisses the current presentation.
+    @Environment(\.dismiss)
+    private var dismiss
+    
     var body: some View {
-        VStack {
-            if let user = portal.user {
-                UserView(user: user).padding()
+        NavigationStack {
+            VStack {
+                if let user = portal.user {
+                    UserView(user: user).padding()
+                }
+                Spacer()
+                signOutButton
             }
-            Spacer()
-            signOutButton
+            .padding()
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
         }
-        .padding()
     }
     
     var signOutButton: some View {

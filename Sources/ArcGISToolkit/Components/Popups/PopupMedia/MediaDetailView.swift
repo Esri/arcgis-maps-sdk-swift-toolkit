@@ -15,6 +15,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying a popup media in a large format.
+@available(visionOS, unavailable)
 struct MediaDetailView : View {
     /// The popup media to display.
     let popupMedia: PopupMedia

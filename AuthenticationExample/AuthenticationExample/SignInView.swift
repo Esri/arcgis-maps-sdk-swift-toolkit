@@ -43,7 +43,11 @@ struct SignInView: View {
                 ProgressView()
             } else {
                 Text(URL.portal.host!)
+#if os(visionOS) || targetEnvironment(macCatalyst)
+                    .font(.headline)
+#else
                     .font(.footnote)
+#endif
                     .foregroundColor(.secondary)
                 signInButton
             }
@@ -106,7 +110,9 @@ struct SignInView: View {
             signIn()
         } label: {
             Text(signInButtonText)
+#if !os(visionOS)
                 .frame(maxWidth: .infinity)
+#endif
         }
         .buttonStyle(.bordered)
         .controlSize(.large)
