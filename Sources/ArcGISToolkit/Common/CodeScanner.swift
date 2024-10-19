@@ -28,6 +28,7 @@ struct CodeScanner: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if cameraAccessIsAuthorized {
 ***REMOVED******REMOVED******REMOVED***CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
