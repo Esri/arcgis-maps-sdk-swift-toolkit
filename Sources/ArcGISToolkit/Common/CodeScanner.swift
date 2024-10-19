@@ -447,10 +447,9 @@ class LegacyScannerViewController: ScannerViewController {
 ***REMOVED***
 ***REMOVED***func updateRotation() {
 ***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
+***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
 ***REMOVED******REMOVED***let newVideoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation)
-***REMOVED******REMOVED***if let videoPreviewLayerConnection = previewLayer.connection {
-***REMOVED******REMOVED******REMOVED***videoPreviewLayerConnection.videoOrientation = newVideoOrientation
-***REMOVED***
+***REMOVED******REMOVED***connection.videoOrientation = newVideoOrientation
 ***REMOVED***
 ***REMOVED***
 
