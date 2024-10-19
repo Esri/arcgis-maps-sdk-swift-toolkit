@@ -434,10 +434,34 @@ class RotationCoordinator {
         }
     }
 }
+
+// MARK: Deprecated
+
+/// - Bug: The camera preview is inverted when started with the device in a landscape face-up orientation.
+/// This is fixed when using the `AVCaptureConnection.videoRotationAngle`
+/// property available in iOS 17.0.
+@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead")
+class LegacyScannerViewController: ScannerViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        updateRotation()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateRotation()
+    }
     
     @objc func updateVideoOrientation() {
+    func updateRotation() {
         let deviceOrientation = UIDevice.current.orientation
         guard let connection = previewLayer.connection else { return }
+        let newVideoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation)
+        if let videoPreviewLayerConnection = previewLayer.connection {
+            videoPreviewLayerConnection.videoOrientation = newVideoOrientation
+        }
+    }
+}
         switch deviceOrientation {
         case .landscapeLeft:
             connection.videoOrientation = .landscapeRight
