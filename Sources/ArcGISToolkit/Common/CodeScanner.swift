@@ -411,6 +411,24 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***updateAutoFocus(for: pointOfInterest)
 ***REMOVED******REMOVED***updateReticle(for: pointOfInterest)
 ***REMOVED***
+
+@available(iOS 17.0, *)
+class RotationCoordinator {
+***REMOVED***private let rotationObservation: NSKeyValueObservation
+***REMOVED***
+***REMOVED***private let rotationCoordinator: AVCaptureDevice.RotationCoordinator
+***REMOVED***
+***REMOVED***init(videoCaptureDevice: AVCaptureDevice, previewLayer: AVCaptureVideoPreviewLayer) {
+***REMOVED******REMOVED***rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: videoCaptureDevice, previewLayer: previewLayer)
+***REMOVED******REMOVED***rotationObservation = rotationCoordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new]) { _, change in
+***REMOVED******REMOVED******REMOVED***if let angle = change.newValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***previewLayer.connection?.videoRotationAngle = angle
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***@objc func updateVideoOrientation() {
 ***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
