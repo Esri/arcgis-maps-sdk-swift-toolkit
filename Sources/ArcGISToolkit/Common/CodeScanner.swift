@@ -153,14 +153,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***override func viewDidLoad() {
 ***REMOVED******REMOVED***super.viewDidLoad()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-***REMOVED******REMOVED***NotificationCenter.default.addObserver(
-***REMOVED******REMOVED******REMOVED***self,
-***REMOVED******REMOVED******REMOVED***selector: #selector(updateVideoOrientation),
-***REMOVED******REMOVED******REMOVED***name: UIDevice.orientationDidChangeNotification,
-***REMOVED******REMOVED******REMOVED***object: nil
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***let videoInput: AVCaptureDeviceInput
 ***REMOVED******REMOVED***
@@ -224,11 +216,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***sessionQueue.async { [captureSession] in
 ***REMOVED******REMOVED******REMOVED***captureSession.startRunning()
 ***REMOVED***
-***REMOVED******REMOVED***updateVideoOrientation()
-***REMOVED***
-***REMOVED***
-***REMOVED***override func viewWillDisappear(_ animated: Bool) {
-***REMOVED******REMOVED***UIDevice.current.endGeneratingDeviceOrientationNotifications()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: AVCaptureMetadataOutputObjectsDelegate methods
@@ -421,6 +408,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***updateAutoFocus(for: pointOfInterest)
 ***REMOVED******REMOVED***updateReticle(for: pointOfInterest)
 ***REMOVED***
+***REMOVED***
 
 @available(iOS 17.0, *)
 class RotationCoordinator {
@@ -457,10 +445,8 @@ class LegacyScannerViewController: ScannerViewController {
 ***REMOVED******REMOVED***updateRotation()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@objc func updateVideoOrientation() {
 ***REMOVED***func updateRotation() {
 ***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
-***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
 ***REMOVED******REMOVED***let newVideoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation)
 ***REMOVED******REMOVED***if let videoPreviewLayerConnection = previewLayer.connection {
 ***REMOVED******REMOVED******REMOVED***videoPreviewLayerConnection.videoOrientation = newVideoOrientation
@@ -472,18 +458,6 @@ class LegacyScannerViewController: ScannerViewController {
 extension AVCaptureVideoOrientation {
 ***REMOVED***init(deviceOrientation: UIDeviceOrientation) {
 ***REMOVED******REMOVED***switch deviceOrientation {
-***REMOVED******REMOVED***case .landscapeLeft:
-***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .landscapeRight
-***REMOVED******REMOVED***case .landscapeRight:
-***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .landscapeLeft
-***REMOVED******REMOVED***case .portraitUpsideDown:
-***REMOVED******REMOVED******REMOVED******REMOVED***/ It is best practice to only support `portraitUpsideDown` on iPadOS.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations
-***REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .pad {
-***REMOVED******REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portraitUpsideDown
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portrait
 ***REMOVED******REMOVED***case .portraitUpsideDown: self = .portraitUpsideDown
 ***REMOVED******REMOVED***case .landscapeLeft: self = .landscapeRight
 ***REMOVED******REMOVED***case .landscapeRight: self = .landscapeLeft
