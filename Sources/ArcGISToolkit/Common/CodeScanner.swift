@@ -127,6 +127,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***/ The string value of the targeted code.
 ***REMOVED***private var targetStringValue: String?
 ***REMOVED***
+***REMOVED***private var videoRotationProvider: AnyObject?
+***REMOVED***
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
 ***REMOVED***private class MetadataObjectLayer: CAShapeLayer {
@@ -207,6 +209,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
 ***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
 ***REMOVED******REMOVED***updateReticleAndAutoFocus()
+***REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED***videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewWillAppear(_ animated: Bool) {
