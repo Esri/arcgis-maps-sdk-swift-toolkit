@@ -81,7 +81,12 @@ struct CodeScannerRepresentable: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeUIViewController(context: Context) -> ScannerViewController {
-***REMOVED******REMOVED***let scannerViewController = ScannerViewController()
+***REMOVED******REMOVED***let scannerViewController: ScannerViewController
+***REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED***scannerViewController = ScannerViewController()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***scannerViewController = LegacyScannerViewController()
+***REMOVED***
 ***REMOVED******REMOVED***scannerViewController.delegate = context.coordinator
 ***REMOVED******REMOVED***return scannerViewController
 ***REMOVED***
