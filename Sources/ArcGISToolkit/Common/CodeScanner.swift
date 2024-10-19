@@ -467,6 +467,10 @@ class LegacyScannerViewController: ScannerViewController {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+@available(iOS, introduced: 16.0, deprecated: 17.0)
+extension AVCaptureVideoOrientation {
+***REMOVED***init(deviceOrientation: UIDeviceOrientation) {
 ***REMOVED******REMOVED***switch deviceOrientation {
 ***REMOVED******REMOVED***case .landscapeLeft:
 ***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .landscapeRight
@@ -480,6 +484,10 @@ class LegacyScannerViewController: ScannerViewController {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portrait
+***REMOVED******REMOVED***case .portraitUpsideDown: self = .portraitUpsideDown
+***REMOVED******REMOVED***case .landscapeLeft: self = .landscapeRight
+***REMOVED******REMOVED***case .landscapeRight: self = .landscapeLeft
+***REMOVED******REMOVED***default: self = .portrait
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
