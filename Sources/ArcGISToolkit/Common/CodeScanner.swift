@@ -274,10 +274,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***/ Checks if the reticle intersects with any of the current overlays. When a code with a consistent string
 ***REMOVED******REMOVED***/ value intersects with the reticle for the `requiredTargetHits` count, it is auto-scanned.
 ***REMOVED***private func checkTargetHits() {
-***REMOVED******REMOVED***var reticleWasContainedInAOverlay = false
+***REMOVED******REMOVED***var reticleWasContainedInAnOverlay = false
 ***REMOVED******REMOVED***for overlayLayer in metadataObjectOverlayLayers {
 ***REMOVED******REMOVED******REMOVED***if overlayLayer.path!.contains(self.reticleLayer!.position) {
-***REMOVED******REMOVED******REMOVED******REMOVED***reticleWasContainedInAOverlay = true
+***REMOVED******REMOVED******REMOVED******REMOVED***reticleWasContainedInAnOverlay = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits += 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
@@ -297,7 +297,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***if !reticleWasContainedInAOverlay {
+***REMOVED******REMOVED***if !reticleWasContainedInAnOverlay {
 ***REMOVED******REMOVED******REMOVED***self.targetStringValue = nil
 ***REMOVED******REMOVED******REMOVED***self.targetHits = 0
 ***REMOVED***
