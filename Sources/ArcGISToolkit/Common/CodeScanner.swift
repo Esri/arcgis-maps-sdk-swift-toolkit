@@ -118,9 +118,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     // MARK: Variables
     
-    var previewLayer: AVCaptureVideoPreviewLayer!
-    
     private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
+    
+    var previewLayer: AVCaptureVideoPreviewLayer!
     
     private var removeMetadataObjectOverlayLayersTimer: Timer?
     
