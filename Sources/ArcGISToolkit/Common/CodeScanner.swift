@@ -276,10 +276,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     /// Checks if the reticle intersects with any of the current overlays. When a code with a consistent string
     /// value intersects with the reticle for the `requiredTargetHits` count, it is auto-scanned.
     private func checkTargetHits() {
-        var reticleWasContainedInAOverlay = false
+        var reticleWasContainedInAnOverlay = false
         for overlayLayer in metadataObjectOverlayLayers {
             if overlayLayer.path!.contains(self.reticleLayer!.position) {
-                reticleWasContainedInAOverlay = true
+                reticleWasContainedInAnOverlay = true
                 if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
                     self.targetHits += 1
                     overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
@@ -299,7 +299,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
                 }
             }
         }
-        if !reticleWasContainedInAOverlay {
+        if !reticleWasContainedInAnOverlay {
             self.targetStringValue = nil
             self.targetHits = 0
         }
