@@ -453,7 +453,7 @@ private extension Point {
 }
 
 private extension SearchViewModel {
-    func searchResults(dropFirst: Bool = false) async throws -> [SearchResult]? {
+    nonisolated func searchResults(dropFirst: Bool = false) async throws -> [SearchResult]? {
         let searchOutcome = try await $searchOutcome
             .compactMap { $0 }
             .dropFirst(dropFirst ? 1 : 0)
@@ -467,7 +467,7 @@ private extension SearchViewModel {
         }
     }
     
-    func searchSuggestions(dropFirst: Bool = false) async throws -> [SearchSuggestion]? {
+    nonisolated func searchSuggestions(dropFirst: Bool = false) async throws -> [SearchSuggestion]? {
         let searchOutcome = try await $searchOutcome
             .compactMap { $0 }
             .dropFirst(dropFirst ? 1 : 0)
