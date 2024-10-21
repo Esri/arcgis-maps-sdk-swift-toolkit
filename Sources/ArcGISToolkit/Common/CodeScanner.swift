@@ -430,10 +430,7 @@ class RotationCoordinator {
 
 // MARK: Deprecated
 
-/// - Bug: The camera preview is inverted when started with the device in a landscape face-up orientation.
-/// This is fixed when using the `AVCaptureConnection.videoRotationAngle`
-/// property available in iOS 17.0.
-@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead")
+@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead.")
 class LegacyScannerViewController: ScannerViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -446,21 +443,21 @@ class LegacyScannerViewController: ScannerViewController {
     }
     
     func updateRotation() {
-        let deviceOrientation = UIDevice.current.orientation
         guard let connection = previewLayer.connection else { return }
-        let newVideoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation)
+        let interfaceOrientation = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.interfaceOrientation ?? .portrait
+        let newVideoOrientation = AVCaptureVideoOrientation(interfaceOrientation: interfaceOrientation)
         connection.videoOrientation = newVideoOrientation
     }
 }
 
 @available(iOS, introduced: 16.0, deprecated: 17.0)
 extension AVCaptureVideoOrientation {
-    init(deviceOrientation: UIDeviceOrientation) {
-        switch deviceOrientation {
-        case .portraitUpsideDown: self = .portraitUpsideDown
-        case .landscapeLeft: self = .landscapeRight
-        case .landscapeRight: self = .landscapeLeft
-        default: self = .portrait
+    init(interfaceOrientation: UIInterfaceOrientation) {
+        self = switch interfaceOrientation {
+        case .portraitUpsideDown: .portraitUpsideDown
+        case .landscapeLeft: .landscapeLeft
+        case .landscapeRight: .landscapeRight
+        default: .portrait
         }
     }
 }
