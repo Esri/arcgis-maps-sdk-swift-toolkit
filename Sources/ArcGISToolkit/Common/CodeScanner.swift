@@ -430,10 +430,7 @@ class RotationCoordinator {
 
 ***REMOVED*** MARK: Deprecated
 
-***REMOVED***/ - Bug: The camera preview is inverted when started with the device in a landscape face-up orientation.
-***REMOVED***/ This is fixed when using the `AVCaptureConnection.videoRotationAngle`
-***REMOVED***/ property available in iOS 17.0.
-@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead")
+@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead.")
 class LegacyScannerViewController: ScannerViewController {
 ***REMOVED***override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
 ***REMOVED******REMOVED***super.viewWillTransition(to: size, with: coordinator)
@@ -446,21 +443,21 @@ class LegacyScannerViewController: ScannerViewController {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func updateRotation() {
-***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
 ***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
-***REMOVED******REMOVED***let newVideoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation)
+***REMOVED******REMOVED***let interfaceOrientation = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.interfaceOrientation ?? .portrait
+***REMOVED******REMOVED***let newVideoOrientation = AVCaptureVideoOrientation(interfaceOrientation: interfaceOrientation)
 ***REMOVED******REMOVED***connection.videoOrientation = newVideoOrientation
 ***REMOVED***
 ***REMOVED***
 
 @available(iOS, introduced: 16.0, deprecated: 17.0)
 extension AVCaptureVideoOrientation {
-***REMOVED***init(deviceOrientation: UIDeviceOrientation) {
-***REMOVED******REMOVED***switch deviceOrientation {
-***REMOVED******REMOVED***case .portraitUpsideDown: self = .portraitUpsideDown
-***REMOVED******REMOVED***case .landscapeLeft: self = .landscapeRight
-***REMOVED******REMOVED***case .landscapeRight: self = .landscapeLeft
-***REMOVED******REMOVED***default: self = .portrait
+***REMOVED***init(interfaceOrientation: UIInterfaceOrientation) {
+***REMOVED******REMOVED***self = switch interfaceOrientation {
+***REMOVED******REMOVED***case .portraitUpsideDown: .portraitUpsideDown
+***REMOVED******REMOVED***case .landscapeLeft: .landscapeLeft
+***REMOVED******REMOVED***case .landscapeRight: .landscapeRight
+***REMOVED******REMOVED***default: .portrait
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
