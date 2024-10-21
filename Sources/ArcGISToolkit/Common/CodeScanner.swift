@@ -99,19 +99,21 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
 ***REMOVED***
-***REMOVED***private let autoScanDelay = 1.0
-***REMOVED***
 ***REMOVED***private let captureSession = AVCaptureSession()
 ***REMOVED***
 ***REMOVED***private let feedbackGenerator = UISelectionFeedbackGenerator()
 ***REMOVED***
 ***REMOVED***private let metadataObjectsOverlayLayersDrawingSemaphore = DispatchSemaphore(value: 1)
 ***REMOVED***
+***REMOVED******REMOVED***/ The color of a code overlay before it's been targeted for auto-scan.
+***REMOVED***private let normalOverlayColor = UIColor.white.withAlphaComponent(0.25)
+***REMOVED***
+***REMOVED******REMOVED***/ The number of consecutive hits required to trigger an automatic scan.
+***REMOVED***private let requiredTargetHits = 25
+***REMOVED***
 ***REMOVED***private let sessionQueue = DispatchQueue(label: "ScannerViewController")
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Variables
-***REMOVED***
-***REMOVED***private var autoScanTimer: Timer?
 ***REMOVED***
 ***REMOVED***private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
 ***REMOVED***
@@ -119,20 +121,28 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private var removeMetadataObjectOverlayLayersTimer: Timer?
 ***REMOVED***
-***REMOVED***weak var delegate: ScannerViewControllerDelegate?
+***REMOVED***private var reticleLayer: CAShapeLayer?
 ***REMOVED***
-***REMOVED***private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-***REMOVED******REMOVED***UITapGestureRecognizer(target: self, action: #selector(userDidTap(with:)))
-***REMOVED***()
+***REMOVED******REMOVED***/ The number of consecutive target hits. See also `requiredTargetHits`.
+***REMOVED***private var targetHits = 0
+***REMOVED***
+***REMOVED******REMOVED***/ The string value of the targeted code.
+***REMOVED***private var targetStringValue: String?
+***REMOVED***
+***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
 ***REMOVED***private class MetadataObjectLayer: CAShapeLayer {
 ***REMOVED******REMOVED***var metadataObject: AVMetadataObject?
+***REMOVED******REMOVED***var stringValue: String? {
+***REMOVED******REMOVED******REMOVED***(metadataObject as? AVMetadataMachineReadableCodeObject)?.stringValue
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: UIViewController methods
 ***REMOVED***
 ***REMOVED***override func viewDidLayoutSubviews() {
 ***REMOVED******REMOVED***previewLayer.frame = view.bounds
+***REMOVED******REMOVED***updateReticleAndAutoFocus()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewDidLoad() {
@@ -197,8 +207,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
 ***REMOVED******REMOVED***previewLayer.frame = view.layer.bounds
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
-***REMOVED******REMOVED***view.addGestureRecognizer(tapGestureRecognizer)
 ***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
+***REMOVED******REMOVED***updateReticleAndAutoFocus()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewWillAppear(_ animated: Bool) {
@@ -225,12 +235,12 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.removeMetadataObjectOverlayLayers()
 ***REMOVED******REMOVED******REMOVED******REMOVED***var metadataObjectOverlayLayers = [MetadataObjectLayer]()
 ***REMOVED******REMOVED******REMOVED******REMOVED***for metadataObject in metadataObjects {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let metadataObjectOverlayLayer = self.createMetadataObjectOverlayWithMetadataObject(metadataObject)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayers.append(metadataObjectOverlayLayer)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let overlayLayer = self.createMetadataObjectOverlayWithMetadataObject(metadataObject)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayers.append(overlayLayer)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.addMetadataObjectOverlayLayersToVideoPreviewView(metadataObjectOverlayLayers)
+***REMOVED******REMOVED******REMOVED******REMOVED***self.checkTargetHits()
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.metadataObjectsOverlayLayersDrawingSemaphore.signal()
-***REMOVED******REMOVED******REMOVED******REMOVED***self.evaluateOutputForAutoScan(metadataObjects)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -266,14 +276,46 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***return path
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Checks if the reticle intersects with any of the current overlays. When a code with a consistent string
+***REMOVED******REMOVED***/ value intersects with the reticle for the `requiredTargetHits` count, it is auto-scanned.
+***REMOVED***private func checkTargetHits() {
+***REMOVED******REMOVED***var reticleWasContainedInAnOverlay = false
+***REMOVED******REMOVED***for overlayLayer in metadataObjectOverlayLayers {
+***REMOVED******REMOVED******REMOVED***if overlayLayer.path!.contains(self.reticleLayer!.position) {
+***REMOVED******REMOVED******REMOVED******REMOVED***reticleWasContainedInAnOverlay = true
+***REMOVED******REMOVED******REMOVED******REMOVED***if let stringValue = self.targetStringValue, stringValue == overlayLayer.stringValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits += 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overlayLayer.fillColor = normalOverlayColor.interpolatedWith(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIColor.tintColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: CGFloat(self.targetHits) / CGFloat(self.requiredTargetHits)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)?.cgColor
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if self.targetHits >= self.requiredTargetHits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17.5, *), let metadataObject = overlayLayer.metadataObject {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.feedbackGenerator.selectionChanged(at: metadataObject.bounds.origin)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits = 0
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetStringValue = overlayLayer.stringValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.targetHits = 0
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***if !reticleWasContainedInAnOverlay {
+***REMOVED******REMOVED******REMOVED***self.targetStringValue = nil
+***REMOVED******REMOVED******REMOVED***self.targetHits = 0
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***private func createMetadataObjectOverlayWithMetadataObject(_ metadataObject: AVMetadataObject) -> MetadataObjectLayer {
 ***REMOVED******REMOVED***let transformedMetadataObject = previewLayer.transformedMetadataObject(for: metadataObject)
 ***REMOVED******REMOVED***let metadataObjectOverlayLayer = MetadataObjectLayer()
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.metadataObject = transformedMetadataObject
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.lineJoin = .round
 ***REMOVED******REMOVED***metadataObjectOverlayLayer.lineWidth = 2.5
-***REMOVED******REMOVED***metadataObjectOverlayLayer.fillColor = view.tintColor.withAlphaComponent(0.25).cgColor
-***REMOVED******REMOVED***metadataObjectOverlayLayer.strokeColor = view.tintColor.withAlphaComponent(1).cgColor
+***REMOVED******REMOVED***metadataObjectOverlayLayer.fillColor = normalOverlayColor.cgColor
+***REMOVED******REMOVED***metadataObjectOverlayLayer.strokeColor = UIColor.tintColor.cgColor
 ***REMOVED******REMOVED***guard let barcodeMetadataObject = transformedMetadataObject as? AVMetadataMachineReadableCodeObject else {
 ***REMOVED******REMOVED******REMOVED***return metadataObjectOverlayLayer
 ***REMOVED***
@@ -306,48 +348,10 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED******REMOVED***textLayer.transform = previewLayer.transform
 ***REMOVED******REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(textLayer)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let guideTextLayer = CATextLayer()
-***REMOVED******REMOVED***let guideTextString = NSAttributedString(
-***REMOVED******REMOVED******REMOVED***string: String.tapToScan,
-***REMOVED******REMOVED******REMOVED***attributes: [
-***REMOVED******REMOVED******REMOVED******REMOVED***.font: UIFont.systemFont(ofSize: fontSize),
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor: UIColor.white,
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***guideTextLayer.alignmentMode = .center
-***REMOVED******REMOVED***guideTextLayer.bounds = guideTextString.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: .usesLineFragmentOrigin, context: nil)
-***REMOVED******REMOVED***guideTextLayer.contentsScale = UIScreen.main.scale
-***REMOVED******REMOVED***guideTextLayer.position = CGPoint(x: barcodeOverlayPath.boundingBox.midX, y: barcodeOverlayPath.boundingBox.minY - 8)
-***REMOVED******REMOVED***guideTextLayer.string = guideTextString
-***REMOVED******REMOVED***guideTextLayer.shadowColor = UIColor.black.cgColor
-***REMOVED******REMOVED***guideTextLayer.shadowOffset = CGSizeZero
-***REMOVED******REMOVED***guideTextLayer.shadowOpacity = 1.0
-***REMOVED******REMOVED***metadataObjectOverlayLayer.addSublayer(guideTextLayer)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return metadataObjectOverlayLayer
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Checks the scanned contents for the number of codes recognized. If only a single code is
-***REMOVED******REMOVED***/ recognized, `autoScanTimer` is started, otherwise `autoScanTimer` is invalidated.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Parameter output: The sect of scanned codes.
-***REMOVED***private func evaluateOutputForAutoScan(_ output: [AVMetadataObject]) {
-***REMOVED******REMOVED***if output.count == 1 {
-***REMOVED******REMOVED******REMOVED***if !(self.autoScanTimer?.isValid ?? false), let metadataObject = output.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.autoScanTimer = Timer.scheduledTimer(withTimeInterval: autoScanDelay, repeats: false) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.scan(metadataObject)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self.autoScanTimer?.invalidate()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@objc
-***REMOVED***private func removeMetadataObjectOverlayLayers() {
+***REMOVED***@objc private func removeMetadataObjectOverlayLayers() {
 ***REMOVED******REMOVED***for sublayer in metadataObjectOverlayLayers {
 ***REMOVED******REMOVED******REMOVED***sublayer.removeFromSuperlayer()
 ***REMOVED***
@@ -356,53 +360,59 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***removeMetadataObjectOverlayLayersTimer = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Triggers the delegated scan method.
-***REMOVED******REMOVED***/ - Parameter metadataObject: The machine readable code.
-***REMOVED***private func scan(_ metadataObject: AVMetadataObject) {
-***REMOVED******REMOVED***if let machineReadableCodeObject = metadataObject as? AVMetadataMachineReadableCodeObject,
-***REMOVED******REMOVED***   let stringValue = machineReadableCodeObject.stringValue {
-***REMOVED******REMOVED******REMOVED***delegate?.didScanCode(stringValue)
-***REMOVED******REMOVED******REMOVED***if #available(iOS 17.5, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.feedbackGenerator.selectionChanged(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: CGPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: metadataObject.bounds.midX,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: metadataObject.bounds.midY
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** MARK: Other methods
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@objc
-***REMOVED***private func userDidTap(with tapGestureRecognizer: UITapGestureRecognizer) {
-***REMOVED******REMOVED******REMOVED*** Check if a recognized code was tapped. If so, select it.
-***REMOVED******REMOVED***let point = tapGestureRecognizer.location(in: view)
-***REMOVED******REMOVED***for metadataObjectOverlayLayer in metadataObjectOverlayLayers {
-***REMOVED******REMOVED******REMOVED***if metadataObjectOverlayLayer.path?.contains(point) ?? false,
-***REMOVED******REMOVED******REMOVED***   let metadataObject = metadataObjectOverlayLayer.metadataObject {
-***REMOVED******REMOVED******REMOVED******REMOVED***scan(metadataObject)
-***REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Otherwise focus on and adjust exposure on the tapped point.
+***REMOVED******REMOVED***/ Focus on and adjust exposure at the point of interest.
+***REMOVED***private func updateAutoFocus(for point: CGPoint) {
 ***REMOVED******REMOVED***let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
 ***REMOVED******REMOVED***guard let device = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try device.lockForConfiguration()
 ***REMOVED******REMOVED******REMOVED***if device.isFocusModeSupported(.autoFocus) && device.isFocusPointOfInterestSupported {
 ***REMOVED******REMOVED******REMOVED******REMOVED***device.focusPointOfInterest = convertedPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***device.focusMode = .autoFocus
+***REMOVED******REMOVED******REMOVED******REMOVED***device.focusMode = .continuousAutoFocus
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if device.isExposureModeSupported(.autoExpose) && device.isExposurePointOfInterestSupported {
 ***REMOVED******REMOVED******REMOVED******REMOVED***device.exposurePointOfInterest = convertedPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***device.exposureMode = .autoExpose
+***REMOVED******REMOVED******REMOVED******REMOVED***device.exposureMode = .continuousAutoExposure
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***device.unlockForConfiguration()
 ***REMOVED*** catch { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Other methods
+***REMOVED***private func updateReticle(for point: CGPoint) {
+***REMOVED******REMOVED***self.reticleLayer?.removeFromSuperlayer()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let reticleLayer = CAShapeLayer()
+***REMOVED******REMOVED***let radius: CGFloat = 5.0
+***REMOVED******REMOVED***reticleLayer.path = UIBezierPath(
+***REMOVED******REMOVED******REMOVED***roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius),
+***REMOVED******REMOVED******REMOVED***cornerRadius: radius
+***REMOVED******REMOVED***).cgPath
+***REMOVED******REMOVED***reticleLayer.frame = CGRect(
+***REMOVED******REMOVED******REMOVED***origin: CGPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: point.x - radius,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: point.y - radius
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***size: CGSize(
+***REMOVED******REMOVED******REMOVED******REMOVED***width: radius * 2,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: radius * 2
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***reticleLayer.fillColor = UIColor.tintColor.cgColor
+***REMOVED******REMOVED***reticleLayer.zPosition = .greatestFiniteMagnitude
+***REMOVED******REMOVED***previewLayer.addSublayer(reticleLayer)
+***REMOVED******REMOVED***self.reticleLayer = reticleLayer
+***REMOVED***
+***REMOVED***
+***REMOVED***private func updateReticleAndAutoFocus() {
+***REMOVED******REMOVED***let pointOfInterest = CGPoint(
+***REMOVED******REMOVED******REMOVED***x: view.frame.midX,
+***REMOVED******REMOVED******REMOVED***y: view.frame.midY
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***updateAutoFocus(for: pointOfInterest)
+***REMOVED******REMOVED***updateReticle(for: pointOfInterest)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***@objc func updateVideoOrientation() {
 ***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
@@ -421,15 +431,5 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portrait
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension String {
-***REMOVED***static var tapToScan: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Tap to scan",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button to select a code identified with the barcode scanner."
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
