@@ -57,10 +57,14 @@ public struct OfflineMapAreasView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text.done
+                    }
                 }
             }
-            .navigationTitle("Map Areas")
+            .navigationTitle(mapAreasLabel)
             .navigationBarTitleDisplayMode(.inline)
             .overlay {
                 if mapIsOfflineDisabled {
@@ -120,9 +124,9 @@ public struct OfflineMapAreasView: View {
     
     private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
-            Text("No map areas")
+            Text(noMapAreasTitle)
                 .bold()
-            Text("There are no map areas defined for this web map.")
+            Text(noMapAreasSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -132,9 +136,9 @@ public struct OfflineMapAreasView: View {
     
     private var emptyOfflinePreplannedMapAreasView: some View {
         VStack(alignment: .center) {
-            Text("No map areas")
+            Text(noMapAreasTitle)
                 .bold()
-            Text("There are no downloaded map areas for this web map.")
+            Text(noDownloadedMapAreasSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -143,8 +147,8 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var offlineDisabledView: some View {
-        let labelText = Text("Offline Disabled")
-        let descriptionText = Text("Please ensure the web map is offline enabled.")
+        let labelText = Text(offlineDisabledTitle)
+        let descriptionText = Text(offlineDisabledSubtitle)
         if #available(iOS 17, *) {
             ContentUnavailableView {
                 labelText
@@ -163,15 +167,6 @@ public struct OfflineMapAreasView: View {
             }
             .frame(maxWidth: .infinity)
         }
-    }
-    
-    private var offlineBannerView: some View {
-        Text("Network Offline")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity)
-            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-            .background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
     }
     
     private func view(for error: Error) -> some View {
@@ -211,4 +206,54 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
+}
+
+private extension OfflineMapAreasView {
+    var mapAreasLabel: String {
+        .init(
+            localized: "Map Areas",
+            bundle: .toolkitModule,
+            comment: "A label for the map areas view."
+        )
+    }
+    
+    var noMapAreasTitle: String {
+        .init(
+            localized: "No map areas",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the map has no map areas."
+        )
+    }
+    
+    var noMapAreasSubtitle: String {
+        .init(
+            localized: "There are no map areas defined for this web map.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that there are no map areas defined for the web map."
+        )
+    }
+    
+    var noDownloadedMapAreasSubtitle: String {
+        .init(
+            localized: "There are no downloaded map areas for this web map.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that there are no downloaded map areas for the web map."
+        )
+    }
+    
+    var offlineDisabledTitle: String {
+        .init(
+            localized: "Offline disabled",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the web map is offline disabled."
+        )
+    }
+    
+    var offlineDisabledSubtitle: String {
+        .init(
+            localized: "Please ensure the web map is offline enabled.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the user should check that the web map is offline enabled."
+        )
+    }
 }
