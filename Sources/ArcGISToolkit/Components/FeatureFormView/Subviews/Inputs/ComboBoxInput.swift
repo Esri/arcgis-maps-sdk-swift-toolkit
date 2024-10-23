@@ -22,6 +22,12 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The element's extrinsic value.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If the element has a value not in its domain, it has an extrinsic value. This extrinsic value is
+***REMOVED******REMOVED***/ present until the user selects a value within the element's domain.
+***REMOVED***@State private var extrinsicValue: String?
+***REMOVED***
 ***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
 ***REMOVED***@State private var filterPhrase = ""
 ***REMOVED***
@@ -86,7 +92,7 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(selectedValue?.name ?? placeholderValue)
+***REMOVED******REMOVED******REMOVED***Text(extrinsicValue ?? selectedValue?.name ?? placeholderValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Combo Box Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
@@ -117,13 +123,21 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(selectedValue) { selectedValue in
+***REMOVED******REMOVED******REMOVED***extrinsicValue = nil
 ***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***value = newValue
 ***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
-***REMOVED******REMOVED******REMOVED***selectedValue = element.codedValues.first { $0.name == formattedValue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***if let currentValue = element.codedValues.first(where: {
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name == formattedValue
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = currentValue
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The element's current value is not in its domain.
+***REMOVED******REMOVED******REMOVED******REMOVED***extrinsicValue = newFormattedValue
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
