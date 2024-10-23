@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Для доступу до вмісту %@ потрібний сертифікат.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Додати новий";
+"Add New" = "ґ_Add New_______________Ї";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Розширені опції";
@@ -22,6 +22,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Прикріплення";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "ґ_Attachments larger than %@ cannot be downloaded_________________________Ї.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Атрибути";
@@ -42,11 +45,14 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "Калібрування";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "ґ_Camera access is disabled__________________________Ї";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Скасувати";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Скасувати вибір початкової точки";
+"Cancel Starting Point Selection" = "ґ_Cancel Starting Point Selection_________________Ї";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Потрібен сертифікат";
@@ -64,7 +70,7 @@ for the AR experience. */
 "Clear" = "Очистити";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Очистити всі результати";
+"Clear All Results" = "ґ_Clear All Results__________________Ї";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Колір";
@@ -77,9 +83,6 @@ east, etc.). */
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Продовжити";
-
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Не вдалося отримати доступ до файлу сертифіката.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Небезпечно: сертифікат, наданий '%@', не підписаний довіреним центром.";
@@ -113,6 +116,12 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "висота";
+
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "ґ_Empty attachments cannot be downloaded_____________________Ї.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "ґ_Empty files are not supported_______________________________Ї.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -152,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "Перевищує максимальне значення";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "ґ_Failed to access the certificate file____________________Ї.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -204,6 +216,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Середовище";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "ґ_Microphone access has been disabled in Settings_________________________Ї.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Мінімальна довжина символів не досягнута";
 
@@ -220,7 +235,7 @@ AR experience. */
 "New name" = "Нова назва";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Нове трасування";
+"New Trace" = "ґ_New Trace___________________Ї";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Закладок немає";
@@ -243,9 +258,6 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Немає значення";
 
-/* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Нічого не вибрано";
-
 /* A trace function output result was not provided. */
 "Not Available" = "Недоступно";
 
@@ -264,6 +276,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Потрібен пароль";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "ґ_Please enable camera access in settings_____________________Ї.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Введіть пароль для вибраного сертифіката.";
 
@@ -278,6 +293,9 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Помилка оцінки спливаючого вікна: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "ґ_Record video only__________________Ї";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Змінити назву";
@@ -305,6 +323,15 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Вибрати пункт обслуговування";
+
+/* A label for button to select a utility network. */
+"Select Network" = "ґ_Select Network_______________Ї";
+
+/* A label for button to select a utility network trace configuration. */
+"Select Trace Configuration" = "ґ_Select Trace Configuration___________________________Ї";
+
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "ґ_Settings_________________Ї";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Сайти";
@@ -426,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Масштабувати";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Масштабування до результату";
+"Zoom To Result" = "ґ_Zoom To Result_______________Ї";
 

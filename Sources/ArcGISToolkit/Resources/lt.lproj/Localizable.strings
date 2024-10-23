@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Norint pasiekti %@ turinį, reikia sertifikato.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Pridėti naują";
+"Add New" = "Į_Add New_______________š";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Išplėstinės parinktys";
@@ -22,6 +22,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Priedai";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "Į_Attachments larger than %@ cannot be downloaded_________________________š.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atributai";
@@ -42,11 +45,14 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "Kalibravimas";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "Į_Camera access is disabled__________________________š";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Atšaukti";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Atšaukti pradžios taško pasirinkimą";
+"Cancel Starting Point Selection" = "Į_Cancel Starting Point Selection_________________š";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Reikalingas sertifikatas";
@@ -64,7 +70,7 @@ for the AR experience. */
 "Clear" = "Valyti";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Išvalyti rezultatus";
+"Clear All Results" = "Į_Clear All Results__________________š";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Spalva";
@@ -77,9 +83,6 @@ east, etc.). */
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Tęsti";
-
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Nepavyko pasiekti sertifikato failo.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Įspėjimas: „%@“ pateiktas sertifikatas nepasirašytas patikimos institucijos.";
@@ -113,6 +116,12 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "aukštis";
+
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "Į_Empty attachments cannot be downloaded_____________________š.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "Į_Empty files are not supported_______________________________š.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -152,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "Viršija maksimalią reikšmę";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "Į_Failed to access the certificate file____________________š.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -204,6 +216,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Medija";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "Į_Microphone access has been disabled in Settings_________________________š.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Nepasiektas minimalus simbolių skaičius";
 
@@ -220,7 +235,7 @@ AR experience. */
 "New name" = "Naujas pavadinimas";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Naujas ženklas";
+"New Trace" = "Į_New Trace___________________š";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nėra žymų";
@@ -243,9 +258,6 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Reikšmių nėra";
 
-/* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Nieko nepasirinkta";
-
 /* A trace function output result was not provided. */
 "Not Available" = "Nepasiekiama";
 
@@ -264,6 +276,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Būtinas slaptažodis";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "Į_Please enable camera access in settings_____________________š.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Įveskite pasirinkto sertifikato slaptažodį.";
 
@@ -278,6 +293,9 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Nepavyko įvertinti iškylančio lango: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "Į_Record video only__________________š";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Pervardinti";
@@ -305,6 +323,15 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Pasirinkti įrenginį";
+
+/* A label for button to select a utility network. */
+"Select Network" = "Į_Select Network_______________š";
+
+/* A label for button to select a utility network trace configuration. */
+"Select Trace Configuration" = "Į_Select Trace Configuration___________________________š";
+
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "Į_Settings_________________š";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Svetainės";
@@ -426,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Priartinti";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Pritraukti prie rezultato";
+"Zoom To Result" = "Į_Zoom To Result_______________š";
 

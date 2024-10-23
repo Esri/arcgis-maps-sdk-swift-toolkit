@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Za dostop do vsebine na %@ je potreben certifikat.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Dodaj novo";
+"Add New" = "Š_Add New_______________č";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Napredne možnosti";
@@ -22,6 +22,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Priloge";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "Š_Attachments larger than %@ cannot be downloaded_________________________č.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atributi";
@@ -42,11 +45,14 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "Kalibracija";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "Š_Camera access is disabled__________________________č";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Prekliči";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Prekliči izbiro začetne točke";
+"Cancel Starting Point Selection" = "Š_Cancel Starting Point Selection_________________č";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certifikat je obvezen";
@@ -64,7 +70,7 @@ for the AR experience. */
 "Clear" = "Počisti";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Počisti vse rezultate";
+"Clear All Results" = "Š_Clear All Results__________________č";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Barva";
@@ -77,9 +83,6 @@ east, etc.). */
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Nadaljuj";
-
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Dostop do datoteke certifikata ni mogoč.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nevarno: certifikata, ki ga zagotavlja '%@', ni podpisala zaupanja vredna ustanova.";
@@ -113,6 +116,12 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "višina";
+
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "Š_Empty attachments cannot be downloaded_____________________č.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "Š_Empty files are not supported_______________________________č.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -152,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "Presega največjo vrednost";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "Š_Failed to access the certificate file____________________č.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -204,6 +216,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Mediji";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "Š_Microphone access has been disabled in Settings_________________________č.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Najmanjša dolžina znakov ni izpolnjena";
 
@@ -220,7 +235,7 @@ AR experience. */
 "New name" = "Novo ime";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Nova sled";
+"New Trace" = "Š_New Trace___________________č";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Ni zaznamkov";
@@ -243,9 +258,6 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Brez vrednosti";
 
-/* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Nič ni izbrano";
-
 /* A trace function output result was not provided. */
 "Not Available" = "Ni na voljo";
 
@@ -264,6 +276,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Zahtevano je geslo";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "Š_Please enable camera access in settings_____________________č.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Vnesite geslo za izbrani certifikat.";
 
@@ -278,6 +293,9 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Ovrednotenje pojavnega okna ni uspelo: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "Š_Record video only__________________č";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Preimenuj";
@@ -305,6 +323,15 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Izberi objekt";
+
+/* A label for button to select a utility network. */
+"Select Network" = "Š_Select Network_______________č";
+
+/* A label for button to select a utility network trace configuration. */
+"Select Trace Configuration" = "Š_Select Trace Configuration___________________________č";
+
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "Š_Settings_________________č";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Spletna mesta";
@@ -426,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Povečaj na";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Približaj na rezultat";
+"Zoom To Result" = "Š_Zoom To Result_______________č";
 
