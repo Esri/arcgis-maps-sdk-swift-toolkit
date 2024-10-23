@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "%@의 콘텐츠에 접근하려면 인증서가 필요합니다.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "새로 추가";
+"Add New" = "한_Add New_______________빠";
 
 /* A section header for advanced options. */
 "Advanced Options" = "고급 옵션";
@@ -22,6 +22,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "첨부 파일";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "한_Attachments larger than %@ cannot be downloaded_________________________빠.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "속성";
@@ -42,11 +45,14 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "보정";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "한_Camera access is disabled__________________________빠";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "취소";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "시작점 선택 취소";
+"Cancel Starting Point Selection" = "한_Cancel Starting Point Selection_________________빠";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "인증서 필요";
@@ -64,7 +70,7 @@ for the AR experience. */
 "Clear" = "지우기";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "모든 결과 지우기";
+"Clear All Results" = "한_Clear All Results__________________빠";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "색상";
@@ -77,9 +83,6 @@ east, etc.). */
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "계속";
-
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "인증서 파일에 접근할 수 없습니다.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "위험: '%@'에서 제공된 인증서가 신뢰할 수 있는 기관에서 서명되지 않았습니다.";
@@ -113,6 +116,12 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "고도";
+
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "한_Empty attachments cannot be downloaded_____________________빠.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "한_Empty files are not supported_______________________________빠.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -152,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "최대값을 초과함";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "한_Failed to access the certificate file____________________빠.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -204,6 +216,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "미디어";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "한_Microphone access has been disabled in Settings_________________________빠.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "최소 문자 길이를 충족하지 않음";
 
@@ -220,7 +235,7 @@ AR experience. */
 "New name" = "새 이름";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "새 추적";
+"New Trace" = "한_New Trace___________________빠";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "북마크 없음";
@@ -243,9 +258,6 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "값 없음";
 
-/* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "선택된 항목 없음";
-
 /* A trace function output result was not provided. */
 "Not Available" = "사용할 수 없음";
 
@@ -264,6 +276,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "비밀번호 필요";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "한_Please enable camera access in settings_____________________빠.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "선택한 인증서의 비밀번호를 입력하세요.";
 
@@ -278,6 +293,9 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "팝업 평가 실패: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "한_Record video only__________________빠";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "이름 바꾸기";
@@ -305,6 +323,15 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "시설 선택";
+
+/* A label for button to select a utility network. */
+"Select Network" = "한_Select Network_______________빠";
+
+/* A label for button to select a utility network trace configuration. */
+"Select Trace Configuration" = "한_Select Trace Configuration___________________________빠";
+
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "한_Settings_________________빠";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "사이트";
@@ -426,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "확대";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "결과 확대";
+"Zoom To Result" = "한_Zoom To Result_______________빠";
 
