@@ -29,6 +29,7 @@ struct CodeScanner: View {
     var body: some View {
         if cameraAccessIsAuthorized {
             CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+                .ignoresSafeArea()
                 .overlay(alignment:.topTrailing) {
                     Button(String.cancel, role: .cancel) {
                         isPresented = false
@@ -82,7 +83,12 @@ struct CodeScannerRepresentable: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> ScannerViewController {
-        let scannerViewController = ScannerViewController()
+        let scannerViewController: ScannerViewController
+        if #available(iOS 17.0, *) {
+            scannerViewController = ScannerViewController()
+        } else {
+            scannerViewController = LegacyScannerViewController()
+        }
         scannerViewController.delegate = context.coordinator
         return scannerViewController
     }
@@ -117,7 +123,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
     
-    private var previewLayer: AVCaptureVideoPreviewLayer!
+    var previewLayer: AVCaptureVideoPreviewLayer!
     
     private var removeMetadataObjectOverlayLayersTimer: Timer?
     
@@ -128,6 +134,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     /// The string value of the targeted code.
     private var targetStringValue: String?
+    
+    private var videoRotationProvider: AnyObject?
     
     weak var delegate: ScannerViewControllerDelegate?
     
@@ -147,14 +155,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(updateVideoOrientation),
-            name: UIDevice.orientationDidChangeNotification,
-            object: nil
-        )
         
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
         let videoInput: AVCaptureDeviceInput
@@ -209,6 +209,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
         updateReticleAndAutoFocus()
+        if #available(iOS 17.0, *) {
+            videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -216,11 +219,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         sessionQueue.async { [captureSession] in
             captureSession.startRunning()
         }
-        updateVideoOrientation()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
     }
     
     // MARK: AVCaptureMetadataOutputObjectsDelegate methods
@@ -413,23 +411,56 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         updateAutoFocus(for: pointOfInterest)
         updateReticle(for: pointOfInterest)
     }
+}
+
+@available(iOS 17.0, *)
+class RotationCoordinator {
+    private let rotationObservation: NSKeyValueObservation
     
-    @objc func updateVideoOrientation() {
-        let deviceOrientation = UIDevice.current.orientation
-        guard let connection = previewLayer.connection else { return }
-        switch deviceOrientation {
-        case .landscapeLeft:
-            connection.videoOrientation = .landscapeRight
-        case .landscapeRight:
-            connection.videoOrientation = .landscapeLeft
-        case .portraitUpsideDown:
-            /// It is best practice to only support `portraitUpsideDown` on iPadOS.
-            /// https://developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                connection.videoOrientation = .portraitUpsideDown
+    private let rotationCoordinator: AVCaptureDevice.RotationCoordinator
+    
+    init(videoCaptureDevice: AVCaptureDevice, previewLayer: AVCaptureVideoPreviewLayer) {
+        rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: videoCaptureDevice, previewLayer: previewLayer)
+        rotationObservation = rotationCoordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new]) { _, change in
+            if let angle = change.newValue {
+                Task { @MainActor in
+                    previewLayer.connection?.videoRotationAngle = angle
+                }
             }
-        default:
-            connection.videoOrientation = .portrait
+        }
+    }
+}
+
+// MARK: Deprecated
+
+@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead.")
+class LegacyScannerViewController: ScannerViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        updateRotation()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateRotation()
+    }
+    
+    func updateRotation() {
+        guard let connection = previewLayer.connection else { return }
+        let interfaceOrientation = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.interfaceOrientation ?? .portrait
+        let newVideoOrientation = AVCaptureVideoOrientation(interfaceOrientation: interfaceOrientation)
+        connection.videoOrientation = newVideoOrientation
+    }
+}
+
+@available(iOS, introduced: 16.0, deprecated: 17.0)
+extension AVCaptureVideoOrientation {
+    init(interfaceOrientation: UIInterfaceOrientation) {
+        self = switch interfaceOrientation {
+        case .portraitUpsideDown: .portraitUpsideDown
+        case .landscapeLeft: .landscapeLeft
+        case .landscapeRight: .landscapeRight
+        default: .portrait
         }
     }
 }
