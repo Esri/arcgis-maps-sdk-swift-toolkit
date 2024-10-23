@@ -22,6 +22,12 @@ struct ComboBoxInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
+    /// The element's extrinsic value.
+    ///
+    /// If the element has a value not in its domain, it has an extrinsic value. This extrinsic value is
+    /// present until the user selects a value within the element's domain.
+    @State private var extrinsicValue: String?
+    
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
     
@@ -86,7 +92,7 @@ struct ComboBoxInput: View {
     
     var body: some View {
         HStack {
-            Text(selectedValue?.name ?? placeholderValue)
+            Text(extrinsicValue ?? selectedValue?.name ?? placeholderValue)
                 .accessibilityIdentifier("\(element.label) Combo Box Value")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(selectedValue != nil ? .primary : .secondary)
@@ -117,13 +123,21 @@ struct ComboBoxInput: View {
             isPresented = true
         }
         .onChange(selectedValue) { selectedValue in
+            extrinsicValue = nil
             element.updateValue(selectedValue?.code)
             model.evaluateExpressions()
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
             value = newValue
             formattedValue = newFormattedValue
-            selectedValue = element.codedValues.first { $0.name == formattedValue }
+            if let currentValue = element.codedValues.first(where: {
+                $0.name == formattedValue
+            }) {
+                selectedValue = currentValue
+            } else {
+                // The element's current value is not in its domain.
+                extrinsicValue = newFormattedValue
+            }
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
