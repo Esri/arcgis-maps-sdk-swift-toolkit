@@ -414,6 +414,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 }
 
 @available(iOS 17.0, *)
+@available(visionOS, unavailable)
 class RotationCoordinator {
     private let rotationObservation: NSKeyValueObservation
     
@@ -434,6 +435,7 @@ class RotationCoordinator {
 // MARK: Deprecated
 
 @available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead.")
+@available(visionOS, unavailable)
 class LegacyScannerViewController: ScannerViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -454,6 +456,7 @@ class LegacyScannerViewController: ScannerViewController {
 }
 
 @available(iOS, introduced: 16.0, deprecated: 17.0)
+@available(visionOS, unavailable)
 extension AVCaptureVideoOrientation {
     init(interfaceOrientation: UIInterfaceOrientation) {
         self = switch interfaceOrientation {
