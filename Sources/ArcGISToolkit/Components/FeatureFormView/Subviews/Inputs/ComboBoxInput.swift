@@ -119,7 +119,7 @@ struct ComboBoxInput: View {
                 $0.name == element.formattedValue
             }) {
                 selectedValue = currentValue
-            } else {
+            } else if !element.formattedValue.isEmpty {
                 unsupportedValue = element.formattedValue
             }
         }
