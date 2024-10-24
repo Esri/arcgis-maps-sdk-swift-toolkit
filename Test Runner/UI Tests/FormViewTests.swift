@@ -1438,8 +1438,6 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 7.1: Test read only elements
     func testCase_7_1() throws {
-        try XCTSkipIf(true, "https://devtopia.esri.com/runtime/apollo/issues/927")
-        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
