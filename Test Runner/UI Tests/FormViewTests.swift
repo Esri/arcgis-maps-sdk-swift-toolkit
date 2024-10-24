@@ -1088,6 +1088,68 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 3.7: Unsupported value
+    func testCase_3_7() throws {
+        let app = XCUIApplication()
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Unsupported Value"]
+        let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+        let firstOption = app.buttons["First"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let noValueButton = app.buttons["No value"]
+        let optionsButton = app.images["Unsupported Value Options Button"]
+        let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value"]
+        let unsupportedValue = app.buttons["0"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "0"
+        )
+        
+        optionsButton.tap()
+        
+        XCTAssertTrue(
+            unsupportedValueSectionHeader.waitForExistence(timeout: 1),
+            "The Unsupported Value section doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            unsupportedValue.exists,
+            "The Unsupported Value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            noValueButton.exists,
+            "No Value doesn't exist."
+        )
+        
+        noValueButton.tap()
+        
+        XCTAssertFalse(
+            unsupportedValueSectionHeader.exists,
+            "The Unsupported Value section exists."
+        )
+    }
+    
     // - MARK: Test case 4: Radio Buttons input type
     
     /// Test case 4.1: Test regular selection
