@@ -119,7 +119,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = currentValue
-***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***unsupportedValue = element.formattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
