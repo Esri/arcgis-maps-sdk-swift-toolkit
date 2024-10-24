@@ -22,17 +22,8 @@ struct ComboBoxInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The element's extrinsic value.
-    ///
-    /// If the element has a value not in its domain, it has an extrinsic value. This extrinsic value is
-    /// present until the user selects a value within the element's domain.
-    @State private var extrinsicValue: String?
-    
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
-    
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
     
     /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
@@ -42,6 +33,12 @@ struct ComboBoxInput: View {
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
+    
+    /// The element's current (but unsupported) value.
+    ///
+    /// If the element has a value not in its domain, it has an unsupported value. This unsupported value is
+    /// present until the user selects a value within the element's domain.
+    @State private var unsupportedValue: String?
     
     /// The element's current value.
     @State private var value: Any?
@@ -92,7 +89,7 @@ struct ComboBoxInput: View {
     
     var body: some View {
         HStack {
-            Text(extrinsicValue ?? selectedValue?.name ?? placeholderValue)
+            Text(unsupportedValue ?? selectedValue?.name ?? placeholderValue)
                 .accessibilityIdentifier("\(element.label) Combo Box Value")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(selectedValue != nil ? .primary : .secondary)
@@ -114,30 +111,30 @@ struct ComboBoxInput: View {
             }
         }
         .formInputStyle()
-        // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
-        .sheet(isPresented: $isPresented) { [matchingValues] in
-            makePicker(for: matchingValues)
+        .sheet(isPresented: $isPresented) {
+            makePicker()
         }
         .onTapGesture {
             model.focusedElement = element
             isPresented = true
         }
+        .onAppear {
+            if let currentValue = element.codedValues.first(where: {
+                $0.name == element.formattedValue
+            }) {
+                selectedValue = currentValue
+            } else {
+                unsupportedValue = element.formattedValue
+            }
+        }
         .onChange(selectedValue) { selectedValue in
-            extrinsicValue = nil
+            unsupportedValue = nil
             element.updateValue(selectedValue?.code)
             model.evaluateExpressions()
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
             value = newValue
-            formattedValue = newFormattedValue
-            if let currentValue = element.codedValues.first(where: {
-                $0.name == formattedValue
-            }) {
-                selectedValue = currentValue
-            } else {
-                // The element's current value is not in its domain.
-                extrinsicValue = newFormattedValue
-            }
+            selectedValue = element.codedValues.first { $0.name == newFormattedValue }
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
@@ -147,7 +144,7 @@ struct ComboBoxInput: View {
     /// The view that allows the user to filter and select coded values by name.
     ///
     /// Adds navigation context to support toolbar items and other visual elements in the picker.
-    func makePicker(for values: [CodedValue]) -> some View {
+    func makePicker() -> some View {
         NavigationStack {
             VStack {
                 Text(element.description)
@@ -159,32 +156,27 @@ struct ComboBoxInput: View {
                 List {
                     if !element.isRequired {
                         if noValueOption == .show {
-                            HStack {
-                                Button {
-                                    selectedValue = nil
-                                } label: {
-                                    Text(noValueLabel.isEmpty ? String.noValue : noValueLabel)
-                                        .italic()
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                if selectedValue == nil {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.accentColor)
-                                }
+                            makePickerRow(
+                                label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
+                                selected: selectedValue == nil && unsupportedValue == nil
+                            ) {
+                                self.selectedValue = nil
                             }
+                            .italic()
+                            .foregroundStyle(.secondary)
                         }
                     }
-                    ForEach(values, id: \.self) { codedValue in
-                        HStack {
-                            Button(codedValue.name) {
-                                selectedValue = codedValue
-                            }
-                            Spacer()
-                            if codedValue == selectedValue {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.accentColor)
-                            }
+                    ForEach(matchingValues, id: \.self) { codedValue in
+                        makePickerRow(label: codedValue.name, selected: codedValue == selectedValue) {
+                            self.selectedValue = codedValue
+                        }
+                    }
+                    if let unsupportedValue {
+                        Section {
+                            makePickerRow(label: unsupportedValue, selected: true) { }
+                                .italic()
+                        } header: {
+                            Text.unsupportedValue
                         }
                     }
                 }
@@ -204,6 +196,17 @@ struct ComboBoxInput: View {
                         .buttonStyle(.plain)
                     }
                 }
+            }
+        }
+    }
+    
+    func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        HStack {
+            Button(label) { action() }
+            Spacer()
+            if selected {
+                Image(systemName: "checkmark")
+                    .foregroundColor(.accentColor)
             }
         }
     }
@@ -244,6 +247,14 @@ private extension Text {
             "Filter",
             bundle: .toolkitModule,
             comment: "A label for a text entry field that allows the user to filter a list of values by name."
+        )
+    }
+    
+    static var unsupportedValue: Self {
+        .init(
+            "Unsupported Value",
+            bundle: .toolkitModule,
+            comment: "A label for a section in a list of possible values that contains a single value outside the list of valid values."
         )
     }
 }
