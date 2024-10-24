@@ -29,6 +29,7 @@ struct CodeScanner: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if cameraAccessIsAuthorized {
 ***REMOVED******REMOVED******REMOVED***CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment:.topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
@@ -82,7 +83,12 @@ struct CodeScannerRepresentable: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeUIViewController(context: Context) -> ScannerViewController {
-***REMOVED******REMOVED***let scannerViewController = ScannerViewController()
+***REMOVED******REMOVED***let scannerViewController: ScannerViewController
+***REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED***scannerViewController = ScannerViewController()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***scannerViewController = LegacyScannerViewController()
+***REMOVED***
 ***REMOVED******REMOVED***scannerViewController.delegate = context.coordinator
 ***REMOVED******REMOVED***return scannerViewController
 ***REMOVED***
@@ -117,7 +123,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***private var metadataObjectOverlayLayers = [MetadataObjectLayer]()
 ***REMOVED***
-***REMOVED***private var previewLayer: AVCaptureVideoPreviewLayer!
+***REMOVED***var previewLayer: AVCaptureVideoPreviewLayer!
 ***REMOVED***
 ***REMOVED***private var removeMetadataObjectOverlayLayersTimer: Timer?
 ***REMOVED***
@@ -128,6 +134,8 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string value of the targeted code.
 ***REMOVED***private var targetStringValue: String?
+***REMOVED***
+***REMOVED***private var videoRotationProvider: AnyObject?
 ***REMOVED***
 ***REMOVED***weak var delegate: ScannerViewControllerDelegate?
 ***REMOVED***
@@ -147,14 +155,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***override func viewDidLoad() {
 ***REMOVED******REMOVED***super.viewDidLoad()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-***REMOVED******REMOVED***NotificationCenter.default.addObserver(
-***REMOVED******REMOVED******REMOVED***self,
-***REMOVED******REMOVED******REMOVED***selector: #selector(updateVideoOrientation),
-***REMOVED******REMOVED******REMOVED***name: UIDevice.orientationDidChangeNotification,
-***REMOVED******REMOVED******REMOVED***object: nil
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return ***REMOVED***
 ***REMOVED******REMOVED***let videoInput: AVCaptureDeviceInput
@@ -209,6 +209,9 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
 ***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
 ***REMOVED******REMOVED***updateReticleAndAutoFocus()
+***REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED***videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func viewWillAppear(_ animated: Bool) {
@@ -216,11 +219,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***sessionQueue.async { [captureSession] in
 ***REMOVED******REMOVED******REMOVED***captureSession.startRunning()
 ***REMOVED***
-***REMOVED******REMOVED***updateVideoOrientation()
-***REMOVED***
-***REMOVED***
-***REMOVED***override func viewWillDisappear(_ animated: Bool) {
-***REMOVED******REMOVED***UIDevice.current.endGeneratingDeviceOrientationNotifications()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: AVCaptureMetadataOutputObjectsDelegate methods
@@ -414,22 +412,58 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***updateReticle(for: pointOfInterest)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@objc func updateVideoOrientation() {
-***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
-***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
-***REMOVED******REMOVED***switch deviceOrientation {
-***REMOVED******REMOVED***case .landscapeLeft:
-***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .landscapeRight
-***REMOVED******REMOVED***case .landscapeRight:
-***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .landscapeLeft
-***REMOVED******REMOVED***case .portraitUpsideDown:
-***REMOVED******REMOVED******REMOVED******REMOVED***/ It is best practice to only support `portraitUpsideDown` on iPadOS.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/uikit/uiviewcontroller/1621435-supportedinterfaceorientations
-***REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .pad {
-***REMOVED******REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portraitUpsideDown
+
+@available(iOS 17.0, *)
+@available(visionOS, unavailable)
+class RotationCoordinator {
+***REMOVED***private let rotationObservation: NSKeyValueObservation
+***REMOVED***
+***REMOVED***private let rotationCoordinator: AVCaptureDevice.RotationCoordinator
+***REMOVED***
+***REMOVED***init(videoCaptureDevice: AVCaptureDevice, previewLayer: AVCaptureVideoPreviewLayer) {
+***REMOVED******REMOVED***rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: videoCaptureDevice, previewLayer: previewLayer)
+***REMOVED******REMOVED***rotationObservation = rotationCoordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new]) { _, change in
+***REMOVED******REMOVED******REMOVED***if let angle = change.newValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***previewLayer.connection?.videoRotationAngle = angle
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***connection.videoOrientation = .portrait
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED*** MARK: Deprecated
+
+@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead.")
+@available(visionOS, unavailable)
+class LegacyScannerViewController: ScannerViewController {
+***REMOVED***override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+***REMOVED******REMOVED***super.viewWillTransition(to: size, with: coordinator)
+***REMOVED******REMOVED***updateRotation()
+***REMOVED***
+***REMOVED***
+***REMOVED***override func viewDidLoad() {
+***REMOVED******REMOVED***super.viewDidLoad()
+***REMOVED******REMOVED***updateRotation()
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateRotation() {
+***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
+***REMOVED******REMOVED***let interfaceOrientation = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.interfaceOrientation ?? .portrait
+***REMOVED******REMOVED***let newVideoOrientation = AVCaptureVideoOrientation(interfaceOrientation: interfaceOrientation)
+***REMOVED******REMOVED***connection.videoOrientation = newVideoOrientation
+***REMOVED***
+***REMOVED***
+
+@available(iOS, introduced: 16.0, deprecated: 17.0)
+@available(visionOS, unavailable)
+extension AVCaptureVideoOrientation {
+***REMOVED***init(interfaceOrientation: UIInterfaceOrientation) {
+***REMOVED******REMOVED***self = switch interfaceOrientation {
+***REMOVED******REMOVED***case .portraitUpsideDown: .portraitUpsideDown
+***REMOVED******REMOVED***case .landscapeLeft: .landscapeLeft
+***REMOVED******REMOVED***case .landscapeRight: .landscapeRight
+***REMOVED******REMOVED***default: .portrait
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

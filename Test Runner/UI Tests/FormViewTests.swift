@@ -1438,8 +1438,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 7.1: Test read only elements
 ***REMOVED***func testCase_7_1() throws {
-***REMOVED******REMOVED***try XCTSkipIf(true, "https:***REMOVED***devtopia.esri.com/runtime/apollo/issues/927")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
