@@ -1088,6 +1088,68 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 3.7: Unsupported value
+***REMOVED***func testCase_3_7() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Unsupported Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+***REMOVED******REMOVED***let firstOption = app.buttons["First"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
+***REMOVED******REMOVED***let optionsButton = app.images["Unsupported Value Options Button"]
+***REMOVED******REMOVED***let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value"]
+***REMOVED******REMOVED***let unsupportedValue = app.buttons["0"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"0"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***optionsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***unsupportedValueSectionHeader.waitForExistence(timeout: 1),
+***REMOVED******REMOVED******REMOVED***"The Unsupported Value section doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***unsupportedValue.exists,
+***REMOVED******REMOVED******REMOVED***"The Unsupported Value doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***noValueButton.exists,
+***REMOVED******REMOVED******REMOVED***"No Value doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***noValueButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***unsupportedValueSectionHeader.exists,
+***REMOVED******REMOVED******REMOVED***"The Unsupported Value section exists."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Test case 4: Radio Buttons input type
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 4.1: Test regular selection
