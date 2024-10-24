@@ -114,10 +114,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED***makePicker()
 ***REMOVED***
-***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED***isPresented = true
-***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***if let currentValue = element.codedValues.first(where: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
@@ -126,6 +122,10 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***unsupportedValue = element.formattedValue
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED***unsupportedValue = nil
