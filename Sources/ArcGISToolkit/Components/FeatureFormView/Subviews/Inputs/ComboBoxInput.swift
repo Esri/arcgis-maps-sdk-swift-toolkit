@@ -114,10 +114,6 @@ struct ComboBoxInput: View {
         .sheet(isPresented: $isPresented) {
             makePicker()
         }
-        .onTapGesture {
-            model.focusedElement = element
-            isPresented = true
-        }
         .onAppear {
             if let currentValue = element.codedValues.first(where: {
                 $0.name == element.formattedValue
@@ -126,6 +122,10 @@ struct ComboBoxInput: View {
             } else {
                 unsupportedValue = element.formattedValue
             }
+        }
+        .onTapGesture {
+            model.focusedElement = element
+            isPresented = true
         }
         .onChange(selectedValue) { selectedValue in
             unsupportedValue = nil
