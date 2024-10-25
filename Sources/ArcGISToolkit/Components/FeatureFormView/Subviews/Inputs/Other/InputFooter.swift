@@ -343,9 +343,9 @@ private extension RangeDomain {
 ***REMOVED******REMOVED***/ String representations of the numeric minimum and maximum value of the range domain.
 ***REMOVED***var displayableNumericMinAndMax: (min: String, max: String)? {
 ***REMOVED******REMOVED***if let min = minValue as? Float32, let max = maxValue as? Float32 {
-***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
+***REMOVED******REMOVED******REMOVED***return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
 ***REMOVED*** else if let min = minValue as? Float64, let max = maxValue as? Float64 {
-***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
+***REMOVED******REMOVED******REMOVED***return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
 ***REMOVED*** else if let min = minValue as? Int16, let max = maxValue as? Int16 {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
 ***REMOVED*** else if let min = minValue as? Int32, let max = maxValue as? Int32 {
