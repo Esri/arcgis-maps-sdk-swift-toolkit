@@ -135,9 +135,22 @@ extension FeatureFormView {
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
-            GroupView(element: element, viewCreator: { makeFieldElement($0) })
+            GroupView(element: element, viewCreator: { internalMakeElement($0) })
         case let element as TextFormElement:
-            TextFormElementView(element: element)
+            makeTextElement(element)
+        default:
+            EmptyView()
+        }
+    }
+
+    /// Makes UI for a field form element or a text form element.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
+        switch element {
+        case let element as FieldFormElement:
+            makeFieldElement(element)
+        case let element as TextFormElement:
+            makeTextElement(element)
         default:
             EmptyView()
         }
@@ -152,6 +165,13 @@ extension FeatureFormView {
         }
     }
     
+    /// Makes UI for a text form element including a divider beneath it.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
+        TextFormElementView(element: element)
+        Divider()
+    }
+
     /// The progress view to be shown while initial expression evaluation is running.
     ///
     /// This avoids flashing elements that may immediately be set hidden or have
