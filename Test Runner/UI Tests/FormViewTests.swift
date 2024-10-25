@@ -1091,15 +1091,12 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.7: Unsupported value
     func testCase_3_7() throws {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Unsupported Value"]
         let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
-        let firstOption = app.buttons["First"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         let noValueButton = app.buttons["No value"]
-        let optionsButton = app.images["Unsupported Value Options Button"]
-        let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value"]
+        let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
         app.launch()
@@ -1125,7 +1122,7 @@ final class FeatureFormViewTests: XCTestCase {
             "0"
         )
         
-        optionsButton.tap()
+        fieldValue.tap()
         
         XCTAssertTrue(
             unsupportedValueSectionHeader.waitForExistence(timeout: 1),
