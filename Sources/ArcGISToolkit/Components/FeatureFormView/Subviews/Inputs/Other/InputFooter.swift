@@ -230,7 +230,7 @@ extension InputFooter {
     
     /// The allowable numeric range the input.
     var numericRange: (min: String, max: String)? {
-        if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableMinAndMax {
+        if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableNumericMinAndMax {
             return minMax
         } else {
             return nil
@@ -340,15 +340,17 @@ extension InputFooter {
 }
 
 private extension RangeDomain {
-    /// String representations of the minimum and maximum value of the range domain.
-    var displayableMinAndMax: (min: String, max: String)? {
-        if let min = minValue as? Double, let max = maxValue as? Double {
-            return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
-        } else if let min = minValue as? Int, let max = maxValue as? Int {
+    /// String representations of the numeric minimum and maximum value of the range domain.
+    var displayableNumericMinAndMax: (min: String, max: String)? {
+        if let min = minValue as? Float32, let max = maxValue as? Float32 {
+            return (min.formatted(), max.formatted())
+        } else if let min = minValue as? Float64, let max = maxValue as? Float64 {
             return (min.formatted(), max.formatted())
         } else if let min = minValue as? Int16, let max = maxValue as? Int16 {
             return (min.formatted(), max.formatted())
         } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+            return (min.formatted(), max.formatted())
+        } else if let min = minValue as? Int64, let max = maxValue as? Int64 {
             return (min.formatted(), max.formatted())
         } else {
             return nil
