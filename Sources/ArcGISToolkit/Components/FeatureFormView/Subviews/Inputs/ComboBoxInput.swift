@@ -84,7 +84,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Combo Box Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(!selectedValue.isNoValue ? .primary : .secondary)
-***REMOVED******REMOVED******REMOVED***if !selectedValue.isNoValue, !isRequired {
+***REMOVED******REMOVED******REMOVED***if let _ = selectedValue.codedValue, !isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show clear button if we have a value
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
