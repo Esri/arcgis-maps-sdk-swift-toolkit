@@ -25,9 +25,6 @@ struct ComboBoxInput: View {
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
     
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
     /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
     
@@ -35,10 +32,7 @@ struct ComboBoxInput: View {
     @State private var isRequired = false
     
     /// The selected option.
-    @State private var selectedValue: CodedValue?
-    
-    /// The element's current value.
-    @State private var value: Any?
+    @State private var selectedValue: ComboBoxValue = .noValue
     
     /// The element the input belongs to.
     private let element: FieldFormElement
@@ -86,18 +80,18 @@ struct ComboBoxInput: View {
     
     var body: some View {
         HStack {
-            Text(selectedValue?.name ?? placeholderValue)
+            Text(displayedValue)
                 .accessibilityIdentifier("\(element.label) Combo Box Value")
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundColor(selectedValue != nil ? .primary : .secondary)
-            if selectedValue != nil, !isRequired {
+                .foregroundColor(!selectedValue.isNoValue ? .primary : .secondary)
+            if let _ = selectedValue.codedValue, !isRequired {
                 // Only show clear button if we have a value
                 // and we're not required. (i.e., Don't show clear if
                 // the field is required.)
                 ClearButton {
                     model.focusedElement = element
                     defer { model.focusedElement = nil }
-                    selectedValue = nil
+                    updateValue(nil)
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             } else {
@@ -108,32 +102,62 @@ struct ComboBoxInput: View {
             }
         }
         .formInputStyle()
-        // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
-        .sheet(isPresented: $isPresented) { [matchingValues] in
-            makePicker(for: matchingValues)
+        .onIsRequiredChange(of: element) { newIsRequired in
+            isRequired = newIsRequired
+        }
+        .onValueChange(of: element) { newValue, newFormattedValue in
+            if let currentValue = element.codedValues.first(where: {
+                $0.name == newFormattedValue
+            }) {
+                selectedValue = .codedValue(currentValue)
+            } else if newValue != nil {
+                selectedValue = .unsupportedValue(newFormattedValue)
+            } else {
+                selectedValue = .noValue
+            }
         }
         .onTapGesture {
             model.focusedElement = element
             isPresented = true
         }
-        .onChange(selectedValue) { selectedValue in
-            element.updateValue(selectedValue?.code)
-            model.evaluateExpressions()
-        }
-        .onValueChange(of: element) { newValue, newFormattedValue in
-            value = newValue
-            formattedValue = newFormattedValue
-            selectedValue = element.codedValues.first { $0.name == formattedValue }
-        }
-        .onIsRequiredChange(of: element) { newIsRequired in
-            isRequired = newIsRequired
+        .sheet(isPresented: $isPresented) {
+            makePicker()
         }
     }
+}
+
+extension ComboBoxInput {
+    var displayedValue: String {
+        switch selectedValue {
+        case .codedValue(let codedValue):
+            codedValue.name
+        case .unsupportedValue(let string):
+            string
+        case .noValue:
+            placeholderValue
+        }
+    }
+    
+    /// The placeholder value to display.
+    var placeholderValue: String {
+        guard !element.isRequired else {
+            return .enterValue
+        }
+        switch (noValueOption, noValueLabel.isEmpty) {
+        case (.show, true):
+            return .noValue
+        case (.show, false):
+            return noValueLabel
+        case (_, _):
+            return ""
+        }
+    }
+    
     
     /// The view that allows the user to filter and select coded values by name.
     ///
     /// Adds navigation context to support toolbar items and other visual elements in the picker.
-    func makePicker(for values: [CodedValue]) -> some View {
+    private func makePicker() -> some View {
         NavigationStack {
             VStack {
                 Text(element.description)
@@ -145,33 +169,29 @@ struct ComboBoxInput: View {
                 List {
                     if !element.isRequired {
                         if noValueOption == .show {
-                            HStack {
-                                Button {
-                                    selectedValue = nil
-                                } label: {
-                                    Text(noValueLabel.isEmpty ? String.noValue : noValueLabel)
-                                        .italic()
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                if selectedValue == nil {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.accentColor)
-                                }
+                            makePickerRow(
+                                label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
+                                selected: selectedValue.isNoValue
+                            ) {
+                                updateValue(nil)
                             }
+                            .italic()
+                            .foregroundStyle(.secondary)
                         }
                     }
-                    ForEach(values, id: \.self) { codedValue in
-                        HStack {
-                            Button(codedValue.name) {
-                                selectedValue = codedValue
-                            }
-                            Spacer()
-                            if codedValue == selectedValue {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.accentColor)
-                            }
+                    ForEach(matchingValues, id: \.self) { codedValue in
+                        makePickerRow(label: codedValue.name, selected: selectedValue.codedValue == codedValue) {
+                            updateValue(codedValue.code)
                         }
+                    }
+                    if let unsupportedValue = selectedValue.unsupportedValue {
+                        Section {
+                            makePickerRow(label: unsupportedValue, selected: true) { }
+                                .italic()
+                        } header: {
+                            Text.unsupportedValue
+                        }
+                        .accessibilityIdentifier("\(element.label) Unsupported Value Section")
                     }
                 }
                 .listStyle(.plain)
@@ -193,22 +213,21 @@ struct ComboBoxInput: View {
             }
         }
     }
-}
-
-extension ComboBoxInput {
-    /// The placeholder value to display.
-    var placeholderValue: String {
-        guard !element.isRequired else {
-            return .enterValue
+    
+    private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        HStack {
+            Button(label) { action() }
+            Spacer()
+            if selected {
+                Image(systemName: "checkmark")
+                    .foregroundColor(.accentColor)
+            }
         }
-        switch (noValueOption, noValueLabel.isEmpty) {
-        case (.show, true):
-            return .noValue
-        case (.show, false):
-            return noValueLabel
-        case (_, _):
-            return ""
-        }
+    }
+    
+    private func updateValue(_ value: (any Sendable)?) {
+        element.updateValue(value)
+        model.evaluateExpressions()
     }
 }
 
@@ -232,6 +251,14 @@ private extension Text {
             comment: "A label for a text entry field that allows the user to filter a list of values by name."
         )
     }
+    
+    static var unsupportedValue: Self {
+        .init(
+            "Unsupported Value",
+            bundle: .toolkitModule,
+            comment: "A label for a section in a list of possible values that contains a single value outside the list of valid values."
+        )
+    }
 }
 
 extension ArcGIS.CodedValue: Swift.Equatable {
@@ -243,5 +270,42 @@ extension ArcGIS.CodedValue: Swift.Equatable {
 extension ArcGIS.CodedValue: Swift.Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
+    }
+}
+
+private enum ComboBoxValue: Equatable {
+    case codedValue(CodedValue)
+    case noValue
+    /// The element's current (but unsupported) value.
+    ///
+    /// If the element has a value not in its domain, it has an unsupported value. This unsupported value is
+    /// present until the user selects a value within the element's domain.
+    case unsupportedValue(String)
+    
+    var codedValue: CodedValue? {
+        switch self {
+        case .codedValue(let codedValue):
+            codedValue
+        default:
+            nil
+        }
+    }
+    
+    var unsupportedValue: String? {
+        switch self {
+        case .unsupportedValue(let string):
+            string
+        default:
+            nil
+        }
+    }
+    
+    var isNoValue: Bool {
+        switch self {
+        case .noValue:
+            true
+        default:
+            false
+        }
     }
 }
