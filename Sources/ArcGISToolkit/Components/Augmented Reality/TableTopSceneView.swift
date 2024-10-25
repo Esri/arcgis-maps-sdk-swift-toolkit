@@ -53,8 +53,13 @@ public struct TableTopSceneView: View {
     /// Creates a table top scene view.
     /// - Parameters:
     ///   - anchorPoint: The location point of the ArcGIS Scene that is anchored on a physical surface.
-    ///   - translationFactor: The translation factor that defines how much the scene view translates
-    ///   as the device moves.
+    ///   - translationFactor: The translation factor that defines how much the scene view
+    ///   translates as the device moves. This value can be determined by dividing the virtual
+    ///   content width by the desired physical content width (translation factor = virtual content
+    ///   width / desired physical content width). The virtual content width is the real-world size
+    ///   of the scene content, and the desired physical content width is the physical tabletop
+    ///   width. The virtual content width is determined by the clipping distance in meters around
+    ///   the camera.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
