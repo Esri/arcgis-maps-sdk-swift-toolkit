@@ -1091,15 +1091,12 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test case 3.7: Unsupported value
 ***REMOVED***func testCase_3_7() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Unsupported Value"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
-***REMOVED******REMOVED***let firstOption = app.buttons["First"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
-***REMOVED******REMOVED***let optionsButton = app.images["Unsupported Value Options Button"]
-***REMOVED******REMOVED***let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value"]
+***REMOVED******REMOVED***let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
 ***REMOVED******REMOVED***let unsupportedValue = app.buttons["0"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -1125,7 +1122,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"0"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***optionsButton.tap()
+***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***unsupportedValueSectionHeader.waitForExistence(timeout: 1),

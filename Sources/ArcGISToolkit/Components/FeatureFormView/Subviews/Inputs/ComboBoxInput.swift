@@ -32,16 +32,7 @@ struct ComboBoxInput: View {
 ***REMOVED***@State private var isRequired = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
-***REMOVED***@State private var selectedValue: CodedValue?
-***REMOVED***
-***REMOVED******REMOVED***/ The element's current (but unsupported) value.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ If the element has a value not in its domain, it has an unsupported value. This unsupported value is
-***REMOVED******REMOVED***/ present until the user selects a value within the element's domain.
-***REMOVED***@State private var unsupportedValue: String?
-***REMOVED***
-***REMOVED******REMOVED***/ The element's current value.
-***REMOVED***@State private var value: Any?
+***REMOVED***@State private var selectedValue: ComboBoxValue = .noValue
 ***REMOVED***
 ***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
@@ -89,18 +80,18 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(unsupportedValue ?? selectedValue?.name ?? placeholderValue)
+***REMOVED******REMOVED******REMOVED***Text(displayedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Combo Box Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
-***REMOVED******REMOVED******REMOVED***if selectedValue != nil, !isRequired {
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(!selectedValue.isNoValue ? .primary : .secondary)
+***REMOVED******REMOVED******REMOVED***if !selectedValue.isNoValue, !isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show clear button if we have a value
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED*** else {
@@ -111,40 +102,62 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
-***REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED***makePicker()
+***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***if let currentValue = element.codedValues.first(where: {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name == newFormattedValue
 ***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = currentValue
-***REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***unsupportedValue = element.formattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = .codedValue(currentValue)
+***REMOVED******REMOVED*** else if newValue != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = .unsupportedValue(newFormattedValue)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = .noValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(selectedValue) { selectedValue in
-***REMOVED******REMOVED******REMOVED***unsupportedValue = nil
-***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
-***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED***makePicker()
 ***REMOVED***
-***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED***value = newValue
-***REMOVED******REMOVED******REMOVED***selectedValue = element.codedValues.first { $0.name == newFormattedValue ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
-***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED***
+
+extension ComboBoxInput {
+***REMOVED***var displayedValue: String {
+***REMOVED******REMOVED***switch selectedValue {
+***REMOVED******REMOVED***case .codedValue(let codedValue):
+***REMOVED******REMOVED******REMOVED***codedValue.name
+***REMOVED******REMOVED***case .unsupportedValue(let string):
+***REMOVED******REMOVED******REMOVED***string
+***REMOVED******REMOVED***case .noValue:
+***REMOVED******REMOVED******REMOVED***placeholderValue
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The placeholder value to display.
+***REMOVED***var placeholderValue: String {
+***REMOVED******REMOVED***guard !element.isRequired else {
+***REMOVED******REMOVED******REMOVED***return .enterValue
+***REMOVED***
+***REMOVED******REMOVED***switch (noValueOption, noValueLabel.isEmpty) {
+***REMOVED******REMOVED***case (.show, true):
+***REMOVED******REMOVED******REMOVED***return .noValue
+***REMOVED******REMOVED***case (.show, false):
+***REMOVED******REMOVED******REMOVED***return noValueLabel
+***REMOVED******REMOVED***case (_, _):
+***REMOVED******REMOVED******REMOVED***return ""
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view that allows the user to filter and select coded values by name.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Adds navigation context to support toolbar items and other visual elements in the picker.
-***REMOVED***func makePicker() -> some View {
+***REMOVED***private func makePicker() -> some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
@@ -158,26 +171,27 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if noValueOption == .show {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makePickerRow(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selected: selectedValue == nil && unsupportedValue == nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selected: selectedValue.isNoValue
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.italic()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(matchingValues, id: \.self) { codedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makePickerRow(label: codedValue.name, selected: codedValue == selectedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = codedValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makePickerRow(label: codedValue.name, selected: selectedValue.codedValue == codedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateValue(codedValue.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let unsupportedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let unsupportedValue = selectedValue.unsupportedValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makePickerRow(label: unsupportedValue, selected: true) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.italic()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** header: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.unsupportedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Unsupported Value Section")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
@@ -200,7 +214,7 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+***REMOVED***private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button(label) { action() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -211,21 +225,9 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-extension ComboBoxInput {
-***REMOVED******REMOVED***/ The placeholder value to display.
-***REMOVED***var placeholderValue: String {
-***REMOVED******REMOVED***guard !element.isRequired else {
-***REMOVED******REMOVED******REMOVED***return .enterValue
-***REMOVED***
-***REMOVED******REMOVED***switch (noValueOption, noValueLabel.isEmpty) {
-***REMOVED******REMOVED***case (.show, true):
-***REMOVED******REMOVED******REMOVED***return .noValue
-***REMOVED******REMOVED***case (.show, false):
-***REMOVED******REMOVED******REMOVED***return noValueLabel
-***REMOVED******REMOVED***case (_, _):
-***REMOVED******REMOVED******REMOVED***return ""
-***REMOVED***
+***REMOVED***private func updateValue(_ value: (any Sendable)?) {
+***REMOVED******REMOVED***element.updateValue(value)
+***REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 
@@ -268,5 +270,42 @@ extension ArcGIS.CodedValue: Swift.Equatable {
 extension ArcGIS.CodedValue: Swift.Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(name)
+***REMOVED***
+***REMOVED***
+
+private enum ComboBoxValue: Equatable {
+***REMOVED***case codedValue(CodedValue)
+***REMOVED***case noValue
+***REMOVED******REMOVED***/ The element's current (but unsupported) value.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If the element has a value not in its domain, it has an unsupported value. This unsupported value is
+***REMOVED******REMOVED***/ present until the user selects a value within the element's domain.
+***REMOVED***case unsupportedValue(String)
+***REMOVED***
+***REMOVED***var codedValue: CodedValue? {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .codedValue(let codedValue):
+***REMOVED******REMOVED******REMOVED***codedValue
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var unsupportedValue: String? {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .unsupportedValue(let string):
+***REMOVED******REMOVED******REMOVED***string
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var isNoValue: Bool {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .noValue:
+***REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
