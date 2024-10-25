@@ -1022,7 +1022,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 3.6: noValueOption is 'Hide'
 ***REMOVED***func testCase_3_6() throws {
-***REMOVED******REMOVED***try XCTSkipIf(true, "https:***REMOVED***devtopia.esri.com/runtime/apollo/issues/927")
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo No Value False"]
@@ -1051,10 +1050,17 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***fieldValue.label,
-***REMOVED******REMOVED******REMOVED***""
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if #available(iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED******REMOVED***fieldValue.exists,
+***REMOVED******REMOVED******REMOVED******REMOVED***"The field value exists but it should not because it is empty."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***optionsButton.tap()
 ***REMOVED******REMOVED***
