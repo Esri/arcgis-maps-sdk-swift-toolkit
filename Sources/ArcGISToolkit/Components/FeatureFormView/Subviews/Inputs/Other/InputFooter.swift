@@ -346,6 +346,8 @@ private extension RangeDomain {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
 ***REMOVED*** else if let min = minValue as? Int, let max = maxValue as? Int {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
+***REMOVED*** else if let min = minValue as? Int16, let max = maxValue as? Int16 {
+***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
 ***REMOVED*** else if let min = minValue as? Int32, let max = maxValue as? Int32 {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
 ***REMOVED*** else {
