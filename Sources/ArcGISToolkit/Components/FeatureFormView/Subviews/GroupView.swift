@@ -30,7 +30,7 @@ struct GroupView<Content>: View where Content: View {
     let element: GroupFormElement
     
     /// The closure to perform to build an element in the group.
-    let viewCreator: (FieldFormElement) -> Content
+    let viewCreator: (FormElement) -> Content
     
     /// Filters the group's elements by visibility.
     private func updateVisibleElements() {
@@ -40,11 +40,9 @@ struct GroupView<Content>: View where Content: View {
     var body: some View {
         Group {
             DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(visibleElements, id: \.label) { formElement in
-                    if let element = formElement as? FieldFormElement {
-                        viewCreator(element)
-                            .padding(.leading, 16)
-                    }
+                ForEach(visibleElements, id: \.self) { element in
+                    viewCreator(element)
+                        .padding(.leading, 16)
                 }
             } label: {
                 VStack {
