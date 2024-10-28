@@ -35,9 +35,10 @@ import SwiftUI
 ///
 /// A Field Element has a single input type object. The following are the supported input types:
 ///
-/// - Combo Box - long lists of coded value domains
+/// - Barcode - machine readable data
+/// - Combo Box - long list of values in a coded value domain
 /// - Date/Time - date/time picker
-/// - Radio Buttons - short lists of coded value domains
+/// - Radio Buttons - short list of values in a coded value domain
 /// - Switch - two mutually exclusive values
 /// - Text Area - multi-line text area
 /// - Text Box - single-line text box
