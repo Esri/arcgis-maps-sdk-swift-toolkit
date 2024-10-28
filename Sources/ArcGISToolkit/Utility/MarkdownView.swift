@@ -349,6 +349,71 @@ private extension Markup {
 ***REMOVED***
 ***REMOVED***
 
+extension Visitor {
+***REMOVED***func visitUnsupportedElement(_ markup: Markup) -> Result {
+***REMOVED******REMOVED***return .other(AnyView(EmptyView()))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitBlockDirective(_ blockDirective: BlockDirective) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(blockDirective)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitBlockQuote(_ blockQuote: BlockQuote) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(blockQuote)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitCustomBlock(_ customBlock: CustomBlock) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(customBlock)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitCustomInline(_ customInline: CustomInline) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(customInline)
+***REMOVED***
+***REMOVED***mutating func visitDoxygenParameter(_ doxygenParam: DoxygenParameter) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(doxygenParam)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitDoxygenReturns(_ doxygenReturns: DoxygenReturns) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(doxygenReturns)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitHTMLBlock(_ html: HTMLBlock) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(html)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitInlineAttributes(_ attributes: InlineAttributes) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(attributes)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitInlineHTML(_ inlineHTML: InlineHTML) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(inlineHTML)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitSymbolLink(_ symbolLink: SymbolLink) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(symbolLink)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTable(_ table: Markdown.Table) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(table)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableBody(_ tableBody: Markdown.Table.Body) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableBody)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableCell(_ tableCell: Markdown.Table.Cell) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableCell)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableHead(_ tableHead: Markdown.Table.Head) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableHead)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableRow(_ tableRow: Markdown.Table.Row) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableRow)
+***REMOVED***
+***REMOVED***
+
 #Preview {
 ***REMOVED***ScrollView {
 ***REMOVED******REMOVED***MarkdownView(markdown: """
