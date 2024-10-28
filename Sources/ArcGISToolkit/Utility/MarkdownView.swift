@@ -216,6 +216,12 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Note: Because all Markup elements are rendered into a `VStack` there's no need to insert an
+***REMOVED******REMOVED***/ additional line break.
+***REMOVED***mutating func visitSoftBreak(_ softBreak: SoftBreak) -> MarkdownResult {
+***REMOVED******REMOVED***.other(AnyView(EmptyView()))
+***REMOVED***
+***REMOVED***
 ***REMOVED***mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> Result {
 ***REMOVED******REMOVED***let children = visitChildren(strikethrough.children)
 ***REMOVED******REMOVED***if let text = children.text {
@@ -347,6 +353,8 @@ private extension Markup {
 ***REMOVED***ScrollView {
 ***REMOVED******REMOVED***MarkdownView(markdown: """
 ***REMOVED******REMOVED****Emphasis*
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Soft\nBreak
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***# Heading 1
 ***REMOVED******REMOVED***## Heading 2
