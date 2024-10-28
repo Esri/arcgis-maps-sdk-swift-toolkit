@@ -12,7 +12,7 @@ struct TableTopExampleView: View {
     var body: some View {
         TableTopSceneView(
             anchorPoint: anchorPoint,
-            translationFactor: 1_000,
+            translationFactor: 400,
             clippingDistance: 400
         )
     }
