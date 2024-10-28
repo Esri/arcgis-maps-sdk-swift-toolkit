@@ -35,9 +35,10 @@
 ***REMOVED***/
 ***REMOVED***/ A Field Element has a single input type object. The following are the supported input types:
 ***REMOVED***/
-***REMOVED***/ - Combo Box - long lists of coded value domains
+***REMOVED***/ - Barcode - machine readable data
+***REMOVED***/ - Combo Box - long list of values in a coded value domain
 ***REMOVED***/ - Date/Time - date/time picker
-***REMOVED***/ - Radio Buttons - short lists of coded value domains
+***REMOVED***/ - Radio Buttons - short list of values in a coded value domain
 ***REMOVED***/ - Switch - two mutually exclusive values
 ***REMOVED***/ - Text Area - multi-line text area
 ***REMOVED***/ - Text Box - single-line text box
