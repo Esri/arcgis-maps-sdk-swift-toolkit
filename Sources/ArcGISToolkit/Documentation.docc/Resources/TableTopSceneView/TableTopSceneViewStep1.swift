@@ -12,7 +12,7 @@ struct TableTopExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***TableTopSceneView(
 ***REMOVED******REMOVED******REMOVED***anchorPoint: anchorPoint,
-***REMOVED******REMOVED******REMOVED***translationFactor: 1_000,
+***REMOVED******REMOVED******REMOVED***translationFactor: 400,
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 400
 ***REMOVED******REMOVED***)
 ***REMOVED***
