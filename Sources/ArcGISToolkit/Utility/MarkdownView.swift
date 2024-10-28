@@ -349,6 +349,71 @@ private extension Markup {
     }
 }
 
+extension Visitor {
+    func visitUnsupportedElement(_ markup: Markup) -> Result {
+        return .other(AnyView(EmptyView()))
+    }
+    
+    mutating func visitBlockDirective(_ blockDirective: BlockDirective) -> MarkdownResult {
+        visitUnsupportedElement(blockDirective)
+    }
+    
+    mutating func visitBlockQuote(_ blockQuote: BlockQuote) -> MarkdownResult {
+        visitUnsupportedElement(blockQuote)
+    }
+    
+    mutating func visitCustomBlock(_ customBlock: CustomBlock) -> MarkdownResult {
+        visitUnsupportedElement(customBlock)
+    }
+    
+    mutating func visitCustomInline(_ customInline: CustomInline) -> MarkdownResult {
+        visitUnsupportedElement(customInline)
+    }
+    mutating func visitDoxygenParameter(_ doxygenParam: DoxygenParameter) -> MarkdownResult {
+        visitUnsupportedElement(doxygenParam)
+    }
+    
+    mutating func visitDoxygenReturns(_ doxygenReturns: DoxygenReturns) -> MarkdownResult {
+        visitUnsupportedElement(doxygenReturns)
+    }
+    
+    mutating func visitHTMLBlock(_ html: HTMLBlock) -> MarkdownResult {
+        visitUnsupportedElement(html)
+    }
+    
+    mutating func visitInlineAttributes(_ attributes: InlineAttributes) -> MarkdownResult {
+        visitUnsupportedElement(attributes)
+    }
+    
+    mutating func visitInlineHTML(_ inlineHTML: InlineHTML) -> MarkdownResult {
+        visitUnsupportedElement(inlineHTML)
+    }
+    
+    mutating func visitSymbolLink(_ symbolLink: SymbolLink) -> MarkdownResult {
+        visitUnsupportedElement(symbolLink)
+    }
+    
+    mutating func visitTable(_ table: Markdown.Table) -> MarkdownResult {
+        visitUnsupportedElement(table)
+    }
+    
+    mutating func visitTableBody(_ tableBody: Markdown.Table.Body) -> MarkdownResult {
+        visitUnsupportedElement(tableBody)
+    }
+    
+    mutating func visitTableCell(_ tableCell: Markdown.Table.Cell) -> MarkdownResult {
+        visitUnsupportedElement(tableCell)
+    }
+    
+    mutating func visitTableHead(_ tableHead: Markdown.Table.Head) -> MarkdownResult {
+        visitUnsupportedElement(tableHead)
+    }
+    
+    mutating func visitTableRow(_ tableRow: Markdown.Table.Row) -> MarkdownResult {
+        visitUnsupportedElement(tableRow)
+    }
+}
+
 #Preview {
     ScrollView {
         MarkdownView(markdown: """
