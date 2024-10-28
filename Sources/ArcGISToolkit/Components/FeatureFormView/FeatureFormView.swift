@@ -171,7 +171,7 @@ extension FeatureFormView {
         TextFormElementView(element: element)
         Divider()
     }
-
+    
     /// The progress view to be shown while initial expression evaluation is running.
     ///
     /// This avoids flashing elements that may immediately be set hidden or have
