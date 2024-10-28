@@ -142,7 +142,7 @@ extension FeatureFormView {
             EmptyView()
         }
     }
-
+    
     /// Makes UI for a field form element or a text form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
