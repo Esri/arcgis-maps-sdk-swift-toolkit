@@ -30,7 +30,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***let element: GroupFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform to build an element in the group.
-***REMOVED***let viewCreator: (FieldFormElement) -> Content
+***REMOVED***let viewCreator: (FormElement) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Filters the group's elements by visibility.
 ***REMOVED***private func updateVisibleElements() {
@@ -40,11 +40,9 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.label) { formElement in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 16)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.self) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 16)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {

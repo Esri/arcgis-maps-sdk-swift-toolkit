@@ -135,9 +135,22 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
-***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { makeFieldElement($0) ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { internalMakeElement($0) ***REMOVED***)
 ***REMOVED******REMOVED***case let element as TextFormElement:
-***REMOVED******REMOVED******REMOVED***TextFormElementView(element: element)
+***REMOVED******REMOVED******REMOVED***makeTextElement(element)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes UI for a field form element or a text form element.
+***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
+***REMOVED***@ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
+***REMOVED******REMOVED***switch element {
+***REMOVED******REMOVED***case let element as FieldFormElement:
+***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
+***REMOVED******REMOVED***case let element as TextFormElement:
+***REMOVED******REMOVED******REMOVED***makeTextElement(element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -150,6 +163,13 @@ extension FeatureFormView {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes UI for a text form element including a divider beneath it.
+***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
+***REMOVED***@ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
+***REMOVED******REMOVED***TextFormElementView(element: element)
+***REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The progress view to be shown while initial expression evaluation is running.
