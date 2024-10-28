@@ -58,8 +58,8 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/   content width by the desired physical content width (translation factor = virtual content
 ***REMOVED******REMOVED***/   width / desired physical content width). The virtual content width is the real-world size
 ***REMOVED******REMOVED***/   of the scene content, and the desired physical content width is the physical tabletop
-***REMOVED******REMOVED***/   width. The virtual content width is determined by the clipping distance in meters around
-***REMOVED******REMOVED***/   the camera.
+***REMOVED******REMOVED***/   width; both measurements should be in meters. The virtual content width is determined 
+***REMOVED******REMOVED***/   by the clipping distance in meters around the camera.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
