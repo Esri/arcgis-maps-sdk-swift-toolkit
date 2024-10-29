@@ -274,14 +274,14 @@ import Foundation
 ***REMOVED******REMOVED***/ - Parameter startingPoint: The starting point to be processed and added to the pending trace.
 ***REMOVED***func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
 ***REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED***  let globalid = feature.globalID else {
+***REMOVED******REMOVED******REMOVED***  let globalID = feature.globalID else {
 ***REMOVED******REMOVED******REMOVED***userAlert = .unableToIdentifyElement
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Block duplicate starting point selection
 ***REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
-***REMOVED******REMOVED******REMOVED***return startingPoint.utilityElement?.globalID == globalid
+***REMOVED******REMOVED******REMOVED***return startingPoint.utilityElement?.globalID == globalID
 ***REMOVED***) else {
 ***REMOVED******REMOVED******REMOVED***userAlert = .duplicateStartingPoint
 ***REMOVED******REMOVED******REMOVED***return
@@ -378,6 +378,9 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityElementTraceResult:
 ***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.elementResults = result.elements
+***REMOVED******REMOVED******REMOVED******REMOVED***if let features = try? await network.features(for: result.elements) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.featureResults = features
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityGeometryTraceResult:
 ***REMOVED******REMOVED******REMOVED******REMOVED***let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return Graphic(
@@ -439,7 +442,8 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Changes the selected state of the graphics for the completed trace at the provided index.
+***REMOVED******REMOVED***/ Changes the selection and visibility state of the graphics and feature results, as well the starting
+***REMOVED******REMOVED***/ points for the completed trace at the provided index.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - index: The index of the completed trace.
 ***REMOVED******REMOVED***/   - isSelected: The new selection state.
@@ -448,8 +452,18 @@ import Foundation
 ***REMOVED******REMOVED***to isSelected: Bool
 ***REMOVED***) {
 ***REMOVED******REMOVED***guard index >= 0, index <= completedTraces.count - 1 else { return ***REMOVED***
-***REMOVED******REMOVED***_ = completedTraces[index].graphics.map { $0.isSelected = isSelected ***REMOVED***
-***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map { $0.graphic?.isSelected = isSelected ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Toggle visibility of graphic results
+***REMOVED******REMOVED***_ = completedTraces[index].graphics.map { $0.isVisible = isSelected ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Toggle visibility/selection of starting points
+***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map {
+***REMOVED******REMOVED******REMOVED***$0.graphic?.isVisible = isSelected
+***REMOVED******REMOVED******REMOVED***$0.graphic?.isSelected = isSelected
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Toggle selection of feature results
+***REMOVED******REMOVED***completedTraces[index].toggleFeatureSelection(selected: isSelected)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes all graphics for the provided trace.
