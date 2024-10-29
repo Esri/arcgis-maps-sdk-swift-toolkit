@@ -216,6 +216,12 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Note: Because all Markup elements are rendered into a `VStack` there's no need to insert an
+***REMOVED******REMOVED***/ additional line break.
+***REMOVED***mutating func visitSoftBreak(_ softBreak: SoftBreak) -> MarkdownResult {
+***REMOVED******REMOVED***.other(AnyView(EmptyView()))
+***REMOVED***
+***REMOVED***
 ***REMOVED***mutating func visitStrikethrough(_ strikethrough: Strikethrough) -> Result {
 ***REMOVED******REMOVED***let children = visitChildren(strikethrough.children)
 ***REMOVED******REMOVED***if let text = children.text {
@@ -343,10 +349,77 @@ private extension Markup {
 ***REMOVED***
 ***REMOVED***
 
+extension Visitor {
+***REMOVED***func visitUnsupportedElement(_ markup: Markup) -> Result {
+***REMOVED******REMOVED***.other(AnyView(EmptyView()))
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitBlockDirective(_ blockDirective: BlockDirective) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(blockDirective)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitBlockQuote(_ blockQuote: BlockQuote) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(blockQuote)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitCustomBlock(_ customBlock: CustomBlock) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(customBlock)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitCustomInline(_ customInline: CustomInline) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(customInline)
+***REMOVED***
+***REMOVED***mutating func visitDoxygenParameter(_ doxygenParam: DoxygenParameter) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(doxygenParam)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitDoxygenReturns(_ doxygenReturns: DoxygenReturns) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(doxygenReturns)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitHTMLBlock(_ html: HTMLBlock) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(html)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitInlineAttributes(_ attributes: InlineAttributes) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(attributes)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitInlineHTML(_ inlineHTML: InlineHTML) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(inlineHTML)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitSymbolLink(_ symbolLink: SymbolLink) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(symbolLink)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTable(_ table: Markdown.Table) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(table)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableBody(_ tableBody: Markdown.Table.Body) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableBody)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableCell(_ tableCell: Markdown.Table.Cell) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableCell)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableHead(_ tableHead: Markdown.Table.Head) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableHead)
+***REMOVED***
+***REMOVED***
+***REMOVED***mutating func visitTableRow(_ tableRow: Markdown.Table.Row) -> MarkdownResult {
+***REMOVED******REMOVED***visitUnsupportedElement(tableRow)
+***REMOVED***
+***REMOVED***
+
 #Preview {
 ***REMOVED***ScrollView {
 ***REMOVED******REMOVED***MarkdownView(markdown: """
 ***REMOVED******REMOVED****Emphasis*
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Soft\nBreak
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***# Heading 1
 ***REMOVED******REMOVED***## Heading 2
