@@ -88,17 +88,12 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(action: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let imageName: String
-#if !os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***imageName = "xmark.circle"
-#else
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***imageName = "xmark"
-#endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return Image(systemName: imageName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 #if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.circle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 #endif
 ***REMOVED******REMOVED******REMOVED***
