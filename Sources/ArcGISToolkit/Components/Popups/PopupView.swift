@@ -88,17 +88,12 @@ public struct PopupView: View {
                     Button(action: {
                         isPresented?.wrappedValue = false
                     }, label: {
-                        let imageName: String
-#if !os(visionOS)
-                        imageName = "xmark.circle"
-#else
-                        imageName = "xmark"
-#endif
-                        return Image(systemName: imageName)
-                            .foregroundColor(.secondary)
-                            .padding([.top, .bottom, .trailing], 4)
+                        Image(systemName: "xmark")
                     })
 #if !os(visionOS)
+                    .foregroundColor(.secondary)
+                    .padding([.top, .bottom, .trailing], 4)
+                    .symbolVariant(.circle)
                     .buttonStyle(.plain)
 #endif
                 }
