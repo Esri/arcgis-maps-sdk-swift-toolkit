@@ -166,9 +166,13 @@ import Foundation
 ***REMOVED******REMOVED***/ Deletes the provided trace from the list of completed traces.
 ***REMOVED******REMOVED***/ - Parameter trace: The trace to be deleted.
 ***REMOVED***func deleteTrace(_ trace: Trace) {
+***REMOVED******REMOVED***if completedTraces.count > 1 {
+***REMOVED******REMOVED******REMOVED***selectPreviousTrace()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***selectedTraceIndex = nil
+***REMOVED***
 ***REMOVED******REMOVED***deleteGraphics(for: trace)
 ***REMOVED******REMOVED***completedTraces.removeAll { $0 == trace ***REMOVED***
-***REMOVED******REMOVED***selectPreviousTrace()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a feature for the given utility element
