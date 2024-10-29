@@ -351,7 +351,7 @@ private extension Markup {
 
 extension Visitor {
     func visitUnsupportedElement(_ markup: Markup) -> Result {
-        return .other(AnyView(EmptyView()))
+        .other(AnyView(EmptyView()))
     }
     
     mutating func visitBlockDirective(_ blockDirective: BlockDirective) -> MarkdownResult {
