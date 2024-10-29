@@ -20,7 +20,6 @@ internal import os
 
 ***REMOVED***/ A view model representing the combination of a `FeatureAttachment` and
 ***REMOVED***/ an associated `UIImage` used as a thumbnail.
-@available(visionOS, unavailable)
 @MainActor class AttachmentModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `FeatureAttachment`.
 ***REMOVED***nonisolated let attachment: FeatureAttachment
@@ -119,5 +118,4 @@ internal import os
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension AttachmentModel: Identifiable {***REMOVED***

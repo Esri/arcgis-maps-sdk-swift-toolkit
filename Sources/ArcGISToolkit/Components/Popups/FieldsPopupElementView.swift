@@ -73,7 +73,8 @@ struct FieldsPopupElementView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***if formattedValue.lowercased().starts(with: "http") {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(.init("[View](\(formattedValue))"))
+***REMOVED******REMOVED******REMOVED******REMOVED***Link("View", destination: URL(string: formattedValue)!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(formattedValue)
 ***REMOVED******REMOVED***

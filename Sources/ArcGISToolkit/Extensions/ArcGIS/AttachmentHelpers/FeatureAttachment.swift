@@ -16,7 +16,6 @@
 import UIKit
 
 ***REMOVED***/ The type of an attachment in a FeatureAttachment.
-@available(visionOS, unavailable)
 public enum FeatureAttachmentKind: Sendable {
 ***REMOVED******REMOVED***/ An attachment of another type.
 ***REMOVED***case other
@@ -30,7 +29,6 @@ public enum FeatureAttachmentKind: Sendable {
 ***REMOVED***case audio
 ***REMOVED***
 
-@available(visionOS, unavailable)
 public protocol FeatureAttachment: Loadable {
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***var featureAttachmentKind: FeatureAttachmentKind { get ***REMOVED***
@@ -68,7 +66,6 @@ public protocol FeatureAttachment: Loadable {
 ***REMOVED***func makeThumbnail(width: Int, height: Int) async throws -> UIImage
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension FeatureAttachmentKind {
 ***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
 ***REMOVED******REMOVED***/ - Parameter kind: The popup attachment kind.

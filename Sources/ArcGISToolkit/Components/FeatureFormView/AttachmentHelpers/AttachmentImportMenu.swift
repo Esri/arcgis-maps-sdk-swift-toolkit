@@ -20,7 +20,6 @@ import UniformTypeIdentifiers
 internal import os
 
 ***REMOVED***/ The context menu shown when the new attachment button is pressed.
-@available(visionOS, unavailable)
 struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentsFormElement
@@ -213,7 +212,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***/ A button that redirects the user to the application's entry in the iOS system Settings application.
 ***REMOVED***var appSettingsButton: some View {
