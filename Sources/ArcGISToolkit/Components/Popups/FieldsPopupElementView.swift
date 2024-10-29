@@ -73,7 +73,8 @@ struct FieldsPopupElementView: View {
         
         var body: some View {
             if formattedValue.lowercased().starts(with: "http") {
-                Text(.init("[View](\(formattedValue))"))
+                Link("View", destination: URL(string: formattedValue)!)
+                    .buttonStyle(.bordered)
             } else {
                 Text(formattedValue)
             }

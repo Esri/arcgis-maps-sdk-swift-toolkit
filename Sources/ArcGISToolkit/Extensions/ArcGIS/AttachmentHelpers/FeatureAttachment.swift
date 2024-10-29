@@ -16,7 +16,6 @@ import ArcGIS
 import UIKit
 
 /// The type of an attachment in a FeatureAttachment.
-@available(visionOS, unavailable)
 public enum FeatureAttachmentKind: Sendable {
     /// An attachment of another type.
     case other
@@ -30,7 +29,6 @@ public enum FeatureAttachmentKind: Sendable {
     case audio
 }
 
-@available(visionOS, unavailable)
 public protocol FeatureAttachment: Loadable {
     /// The type of the attachment.
     var featureAttachmentKind: FeatureAttachmentKind { get }
@@ -68,7 +66,6 @@ public protocol FeatureAttachment: Loadable {
     func makeThumbnail(width: Int, height: Int) async throws -> UIImage
 }
 
-@available(visionOS, unavailable)
 extension FeatureAttachmentKind {
     /// Creates a feature attachment kind from a popup attachment kind.
     /// - Parameter kind: The popup attachment kind.

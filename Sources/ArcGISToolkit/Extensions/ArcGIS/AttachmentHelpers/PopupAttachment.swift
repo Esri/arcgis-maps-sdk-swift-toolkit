@@ -15,7 +15,6 @@
 import ArcGIS
 import Foundation
 
-@available(visionOS, unavailable)
 extension PopupAttachment: FeatureAttachment {
     /// The type of the attachment.
     public var featureAttachmentKind: FeatureAttachmentKind {
