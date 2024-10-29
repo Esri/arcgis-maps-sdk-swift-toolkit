@@ -351,7 +351,7 @@ private extension Markup {
 
 extension Visitor {
 ***REMOVED***func visitUnsupportedElement(_ markup: Markup) -> Result {
-***REMOVED******REMOVED***return .other(AnyView(EmptyView()))
+***REMOVED******REMOVED***.other(AnyView(EmptyView()))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitBlockDirective(_ blockDirective: BlockDirective) -> MarkdownResult {
