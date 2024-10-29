@@ -85,11 +85,10 @@ public struct PopupView: View {
                 }
                 Spacer()
                 if showCloseButton {
-                    Button(action: {
+                    Button("Close", systemImage: "xmark") {
                         isPresented?.wrappedValue = false
-                    }, label: {
-                        Image(systemName: "xmark")
-                    })
+                    }
+                    .labelStyle(.iconOnly)
 #if !os(visionOS)
                     .foregroundColor(.secondary)
                     .padding([.top, .bottom, .trailing], 4)
