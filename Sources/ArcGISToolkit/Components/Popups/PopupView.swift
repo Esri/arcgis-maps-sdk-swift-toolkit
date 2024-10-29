@@ -85,7 +85,7 @@ public struct PopupView: View {
                 }
                 Spacer()
                 if showCloseButton {
-                    Button("Close", systemImage: "xmark") {
+                    Button(String.close, systemImage: "xmark") {
                         isPresented?.wrappedValue = false
                     }
                     .labelStyle(.iconOnly)
