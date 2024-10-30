@@ -14,7 +14,6 @@
 
 import ArcGIS
 
-@available(visionOS, unavailable)
 extension AttachmentsPopupElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
     public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {

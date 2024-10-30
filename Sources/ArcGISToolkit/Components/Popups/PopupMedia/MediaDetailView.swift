@@ -15,7 +15,6 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying a popup media in a large format.
-@available(visionOS, unavailable)
 struct MediaDetailView : View {
     /// The popup media to display.
     let popupMedia: PopupMedia
@@ -58,6 +57,7 @@ struct MediaDetailView : View {
                             UIApplication.shared.open(linkURL)
                         }
                     }
+                    .hoverEffect()
                     if popupMedia.value?.linkURL != nil {
                         HStack {
                             Text(

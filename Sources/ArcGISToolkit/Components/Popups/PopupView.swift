@@ -51,7 +51,6 @@ import ArcGIS
 /// and refer to
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 /// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
-@available(visionOS, unavailable)
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
     /// - Parameters:
@@ -86,14 +85,16 @@ public struct PopupView: View {
                 }
                 Spacer()
                 if showCloseButton {
-                    Button(action: {
+                    Button(String.close, systemImage: "xmark") {
                         isPresented?.wrappedValue = false
-                    }, label: {
-                        Image(systemName: "xmark.circle")
-                            .foregroundColor(.secondary)
-                            .padding([.top, .bottom, .trailing], 4)
-                    })
+                    }
+                    .labelStyle(.iconOnly)
+#if !os(visionOS)
+                    .foregroundColor(.secondary)
+                    .padding([.top, .bottom, .trailing], 4)
+                    .symbolVariant(.circle)
                     .buttonStyle(.plain)
+#endif
                 }
             }
             Divider()
@@ -155,7 +156,6 @@ public struct PopupView: View {
     }
 }
 
-@available(visionOS, unavailable)
 extension PopupView {
     private struct PopupElementList: View {
         let popupElements: [PopupElement]
@@ -183,7 +183,6 @@ extension PopupView {
     }
 }
 
-@available(visionOS, unavailable)
 extension PopupView {
     /// An object used to hold the result of evaluating the expressions of a popup.
     private final class Evaluation {
@@ -203,7 +202,6 @@ extension PopupView {
     }
 }
 
-@available(visionOS, unavailable)
 extension PopupView {
     /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
