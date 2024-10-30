@@ -62,9 +62,9 @@ import SwiftUI
     
     /// A Boolean value indicating if the pending trace is configured to the point that it can be run.
     var canRunTrace: Bool {
-        network != nil &&
-        pendingTrace.configuration != nil &&
-        !pendingTrace.startingPoints.isEmpty
+        network != nil
+        && pendingTrace.configuration != nil
+        && !pendingTrace.startingPoints.isEmpty
     }
     
     /// The map's utility networks.
