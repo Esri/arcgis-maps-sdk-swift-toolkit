@@ -457,7 +457,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED*** Toggle visibility of graphic results
 ***REMOVED******REMOVED***_ = completedTraces[index].graphics.map { $0.isVisible = isSelected ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Toggle visibility/selection of starting points
+***REMOVED******REMOVED******REMOVED*** Toggle visibility and selection of starting points
 ***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map {
 ***REMOVED******REMOVED******REMOVED***$0.graphic?.isVisible = isSelected
 ***REMOVED******REMOVED******REMOVED***$0.graphic?.isSelected = isSelected
