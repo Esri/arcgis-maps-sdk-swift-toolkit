@@ -16,11 +16,7 @@
 
 struct Examples: View {
 ***REMOVED******REMOVED***/ The list of example lists.  Allows for a hierarchical navigation model for examples.
-***REMOVED***let lists: [ExampleList] = [
-***REMOVED******REMOVED***.augmentedReality,
-***REMOVED******REMOVED***.geoview,
-***REMOVED******REMOVED***.views
-***REMOVED***]
+***REMOVED***let lists = makeExamples()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
@@ -32,8 +28,21 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***static func makeExamples() -> [ExampleList] {
+***REMOVED******REMOVED***let common: [ExampleList] = [
+***REMOVED******REMOVED******REMOVED***.geoview,
+***REMOVED******REMOVED******REMOVED***.views
+***REMOVED******REMOVED***]
+#if !targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***return [.augmentedReality] + common
+#else
+***REMOVED******REMOVED***return common
+#endif
+***REMOVED***
+***REMOVED***
 
 extension ExampleList {
+***REMOVED***@available(macCatalyst, unavailable)
 ***REMOVED***static let augmentedReality = Self(
 ***REMOVED******REMOVED***name: "Augmented Reality",
 ***REMOVED******REMOVED***examples: [
