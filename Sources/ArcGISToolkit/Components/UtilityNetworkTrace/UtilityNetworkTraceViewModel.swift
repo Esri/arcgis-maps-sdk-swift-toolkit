@@ -62,9 +62,9 @@ import Foundation
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the pending trace is configured to the point that it can be run.
 ***REMOVED***var canRunTrace: Bool {
-***REMOVED******REMOVED***network != nil &&
-***REMOVED******REMOVED***pendingTrace.configuration != nil &&
-***REMOVED******REMOVED***!pendingTrace.startingPoints.isEmpty
+***REMOVED******REMOVED***network != nil
+***REMOVED******REMOVED***&& pendingTrace.configuration != nil
+***REMOVED******REMOVED***&& !pendingTrace.startingPoints.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map's utility networks.
