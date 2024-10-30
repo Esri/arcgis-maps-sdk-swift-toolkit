@@ -275,14 +275,14 @@ import Foundation
 ***REMOVED******REMOVED***/ - Parameter startingPoint: The starting point to be processed and added to the pending trace.
 ***REMOVED***func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
 ***REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED***  let globalID = feature.globalID else {
+***REMOVED******REMOVED******REMOVED***  let globalid = feature.globalID else {
 ***REMOVED******REMOVED******REMOVED***userAlert = .unableToIdentifyElement
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Block duplicate starting point selection
 ***REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
-***REMOVED******REMOVED******REMOVED***return startingPoint.utilityElement?.globalID == globalID
+***REMOVED******REMOVED******REMOVED***return startingPoint.utilityElement?.globalID == globalid
 ***REMOVED***) else {
 ***REMOVED******REMOVED******REMOVED***userAlert = .duplicateStartingPoint
 ***REMOVED******REMOVED******REMOVED***return
