@@ -457,7 +457,7 @@ import SwiftUI
         // Toggle visibility of graphic results
         _ = completedTraces[index].graphics.map { $0.isVisible = isSelected }
         
-        // Toggle visibility/selection of starting points
+        // Toggle visibility and selection of starting points
         _ = completedTraces[index].startingPoints.map {
             $0.graphic?.isVisible = isSelected
             $0.graphic?.isSelected = isSelected
