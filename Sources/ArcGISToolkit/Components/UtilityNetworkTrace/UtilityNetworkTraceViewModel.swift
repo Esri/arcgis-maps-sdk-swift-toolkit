@@ -275,14 +275,14 @@ import SwiftUI
     /// - Parameter startingPoint: The starting point to be processed and added to the pending trace.
     func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
         guard let feature = startingPoint.geoElement as? ArcGISFeature,
-              let globalID = feature.globalID else {
+              let globalid = feature.globalID else {
             userAlert = .unableToIdentifyElement
             return
         }
         
         // Block duplicate starting point selection
         guard !pendingTrace.startingPoints.contains(where: { startingPoint in
-            return startingPoint.utilityElement?.globalID == globalID
+            return startingPoint.utilityElement?.globalID == globalid
         }) else {
             userAlert = .duplicateStartingPoint
             return
