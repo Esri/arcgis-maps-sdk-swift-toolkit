@@ -166,6 +166,7 @@ import SwiftUI
     /// Deletes the provided trace from the list of completed traces.
     /// - Parameter trace: The trace to be deleted.
     func deleteTrace(_ trace: Trace) {
+        trace.toggleFeatureSelection(selected: false)
         deleteGraphics(for: trace)
         completedTraces.removeAll { $0 == trace }
         selectPreviousTrace()
