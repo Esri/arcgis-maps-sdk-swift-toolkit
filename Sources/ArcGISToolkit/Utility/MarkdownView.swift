@@ -74,7 +74,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***mutating func visitChildren(_ children: MarkupChildren) -> Result {
 ***REMOVED******REMOVED***var results = [Result]()
-***REMOVED******REMOVED***var combinedText = SwiftUI.Text("")
+***REMOVED******REMOVED***var combinedText = SwiftUI.Text(verbatim: "")
 ***REMOVED******REMOVED***var isPureText = false
 ***REMOVED******REMOVED***var containsBreak = false
 ***REMOVED******REMOVED***children.forEach {
@@ -87,7 +87,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isPureText {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results.append(.text(combinedText))
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***combinedText = SwiftUI.Text("")
+***REMOVED******REMOVED******REMOVED******REMOVED***combinedText = SwiftUI.Text(verbatim: "")
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPureText = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***results.append(child)
 ***REMOVED******REMOVED***
@@ -170,7 +170,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitLineBreak(_ lineBreak: LineBreak) -> Result {
-***REMOVED******REMOVED***.text(SwiftUI.Text("\n"))
+***REMOVED******REMOVED***.text(SwiftUI.Text(verbatim: "\n"))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitLink(_ link: Markdown.Link) -> Result {
@@ -191,7 +191,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED***AnyView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results.indices, id: \.self) { index in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((index + 1).description) + Text(".")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((index + 1).description) + Text(verbatim: ".")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***results[index].resolve()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(
@@ -209,7 +209,7 @@ struct Visitor: MarkupVisitor {
 ***REMOVED******REMOVED******REMOVED***if paragraph.isInList {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return .text(text)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return .text(text + SwiftUI.Text("\n"))
+***REMOVED******REMOVED******REMOVED******REMOVED***return .text(text + SwiftUI.Text(verbatim: "\n"))
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return children
