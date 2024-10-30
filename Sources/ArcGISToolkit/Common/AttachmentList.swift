@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying a list of attachments, with a thumbnail, title, and download button.
-@available(visionOS, unavailable)
 struct AttachmentList: View {
 ***REMOVED******REMOVED***/ The attachment models displayed in the list.
 ***REMOVED***var attachmentModels: [AttachmentModel]
@@ -29,7 +28,6 @@ struct AttachmentList: View {
 ***REMOVED***
 
 ***REMOVED***/ A view representing a single row in an `AttachmentList`.
-@available(visionOS, unavailable)
 struct AttachmentRow: View  {
 ***REMOVED******REMOVED***/ The model representing the attachment to display.
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
@@ -66,7 +64,6 @@ struct AttachmentRow: View  {
 ***REMOVED***
 
 ***REMOVED***/ View displaying a button used to load an attachment.
-@available(visionOS, unavailable)
 struct AttachmentLoadButton: View  {
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED***
@@ -87,7 +84,9 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "square.and.arrow.down")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loaded:

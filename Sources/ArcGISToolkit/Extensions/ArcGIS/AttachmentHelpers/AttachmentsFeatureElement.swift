@@ -16,7 +16,6 @@
 import Foundation
 
 ***REMOVED***/ Indicates how to display the attachments.
-@available(visionOS, unavailable)
 public enum AttachmentsFeatureElementDisplayType: Sendable {
 ***REMOVED******REMOVED***/ Show attachments as links.
 ***REMOVED***case list
@@ -27,7 +26,6 @@ public enum AttachmentsFeatureElementDisplayType: Sendable {
 ***REMOVED***
 
 ***REMOVED***/ Common properties for elements which display feature attachments.
-@available(visionOS, unavailable)
 public protocol AttachmentsFeatureElement: Sendable {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
 ***REMOVED***var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get ***REMOVED***
@@ -44,7 +42,6 @@ public protocol AttachmentsFeatureElement: Sendable {
 ***REMOVED***var title: String { get ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***/ Creates a display type from an attachment popup element's display type.
 ***REMOVED******REMOVED***/ - Parameter kind: The display type of the popup element.

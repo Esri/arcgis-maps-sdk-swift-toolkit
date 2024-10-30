@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying chart popup media.
-@available(visionOS, unavailable)
 struct ChartMediaView: View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
@@ -62,6 +61,7 @@ struct ChartMediaView: View {
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***isShowingDetailView = true
 ***REMOVED***
+***REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED***.sheet(isPresented: $isShowingDetailView) {
 ***REMOVED******REMOVED******REMOVED***MediaDetailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,

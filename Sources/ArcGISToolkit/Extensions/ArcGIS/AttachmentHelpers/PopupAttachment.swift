@@ -15,7 +15,6 @@
 ***REMOVED***
 import Foundation
 
-@available(visionOS, unavailable)
 extension PopupAttachment: FeatureAttachment {
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***public var featureAttachmentKind: FeatureAttachmentKind {

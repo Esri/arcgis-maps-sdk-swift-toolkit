@@ -17,7 +17,6 @@ import QuickLook
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an `AttachmentsFeatureElement`.
-@available(visionOS, unavailable)
 struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
 ***REMOVED***let featureElement: AttachmentsFeatureElement
@@ -200,7 +199,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
 ***REMOVED***var displayTitle: String {
@@ -212,7 +210,6 @@ private extension AttachmentsFeatureElement {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED***/ The size of thumbnail images, based on the attachment display type
 ***REMOVED******REMOVED***/ and the current size class of the view.
@@ -238,7 +235,6 @@ extension AttachmentsFeatureElementView {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension View {
 ***REMOVED******REMOVED***/ Modifier for watching `AttachmentsFormElement.isEditable`.
 ***REMOVED******REMOVED***/ - Parameters:
