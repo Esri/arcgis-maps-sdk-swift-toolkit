@@ -88,7 +88,6 @@ internal import os
 /// In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
 /// - Since: 200.3
 @MainActor
-@available(visionOS, unavailable)
 public class JobManager: ObservableObject {
     /// The shared job manager.
     public static let `shared` = JobManager()
@@ -288,7 +287,6 @@ public class JobManager: ObservableObject {
 }
 
 /// An enum that defines a schedule for background status checks.
-@available(visionOS, unavailable)
 public enum BackgroundStatusCheckSchedule: Sendable {
     /// No background status checks will be requested.
     case disabled

@@ -24,6 +24,15 @@ extension String {
         )
     }
     
+    /// A localized string for the word "Close".
+    static var close: Self {
+        .init(
+            localized: "Close",
+            bundle: .toolkitModule,
+            comment: "A label for a button indicating that the view should be closed."
+        )
+    }
+    
     /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
     static var emptyAttachmentDownloadErrorMessage: Self {
         .init(

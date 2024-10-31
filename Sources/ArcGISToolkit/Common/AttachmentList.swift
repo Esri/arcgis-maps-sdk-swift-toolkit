@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view displaying a list of attachments, with a thumbnail, title, and download button.
-@available(visionOS, unavailable)
 struct AttachmentList: View {
     /// The attachment models displayed in the list.
     var attachmentModels: [AttachmentModel]
@@ -29,7 +28,6 @@ struct AttachmentList: View {
 }
 
 /// A view representing a single row in an `AttachmentList`.
-@available(visionOS, unavailable)
 struct AttachmentRow: View  {
     /// The model representing the attachment to display.
     @ObservedObject var attachmentModel: AttachmentModel
@@ -66,7 +64,6 @@ struct AttachmentRow: View  {
 }
 
 /// View displaying a button used to load an attachment.
-@available(visionOS, unavailable)
 struct AttachmentLoadButton: View  {
     @ObservedObject var attachmentModel: AttachmentModel
     
@@ -87,7 +84,9 @@ struct AttachmentLoadButton: View  {
                     Image(systemName: "square.and.arrow.down")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+#if !os(visionOS)
                         .foregroundColor(.accentColor)
+#endif
                 case .loading:
                     ProgressView()
                 case .loaded:

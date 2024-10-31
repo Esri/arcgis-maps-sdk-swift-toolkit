@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
-@available(visionOS, unavailable)
 struct AttachmentPreview: View {
     /// An action which scrolls the Carousel to the front.
     @Binding var scrollToNewAttachmentAction: (() -> Void)?
@@ -244,7 +243,6 @@ struct AttachmentPreview: View {
 }
 
 /// A view displaying details for popup media.
-@available(visionOS, unavailable)
 struct ThumbnailViewFooter: View {
     /// The popup media to display.
     @ObservedObject var attachmentModel: AttachmentModel
@@ -274,7 +272,6 @@ struct ThumbnailViewFooter: View {
     }
 }
 
-@available(visionOS, unavailable)
 private extension AttachmentPreview.AttachmentCell {
     /// An error message explaining attachments larger than the provided maximum cannot be downloaded.
     var maximumSizeDownloadExceededErrorMessage: Text {

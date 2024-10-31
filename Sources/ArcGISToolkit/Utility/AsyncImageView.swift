@@ -16,7 +16,6 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
-@available(visionOS, unavailable)
 public struct AsyncImageView: View {
     /// The `URL` of the image.
     private var url: URL?

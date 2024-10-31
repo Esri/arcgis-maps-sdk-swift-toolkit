@@ -74,7 +74,7 @@ struct Visitor: MarkupVisitor {
     
     mutating func visitChildren(_ children: MarkupChildren) -> Result {
         var results = [Result]()
-        var combinedText = SwiftUI.Text("")
+        var combinedText = SwiftUI.Text(verbatim: "")
         var isPureText = false
         var containsBreak = false
         children.forEach {
@@ -87,7 +87,7 @@ struct Visitor: MarkupVisitor {
                 if isPureText {
                     results.append(.text(combinedText))
                 }
-                combinedText = SwiftUI.Text("")
+                combinedText = SwiftUI.Text(verbatim: "")
                 isPureText = false
                 results.append(child)
             }
@@ -170,7 +170,7 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitLineBreak(_ lineBreak: LineBreak) -> Result {
-        .text(SwiftUI.Text("\n"))
+        .text(SwiftUI.Text(verbatim: "\n"))
     }
     
     mutating func visitLink(_ link: Markdown.Link) -> Result {
@@ -191,7 +191,7 @@ struct Visitor: MarkupVisitor {
             AnyView(
                 ForEach(results.indices, id: \.self) { index in
                     HStack(alignment: .firstTextBaseline) {
-                        Text((index + 1).description) + Text(".")
+                        Text((index + 1).description) + Text(verbatim: ".")
                         results[index].resolve()
                     }
                     .padding(
@@ -209,7 +209,7 @@ struct Visitor: MarkupVisitor {
             if paragraph.isInList {
                 return .text(text)
             } else {
-                return .text(text + SwiftUI.Text("\n"))
+                return .text(text + SwiftUI.Text(verbatim: "\n"))
             }
         } else {
             return children
