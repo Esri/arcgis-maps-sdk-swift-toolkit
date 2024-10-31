@@ -16,7 +16,6 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying chart popup media.
-@available(visionOS, unavailable)
 struct ChartMediaView: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
@@ -62,6 +61,7 @@ struct ChartMediaView: View {
         .onTapGesture {
             isShowingDetailView = true
         }
+        .hoverEffect()
         .sheet(isPresented: $isShowingDetailView) {
             MediaDetailView(
                 popupMedia: popupMedia,
