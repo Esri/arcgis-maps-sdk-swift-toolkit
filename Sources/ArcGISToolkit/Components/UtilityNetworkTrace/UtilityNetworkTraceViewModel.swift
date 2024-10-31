@@ -438,6 +438,10 @@ import SwiftUI
     
     /// Adds programatic starting points to the pending trace.
     private func addExternalStartingPoints() async {
+        pendingTrace.startingPoints.forEach { startingPoint in
+            deleteStartingPoint(startingPoint)
+        }
+        
         for startingPoint in externalStartingPoints {
             await processAndAdd(startingPoint: startingPoint)
         }
