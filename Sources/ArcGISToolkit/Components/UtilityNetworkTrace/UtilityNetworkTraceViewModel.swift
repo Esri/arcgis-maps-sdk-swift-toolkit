@@ -418,10 +418,20 @@ import SwiftUI
                 break
             }
         }
+        
+        // Save the starting points used in this trace
+        let previousStartingPoints = pendingTrace.startingPoints
+        
+        // Save the completed trace and select it
         completedTraces.append(pendingTrace)
         selectedTraceIndex = completedTraces.count - 1
+        
+        // Create and configure a new trace
         pendingTrace = Trace()
-        await addExternalStartingPoints()
+        for startingPoint in previousStartingPoints {
+            await processAndAdd(startingPoint: startingPoint)
+        }
+        
         return true
     }
     
