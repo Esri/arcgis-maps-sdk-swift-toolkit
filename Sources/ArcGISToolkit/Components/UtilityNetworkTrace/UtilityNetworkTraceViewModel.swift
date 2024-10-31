@@ -166,6 +166,7 @@ import SwiftUI
     /// Deletes the provided trace from the list of completed traces.
     /// - Parameter trace: The trace to be deleted.
     func deleteTrace(_ trace: Trace) {
+        trace.toggleFeatureSelection(selected: false)
         deleteGraphics(for: trace)
         completedTraces.removeAll { $0 == trace }
         selectPreviousTrace()
@@ -378,6 +379,9 @@ import SwiftUI
             switch result {
             case let result as UtilityElementTraceResult:
                 pendingTrace.elementResults = result.elements
+                if let features = try? await network.features(for: result.elements) {
+                    pendingTrace.featureResults = features
+                }
             case let result as UtilityGeometryTraceResult:
                 let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
                     return Graphic(
@@ -439,7 +443,8 @@ import SwiftUI
         }
     }
     
-    /// Changes the selected state of the graphics for the completed trace at the provided index.
+    /// Changes the selection and visibility state of the graphics and feature results, as well the starting
+    /// points for the completed trace at the provided index.
     /// - Parameters:
     ///   - index: The index of the completed trace.
     ///   - isSelected: The new selection state.
@@ -448,8 +453,18 @@ import SwiftUI
         to isSelected: Bool
     ) {
         guard index >= 0, index <= completedTraces.count - 1 else { return }
-        _ = completedTraces[index].graphics.map { $0.isSelected = isSelected }
-        _ = completedTraces[index].startingPoints.map { $0.graphic?.isSelected = isSelected }
+        
+        // Toggle visibility of graphic results
+        _ = completedTraces[index].graphics.map { $0.isVisible = isSelected }
+        
+        // Toggle visibility and selection of starting points
+        _ = completedTraces[index].startingPoints.map {
+            $0.graphic?.isVisible = isSelected
+            $0.graphic?.isSelected = isSelected
+        }
+        
+        // Toggle selection of feature results
+        completedTraces[index].toggleFeatureSelection(selected: isSelected)
     }
     
     /// Deletes all graphics for the provided trace.

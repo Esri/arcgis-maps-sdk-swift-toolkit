@@ -40,6 +40,11 @@ extension UtilityNetworkTraceViewModel {
         /// A collection of all elements returned in the trace.
         var elementResults = [UtilityElement]()
         
+        /// A collection of all feature results returned in the trace.
+        ///
+        /// Each feature corresponds to an element in `elementResults`.
+        var featureResults = [ArcGISFeature]()
+        
         /// A collection of utility trace function outputs.
         var functionOutputs = [UtilityTraceFunctionOutput]()
         
@@ -91,6 +96,20 @@ extension UtilityNetworkTraceViewModel.Trace {
     /// - Returns: The elements in the indicated group.
     func elements(inAssetGroupNamed assetGroupName: String) -> [UtilityElement] {
         elementResults.filter { $0.assetGroup.name == assetGroupName }
+    }
+    
+    /// Toggles the selection state on feature result.
+    /// - Parameter selected: A Boolean value indicating whether the feature is selected or not.
+    func toggleFeatureSelection(selected: Bool) {
+        featureResults.forEach { feature in
+            if let featureLayer = feature.table?.layer as? FeatureLayer {
+                if selected {
+                    featureLayer.selectFeature(feature)
+                } else {
+                    featureLayer.unselectFeature(feature)
+                }
+            }
+        }
     }
     
     /// A set of the asset group names returned by the trace.
