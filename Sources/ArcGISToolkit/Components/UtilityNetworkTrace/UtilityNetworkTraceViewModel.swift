@@ -418,10 +418,20 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save the starting points used in this trace
+***REMOVED******REMOVED***let previousStartingPoints = pendingTrace.startingPoints
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save the completed trace and select it
 ***REMOVED******REMOVED***completedTraces.append(pendingTrace)
 ***REMOVED******REMOVED***selectedTraceIndex = completedTraces.count - 1
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create and configure a new trace
 ***REMOVED******REMOVED***pendingTrace = Trace()
-***REMOVED******REMOVED***await addExternalStartingPoints()
+***REMOVED******REMOVED***for startingPoint in previousStartingPoints {
+***REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
