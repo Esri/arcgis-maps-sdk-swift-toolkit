@@ -531,6 +531,7 @@ public struct UtilityNetworkTrace: View {
             Button(String.deleteButtonLabel, role: .destructive) {
                 if let startingPoint = selectedStartingPoint {
                     viewModel.deleteStartingPoint(startingPoint)
+                    externalStartingPoints.removeAll { $0 == startingPoint }
                     currentActivity = .creatingTrace(.viewingStartingPoints)
                 }
             }
