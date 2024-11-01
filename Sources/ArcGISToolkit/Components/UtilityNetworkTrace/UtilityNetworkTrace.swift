@@ -863,6 +863,22 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***static var deleteAllStartingPoints: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Delete All Starting Points",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button used to delete all starting points on a pending utility network trace."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var deleteAllStartingPointsMessage: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "All starting points will be deleted.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message describing the outcome of clearing all starting points."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static var deleteButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Delete",
