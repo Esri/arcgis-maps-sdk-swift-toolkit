@@ -18,6 +18,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
+@available(macCatalyst, unavailable)
 final class ARTests: XCTestCase {
     @MainActor
     func testFlyoverLocationInitWithDefaults() throws {
