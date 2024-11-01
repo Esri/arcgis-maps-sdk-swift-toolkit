@@ -14,6 +14,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A reference to all of the sites defined in a floor aware map. */
 "All sites" = "All sites";
 
+/* A message describing the outcome of clearing all starting points. */
+"All starting points will be deleted." = "All starting points will be deleted.";
+
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
 
@@ -101,6 +104,9 @@ east, etc.). */
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Delete";
+
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "Delete All Starting Points";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Done";
