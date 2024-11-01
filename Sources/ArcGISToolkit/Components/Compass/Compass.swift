@@ -169,7 +169,6 @@ public extension Compass {
 ***REMOVED***
 ***REMOVED***
 
-@available(iOS 17.0, *)
 #Preview("Compass") {
 ***REMOVED***Compass(rotation: .zero) { ***REMOVED***
 ***REMOVED******REMOVED***.autoHideDisabled()
