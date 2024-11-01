@@ -863,6 +863,22 @@ private extension String {
         )
     }
     
+    static var deleteAllStartingPoints: Self {
+        .init(
+            localized: "Delete All Starting Points",
+            bundle: .toolkitModule,
+            comment: "A label for a button used to delete all starting points on a pending utility network trace."
+        )
+    }
+    
+    static var deleteAllStartingPointsMessage: Self {
+        .init(
+            localized: "All starting points will be deleted.",
+            bundle: .toolkitModule,
+            comment: "A message describing the outcome of clearing all starting points."
+        )
+    }
+    
     static var deleteButtonLabel: Self {
         .init(
             localized: "Delete",
