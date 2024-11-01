@@ -18,7 +18,6 @@ import ARKit
 import CoreLocation
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
-@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The clipping distance of the scene view.
@@ -297,7 +296,6 @@ public struct WorldScaleSceneView: View {
 #endif
 ***REMOVED***
 
-@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ The type of tracking configuration used by the view.
@@ -331,7 +329,6 @@ private extension ARGeoTrackingConfiguration {
 ***REMOVED***
 #endif
 
-@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 private extension WorldScaleSceneView {
 ***REMOVED***var calibrateLabel: String {
@@ -345,7 +342,6 @@ private extension WorldScaleSceneView {
 ***REMOVED***
 ***REMOVED***
 
-@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public extension WorldScaleSceneView {
 #if os(iOS)
