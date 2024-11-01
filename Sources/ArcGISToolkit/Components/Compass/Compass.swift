@@ -169,7 +169,6 @@ public extension Compass {
     }
 }
 
-@available(iOS 17.0, *)
 #Preview("Compass") {
     Compass(rotation: .zero) { }
         .autoHideDisabled()
