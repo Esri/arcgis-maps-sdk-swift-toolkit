@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Varmenne tarvitaan, jotta kohteen %@ sisältöä voidaan käyttää.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Å_Add New_______________ö";
+"Add New" = "Lisää uusi";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Lisäasetukset";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Liitteet";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Å_Attachments larger than %@ cannot be downloaded_________________________ö.";
+"Attachments larger than %@ cannot be downloaded." = "Liitteitä, joiden koko on suurempi kuin %@, ei voi ladata.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Ominaisuustiedot";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibrointi";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Å_Camera access is disabled__________________________ö";
+"Camera access is disabled" = "Kameran käyttöoikeus poistettu käytöstä";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Peruuta";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Å_Cancel Starting Point Selection_________________ö";
+"Cancel Starting Point Selection" = "Peruuta aloituspisteen valinta";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Varmenne vaaditaan";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Tyhjennä";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Å_Clear All Results__________________ö";
+"Clear All Results" = "Tyhjennä kaikki tulokset";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Väri";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "korkeus";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Å_Empty attachments cannot be downloaded_____________________ö.";
+"Empty attachments cannot be downloaded." = "Tyhjiä liitteitä ei voi ladata.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Å_Empty files are not supported_______________________________ö.";
+"Empty files are not supported." = "Tyhjiä tiedostoja ei tueta.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Suurempi kuin enimmäisarvo";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Å_Failed to access the certificate file____________________ö.";
+"Failed to access the certificate file." = "Varmennetiedostoa ei voitu käyttää.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Media";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Å_Microphone access has been disabled in Settings_________________________ö.";
+"Microphone access has been disabled in Settings." = "Mikrofonin käyttöoikeus on poistettu käytöstä Asetuksista.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Pienin sallittu merkkimäärä ei täyttynyt";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Uusi nimi";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Å_New Trace___________________ö";
+"New Trace" = "Uusi jäljitys";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Ei kirjanmerkkejä";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Salasana on pakollinen";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Å_Please enable camera access in settings_____________________ö.";
+"Please enable camera access in settings." = "Ota kameran käyttöoikeus käyttöön Asetuksista.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Anna valitun varmenteen salasana.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Ponnahdusikkunan arviointi epäonnistui: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Å_Record video only__________________ö";
+"Record video only" = "Vain videon tallennus";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Nimeä uudelleen";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Valitse palvelu";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Å_Select Network_______________ö";
+"Select Network" = "Valitse verkko";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Å_Select Trace Configuration___________________________ö";
+"Select Trace Configuration" = "Valitse jäljityksen määritys";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Å_Settings_________________ö";
+"Settings" = "Asetukset";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sivustot";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Tarkenna kohteeseen";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Å_Zoom To Result_______________ö";
+"Zoom To Result" = "Tarkenna tulokseen";
 

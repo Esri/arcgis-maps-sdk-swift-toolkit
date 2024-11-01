@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "%@ üzerindeki içeriğe erişmek için bir sertifika gerekiyor.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "ı_Add New_______________İ";
+"Add New" = "Yeni Ekle";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Gelişmiş Seçenekler";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Ekler";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "ı_Attachments larger than %@ cannot be downloaded_________________________İ.";
+"Attachments larger than %@ cannot be downloaded." = "%@'den büyük ekler indirilemez.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Öznitelikler";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibrasyon";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "ı_Camera access is disabled__________________________İ";
+"Camera access is disabled" = "Kamera erişimi devre dışı";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "İptal";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "ı_Cancel Starting Point Selection_________________İ";
+"Cancel Starting Point Selection" = "Başlangıç Noktası Seçimini İptal Et";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Sertifika Gerekli";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Temizle";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "ı_Clear All Results__________________İ";
+"Clear All Results" = "Tüm Sonuçları Temizle";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Renk";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "yükselti";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "ı_Empty attachments cannot be downloaded_____________________İ.";
+"Empty attachments cannot be downloaded." = "Boş ekler indirilemez.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "ı_Empty files are not supported_______________________________İ.";
+"Empty files are not supported." = "Boş dosyalar desteklenmez.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Maksimum değeri aşıyor";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "ı_Failed to access the certificate file____________________İ.";
+"Failed to access the certificate file." = "Sertifika dosyasına erişim sağlanamadı.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Ortam";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "ı_Microphone access has been disabled in Settings_________________________İ.";
+"Microphone access has been disabled in Settings." = "Mikrofon erişimi Ayarlar'da devre dışı bırakıldı.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Maksimum karakter uzunluğu karşılanmadı";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Yeni ad";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "ı_New Trace___________________İ";
+"New Trace" = "Yeni İz";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Yer işareti yok";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Parola Gerekiyor";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "ı_Please enable camera access in settings_____________________İ.";
+"Please enable camera access in settings." = "Lütfen ayarlarda kamera erişimini etkinleştirin.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Seçilen sertifika için lütfen bir parola girin.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Açılır menü değerlendirilemedi: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "ı_Record video only__________________İ";
+"Record video only" = "Yalnızca video kaydet";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Yeniden Adlandır";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Bir tesis seç";
 
 /* A label for button to select a utility network. */
-"Select Network" = "ı_Select Network_______________İ";
+"Select Network" = "Ağ Seç";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "ı_Select Trace Configuration___________________________İ";
+"Select Trace Configuration" = "İz Yapılandırması Seç";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "ı_Settings_________________İ";
+"Settings" = "Ayarlar";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Siteler";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Yakınlaştır";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "ı_Zoom To Result_______________İ";
+"Zoom To Result" = "Sonuca Yakınlaştır";
 
