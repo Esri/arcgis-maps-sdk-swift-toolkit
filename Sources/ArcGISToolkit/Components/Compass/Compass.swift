@@ -168,3 +168,16 @@ public extension Compass {
         return copy
     }
 }
+
+#Preview("Compass") {
+    Compass(rotation: .zero) { }
+        .autoHideDisabled()
+        .compassSize(size: 100)
+}
+
+#Preview("Compass - Right To Left") {
+    Compass(rotation: .zero) { }
+        .autoHideDisabled()
+        .compassSize(size: 100)
+        .environment(\.layoutDirection, .rightToLeft)
+}
