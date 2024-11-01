@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !os(visionOS) || !targetEnvironment(macCatalyst)
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
 import ArcGIS
 import SwiftUI
 import XCTest
