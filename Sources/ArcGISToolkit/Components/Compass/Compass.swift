@@ -169,6 +169,7 @@ public extension Compass {
 ***REMOVED***
 ***REMOVED***
 
+#if !os(visionOS)
 #Preview("Compass") {
 ***REMOVED***Compass(rotation: .zero) { ***REMOVED***
 ***REMOVED******REMOVED***.autoHideDisabled()
@@ -181,3 +182,4 @@ public extension Compass {
 ***REMOVED******REMOVED***.compassSize(size: 100)
 ***REMOVED******REMOVED***.environment(\.layoutDirection, .rightToLeft)
 ***REMOVED***
+#endif
