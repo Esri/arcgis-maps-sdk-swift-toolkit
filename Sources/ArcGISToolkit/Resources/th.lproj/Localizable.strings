@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "จำเป็นต้องใช้ใบรับรองในการเข้าถึงเนื้อหาบน %@";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "ก้_Add New_______________ษฺ";
+"Add New" = "เพิ่มใหม่";
 
 /* A section header for advanced options. */
 "Advanced Options" = "ตัวเลือกขั้นสูง";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "เอกสารแนบ";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "ก้_Attachments larger than %@ cannot be downloaded_________________________ษฺ.";
+"Attachments larger than %@ cannot be downloaded." = "ไม่สามารถดาวน์โหลดไฟล์แนบที่ใหญ่เกิน %@ ได้";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "ข้อมูลคุณลักษณะ";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "การปรับเทียบ";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "ก้_Camera access is disabled__________________________ษฺ";
+"Camera access is disabled" = "การเข้าถึงกล้องถูกปิดใช้งานไว้";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "ยกเลิก";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "ก้_Cancel Starting Point Selection_________________ษฺ";
+"Cancel Starting Point Selection" = "ยกเลิกการเลือกจุดเริ่มต้น";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "จำเป็นต้องใช้ใบรับรอง";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "ชัดเจน";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "ก้_Clear All Results__________________ษฺ";
+"Clear All Results" = "ล้างผลลัพธ์ทั้งหมด";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "สี";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "ความสูง";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "ก้_Empty attachments cannot be downloaded_____________________ษฺ.";
+"Empty attachments cannot be downloaded." = "ไม่สามารถดาวน์โหลดไฟล์แนบที่ว่างเปล่าได้";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "ก้_Empty files are not supported_______________________________ษฺ.";
+"Empty files are not supported." = "ไม่รองรับไฟล์เปล่า";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "เกินค่าสูงสุด";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "ก้_Failed to access the certificate file____________________ษฺ.";
+"Failed to access the certificate file." = "เข้าถึงไฟล์ใบรับรองไม่สำเร็จ";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "มีเดีย";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "ก้_Microphone access has been disabled in Settings_________________________ษฺ.";
+"Microphone access has been disabled in Settings." = "การเข้าถึงไมโครโฟนถูกปิดใช้งานไว้ใน การตั้งค่า";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "ไม่เป็นไปตามความยาวตัวอักขระขั้นต่ำ";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "ชื่อใหม่";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "ก้_New Trace___________________ษฺ";
+"New Trace" = "การติดตามใหม่";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "ไม่มีบุ๊กมาร์ก";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "จำเป็นต้องใช้รหัสผ่าน";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "ก้_Please enable camera access in settings_____________________ษฺ.";
+"Please enable camera access in settings." = "กรุณาเปิดใช้งานการเข้าถึงกล้องในการตั้งค่า";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "โปรดป้อนรหัสผ่านสำหรับใบรับรองที่เลือก";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "ประเมินผลป็อปอัพไม่สำเร็จ: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "ก้_Record video only__________________ษฺ";
+"Record video only" = "บันทึกวิดีโอเท่านั้น";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "เปลี่ยนชื่อ";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "เลือกสิ่งอำนวยความสะดวก";
 
 /* A label for button to select a utility network. */
-"Select Network" = "ก้_Select Network_______________ษฺ";
+"Select Network" = "เลือกเครือข่าย";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "ก้_Select Trace Configuration___________________________ษฺ";
+"Select Trace Configuration" = "เลือก การกำหนดค่าการติดตาม";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "ก้_Settings_________________ษฺ";
+"Settings" = "การตั้งค่า";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "เว็บไซต์";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "ซูมไปยัง";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "ก้_Zoom To Result_______________ษฺ";
+"Zoom To Result" = "ซูมไปยังผลลัพธ์";
 

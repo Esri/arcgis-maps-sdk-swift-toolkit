@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Sertifikat je potreban za pristup na %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Č_Add New_______________ž";
+"Add New" = "Dodaj novi";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Napredne opcije";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Prilozi";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Č_Attachments larger than %@ cannot be downloaded_________________________ž.";
+"Attachments larger than %@ cannot be downloaded." = "Prilozi veći od %@ ne mogu da se preuzimaju.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atributi";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibracija";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Č_Camera access is disabled__________________________ž";
+"Camera access is disabled" = "Pristup kameri je onemogućen";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Otkaži";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Č_Cancel Starting Point Selection_________________ž";
+"Cancel Starting Point Selection" = "Otkaži izbor početne tačke";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Potreban je sertifikat";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Obriši";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Č_Clear All Results__________________ž";
+"Clear All Results" = "Obriši sve rezultate";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Boja";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "elevacija";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Č_Empty attachments cannot be downloaded_____________________ž.";
+"Empty attachments cannot be downloaded." = "Prazni prilozi ne mogu da se preuzimaju.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Č_Empty files are not supported_______________________________ž.";
+"Empty files are not supported." = "Prazne datoteke nisu podržane.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Prekoračuje maksimalnu vrednost";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Č_Failed to access the certificate file____________________ž.";
+"Failed to access the certificate file." = "Pristup datoteci sertifikata nije uspeo.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Mediji";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Č_Microphone access has been disabled in Settings_________________________ž.";
+"Microphone access has been disabled in Settings." = "Pristup mikrofonu je onemogućen u meniju Postavke.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimalna dužina karaktera nije ispunjena";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Novi naziv";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Č_New Trace___________________ž";
+"New Trace" = "Novo praćenje";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Bez obeleživača";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Lozinka je obavezna";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Č_Please enable camera access in settings_____________________ž.";
+"Please enable camera access in settings." = "Omogućite pristup kameri u postavkama.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Molimo unesite lozinku za odabrani sertifikat.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Iskačuća evaluacija neuspešna: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Č_Record video only__________________ž";
+"Record video only" = "Snimaj samo video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Preimenuj";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Izaberite objekat";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Č_Select Network_______________ž";
+"Select Network" = "Izaberite mrežu";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Č_Select Trace Configuration___________________________ž";
+"Select Trace Configuration" = "Izaberite konfiguraciju praćenja";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Č_Settings_________________ž";
+"Settings" = "Postavke";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sajtovi";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Zumiraj do";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Č_Zoom To Result_______________ž";
+"Zoom To Result" = "Zumiraj na rezultat";
 
