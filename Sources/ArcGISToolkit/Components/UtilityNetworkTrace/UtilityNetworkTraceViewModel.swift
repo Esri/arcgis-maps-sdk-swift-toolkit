@@ -449,10 +449,13 @@ import Foundation
 ***REMOVED******REMOVED***/ Adds programatic starting points to the pending trace.
 ***REMOVED***private func addExternalStartingPoints() async {
 ***REMOVED******REMOVED***pendingTrace.startingPoints.forEach { startingPoint in
-***REMOVED******REMOVED******REMOVED***deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED******REMOVED***if startingPoint.isExternalStartingPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED***deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***for startingPoint in externalStartingPoints {
+***REMOVED******REMOVED***for var startingPoint in externalStartingPoints {
+***REMOVED******REMOVED******REMOVED***startingPoint.isExternalStartingPoint = true
 ***REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
 ***REMOVED***
 ***REMOVED***
