@@ -18,6 +18,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
+@available(macCatalyst, unavailable)
 final class ARTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testFlyoverLocationInitWithDefaults() throws {
