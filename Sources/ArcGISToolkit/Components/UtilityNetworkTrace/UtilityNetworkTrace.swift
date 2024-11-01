@@ -291,7 +291,7 @@ public struct UtilityNetworkTrace: View {
                         .catalystPadding(4)
                 }
             }
-            Section(String.startingPointsTitle) {
+            Section {
                 Button(String.addNewButtonLabel) {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                     activeDetent = .summary
@@ -312,6 +312,31 @@ public struct UtilityNetworkTrace: View {
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
                         .catalystPadding(4)
+                    }
+                }
+            } header: {
+                HStack {
+                    Text(String.startingPointsTitle)
+                    if !viewModel.pendingTrace.startingPoints.isEmpty {
+                        Spacer()
+                        Button(String.deleteAllStartingPoints, systemImage: "trash") {
+                            deleteAllStartingPointsConfirmationIsPresented = true
+                        }
+                        .buttonStyle(.plain)
+                        .labelStyle(.iconOnly)
+                        .confirmationDialog(
+                            String.deleteAllStartingPoints,
+                            isPresented: $deleteAllStartingPointsConfirmationIsPresented
+                        ) {
+                            Button(String.deleteAllStartingPoints, role: .destructive) {
+                                viewModel.pendingTrace.startingPoints.forEach { startingPoint in
+                                    viewModel.deleteStartingPoint(startingPoint)
+                                    externalStartingPoints.removeAll()
+                                }
+                            }
+                        } message: {
+                            Text(String.deleteAllStartingPointsMessage)
+                        }
                     }
                 }
             }
