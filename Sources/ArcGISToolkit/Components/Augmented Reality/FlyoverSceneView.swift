@@ -17,6 +17,7 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality fly over experience.
+@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public struct FlyoverSceneView: View {
 #if os(iOS)
