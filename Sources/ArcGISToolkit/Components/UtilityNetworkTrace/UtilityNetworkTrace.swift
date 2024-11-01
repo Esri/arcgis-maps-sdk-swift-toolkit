@@ -112,6 +112,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the "Delete All Starting Points" confirmation is presented.
+***REMOVED***@State private var deleteAllStartingPointsConfirmationIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
 ***REMOVED***@State private var shouldZoomOnTraceCompletion = false
 ***REMOVED***
