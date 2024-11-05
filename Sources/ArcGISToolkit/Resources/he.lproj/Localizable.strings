@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "אישור נדרש כדי לגשת לתוכן ב-%@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "כן_Add New_______________ש";
+"Add New" = "הוסף חדש";
 
 /* A section header for advanced options. */
 "Advanced Options" = "אפשרויות מתקדמות";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "קבצים מצורפים";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "כן_Attachments larger than %@ cannot be downloaded_________________________ש.";
+"Attachments larger than %@ cannot be downloaded." = "לא ניתן להוריד צרופות גדולות מ-%@.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "מאפיינים";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "כיול";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "כן_Camera access is disabled__________________________ש";
+"Camera access is disabled" = "הגישה למצלמה מושבתת";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "ביטול";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "כן_Cancel Starting Point Selection_________________ש";
+"Cancel Starting Point Selection" = "בטל בחירת נקודת התחלה";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "נדרש אישור";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "נקה";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "כן_Clear All Results__________________ש";
+"Clear All Results" = "נקה את כל התוצאות";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "צבע";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "גובה";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "כן_Empty attachments cannot be downloaded_____________________ש.";
+"Empty attachments cannot be downloaded." = "לא ניתן להוריד צרופות ריקות.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "כן_Empty files are not supported_______________________________ש.";
+"Empty files are not supported." = "קבצים ריקים לא נתמכים.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "חורג מהערך המקסימלי";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "כן_Failed to access the certificate file____________________ש.";
+"Failed to access the certificate file." = "הניסיון לגשת לקובץ האישור נכשל.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "מדיה";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "כן_Microphone access has been disabled in Settings_________________________ש.";
+"Microphone access has been disabled in Settings." = "הגישה למיקרופון הושבתה בהגדרות.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "לא הגעת לאורך התווים המינימלי";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "שם חדש";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "כן_New Trace___________________ש";
+"New Trace" = "מעקב חדש";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "אין סימניות";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "נדרשת סיסמה";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "כן_Please enable camera access in settings_____________________ש.";
+"Please enable camera access in settings." = "הפעל גישה למצלמה בהגדרות.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "הזן סיסמה עבור האישור שנבחר.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "הערכת חלון קופץ נכשלה: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "כן_Record video only__________________ש";
+"Record video only" = "הקלט וידאו בלבד";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "שנה שם";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "בחר מתקן";
 
 /* A label for button to select a utility network. */
-"Select Network" = "כן_Select Network_______________ש";
+"Select Network" = "בחר רשת";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "כן_Select Trace Configuration___________________________ש";
+"Select Trace Configuration" = "בחר תצורת מעקב";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "כן_Settings_________________ש";
+"Settings" = "הגדרות";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "אתרים";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "בצע זום אל";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "כן_Zoom To Result_______________ש";
+"Zoom To Result" = "זום לתוצאה";
 

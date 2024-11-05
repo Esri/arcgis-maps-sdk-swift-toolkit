@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Pro přístup k obsahu na %@ je vyžadován certifikát.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Ř_Add New_______________ů";
+"Add New" = "Přidat novou";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Pokročilé možnosti";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Přílohy";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Ř_Attachments larger than %@ cannot be downloaded_________________________ů.";
+"Attachments larger than %@ cannot be downloaded." = "Přílohy větší než %@ nelze stáhnout.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atributy";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibrace";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Ř_Camera access is disabled__________________________ů";
+"Camera access is disabled" = "Přístup k fotoaparátu byl zakázán";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Storno";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Ř_Cancel Starting Point Selection_________________ů";
+"Cancel Starting Point Selection" = "Zrušit výběr výchozího bodu";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Vyžadován certifikát";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Vymazat";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Ř_Clear All Results__________________ů";
+"Clear All Results" = "Vymazat všechny výsledky";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Barva";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "nadmořská výška";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Ř_Empty attachments cannot be downloaded_____________________ů.";
+"Empty attachments cannot be downloaded." = "Prázdné přílohy nelze stáhnout.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Ř_Empty files are not supported_______________________________ů.";
+"Empty files are not supported." = "Prázdné soubory nejsou podporovány.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Překračuje maximální hodnotu";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Ř_Failed to access the certificate file____________________ů.";
+"Failed to access the certificate file." = "Nepodařilo se získat přístup k souboru certifikátu.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Multimédia";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Ř_Microphone access has been disabled in Settings_________________________ů.";
+"Microphone access has been disabled in Settings." = "Přístup k mikrofonu byl zakázán v části Nastavení.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Nebyl dodržen minimální počet znaků";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Nový název";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Ř_New Trace___________________ů";
+"New Trace" = "Nové trasování";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Žádné záložky";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Je vyžadováno heslo";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Ř_Please enable camera access in settings_____________________ů.";
+"Please enable camera access in settings." = "Povolte přístup k fotoaparátu v části Nastavení.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Zadejte prosím heslo pro zvolený certifikát.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Vyhodnocení vyskakovacího okna se nezdařilo: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Ř_Record video only__________________ů";
+"Record video only" = "Pouze záznam videa";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Přejmenovat";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Vybrat zařízení";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Ř_Select Network_______________ů";
+"Select Network" = "Vybrat síť";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Ř_Select Trace Configuration___________________________ů";
+"Select Trace Configuration" = "Vybrat konfiguraci trasování";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Ř_Settings_________________ů";
+"Settings" = "Nastavení";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Místa";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Přiblížit na";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Ř_Zoom To Result_______________ů";
+"Zoom To Result" = "Příblížit na výsledek";
 
