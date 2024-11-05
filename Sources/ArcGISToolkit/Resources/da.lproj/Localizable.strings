@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Et certifikat er påkrævet for at få adgang til indhold på %@.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Tilføj ny";
+"Add New" = "Tilføj ny";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Avancerede indstillinger";
@@ -22,6 +22,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Vedhæftninger";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "Vedhæftede filer, der er større end %@ kan ikke downloades.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atributter";
@@ -42,11 +45,14 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "Kalibrering";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "Kameraadgang er deaktiveret";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Annullér";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Annullér valg af startpunkt";
+"Cancel Starting Point Selection" = "Annuller valg af startpunkt";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certifikat påkrævet";
@@ -64,7 +70,7 @@ for the AR experience. */
 "Clear" = "Ryd";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Ryd alle resultater";
+"Clear All Results" = "Ryd alle resultater";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Farve";
@@ -77,9 +83,6 @@ east, etc.). */
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Fortsæt";
-
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Kunne ikke få adgang til certifikatfilen.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Advarsel: Certifikatet angivet af '%@' er ikke signeret af en pålidelig myndighed.";
@@ -113,6 +116,12 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "højde";
+
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "Tomme vedhæftede filer kan ikke downloades.";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "Tomme filer understøttes ikke.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -152,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "Overskrider maksimumværdien";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "Kunne ikke få adgang til certifikatfilen.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -204,6 +216,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Medier";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "Mikrofonadgang er blevet deaktiveret under Indstillinger.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimumtegnlængde ikke overholdt";
 
@@ -220,7 +235,7 @@ AR experience. */
 "New name" = "Nyt navn";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Ny sporing";
+"New Trace" = "Ny sporing";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Ingen bogmærker";
@@ -243,9 +258,6 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Ingen værdi";
 
-/* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Ingen valgt";
-
 /* A trace function output result was not provided. */
 "Not Available" = "Ikke tilgængelig";
 
@@ -264,6 +276,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Adgangskode kræves";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "Aktivér kamera under Indstillinger.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Indtast adgangskode til det valgte certifikat.";
 
@@ -278,6 +293,9 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Evaluering af pop-up mislykkedes: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "Optag kun video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Omdøb";
@@ -305,6 +323,15 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Vælg en facilitet";
+
+/* A label for button to select a utility network. */
+"Select Network" = "Vælg netværk";
+
+/* A label for button to select a utility network trace configuration. */
+"Select Trace Configuration" = "Vælg sporingskonfiguration";
+
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "Indstillinger";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Websteder";
@@ -426,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Zoom til";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Zoom til resultat";
+"Zoom To Result" = "Zoom til resultat";
 
