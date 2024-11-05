@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Cần có chứng chỉ để truy cập nội dung trên %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Đ_Add New_______________ớ";
+"Add New" = "Thêm Mới";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Tùy chọn Nâng cao";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Các tệp đính kèm";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Đ_Attachments larger than %@ cannot be downloaded_________________________ớ.";
+"Attachments larger than %@ cannot be downloaded." = "Không thể tải xuống tệp đính kèm lớn hơn %@.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Thuộc tính";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Hiệu chuẩn";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Đ_Camera access is disabled__________________________ớ";
+"Camera access is disabled" = "Quyền truy cập camera bị tắt";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Hủy";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Đ_Cancel Starting Point Selection_________________ớ";
+"Cancel Starting Point Selection" = "Hủy Lựa chọn Điểm Bắt đầu";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Yêu cầu Chứng chỉ";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Xóa";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Đ_Clear All Results__________________ớ";
+"Clear All Results" = "Xóa Tất cả Kết quả";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Màu sắc";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "độ cao";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Đ_Empty attachments cannot be downloaded_____________________ớ.";
+"Empty attachments cannot be downloaded." = "Không thể tải xuống tệp đính kèm rỗng.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Đ_Empty files are not supported_______________________________ớ.";
+"Empty files are not supported." = "Không hỗ trợ tệp rỗng.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Vượt quá giá trị tối đa";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Đ_Failed to access the certificate file____________________ớ.";
+"Failed to access the certificate file." = "Không thể truy cập tệp chứng chỉ.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Phương tiện truyền thông";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Đ_Microphone access has been disabled in Settings_________________________ớ.";
+"Microphone access has been disabled in Settings." = "Quyền truy cập micrô bị tắt trong Thiết lập.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Chưa đáp ứng độ dài ký tự tối thiểu";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Tên mới";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Đ_New Trace___________________ớ";
+"New Trace" = "Theo dõi Mới";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Không có đánh dấu phạm vi nào";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Cần mật khẩu";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Đ_Please enable camera access in settings_____________________ớ.";
+"Please enable camera access in settings." = "Vui lòng bật quyền truy cập camera trong thiết lập.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Vui lòng nhập mật khẩu cho chứng chỉ được chọn.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Không thể đánh giá popup: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Đ_Record video only__________________ớ";
+"Record video only" = "Chỉ quay video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Đổi tên";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Chọn một cơ sở";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Đ_Select Network_______________ớ";
+"Select Network" = "Chọn Mạng";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Đ_Select Trace Configuration___________________________ớ";
+"Select Trace Configuration" = "Chọn Theo dõi đã cấu hình";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Đ_Settings_________________ớ";
+"Settings" = "Thiết lập";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Phóng tới";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Đ_Zoom To Result_______________ớ";
+"Zoom To Result" = "Thu phóng Kết quả";
 

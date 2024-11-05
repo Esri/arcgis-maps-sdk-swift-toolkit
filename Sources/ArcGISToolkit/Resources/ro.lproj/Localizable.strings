@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Este necesar un certificat pentru a accesa conținutul pe %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Ă_Add New_______________ș";
+"Add New" = "Adăugare nou";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Opțiuni avansate";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Fișiere atașate";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Ă_Attachments larger than %@ cannot be downloaded_________________________ș.";
+"Attachments larger than %@ cannot be downloaded." = "Fișierele atașate mai mari de %@ nu pot fi descărcate.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atribute";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Calibrare";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Ă_Camera access is disabled__________________________ș";
+"Camera access is disabled" = "Accesul la cameră este dezactivat";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Anulare";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Ă_Cancel Starting Point Selection_________________ș";
+"Cancel Starting Point Selection" = "Anulare selecție punct de pornire";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificat necesar";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Golire";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Ă_Clear All Results__________________ș";
+"Clear All Results" = "Golire toate rezultatele";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Culoare";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "elevație";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Ă_Empty attachments cannot be downloaded_____________________ș.";
+"Empty attachments cannot be downloaded." = "Fișierele atașate goale nu pot fi descărcate.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Ă_Empty files are not supported_______________________________ș.";
+"Empty files are not supported." = "Fișierele goale nu sunt acceptate.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Depășește valoarea maximă";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Ă_Failed to access the certificate file____________________ș.";
+"Failed to access the certificate file." = "Nu s-a reușit accesarea fișierului certificat.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Media";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Ă_Microphone access has been disabled in Settings_________________________ș.";
+"Microphone access has been disabled in Settings." = "Accesul la telefon a fost dezactivat din Setări.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Lungimea minimă a caracterelor nu a fost atinsă";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Nume nou";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Ă_New Trace___________________ș";
+"New Trace" = "Urmărire nouă";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Fără semne de carte";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Parola este necesară";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Ă_Please enable camera access in settings_____________________ș.";
+"Please enable camera access in settings." = "Vă rugăm să activați accesul la cameră din setări.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Introduceți parola pentru certificatul ales.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Evaluarea popup a eșuat: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Ă_Record video only__________________ș";
+"Record video only" = "Numai înregistrare video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Redenumire";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Selectați un punct de servicii";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Ă_Select Network_______________ș";
+"Select Network" = "Selectare rețea";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Ă_Select Trace Configuration___________________________ș";
+"Select Trace Configuration" = "Selectare configurație urmărire";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Ă_Settings_________________ș";
+"Settings" = "Setări";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Site-uri";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Transfocare către";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Ă_Zoom To Result_______________ș";
+"Zoom To Result" = "Transfocare la rezultat";
 

@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "A(z) %@ helyen lévő tartalom eléréséhez tanúsítványra van szükség.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "í_Add New_______________ő";
+"Add New" = "Új hozzáadása";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Speciális beállítások";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Csatolmányok";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "í_Attachments larger than %@ cannot be downloaded_________________________ő.";
+"Attachments larger than %@ cannot be downloaded." = "A(z) %@ méretnél nagyobb csatolmányok nem tölthetők le.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attribútumok";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibráció";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "í_Camera access is disabled__________________________ő";
+"Camera access is disabled" = "A kamera hozzáférése le van tiltva";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Mégse";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "í_Cancel Starting Point Selection_________________ő";
+"Cancel Starting Point Selection" = "A kiindulási pont kiválasztásának törlése";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Megkövetelt tanúsítvány";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Törlés";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "í_Clear All Results__________________ő";
+"Clear All Results" = "Összes eredmény törlése";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Szín";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "magasság";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "í_Empty attachments cannot be downloaded_____________________ő.";
+"Empty attachments cannot be downloaded." = "Az üres csatolmányok nem tölthetők le.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "í_Empty files are not supported_______________________________ő.";
+"Empty files are not supported." = "Az üres fájlok nincsenek támogatva.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Több, mint a maximális érték";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "í_Failed to access the certificate file____________________ő.";
+"Failed to access the certificate file." = "Nem lehetett hozzáférni a tanúsítványfájlhoz.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Média";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "í_Microphone access has been disabled in Settings_________________________ő.";
+"Microphone access has been disabled in Settings." = "A mikrofon-hozzáférés le lett tiltva a Beállításokban.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Nem tesz eleget a minimális karakterhossz követelményének";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Új név";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "í_New Trace___________________ő";
+"New Trace" = "Új nyomkövetés";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nincsenek könyvjelzők";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Jelszó szükséges";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "í_Please enable camera access in settings_____________________ő.";
+"Please enable camera access in settings." = "Engedélyezze a kamerához való hozzáférést a beállításokban.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Kérjük, adja meg a kiválasztott tanúsítvány jelszavát.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "A felugró ablak kiértékelése sikertelen: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "í_Record video only__________________ő";
+"Record video only" = "Csak videó rögzítése";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Átnevezés";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Válasszon ki egy létesítményt";
 
 /* A label for button to select a utility network. */
-"Select Network" = "í_Select Network_______________ő";
+"Select Network" = "Hálózat kiválasztása";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "í_Select Trace Configuration___________________________ő";
+"Select Trace Configuration" = "Nyomkövetés-konfiguráció kijelölése";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "í_Settings_________________ő";
+"Settings" = "Beállítások";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Webhelyek";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Nagyítás/kicsinyítés:";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "í_Zoom To Result_______________ő";
+"Zoom To Result" = "Nagyítás az eredményre";
 

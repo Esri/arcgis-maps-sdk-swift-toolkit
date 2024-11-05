@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Er is een certificaat nodig voor het openen van content in %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Ĳ_Add New_______________ä";
+"Add New" = "Nieuwe toevoegen";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Geavanceerde opties";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Bijlagen";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Ĳ_Attachments larger than %@ cannot be downloaded_________________________ä.";
+"Attachments larger than %@ cannot be downloaded." = "U kunt geen bijlagen downloaden die groter zijn dan %@.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attributen";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibratie";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Ĳ_Camera access is disabled__________________________ä";
+"Camera access is disabled" = "Cameratoegang is uitgeschakeld";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Annuleren";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Ĳ_Cancel Starting Point Selection_________________ä";
+"Cancel Starting Point Selection" = "Startpuntselectie annuleren";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificaat vereist";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Wissen";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Ĳ_Clear All Results__________________ä";
+"Clear All Results" = "Alle resultaten wissen";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Kleur";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "hoogte";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Ĳ_Empty attachments cannot be downloaded_____________________ä.";
+"Empty attachments cannot be downloaded." = "Kan geen lege bijlages downloaden.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Ĳ_Empty files are not supported_______________________________ä.";
+"Empty files are not supported." = "Er is geen ondersteuning voor lege bestanden.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Overschrijdt maximumwaarde";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Ĳ_Failed to access the certificate file____________________ä.";
+"Failed to access the certificate file." = "Kan het certificaatbestand niet openen.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Media";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Ĳ_Microphone access has been disabled in Settings_________________________ä.";
+"Microphone access has been disabled in Settings." = "Microfoontoegang is uitgeschakeld in Instellingen.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Er is niet aan de minimale tekenlengte voldaan";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Nieuwe naam";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Ĳ_New Trace___________________ä";
+"New Trace" = "Nieuwe tracering";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Geen bladwijzers";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Wachtwoord vereist";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Ĳ_Please enable camera access in settings_____________________ä.";
+"Please enable camera access in settings." = "Ga naar Instellingen en schakel cameratoegang in.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Voer een wachtwoord in voor het gekozen certificaat.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Pop-upevaluatie is mislukt: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Ĳ_Record video only__________________ä";
+"Record video only" = "Alleen video opnemen";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Naam wijzigen";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Selecteer een faciliteit";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Ĳ_Select Network_______________ä";
+"Select Network" = "Netwerk selecteren";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Ĳ_Select Trace Configuration___________________________ä";
+"Select Trace Configuration" = "Configuratie tracering selecteren";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Ĳ_Settings_________________ä";
+"Settings" = "Instellingen";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Inzoomen op";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Ĳ_Zoom To Result_______________ä";
+"Zoom To Result" = "Inzoomen op resultaat";
 

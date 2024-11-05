@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Lai piekļūtu saturam %@, ir nepieciešams sertifikāts.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "ķ_Add New_______________ū";
+"Add New" = "Pievienot jaunu";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Paplašinātās iespējas";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Pielikumi";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "ķ_Attachments larger than %@ cannot be downloaded_________________________ū.";
+"Attachments larger than %@ cannot be downloaded." = "Pielikumus, kuru izmērs pārsniedz %@, lejupielādēt nav iespējams";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atribūti";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibrēšana";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "ķ_Camera access is disabled__________________________ū";
+"Camera access is disabled" = "Liegta piekļuve kamerai";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Atcelt";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "ķ_Cancel Starting Point Selection_________________ū";
+"Cancel Starting Point Selection" = "Atcelt sākumpunkta atlasi";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Ir nepieciešams sertifikāts";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Notīrīt";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "ķ_Clear All Results__________________ū";
+"Clear All Results" = "Notīrīt visus rezultātus";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Krāsa";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "augstums";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "ķ_Empty attachments cannot be downloaded_____________________ū.";
+"Empty attachments cannot be downloaded." = "Tukšu pielikumu lejupielāde nav iespējama";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "ķ_Empty files are not supported_______________________________ū.";
+"Empty files are not supported." = "Tukši faili netiek atbalstīti";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Pārsniedz maksimālo vērtību";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "ķ_Failed to access the certificate file____________________ū.";
+"Failed to access the certificate file." = "Nevarēja piekļūt sertifikāta failam.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Multivide";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "ķ_Microphone access has been disabled in Settings_________________________ū.";
+"Microphone access has been disabled in Settings." = "Piekļuve mikrofonam ir atspējota iestatījumos.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimālais rakstzīmju garums nav sasniegts";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Jauns nosaukums";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "ķ_New Trace___________________ū";
+"New Trace" = "Jauns trasējums";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nav grāmatatzīmju";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Ir jānorāda parole";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "ķ_Please enable camera access in settings_____________________ū.";
+"Please enable camera access in settings." = "Lūdzu, iestatījumos iespējojiet piekļuvi kamerai.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Lūdzu, ievadiet izvēlētā sertifikāta paroli.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Uznirstošais novērtējums neizdevās: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "ķ_Record video only__________________ū";
+"Record video only" = "Ierakstīt tikai video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Pārdēvēt";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Izvēlieties infrastruktūras objektu";
 
 /* A label for button to select a utility network. */
-"Select Network" = "ķ_Select Network_______________ū";
+"Select Network" = "Izvēlēties tīklu";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "ķ_Select Trace Configuration___________________________ū";
+"Select Trace Configuration" = "Izvēlēties trasēšanas konfigurāciju";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "ķ_Settings_________________ū";
+"Settings" = "Iestatījumi";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Vietnes";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Tālummaiņa";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "ķ_Zoom To Result_______________ū";
+"Zoom To Result" = "Pietuvināt rezultātu";
 

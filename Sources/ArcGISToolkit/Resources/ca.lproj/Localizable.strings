@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Cal un certificat per accedir al contingut a %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "ó_Add New_______________à";
+"Add New" = "Afegeix-ne un de nou";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Opcions avançades";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Fitxers adjunts";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "ó_Attachments larger than %@ cannot be downloaded_________________________à.";
+"Attachments larger than %@ cannot be downloaded." = "No es poden baixar fitxers adjunts amb una mida superior a %@.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atributs";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Calibratge";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "ó_Camera access is disabled__________________________à";
+"Camera access is disabled" = "L'accés a la càmera està inhabilitat.";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Cancel·la";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "ó_Cancel Starting Point Selection_________________à";
+"Cancel Starting Point Selection" = "Cancel·la la selecció del punt d'inici";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificat obligatori";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Esborra";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "ó_Clear All Results__________________à";
+"Clear All Results" = "Esborra tots els resultats";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "elevació";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "ó_Empty attachments cannot be downloaded_____________________à.";
+"Empty attachments cannot be downloaded." = "No es poden baixar fitxers adjunts buits.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "ó_Empty files are not supported_______________________________à.";
+"Empty files are not supported." = "No s'admeten fitxers buits.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Supera el valor màxim";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "ó_Failed to access the certificate file____________________à.";
+"Failed to access the certificate file." = "No s'ha pogut accedir al fitxer del certificat.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Contingut multimèdia";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "ó_Microphone access has been disabled in Settings_________________________à.";
+"Microphone access has been disabled in Settings." = "L'accés al micròfon s'ha inhabilitat a la configuració.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "No s'ha arribat a la longitud mínima de caràcters";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Nom nou";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "ó_New Trace___________________à";
+"New Trace" = "Traçat nou";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No hi ha cap marcador";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "La contrasenya és obligatòria";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "ó_Please enable camera access in settings_____________________à.";
+"Please enable camera access in settings." = "Habiliteu l'accés a la càmera a la configuració.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Introduïu una contrasenya per al certificat seleccionat";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "No s'ha pogut avaluar la finestra emergent: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "ó_Record video only__________________à";
+"Record video only" = "Grava només vídeo";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Canvia el nom";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Seleccioneu una instal·lació";
 
 /* A label for button to select a utility network. */
-"Select Network" = "ó_Select Network_______________à";
+"Select Network" = "Seleccioneu una xarxa";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "ó_Select Trace Configuration___________________________à";
+"Select Trace Configuration" = "Seleccioneu la configuració del traçat";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "ó_Settings_________________à";
+"Settings" = "Configuració";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Llocs";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Aplica el zoom a";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "ó_Zoom To Result_______________à";
+"Zoom To Result" = "Aplica el zoom als resultats";
 

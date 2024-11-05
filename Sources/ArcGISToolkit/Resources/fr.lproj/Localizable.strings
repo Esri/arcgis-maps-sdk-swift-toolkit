@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Un certificat est requis pour accéder au contenu sur %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "æ_Add New_______________Â";
+"Add New" = "Nouveau";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Options avancées";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Pièces jointes";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "æ_Attachments larger than %@ cannot be downloaded_________________________Â.";
+"Attachments larger than %@ cannot be downloaded." = "Impossible de télécharger les pièces jointes d’une taille supérieure à %@.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attributs";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Calibrage";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "æ_Camera access is disabled__________________________Â";
+"Camera access is disabled" = "L’accès à l’appareil photo est désactivé";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Annuler";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "æ_Cancel Starting Point Selection_________________Â";
+"Cancel Starting Point Selection" = "Annuler la sélection du point de départ";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificat requis";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Effacer";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "æ_Clear All Results__________________Â";
+"Clear All Results" = "Effacer tous les résultats";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Couleur";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "élévation";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "æ_Empty attachments cannot be downloaded_____________________Â.";
+"Empty attachments cannot be downloaded." = "Impossible de télécharger des pièces jointes vides.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "æ_Empty files are not supported_______________________________Â.";
+"Empty files are not supported." = "Les fichiers vides ne sont pas pris en charge.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Valeur maximale dépassée";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "æ_Failed to access the certificate file____________________Â.";
+"Failed to access the certificate file." = "Échec de l’accès au fichier de certificat.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Contenu multimédia";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "æ_Microphone access has been disabled in Settings_________________________Â.";
+"Microphone access has been disabled in Settings." = "L’accès au microphone a été désactivé dans Paramètres.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Nombre minimal de caractères non atteint";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Nouveau nom";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "æ_New Trace___________________Â";
+"New Trace" = "Nouveau traçage";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Aucun géosignet";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Mot de passe requis";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "æ_Please enable camera access in settings_____________________Â.";
+"Please enable camera access in settings." = "Activez l’accès à l’appareil photo dans les paramètres.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Saisissez un mot de passe pour le certificat sélectionné.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "L’évaluation de la fenêtre contextuelle a échoué : %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "æ_Record video only__________________Â";
+"Record video only" = "Enregistrer une vidéo sans audio";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Renommer";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Sélectionner un bâtiment";
 
 /* A label for button to select a utility network. */
-"Select Network" = "æ_Select Network_______________Â";
+"Select Network" = "Sélectionner un réseau";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "æ_Select Trace Configuration___________________________Â";
+"Select Trace Configuration" = "Sélectionner une configuration de traçage";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "æ_Settings_________________Â";
+"Settings" = "Paramètres";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Zoom sur";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "æ_Zoom To Result_______________Â";
+"Zoom To Result" = "Zoom sur le résultat";
 

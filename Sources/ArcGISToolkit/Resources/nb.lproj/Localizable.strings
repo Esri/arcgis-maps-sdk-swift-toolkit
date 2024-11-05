@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Det kreves et sertifikat for tilgang til innhold på %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "å_Add New_______________ø";
+"Add New" = "Legg til ny";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Avanserte alternativer";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Vedlegg";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "å_Attachments larger than %@ cannot be downloaded_________________________ø.";
+"Attachments larger than %@ cannot be downloaded." = "Vedlegg som er større enn %@, kan ikke lastes ned.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attributter";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibrering";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "å_Camera access is disabled__________________________ø";
+"Camera access is disabled" = "Kameratilgang deaktivert";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Avbryt";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "å_Cancel Starting Point Selection_________________ø";
+"Cancel Starting Point Selection" = "Avbryt startpunktvalg";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Sertifikat kreves";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Fjern";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "å_Clear All Results__________________ø";
+"Clear All Results" = "Fjern alle resultater";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Farge";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "høyde";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "å_Empty attachments cannot be downloaded_____________________ø.";
+"Empty attachments cannot be downloaded." = "Tomme vedlegg kan ikke lastes ned.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "å_Empty files are not supported_______________________________ø.";
+"Empty files are not supported." = "Tomme filer støttes ikke.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Overstiger maksimumsverdi";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "å_Failed to access the certificate file____________________ø.";
+"Failed to access the certificate file." = "Får ikke tilgang til sertifikatfilen.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Media";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "å_Microphone access has been disabled in Settings_________________________ø.";
+"Microphone access has been disabled in Settings." = "Mikrofontilgang er deaktivert i innstillingene.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimumsgrensen for antall tegn er ikke nådd";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Nytt navn";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "å_New Trace___________________ø";
+"New Trace" = "Ny sporing";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Ingen bokmerker";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Du må angi et passord";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "å_Please enable camera access in settings_____________________ø.";
+"Please enable camera access in settings." = "Aktiver kameratilgang i innstillingene.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Skriv inn et passord for det valgte sertifikatet.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup-evaluering mislyktes: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "å_Record video only__________________ø";
+"Record video only" = "Ta opp bare video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Gi nytt navn";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Velg en fasilitet";
 
 /* A label for button to select a utility network. */
-"Select Network" = "å_Select Network_______________ø";
+"Select Network" = "Velg nettverk";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "å_Select Trace Configuration___________________________ø";
+"Select Trace Configuration" = "Velg sporingskonfigurasjon";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "å_Settings_________________ø";
+"Settings" = "Innstillinger";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Nettsteder";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Zoom til";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "å_Zoom To Result_______________ø";
+"Zoom To Result" = "Zoom til resultatet";
 

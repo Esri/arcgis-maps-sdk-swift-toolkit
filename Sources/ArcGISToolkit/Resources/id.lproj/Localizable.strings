@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Sertifikat diperlukan untuk mengakses konten di %@.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "ng_Add New_______________ny";
+"Add New" = "Tambahkan Baru";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Opsi Lanjutan";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Lampiran";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "ng_Attachments larger than %@ cannot be downloaded_________________________ny.";
+"Attachments larger than %@ cannot be downloaded." = "Lampiran berukuran lebih dari %@ tidak dapat diunduh.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atribut";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibrasi";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "ng_Camera access is disabled__________________________ny";
+"Camera access is disabled" = "Akses kamera dinonaktifkan";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Batalkan";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "ng_Cancel Starting Point Selection_________________ny";
+"Cancel Starting Point Selection" = "Batalkan Pemilihan Titik Awal";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Diperlukan Sertifikat";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Hapus";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "ng_Clear All Results__________________ny";
+"Clear All Results" = "Hapus Semua Hasil";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Warna";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "elevasi";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "ng_Empty attachments cannot be downloaded_____________________ny.";
+"Empty attachments cannot be downloaded." = "Lampiran kosong tidak dapat diunduh.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "ng_Empty files are not supported_______________________________ny.";
+"Empty files are not supported." = "File kosong tidak didukung.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Melebihi nilai maksimal";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "ng_Failed to access the certificate file____________________ny.";
+"Failed to access the certificate file." = "Gagal mengakses file sertifikat.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Media";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "ng_Microphone access has been disabled in Settings_________________________ny.";
+"Microphone access has been disabled in Settings." = "Akses mikrofon telah dinonaktifkan di Pengaturan.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Panjang karakter minimal tidak sesuai";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Nama baru";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "ng_New Trace___________________ny";
+"New Trace" = "Pelacakan Baru";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Tidak ada bookmark";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Kata Sandi Diperlukan";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "ng_Please enable camera access in settings_____________________ny.";
+"Please enable camera access in settings." = "Aktifkan akses kamera di pengaturan.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Harap masukkan kata sandi untuk sertifikat yang dipilih.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Evaluasi popup gagal: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "ng_Record video only__________________ny";
+"Record video only" = "Hanya perekaman video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Ubah Nama";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Pilih fasilitas";
 
 /* A label for button to select a utility network. */
-"Select Network" = "ng_Select Network_______________ny";
+"Select Network" = "Pilih Jaringan";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "ng_Select Trace Configuration___________________________ny";
+"Select Trace Configuration" = "Pilih Konfigurasi Pelacakan";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "ng_Settings_________________ny";
+"Settings" = "Pengaturan";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Situs";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Zoom Ke";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "ng_Zoom To Result_______________ny";
+"Zoom To Result" = "Perbesar ke Hasil";
 

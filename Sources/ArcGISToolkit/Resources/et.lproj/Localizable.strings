@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Sisule juurdepääsuks kohas %@ on vaja serti.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Š_Add New_______________ä";
+"Add New" = "Lisa uus";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Täpsemad valikud";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Manused";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Š_Attachments larger than %@ cannot be downloaded_________________________ä.";
+"Attachments larger than %@ cannot be downloaded." = "Suuremaid manuseid kui %@ ei saa alla laadida.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atribuudid";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibreerimine";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Š_Camera access is disabled__________________________ä";
+"Camera access is disabled" = "Juurdepääs kaamerale ei ole lubatud";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Tühista";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Š_Cancel Starting Point Selection_________________ä";
+"Cancel Starting Point Selection" = "Tühista alguspunkti valik";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Sert on nõutav";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Tühista";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Š_Clear All Results__________________ä";
+"Clear All Results" = "Kustuta kõik tulemused";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Värv";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "kõrgus merepinnast";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Š_Empty attachments cannot be downloaded_____________________ä.";
+"Empty attachments cannot be downloaded." = "Tühje manuseid ei saa alla laadida.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Š_Empty files are not supported_______________________________ä.";
+"Empty files are not supported." = "Tühje faile ei toetata.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Ületab maksimumväärtust";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Š_Failed to access the certificate file____________________ä.";
+"Failed to access the certificate file." = "Juurdepääs serdifailile nurjus.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Meedia";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Š_Microphone access has been disabled in Settings_________________________ä.";
+"Microphone access has been disabled in Settings." = "Juurdepääs mikrofonile on seadetes välja lülitatud.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Minimaalne tähemärkide arv pole saavutatud";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Uus nimi";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Š_New Trace___________________ä";
+"New Trace" = "Uus jälgimisfail";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Järjehoidjaid pole";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Parool on nõutav";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Š_Please enable camera access in settings_____________________ä.";
+"Please enable camera access in settings." = "Lubage seadetes juurdepääs kaamerale.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Sisestage valitud serdi jaoks parool.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Hüpiku hindamine nurjus: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Š_Record video only__________________ä";
+"Record video only" = "Salvesta ainult video";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Nimeta ümber";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Vali rajatis";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Š_Select Network_______________ä";
+"Select Network" = "Valige võrk";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Š_Select Trace Configuration___________________________ä";
+"Select Trace Configuration" = "Valige jälgimiskonfiguratsioon";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Š_Settings_________________ä";
+"Settings" = "Sätted";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Saidid";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Suumi:";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Š_Zoom To Result_______________ä";
+"Zoom To Result" = "Suumi tulemini";
 

@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "需要憑證才能在 %@ 上存取內容。";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "試_Add New_______________驗";
+"Add New" = "新增";
 
 /* A section header for advanced options. */
 "Advanced Options" = "進階選項";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "附件(A)";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "試_Attachments larger than %@ cannot be downloaded_________________________驗.";
+"Attachments larger than %@ cannot be downloaded." = "無法下載大於 %@ 的附件。";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "屬性";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "校正";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "試_Camera access is disabled__________________________驗";
+"Camera access is disabled" = "相機存取已停用";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "取消";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "試_Cancel Starting Point Selection_________________驗";
+"Cancel Starting Point Selection" = "取消起點選擇";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "需要憑證";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "清除";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "試_Clear All Results__________________驗";
+"Clear All Results" = "清除所有結果";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "顏色";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "高程";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "試_Empty attachments cannot be downloaded_____________________驗.";
+"Empty attachments cannot be downloaded." = "無法下載空白附件。";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "試_Empty files are not supported_______________________________驗.";
+"Empty files are not supported." = "不支援空白檔案。";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "超過最大值";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "試_Failed to access the certificate file____________________驗.";
+"Failed to access the certificate file." = "無法存取憑證檔。";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "媒體";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "試_Microphone access has been disabled in Settings_________________________驗.";
+"Microphone access has been disabled in Settings." = "麥克風存取已在「設定」中停用。";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "不符合字元長度下限";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "新名稱";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "試_New Trace___________________驗";
+"New Trace" = "新增軌跡";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "無書籤";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "需要密碼";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "試_Please enable camera access in settings_____________________驗.";
+"Please enable camera access in settings." = "請在設定中啟用相機存取。";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "請輸入所選憑證的密碼。";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "快顯視窗評估失敗: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "試_Record video only__________________驗";
+"Record video only" = "僅限錄影";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "重新命名";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "選擇機構";
 
 /* A label for button to select a utility network. */
-"Select Network" = "試_Select Network_______________驗";
+"Select Network" = "選擇網路";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "試_Select Trace Configuration___________________________驗";
+"Select Trace Configuration" = "選擇追蹤配置";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "試_Settings_________________驗";
+"Settings" = "設定";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "網站";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "縮放至";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "試_Zoom To Result_______________驗";
+"Zoom To Result" = "縮放至結果";
 

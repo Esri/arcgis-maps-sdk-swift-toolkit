@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Norint pasiekti %@ turinį, reikia sertifikato.";
 
 /* A button to add new utility trace starting points. */
-"Add New" = "Į_Add New_______________š";
+"Add New" = "Pridėti naują";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Išplėstinės parinktys";
@@ -24,7 +24,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Priedai";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
-"Attachments larger than %@ cannot be downloaded." = "Į_Attachments larger than %@ cannot be downloaded_________________________š.";
+"Attachments larger than %@ cannot be downloaded." = "Didesnių nei %@ priedų atsisiųsti negalima.";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Atributai";
@@ -46,13 +46,13 @@ for the AR experience. */
 "Calibration" = "Kalibravimas";
 
 /* A title for an alert that camera access is disabled. */
-"Camera access is disabled" = "Į_Camera access is disabled__________________________š";
+"Camera access is disabled" = "Kameros prieiga išjungta";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Atšaukti";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel Starting Point Selection" = "Į_Cancel Starting Point Selection_________________š";
+"Cancel Starting Point Selection" = "Atšaukti pradžios taško pasirinkimą";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Reikalingas sertifikatas";
@@ -70,7 +70,7 @@ for the AR experience. */
 "Clear" = "Valyti";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear All Results" = "Į_Clear All Results__________________š";
+"Clear All Results" = "Išvalyti visus rezultatus";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Spalva";
@@ -118,10 +118,10 @@ AR experience. */
 "elevation" = "aukštis";
 
 /* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
-"Empty attachments cannot be downloaded." = "Į_Empty attachments cannot be downloaded_____________________š.";
+"Empty attachments cannot be downloaded." = "Negalima atsisiųsti tuščių priedų.";
 
 /* An error message indicating the selected attachment is an empty file and not supported. */
-"Empty files are not supported." = "Į_Empty files are not supported_______________________________š.";
+"Empty files are not supported." = "Tušti failai nėra palaikomi.";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -163,7 +163,7 @@ The variable provides additional data. */
 "Exceeds maximum value" = "Viršija maksimalią reikšmę";
 
 /* A label indicating a certificate file was inaccessible. */
-"Failed to access the certificate file." = "Į_Failed to access the certificate file____________________š.";
+"Failed to access the certificate file." = "Nepavyko pasiekti sertifikato failo.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -217,7 +217,7 @@ AR experience. */
 "Media" = "Medija";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
-"Microphone access has been disabled in Settings." = "Į_Microphone access has been disabled in Settings_________________________š.";
+"Microphone access has been disabled in Settings." = "Nustatymuose išjungta mikrofono prieiga.";
 
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Nepasiektas minimalus simbolių skaičius";
@@ -235,7 +235,7 @@ AR experience. */
 "New name" = "Naujas pavadinimas";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New Trace" = "Į_New Trace___________________š";
+"New Trace" = "Naujas sekimas";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nėra žymų";
@@ -277,7 +277,7 @@ AR experience. */
 "Password Required" = "Būtinas slaptažodis";
 
 /* A message for an alert requesting camera access. */
-"Please enable camera access in settings." = "Į_Please enable camera access in settings_____________________š.";
+"Please enable camera access in settings." = "Nustatymuose įjunkite prieigą prie kameros.";
 
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Įveskite pasirinkto sertifikato slaptažodį.";
@@ -295,7 +295,7 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Nepavyko įvertinti iškylančio lango: %@";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
-"Record video only" = "Į_Record video only__________________š";
+"Record video only" = "Įrašyti tik vaizdo įrašą";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Pervardinti";
@@ -325,13 +325,13 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Pasirinkti įrenginį";
 
 /* A label for button to select a utility network. */
-"Select Network" = "Į_Select Network_______________š";
+"Select Network" = "Pasirinkite tinklą";
 
 /* A label for button to select a utility network trace configuration. */
-"Select Trace Configuration" = "Į_Select Trace Configuration___________________________š";
+"Select Trace Configuration" = "Pasirinkite sekimo konfigūraciją";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
-"Settings" = "Į_Settings_________________š";
+"Settings" = "Nuostatos";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Svetainės";
@@ -453,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Priartinti";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom To Result" = "Į_Zoom To Result_______________š";
+"Zoom To Result" = "Pritraukti prie rezultato";
 
