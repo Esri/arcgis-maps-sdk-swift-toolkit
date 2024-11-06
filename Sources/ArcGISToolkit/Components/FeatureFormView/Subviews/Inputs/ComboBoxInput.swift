@@ -95,8 +95,8 @@ struct ComboBoxInput: View {
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             } else {
-                // Otherwise, always show list icon.
-                Image(systemName: "list.bullet")
+                // Otherwise, always show chevron.
+                Image(systemName: "chevron.right")
                     .accessibilityIdentifier("\(element.label) Options Button")
                     .foregroundColor(.secondary)
             }
