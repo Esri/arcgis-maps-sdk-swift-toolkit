@@ -65,7 +65,7 @@ struct UserView: View {
     }
 }
 
-extension PortalUser.Role: CustomStringConvertible {
+extension PortalUser.Role: @retroactive CustomStringConvertible {
     public var description: String {
         switch self {
         case .user:
