@@ -136,7 +136,9 @@ private extension TextInput {
             }
 #endif
             .scrollContentBackground(.hidden)
-            if !text.isEmpty, !element.isMultiline {
+            if !text.isEmpty,
+               !isBarcodeScanner,
+               !element.isMultiline {
                 ClearButton {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
@@ -148,13 +150,14 @@ private extension TextInput {
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             }
-            if element.input is BarcodeScannerFormInput {
+            if isBarcodeScanner {
                 Button {
                     model.focusedElement = element
                     scannerIsPresented = true
                 } label: {
                     Image(systemName: "barcode.viewfinder")
-                        .foregroundStyle(.secondary)
+                        .font(.title2)
+                        .foregroundStyle(Color.accentColor)
                 }
                 .disabled(cameraIsDisabled)
                 .buttonStyle(.plain)
@@ -242,6 +245,12 @@ private extension TextInput {
             Spacer()
             InputFooter(element: element)
         }
+    }
+}
+
+private extension TextInput {
+    private var isBarcodeScanner: Bool {
+        element.input is BarcodeScannerFormInput
     }
 }
 
