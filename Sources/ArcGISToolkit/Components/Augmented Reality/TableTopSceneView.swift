@@ -17,6 +17,7 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality table top experience.
+@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public struct TableTopSceneView: View {
 #if os(iOS)
