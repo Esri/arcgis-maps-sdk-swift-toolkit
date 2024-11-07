@@ -113,7 +113,7 @@ public struct UtilityNetworkTrace: View {
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
     /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
-    @State private var shouldZoomOnTraceCompletion = false
+    @State private var shouldZoomOnTraceCompletion = true
     
     /// A Boolean value indicating whether the Clear All Results confirmation
     /// dialog is being shown.
@@ -195,12 +195,7 @@ public struct UtilityNetworkTrace: View {
                                     Task {
                                         if let feature = await viewModel.feature(for: element),
                                            let geometry = feature.geometry {
-                                            let newViewpoint = Viewpoint(boundingGeometry: geometry.extent)
-                                            if let mapViewProxy {
-                                                Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-                                            } else {
-                                                viewpoint = newViewpoint
-                                            }
+                                            updateViewpoint(to: geometry.extent)
                                         }
                                     }
                                 } label: {
@@ -344,7 +339,7 @@ public struct UtilityNetworkTrace: View {
                     currentActivity = .viewingTraces(nil)
                     if shouldZoomOnTraceCompletion,
                        let extent = viewModel.selectedTrace?.resultExtent {
-                        viewpoint = Viewpoint(boundingGeometry: extent)
+                        updateViewpoint(to: extent)
                     }
                 }
             }
@@ -360,6 +355,9 @@ public struct UtilityNetworkTrace: View {
                 if viewModel.completedTraces.count > 1 {
                     Button {
                         viewModel.selectPreviousTrace()
+                        if let extent = viewModel.selectedTrace?.resultExtent {
+                            updateViewpoint(to: extent)
+                        }
                     } label: {
                         Image(systemName: "chevron.backward")
                     }
@@ -369,6 +367,9 @@ public struct UtilityNetworkTrace: View {
                 if viewModel.completedTraces.count > 1 {
                     Button {
                         viewModel.selectNextTrace()
+                        if let extent = viewModel.selectedTrace?.resultExtent {
+                            updateViewpoint(to: extent)
+                        }
                     } label: {
                         Image(systemName: "chevron.forward")
                     }
@@ -385,12 +386,7 @@ public struct UtilityNetworkTrace: View {
             Menu(selectedTrace.name) {
                 if let resultExtent = selectedTrace.resultExtent {
                     Button(String.zoomToButtonLabel) {
-                        let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
-                        if let mapViewProxy {
-                            Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-                        } else {
-                            viewpoint = newViewpoint
-                        }
+                        updateViewpoint(to: resultExtent)
                     }
                 }
                 Button(String.deleteButtonLabel) {
@@ -520,12 +516,7 @@ public struct UtilityNetworkTrace: View {
             Button(String.zoomToButtonLabel) {
                 if let selectedStartingPoint = selectedStartingPoint,
                    let extent = selectedStartingPoint.geoElement.geometry?.extent {
-                    let newViewpoint = Viewpoint(boundingGeometry: extent)
-                    if let mapViewProxy {
-                        Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-                    } else {
-                        viewpoint = newViewpoint
-                    }
+                    updateViewpoint(to: extent)
                 }
             }
             Button(String.deleteButtonLabel, role: .destructive) {
@@ -663,6 +654,18 @@ public struct UtilityNetworkTrace: View {
         var copy = self
         copy._activeDetent = Binding(detent)
         return copy
+    }
+    
+    /// Updates the viewpoint to the provided extent. If a map view proxy is provided, the update is
+    /// animated. Otherwise the bound viewpoint is set directly.
+    /// - Parameter extent: The new extent to be shown.
+    func updateViewpoint(to extent: Envelope) {
+        let newViewpoint = Viewpoint(boundingGeometry: extent)
+        if let mapViewProxy {
+            Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+        } else {
+            viewpoint = newViewpoint
+        }
     }
     
     public var body: some View {
