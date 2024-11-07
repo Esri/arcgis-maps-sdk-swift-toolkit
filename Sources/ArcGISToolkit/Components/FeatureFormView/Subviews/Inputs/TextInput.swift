@@ -111,7 +111,7 @@ private extension TextInput {
                                 .environmentObject(model)
 #endif
                         }
-                        .frame(minHeight: 100)
+                        .frame(minHeight: 100, alignment: .top)
                 } else {
                     TextField(
                         element.label,
