@@ -102,7 +102,7 @@ private extension TextInput {
                     Text(text)
                         .accessibilityIdentifier("\(element.label) Text Input Preview")
                         .fixedSize(horizontal: false, vertical: true)
-                        .lineLimit(10)
+                        .lineLimit(5)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
                             FullScreenTextInput(text: $text, element: element, model: model)
@@ -111,6 +111,7 @@ private extension TextInput {
                                 .environmentObject(model)
 #endif
                         }
+                        .frame(minHeight: 100)
                 } else {
                     TextField(
                         element.label,
@@ -135,7 +136,7 @@ private extension TextInput {
             }
 #endif
             .scrollContentBackground(.hidden)
-            if !text.isEmpty {
+            if !text.isEmpty, !element.isMultiline {
                 ClearButton {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
