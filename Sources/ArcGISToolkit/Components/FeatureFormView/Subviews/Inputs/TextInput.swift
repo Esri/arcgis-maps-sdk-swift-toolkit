@@ -102,7 +102,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input Preview")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element, model: model)
@@ -111,6 +111,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
 #endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
@@ -135,7 +136,7 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 #endif
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty, !element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
