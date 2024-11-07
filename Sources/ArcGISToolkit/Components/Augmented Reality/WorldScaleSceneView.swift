@@ -18,6 +18,7 @@ import ArcGIS
 import CoreLocation
 
 /// A scene view that provides an augmented reality world scale experience.
+@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public struct WorldScaleSceneView: View {
     /// The clipping distance of the scene view.
@@ -296,6 +297,7 @@ public struct WorldScaleSceneView: View {
 #endif
 }
 
+@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public extension WorldScaleSceneView {
     /// The type of tracking configuration used by the view.
@@ -329,6 +331,7 @@ private extension ARGeoTrackingConfiguration {
 }
 #endif
 
+@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 private extension WorldScaleSceneView {
     var calibrateLabel: String {
@@ -342,6 +345,7 @@ private extension WorldScaleSceneView {
     }
 }
 
+@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public extension WorldScaleSceneView {
 #if os(iOS)
