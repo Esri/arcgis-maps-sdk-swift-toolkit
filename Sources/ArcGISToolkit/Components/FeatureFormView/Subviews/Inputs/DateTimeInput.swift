@@ -101,6 +101,7 @@ struct DateTimeInput: View {
             } else {
                 if date == nil {
                     Image(systemName: "calendar")
+                        .font(.title2)
                         .accessibilityIdentifier("\(element.label) Calendar Image")
                         .foregroundColor(.secondary)
                 } else if !isRequired {
