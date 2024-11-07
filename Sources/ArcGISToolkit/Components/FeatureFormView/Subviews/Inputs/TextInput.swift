@@ -136,7 +136,9 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 #endif
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty, !element.isMultiline {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty,
+***REMOVED******REMOVED******REMOVED***   !isBarcodeScanner,
+***REMOVED******REMOVED******REMOVED***   !element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
@@ -148,13 +150,14 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if element.input is BarcodeScannerFormInput {
+***REMOVED******REMOVED******REMOVED***if isBarcodeScanner {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(cameraIsDisabled)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
@@ -242,6 +245,12 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension TextInput {
+***REMOVED***private var isBarcodeScanner: Bool {
+***REMOVED******REMOVED***element.input is BarcodeScannerFormInput
 ***REMOVED***
 ***REMOVED***
 

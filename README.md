@@ -29,7 +29,7 @@ To use Toolkit in your project:
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
-* The [System Requirements](https:***REMOVED***developers.arcgis.com/swift/system-requirements/system-requirements-for-200-5/) are the same as those for the ArcGIS Maps SDK for Swift
+* The [System Requirements](https:***REMOVED***developers.arcgis.com/swift/system-requirements/system-requirements-for-200-6/) are the same as those for the ArcGIS Maps SDK for Swift
 
 ## Instructions
 
