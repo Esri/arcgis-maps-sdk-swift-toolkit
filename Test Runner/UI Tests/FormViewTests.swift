@@ -1728,6 +1728,7 @@ final class FeatureFormViewTests: XCTestCase {
         fieldValue.tap()
         fieldValue.typeText("https://esri.com")
         
+        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
         XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
     }
 }
