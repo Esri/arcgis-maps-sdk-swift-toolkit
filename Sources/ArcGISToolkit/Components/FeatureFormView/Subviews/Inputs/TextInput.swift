@@ -248,6 +248,7 @@ private extension TextInput {
     }
 }
 
+@available(visionOS, unavailable)
 private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput
