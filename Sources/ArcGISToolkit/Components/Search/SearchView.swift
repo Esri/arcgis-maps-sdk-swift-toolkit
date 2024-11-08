@@ -305,7 +305,7 @@ extension SearchView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the current query.
-***REMOVED******REMOVED***/ - Parameter newQueryString: The new value.
+***REMOVED******REMOVED***/ - Parameter newQuery: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func currentQuery(_ newQuery: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
@@ -316,7 +316,6 @@ extension SearchView {
 ***REMOVED******REMOVED***/ Sets a closure to perform when the query changes.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - action: The closure to performed when the query has changed.
-***REMOVED******REMOVED***/   - query: The new query.
 ***REMOVED***public func onQueryChanged(perform action: @escaping (_ query: String) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.onQueryChangedAction = action
