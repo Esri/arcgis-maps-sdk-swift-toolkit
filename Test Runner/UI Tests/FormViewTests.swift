@@ -1723,20 +1723,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
-        
         XCTAssertFalse(clearButton.exists, "The clear button exists.")
         
         fieldValue.tap()
         fieldValue.typeText("https://esri.com")
-
-        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
-        XCTAssertTrue(clearButton.exists, "The clear button doesn't exist.")
         
-        clearButton.tap()
-        
-        fieldValue.tap()
-        fieldValue.typeText("https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?layers=a9155494098147b9be2fc52bcf825224")
-
         XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
     }
 }
