@@ -248,6 +248,7 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED***private var isBarcodeScanner: Bool {
 ***REMOVED******REMOVED***element.input is BarcodeScannerFormInput
