@@ -19,7 +19,7 @@ The following images are of a simple list of numbers in a floating panel.
 | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202795901-b86d6d26-3572-4c88-8f6e-84473ce57002.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202796009-92e3b5c3-d88b-4124-8d9f-bad6df445f02.png) |
 
 - Note: The Floating Panel is exposed as a view modifier. See 
-``SwiftUICore/View/floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)`` or ``SwiftUICore/View/floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)`` instead.
+``SwiftUICore/View/floatingPanel(attributionBarHeight:backgroundColor:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)`` or ``SwiftUICore/View/floatingPanel(attributionBarHeight:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)`` instead.
 
 **Features**
 
