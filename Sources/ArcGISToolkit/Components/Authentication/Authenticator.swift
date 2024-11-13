@@ -61,7 +61,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
 ***REMOVED******REMOVED***/   encountering an untrusted host.
-***REMOVED******REMOVED***/   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
+***REMOVED******REMOVED***/   - oAuthUserConfigurations: The OAuth configurations that this authenticator can work with.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***promptForUntrustedHosts: Bool = false,
 ***REMOVED******REMOVED***oAuthUserConfigurations: [OAuthUserConfiguration] = []

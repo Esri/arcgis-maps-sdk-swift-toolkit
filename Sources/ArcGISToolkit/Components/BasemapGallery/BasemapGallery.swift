@@ -223,7 +223,7 @@ private extension BasemapGallery {
 
 public extension BasemapGallery {
 ***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to ``Style/automatic(maxGridItemWidth:)``.
-***REMOVED******REMOVED***/ - Parameter style: The `Style` to use.
+***REMOVED******REMOVED***/ - Parameter newStyle: The `Style` to use.
 ***REMOVED******REMOVED***/ - Returns: The `BasemapGallery`.
 ***REMOVED***func style(
 ***REMOVED******REMOVED***_ newStyle: Style
