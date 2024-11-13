@@ -223,7 +223,7 @@ private extension BasemapGallery {
 
 public extension BasemapGallery {
     /// The style of the basemap gallery. Defaults to ``Style/automatic(maxGridItemWidth:)``.
-    /// - Parameter style: The `Style` to use.
+    /// - Parameter newStyle: The `Style` to use.
     /// - Returns: The `BasemapGallery`.
     func style(
         _ newStyle: Style
