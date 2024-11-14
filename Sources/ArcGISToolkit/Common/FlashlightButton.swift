@@ -20,7 +20,11 @@ struct FlashlightButton: View {
 ***REMOVED***@State private var torchIsOn = false
 ***REMOVED***
 ***REMOVED***var device: AVCaptureDevice? {
+#if os(visionOS)
+***REMOVED******REMOVED***nil
+#else
 ***REMOVED******REMOVED***.default(for: .video)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var hasTorch: Bool {
