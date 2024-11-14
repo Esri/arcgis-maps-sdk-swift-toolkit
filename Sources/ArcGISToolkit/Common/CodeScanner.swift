@@ -155,7 +155,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+#if !os(visionOS)
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
         let videoInput: AVCaptureDeviceInput
         
@@ -212,6 +212,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         if #available(iOS 17.0, *) {
             videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
         }
+#endif
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -362,6 +363,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     
     /// Focus on and adjust exposure at the point of interest.
     private func updateAutoFocus(for point: CGPoint) {
+#if !os(visionOS)
         let convertedPoint = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
         guard let device = AVCaptureDevice.default(for: .video) else { return }
         do {
@@ -376,6 +378,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
             }
             device.unlockForConfiguration()
         } catch { }
+#endif
     }
     
     private func updateReticle(for point: CGPoint) {
