@@ -68,7 +68,7 @@ struct Carousel<Content: View>: View {
             }
         }
         // When a GeometryReader is within a List, height must be specified.
-        .frame(height: cellSize.height)
+        .frame(height: cellSize.height + scrollIndicatorOffset)
     }
     
     @available(iOS 18.0, *)
