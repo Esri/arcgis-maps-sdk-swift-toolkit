@@ -27,6 +27,9 @@ struct Carousel<Content: View>: View {
     /// The content shown in the Carousel.
     let content: (_: CGSize, _: (() -> Void)?) -> Content
     
+    /// The amount to offset the scroll indicator.
+    let scrollIndicatorOffset = 10.0
+    
     /// This number is used to compute the final width that allows for a partially visible cell.
     var cellBaseWidth = 120.0
     
@@ -55,7 +58,6 @@ struct Carousel<Content: View>: View {
             ScrollViewReader { scrollViewProxy in
                 ScrollView(.horizontal) {
                     makeCommonScrollViewContent(scrollViewProxy)
-                        .padding(.bottom, 10)
                 }
             }
             .onAppear {
@@ -74,7 +76,6 @@ struct Carousel<Content: View>: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView(.horizontal) {
                 makeCommonScrollViewContent(scrollViewProxy)
-                    .padding(.bottom, 10)
             }
         }
         .onScrollGeometryChange(for: CGFloat.self) { geometry in
@@ -94,6 +95,9 @@ struct Carousel<Content: View>: View {
             .id(contentIdentifier)
             .frame(width: cellSize.width, height: cellSize.height)
             .clipped()
+            // Pad the content such that the scroll indicator appears beneath it
+            // so that the content is not covered. 
+            .padding(.bottom, scrollIndicatorOffset)
         }
     }
 }
