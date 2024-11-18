@@ -69,8 +69,8 @@ public struct PopupView: View {
     /// so that the the "close" button can close the view.
     var showCloseButton = false
     
-    /// The visibility of the popup title.
-    private var titleVisibility: TitleVisibility = .visible
+    /// The visibility of the popup header.
+    var headerVisibility: Visibility = .automatic
     
     /// The result of evaluating the popup expressions.
     @State private var evaluation: Evaluation?
