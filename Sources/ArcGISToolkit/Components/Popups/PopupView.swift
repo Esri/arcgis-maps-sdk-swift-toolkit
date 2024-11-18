@@ -80,27 +80,29 @@ public struct PopupView: View {
     
     public var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                if !popup.title.isEmpty && titleVisibility == .visible {
-                    Text(popup.title)
-                        .font(.title)
-                        .fontWeight(.bold)
-                }
-                Spacer()
-                if showCloseButton {
-                    Button(String.close, systemImage: "xmark") {
-                        isPresented?.wrappedValue = false
+            if headerVisibility != .hidden {
+                HStack {
+                    if !popup.title.isEmpty {
+                        Text(popup.title)
+                            .font(.title)
+                            .fontWeight(.bold)
                     }
-                    .labelStyle(.iconOnly)
+                    Spacer()
+                    if showCloseButton && isPresented != nil {
+                        Button(String.close, systemImage: "xmark") {
+                            isPresented?.wrappedValue = false
+                        }
+                        .labelStyle(.iconOnly)
 #if !os(visionOS)
-                    .foregroundColor(.secondary)
-                    .padding([.top, .bottom, .trailing], 4)
-                    .symbolVariant(.circle)
-                    .buttonStyle(.plain)
+                        .foregroundColor(.secondary)
+                        .padding([.top, .bottom, .trailing], 4)
+                        .symbolVariant(.circle)
+                        .buttonStyle(.plain)
 #endif
+                    }
                 }
+                Divider()
             }
-            Divider()
             Group {
                 if let evaluation {
                     if let error = evaluation.error {
