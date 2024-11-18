@@ -67,7 +67,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ A Boolean value specifying whether a "close" button should be shown or not. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the initializer,
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
-***REMOVED***private var showCloseButton = false
+***REMOVED***var showCloseButton = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the popup title.
 ***REMOVED***private var titleVisibility: TitleVisibility = .visible
