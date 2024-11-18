@@ -15,21 +15,12 @@
 import SwiftUI
 
 public extension FeatureFormView {
-    /// The visibility of the form title.
-    /// - Since: 200.6
-    enum TitleVisibility: Sendable {
-        /// The form title is hidden.
-        case hidden
-        /// The form title is visible.
-        case visible
-    }
-    
-    /// Specifies the visibility of the form title.
-    /// - Parameter visibility: The preferred visibility of the form title.
-    /// - Since: 200.6
-    func formTitle(_ visibility: TitleVisibility) -> FeatureFormView {
+    /// Specifies the visibility of the form header.
+    /// - Parameter visibility: The preferred visibility of the form header.
+    /// - Since: 200.7
+    func formHeader(_ visibility: Visibility) -> Self {
         var copy = self
-        copy.titleVisibility = visibility
+        copy.headerVisibility = visibility
         return copy
     }
 }
