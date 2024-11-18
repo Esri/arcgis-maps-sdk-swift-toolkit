@@ -67,7 +67,7 @@ public struct PopupView: View {
     /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the initializer,
     /// so that the the "close" button can close the view.
-    private var showCloseButton = false
+    var showCloseButton = false
     
     /// The visibility of the popup title.
     private var titleVisibility: TitleVisibility = .visible
