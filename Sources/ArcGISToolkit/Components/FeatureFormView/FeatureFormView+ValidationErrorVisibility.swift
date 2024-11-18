@@ -26,7 +26,7 @@ public extension FeatureFormView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Specifies the visibility of validation errors in the form.
 ***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of validation errors in the form.
-***REMOVED***func validationErrors(_ visibility: ValidationErrorVisibility) -> FeatureFormView {
+***REMOVED***func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.validationErrorVisibility = visibility
 ***REMOVED******REMOVED***return copy
