@@ -26,7 +26,7 @@ public extension FeatureFormView {
     
     /// Specifies the visibility of validation errors in the form.
     /// - Parameter visibility: The preferred visibility of validation errors in the form.
-    func validationErrors(_ visibility: ValidationErrorVisibility) -> FeatureFormView {
+    func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
         var copy = self
         copy.validationErrorVisibility = visibility
         return copy
