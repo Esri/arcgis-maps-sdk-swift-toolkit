@@ -15,21 +15,12 @@
 ***REMOVED***
 
 public extension FeatureFormView {
-***REMOVED******REMOVED***/ The visibility of the form title.
-***REMOVED******REMOVED***/ - Since: 200.6
-***REMOVED***enum TitleVisibility: Sendable {
-***REMOVED******REMOVED******REMOVED***/ The form title is hidden.
-***REMOVED******REMOVED***case hidden
-***REMOVED******REMOVED******REMOVED***/ The form title is visible.
-***REMOVED******REMOVED***case visible
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Specifies the visibility of the form title.
-***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of the form title.
-***REMOVED******REMOVED***/ - Since: 200.6
-***REMOVED***func formTitle(_ visibility: TitleVisibility) -> FeatureFormView {
+***REMOVED******REMOVED***/ Specifies the visibility of the form header.
+***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of the form header.
+***REMOVED******REMOVED***/ - Since: 200.7
+***REMOVED***func formHeader(_ visibility: Visibility) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.titleVisibility = visibility
+***REMOVED******REMOVED***copy.headerVisibility = visibility
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
