@@ -51,12 +51,10 @@
 ***REMOVED***/ and refer to
 ***REMOVED***/ [PopupExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
-@MainActor
-@preconcurrency
 public struct PopupView: View {
 ***REMOVED******REMOVED***/ Creates a `PopupView` with the given popup.
-***REMOVED******REMOVED***/ - Parameters
-***REMOVED******REMOVED***/***REMOVED*** popup: The popup to display.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - popup: The popup to display.
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED***public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
 ***REMOVED******REMOVED***self.popup = popup
@@ -73,7 +71,7 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
 ***REMOVED***@State private var evaluation: Evaluation?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>?
 ***REMOVED***
@@ -87,14 +85,16 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if showCloseButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.close, systemImage: "xmark") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
-***REMOVED******REMOVED******REMOVED******REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.circle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+#endif
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()

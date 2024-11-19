@@ -90,7 +90,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Note: The rename contextual action is disabled for attachments greater than the attachment download
 ***REMOVED******REMOVED***/ size limit as rename operations trigger a download which currently has adverse memory implications.
-***REMOVED***@MainActor
 ***REMOVED***func makeCarouselContent(for size: CGSize) -> some View {
 ***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
 ***REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel, attachmentDownloadSizeLimit: attachmentDownloadSizeLimit, cellSize: size)

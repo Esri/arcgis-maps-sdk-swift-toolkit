@@ -20,7 +20,6 @@ import UniformTypeIdentifiers
 internal import os
 
 ***REMOVED***/ The context menu shown when the new attachment button is pressed.
-@MainActor
 struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentsFormElement
@@ -32,9 +31,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the camera access alert is presented.
-***REMOVED***@State private var cameraAccessAlertIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment camera controller is presented.
 ***REMOVED***@State private var cameraIsShowing = false
@@ -50,6 +46,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
+***REMOVED***
+***REMOVED******REMOVED***/ Performs camera authorization request handling.
+***REMOVED***@StateObject private var cameraRequester = CameraRequester()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment size limit.
 ***REMOVED***let attachmentUploadSizeLimit = Measurement(
@@ -71,20 +70,12 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+***REMOVED******REMOVED******REMOVED***cameraRequester.request {
 ***REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let granted = await AVCaptureDevice.requestAccess(for: .video)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if granted {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraAccessAlertIsPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** onAccessDenied: { ***REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
@@ -117,7 +108,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***Menu {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Show photo/video and library picker.
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***takePhotoOrVideoButton()
+#endif
 ***REMOVED******REMOVED******REMOVED***chooseFromLibraryButton()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Always show file picker, no matter the input type.
 ***REMOVED******REMOVED******REMOVED***chooseFromFilesButton()
@@ -127,14 +120,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(5)
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
-***REMOVED******REMOVED***.alert(cameraAccessAlertTitle, isPresented: $cameraAccessAlertIsPresented) {
-#if !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED***appSettingsButton
-#endif
-***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) { ***REMOVED***
-***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(cameraAccessAlertMessage)
-***REMOVED***
+***REMOVED******REMOVED***.cameraRequester(cameraRequester)
 ***REMOVED******REMOVED***.alert(importFailureAlertTitle, isPresented: errorIsPresented) { ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(importFailureAlertMessage)
 ***REMOVED***
@@ -197,6 +183,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***.fullScreenCover(isPresented: $cameraIsShowing) {
 ***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
@@ -215,6 +202,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+#endif
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState,
@@ -230,24 +218,6 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***Button(String.settings) {
 ***REMOVED******REMOVED******REMOVED***Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A message for an alert requesting camera access.
-***REMOVED***var cameraAccessAlertMessage: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Please enable camera access in settings.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A message for an alert requesting camera access."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A title for an alert that camera access is disabled.
-***REMOVED***var cameraAccessAlertTitle: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Camera access is disabled",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A title for an alert that camera access is disabled."
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A label for a button to capture a new photo or video.

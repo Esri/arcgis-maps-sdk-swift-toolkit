@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying a thumbnail image for an attachment.
-@MainActor
 struct ThumbnailView: View  {
 ***REMOVED******REMOVED***/ The model represented by the thumbnail.
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel

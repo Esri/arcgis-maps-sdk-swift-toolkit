@@ -18,7 +18,7 @@
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 ***REMOVED***/
 ***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
-@MainActor
+@available(visionOS, unavailable)
 struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding var isPresented: Bool
@@ -97,7 +97,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(viewModel.selection) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let floorFacility = viewModel.selection?.facility {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
@@ -130,7 +130,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: facilityListIsVisible) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(facilityListIsVisible) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.removeAll()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -214,6 +214,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the back button in the header navigations controls is visible..
 ***REMOVED***var backButtonIsVisible: Bool {

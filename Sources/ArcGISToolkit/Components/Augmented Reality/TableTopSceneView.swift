@@ -17,11 +17,13 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality table top experience.
-@MainActor
-@preconcurrency
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 public struct TableTopSceneView: View {
+#if os(iOS)
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
+#endif
 ***REMOVED******REMOVED***/ The initial transformation for the scene's camera controller.
 ***REMOVED***@State private var initialTransformation: TransformationMatrix? = nil
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
@@ -36,8 +38,10 @@ public struct TableTopSceneView: View {
 ***REMOVED***var coachingOverlayIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+#if os(iOS)
 ***REMOVED******REMOVED***/ The configuration for the AR session.
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
+#endif
 ***REMOVED******REMOVED***/ A Boolean value indicating that the scene's initial transformation has been set.
 ***REMOVED***var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
 ***REMOVED******REMOVED***/ The anchor point for the scene view.
@@ -50,8 +54,13 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ Creates a table top scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - anchorPoint: The location point of the ArcGIS Scene that is anchored on a physical surface.
-***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
-***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view
+***REMOVED******REMOVED***/   translates as the device moves. This value can be determined by dividing the virtual
+***REMOVED******REMOVED***/   content width by the desired physical content width (translation factor = virtual content
+***REMOVED******REMOVED***/   width / desired physical content width). The virtual content width is the real-world size
+***REMOVED******REMOVED***/   of the scene content, and the desired physical content width is the physical tabletop
+***REMOVED******REMOVED***/   width; both measurements should be in meters. The virtual content width is determined 
+***REMOVED******REMOVED***/   by the clipping distance in meters around the camera.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -76,14 +85,17 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED******REMOVED***configuration.planeDetection = [.horizontal]
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***ZStack {
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let interfaceOrientation else { return ***REMOVED***
@@ -98,11 +110,11 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: renderer, node: node, anchor: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { parameters in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: parameters.renderer, node: parameters.node, anchor: parameters.anchor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { _, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: node, for: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { parameters in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: parameters.node, for: parameters.anchor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { screenPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !initialTransformationIsSet else { return ***REMOVED***
@@ -138,7 +150,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
@@ -147,18 +159,19 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: anchorPoint) { anchorPoint in
+***REMOVED******REMOVED***.onChange(anchorPoint) { anchorPoint in
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: translationFactor) { translationFactor in
+***REMOVED******REMOVED***.onChange(translationFactor) { translationFactor in
 ***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: clippingDistance) { clippingDistance in
+***REMOVED******REMOVED***.onChange(clippingDistance) { clippingDistance in
 ***REMOVED******REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED***
 ***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***/ Visualizes a new node added to the scene as an AR Plane.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - renderer: The renderer for the scene.
@@ -218,8 +231,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED***helpText = .planeFound
 ***REMOVED***
 ***REMOVED***
+#endif
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experince.
+***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experience.
 ***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
 ***REMOVED******REMOVED***/  coaching overlay view.
 ***REMOVED***public func coachingOverlayHidden(_ hidden: Bool) -> Self {
@@ -229,6 +243,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***
 
+#if os(iOS)
 private extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
 ***REMOVED******REMOVED***/ via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
@@ -250,6 +265,7 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***return initialTransformation
 ***REMOVED***
 ***REMOVED***
+#endif
 
 private extension String {
 ***REMOVED***static var planeFound: String {

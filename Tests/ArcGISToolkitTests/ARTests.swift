@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
 ***REMOVED***
 ***REMOVED***
 import XCTest
@@ -222,3 +223,4 @@ final class ARTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(view.calibrationButtonAlignment, .bottomLeading)
 ***REMOVED***
 ***REMOVED***
+#endif

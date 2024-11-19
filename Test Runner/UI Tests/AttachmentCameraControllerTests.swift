@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED***override func setUpWithError() throws {
 ***REMOVED******REMOVED***continueAfterFailure = true
@@ -34,8 +35,6 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED******REMOVED***let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
 ***REMOVED******REMOVED***let device = UIDevice.current.userInterfaceIdiom
 ***REMOVED******REMOVED***let orientation = app.staticTexts["Device Orientation"]
-***REMOVED******REMOVED***let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-***REMOVED******REMOVED***let allowButton = springboard.buttons["OK"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -78,5 +77,17 @@ final class AttachmentCameraControllerTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(cameraModeLabel.label, "Photo")
+***REMOVED***
+***REMOVED***
+
+private extension AttachmentCameraControllerTests {
+***REMOVED***var allowButton: XCUIElement {
+***REMOVED******REMOVED***let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+***REMOVED******REMOVED***let key = if #available(iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED***"Allow"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***"OK"
+***REMOVED***
+***REMOVED******REMOVED***return springboard.buttons[key]
 ***REMOVED***
 ***REMOVED***

@@ -24,6 +24,15 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Close".
+***REMOVED***static var close: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Close",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button indicating that the view should be closed."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
 ***REMOVED***static var emptyAttachmentDownloadErrorMessage: Self {
 ***REMOVED******REMOVED***.init(

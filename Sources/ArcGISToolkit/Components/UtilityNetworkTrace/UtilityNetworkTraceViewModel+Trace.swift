@@ -15,6 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***/ A trace performed on a utility network.
 ***REMOVED***struct Trace {
@@ -38,6 +39,11 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A collection of all elements returned in the trace.
 ***REMOVED******REMOVED***var elementResults = [UtilityElement]()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A collection of all feature results returned in the trace.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ Each feature corresponds to an element in `elementResults`.
+***REMOVED******REMOVED***var featureResults = [ArcGISFeature]()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A collection of utility trace function outputs.
 ***REMOVED******REMOVED***var functionOutputs = [UtilityTraceFunctionOutput]()
@@ -68,6 +74,7 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED******REMOVED***/ Finds the set of utility elements returned by the trace that belong to the provided
 ***REMOVED******REMOVED***/ asset group, grouped by type.
@@ -89,6 +96,20 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED******REMOVED***/ - Returns: The elements in the indicated group.
 ***REMOVED***func elements(inAssetGroupNamed assetGroupName: String) -> [UtilityElement] {
 ***REMOVED******REMOVED***elementResults.filter { $0.assetGroup.name == assetGroupName ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Toggles the selection state on feature result.
+***REMOVED******REMOVED***/ - Parameter selected: A Boolean value indicating whether the feature is selected or not.
+***REMOVED***func toggleFeatureSelection(selected: Bool) {
+***REMOVED******REMOVED***featureResults.forEach { feature in
+***REMOVED******REMOVED******REMOVED***if let featureLayer = feature.table?.layer as? FeatureLayer {
+***REMOVED******REMOVED******REMOVED******REMOVED***if selected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureLayer.selectFeature(feature)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureLayer.unselectFeature(feature)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A set of the asset group names returned by the trace.
@@ -122,6 +143,7 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel.Trace: Equatable {
 ***REMOVED***static func == (lhs: Self, rhs: Self) -> Bool {
 ***REMOVED******REMOVED***return lhs.id == rhs.id

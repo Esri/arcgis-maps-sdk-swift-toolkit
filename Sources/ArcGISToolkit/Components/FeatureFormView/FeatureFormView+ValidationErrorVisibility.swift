@@ -14,6 +14,7 @@
 
 ***REMOVED***
 
+@available(visionOS, unavailable)
 public extension FeatureFormView {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
 ***REMOVED***enum ValidationErrorVisibility: Sendable {
@@ -30,6 +31,7 @@ public extension FeatureFormView {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension EnvironmentValues {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
 ***REMOVED***var validationErrorVisibility: FeatureFormView.ValidationErrorVisibility {
@@ -39,6 +41,7 @@ extension EnvironmentValues {
 ***REMOVED***
 
 ***REMOVED***/ The validation error visibility configuration of a form.
+@available(visionOS, unavailable)
 private struct FormViewValidationErrorVisibility: EnvironmentKey {
 ***REMOVED***static let defaultValue: FeatureFormView.ValidationErrorVisibility = .automatic
 ***REMOVED***

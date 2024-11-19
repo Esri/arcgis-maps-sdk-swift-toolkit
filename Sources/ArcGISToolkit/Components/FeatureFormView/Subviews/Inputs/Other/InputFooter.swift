@@ -16,7 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the bottom of a field element in a form.
-@MainActor
+@available(visionOS, unavailable)
 struct InputFooter: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
@@ -74,6 +74,7 @@ struct InputFooter: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension InputFooter {
 ***REMOVED******REMOVED***/ Localized error text to be shown to a user depending on the type of error information available.
 ***REMOVED***var errorMessage: Text? {
@@ -217,16 +218,19 @@ extension InputFooter {
 ***REMOVED***var lengthRange: ClosedRange<Int>? {
 ***REMOVED******REMOVED***if let input = element.input as? TextAreaFormInput {
 ***REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
-***REMOVED*** else if let input = element.input as? TextBoxFormInput, element.fieldType == .text {
-***REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED*** else if element.fieldType == .text {
+***REMOVED******REMOVED******REMOVED***if let input = element.input as? TextBoxFormInput {
+***REMOVED******REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
+***REMOVED******REMOVED*** else if let input = element.input as? BarcodeScannerFormInput {
+***REMOVED******REMOVED******REMOVED******REMOVED***return input.minLength...input.maxLength
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable numeric range the input.
 ***REMOVED***var numericRange: (min: String, max: String)? {
-***REMOVED******REMOVED***if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableMinAndMax {
+***REMOVED******REMOVED***if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableNumericMinAndMax {
 ***REMOVED******REMOVED******REMOVED***return minMax
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil
@@ -336,13 +340,17 @@ extension InputFooter {
 ***REMOVED***
 
 private extension RangeDomain {
-***REMOVED******REMOVED***/ String representations of the minimum and maximum value of the range domain.
-***REMOVED***var displayableMinAndMax: (min: String, max: String)? {
-***REMOVED******REMOVED***if let min = minValue as? Double, let max = maxValue as? Double {
+***REMOVED******REMOVED***/ String representations of the numeric minimum and maximum value of the range domain.
+***REMOVED***var displayableNumericMinAndMax: (min: String, max: String)? {
+***REMOVED******REMOVED***if let min = minValue as? Float32, let max = maxValue as? Float32 {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
-***REMOVED*** else if let min = minValue as? Int, let max = maxValue as? Int {
+***REMOVED*** else if let min = minValue as? Float64, let max = maxValue as? Float64 {
+***REMOVED******REMOVED******REMOVED***return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
+***REMOVED*** else if let min = minValue as? Int16, let max = maxValue as? Int16 {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
 ***REMOVED*** else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
+***REMOVED*** else if let min = minValue as? Int64, let max = maxValue as? Int64 {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil

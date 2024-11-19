@@ -12,11 +12,11 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if os(iOS)
 ***REMOVED***
 import UniformTypeIdentifiers
 
 ***REMOVED***/ A UIImagePickerController wrapper to provide a native photo capture experience.
-@MainActor
 struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
@@ -81,7 +81,7 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 extension AttachmentCameraController {
 ***REMOVED******REMOVED***/ Specifies an action to perform when the camera capture mode has changed from photo to video or vice versa.
 ***REMOVED******REMOVED***/ - Parameter action: The new camera capture mode.
-***REMOVED***func onCameraCaptureModeChanged(perform action: @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
+***REMOVED***func onCameraCaptureModeChanged(perform action: @MainActor @Sendable @escaping (_: UIImagePickerController.CameraCaptureMode) -> Void) -> Self {
 ***REMOVED******REMOVED***self.controller.action = action
 ***REMOVED******REMOVED***return self
 ***REMOVED***
@@ -112,3 +112,4 @@ class AttachmentUIImagePickerController: UIImagePickerController {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+#endif

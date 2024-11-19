@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class RepresentedUITextViewTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
