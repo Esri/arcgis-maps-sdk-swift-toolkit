@@ -207,3 +207,23 @@ public struct Scalebar: View {
         .environment(\.scalebarSettings, settings)
     }
 }
+
+@available(iOS 17.0, *)
+#Preview {
+    Scalebar(
+        maxWidth: 175,
+        spatialReference: .webMercator,
+        unitsPerPoint: 100_000,
+        viewpoint: .zero
+    )
+}
+
+private extension Viewpoint {
+    static var zero: Viewpoint {
+        .init(
+            center: .init(x: .zero, y: .zero, spatialReference: .wgs84),
+            scale: .zero,
+            rotation: .zero
+        )
+    }
+}
