@@ -51,12 +51,10 @@ import ArcGIS
 /// and refer to
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 /// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
-@MainActor
-@preconcurrency
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
-    /// - Parameters
-    ///     popup: The popup to display.
+    /// - Parameters:
+    ///   - popup: The popup to display.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = popup
@@ -73,7 +71,7 @@ public struct PopupView: View {
     
     /// The result of evaluating the popup expressions.
     @State private var evaluation: Evaluation?
-
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
     
@@ -87,14 +85,16 @@ public struct PopupView: View {
                 }
                 Spacer()
                 if showCloseButton {
-                    Button(action: {
+                    Button(String.close, systemImage: "xmark") {
                         isPresented?.wrappedValue = false
-                    }, label: {
-                        Image(systemName: "xmark.circle")
-                            .foregroundColor(.secondary)
-                            .padding([.top, .bottom, .trailing], 4)
-                    })
+                    }
+                    .labelStyle(.iconOnly)
+#if !os(visionOS)
+                    .foregroundColor(.secondary)
+                    .padding([.top, .bottom, .trailing], 4)
+                    .symbolVariant(.circle)
                     .buttonStyle(.plain)
+#endif
                 }
             }
             Divider()

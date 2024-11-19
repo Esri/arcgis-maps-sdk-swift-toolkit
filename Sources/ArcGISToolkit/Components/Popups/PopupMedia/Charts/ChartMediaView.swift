@@ -61,6 +61,7 @@ struct ChartMediaView: View {
         .onTapGesture {
             isShowingDetailView = true
         }
+        .hoverEffect()
         .sheet(isPresented: $isShowingDetailView) {
             MediaDetailView(
                 popupMedia: popupMedia,

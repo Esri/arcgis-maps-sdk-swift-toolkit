@@ -412,6 +412,9 @@ to be imported as an attachment. */
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
 
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "Unsupported Value";
+
 /* A label in reference to a credential username. */
 "Username" = "Username";
 

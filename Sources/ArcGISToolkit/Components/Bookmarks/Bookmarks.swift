@@ -30,7 +30,6 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BookmarksExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
 /// in the project. To learn more about using the `Bookmarks` component see the <doc:BookmarksTutorial>.
-@MainActor
 @preconcurrency
 public struct Bookmarks: View {
     /// The data source used to initialize the view.
@@ -191,12 +190,16 @@ extension Bookmarks {
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
+#endif
 #if targetEnvironment(macCatalyst)
                 .listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
 #endif
             }
+#if !os(visionOS)
             .listStyle(.plain)
+#endif
         }
     }
     

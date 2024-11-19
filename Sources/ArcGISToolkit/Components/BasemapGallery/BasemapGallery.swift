@@ -52,7 +52,6 @@ import ArcGIS
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BasemapGalleryExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
 /// in the project. To learn more about using the `BasemapGallery` see the <doc:BasemapGalleryTutorial>.
-@MainActor
 @preconcurrency
 public struct BasemapGallery: View {
     /// The view style of the gallery.
@@ -224,7 +223,7 @@ private extension BasemapGallery {
 
 public extension BasemapGallery {
     /// The style of the basemap gallery. Defaults to ``Style/automatic(maxGridItemWidth:)``.
-    /// - Parameter style: The `Style` to use.
+    /// - Parameter newStyle: The `Style` to use.
     /// - Returns: The `BasemapGallery`.
     func style(
         _ newStyle: Style

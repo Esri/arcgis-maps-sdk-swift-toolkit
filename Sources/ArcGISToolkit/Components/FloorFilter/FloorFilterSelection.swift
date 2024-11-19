@@ -15,6 +15,7 @@
 import ArcGIS
 
 ///  A selected site, facility, or level.
+@available(visionOS, unavailable)
 public enum FloorFilterSelection: Hashable, Sendable {
     /// A selected site.
     case site(FloorSite)
@@ -24,6 +25,7 @@ public enum FloorFilterSelection: Hashable, Sendable {
     case level(FloorLevel)
 }
 
+@available(visionOS, unavailable)
 public extension FloorFilterSelection {
     /// The selected site.
     var site: FloorSite? {

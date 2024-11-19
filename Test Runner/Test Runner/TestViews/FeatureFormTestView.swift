@@ -16,7 +16,6 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-@MainActor
 struct FeatureFormTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
@@ -51,7 +50,7 @@ private extension FeatureFormTestView {
     /// - Parameters:
     ///   - map: The map under test.
     ///   - testCase: The test definition.
-    @MainActor func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
+    func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
         MapView(map: map)
             .onAttributionBarHeightChanged {
                 attributionBarHeight = $0
@@ -64,9 +63,8 @@ private extension FeatureFormTestView {
                 let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
                 guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
                 try? await feature.load()
-                guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return }
                 featureLayer?.selectFeature(feature)
-                featureForm = FeatureForm(feature: feature, definition: formDefinition)
+                featureForm = FeatureForm(feature: feature)
                 isPresented = true
             }
             .ignoresSafeArea(.keyboard)
@@ -144,6 +142,7 @@ private extension FeatureFormTestView {
         .init("testCase_3_4", objectID: 2, portalID: .comboBoxMapID),
         .init("testCase_3_5", objectID: 2, portalID: .comboBoxMapID),
         .init("testCase_3_6", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_7", objectID: 2, portalID: .comboBoxMapID),
         .init("testCase_4_1", objectID: 1, portalID: .radioButtonMapID),
         .init("testCase_4_2", objectID: 1, portalID: .radioButtonMapID),
         .init("testCase_5_1", objectID: 1, portalID: .switchMapID),
@@ -156,6 +155,7 @@ private extension FeatureFormTestView {
         .init("testCase_9_1", objectID: 1, portalID: .testCase9),
         .init("testCase_10_1", objectID: 1, portalID: .testCase10),
         .init("testCase_10_2", objectID: 1, portalID: .testCase10),
+        .init("testCase_11_1", objectID: 2, portalID: .testCase11),
     ]}
 }
 
@@ -171,4 +171,5 @@ private extension String {
     static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
     static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
     static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
+    static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
 }
