@@ -88,7 +88,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showCloseButton && isPresented != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.close, systemImage: "xmark") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
