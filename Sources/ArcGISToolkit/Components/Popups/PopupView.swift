@@ -88,7 +88,7 @@ public struct PopupView: View {
                             .fontWeight(.bold)
                     }
                     Spacer()
-                    if showCloseButton && isPresented != nil {
+                    if isPresented != nil {
                         Button(String.close, systemImage: "xmark") {
                             isPresented?.wrappedValue = false
                         }
