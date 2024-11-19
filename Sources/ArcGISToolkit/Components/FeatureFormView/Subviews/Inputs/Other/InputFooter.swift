@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
-@MainActor
+@available(visionOS, unavailable)
 struct InputFooter: View {
     @Environment(\.formElementPadding) var elementPadding
     
@@ -74,6 +74,7 @@ struct InputFooter: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension InputFooter {
     /// Localized error text to be shown to a user depending on the type of error information available.
     var errorMessage: Text? {
@@ -217,16 +218,19 @@ extension InputFooter {
     var lengthRange: ClosedRange<Int>? {
         if let input = element.input as? TextAreaFormInput {
             return input.minLength...input.maxLength
-        } else if let input = element.input as? TextBoxFormInput, element.fieldType == .text {
-            return input.minLength...input.maxLength
-        } else {
-            return nil
+        } else if element.fieldType == .text {
+            if let input = element.input as? TextBoxFormInput {
+                return input.minLength...input.maxLength
+            } else if let input = element.input as? BarcodeScannerFormInput {
+                return input.minLength...input.maxLength
+            }
         }
+        return nil
     }
     
     /// The allowable numeric range the input.
     var numericRange: (min: String, max: String)? {
-        if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableMinAndMax {
+        if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableNumericMinAndMax {
             return minMax
         } else {
             return nil
@@ -336,13 +340,17 @@ extension InputFooter {
 }
 
 private extension RangeDomain {
-    /// String representations of the minimum and maximum value of the range domain.
-    var displayableMinAndMax: (min: String, max: String)? {
-        if let min = minValue as? Double, let max = maxValue as? Double {
+    /// String representations of the numeric minimum and maximum value of the range domain.
+    var displayableNumericMinAndMax: (min: String, max: String)? {
+        if let min = minValue as? Float32, let max = maxValue as? Float32 {
             return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
-        } else if let min = minValue as? Int, let max = maxValue as? Int {
+        } else if let min = minValue as? Float64, let max = maxValue as? Float64 {
+            return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
+        } else if let min = minValue as? Int16, let max = maxValue as? Int16 {
             return (min.formatted(), max.formatted())
         } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+            return (min.formatted(), max.formatted())
+        } else if let min = minValue as? Int64, let max = maxValue as? Int64 {
             return (min.formatted(), max.formatted())
         } else {
             return nil

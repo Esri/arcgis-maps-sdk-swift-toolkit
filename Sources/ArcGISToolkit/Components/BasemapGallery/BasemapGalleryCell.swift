@@ -15,7 +15,6 @@
 import SwiftUI
 
 /// A row or grid element representing a basemap gallery item.
-@MainActor
 struct BasemapGalleryCell: View {
     /// The displayed item.
     @ObservedObject var item: BasemapGalleryItem
@@ -59,6 +58,10 @@ struct BasemapGalleryCell: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(item.hasError ? .secondary : .primary)
             }
+#if os(visionOS)
+            .contentShape(.hoverEffect, .rect(cornerRadius: 12))
+            .hoverEffect()
+#endif
         })
         .buttonStyle(.plain)
         .disabled(item.isBasemapLoading)

@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class FeatureFormViewTests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false
@@ -1020,7 +1021,7 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 3.6: noValueOption is 'Hide'
-    func testCase_3_6() {
+    func testCase_3_6() throws {
         let app = XCUIApplication()
         let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo No Value False"]
@@ -1049,10 +1050,17 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        XCTAssertEqual(
-            fieldValue.label,
-            ""
-        )
+        if #available(iOS 18.0, *) {
+            XCTAssertFalse(
+                fieldValue.exists,
+                "The field value exists but it should not because it is empty."
+            )
+        } else {
+            XCTAssertEqual(
+                fieldValue.label,
+                ""
+            )
+        }
         
         optionsButton.tap()
         
@@ -1083,6 +1091,65 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "First"
+        )
+    }
+    
+    /// Test case 3.7: Unsupported value
+    func testCase_3_7() throws {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["Unsupported Value"]
+        let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let noValueButton = app.buttons["No value"]
+        let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
+        let unsupportedValue = app.buttons["0"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "0"
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertTrue(
+            unsupportedValueSectionHeader.waitForExistence(timeout: 1),
+            "The Unsupported Value section doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            unsupportedValue.exists,
+            "The Unsupported Value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            noValueButton.exists,
+            "No Value doesn't exist."
+        )
+        
+        noValueButton.tap()
+        
+        XCTAssertFalse(
+            unsupportedValueSectionHeader.exists,
+            "The Unsupported Value section exists."
         )
     }
     
@@ -1435,7 +1502,7 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 7.1: Test read only elements
-    func testCase_7_1() {
+    func testCase_7_1() throws {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1524,7 +1591,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The form failed to open after 10 seconds."
         )
         
-        XCTAssertTrue(attachmentElementTitle.exists)
+        XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
         XCTAssertTrue(placeholderImage.exists)
         XCTAssertTrue(attachmentName.exists)
         XCTAssertTrue(sizeLabel.exists)
@@ -1630,6 +1697,39 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(plainText.exists)
+    }
+    
+    /// Test case 11.1: Barcode Scan and Clear buttons
+    func testCase_11_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test case 11.1 Layer"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let scanButton = app.buttons["Barcode Scan Button"]
+        let clearButton = app.buttons["Barcode Clear Button"]
+        let barcodeValidationString = app.staticTexts["Barcode Footer"]
+        let fieldValue = app.textFields["Barcode Text Input"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+        
+        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        XCTAssertFalse(clearButton.exists, "The clear button exists.")
+        
+        fieldValue.tap()
+        fieldValue.typeText("https://esri.com")
+        
+        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
     }
 }
 

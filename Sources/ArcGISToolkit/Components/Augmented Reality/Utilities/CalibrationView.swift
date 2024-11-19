@@ -61,9 +61,10 @@ class WorldScaleCalibrationViewModel: ObservableObject {
     }
 }
 
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 extension WorldScaleSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
-    @MainActor
     struct CalibrationView: View {
         @ObservedObject
         var viewModel: WorldScaleCalibrationViewModel
@@ -179,6 +180,8 @@ extension WorldScaleSceneView {
     }
 }
 
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 private extension WorldScaleSceneView.CalibrationView {
     var calibrationLabel: String {
         String(

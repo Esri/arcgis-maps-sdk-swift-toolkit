@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // Copyright 2021 Esri
 //
@@ -21,7 +21,8 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v16),
-        .macCatalyst(.v16)
+        .macCatalyst(.v16),
+        .visionOS(.v2)
     ],
     products: [
         .library(
@@ -39,9 +40,6 @@ let package = Package(
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
                 .product(name: "Markdown", package: "swift-markdown")
-            ],
-            resources: [
-                .copy("PrivacyInfo.xcprivacy")
             ]
         ),
         .testTarget(
@@ -50,13 +48,3 @@ let package = Package(
         )
     ]
 )
-
-for target in package.targets {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        // Experimental Features.
-        .enableExperimentalFeature("AccessLevelOnImport"),
-        .enableExperimentalFeature("StrictConcurrency"),
-        // Upcoming Features.
-        .enableUpcomingFeature("DisableOutwardActorInference")
-    ]
-}

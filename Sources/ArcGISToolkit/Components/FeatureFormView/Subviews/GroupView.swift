@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// Displays a group form element and manages the visibility of the elements within the group.
-@MainActor
 struct GroupView<Content>: View where Content: View {
     /// A Boolean value indicating whether the group is expanded or collapsed.
     @State private var isExpanded = false
@@ -31,7 +30,7 @@ struct GroupView<Content>: View where Content: View {
     let element: GroupFormElement
     
     /// The closure to perform to build an element in the group.
-    let viewCreator: (FieldFormElement) -> Content
+    let viewCreator: (FormElement) -> Content
     
     /// Filters the group's elements by visibility.
     private func updateVisibleElements() {
@@ -41,11 +40,9 @@ struct GroupView<Content>: View where Content: View {
     var body: some View {
         Group {
             DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(visibleElements, id: \.label) { formElement in
-                    if let element = formElement as? FieldFormElement {
-                        viewCreator(element)
-                            .padding(.leading, 16)
-                    }
+                ForEach(visibleElements, id: \.self) { element in
+                    viewCreator(element)
+                        .padding(.leading, 16)
                 }
             } label: {
                 VStack {
@@ -61,7 +58,7 @@ struct GroupView<Content>: View where Content: View {
         .onAppear {
             isExpanded = element.initialState == .expanded
             for element in element.elements {
-                let newTask = Task.detached { @MainActor [self] in
+                let newTask = Task { @MainActor [self] in
                     for await _ in element.$isVisible {
                         self.updateVisibleElements()
                     }

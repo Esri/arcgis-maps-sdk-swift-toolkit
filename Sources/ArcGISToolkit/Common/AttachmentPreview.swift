@@ -90,7 +90,6 @@ struct AttachmentPreview: View {
     ///
     /// - Note: The rename contextual action is disabled for attachments greater than the attachment download
     /// size limit as rename operations trigger a download which currently has adverse memory implications.
-    @MainActor
     func makeCarouselContent(for size: CGSize) -> some View {
         ForEach(attachmentModels) { attachmentModel in
             AttachmentCell(attachmentModel: attachmentModel, attachmentDownloadSizeLimit: attachmentDownloadSizeLimit, cellSize: size)

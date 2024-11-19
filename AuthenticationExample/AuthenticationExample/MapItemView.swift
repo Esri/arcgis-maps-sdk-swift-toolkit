@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view that displays a map.
-@MainActor
 struct MapItemView: View {
     /// The map that is to be displayed.
     let map: Map
