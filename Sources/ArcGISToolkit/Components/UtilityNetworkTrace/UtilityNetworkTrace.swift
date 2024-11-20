@@ -119,9 +119,6 @@ public struct UtilityNetworkTrace: View {
     /// dialog is being shown.
     @State private var isShowingClearAllResultsConfirmationDialog = false
     
-    /// <#Description#>
-    @State private var startingPointsAreExternallyProvided = false
-    
     /// The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
     /// The view observes `UtilityNetworkTraceViewModel` for changes in state.
     @StateObject private var viewModel: UtilityNetworkTraceViewModel
@@ -136,12 +133,6 @@ public struct UtilityNetworkTrace: View {
     
     /// Acts as the point at which newly selected starting point graphics will be created.
     @Binding private var mapPoint: Point?
-    
-    /// Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
-    ///
-    /// - Warning: This property should be considered deprecated. Viewpoint updates should be
-    /// handled via the map view proxy.
-    @Binding private var viewpoint: Viewpoint?
     
     // MARK: Subviews
     
@@ -287,11 +278,9 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             Section(String.startingPointsTitle) {
-                if !startingPointsAreExternallyProvided {
-                    Button(String.addNewButtonLabel) {
-                        currentActivity = .creatingTrace(.addingStartingPoints)
-                        activeDetent = .summary
-                    }
+                Button(String.addNewButtonLabel) {
+                    currentActivity = .creatingTrace(.addingStartingPoints)
+                    activeDetent = .summary
                 }
                 if !viewModel.pendingTrace.startingPoints.isEmpty {
                     DisclosureGroup(
@@ -618,53 +607,26 @@ public struct UtilityNetworkTrace: View {
     /// - Parameters:
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
+    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
-    ///   - startingPoints: A list of programmatically provided starting points.
+    ///   - startingPoints: An optional list of programmatically provided starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
+        mapPoint: Binding<Point?>,
         mapViewProxy: MapViewProxy,
-        startingPoints: Binding<[UtilityNetworkTraceStartingPoint]>
+        startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
         self.mapViewProxy = mapViewProxy
-        startingPointsAreExternallyProvided = true
         _activeDetent = .constant(nil)
-        _mapPoint = .constant(nil)
+        _mapPoint = mapPoint
         _graphicsOverlay = graphicsOverlay
-        _viewpoint = .constant(nil)
         _externalStartingPoints = startingPoints
         _viewModel = StateObject(
             wrappedValue: UtilityNetworkTraceViewModel(
                 map: map,
                 graphicsOverlay: graphicsOverlay.wrappedValue,
                 startingPoints: startingPoints.wrappedValue
-            )
-        )
-    }
-    
-    /// A graphical interface to run pre-configured traces on a map's utility networks.
-    /// - Parameters:
-    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
-    ///   - map: The map containing the utility network(s).
-    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
-    public init(
-        graphicsOverlay: Binding<GraphicsOverlay>,
-        map: Map,
-        mapPoint: Binding<Point?>,
-        mapViewProxy: MapViewProxy
-    ) {
-        self.mapViewProxy = mapViewProxy
-        _activeDetent = .constant(nil)
-        _mapPoint = mapPoint
-        _graphicsOverlay = graphicsOverlay
-        _viewpoint = .constant(nil)
-        _externalStartingPoints = .constant([])
-        _viewModel = StateObject(
-            wrappedValue: UtilityNetworkTraceViewModel(
-                map: map,
-                graphicsOverlay: graphicsOverlay.wrappedValue,
-                startingPoints: []
             )
         )
     }
@@ -689,8 +651,6 @@ public struct UtilityNetworkTrace: View {
         let newViewpoint = Viewpoint(boundingGeometry: extent)
         if let mapViewProxy {
             Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-        } else {
-            viewpoint = newViewpoint
         }
     }
     
@@ -1080,7 +1040,6 @@ public extension UtilityNetworkTrace /* Deprecated */ {
         _activeDetent = .constant(nil)
         _mapPoint = mapPoint
         _graphicsOverlay = graphicsOverlay
-        _viewpoint = viewpoint
         _externalStartingPoints = startingPoints
         _viewModel = StateObject(
             wrappedValue: UtilityNetworkTraceViewModel(
