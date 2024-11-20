@@ -55,11 +55,11 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $activeDetent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $activeDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
