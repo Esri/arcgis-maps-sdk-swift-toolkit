@@ -618,8 +618,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy,
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
