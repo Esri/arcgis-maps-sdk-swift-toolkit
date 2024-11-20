@@ -55,11 +55,11 @@ struct UtilityNetworkTraceExampleView: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .floatingPanel(
-                        attributionBarHeight: attributionBarHeight,
-                        backgroundColor: Color(uiColor: .systemGroupedBackground),
-                        selectedDetent: $activeDetent,
-                        horizontalAlignment: .trailing,
-                        isPresented: .constant(true)
+                    attributionBarHeight: attributionBarHeight,
+                    backgroundColor: Color(uiColor: .systemGroupedBackground),
+                    selectedDetent: $activeDetent,
+                    horizontalAlignment: .trailing,
+                    isPresented: .constant(true)
                 ) {
                     UtilityNetworkTrace(
                         graphicsOverlay: $resultGraphicsOverlay,
