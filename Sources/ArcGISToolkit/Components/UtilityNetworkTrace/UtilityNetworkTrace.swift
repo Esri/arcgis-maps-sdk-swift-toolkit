@@ -119,9 +119,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ dialog is being shown.
 ***REMOVED***@State private var isShowingClearAllResultsConfirmationDialog = false
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var startingPointsAreExternallyProvided = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
 ***REMOVED******REMOVED***/ The view observes `UtilityNetworkTraceViewModel` for changes in state.
 ***REMOVED***@StateObject private var viewModel: UtilityNetworkTraceViewModel
@@ -136,12 +133,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED***@Binding private var mapPoint: Point?
-***REMOVED***
-***REMOVED******REMOVED***/ Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Warning: This property should be considered deprecated. Viewpoint updates should be
-***REMOVED******REMOVED***/ handled via the map view proxy.
-***REMOVED***@Binding private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Subviews
 ***REMOVED***
@@ -287,11 +278,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section(String.startingPointsTitle) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !startingPointsAreExternallyProvided {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
@@ -618,53 +607,26 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
+***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED******REMOVED***/   - startingPoints: A list of programmatically provided starting points.
+***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***mapPoint: Binding<Point?>,
 ***REMOVED******REMOVED***mapViewProxy: MapViewProxy,
-***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]>
+***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
-***REMOVED******REMOVED***startingPointsAreExternallyProvided = true
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
-***REMOVED******REMOVED***_mapPoint = .constant(nil)
+***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
-***REMOVED******REMOVED***_viewpoint = .constant(nil)
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***startingPoints: startingPoints.wrappedValue
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
-***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
-***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***public init(
-***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
-***REMOVED******REMOVED***map: Map,
-***REMOVED******REMOVED***mapPoint: Binding<Point?>,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy
-***REMOVED***) {
-***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
-***REMOVED******REMOVED***_activeDetent = .constant(nil)
-***REMOVED******REMOVED***_mapPoint = mapPoint
-***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
-***REMOVED******REMOVED***_viewpoint = .constant(nil)
-***REMOVED******REMOVED***_externalStartingPoints = .constant([])
-***REMOVED******REMOVED***_viewModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue,
-***REMOVED******REMOVED******REMOVED******REMOVED***startingPoints: []
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -689,8 +651,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: extent)
 ***REMOVED******REMOVED***if let mapViewProxy {
 ***REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -1080,7 +1040,6 @@ public extension UtilityNetworkTrace /* Deprecated */ {
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
 ***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
-***REMOVED******REMOVED***_viewpoint = viewpoint
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
