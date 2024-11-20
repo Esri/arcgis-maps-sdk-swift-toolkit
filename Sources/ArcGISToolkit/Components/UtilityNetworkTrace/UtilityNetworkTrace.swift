@@ -134,6 +134,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED***@Binding private var mapPoint: Point?
 ***REMOVED***
+***REMOVED******REMOVED***/ Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Warning: This property should be considered deprecated. Viewpoint updates should be
+***REMOVED******REMOVED***/ handled via the map view proxy.
+***REMOVED***@Binding private var viewpoint: Viewpoint?
+***REMOVED***
 ***REMOVED******REMOVED*** MARK: Subviews
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to switch between the trace creation and viewing tabs.
@@ -621,6 +627,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
 ***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
+***REMOVED******REMOVED***_viewpoint = .constant(nil)
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
@@ -1027,7 +1034,7 @@ public extension UtilityNetworkTrace /* Deprecated */ {
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
-***REMOVED******REMOVED***/ - Attention: Deprecated at 200.6.
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
 ***REMOVED***@available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
 ***REMOVED***init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
@@ -1042,6 +1049,7 @@ public extension UtilityNetworkTrace /* Deprecated */ {
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
 ***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
+***REMOVED******REMOVED***_viewpoint = viewpoint
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
