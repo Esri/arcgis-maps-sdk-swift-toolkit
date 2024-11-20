@@ -134,6 +134,12 @@ public struct UtilityNetworkTrace: View {
     /// Acts as the point at which newly selected starting point graphics will be created.
     @Binding private var mapPoint: Point?
     
+    /// Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
+    ///
+    /// - Warning: This property should be considered deprecated. Viewpoint updates should be
+    /// handled via the map view proxy.
+    @Binding private var viewpoint: Viewpoint?
+    
     // MARK: Subviews
     
     /// Allows the user to switch between the trace creation and viewing tabs.
@@ -621,6 +627,7 @@ public struct UtilityNetworkTrace: View {
         _activeDetent = .constant(nil)
         _mapPoint = mapPoint
         _graphicsOverlay = graphicsOverlay
+        _viewpoint = .constant(nil)
         _externalStartingPoints = startingPoints
         _viewModel = StateObject(
             wrappedValue: UtilityNetworkTraceViewModel(
@@ -1027,7 +1034,7 @@ public extension UtilityNetworkTrace /* Deprecated */ {
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     ///   - startingPoints: An optional list of programmatically provided starting points.
-    /// - Attention: Deprecated at 200.6.
+    /// - Attention: Deprecated at 200.7.
     @available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
     init(
         graphicsOverlay: Binding<GraphicsOverlay>,
@@ -1042,6 +1049,7 @@ public extension UtilityNetworkTrace /* Deprecated */ {
         _activeDetent = .constant(nil)
         _mapPoint = mapPoint
         _graphicsOverlay = graphicsOverlay
+        _viewpoint = viewpoint
         _externalStartingPoints = startingPoints
         _viewModel = StateObject(
             wrappedValue: UtilityNetworkTraceViewModel(
