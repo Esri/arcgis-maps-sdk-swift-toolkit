@@ -638,6 +638,33 @@ public struct UtilityNetworkTrace: View {
         )
     }
     
+    /// A graphical interface to run pre-configured traces on a map's utility networks.
+    /// - Parameters:
+    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
+    ///   - map: The map containing the utility network(s).
+    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
+    public init(
+        graphicsOverlay: Binding<GraphicsOverlay>,
+        map: Map,
+        mapPoint: Binding<Point?>,
+        mapViewProxy: MapViewProxy
+    ) {
+        self.mapViewProxy = mapViewProxy
+        _activeDetent = .constant(nil)
+        _mapPoint = mapPoint
+        _graphicsOverlay = graphicsOverlay
+        _viewpoint = .constant(nil)
+        _externalStartingPoints = .constant([])
+        _viewModel = StateObject(
+            wrappedValue: UtilityNetworkTraceViewModel(
+                map: map,
+                graphicsOverlay: graphicsOverlay.wrappedValue,
+                startingPoints: []
+            )
+        )
+    }
+    
     /// Sets the active detent for a hosting floating panel.
     /// - Parameter detent: A binding to a value that determines the height of a hosting
     /// floating panel.
