@@ -614,12 +614,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
+***REMOVED******REMOVED***/   - startingPoints: A list of programmatically provided starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
-***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED******REMOVED***mapViewProxy: MapViewProxy,
+***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
