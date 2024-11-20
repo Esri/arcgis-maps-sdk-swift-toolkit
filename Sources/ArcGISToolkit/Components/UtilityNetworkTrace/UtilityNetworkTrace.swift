@@ -638,6 +638,33 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
+***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
+***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED***public init(
+***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
+***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***mapPoint: Binding<Point?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy
+***REMOVED***) {
+***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
+***REMOVED******REMOVED***_activeDetent = .constant(nil)
+***REMOVED******REMOVED***_mapPoint = mapPoint
+***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
+***REMOVED******REMOVED***_viewpoint = .constant(nil)
+***REMOVED******REMOVED***_externalStartingPoints = .constant([])
+***REMOVED******REMOVED***_viewModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***startingPoints: []
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets the active detent for a hosting floating panel.
 ***REMOVED******REMOVED***/ - Parameter detent: A binding to a value that determines the height of a hosting
 ***REMOVED******REMOVED***/ floating panel.
