@@ -119,6 +119,9 @@ public struct UtilityNetworkTrace: View {
     /// dialog is being shown.
     @State private var isShowingClearAllResultsConfirmationDialog = false
     
+    /// <#Description#>
+    @State private var startingPointsAreExternallyProvided = false
+    
     /// The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
     /// The view observes `UtilityNetworkTraceViewModel` for changes in state.
     @StateObject private var viewModel: UtilityNetworkTraceViewModel
@@ -284,9 +287,11 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             Section(String.startingPointsTitle) {
-                Button(String.addNewButtonLabel) {
-                    currentActivity = .creatingTrace(.addingStartingPoints)
-                    activeDetent = .summary
+                if !startingPointsAreExternallyProvided {
+                    Button(String.addNewButtonLabel) {
+                        currentActivity = .creatingTrace(.addingStartingPoints)
+                        activeDetent = .summary
+                    }
                 }
                 if !viewModel.pendingTrace.startingPoints.isEmpty {
                     DisclosureGroup(
@@ -622,6 +627,7 @@ public struct UtilityNetworkTrace: View {
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]>
     ) {
         self.mapViewProxy = mapViewProxy
+        startingPointsAreExternallyProvided = true
         _activeDetent = .constant(nil)
         _mapPoint = .constant(nil)
         _graphicsOverlay = graphicsOverlay
