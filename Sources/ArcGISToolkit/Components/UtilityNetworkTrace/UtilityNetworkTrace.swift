@@ -119,6 +119,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ dialog is being shown.
 ***REMOVED***@State private var isShowingClearAllResultsConfirmationDialog = false
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var startingPointsAreExternallyProvided = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
 ***REMOVED******REMOVED***/ The view observes `UtilityNetworkTraceViewModel` for changes in state.
 ***REMOVED***@StateObject private var viewModel: UtilityNetworkTraceViewModel
@@ -284,9 +287,11 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section(String.startingPointsTitle) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
+***REMOVED******REMOVED******REMOVED******REMOVED***if !startingPointsAreExternallyProvided {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
@@ -622,6 +627,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
+***REMOVED******REMOVED***startingPointsAreExternallyProvided = true
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
 ***REMOVED******REMOVED***_mapPoint = .constant(nil)
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
