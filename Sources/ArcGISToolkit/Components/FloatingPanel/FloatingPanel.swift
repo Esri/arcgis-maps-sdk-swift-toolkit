@@ -81,7 +81,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .clipShape(
                 RoundedCorners(
                     corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
-                    radius: 10
+                    radius: .cornerRadius
                 )
             )
             .shadow(radius: 10)
@@ -223,6 +223,15 @@ private extension CGFloat {
     static let handleFrameHeight: CGFloat = 30
     
     static let minHeight: CGFloat = 66
+    
+    /// The corner radius of the floating panel.
+    static let cornerRadius: CGFloat = {
+#if os(visionOS)
+        32
+#else
+        10
+#endif
+    }()
 }
 
 private extension Color {
