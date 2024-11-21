@@ -3,33 +3,40 @@ import ArcGISToolkit
 import SwiftUI
 
 struct UtilityNetworkTraceExampleView: View {
+    @State private var activeDetent: FloatingPanelDetent = .half
+    
     @State private var map = makeMap()
     
     @State private var mapPoint: Point?
     
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    @State private var screenPoint: CGPoint?
-    
-    @State private var viewpoint: Viewpoint?
-    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(
                 map: map,
-                viewpoint: viewpoint,
                 graphicsOverlays: [resultGraphicsOverlay]
             )
-            .onSingleTapGesture { screenPoint, mapPoint in
-                self.screenPoint = screenPoint
+            .onSingleTapGesture { _, mapPoint in
                 self.mapPoint = mapPoint
-            }
-            .onViewpointChanged(kind: .centerAndScale) {
-                viewpoint = $0
             }
             .task {
                 let publicSample = try? await ArcGISCredential.publicSample
                 ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+            }
+            .floatingPanel(
+                    backgroundColor: Color(uiColor: .systemGroupedBackground),
+                    selectedDetent: $activeDetent,
+                    horizontalAlignment: .trailing,
+                    isPresented: .constant(true)
+            ) {
+                UtilityNetworkTrace(
+                    graphicsOverlay: $resultGraphicsOverlay,
+                    map: map,
+                    mapPoint: $mapPoint,
+                    mapViewProxy: mapViewProxy
+                )
+                .floatingPanelDetent($activeDetent)
             }
         }
     }
