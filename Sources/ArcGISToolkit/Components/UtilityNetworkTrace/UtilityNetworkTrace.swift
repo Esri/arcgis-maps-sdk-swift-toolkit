@@ -638,7 +638,8 @@ public struct UtilityNetworkTrace: View {
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
-    ///   - startingPoints: An optional list of programmatically provided starting points.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
@@ -1069,7 +1070,8 @@ public extension UtilityNetworkTrace /* Deprecated */ {
     ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-    ///   - startingPoints: An optional list of programmatically provided starting points.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
     /// - Attention: Deprecated at 200.7.
     @available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
     init(
