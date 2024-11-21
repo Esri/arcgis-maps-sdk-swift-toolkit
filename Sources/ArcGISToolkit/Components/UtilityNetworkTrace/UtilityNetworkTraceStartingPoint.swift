@@ -30,6 +30,9 @@ public struct UtilityNetworkTraceStartingPoint: Sendable {
     /// The symbol of the starting point as shown on the map.
     var image: UIImage?
     
+    /// A Boolean value indicating whether the starting point was added externally (programmatically).
+    var isExternalStartingPoint = false
+    
     /// A point on the map indicated as the location of this starting point. This can be used to indicate a
     /// specific location along an edge element.
     var mapPoint: Point?
