@@ -9,15 +9,10 @@ struct UtilityNetworkTraceExampleView: View {
     
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    @State private var screenPoint: CGPoint?
-    
-    @State private var viewpoint: Viewpoint?
-    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(
                 map: map,
-                viewpoint: viewpoint,
                 graphicsOverlays: [resultGraphicsOverlay]
             )
             .task {
