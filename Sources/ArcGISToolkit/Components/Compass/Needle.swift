@@ -50,6 +50,7 @@ struct Needle: View {
             )
             .scaleEffect(0.6)
         }
+        .environment(\.layoutDirection, .leftToRight)
     }
 }
 

@@ -12,7 +12,7 @@
         @Steps {
             @Step {
                 Add important stateful properties. A map containing at least one utility network is
-                required. A `Point` and `CGPoint` will help allow the component to create trace
+                required. A `Point` will help allow the component to create trace
                 starting points at tap locations. A `GraphicsOverlay` will allow the component to
                 visually display trace results.
                 @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep1.swift)
@@ -24,19 +24,14 @@
             }
             
             @Step {
-                Track viewpoint changes.
+                Track any tap gestures on the map view. When the user is adding starting points,
+                the trace tool needs to know the tap location to detect the desired network element.
                 @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep3.swift)
             }
             
             @Step {
-                Track any tap gestures on the map view. When the user is adding starting points,
-                the trace tool needs to know the tap locations to detect the desired network element.
-                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4.swift)
-            }
-            
-            @Step {
                 Overlay the `UtilityNetworkTrace` on the `MapView` with a `FloatingPanel`.
-                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep5.swift)
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4.swift)
             }
         }
     }
