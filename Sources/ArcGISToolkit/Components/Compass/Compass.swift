@@ -168,3 +168,18 @@ public extension Compass {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
+
+#if !os(visionOS)
+#Preview("Compass") {
+***REMOVED***Compass(rotation: .zero) { ***REMOVED***
+***REMOVED******REMOVED***.autoHideDisabled()
+***REMOVED******REMOVED***.compassSize(size: 100)
+***REMOVED***
+
+#Preview("Compass - Right To Left") {
+***REMOVED***Compass(rotation: .zero) { ***REMOVED***
+***REMOVED******REMOVED***.autoHideDisabled()
+***REMOVED******REMOVED***.compassSize(size: 100)
+***REMOVED******REMOVED***.environment(\.layoutDirection, .rightToLeft)
+***REMOVED***
+#endif

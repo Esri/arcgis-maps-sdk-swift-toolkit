@@ -50,6 +50,7 @@ struct Needle: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.scaleEffect(0.6)
 ***REMOVED***
+***REMOVED******REMOVED***.environment(\.layoutDirection, .leftToRight)
 ***REMOVED***
 ***REMOVED***
 

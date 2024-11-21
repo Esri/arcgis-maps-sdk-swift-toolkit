@@ -27,6 +27,9 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***/ The content shown in the Carousel.
 ***REMOVED***let content: (_: CGSize, _: (() -> Void)?) -> Content
 ***REMOVED***
+***REMOVED******REMOVED***/ The amount to offset the scroll indicator.
+***REMOVED***let scrollIndicatorOffset = 10.0
+***REMOVED***
 ***REMOVED******REMOVED***/ This number is used to compute the final width that allows for a partially visible cell.
 ***REMOVED***var cellBaseWidth = 120.0
 ***REMOVED***
@@ -55,7 +58,6 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 10)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
@@ -66,7 +68,7 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** When a GeometryReader is within a List, height must be specified.
-***REMOVED******REMOVED***.frame(height: cellSize.height)
+***REMOVED******REMOVED***.frame(height: cellSize.height + scrollIndicatorOffset)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@available(iOS 18.0, *)
@@ -74,7 +76,6 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 10)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
@@ -94,6 +95,9 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***.id(contentIdentifier)
 ***REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
 ***REMOVED******REMOVED******REMOVED***.clipped()
+***REMOVED******REMOVED******REMOVED******REMOVED*** Pad the content such that the scroll indicator appears beneath it
+***REMOVED******REMOVED******REMOVED******REMOVED*** so that the content is not covered. 
+***REMOVED******REMOVED******REMOVED***.padding(.bottom, scrollIndicatorOffset)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
