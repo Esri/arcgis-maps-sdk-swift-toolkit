@@ -69,6 +69,13 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
 ***REMOVED***var showCloseButton = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the deprecated `PopupView.showCloseButton(_:)`
+***REMOVED******REMOVED***/ modifier is applied.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Once the modifier is removed this property can be removed and the presence or lack of a value for
+***REMOVED******REMOVED***/ `isPresented` should be the sole criteria to show or hide the close button.
+***REMOVED***var showCloseButtonDeprecatedModifierIsApplied = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the popup header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
 ***REMOVED***
@@ -88,7 +95,8 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|| (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.close, systemImage: "xmark") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
