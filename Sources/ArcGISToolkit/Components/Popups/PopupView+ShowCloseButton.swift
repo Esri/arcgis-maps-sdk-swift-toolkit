@@ -21,10 +21,12 @@ public extension PopupView /* Deprecated */ {
     /// Defaults to `false`.
     /// - Parameter newShowCloseButton: The new value.
     /// - Returns: A new `PopupView`.
-    @available(*, deprecated, message: "Use 'popupHeader(_:)' instead.")
+    /// - Attention: Deprecated at 200.7. To not show the close button use `PopupView(popup:)`.
+    @available(*, deprecated)
     func showCloseButton(_ newShowCloseButton: Bool) -> Self {
         var copy = self
         copy.showCloseButton = newShowCloseButton
+        copy.showCloseButtonDeprecatedModifierIsApplied = true
         return copy
     }
 }
