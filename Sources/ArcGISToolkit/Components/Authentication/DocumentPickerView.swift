@@ -54,8 +54,10 @@ extension DocumentPickerView {
             onCancel()
         }
         
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-            onPickDocument(url)
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            guard let firstURL = urls.first else { return }
+            
+            onPickDocument(firstURL)
         }
     }
 }

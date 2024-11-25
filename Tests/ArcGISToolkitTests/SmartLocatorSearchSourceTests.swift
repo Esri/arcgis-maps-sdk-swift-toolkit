@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !os(visionOS)
 import XCTest
 import ArcGIS
 import ArcGISToolkit
 
+@MainActor
 final class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSearchResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
@@ -68,3 +70,4 @@ private extension Envelope {
         yRange: 7536778.456812576...7559866.706991681
     )
 }
+#endif

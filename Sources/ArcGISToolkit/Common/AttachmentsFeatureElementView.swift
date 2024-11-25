@@ -17,7 +17,6 @@ import QuickLook
 import SwiftUI
 
 /// A view displaying an `AttachmentsFeatureElement`.
-@MainActor
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
     let featureElement: AttachmentsFeatureElement
@@ -87,6 +86,7 @@ struct AttachmentsFeatureElementView: View {
                         attachmentHeader
                             .catalystPadding(4)
                     }
+                    .disclosureGroupPadding()
                 }
             }
         }
@@ -158,7 +158,6 @@ struct AttachmentsFeatureElementView: View {
     
     /// Creates a model for the new attachment for display.
     /// - Parameter attachment: The added attachment.
-    @MainActor
     func onAdd(attachment: FeatureAttachment) -> Void {
         guard case .initialized(var models) = attachmentModelsState else { return }
         let newModel = AttachmentModel(
@@ -177,7 +176,6 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameters:
     ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
-    @MainActor
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
@@ -189,7 +187,6 @@ struct AttachmentsFeatureElementView: View {
     /// Deletes the attachment associated with the given model.
     /// - Parameters:
     ///   - attachmentModel: The model for the attachment to delete.
-    @MainActor
     func onDelete(attachmentModel: AttachmentModel) -> Void {
         if let element = featureElement as? AttachmentsFormElement,
            let attachment = attachmentModel.attachment as? FormAttachment {
@@ -244,7 +241,6 @@ extension View {
     ///   - element: The attachment form element to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
-    @MainActor
     @ViewBuilder
     func onAttachmentIsEditableChange(
         of element: AttachmentsFeatureElement,

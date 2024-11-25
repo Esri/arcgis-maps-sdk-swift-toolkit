@@ -18,7 +18,6 @@ import OSLog
 import SwiftUI
 import UserNotifications
 
-@MainActor
 struct JobManagerExampleView: View {
     /// The job manager used by this view.
     @ObservedObject var jobManager = JobManager.shared
@@ -33,14 +32,7 @@ struct JobManagerExampleView: View {
     }
     
     var body: some View {
-        VStack {
-            HStack(spacing: 10) {
-                Spacer()
-                if isAddingGeodatabaseJob || isAddingOfflineMapJob {
-                    ProgressView()
-                }
-                menu
-            }
+        NavigationStack {
             List(jobManager.jobs, id: \.id) { job in
                 HStack {
                     JobView(job: job)
@@ -49,19 +41,41 @@ struct JobManagerExampleView: View {
                     } label: {
                         Image(systemName: "trash")
                     }
+#if os(visionOS)
+                    .buttonStyle(.bordered)
+#else
                     .buttonStyle(.borderless)
+#endif
                 }
+#if os(visionOS)
+                // We don't want each row in the list to have the
+                // hover effect in this case because the row themselves
+                // have buttons on them.
+                .listRowHoverEffectDisabled()
+#endif
             }
+#if !os(visionOS)
             .listStyle(.plain)
-        }
-        .onAppear {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-                if let error {
+#endif
+            .task {
+                do {
+                    _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+                } catch {
                     print(error.localizedDescription)
                 }
             }
+            .padding()
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    HStack(spacing: 10) {
+                        if isAddingGeodatabaseJob || isAddingOfflineMapJob {
+                            ProgressView()
+                        }
+                        menu
+                    }
+                }
+            }
         }
-        .padding()
     }
     
     /// The jobs menu.
@@ -191,7 +205,11 @@ private struct JobView: View {
                         }
                     }
                 }
+#if os(visionOS)
+                .buttonStyle(.bordered)
+#else
                 .buttonStyle(.borderless)
+#endif
                 .padding(.top, 2)
             }
         }

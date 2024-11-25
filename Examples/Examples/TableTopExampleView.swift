@@ -16,6 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+@available(macCatalyst, unavailable)
 struct TableTopExampleView: View {
     @State private var scene: ArcGIS.Scene = {
         // Creates a scene layer from buildings REST service.
@@ -49,7 +50,7 @@ struct TableTopExampleView: View {
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
-                    Task.detached { @MainActor in
+                    Task { @MainActor in
                         let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
                         print("\(results.count) identify result(s).")
                     }

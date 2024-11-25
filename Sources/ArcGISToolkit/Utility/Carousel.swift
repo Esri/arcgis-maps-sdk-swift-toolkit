@@ -27,6 +27,9 @@ struct Carousel<Content: View>: View {
     /// The content shown in the Carousel.
     let content: (_: CGSize, _: (() -> Void)?) -> Content
     
+    /// The amount to offset the scroll indicator.
+    let scrollIndicatorOffset = 10.0
+    
     /// This number is used to compute the final width that allows for a partially visible cell.
     var cellBaseWidth = 120.0
     
@@ -42,11 +45,9 @@ struct Carousel<Content: View>: View {
         self.content = content
     }
     
-    /// - Note: The iOS 18 version currently uses `legacyImplementation` as
-    /// `iOS18Implementation` contains symbols not available in Xcode 15.4.
     var body: some View {
         if #available(iOS 18.0, *) {
-            legacyImplementation
+            iOS18Implementation
         } else {
             legacyImplementation
         }
@@ -62,29 +63,27 @@ struct Carousel<Content: View>: View {
             .onAppear {
                 updateCellSizeForContainer(geometry.size.width)
             }
-            .onChange(of: geometry.size.width) { width in
+            .onChange(geometry.size.width) { width in
                 updateCellSizeForContainer(width)
             }
         }
         // When a GeometryReader is within a List, height must be specified.
-        .frame(height: cellSize.height)
+        .frame(height: cellSize.height + scrollIndicatorOffset)
     }
     
-//    The iOS 18 implementation is commented as it contains symbols not
-//    available in Xcode 15.4.
-//    @available(iOS 18.0, *)
-//    var iOS18Implementation: some View {
-//        ScrollViewReader { scrollViewProxy in
-//            ScrollView(.horizontal) {
-//                makeCommonScrollViewContent(scrollViewProxy)
-//            }
-//        }
-//        .onScrollGeometryChange(for: CGFloat.self) { geometry in
-//            geometry.containerSize.width
-//        } action: { _, newValue in
-//            updateCellSizeForContainer(newValue)
-//        }
-//    }
+    @available(iOS 18.0, *)
+    var iOS18Implementation: some View {
+        ScrollViewReader { scrollViewProxy in
+            ScrollView(.horizontal) {
+                makeCommonScrollViewContent(scrollViewProxy)
+            }
+        }
+        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+            geometry.containerSize.width
+        } action: { _, newValue in
+            updateCellSizeForContainer(newValue)
+        }
+    }
     
     func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
         HStack(spacing: cellSpacing) {
@@ -96,6 +95,9 @@ struct Carousel<Content: View>: View {
             .id(contentIdentifier)
             .frame(width: cellSize.width, height: cellSize.height)
             .clipped()
+            // Pad the content such that the scroll indicator appears beneath it
+            // so that the content is not covered. 
+            .padding(.bottom, scrollIndicatorOffset)
         }
     }
 }
@@ -154,11 +156,11 @@ extension Carousel {
 
 #Preview("In a List") {
     List {
-        Text("Hello")
+        Text(verbatim: "Hello")
         Carousel { _, _ in
             PreviewContent()
         }
-        Text("World!")
+        Text(verbatim: "World!")
     }
 }
 
@@ -176,10 +178,12 @@ extension Carousel {
                     self.scrollToLeftAction = scrollToLeftAction
                 }
             }
-            Button("Scroll to 1") {
+            Button {
                 withAnimation {
                     scrollToLeftAction?()
                 }
+            } label: {
+                Text(verbatim: "Scroll to left")
             }
         }
     }

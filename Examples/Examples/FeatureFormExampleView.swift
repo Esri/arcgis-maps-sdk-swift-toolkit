@@ -52,9 +52,8 @@ struct FeatureFormExampleView: View {
                     }
                 }
                 .task(id: identifyScreenPoint) {
-                    if let feature = await identifyFeature(with: mapViewProxy),
-                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
-                        model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
+                    if let feature = await identifyFeature(with: mapViewProxy) {
+                        model.state = .editing(FeatureForm(feature: feature))
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -103,7 +102,7 @@ struct FeatureFormExampleView: View {
                         HStack(spacing: 5) {
                             ProgressView()
                                 .progressViewStyle(.circular)
-                            model.textForState
+                            Text(model.state.label)
                         }
                         .padding()
                         .background(.thinMaterial)
@@ -139,23 +138,18 @@ struct FeatureFormExampleView: View {
 extension FeatureFormExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
-    /// - Returns: The first identified feature in a layer with
-    /// a feature form definition.
+    /// - Returns: The first identified feature in a layer.
     func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
         guard let identifyScreenPoint else { return nil }
-        let identifyResult = try? await proxy.identifyLayers(
+        let identifyLayerResults = try? await proxy.identifyLayers(
             screenPoint: identifyScreenPoint,
             tolerance: 10
         )
-            .first(where: { result in
-                if let feature = result.geoElements.first as? ArcGISFeature,
-                   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
-                    return true
-                } else {
-                    return false
-                }
-            })
-        return identifyResult?.geoElements.first as? ArcGISFeature
+        return identifyLayerResults?.compactMap { result in
+            result.geoElements.compactMap { element in
+                element as? ArcGISFeature
+            }.first
+        }.first
     }
 }
 
@@ -184,6 +178,26 @@ class Model: ObservableObject {
         case idle
         /// The form is being checked for validation errors.
         case validating(FeatureForm)
+        
+        /// User-friendly text that describes this state.
+        var label: String {
+            switch self {
+            case .applyingEdits:
+                "Applying Edits"
+            case .cancellationPending:
+                "Cancellation Pending"
+            case .editing:
+                "Editing"
+            case .finishingEdits:
+                "Finishing Edits"
+            case .generalError:
+                "Error"
+            case .idle:
+                ""
+            case .validating:
+                "Validating"
+            }
+        }
     }
     
     /// The current feature form workflow state.
@@ -250,22 +264,6 @@ class Model: ObservableObject {
             guard case .idle = self.state else { return true }
             return false
         } set: { _ in
-        }
-    }
-    
-    /// User facing text indicating the current form workflow state.
-    ///
-    /// This is most useful during post form processing to indicate ongoing background work.
-    var textForState: Text {
-        switch state {
-        case .validating:
-            Text("Validating")
-        case .finishingEdits:
-            Text("Finishing edits")
-        case .applyingEdits:
-            Text("Applying edits")
-        default:
-            Text("")
         }
     }
     

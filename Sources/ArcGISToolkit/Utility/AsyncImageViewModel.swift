@@ -105,11 +105,9 @@ import UIKit
         DispatchQueue.main.async { [weak self] in
             if let image = UIImage(data: data) {
                 self?.result = .success(image)
-                print("image success: \(url.absoluteString)")
             } else {
                 // We have data, but couldn't create an image.
                 self?.result = .failure(LoadImageError())
-                print("image failure: \(url.absoluteString)")
             }
         }
         
