@@ -60,8 +60,7 @@ import ArcGIS
 /// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 /// in the project. To learn more about using the `SearchView` see the <doc:SearchViewTutorial>.
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
@@ -243,22 +242,22 @@ public struct SearchView: View {
             onQueryChangedAction?(viewModel.currentQuery)
             viewModel.updateSuggestions()
         }
-        .onChange(of: viewModel.selectedResult) { _ in
+        .onChange(viewModel.selectedResult) { _ in
             searchFieldIsFocused = false
         }
-        .onChange(of: viewModel.currentSuggestion) { _ in
+        .onChange(viewModel.currentSuggestion) { _ in
             searchFieldIsFocused = false
         }
-        .onChange(of: geoViewExtent) { _ in
+        .onChange(geoViewExtent) { _ in
             viewModel.geoViewExtent = geoViewExtent
         }
-        .onChange(of: isGeoViewNavigating) { _ in
+        .onChange(isGeoViewNavigating) { _ in
             viewModel.isGeoViewNavigating = isGeoViewNavigating
         }
-        .onChange(of: queryCenter) { _ in
+        .onChange(queryCenter) { _ in
             viewModel.queryCenter = queryCenter
         }
-        .onChange(of: queryArea) { _ in
+        .onChange(queryArea) { _ in
             viewModel.queryArea = queryArea
         }
         .onAppear {
@@ -270,6 +269,7 @@ public struct SearchView: View {
 }
 
 // MARK: Modifiers
+@available(visionOS, unavailable)
 extension SearchView {
     /// Specifies whether a built-in result view will be shown. If `false`, the result display/selection
     /// list is not shown. Set to `false` if you want to define a custom result list. You might use a
@@ -305,7 +305,7 @@ extension SearchView {
     }
     
     /// Sets the current query.
-    /// - Parameter newQueryString: The new value.
+    /// - Parameter newQuery: The new value.
     /// - Returns: The `SearchView`.
     public func currentQuery(_ newQuery: String) -> Self {
         var copy = self
@@ -316,7 +316,6 @@ extension SearchView {
     /// Sets a closure to perform when the query changes.
     /// - Parameters:
     ///   - action: The closure to performed when the query has changed.
-    ///   - query: The new query.
     public func onQueryChanged(perform action: @escaping (_ query: String) -> Void) -> Self {
         var copy = self
         copy.onQueryChangedAction = action
@@ -380,6 +379,7 @@ extension SearchView {
 }
 
 /// A View displaying the list of search results.
+@available(visionOS, unavailable)
 struct SearchResultList: View {
     /// The array of search results to display.
     var searchResults: [SearchResult]
@@ -412,6 +412,7 @@ struct SearchResultList: View {
 }
 
 /// A View displaying the list of search suggestion results.
+@available(visionOS, unavailable)
 struct SearchSuggestionList: View {
     /// The array of suggestion results to display.
     var suggestionResults: [SearchSuggestion]
@@ -477,6 +478,7 @@ struct ResultRow: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension ResultRow {
     /// Creates a `ResultRow` from a search suggestion.
     /// - Parameter searchSuggestion: The search suggestion displayed in the row.

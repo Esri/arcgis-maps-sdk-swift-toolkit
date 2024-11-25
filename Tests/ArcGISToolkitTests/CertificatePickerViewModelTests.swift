@@ -30,12 +30,6 @@ final class CertificatePickerViewModelTests: XCTestCase {
         
         model.proceedToPicker()
         
-#if swift(<5.10)
-        XCTExpectFailure(
-            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Swift 5.9. Ref Toolkit #699",
-            options: .nonStrict()
-        )
-#endif
         // Have to wait here because the proceed function is delayed to avoid a bug.
         await fulfillment(
             of: [
@@ -54,12 +48,6 @@ final class CertificatePickerViewModelTests: XCTestCase {
         
         model.proceedToUseCertificate(withPassword: "1234")
         
-#if swift(<5.10)
-        XCTExpectFailure(
-            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Swift 5.9. Ref Toolkit #699",
-            options: .nonStrict()
-        )
-#endif
         await fulfillment(
             of: [
                 expectation(
@@ -76,8 +64,8 @@ final class CertificatePickerViewModelTests: XCTestCase {
     }
     
     func testCertificateErrorLocalizedDescription() {
-        let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
-        XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
+        let failedToAccessCertificateFile = CertificatePickerViewModel.CertificateError.failedToAccessCertificateFile
+        XCTAssertEqual(failedToAccessCertificateFile.localizedDescription, "Failed to access the certificate file.")
         
         let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
         XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")

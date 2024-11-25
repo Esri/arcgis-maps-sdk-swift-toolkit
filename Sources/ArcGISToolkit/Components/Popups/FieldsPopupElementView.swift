@@ -46,6 +46,7 @@ struct FieldsPopupElementView: View {
             )
             .catalystPadding(4)
         }
+        .disclosureGroupPadding()
     }
     
     /// A view for displaying a `DisplayField`.
@@ -71,8 +72,10 @@ struct FieldsPopupElementView: View {
         let formattedValue: String
         
         var body: some View {
-            if formattedValue.lowercased().starts(with: "http") {
-                Text(.init("[View](\(formattedValue))"))
+            if formattedValue.lowercased().starts(with: "http"),
+               let url = URL(string: formattedValue) {
+                Link("View", destination: url)
+                    .buttonStyle(.bordered)
             } else {
                 Text(formattedValue)
             }

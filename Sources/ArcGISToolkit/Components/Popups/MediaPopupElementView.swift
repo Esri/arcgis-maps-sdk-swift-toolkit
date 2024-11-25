@@ -36,6 +36,7 @@ struct MediaPopupElementView: View {
                 )
                 .catalystPadding(4)
             }
+            .disclosureGroupPadding()
         }
     }
     

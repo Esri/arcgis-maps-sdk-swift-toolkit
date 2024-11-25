@@ -24,7 +24,3 @@ struct ExampleView: View {
             .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-extension ExampleView: Identifiable {
-    var id: String { example.name }
-}

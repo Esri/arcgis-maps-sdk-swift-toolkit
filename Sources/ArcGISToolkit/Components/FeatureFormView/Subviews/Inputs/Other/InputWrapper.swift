@@ -19,6 +19,7 @@ import SwiftUI
 ///
 /// This view injects a header and footer. It also monitors whether a field form element is editable and
 /// chooses the correct input view based on the input type.
+@available(visionOS, unavailable)
 struct InputWrapper: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
@@ -31,6 +32,8 @@ struct InputWrapper: View {
             InputHeader(element: element)
             if isEditable {
                 switch element.input {
+                case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
+                    TextInput(element: element)
                 case is ComboBoxFormInput:
                     ComboBoxInput(element: element)
                 case is DateTimePickerFormInput:
@@ -39,8 +42,6 @@ struct InputWrapper: View {
                     RadioButtonsInput(element: element)
                 case is SwitchFormInput:
                     SwitchInput(element: element)
-                case is TextAreaFormInput, is TextBoxFormInput:
-                    TextInput(element: element)
                 default:
                     EmptyView()
                 }

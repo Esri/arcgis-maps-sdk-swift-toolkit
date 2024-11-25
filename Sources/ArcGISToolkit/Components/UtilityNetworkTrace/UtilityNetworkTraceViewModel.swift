@@ -17,6 +17,7 @@ import Combine
 import Foundation
 import SwiftUI
 
+@available(visionOS, unavailable)
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
     // MARK: Published Properties
     
@@ -61,9 +62,9 @@ import SwiftUI
     
     /// A Boolean value indicating if the pending trace is configured to the point that it can be run.
     var canRunTrace: Bool {
-        network != nil &&
-        pendingTrace.configuration != nil &&
-        !pendingTrace.startingPoints.isEmpty
+        network != nil
+        && pendingTrace.configuration != nil
+        && !pendingTrace.startingPoints.isEmpty
     }
     
     /// The map's utility networks.
@@ -129,7 +130,7 @@ import SwiftUI
         await withTaskGroup(of: Void.self) { [weak self] taskGroup in
             guard let self else { return }
             for layer in network?.layers ?? [] {
-                taskGroup.addTask { @MainActor in
+                taskGroup.addTask { @MainActor @Sendable in
                     if let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
                         for element in result.geoElements {
                             await self.processAndAdd(
@@ -165,6 +166,7 @@ import SwiftUI
     /// Deletes the provided trace from the list of completed traces.
     /// - Parameter trace: The trace to be deleted.
     func deleteTrace(_ trace: Trace) {
+        trace.toggleFeatureSelection(selected: false)
         deleteGraphics(for: trace)
         completedTraces.removeAll { $0 == trace }
         selectPreviousTrace()
@@ -273,14 +275,14 @@ import SwiftUI
     /// - Parameter startingPoint: The starting point to be processed and added to the pending trace.
     func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
         guard let feature = startingPoint.geoElement as? ArcGISFeature,
-              let globalid = feature.globalID else {
+              let globalID = feature.globalID else {
             userAlert = .unableToIdentifyElement
             return
         }
         
         // Block duplicate starting point selection
         guard !pendingTrace.startingPoints.contains(where: { startingPoint in
-            return startingPoint.utilityElement?.globalID == globalid
+            return startingPoint.utilityElement?.globalID == globalID
         }) else {
             userAlert = .duplicateStartingPoint
             return
@@ -377,6 +379,9 @@ import SwiftUI
             switch result {
             case let result as UtilityElementTraceResult:
                 pendingTrace.elementResults = result.elements
+                if let features = try? await network.features(for: result.elements) {
+                    pendingTrace.featureResults = features
+                }
             case let result as UtilityGeometryTraceResult:
                 let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
                     return Graphic(
@@ -438,7 +443,8 @@ import SwiftUI
         }
     }
     
-    /// Changes the selected state of the graphics for the completed trace at the provided index.
+    /// Changes the selection and visibility state of the graphics and feature results, as well the starting
+    /// points for the completed trace at the provided index.
     /// - Parameters:
     ///   - index: The index of the completed trace.
     ///   - isSelected: The new selection state.
@@ -447,8 +453,18 @@ import SwiftUI
         to isSelected: Bool
     ) {
         guard index >= 0, index <= completedTraces.count - 1 else { return }
-        _ = completedTraces[index].graphics.map { $0.isSelected = isSelected }
-        _ = completedTraces[index].startingPoints.map { $0.graphic?.isSelected = isSelected }
+        
+        // Toggle visibility of graphic results
+        _ = completedTraces[index].graphics.map { $0.isVisible = isSelected }
+        
+        // Toggle visibility and selection of starting points
+        _ = completedTraces[index].startingPoints.map {
+            $0.graphic?.isVisible = isSelected
+            $0.graphic?.isSelected = isSelected
+        }
+        
+        // Toggle selection of feature results
+        completedTraces[index].toggleFeatureSelection(selected: isSelected)
     }
     
     /// Deletes all graphics for the provided trace.
@@ -474,6 +490,7 @@ import SwiftUI
     }
 }
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
     /// Finds the location on a polyline nearest the point.
     /// - Parameters:

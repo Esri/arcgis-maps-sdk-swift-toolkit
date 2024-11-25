@@ -30,8 +30,7 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [CompassExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
 /// in the project. To learn more about using the `Compass` see the <doc:CompassTutorial>.
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
@@ -85,7 +84,7 @@ public struct Compass: View {
                 .opacity(opacity)
                 .frame(width: size, height: size)
                 .onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 }
-                .onChange(of: heading) { newHeading in
+                .onChange(heading) { newHeading in
                     let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
                     guard opacity != newOpacity else { return }
                     withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {
@@ -115,6 +114,7 @@ public struct Compass: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension Compass {
     /// Returns a Boolean value indicating whether the compass should hide based on the
     /// provided heading and whether the compass has been configured to automatically hide.
@@ -125,6 +125,7 @@ extension Compass {
     }
 }
 
+@available(visionOS, unavailable)
 public extension Compass {
     /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
     /// a direction toward true West, etc.).
@@ -167,3 +168,18 @@ public extension Compass {
         return copy
     }
 }
+
+#if !os(visionOS)
+#Preview("Compass") {
+    Compass(rotation: .zero) { }
+        .autoHideDisabled()
+        .compassSize(size: 100)
+}
+
+#Preview("Compass - Right To Left") {
+    Compass(rotation: .zero) { }
+        .autoHideDisabled()
+        .compassSize(size: 100)
+        .environment(\.layoutDirection, .rightToLeft)
+}
+#endif
