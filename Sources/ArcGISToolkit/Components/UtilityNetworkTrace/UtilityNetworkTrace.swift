@@ -424,7 +424,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.elementResults.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -459,7 +459,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -1027,6 +1027,16 @@ private extension String {
             localized: "Zoom To Result",
             bundle: .toolkitModule,
             comment: "A user option specifying that a map should automatically change to show completed trace results."
+        )
+    }
+}
+
+private extension Text {
+    static func makeResultsLabel(_ results: Int) -> Self {
+        .init(
+            "^[\(results) Results](inflect: true)",
+            bundle: .toolkitModule,
+            comment: "A label indicating the number of results of a utility network trace."
         )
     }
 }
