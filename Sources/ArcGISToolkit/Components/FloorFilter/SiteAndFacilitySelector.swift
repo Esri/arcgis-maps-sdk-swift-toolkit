@@ -32,7 +32,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the user is typing into the text field.
 ***REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the user tapped the "All sites" button.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user tapped the "All Sites" button.
 ***REMOVED***@State private var allSitesIsSelected = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The site or facility filter phrase.
@@ -268,7 +268,7 @@ extension SiteAndFacilitySelector {
 private extension String {
 ***REMOVED***static var allSites: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "All sites",
+***REMOVED******REMOVED******REMOVED***localized: "All Sites",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED***)

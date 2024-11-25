@@ -12,7 +12,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Advanced Options";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "All sites";
+"All Sites" = "All Sites";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
