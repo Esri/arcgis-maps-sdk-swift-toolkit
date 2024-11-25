@@ -29,7 +29,7 @@ struct ScalebarTextModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 extension Text {
 ***REMOVED***func scalebarText() -> some View {
 ***REMOVED******REMOVED***modifier(

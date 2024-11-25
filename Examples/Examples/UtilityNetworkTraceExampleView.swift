@@ -25,6 +25,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ The current detent of the floating panel presenting the trace tool.
 ***REMOVED***@State private var activeDetent: FloatingPanelDetent = .half
 ***REMOVED***
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight: CGFloat = 0
+***REMOVED***
 ***REMOVED******REMOVED***/ The map with the utility networks.
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
@@ -48,6 +51,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [resultGraphicsOverlay]
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, mapPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.screenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
@@ -60,6 +66,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $activeDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,

@@ -16,7 +16,6 @@ import PhotosUI
 ***REMOVED***
 
 ***REMOVED***/ A wrapper for the PhotosPicker API.
-@MainActor
 struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED***/ The item selected in the photos picker.
 ***REMOVED***@State private var item: PhotosPickerItem?

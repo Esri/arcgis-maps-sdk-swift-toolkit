@@ -26,23 +26,26 @@
 ***REMOVED***/ `FeatureFormView` supports the display of form elements created by
 ***REMOVED***/ the Map Viewer or Field Maps Designer, including:
 ***REMOVED***/
+***REMOVED***/ - Attachments Element - used to display and edit attachments.
 ***REMOVED***/ - Field Element - used to edit a single field of a feature with a specific "input type".
-***REMOVED***/ - Group Element - used to group field elements together. Group Elements
-***REMOVED***/ can be expanded, to show all enclosed field elements, or collapsed, hiding
-***REMOVED***/ the field elements it contains.
+***REMOVED***/ - Group Element - used to group elements together. Group Elements
+***REMOVED***/ can be expanded, to show all enclosed elements, or collapsed, hiding
+***REMOVED***/ the elements it contains.
+***REMOVED***/ - Text Element - used to display read-only plain or Markdown-formatted text.
 ***REMOVED***/
 ***REMOVED***/ A Field Element has a single input type object. The following are the supported input types:
 ***REMOVED***/
-***REMOVED***/ - Combo Box - long lists of coded value domains
+***REMOVED***/ - Barcode - machine readable data
+***REMOVED***/ - Combo Box - long list of values in a coded value domain
 ***REMOVED***/ - Date/Time - date/time picker
-***REMOVED***/ - Radio Buttons - short lists of coded value domains
+***REMOVED***/ - Radio Buttons - short list of values in a coded value domain
 ***REMOVED***/ - Switch - two mutually exclusive values
 ***REMOVED***/ - Text Area - multi-line text area
 ***REMOVED***/ - Text Box - single-line text box
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
-***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map.
+***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map and obtained from either an `ArcGISFeature`, `ArcGISFeatureTable`, `FeatureLayer` or `SubtypeSublayer`.
 ***REMOVED***/ - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 ***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
 ***REMOVED***/ - Add, delete, or rename feature attachments.
@@ -53,9 +56,8 @@
 ***REMOVED***/ The feature form view can be embedded in any type of container view including, as demonstrated in the
 ***REMOVED***/ example, the Toolkit's `FloatingPanel`.
 ***REMOVED***/
-***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
-***REMOVED***/ and refer to
-***REMOVED***/ [FeatureFormExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [FeatureFormExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FeatureFormExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
 ***REMOVED***/
 ***REMOVED***/ - Note: In order to capture video and photos as form attachments, your application will need
@@ -63,8 +65,7 @@
 ***REMOVED***/ `Info.plist` file.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
@@ -110,7 +111,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -119,11 +120,14 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
+#endif
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension FeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
@@ -132,7 +136,22 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
-***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { makeFieldElement($0) ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { internalMakeElement($0) ***REMOVED***)
+***REMOVED******REMOVED***case let element as TextFormElement:
+***REMOVED******REMOVED******REMOVED***makeTextElement(element)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes UI for a field form element or a text form element.
+***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
+***REMOVED***@ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
+***REMOVED******REMOVED***switch element {
+***REMOVED******REMOVED***case let element as FieldFormElement:
+***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
+***REMOVED******REMOVED***case let element as TextFormElement:
+***REMOVED******REMOVED******REMOVED***makeTextElement(element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -141,11 +160,17 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a field form element including a divider beneath it.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput ||
-***REMOVED******REMOVED******REMOVED*** element.input is BarcodeScannerFormInput) {
+***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput) {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes UI for a text form element including a divider beneath it.
+***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
+***REMOVED***@ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
+***REMOVED******REMOVED***TextFormElementView(element: element)
+***REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The progress view to be shown while initial expression evaluation is running.

@@ -32,9 +32,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task(id: identifyScreenPoint) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(FeatureForm(feature: feature))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -45,19 +44,15 @@ struct FeatureFormExampleView: View {
 extension FeatureFormExampleView {
 ***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
 ***REMOVED******REMOVED***guard let identifyScreenPoint else { return nil ***REMOVED***
-***REMOVED******REMOVED***let identifyResult = try? await proxy.identifyLayers(
+***REMOVED******REMOVED***let identifyLayerResults = try? await proxy.identifyLayers(
 ***REMOVED******REMOVED******REMOVED***screenPoint: identifyScreenPoint,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.first(where: { result in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = result.geoElements.first as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED******REMOVED***   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***return identifyResult?.geoElements.first as? ArcGISFeature
+***REMOVED******REMOVED***return identifyLayerResults?.compactMap { result in
+***REMOVED******REMOVED******REMOVED***result.geoElements.compactMap { element in
+***REMOVED******REMOVED******REMOVED******REMOVED***element as? ArcGISFeature
+***REMOVED******REMOVED***.first
+***REMOVED***.first
 ***REMOVED***
 ***REMOVED***
 
@@ -71,6 +66,25 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***case generalError(FeatureForm, Text)
 ***REMOVED******REMOVED***case idle
 ***REMOVED******REMOVED***case validating(FeatureForm)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var label: String {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .applyingEdits:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Applying Edits"
+***REMOVED******REMOVED******REMOVED***case .cancellationPending:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Cancellation Pending"
+***REMOVED******REMOVED******REMOVED***case .editing:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Editing"
+***REMOVED******REMOVED******REMOVED***case .finishingEdits:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Finishing Edits"
+***REMOVED******REMOVED******REMOVED***case .generalError:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Error"
+***REMOVED******REMOVED******REMOVED***case .idle:
+***REMOVED******REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED******REMOVED***case .validating:
+***REMOVED******REMOVED******REMOVED******REMOVED***"Validating"
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var state: State = .idle {
@@ -129,19 +143,6 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***guard case .idle = self.state else { return true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED*** set: { _ in
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var textForState: Text {
-***REMOVED******REMOVED***switch state {
-***REMOVED******REMOVED***case .validating:
-***REMOVED******REMOVED******REMOVED***Text("Validating")
-***REMOVED******REMOVED***case .finishingEdits:
-***REMOVED******REMOVED******REMOVED***Text("Finishing edits")
-***REMOVED******REMOVED***case .applyingEdits:
-***REMOVED******REMOVED******REMOVED***Text("Applying edits")
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***Text("")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

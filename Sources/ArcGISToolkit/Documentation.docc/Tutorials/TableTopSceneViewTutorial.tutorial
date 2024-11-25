@@ -16,8 +16,11 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***The anchor point is the location point of the ArcGIS Scene that is anchored on a 
 ***REMOVED******REMOVED******REMOVED******REMOVED***physical surface. The translation factor determines how many meters the scene view
-***REMOVED******REMOVED******REMOVED******REMOVED***translates as the device moves in the AR experience. The clipping distance is the 
-***REMOVED******REMOVED******REMOVED******REMOVED***distance in meters that the ArcGIS Scene data will be clipped to.
+***REMOVED******REMOVED******REMOVED******REMOVED***translates as the device moves in the AR experience. This value can be determined by
+***REMOVED******REMOVED******REMOVED******REMOVED***dividing the virtual content width by the desired physical content width. In this
+***REMOVED******REMOVED******REMOVED******REMOVED***case, 400 m (ArcGIS Scene width) / 1 m (table top width) = 400 m (translation
+***REMOVED******REMOVED******REMOVED******REMOVED***factor). The clipping distance is the distance in clipping distance is the distance
+***REMOVED******REMOVED******REMOVED******REMOVED***in meters that the ArcGIS Scene data will be clipped to.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***

@@ -30,7 +30,6 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BookmarksExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see the <doc:BookmarksTutorial>.
-@MainActor
 @preconcurrency
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ The data source used to initialize the view.
@@ -191,12 +190,16 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+#endif
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
 #endif
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

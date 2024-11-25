@@ -6,7 +6,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A certificate is required to access content on %@." = "Изисква се сертификат за достъп до съдържание на %@.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Добавяне на нови";
+"Add New" = "Добавяне на ново";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Разширени oпции";
@@ -22,6 +22,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Прикачени файлове";
+
+/* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
+"Attachments larger than %@ cannot be downloaded." = "Прикачени файлове, по-големи от %@ не могат да бъдат изтеглени";
 
 /* A label in reference to the attributes of a geo element. */
 "Attributes" = "Атрибути";
@@ -42,11 +45,14 @@ content on a remote host. The variable is the host that prompted the challenge. 
 for the AR experience. */
 "Calibration" = "Калибриране";
 
+/* A title for an alert that camera access is disabled. */
+"Camera access is disabled" = "Деактивиран e достъпът до камера";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Отказ";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Отмяна на избор на начална точка";
+"Cancel Starting Point Selection" = "Отмяна на селекция на начална точка";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Изисква се сертификат";
@@ -64,7 +70,7 @@ for the AR experience. */
 "Clear" = "Изчистване";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Изчистване на всички резултати";
+"Clear All Results" = "Изчистване на всички резултати";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Цвят";
@@ -77,9 +83,6 @@ east, etc.). */
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Продължение";
-
-/* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Няма достъп до файла със сертификата.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Внимание: сертификатът, предоставен от '%@', не е подписан от надежден орган.";
@@ -113,6 +116,12 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "височина";
+
+/* An error message explaining attachments with empty files (0 bytes) cannot be downloaded. */
+"Empty attachments cannot be downloaded." = "Празни прикачени файлове не могат да бъдат свалени";
+
+/* An error message indicating the selected attachment is an empty file and not supported. */
+"Empty files are not supported." = "Не се поддържат празни файлове";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -152,6 +161,9 @@ The variable provides additional data. */
 
 /* Text indicating a field's value exceeds the maximum allowed value. */
 "Exceeds maximum value" = "Надвишава максималната стойност";
+
+/* A label indicating a certificate file was inaccessible. */
+"Failed to access the certificate file." = "Няма достъп до файла със сертификата.";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -204,6 +216,9 @@ AR experience. */
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Медия";
 
+/* A warning message indicating microphone access has been disabled for the current application in the system settings. */
+"Microphone access has been disabled in Settings." = "Достъпът до микрофона е деактивиран в Настройки.";
+
 /* Text indicating a field's minimum number of allowed characters is not met. */
 "Minimum character length not met" = "Не е изпълнено изискването за минимален брой на символите";
 
@@ -220,7 +235,7 @@ AR experience. */
 "New name" = "Ново име";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Ново проследяване";
+"New Trace" = "Ново проследяване";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Няма отметки";
@@ -243,9 +258,6 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Няма стойност";
 
-/* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Няма избрани";
-
 /* A trace function output result was not provided. */
 "Not Available" = "Няма налични";
 
@@ -264,6 +276,9 @@ AR experience. */
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Изисква се парола";
 
+/* A message for an alert requesting camera access. */
+"Please enable camera access in settings." = "Моля, активирайте достъпа до камера в настройки.";
+
 /* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Въведете парола за избрания сертификат.";
 
@@ -278,6 +293,9 @@ chosen utility network trace configuration. */
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Неуспешна оценка на изскачащи прозорци: %@";
+
+/* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
+"Record video only" = "Запис само на видео";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Преименуване";
@@ -305,6 +323,15 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Избор на съоръжение";
+
+/* A label for button to select a utility network. */
+"Select Network" = "Избор на мрежа";
+
+/* A label for button to select a utility network trace configuration. */
+"Select Trace Configuration" = "Избор на конфигурации за проследяване";
+
+/* A label for a button to take the user to a contextually inferred settings page. */
+"Settings" = "Настройки";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Сайтове";
@@ -426,5 +453,5 @@ The host is indicated in the variable. */
 "Zoom To" = "Приближаване до";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Приближаване към резултата";
+"Zoom To Result" = "Приближаване към резултата";
 

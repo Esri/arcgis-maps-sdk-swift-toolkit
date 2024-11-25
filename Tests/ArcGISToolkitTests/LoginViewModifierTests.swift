@@ -15,6 +15,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
+@MainActor
 final class LoginViewModifierTests: XCTestCase {
 ***REMOVED***func testMemberwiseInit() {
 ***REMOVED******REMOVED***var signInCalled = false

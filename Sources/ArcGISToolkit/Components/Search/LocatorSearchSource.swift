@@ -18,6 +18,7 @@ import Foundation
 
 ***REMOVED***/ Uses a Locator to provide search and suggest results. Most configuration should be done on the
 ***REMOVED***/ `GeocodeParameters` directly.
+@available(visionOS, unavailable)
 public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***/ Creates a locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -131,6 +132,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension LocatorSearchSource {
 ***REMOVED***func internalSearch(
 ***REMOVED******REMOVED***_ query: String,

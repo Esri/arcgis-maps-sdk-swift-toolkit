@@ -12,10 +12,12 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if !os(visionOS)
 import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
 
+@MainActor
 final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testMaximumResults() async throws {
 ***REMOVED******REMOVED***let locator = LocatorSearchSource()
@@ -57,3 +59,4 @@ final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(suggestResults.count, 2)
 ***REMOVED***
 ***REMOVED***
+#endif

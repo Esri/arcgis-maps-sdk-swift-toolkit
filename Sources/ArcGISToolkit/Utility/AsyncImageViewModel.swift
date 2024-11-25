@@ -105,11 +105,9 @@ import UIKit
 ***REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
 ***REMOVED******REMOVED******REMOVED***if let image = UIImage(data: data) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .success(image)
-***REMOVED******REMOVED******REMOVED******REMOVED***print("image success: \(url.absoluteString)")
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** We have data, but couldn't create an image.
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .failure(LoadImageError())
-***REMOVED******REMOVED******REMOVED******REMOVED***print("image failure: \(url.absoluteString)")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***

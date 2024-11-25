@@ -16,8 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
-@MainActor
-@preconcurrency
 public struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `URL` of the image.
 ***REMOVED***private var url: URL?

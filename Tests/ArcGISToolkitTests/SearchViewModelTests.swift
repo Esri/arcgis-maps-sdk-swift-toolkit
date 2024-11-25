@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if !os(visionOS)
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 @preconcurrency import Combine
@@ -452,7 +453,7 @@ private extension Point {
 ***REMOVED***
 
 private extension SearchViewModel {
-***REMOVED***func searchResults(dropFirst: Bool = false) async throws -> [SearchResult]? {
+***REMOVED***nonisolated func searchResults(dropFirst: Bool = false) async throws -> [SearchResult]? {
 ***REMOVED******REMOVED***let searchOutcome = try await $searchOutcome
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.dropFirst(dropFirst ? 1 : 0)
@@ -466,7 +467,7 @@ private extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func searchSuggestions(dropFirst: Bool = false) async throws -> [SearchSuggestion]? {
+***REMOVED***nonisolated func searchSuggestions(dropFirst: Bool = false) async throws -> [SearchSuggestion]? {
 ***REMOVED******REMOVED***let searchOutcome = try await $searchOutcome
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.dropFirst(dropFirst ? 1 : 0)
@@ -480,3 +481,4 @@ private extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+#endif

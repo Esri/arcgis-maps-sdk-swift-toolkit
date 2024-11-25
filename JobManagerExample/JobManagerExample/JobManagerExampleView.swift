@@ -18,7 +18,6 @@ import OSLog
 ***REMOVED***
 import UserNotifications
 
-@MainActor
 struct JobManagerExampleView: View {
 ***REMOVED******REMOVED***/ The job manager used by this view.
 ***REMOVED***@ObservedObject var jobManager = JobManager.shared
@@ -33,14 +32,7 @@ struct JobManagerExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***HStack(spacing: 10) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***if isAddingGeodatabaseJob || isAddingOfflineMapJob {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***menu
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***List(jobManager.jobs, id: \.id) { job in
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***JobView(job: job)
@@ -49,19 +41,41 @@ struct JobManagerExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+#else
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+#endif
 ***REMOVED******REMOVED******REMOVED***
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** We don't want each row in the list to have the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** hover effect in this case because the row themselves
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** have buttons on them.
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowHoverEffectDisabled()
+#endif
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let error {
+#endif
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isAddingGeodatabaseJob || isAddingOfflineMapJob {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***menu
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs menu.
@@ -191,7 +205,11 @@ private struct JobView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+#else
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, 2)
 ***REMOVED******REMOVED***
 ***REMOVED***

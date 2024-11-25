@@ -17,23 +17,26 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience using geo-tracking.
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
 ***REMOVED***@Binding var initialCameraIsSet: Bool
 ***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
+#if os(iOS)
 ***REMOVED******REMOVED***/ The geo-tracking configuration for the AR session.
 ***REMOVED***private let configuration = ARGeoTrackingConfiguration()
+#endif
 ***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
 ***REMOVED***private let calibrationViewIsPresented: Bool
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***private let locationDataSource: LocationDataSource
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+#if os(iOS)
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***private let arViewProxy: ARSwiftUIViewProxy
+#endif
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
@@ -44,6 +47,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
+#if os(iOS)
 ***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
 ***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
@@ -81,10 +85,12 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***sceneViewBuilder = sceneView
 ***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***ZStack {
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let interfaceOrientation, initialCameraIsSet else { return ***REMOVED***
@@ -107,10 +113,12 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraDidChangeTrackingState { _, trackingState in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.worldScaleSetup(cameraController: cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialCameraIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .geoTracking)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
@@ -126,14 +134,17 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
+#if os(iOS)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration)
 ***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session.pause()
 ***REMOVED***
+#endif
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
@@ -165,7 +176,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
+#if os(iOS)
 ***REMOVED***private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
 ***REMOVED******REMOVED***switch status.state {
 ***REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
@@ -211,4 +222,5 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***view.onGeoTrackingStatusChangedAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
+#endif
 ***REMOVED***

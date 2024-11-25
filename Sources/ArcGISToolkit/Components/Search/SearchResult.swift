@@ -16,6 +16,7 @@ import UIKit.UIImage
 ***REMOVED***
 
 ***REMOVED***/ Wraps a search result for display.
+@available(visionOS, unavailable)
 public struct SearchResult: @unchecked Sendable {
 ***REMOVED******REMOVED***/ Creates a `SearchResult`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -70,20 +71,24 @@ public struct SearchResult: @unchecked Sendable {
 
 ***REMOVED*** MARK: Extensions
 
+@available(visionOS, unavailable)
 extension SearchResult: Identifiable {***REMOVED***
 
+@available(visionOS, unavailable)
 extension SearchResult: Equatable {
 ***REMOVED***public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
 ***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension SearchResult: Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension SearchResult {
 ***REMOVED***init(
 ***REMOVED******REMOVED***geocodeResult: GeocodeResult,

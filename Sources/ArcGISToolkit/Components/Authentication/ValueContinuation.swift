@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that allows a consumer to await on a value and a provider to provide a value
 ***REMOVED***/ asynchronously. This is effectively a continuation that holds a value.
-@MainActor class ValueContinuation<Value> {
+@MainActor class ValueContinuation<Value: Sendable> {
 ***REMOVED******REMOVED***/ The value.
 ***REMOVED***private var _value: Value?
 ***REMOVED***
