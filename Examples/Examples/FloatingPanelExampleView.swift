@@ -47,15 +47,15 @@ struct FloatingPanelExampleView: View {
                 selectedDetent: $selectedDetent,
                 isPresented: isPresented
             ) {
-                switch demoContent {
-                case .list:
-                    FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
-                case .text:
-                    FloatingPanelTextContent()
-                case .textField:
-                    FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
-                case .none:
-                    EmptyView()
+                if let demoContent {
+                    switch demoContent {
+                    case .list:
+                        FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
+                    case .text:
+                        FloatingPanelTextContent()
+                    case .textField:
+                        FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
+                    }
                 }
             }
             .toolbar {
