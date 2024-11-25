@@ -65,7 +65,7 @@ struct FloatingPanelExampleView: View {
                             demoContent = nil
                         }
                     } else {
-                        Menu {
+                        Menu("Present") {
                             Button("List") {
                                 demoContent = .list
                             }
@@ -75,8 +75,6 @@ struct FloatingPanelExampleView: View {
                             Button("Text Field") {
                                 demoContent = .textField
                             }
-                        } label: {
-                            Text("Present")
                         }
                     }
                 }
