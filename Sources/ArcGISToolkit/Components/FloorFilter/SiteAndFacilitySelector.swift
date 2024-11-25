@@ -164,7 +164,10 @@ struct SiteAndFacilitySelector: View {
                 userDidBackOutToSiteList = true
             } label: {
                 Image(systemName: "chevron.left")
+                    .padding(.toolkitDefault)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
             .opacity(backButtonIsVisible ? 1 : 0)
             Spacer()
             Group {
@@ -182,7 +185,10 @@ struct SiteAndFacilitySelector: View {
                 isPresented = false
             } label: {
                 Image(systemName: "xmark.circle")
+                    .padding(.toolkitDefault)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
         }
     }
     
