@@ -75,11 +75,8 @@ public struct SearchField: View {
             
             // Delete text button
             if !query.wrappedValue.isEmpty {
-                Button {
+                DismissButton {
                     query.wrappedValue = ""
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(Color.secondary)
                 }
             }
             

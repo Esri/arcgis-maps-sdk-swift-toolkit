@@ -88,12 +88,13 @@ struct ComboBoxInput: View {
                 // Only show clear button if we have a value
                 // and we're not required. (i.e., Don't show clear if
                 // the field is required.)
-                ClearButton {
+                DismissButton {
                     model.focusedElement = element
                     defer { model.focusedElement = nil }
                     updateValue(nil)
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
+                .padding(2)
             } else {
                 // Otherwise, always show chevron.
                 Image(systemName: "chevron.right")

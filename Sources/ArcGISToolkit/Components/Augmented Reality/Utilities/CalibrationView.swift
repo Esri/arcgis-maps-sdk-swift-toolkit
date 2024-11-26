@@ -95,8 +95,12 @@ extension WorldScaleSceneView {
                         .font(.title)
                         .lineLimit(1)
                     Spacer()
-                    dismissButton
-                        .layoutPriority(1)
+                    DismissButton {
+                        withAnimation {
+                            isPresented = false
+                        }
+                    }
+                    .layoutPriority(1)
                 }
                 .padding(.bottom)
                 headingSlider
@@ -160,22 +164,6 @@ extension WorldScaleSceneView {
                         viewModel.propose(elevationCorrection: delta)
                     }
             }
-        }
-        
-        @ViewBuilder
-        var dismissButton: some View {
-            Button {
-                withAnimation {
-                    isPresented = false
-                }
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .resizable()
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 28, height: 28)
-            }
-            .buttonStyle(.plain)
         }
     }
 }
