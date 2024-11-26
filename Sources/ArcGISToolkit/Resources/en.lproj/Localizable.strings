@@ -66,9 +66,6 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Choose From Library";
 
-/* The label of a button that clears a form's input. */
-"Clear" = "Clear";
-
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "Clear All Results";
 

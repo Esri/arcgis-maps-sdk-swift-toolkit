@@ -139,7 +139,7 @@ private extension TextInput {
             if !text.isEmpty,
                !isBarcodeScanner,
                !element.isMultiline {
-                ClearButton {
+                DismissButton {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
@@ -149,6 +149,7 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
+                .padding(2)
             }
             if isBarcodeScanner {
                 Button {

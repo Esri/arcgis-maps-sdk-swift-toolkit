@@ -135,13 +135,9 @@ struct SiteAndFacilitySelector: View {
                         textFieldIsFocused = false
                     }
                 if textFieldIsFocused && !query.isEmpty {
-                    Button {
+                    DismissButton(size: 18) {
                         query.removeAll()
-                    } label: {
-                        Image(systemName: "x.circle.fill")
-                            .renderingMode(.template)
                     }
-                    .foregroundStyle(.secondary)
                 }
             }
             .padding(5)
@@ -181,14 +177,9 @@ struct SiteAndFacilitySelector: View {
             }
             .font(.title3)
             Spacer()
-            Button {
+            DismissButton {
                 isPresented = false
-            } label: {
-                Image(systemName: "xmark.circle")
-                    .padding(.toolkitDefault)
-                    .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
         }
     }
     
