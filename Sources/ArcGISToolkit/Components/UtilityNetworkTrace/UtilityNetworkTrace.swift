@@ -418,7 +418,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.elementResults.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -453,7 +453,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -1015,6 +1015,7 @@ private extension String {
     }
 }
 
+
 @available(visionOS, unavailable)
 public extension UtilityNetworkTrace /* Deprecated */ {
     /// A graphical interface to run pre-configured traces on a map's utility networks.
@@ -1048,6 +1049,16 @@ public extension UtilityNetworkTrace /* Deprecated */ {
                 graphicsOverlay: graphicsOverlay.wrappedValue,
                 startingPoints: startingPoints.wrappedValue
             )
+        )
+    }
+}
+
+private extension Text {
+    static func makeResultsLabel(_ results: Int) -> Self {
+        .init(
+            "^[\(results) Results](inflect: true)",
+            bundle: .toolkitModule,
+            comment: "A label indicating the number of results of a utility network trace."
         )
     }
 }
