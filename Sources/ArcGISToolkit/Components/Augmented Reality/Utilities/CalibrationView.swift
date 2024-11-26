@@ -202,3 +202,12 @@ private extension WorldScaleSceneView.CalibrationView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
+#Preview {
+***REMOVED***WorldScaleSceneView.CalibrationView(
+***REMOVED******REMOVED***viewModel: WorldScaleCalibrationViewModel(),
+***REMOVED******REMOVED***isPresented: .constant(true)
+***REMOVED***)
+***REMOVED***
+#endif
