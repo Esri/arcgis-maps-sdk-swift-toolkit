@@ -24,65 +24,61 @@ struct FloatingPanelExampleView: View {
 ***REMOVED***@State private var demoContent: FloatingPanelDemoContent?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***@State private var map: Map = {
+***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***map.initialViewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED***scale: 1_000_000
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return map
+***REMOVED***()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The Floating Panel's current detent.
 ***REMOVED***@State private var selectedDetent: FloatingPanelDetent = .half
 ***REMOVED***
-***REMOVED******REMOVED***/ The initial viewpoint shown in the map.
-***REMOVED***private let initialViewpoint = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 1_000_000
-***REMOVED***)
-***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.onAttributionBarHeightChanged {
-***REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
-***REMOVED***
-***REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
-***REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
-***REMOVED******REMOVED******REMOVED***selectedDetent: $selectedDetent,
-***REMOVED******REMOVED******REMOVED***isPresented: isPresented
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***switch demoContent {
-***REMOVED******REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
-***REMOVED******REMOVED******REMOVED***case .text:
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextContent()
-***REMOVED******REMOVED******REMOVED***case .textField:
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
-***REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if demoContent != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Dismiss") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Menu {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("List") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .list
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .text
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text Field") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .textField
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Present")
+***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
+***REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $selectedDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let demoContent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch demoContent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .text:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextContent()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .textField:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if demoContent != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Dismiss") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Menu("Present") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("List") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .text
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text Field") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .textField
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the Floating Panel is displayed or not.

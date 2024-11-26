@@ -418,7 +418,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.makeResultsLabel(viewModel.selectedTrace?.elementResults.count ?? 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -453,7 +453,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.makeResultsLabel(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -1015,6 +1015,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***
 
+
 @available(visionOS, unavailable)
 public extension UtilityNetworkTrace /* Deprecated */ {
 ***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
@@ -1048,6 +1049,16 @@ public extension UtilityNetworkTrace /* Deprecated */ {
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***startingPoints: startingPoints.wrappedValue
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private extension Text {
+***REMOVED***static func makeResultsLabel(_ results: Int) -> Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"^[\(results) Results](inflect: true)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating the number of results of a utility network trace."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
