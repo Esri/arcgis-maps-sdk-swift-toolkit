@@ -202,3 +202,12 @@ private extension WorldScaleSceneView.CalibrationView {
         )
     }
 }
+
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
+#Preview {
+    WorldScaleSceneView.CalibrationView(
+        viewModel: WorldScaleCalibrationViewModel(),
+        isPresented: .constant(true)
+    )
+}
+#endif
