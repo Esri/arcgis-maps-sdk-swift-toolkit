@@ -1015,6 +1015,7 @@ private extension String {
     }
 }
 
+@available(visionOS, unavailable)
 public extension UtilityNetworkTrace /* Deprecated */ {
     /// A graphical interface to run pre-configured traces on a map's utility networks.
     /// - Parameters:
