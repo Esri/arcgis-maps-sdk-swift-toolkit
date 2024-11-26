@@ -85,16 +85,9 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if showCloseButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.close, systemImage: "xmark") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DismissButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
-#if !os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.circle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-#endif
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
