@@ -1015,7 +1015,6 @@ private extension String {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 public extension UtilityNetworkTrace /* Deprecated */ {
 ***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
 ***REMOVED******REMOVED***/ - Parameters:
