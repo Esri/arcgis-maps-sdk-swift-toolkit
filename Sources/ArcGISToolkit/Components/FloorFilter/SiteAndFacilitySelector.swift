@@ -175,12 +175,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***DismissButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.font(.title3)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view containing a list of the site names.
