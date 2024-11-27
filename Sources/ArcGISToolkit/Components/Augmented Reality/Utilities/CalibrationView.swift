@@ -92,7 +92,6 @@ extension WorldScaleSceneView {
             VStack {
                 HStack(alignment: .firstTextBaseline) {
                     Text(calibrationLabel)
-                        .font(.title)
                         .lineLimit(1)
                     Spacer()
                     DismissButton {
@@ -102,6 +101,7 @@ extension WorldScaleSceneView {
                     }
                     .layoutPriority(1)
                 }
+                .font(.title)
                 .padding(.bottom)
                 headingSlider
                 Divider()
