@@ -135,7 +135,7 @@ struct SiteAndFacilitySelector: View {
                         textFieldIsFocused = false
                     }
                 if textFieldIsFocused && !query.isEmpty {
-                    DismissButton(size: 18) {
+                    DismissButton {
                         query.removeAll()
                     }
                 }
