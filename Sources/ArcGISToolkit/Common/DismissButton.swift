@@ -17,45 +17,31 @@
 struct DismissButton: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
-***REMOVED***init(_ label: String? = nil, size: CGFloat? = nil, action: (() -> Void)? = nil) {
+***REMOVED***init(_ label: String? = nil, action: (() -> Void)? = nil) {
 ***REMOVED******REMOVED***self.action = action
 ***REMOVED******REMOVED***self.label = label
-***REMOVED******REMOVED***if let size {
-***REMOVED******REMOVED******REMOVED***self.size = size
-***REMOVED*** else {
-#if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED***self.size = 20
-#else
-***REMOVED******REMOVED***self.size = 28
-#endif
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***let action: (() -> Void)?
 ***REMOVED***
 ***REMOVED***let label: String?
 ***REMOVED***
-***REMOVED***let size: CGFloat
-***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***if let action {
-***REMOVED******REMOVED******REMOVED******REMOVED***action()
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED***if let label {
+***REMOVED******REMOVED******REMOVED***Button(label) {
+***REMOVED******REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
 ***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***if let label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size, height: size)
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.labelStyle(.titleOnly)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Button("Done", systemImage: "xmark.circle.fill") {
+***REMOVED******REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
+***REMOVED******REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
 ***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 
