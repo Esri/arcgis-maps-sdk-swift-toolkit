@@ -175,12 +175,12 @@ struct SiteAndFacilitySelector: View {
                     Text.sites
                 }
             }
-            .font(.title3)
             Spacer()
             DismissButton {
                 isPresented = false
             }
         }
+        .font(.title3)
     }
     
     /// A view containing a list of the site names.
