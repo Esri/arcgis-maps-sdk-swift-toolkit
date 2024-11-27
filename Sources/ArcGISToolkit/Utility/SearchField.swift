@@ -90,8 +90,9 @@ public struct SearchField: View {
                         "chevron.down" :
                             "chevron.up"
                     )
-                        .foregroundColor(Color.secondary)
+                    .foregroundColor(Color.secondary)
                 }
+                .buttonStyle(.plain)
             }
         }
         .esriBorder()
