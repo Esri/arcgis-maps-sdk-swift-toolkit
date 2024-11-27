@@ -17,45 +17,31 @@ import SwiftUI
 struct DismissButton: View {
     @Environment(\.dismiss) private var dismiss
     
-    init(_ label: String? = nil, size: CGFloat? = nil, action: (() -> Void)? = nil) {
+    init(_ label: String? = nil, action: (() -> Void)? = nil) {
         self.action = action
         self.label = label
-        if let size {
-            self.size = size
-        } else {
-#if targetEnvironment(macCatalyst)
-        self.size = 20
-#else
-        self.size = 28
-#endif
-        }
     }
     
     let action: (() -> Void)?
     
     let label: String?
     
-    let size: CGFloat
-    
     var body: some View {
-        Button {
-            if let action {
-                action()
-            } else {
-                dismiss()
+        if let label {
+            Button(label) {
+                action?() ?? dismiss()
             }
-        } label: {
-            if let label {
-                Text(label)
-            } else {
-                Image(systemName: "xmark.circle.fill")
-                    .resizable()
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(.secondary)
-                    .frame(width: size, height: size)
+            .buttonStyle(.plain)
+            .labelStyle(.titleOnly)
+        } else {
+            Button("Done", systemImage: "xmark.circle.fill") {
+                action?() ?? dismiss()
             }
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
+            .labelStyle(.iconOnly)
+            .symbolRenderingMode(.hierarchical)
         }
-        .buttonStyle(.plain)
     }
 }
 
