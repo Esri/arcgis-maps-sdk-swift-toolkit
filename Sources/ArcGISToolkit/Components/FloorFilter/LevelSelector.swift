@@ -70,8 +70,8 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ The system name of the icon that reflects the current state of `isCollapsed`.
 ***REMOVED***var iconForCollapsedState: String {
 ***REMOVED******REMOVED***switch (isCollapsed, isTopAligned) {
-***REMOVED******REMOVED***case (true, true), (false, false): return "chevron.down.circle"
-***REMOVED******REMOVED***case (true, false), (false, true): return "chevron.up.circle"
+***REMOVED******REMOVED***case (true, true), (false, false): return "chevron.down"
+***REMOVED******REMOVED***case (true, false), (false, true): return "chevron.up"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
