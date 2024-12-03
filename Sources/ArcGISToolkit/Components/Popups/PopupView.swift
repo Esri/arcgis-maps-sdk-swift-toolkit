@@ -67,7 +67,17 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ A Boolean value specifying whether a "close" button should be shown or not. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the initializer,
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
-***REMOVED***private var showCloseButton = false
+***REMOVED***var showCloseButton = false
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the deprecated `PopupView.showCloseButton(_:)`
+***REMOVED******REMOVED***/ modifier is applied.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Once the modifier is removed this property can be removed and the presence or lack of a value for
+***REMOVED******REMOVED***/ `isPresented` should be the sole criteria to show or hide the close button.
+***REMOVED***var showCloseButtonDeprecatedModifierIsApplied = false
+***REMOVED***
+***REMOVED******REMOVED***/ The visibility of the popup header.
+***REMOVED***var headerVisibility: Visibility = .automatic
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
 ***REMOVED***@State private var evaluation: Evaluation?
@@ -77,20 +87,31 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !popup.title.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(popup.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***if showCloseButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
+***REMOVED******REMOVED******REMOVED***if headerVisibility != .hidden {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !popup.title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(popup.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|| (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.circle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let evaluation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let error = evaluation.error {
@@ -192,19 +213,5 @@ extension PopupView {
 ***REMOVED******REMOVED******REMOVED***self.elements = elements
 ***REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension PopupView {
-***REMOVED******REMOVED***/ Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
-***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the `PopupView`
-***REMOVED******REMOVED***/ initializer, so that the the "close" button can close the view.
-***REMOVED******REMOVED***/ Defaults to `false`.
-***REMOVED******REMOVED***/ - Parameter newShowCloseButton: The new value.
-***REMOVED******REMOVED***/ - Returns: A new `PopupView`.
-***REMOVED***public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.showCloseButton = newShowCloseButton
-***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
