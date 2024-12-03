@@ -135,7 +135,7 @@ struct SiteAndFacilitySelector: View {
                         textFieldIsFocused = false
                     }
                 if textFieldIsFocused && !query.isEmpty {
-                    DismissButton {
+                    DoneButton {
                         query.removeAll()
                     }
                 }
@@ -176,7 +176,7 @@ struct SiteAndFacilitySelector: View {
                 }
             }
             Spacer()
-            DismissButton {
+            DoneButton {
                 isPresented = false
             }
         }

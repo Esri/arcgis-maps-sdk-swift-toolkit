@@ -14,34 +14,23 @@
 
 import SwiftUI
 
-struct DismissButton: View {
+struct DoneButton: View {
     @Environment(\.dismiss) private var dismiss
     
-    init(_ label: String? = nil, action: (() -> Void)? = nil) {
+    init(action: (() -> Void)? = nil) {
         self.action = action
-        self.label = label
     }
     
     let action: (() -> Void)?
     
-    let label: String?
-    
     var body: some View {
-        if let label {
-            Button(label) {
-                action?() ?? dismiss()
-            }
-            .buttonStyle(.plain)
-            .labelStyle(.titleOnly)
-        } else {
-            Button("Done", systemImage: "xmark.circle.fill") {
-                action?() ?? dismiss()
-            }
-            .buttonStyle(.plain)
-            .foregroundStyle(.secondary)
-            .labelStyle(.iconOnly)
-            .symbolRenderingMode(.hierarchical)
+        Button(String.done, systemImage: "xmark.circle.fill") {
+            action?() ?? dismiss()
         }
+        .buttonStyle(.plain)
+        .foregroundStyle(.secondary)
+        .labelStyle(.iconOnly)
+        .symbolRenderingMode(.hierarchical)
     }
 }
 
@@ -58,8 +47,7 @@ struct DismissButton: View {
             EmptyView()
                 .overlay(alignment: .topTrailing) {
                     HStack {
-                        DismissButton("Done")
-                        DismissButton()
+                        DoneButton()
                     }
                     .padding()
                 }

@@ -33,6 +33,15 @@ extension String {
         )
     }
     
+    /// Localized text for the word "Done".
+    static var done: Self {
+        .init(
+            localized: "Done",
+            bundle: .toolkitModule,
+            comment: "A label for a button for the user to indicate completion of the current task."
+        )
+    }
+    
     /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
     static var emptyAttachmentDownloadErrorMessage: Self {
         .init(
