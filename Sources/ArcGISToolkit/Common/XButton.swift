@@ -37,16 +37,14 @@ struct XButton: View {
 ***REMOVED***let context: Context
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button(title, systemImage: "xmark.circle.fill") {
+***REMOVED******REMOVED***Button(title, systemImage: "xmark") {
 ***REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
 ***REMOVED***
-***REMOVED******REMOVED***.labelStyle(.iconOnly)
-***REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
-#if !os(visionOS)
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED***.symbolVariant(.circle)
-#endif
+***REMOVED******REMOVED***.labelStyle(.iconOnly)
+***REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
+***REMOVED******REMOVED***.symbolVariant(.circle.fill)
 ***REMOVED***
 ***REMOVED***
 
