@@ -14,6 +14,7 @@
 
 ***REMOVED***
 
+@available(visionOS, unavailable)
 public extension FeatureFormView {
 ***REMOVED******REMOVED***/ Specifies the visibility of the form header.
 ***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of the form header.
