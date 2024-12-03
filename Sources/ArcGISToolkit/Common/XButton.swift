@@ -70,6 +70,7 @@ extension XButton {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "Present")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED***
