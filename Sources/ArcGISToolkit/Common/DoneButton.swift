@@ -38,7 +38,7 @@ struct DoneButton: View {
 #Preview {
     @Previewable @State var isPresented = true
     LinearGradient(colors: [.blue, .black], startPoint: .topLeading, endPoint: .bottomTrailing)
-        .overlay(alignment: .center) {
+        .overlay {
             Button("Present") {
                 isPresented = true
             }
