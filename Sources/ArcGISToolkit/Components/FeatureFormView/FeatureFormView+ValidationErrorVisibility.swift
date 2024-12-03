@@ -26,8 +26,10 @@ public extension FeatureFormView {
     
     /// Specifies the visibility of validation errors in the form.
     /// - Parameter visibility: The preferred visibility of validation errors in the form.
-    func validationErrors(_ visibility: ValidationErrorVisibility) -> some View {
-        environment(\.validationErrorVisibility, visibility)
+    func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
+        var copy = self
+        copy.validationErrorVisibility = visibility
+        return copy
     }
 }
 
@@ -42,6 +44,6 @@ extension EnvironmentValues {
 
 /// The validation error visibility configuration of a form.
 @available(visionOS, unavailable)
-private struct FormViewValidationErrorVisibility: EnvironmentKey {
+struct FormViewValidationErrorVisibility: EnvironmentKey {
     static let defaultValue: FeatureFormView.ValidationErrorVisibility = .automatic
 }
