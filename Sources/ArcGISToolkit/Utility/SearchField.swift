@@ -75,7 +75,7 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Delete text button
 ***REMOVED******REMOVED******REMOVED***if !query.wrappedValue.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***DismissButton {
+***REMOVED******REMOVED******REMOVED******REMOVED***DoneButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.wrappedValue = ""
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

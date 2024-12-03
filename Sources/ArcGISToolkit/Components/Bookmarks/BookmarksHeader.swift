@@ -51,7 +51,7 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text.done
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.done)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED***
 #if !os(visionOS)

@@ -84,7 +84,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if showCloseButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DismissButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***

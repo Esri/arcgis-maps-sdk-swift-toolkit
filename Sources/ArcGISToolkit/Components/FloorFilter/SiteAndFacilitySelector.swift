@@ -135,7 +135,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if textFieldIsFocused && !query.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DismissButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.removeAll()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -176,7 +176,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***DismissButton {
+***REMOVED******REMOVED******REMOVED***DoneButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***
 ***REMOVED***

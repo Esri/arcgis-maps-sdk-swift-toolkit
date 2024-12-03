@@ -15,15 +15,6 @@
 ***REMOVED***
 
 extension Text {
-***REMOVED******REMOVED***/ Localized text for the word "Done".
-***REMOVED***static var done: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***"Done",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button for the user to indicate completion of the current task."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Localized text for the word "Required".
 ***REMOVED***static var required: Self {
 ***REMOVED******REMOVED***Text(

@@ -14,34 +14,23 @@
 
 ***REMOVED***
 
-struct DismissButton: View {
+struct DoneButton: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
-***REMOVED***init(_ label: String? = nil, action: (() -> Void)? = nil) {
+***REMOVED***init(action: (() -> Void)? = nil) {
 ***REMOVED******REMOVED***self.action = action
-***REMOVED******REMOVED***self.label = label
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***let action: (() -> Void)?
 ***REMOVED***
-***REMOVED***let label: String?
-***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if let label {
-***REMOVED******REMOVED******REMOVED***Button(label) {
-***REMOVED******REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED***.labelStyle(.titleOnly)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Button("Done", systemImage: "xmark.circle.fill") {
-***REMOVED******REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
-***REMOVED******REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
+***REMOVED******REMOVED***Button(String.done, systemImage: "xmark.circle.fill") {
+***REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***.labelStyle(.iconOnly)
+***REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
 ***REMOVED***
 ***REMOVED***
 
@@ -58,8 +47,7 @@ struct DismissButton: View {
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DismissButton("Done")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DismissButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
