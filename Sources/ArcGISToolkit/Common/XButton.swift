@@ -42,6 +42,7 @@ struct XButton: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(.secondary)
+        ._hoverEffectDisabled()
         .labelStyle(.iconOnly)
         .symbolRenderingMode(.hierarchical)
         .symbolVariant(.circle.fill)
@@ -56,6 +57,18 @@ extension XButton {
             String.clear
         case .dismiss:
             String.dismiss
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func _hoverEffectDisabled() -> some View {
+        if #available(iOS 17.0, *) {
+            self
+                .hoverEffectDisabled()
+        } else {
+            self
         }
     }
 }
