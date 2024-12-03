@@ -14,23 +14,51 @@
 
 ***REMOVED***
 
-struct DoneButton: View {
+struct XButton: View {
+***REMOVED***enum Context {
+***REMOVED******REMOVED******REMOVED***/ The button is used to clear content.
+***REMOVED******REMOVED***case clear
+***REMOVED******REMOVED******REMOVED***/ The button is used to dismiss content.
+***REMOVED******REMOVED***case dismiss
+***REMOVED***
+***REMOVED***
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
-***REMOVED***init(action: (() -> Void)? = nil) {
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - context: The context the button is used in. Helps to provide an accurate accessibility title.
+***REMOVED******REMOVED***/   - action: The button's action. Calls the DismissAction if no action is provided.
+***REMOVED***init(_ context: Context, action: (() -> Void)? = nil) {
 ***REMOVED******REMOVED***self.action = action
+***REMOVED******REMOVED***self.context = context
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***let action: (() -> Void)?
 ***REMOVED***
+***REMOVED***let context: Context
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button(String.done, systemImage: "xmark.circle.fill") {
+***REMOVED******REMOVED***Button(title, systemImage: "xmark.circle.fill") {
 ***REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
 ***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***.labelStyle(.iconOnly)
 ***REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
+#if !os(visionOS)
+***REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***.symbolVariant(.circle)
+#endif
+***REMOVED***
+***REMOVED***
+
+extension XButton {
+***REMOVED******REMOVED***/ The title for the button.
+***REMOVED***var title: String {
+***REMOVED******REMOVED***switch context {
+***REMOVED******REMOVED***case .clear:
+***REMOVED******REMOVED******REMOVED***String.clear
+***REMOVED******REMOVED***case .dismiss:
+***REMOVED******REMOVED******REMOVED***String.dismiss
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -39,15 +67,16 @@ struct DoneButton: View {
 ***REMOVED***@Previewable @State var isPresented = true
 ***REMOVED***LinearGradient(colors: [.blue, .black], startPoint: .topLeading, endPoint: .bottomTrailing)
 ***REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED***Button("Present") {
+***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()

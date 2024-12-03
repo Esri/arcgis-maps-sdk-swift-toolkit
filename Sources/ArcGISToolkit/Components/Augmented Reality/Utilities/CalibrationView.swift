@@ -94,7 +94,7 @@ extension WorldScaleSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(calibrationLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***

@@ -97,15 +97,11 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|| (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DoneButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
 #if !os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.circle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 #endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***

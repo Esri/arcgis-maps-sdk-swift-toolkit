@@ -24,6 +24,15 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Clear".
+***REMOVED***static var clear: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Clear",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "E.g. Remove text from a text field."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Close".
 ***REMOVED***static var close: Self {
 ***REMOVED******REMOVED***.init(
@@ -33,12 +42,12 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Localized text for the word "Done".
-***REMOVED***static var done: Self {
+***REMOVED******REMOVED***/ A localized string for the word "Dismiss".
+***REMOVED***static var dismiss: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Done",
+***REMOVED******REMOVED******REMOVED***localized: "Dismiss",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button for the user to indicate completion of the current task."
+***REMOVED******REMOVED******REMOVED***comment: "E.g. Close/hide a sheet or pop-up."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
