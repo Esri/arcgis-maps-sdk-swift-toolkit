@@ -84,7 +84,7 @@ public struct PopupView: View {
                 }
                 Spacer()
                 if showCloseButton {
-                    DismissButton {
+                    DoneButton {
                         isPresented?.wrappedValue = false
                     }
                 }

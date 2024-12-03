@@ -29,7 +29,7 @@ struct MediaDetailView : View {
                 Button {
                     isShowingDetailView.wrappedValue = false
                 } label: {
-                    Text.done
+                    Text(String.done)
                         .fontWeight(.semibold)
                 }
                 .padding([.bottom], 4)
