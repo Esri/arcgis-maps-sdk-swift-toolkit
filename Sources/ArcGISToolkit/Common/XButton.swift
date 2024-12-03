@@ -14,23 +14,51 @@
 
 import SwiftUI
 
-struct DoneButton: View {
+struct XButton: View {
+    enum Context {
+        /// The button is used to clear content.
+        case clear
+        /// The button is used to dismiss content.
+        case dismiss
+    }
+    
     @Environment(\.dismiss) private var dismiss
     
-    init(action: (() -> Void)? = nil) {
+    /// - Parameters:
+    ///   - context: The context the button is used in. Helps to provide an accurate accessibility title.
+    ///   - action: The button's action. Calls the DismissAction if no action is provided.
+    init(_ context: Context, action: (() -> Void)? = nil) {
         self.action = action
+        self.context = context
     }
     
     let action: (() -> Void)?
     
+    let context: Context
+    
     var body: some View {
-        Button(String.done, systemImage: "xmark.circle.fill") {
+        Button(title, systemImage: "xmark.circle.fill") {
             action?() ?? dismiss()
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(.secondary)
         .labelStyle(.iconOnly)
         .symbolRenderingMode(.hierarchical)
+#if !os(visionOS)
+        .buttonStyle(.plain)
+        .foregroundStyle(.secondary)
+        .symbolVariant(.circle)
+#endif
+    }
+}
+
+extension XButton {
+    /// The title for the button.
+    var title: String {
+        switch context {
+        case .clear:
+            String.clear
+        case .dismiss:
+            String.dismiss
+        }
     }
 }
 
@@ -39,15 +67,16 @@ struct DoneButton: View {
     @Previewable @State var isPresented = true
     LinearGradient(colors: [.blue, .black], startPoint: .topLeading, endPoint: .bottomTrailing)
         .overlay {
-            Button("Present") {
+            Button {
                 isPresented = true
+            } label: {
             }
             .buttonStyle(.bordered)
         }
         .sheet(isPresented: $isPresented) {
             EmptyView()
                 .overlay(alignment: .topTrailing) {
-                    DoneButton()
+                    XButton(.dismiss)
                         .padding()
                 }
                 .interactiveDismissDisabled()

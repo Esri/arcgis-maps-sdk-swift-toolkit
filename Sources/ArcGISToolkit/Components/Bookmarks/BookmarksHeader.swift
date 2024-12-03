@@ -51,7 +51,7 @@ struct BookmarksHeader: View {
             Button {
                 isPresented = false
             } label: {
-                Text(String.done)
+                Text.done
                     .fontWeight(.semibold)
             }
 #if !os(visionOS)

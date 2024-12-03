@@ -94,7 +94,7 @@ extension WorldScaleSceneView {
                     Text(calibrationLabel)
                         .lineLimit(1)
                     Spacer()
-                    DoneButton {
+                    XButton(.dismiss) {
                         withAnimation {
                             isPresented = false
                         }

@@ -24,6 +24,15 @@ extension String {
         )
     }
     
+    /// A localized string for the word "Clear".
+    static var clear: Self {
+        .init(
+            localized: "Clear",
+            bundle: .toolkitModule,
+            comment: "E.g. Remove text from a text field."
+        )
+    }
+    
     /// A localized string for the word "Close".
     static var close: Self {
         .init(
@@ -33,12 +42,12 @@ extension String {
         )
     }
     
-    /// Localized text for the word "Done".
-    static var done: Self {
+    /// A localized string for the word "Dismiss".
+    static var dismiss: Self {
         .init(
-            localized: "Done",
+            localized: "Dismiss",
             bundle: .toolkitModule,
-            comment: "A label for a button for the user to indicate completion of the current task."
+            comment: "E.g. Close/hide a sheet or pop-up."
         )
     }
     

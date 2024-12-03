@@ -75,7 +75,7 @@ public struct SearchField: View {
             
             // Delete text button
             if !query.wrappedValue.isEmpty {
-                DoneButton {
+                XButton(.clear) {
                     query.wrappedValue = ""
                 }
             }
