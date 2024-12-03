@@ -38,18 +38,17 @@ struct DoneButton: View {
 #Preview {
     @Previewable @State var isPresented = true
     LinearGradient(colors: [.blue, .black], startPoint: .topLeading, endPoint: .bottomTrailing)
-        .onTapGesture {
-            if !isPresented {
+        .overlay(alignment: .center) {
+            Button("Present") {
                 isPresented = true
             }
+            .buttonStyle(.bordered)
         }
         .sheet(isPresented: $isPresented) {
             EmptyView()
                 .overlay(alignment: .topTrailing) {
-                    HStack {
-                        DoneButton()
-                    }
-                    .padding()
+                    DoneButton()
+                        .padding()
                 }
                 .interactiveDismissDisabled()
                 .presentationBackgroundInteraction(.disabled)
