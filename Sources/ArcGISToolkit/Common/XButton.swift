@@ -70,6 +70,7 @@ extension XButton {
             Button {
                 isPresented = true
             } label: {
+                Text(verbatim: "Present")
             }
             .buttonStyle(.bordered)
         }
