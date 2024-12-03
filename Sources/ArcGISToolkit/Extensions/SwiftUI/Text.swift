@@ -15,6 +15,15 @@
 import SwiftUI
 
 extension Text {
+    /// Localized text for the word "Done".
+    static var done: Self {
+        Text(
+            "Done",
+            bundle: .toolkitModule,
+            comment: "A label for a button for the user to indicate completion of the current task."
+        )
+    }
+    
     /// Localized text for the word "Required".
     static var required: Self {
         Text(
