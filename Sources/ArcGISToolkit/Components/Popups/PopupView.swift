@@ -67,7 +67,17 @@ public struct PopupView: View {
     /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the initializer,
     /// so that the the "close" button can close the view.
-    private var showCloseButton = false
+    var showCloseButton = false
+    
+    /// A Boolean value indicating whether the deprecated `PopupView.showCloseButton(_:)`
+    /// modifier is applied.
+    ///
+    /// Once the modifier is removed this property can be removed and the presence or lack of a value for
+    /// `isPresented` should be the sole criteria to show or hide the close button.
+    var showCloseButtonDeprecatedModifierIsApplied = false
+    
+    /// The visibility of the popup header.
+    var headerVisibility: Visibility = .automatic
     
     /// The result of evaluating the popup expressions.
     @State private var evaluation: Evaluation?
@@ -77,20 +87,31 @@ public struct PopupView: View {
     
     public var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                if !popup.title.isEmpty {
-                    Text(popup.title)
-                        .fontWeight(.bold)
-                }
-                Spacer()
-                if showCloseButton {
-                    DoneButton {
-                        isPresented?.wrappedValue = false
+            if headerVisibility != .hidden {
+                HStack {
+                    if !popup.title.isEmpty {
+                        Text(popup.title)
+                            .font(.title)
+                            .fontWeight(.bold)
+                    }
+                    Spacer()
+                    if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
+                        || (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
+                        DoneButton {
+                            isPresented?.wrappedValue = false
+                        }
+                        .labelStyle(.iconOnly)
+#if !os(visionOS)
+                        .foregroundColor(.secondary)
+                        .padding([.top, .bottom, .trailing], 4)
+                        .symbolVariant(.circle)
+                        .buttonStyle(.plain)
+#endif
                     }
                 }
+                .font(.title)
+                Divider()
             }
-            .font(.title)
-            Divider()
             Group {
                 if let evaluation {
                     if let error = evaluation.error {
@@ -192,19 +213,5 @@ extension PopupView {
             self.elements = elements
             self.error = error
         }
-    }
-}
-
-extension PopupView {
-    /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
-    /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
-    /// initializer, so that the the "close" button can close the view.
-    /// Defaults to `false`.
-    /// - Parameter newShowCloseButton: The new value.
-    /// - Returns: A new `PopupView`.
-    public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
-        var copy = self
-        copy.showCloseButton = newShowCloseButton
-        return copy
     }
 }
