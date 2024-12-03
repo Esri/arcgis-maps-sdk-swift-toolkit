@@ -37,16 +37,14 @@ struct XButton: View {
     let context: Context
     
     var body: some View {
-        Button(title, systemImage: "xmark.circle.fill") {
+        Button(title, systemImage: "xmark") {
             action?() ?? dismiss()
         }
-        .labelStyle(.iconOnly)
-        .symbolRenderingMode(.hierarchical)
-#if !os(visionOS)
         .buttonStyle(.plain)
         .foregroundStyle(.secondary)
-        .symbolVariant(.circle)
-#endif
+        .labelStyle(.iconOnly)
+        .symbolRenderingMode(.hierarchical)
+        .symbolVariant(.circle.fill)
     }
 }
 
