@@ -38,7 +38,7 @@ struct DoneButton: View {
 #Preview {
 ***REMOVED***@Previewable @State var isPresented = true
 ***REMOVED***LinearGradient(colors: [.blue, .black], startPoint: .topLeading, endPoint: .bottomTrailing)
-***REMOVED******REMOVED***.overlay(alignment: .center) {
+***REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED***Button("Present") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
