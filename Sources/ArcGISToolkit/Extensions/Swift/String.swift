@@ -33,15 +33,6 @@ extension String {
         )
     }
     
-    /// A localized string for the word "Close".
-    static var close: Self {
-        .init(
-            localized: "Close",
-            bundle: .toolkitModule,
-            comment: "A label for a button indicating that the view should be closed."
-        )
-    }
-    
     /// A localized string for the word "Dismiss".
     static var dismiss: Self {
         .init(
