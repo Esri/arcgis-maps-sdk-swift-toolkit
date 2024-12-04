@@ -40,12 +40,13 @@ struct XButton: View {
         Button(title, systemImage: "xmark") {
             action?() ?? dismiss()
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(.secondary)
-        ._hoverEffectDisabled()
         .labelStyle(.iconOnly)
         .symbolRenderingMode(.hierarchical)
+#if !os(visionOS)
+        .buttonStyle(.plain)
+        .foregroundStyle(.secondary)
         .symbolVariant(.circle.fill)
+#endif
     }
 }
 
@@ -57,18 +58,6 @@ extension XButton {
             String.clear
         case .dismiss:
             String.dismiss
-        }
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func _hoverEffectDisabled() -> some View {
-        if #available(iOS 17.0, *) {
-            self
-                .hoverEffectDisabled()
-        } else {
-            self
         }
     }
 }
