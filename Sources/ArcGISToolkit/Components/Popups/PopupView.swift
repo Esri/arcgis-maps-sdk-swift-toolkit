@@ -91,7 +91,6 @@ public struct PopupView: View {
                 HStack {
                     if !popup.title.isEmpty {
                         Text(popup.title)
-                            .font(.title)
                             .fontWeight(.bold)
                     }
                     Spacer()
