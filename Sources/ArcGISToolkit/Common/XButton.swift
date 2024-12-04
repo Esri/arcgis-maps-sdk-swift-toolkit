@@ -40,12 +40,13 @@ struct XButton: View {
 ***REMOVED******REMOVED***Button(title, systemImage: "xmark") {
 ***REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
 ***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED***._hoverEffectDisabled()
 ***REMOVED******REMOVED***.labelStyle(.iconOnly)
 ***REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
+#if !os(visionOS)
+***REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***.symbolVariant(.circle.fill)
+#endif
 ***REMOVED***
 ***REMOVED***
 
@@ -57,18 +58,6 @@ extension XButton {
 ***REMOVED******REMOVED******REMOVED***String.clear
 ***REMOVED******REMOVED***case .dismiss:
 ***REMOVED******REMOVED******REMOVED***String.dismiss
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension View {
-***REMOVED***@ViewBuilder
-***REMOVED***func _hoverEffectDisabled() -> some View {
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffectDisabled()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
