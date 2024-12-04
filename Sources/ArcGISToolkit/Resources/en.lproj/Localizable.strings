@@ -454,6 +454,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Value must not be empty";
 
+/* E.g. Open a hyperlink. */
+"View" = "View";
+
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
 "You must sign in to access '%@'" = "You must sign in to access '%@'";
