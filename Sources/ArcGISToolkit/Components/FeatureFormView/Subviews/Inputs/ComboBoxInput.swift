@@ -94,7 +94,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(2)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, always show chevron.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")

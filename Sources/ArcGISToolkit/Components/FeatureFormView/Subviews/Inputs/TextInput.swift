@@ -149,7 +149,6 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text.removeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(2)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isBarcodeScanner {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
