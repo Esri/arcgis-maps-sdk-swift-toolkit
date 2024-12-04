@@ -101,6 +101,7 @@ public struct PopupView: View {
                             isPresented?.wrappedValue = false
                         }
 #if !os(visionOS)
+                        .font(.title)
                         .padding([.top, .bottom, .trailing], 4)
 #endif
                     }
