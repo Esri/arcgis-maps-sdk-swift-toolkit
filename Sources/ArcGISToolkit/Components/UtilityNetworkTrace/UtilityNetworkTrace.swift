@@ -112,6 +112,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the "Delete All Starting Points" confirmation is presented.
+***REMOVED***@State private var deleteAllStartingPointsConfirmationIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
 ***REMOVED***@State private var shouldZoomOnTraceCompletion = true
 ***REMOVED***
@@ -277,7 +280,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section(String.startingPointsTitle) {
+***REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
@@ -298,6 +301,31 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label declaring the number of starting points selected for a utility network trace."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** header: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.startingPointsTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.deleteAllStartingPoints, systemImage: "trash") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deleteAllStartingPointsConfirmationIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.confirmationDialog(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.deleteAllStartingPoints,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $deleteAllStartingPointsConfirmationIsPresented
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.deleteAllStartingPoints, role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.startingPoints.forEach { startingPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***externalStartingPoints.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.deleteAllStartingPointsMessage)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -516,6 +544,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Button(String.deleteButtonLabel, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let startingPoint = selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***externalStartingPoints.removeAll { $0 == startingPoint ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -609,7 +638,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
+***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points. This
+***REMOVED******REMOVED***/   property will not modify interactively added starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
@@ -849,6 +879,22 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***static var deleteAllStartingPoints: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Delete All Starting Points",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button used to delete all starting points on a pending utility network trace."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var deleteAllStartingPointsMessage: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "All starting points will be deleted.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message describing the outcome of clearing all starting points."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static var deleteButtonLabel: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Delete",
@@ -1026,7 +1072,8 @@ public extension UtilityNetworkTrace /* Deprecated */ {
 ***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
+***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points. This
+***REMOVED******REMOVED***/   property will not modify interactively added starting points.
 ***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
 ***REMOVED***@available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
 ***REMOVED***init(
