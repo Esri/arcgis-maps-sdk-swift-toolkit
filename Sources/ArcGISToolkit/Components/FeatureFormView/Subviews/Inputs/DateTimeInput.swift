@@ -111,7 +111,6 @@ struct DateTimeInput: View {
                         date = nil
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
-                    .padding(2)
                 }
             }
         }
