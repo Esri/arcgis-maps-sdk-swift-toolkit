@@ -149,7 +149,6 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
-                .padding(2)
             }
             if isBarcodeScanner {
                 Button {
