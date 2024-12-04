@@ -112,6 +112,9 @@ public struct UtilityNetworkTrace: View {
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
+    /// A Boolean value indicating whether the "Delete All Starting Points" confirmation is presented.
+    @State private var deleteAllStartingPointsConfirmationIsPresented = false
+    
     /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
     @State private var shouldZoomOnTraceCompletion = true
     
@@ -277,7 +280,7 @@ public struct UtilityNetworkTrace: View {
                         .catalystPadding(4)
                 }
             }
-            Section(String.startingPointsTitle) {
+            Section {
                 Button(String.addNewButtonLabel) {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                     activeDetent = .summary
@@ -298,6 +301,31 @@ public struct UtilityNetworkTrace: View {
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
                         .catalystPadding(4)
+                    }
+                }
+            } header: {
+                HStack {
+                    Text(String.startingPointsTitle)
+                    if !viewModel.pendingTrace.startingPoints.isEmpty {
+                        Spacer()
+                        Button(String.deleteAllStartingPoints, systemImage: "trash") {
+                            deleteAllStartingPointsConfirmationIsPresented = true
+                        }
+                        .buttonStyle(.plain)
+                        .labelStyle(.iconOnly)
+                        .confirmationDialog(
+                            String.deleteAllStartingPoints,
+                            isPresented: $deleteAllStartingPointsConfirmationIsPresented
+                        ) {
+                            Button(String.deleteAllStartingPoints, role: .destructive) {
+                                viewModel.pendingTrace.startingPoints.forEach { startingPoint in
+                                    viewModel.deleteStartingPoint(startingPoint)
+                                    externalStartingPoints.removeAll()
+                                }
+                            }
+                        } message: {
+                            Text(String.deleteAllStartingPointsMessage)
+                        }
                     }
                 }
             }
@@ -516,6 +544,7 @@ public struct UtilityNetworkTrace: View {
             Button(String.deleteButtonLabel, role: .destructive) {
                 if let startingPoint = selectedStartingPoint {
                     viewModel.deleteStartingPoint(startingPoint)
+                    externalStartingPoints.removeAll { $0 == startingPoint }
                     currentActivity = .creatingTrace(.viewingStartingPoints)
                 }
             }
@@ -609,7 +638,8 @@ public struct UtilityNetworkTrace: View {
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
-    ///   - startingPoints: An optional list of programmatically provided starting points.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
@@ -849,6 +879,22 @@ private extension String {
         )
     }
     
+    static var deleteAllStartingPoints: Self {
+        .init(
+            localized: "Delete All Starting Points",
+            bundle: .toolkitModule,
+            comment: "A label for a button used to delete all starting points on a pending utility network trace."
+        )
+    }
+    
+    static var deleteAllStartingPointsMessage: Self {
+        .init(
+            localized: "All starting points will be deleted.",
+            bundle: .toolkitModule,
+            comment: "A message describing the outcome of clearing all starting points."
+        )
+    }
+    
     static var deleteButtonLabel: Self {
         .init(
             localized: "Delete",
@@ -1026,7 +1072,8 @@ public extension UtilityNetworkTrace /* Deprecated */ {
     ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-    ///   - startingPoints: An optional list of programmatically provided starting points.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
     /// - Attention: Deprecated at 200.7.
     @available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
     init(
