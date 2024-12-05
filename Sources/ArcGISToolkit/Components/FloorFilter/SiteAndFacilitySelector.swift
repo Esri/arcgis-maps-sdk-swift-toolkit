@@ -32,7 +32,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the user is typing into the text field.
 ***REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the user tapped the "All sites" button.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user tapped the "All Sites" button.
 ***REMOVED***@State private var allSitesIsSelected = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The site or facility filter phrase.
@@ -141,13 +141,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if textFieldIsFocused && !query.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.removeAll()
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "x.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding(5)
@@ -170,7 +166,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = true
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.opacity(backButtonIsVisible ? 1 : 0)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***Group {
@@ -182,14 +181,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.font(.title3)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view containing a list of the site names.
@@ -268,7 +265,7 @@ extension SiteAndFacilitySelector {
 private extension String {
 ***REMOVED***static var allSites: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "All sites",
+***REMOVED******REMOVED******REMOVED***localized: "All Sites",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED***)

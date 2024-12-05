@@ -92,12 +92,16 @@ extension WorldScaleSceneView {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(calibrationLabel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissButton
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.layoutPriority(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.layoutPriority(1)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***headingSlider
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
@@ -161,22 +165,6 @@ extension WorldScaleSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***@ViewBuilder
-***REMOVED******REMOVED***var dismissButton: some View {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 28, height: 28)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -214,3 +202,12 @@ private extension WorldScaleSceneView.CalibrationView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
+#Preview {
+***REMOVED***WorldScaleSceneView.CalibrationView(
+***REMOVED******REMOVED***viewModel: WorldScaleCalibrationViewModel(),
+***REMOVED******REMOVED***isPresented: .constant(true)
+***REMOVED***)
+***REMOVED***
+#endif
