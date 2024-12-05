@@ -64,12 +64,8 @@ struct SiteAndFacilitySelector: View {
                     .transition(.move(edge: .leading))
             }
         }
-        // Resolve animation-related buggy behavior as documented in issue #981
-        // by disabling these animations on Mac Catalyst.
-#if !targetEnvironment(macCatalyst)
         .animation(.default, value: facilityListIsVisible)
         .animation(.default, value: textFieldIsFocused)
-#endif
         .clipped()
     }
     
