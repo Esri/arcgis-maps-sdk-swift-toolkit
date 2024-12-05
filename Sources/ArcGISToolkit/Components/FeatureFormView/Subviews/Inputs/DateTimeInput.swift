@@ -105,7 +105,7 @@ struct DateTimeInput: View {
                         .accessibilityIdentifier("\(element.label) Calendar Image")
                         .foregroundColor(.secondary)
                 } else if !isRequired {
-                    ClearButton {
+                    XButton(.clear) {
                         model.focusedElement = element
                         defer { model.focusedElement = nil }
                         date = nil

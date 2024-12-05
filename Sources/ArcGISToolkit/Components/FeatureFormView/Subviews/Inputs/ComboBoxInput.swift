@@ -88,7 +88,7 @@ struct ComboBoxInput: View {
                 // Only show clear button if we have a value
                 // and we're not required. (i.e., Don't show clear if
                 // the field is required.)
-                ClearButton {
+                XButton(.clear) {
                     model.focusedElement = element
                     defer { model.focusedElement = nil }
                     updateValue(nil)

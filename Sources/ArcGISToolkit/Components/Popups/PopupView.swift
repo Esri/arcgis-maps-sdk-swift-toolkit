@@ -97,15 +97,12 @@ public struct PopupView: View {
                     Spacer()
                     if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
                         || (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
-                        Button(String.close, systemImage: "xmark") {
+                        XButton(.dismiss) {
                             isPresented?.wrappedValue = false
                         }
-                        .labelStyle(.iconOnly)
 #if !os(visionOS)
-                        .foregroundColor(.secondary)
+                        .font(.title)
                         .padding([.top, .bottom, .trailing], 4)
-                        .symbolVariant(.circle)
-                        .buttonStyle(.plain)
 #endif
                     }
                 }
