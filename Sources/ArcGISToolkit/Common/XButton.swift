@@ -65,24 +65,18 @@ extension XButton {
 @available(iOS 17.0, *)
 #Preview {
     @Previewable @State var isPresented = true
-    LinearGradient(colors: [.blue, .black], startPoint: .topLeading, endPoint: .bottomTrailing)
-        .overlay {
-            Button {
-                isPresented = true
-            } label: {
-                Text(verbatim: "Present")
+    Button {
+        isPresented = true
+    } label: {
+        Text(verbatim: "Present")
+    }
+    .sheet(isPresented: $isPresented) {
+        EmptyView()
+            .overlay(alignment: .topTrailing) {
+                XButton(.dismiss)
+                    .font(.title)
+                    .padding()
             }
-            .buttonStyle(.bordered)
-        }
-        .sheet(isPresented: $isPresented) {
-            EmptyView()
-                .overlay(alignment: .topTrailing) {
-                    XButton(.dismiss)
-                        .padding()
-                }
-                .interactiveDismissDisabled()
-                .presentationBackgroundInteraction(.disabled)
-                .presentationDetents([.medium])
-        }
-        .ignoresSafeArea()
+            .interactiveDismissDisabled()
+    }
 }
