@@ -139,7 +139,7 @@ private extension TextInput {
             if !text.isEmpty,
                !isBarcodeScanner,
                !element.isMultiline {
-                ClearButton {
+                XButton(.clear) {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
