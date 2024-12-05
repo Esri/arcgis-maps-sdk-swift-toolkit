@@ -139,7 +139,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty,
 ***REMOVED******REMOVED******REMOVED***   !isBarcodeScanner,
 ***REMOVED******REMOVED******REMOVED***   !element.isMultiline {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** instantaneous focus to enable validation.

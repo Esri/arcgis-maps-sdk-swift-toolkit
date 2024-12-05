@@ -75,11 +75,8 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Delete text button
 ***REMOVED******REMOVED******REMOVED***if !query.wrappedValue.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.wrappedValue = ""
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -93,8 +90,9 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"chevron.down" :
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"chevron.up"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.secondary)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.esriBorder()
