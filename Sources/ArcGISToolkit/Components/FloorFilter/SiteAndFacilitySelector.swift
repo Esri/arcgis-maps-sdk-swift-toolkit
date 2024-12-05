@@ -64,12 +64,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .leading))
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Resolve animation-related buggy behavior as documented in issue #981
-***REMOVED******REMOVED******REMOVED*** by disabling these animations on Mac Catalyst.
-#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***.animation(.default, value: facilityListIsVisible)
 ***REMOVED******REMOVED***.animation(.default, value: textFieldIsFocused)
-#endif
 ***REMOVED******REMOVED***.clipped()
 ***REMOVED***
 ***REMOVED***
