@@ -30,6 +30,9 @@ public struct UtilityNetworkTraceStartingPoint: Sendable {
 ***REMOVED******REMOVED***/ The symbol of the starting point as shown on the map.
 ***REMOVED***var image: UIImage?
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the starting point was added externally (programmatically).
+***REMOVED***var isExternalStartingPoint = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A point on the map indicated as the location of this starting point. This can be used to indicate a
 ***REMOVED******REMOVED***/ specific location along an edge element.
 ***REMOVED***var mapPoint: Point?
