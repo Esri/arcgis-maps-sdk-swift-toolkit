@@ -65,24 +65,18 @@ extension XButton {
 @available(iOS 17.0, *)
 #Preview {
 ***REMOVED***@Previewable @State var isPresented = true
-***REMOVED***LinearGradient(colors: [.blue, .black], startPoint: .topLeading, endPoint: .bottomTrailing)
-***REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "Present")
+***REMOVED***Button {
+***REMOVED******REMOVED***isPresented = true
+***REMOVED*** label: {
+***REMOVED******REMOVED***Text(verbatim: "Present")
+***REMOVED***
+***REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteraction(.disabled)
-***REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
-***REMOVED***
-***REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED***
