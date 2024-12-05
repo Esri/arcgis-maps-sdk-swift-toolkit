@@ -75,11 +75,8 @@ public struct SearchField: View {
             
             // Delete text button
             if !query.wrappedValue.isEmpty {
-                Button {
+                XButton(.clear) {
                     query.wrappedValue = ""
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(Color.secondary)
                 }
             }
             
@@ -93,8 +90,9 @@ public struct SearchField: View {
                         "chevron.down" :
                             "chevron.up"
                     )
-                        .foregroundColor(Color.secondary)
+                    .foregroundColor(Color.secondary)
                 }
+                .buttonStyle(.plain)
             }
         }
         .esriBorder()

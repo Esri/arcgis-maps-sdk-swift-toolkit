@@ -70,8 +70,8 @@ extension LevelSelector {
     /// The system name of the icon that reflects the current state of `isCollapsed`.
     var iconForCollapsedState: String {
         switch (isCollapsed, isTopAligned) {
-        case (true, true), (false, false): return "chevron.down.circle"
-        case (true, false), (false, true): return "chevron.up.circle"
+        case (true, true), (false, false): return "chevron.down"
+        case (true, false), (false, true): return "chevron.up"
         }
     }
     
@@ -85,7 +85,9 @@ extension LevelSelector {
         } label: {
             Image(systemName: iconForCollapsedState)
                 .padding(.toolkitDefault)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .disabled(levels.count == 1)
     }
     

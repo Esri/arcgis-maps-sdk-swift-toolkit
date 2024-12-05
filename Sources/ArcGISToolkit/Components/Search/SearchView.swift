@@ -234,6 +234,7 @@ public struct SearchView: View {
                                   """
                     )
                 }
+                .buttonStyle(.plain)
                 .esriBorder()
             }
         }
