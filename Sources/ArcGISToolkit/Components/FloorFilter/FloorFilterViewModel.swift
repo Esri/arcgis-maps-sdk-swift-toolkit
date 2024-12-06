@@ -34,13 +34,21 @@ final class FloorFilterViewModel: ObservableObject {
         self.floorManager = floorManager
         self.viewpoint = viewpoint
         
-        loadFloorManager()
+        floorManagerLoadStatusTask = Task {
+            for await loadStatus in floorManager.$loadStatus {
+                self.loadStatus = loadStatus
+            }
+        }
+    }
+    
+    deinit {
+        floorManagerLoadStatusTask?.cancel()
     }
     
     // MARK: Published members
     
-    /// `true` if the model is loading it's properties, `false` if not loading.
-    @Published private(set) var isLoading = true
+    /// Load status of the FloorManager.
+    @Published private(set) var loadStatus: LoadStatus?
     
     /// The selected site, floor, or level.
     @Published private(set) var selection: FloorFilterSelection?
@@ -87,6 +95,17 @@ final class FloorFilterViewModel: ObservableObject {
     /// Sets the current selection to `nil`.
     func clearSelection() {
         selection = nil
+    }
+    
+    /// Loads the `FloorManager` if needed.
+    func loadFloorManager() async {
+        floorManager.cancelLoad()
+        
+        do {
+            try await floorManager.load()
+        } catch {
+            print("error: \(error)")
+        }
     }
     
     /// Allows model users to alert the model that the viewpoint has changed.
@@ -152,6 +171,9 @@ final class FloorFilterViewModel: ObservableObject {
     }
     
     // MARK: Private items
+    
+    /// A task to track the load status of the FloorManager.
+    private var floorManagerLoadStatusTask: Task<Void, Never>?
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facility.
     /// If `nil`, there will be no automatic pan/zoom operations.
@@ -236,28 +258,6 @@ final class FloorFilterViewModel: ObservableObject {
             levels.forEach {
                 $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
             }
-        }
-    }
-    
-    /// Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
-    private func loadFloorManager() {
-        guard floorManager.loadStatus == .notLoaded,
-              floorManager.loadStatus != .loading else {
-            isLoading = false
-            return
-        }
-        Task {
-            do {
-                try await floorManager.load()
-                if sites.count == 1,
-                   let firstSite = sites.first {
-                    // If we have only one site, select it.
-                    setSite(firstSite, zoomTo: true)
-                }
-            } catch {
-                print("error: \(error)")
-            }
-            isLoading = false
         }
     }
     
