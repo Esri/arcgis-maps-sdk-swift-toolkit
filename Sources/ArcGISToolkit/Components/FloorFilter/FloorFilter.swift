@@ -121,26 +121,27 @@ public struct FloorFilter: View {
     private var viewpoint: Binding<Viewpoint?>
     
     /// Button to open and close the site and facility selector.
+    @ViewBuilder
     private var sitesAndFacilitiesButton: some View {
-        Button {
-            siteAndFacilitySelectorIsPresented.toggle()
-        } label: {
-            Group {
-                if [.notLoaded, .loading].contains(viewModel.loadStatus) {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                } else if viewModel.loadStatus == .loaded {
-                    Image(systemName: "building.2")
-                } else {
-                    Image(systemName: "exclamationmark.circle")
-                }
+        if [.notLoaded, .loading].contains(viewModel.loadStatus) {
+            ProgressView()
+                .padding(.toolkitDefault)
+                .progressViewStyle(.circular)
+        } else if viewModel.loadStatus == .loaded {
+            Button {
+                siteAndFacilitySelectorIsPresented.toggle()
+            } label: {
+                Image(systemName: "building.2")
+                    .padding(.toolkitDefault)
+                    .contentShape(Rectangle())
             }
-            .padding(.toolkitDefault)
-            .contentShape(Rectangle())
+            .accessibilityIdentifier("Floor Filter button")
+            .buttonStyle(.plain)
+            .foregroundStyle(.tint)
+        } else {
+            Image(systemName: "exclamationmark.circle")
+                .padding(.toolkitDefault)
         }
-        .accessibilityIdentifier("Floor Filter button")
-        .buttonStyle(.plain)
-        .foregroundStyle(.tint)
     }
     
     /// A view that displays the level selector and the sites and facilities button.
