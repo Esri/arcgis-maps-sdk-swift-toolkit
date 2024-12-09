@@ -39,6 +39,8 @@ final class FloorFilterViewModel: ObservableObject {
                 self.loadStatus = loadStatus
             }
         }
+        
+        loadFloorManager()
     }
     
     deinit {
@@ -95,17 +97,6 @@ final class FloorFilterViewModel: ObservableObject {
     /// Sets the current selection to `nil`.
     func clearSelection() {
         selection = nil
-    }
-    
-    /// Loads the `FloorManager` if needed.
-    func loadFloorManager() async {
-        floorManager.cancelLoad()
-        
-        do {
-            try await floorManager.load()
-        } catch {
-            print("error: \(error)")
-        }
     }
     
     /// Allows model users to alert the model that the viewpoint has changed.
@@ -257,6 +248,21 @@ final class FloorFilterViewModel: ObservableObject {
         if let selectedLevel = selection?.level {
             levels.forEach {
                 $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+            }
+        }
+    }
+    
+    /// Loads the `FloorManager` if needed.
+    private func loadFloorManager() {
+        guard floorManager.loadStatus == .notLoaded,
+              floorManager.loadStatus != .loading else {
+            return
+        }
+        Task {
+            do {
+                try await floorManager.load()
+            } catch {
+                print("error: \(error)")
             }
         }
     }
