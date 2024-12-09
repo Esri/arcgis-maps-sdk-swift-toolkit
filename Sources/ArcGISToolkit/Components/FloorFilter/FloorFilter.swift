@@ -229,6 +229,15 @@ public struct FloorFilter: View {
             case .none: viewModel.clearSelection()
             }
         }
+        .onChange(viewModel.loadStatus) { newLoadStatus in
+            if newLoadStatus == .loaded,
+               !automaticSingleSiteSelectionDisabled,
+               viewModel.sites.count == 1,
+               let firstSite = viewModel.sites.first {
+                // If we have only one site, select it.
+                viewModel.setSite(firstSite, zoomTo: true)
+            }
+        }
         .onChange(viewModel.selection) { newValue in
             // Prevent a double-set if the user triggered the original change.
             guard selection?.wrappedValue != newValue else { return }
@@ -238,15 +247,6 @@ public struct FloorFilter: View {
             guard isNavigating.wrappedValue else { return }
             if let newViewpoint {
                 viewModel.onViewpointChanged(newViewpoint)
-            }
-        }
-        .task {
-            await viewModel.loadFloorManager()
-            if !automaticSingleSiteSelectionDisabled,
-               viewModel.sites.count == 1,
-               let firstSite = viewModel.sites.first {
-                // If we have only one site, select it.
-                viewModel.setSite(firstSite, zoomTo: true)
             }
         }
     }
