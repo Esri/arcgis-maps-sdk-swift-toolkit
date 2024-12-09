@@ -116,24 +116,24 @@ public struct FloorFilter: View {
     private var viewpoint: Binding<Viewpoint?>
     
     /// Button to open and close the site and facility selector.
+    @ViewBuilder
     private var sitesAndFacilitiesButton: some View {
-        Button {
-            siteAndFacilitySelectorIsPresented.toggle()
-        } label: {
-            Group {
-                if viewModel.isLoading {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                } else {
-                    Image(systemName: "building.2")
-                }
+        if viewModel.isLoading {
+            ProgressView()
+                .padding(.toolkitDefault)
+                .progressViewStyle(.circular)
+        } else {
+            Button {
+                siteAndFacilitySelectorIsPresented.toggle()
+            } label: {
+                Image(systemName: "building.2")
+                    .padding(.toolkitDefault)
+                    .contentShape(Rectangle())
             }
-            .padding(.toolkitDefault)
-            .contentShape(Rectangle())
+            .accessibilityIdentifier("Floor Filter button")
+            .buttonStyle(.plain)
+            .foregroundStyle(.tint)
         }
-        .accessibilityIdentifier("Floor Filter button")
-        .buttonStyle(.plain)
-        .foregroundStyle(.tint)
     }
     
     /// A view that displays the level selector and the sites and facilities button.
