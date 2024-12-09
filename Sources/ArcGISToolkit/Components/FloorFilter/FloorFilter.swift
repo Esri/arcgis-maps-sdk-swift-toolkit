@@ -121,26 +121,27 @@ public struct FloorFilter: View {
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
+***REMOVED***@ViewBuilder
 ***REMOVED***private var sitesAndFacilitiesButton: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if [.notLoaded, .loading].contains(viewModel.loadStatus) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
-***REMOVED******REMOVED******REMOVED*** else if viewModel.loadStatus == .loaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***if [.notLoaded, .loading].contains(viewModel.loadStatus) {
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
+***REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED*** else if viewModel.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
-***REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Floor Filter button")
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
-***REMOVED******REMOVED***.accessibilityIdentifier("Floor Filter button")
-***REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***.foregroundStyle(.tint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that displays the level selector and the sites and facilities button.
