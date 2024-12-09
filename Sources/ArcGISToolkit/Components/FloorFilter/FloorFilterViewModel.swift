@@ -39,6 +39,8 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = loadStatus
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***loadFloorManager()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {
@@ -95,17 +97,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Sets the current selection to `nil`.
 ***REMOVED***func clearSelection() {
 ***REMOVED******REMOVED***selection = nil
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Loads the `FloorManager` if needed.
-***REMOVED***func loadFloorManager() async {
-***REMOVED******REMOVED***floorManager.cancelLoad()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await floorManager.load()
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***print("error: \(error)")
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows model users to alert the model that the viewpoint has changed.
@@ -257,6 +248,21 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***if let selectedLevel = selection?.level {
 ***REMOVED******REMOVED******REMOVED***levels.forEach {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the `FloorManager` if needed.
+***REMOVED***private func loadFloorManager() {
+***REMOVED******REMOVED***guard floorManager.loadStatus == .notLoaded,
+***REMOVED******REMOVED******REMOVED***  floorManager.loadStatus != .loading else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

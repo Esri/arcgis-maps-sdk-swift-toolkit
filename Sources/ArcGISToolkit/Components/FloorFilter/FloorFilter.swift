@@ -229,6 +229,15 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***case .none: viewModel.clearSelection()
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(viewModel.loadStatus) { newLoadStatus in
+***REMOVED******REMOVED******REMOVED***if newLoadStatus == .loaded,
+***REMOVED******REMOVED******REMOVED***   !automaticSingleSiteSelectionDisabled,
+***REMOVED******REMOVED******REMOVED***   viewModel.sites.count == 1,
+***REMOVED******REMOVED******REMOVED***   let firstSite = viewModel.sites.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(firstSite, zoomTo: true)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.onChange(viewModel.selection) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the user triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
@@ -238,15 +247,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let newViewpoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged(newViewpoint)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***await viewModel.loadFloorManager()
-***REMOVED******REMOVED******REMOVED***if !automaticSingleSiteSelectionDisabled,
-***REMOVED******REMOVED******REMOVED***   viewModel.sites.count == 1,
-***REMOVED******REMOVED******REMOVED***   let firstSite = viewModel.sites.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(firstSite, zoomTo: true)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
