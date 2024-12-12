@@ -16,10 +16,195 @@ import ArcGIS
 import CoreLocation
 import SwiftUI
 
+extension LocationButton {
+    @MainActor
+    class Model: ObservableObject {
+        /// The location display which the button controls.
+        let locationDisplay: LocationDisplay
+        
+        /// The current status of the location display's datasource.
+        @Published var status: LocationDataSource.Status = .stopped
+        
+        /// The autopan mode of the location display.
+        @Published var autoPanMode: LocationDisplay.AutoPanMode = .off {
+            didSet {
+                // Update last selected auto pan mode if the user selected one.
+                if autoPanMode != locationDisplay.autoPanMode {
+                    locationDisplay.autoPanMode = autoPanMode
+                    if autoPanMode != .off {
+                        // Do not update the last selected autopan mode here if
+                        // `off` was selected by the user.
+                        lastSelectedAutoPanMode = autoPanMode
+                    }
+                }
+            }
+        }
+        
+        /// The last selected autopan mode by the user.
+        @Published var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
+        
+        /// The auto pan options that the user can choose from the context menu of the button.
+        private let autoPanOptions: Set<LocationDisplay.AutoPanMode>
+        
+        /// Creates a location button model with a location display.
+        /// - Parameter locationDisplay: The location display that the button will control.
+        /// - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
+        public init(
+            locationDisplay: LocationDisplay,
+            autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+        ) {
+            self.locationDisplay = locationDisplay
+            self.autoPanMode = locationDisplay.autoPanMode
+            self.autoPanOptions = autoPanOptions
+            if autoPanOptions.isEmpty || (autoPanOptions.count == 1 && autoPanOptions.first == .off) {
+                lastSelectedAutoPanMode = .off
+            } else {
+                lastSelectedAutoPanMode = LocationDisplay.AutoPanMode.orderedOptions
+                    .lazy
+                    .filter { $0 != .off }
+                    .first { autoPanOptions.contains($0) } ?? .recenter
+            }
+        }
+        
+        func buttonAction() {
+            // Decide the button behavior based on the status.
+            switch status {
+            case .stopped, .failedToStart:
+                // If the datasource is a system location datasource, then request authorization.
+                if locationDisplay.dataSource is SystemLocationDataSource,
+                   CLLocationManager.shared.authorizationStatus == .notDetermined {
+                    CLLocationManager.shared.requestWhenInUseAuthorization()
+                }
+                Task {
+                    // Start the datasource, set initial auto pan mode.
+                    do {
+                        locationDisplay.autoPanMode = lastSelectedAutoPanMode
+                        try await locationDisplay.dataSource.start()
+                    } catch {
+                        print("Error starting location display: \(error)")
+                    }
+                }
+            case .started:
+                // If the datasource is started then decide what to do based
+                // on the autopan mode.
+                switch autoPanMode {
+                case .off:
+                    // If autopan is off, then set it to the last selected autopan mode.
+                    locationDisplay.autoPanMode = lastSelectedAutoPanMode
+                default:
+                    // Otherwise set it to off.
+                    locationDisplay.autoPanMode = .off
+                }
+            case .starting, .stopping:
+                break
+            @unknown default:
+                fatalError()
+            }
+        }
+    }
+}
+
 /// A button that allows a user to show their location on a map view.
 /// Gives the user a variety of options to set the auto pan mode or stop the
 /// location datasource.
 public struct LocationButton: View {
+    @StateObject private var model: Model
+    
+    /// Creates a location button with a location display.
+    /// - Parameter locationDisplay: The location display that the button will control.
+    public init(
+        locationDisplay: LocationDisplay,
+        autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+    ) {
+        _model = .init(wrappedValue: .init(locationDisplay: locationDisplay, autoPanOptions: autoPanOptions))
+    }
+    
+    public var body: some View {
+        Button {
+            model.buttonAction()
+        } label: {
+            buttonLabel()
+                .padding(8)
+        }
+//        .contextMenu(
+//            ContextMenu { contextMenuContent() }
+//        )
+//        .disabled(status == .starting || status == .stopping)
+//        .onReceive(locationDisplay.dataSource.$status) { status = $0 }
+//        .onReceive(locationDisplay.$autoPanMode) { autoPanMode = $0 }
+//        .onChange(of: autoPanMode) { autoPanMode in
+//            if autoPanMode != locationDisplay.autoPanMode {
+//                locationDisplay.autoPanMode = autoPanMode
+//                if autoPanMode != .off {
+//                    // Do not update the last selected autopan mode here if
+//                    // `off` was selected by the user.
+//                    lastSelectedAutoPanMode = autoPanMode
+//                }
+//            }
+//        }
+    }
+    
+    @ViewBuilder
+    private func buttonLabel() -> some View {
+        // Decide what what image is in the button based on the status
+        // and autopan mode.
+        switch model.status {
+        case .stopped:
+            Image(systemName: "location.slash")
+        case .starting, .stopping:
+            ProgressView()
+        case .started:
+            switch model.autoPanMode {
+            case .compassNavigation:
+                Image(systemName: "location.north.circle")
+            case .navigation:
+                Image(systemName: "location.north.line.fill")
+            case .recenter:
+                Image(systemName: "location.fill")
+            case .off:
+                Image(systemName: "location")
+            @unknown default:
+                fatalError()
+            }
+        case .failedToStart:
+            Image(systemName: "exclamationmark.triangle")
+                .tint(.secondary)
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+//    @MainActor
+//    @ViewBuilder
+//    private func contextMenuContent() -> some View {
+//        if model.status == .started {
+//            if model.autoPanOptions.count > 1 {
+//                Section("Autopan") {
+//                    Picker("Autopan", selection: $autoPanMode) {
+//                        ForEach(LocationDisplay.AutoPanMode.orderedOptions, id: \.self) { autoPanMode in
+//                            if autoPanOptions.contains(autoPanMode) {
+//                                Text(autoPanMode.pickerText).tag(autoPanMode)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            
+//            Button {
+//                Task {
+//                    await locationDisplay.dataSource.stop()
+//                }
+//            } label: {
+//                Label("Hide Location", systemImage: "location.slash")
+//            }
+//        }
+//    }
+}
+
+/// A button that allows a user to show their location on a map view.
+/// Gives the user a variety of options to set the auto pan mode or stop the
+/// location datasource.
+public struct LocationButton2: View {
     /// The location display which the button controls.
     @State private var locationDisplay: LocationDisplay
     /// The current status of the location display's datasource.
