@@ -35,16 +35,17 @@ import SwiftUI
 ///
 /// A Field Element has a single input type object. The following are the supported input types:
 ///
-/// - Combo Box - long lists of coded value domains
+/// - Barcode - machine readable data
+/// - Combo Box - long list of values in a coded value domain
 /// - Date/Time - date/time picker
-/// - Radio Buttons - short lists of coded value domains
+/// - Radio Buttons - short list of values in a coded value domain
 /// - Switch - two mutually exclusive values
 /// - Text Area - multi-line text area
 /// - Text Box - single-line text box
 ///
 /// **Features**
 ///
-/// - Display a form editing view for a feature based on the feature form definition defined in a web map.
+/// - Display a form editing view for a feature based on the feature form definition defined in a web map and obtained from either an `ArcGISFeature`, `ArcGISFeatureTable`, `FeatureLayer` or `SubtypeSublayer`.
 /// - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 /// - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
 /// - Add, delete, or rename feature attachments.
@@ -55,9 +56,8 @@ import SwiftUI
 /// The feature form view can be embedded in any type of container view including, as demonstrated in the
 /// example, the Toolkit's `FloatingPanel`.
 ///
-/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
-/// and refer to
-/// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
+/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FeatureFormExampleView.swift)
 /// in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
 ///
 /// - Note: In order to capture video and photos as form attachments, your application will need
@@ -65,8 +65,7 @@ import SwiftUI
 /// `Info.plist` file.
 ///
 /// - Since: 200.4
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
@@ -76,6 +75,12 @@ public struct FeatureFormView: View {
     
     /// The title of the feature form view.
     @State private var title = ""
+    
+    /// The visibility of the form header.
+    var headerVisibility: Visibility = .automatic
+    
+    /// The validation error visibility configuration of the form.
+    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
     /// Initializes a form view.
     /// - Parameters:
@@ -96,7 +101,7 @@ public struct FeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty {
+                    if !title.isEmpty && headerVisibility != .hidden {
                         FormHeader(title: title)
                         Divider()
                     }
@@ -112,7 +117,7 @@ public struct FeatureFormView: View {
                     }
                 }
             }
-            .onChange(of: model.focusedElement) { _ in
+            .onChange(model.focusedElement) { _ in
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
@@ -121,11 +126,15 @@ public struct FeatureFormView: View {
                 title = newTitle
             }
         }
+#if os(iOS)
         .scrollDismissesKeyboard(.immediately)
+#endif
+        .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
     }
 }
 
+@available(visionOS, unavailable)
 extension FeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
@@ -134,9 +143,22 @@ extension FeatureFormView {
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
-            GroupView(element: element, viewCreator: { makeFieldElement($0) })
+            GroupView(element: element, viewCreator: { internalMakeElement($0) })
         case let element as TextFormElement:
-            TextFormElementView(element: element)
+            makeTextElement(element)
+        default:
+            EmptyView()
+        }
+    }
+    
+    /// Makes UI for a field form element or a text form element.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
+        switch element {
+        case let element as FieldFormElement:
+            makeFieldElement(element)
+        case let element as TextFormElement:
+            makeTextElement(element)
         default:
             EmptyView()
         }
@@ -145,11 +167,17 @@ extension FeatureFormView {
     /// Makes UI for a field form element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        if !(element.input is UnsupportedFormInput ||
-             element.input is BarcodeScannerFormInput) {
+        if !(element.input is UnsupportedFormInput) {
             InputWrapper(element: element)
             Divider()
         }
+    }
+    
+    /// Makes UI for a text form element including a divider beneath it.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
+        TextFormElementView(element: element)
+        Divider()
     }
     
     /// The progress view to be shown while initial expression evaluation is running.

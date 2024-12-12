@@ -9,10 +9,6 @@ struct UtilityNetworkTraceExampleView: View {
     
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    @State private var screenPoint: CGPoint?
-    
-    @State private var viewpoint: Viewpoint?
-    
     static func makeMap() -> Map {
         let portalItem = PortalItem(
             portal: .arcGISOnline(connection: .anonymous),

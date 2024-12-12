@@ -47,8 +47,6 @@ import SwiftUI
 /// the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [OverviewMapExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/OverviewMapExampleView.swift)
 /// in the project. To learn more about using the `OverviewMap` see the <doc:OverviewMapTutorial>.
-@MainActor
-@preconcurrency
 public struct OverviewMap: View {
     /// The `Viewpoint` of the main `GeoView`.
     let viewpoint: Viewpoint?
@@ -138,19 +136,19 @@ public struct OverviewMap: View {
             dataModel.graphic.geometry = visibleArea
             dataModel.graphic.symbol = symbol
         }
-        .onChange(of: visibleArea) { visibleArea in
+        .onChange(visibleArea) { visibleArea in
             if let visibleArea = visibleArea {
                 dataModel.graphic.geometry = visibleArea
             }
         }
-        .onChange(of: viewpoint) { viewpoint in
+        .onChange(viewpoint) { viewpoint in
             if visibleArea == nil,
                let viewpoint = viewpoint,
                let point = viewpoint.targetGeometry as? Point {
                 dataModel.graphic.geometry = point
             }
         }
-        .onChange(of: symbol) {
+        .onChange(symbol) {
             dataModel.graphic.symbol = $0
         }
     }

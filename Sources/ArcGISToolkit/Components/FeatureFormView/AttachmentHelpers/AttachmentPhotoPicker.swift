@@ -16,7 +16,6 @@ import PhotosUI
 import SwiftUI
 
 /// A wrapper for the PhotosPicker API.
-@MainActor
 struct AttachmentPhotoPicker: ViewModifier {
     /// The item selected in the photos picker.
     @State private var item: PhotosPickerItem?

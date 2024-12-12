@@ -16,8 +16,7 @@ import SwiftUI
 
 /// A custom view implementing a SearchField. It contains a search button, text field, delete text button,
 /// and a button to allow users to hide/show the search results list.
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct SearchField: View {
     /// Creates a `SearchField`.
     /// - Parameters:
@@ -76,11 +75,8 @@ public struct SearchField: View {
             
             // Delete text button
             if !query.wrappedValue.isEmpty {
-                Button {
+                XButton(.clear) {
                     query.wrappedValue = ""
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(Color.secondary)
                 }
             }
             
@@ -94,8 +90,9 @@ public struct SearchField: View {
                         "chevron.down" :
                             "chevron.up"
                     )
-                        .foregroundColor(Color.secondary)
+                    .foregroundColor(Color.secondary)
                 }
+                .buttonStyle(.plain)
             }
         }
         .esriBorder()

@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class FloorFilterTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false

@@ -16,7 +16,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view which allows selection of levels represented in `FloorFacility`.
-@MainActor
+@available(visionOS, unavailable)
 struct LevelSelector: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
@@ -50,6 +50,7 @@ struct LevelSelector: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension LevelSelector {
     /// A list of all the levels to be displayed.
     ///
@@ -69,8 +70,8 @@ extension LevelSelector {
     /// The system name of the icon that reflects the current state of `isCollapsed`.
     var iconForCollapsedState: String {
         switch (isCollapsed, isTopAligned) {
-        case (true, true), (false, false): return "chevron.down.circle"
-        case (true, false), (false, true): return "chevron.up.circle"
+        case (true, true), (false, false): return "chevron.down"
+        case (true, false), (false, true): return "chevron.up"
         }
     }
     
@@ -84,7 +85,9 @@ extension LevelSelector {
         } label: {
             Image(systemName: iconForCollapsedState)
                 .padding(.toolkitDefault)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .disabled(levels.count == 1)
     }
     
@@ -122,7 +125,7 @@ extension LevelSelector {
             }
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
-            .onChange(of: isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
+            .onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
         }
     }
     

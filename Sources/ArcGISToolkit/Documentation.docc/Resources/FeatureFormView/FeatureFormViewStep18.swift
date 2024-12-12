@@ -36,9 +36,8 @@ struct FeatureFormExampleView: View {
                         }
                     }
                     .task(id: identifyScreenPoint) {
-                        if let feature = await identifyFeature(with: mapViewProxy),
-                           let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
-                            model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
+                        if let feature = await identifyFeature(with: mapViewProxy) {
+                            model.state = .editing(FeatureForm(feature: feature))
                         }
                     }
                     .ignoresSafeArea(.keyboard)
@@ -121,19 +120,15 @@ struct FeatureFormExampleView: View {
 extension FeatureFormExampleView {
     func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
         guard let identifyScreenPoint else { return nil }
-        let identifyResult = try? await proxy.identifyLayers(
+        let identifyLayerResults = try? await proxy.identifyLayers(
             screenPoint: identifyScreenPoint,
             tolerance: 10
         )
-            .first(where: { result in
-                if let feature = result.geoElements.first as? ArcGISFeature,
-                   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
-                    return true
-                } else {
-                    return false
-                }
-            })
-        return identifyResult?.geoElements.first as? ArcGISFeature
+        return identifyLayerResults?.compactMap { result in
+            result.geoElements.compactMap { element in
+                element as? ArcGISFeature
+            }.first
+        }.first
     }
 }
 

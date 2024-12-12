@@ -18,7 +18,6 @@ import CryptoKit
 import SwiftUI
 
 /// A view that allows the user to sign in to a portal.
-@MainActor
 struct SignInView: View {
     /// The error that occurred during an attempt to sign in.
     @State private var error: Error?
@@ -44,7 +43,11 @@ struct SignInView: View {
                 ProgressView()
             } else {
                 Text(URL.portal.host!)
+#if os(visionOS) || targetEnvironment(macCatalyst)
+                    .font(.headline)
+#else
                     .font(.footnote)
+#endif
                     .foregroundColor(.secondary)
                 signInButton
             }
@@ -107,7 +110,9 @@ struct SignInView: View {
             signIn()
         } label: {
             Text(signInButtonText)
+#if !os(visionOS)
                 .frame(maxWidth: .infinity)
+#endif
         }
         .buttonStyle(.bordered)
         .controlSize(.large)

@@ -16,11 +16,7 @@ import SwiftUI
 
 struct Examples: View {
     /// The list of example lists.  Allows for a hierarchical navigation model for examples.
-    let lists: [ExampleList] = [
-        .augmentedReality,
-        .geoview,
-        .views
-    ]
+    let lists = makeExamples()
     
     var body: some View {
         NavigationStack {
@@ -31,9 +27,22 @@ struct Examples: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+    
+    static func makeExamples() -> [ExampleList] {
+        let common: [ExampleList] = [
+            .geoview,
+            .views
+        ]
+#if !targetEnvironment(macCatalyst)
+        return [.augmentedReality] + common
+#else
+        return common
+#endif
+    }
 }
 
 extension ExampleList {
+    @available(macCatalyst, unavailable)
     static let augmentedReality = Self(
         name: "Augmented Reality",
         examples: [

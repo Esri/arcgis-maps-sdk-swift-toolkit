@@ -61,8 +61,7 @@ import SwiftUI
 /// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [UtilityNetworkTraceExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
 /// in the project. To learn more about using the `UtilityNetworkTrace` see the <doc:UtilityNetworkTraceTutorial>.
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct UtilityNetworkTrace: View {
     /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?
@@ -113,8 +112,11 @@ public struct UtilityNetworkTrace: View {
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
+    /// A Boolean value indicating whether the "Delete All Starting Points" confirmation is presented.
+    @State private var deleteAllStartingPointsConfirmationIsPresented = false
+    
     /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
-    @State private var shouldZoomOnTraceCompletion = false
+    @State private var shouldZoomOnTraceCompletion = true
     
     /// A Boolean value indicating whether the Clear All Results confirmation
     /// dialog is being shown.
@@ -132,14 +134,8 @@ public struct UtilityNetworkTrace: View {
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
     
-    /// Acts as the point of identification for items tapped in the utility network.
-    @Binding private var screenPoint: CGPoint?
-    
     /// Acts as the point at which newly selected starting point graphics will be created.
     @Binding private var mapPoint: Point?
-    
-    /// Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
-    @Binding private var viewpoint: Viewpoint?
     
     // MARK: Subviews
     
@@ -196,12 +192,7 @@ public struct UtilityNetworkTrace: View {
                                     Task {
                                         if let feature = await viewModel.feature(for: element),
                                            let geometry = feature.geometry {
-                                            let newViewpoint = Viewpoint(boundingGeometry: geometry.extent)
-                                            if let mapViewProxy {
-                                                Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-                                            } else {
-                                                viewpoint = newViewpoint
-                                            }
+                                            updateViewpoint(to: geometry.extent)
                                         }
                                     }
                                 } label: {
@@ -289,7 +280,7 @@ public struct UtilityNetworkTrace: View {
                         .catalystPadding(4)
                 }
             }
-            Section(String.startingPointsTitle) {
+            Section {
                 Button(String.addNewButtonLabel) {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                     activeDetent = .summary
@@ -310,6 +301,34 @@ public struct UtilityNetworkTrace: View {
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
                         .catalystPadding(4)
+                    }
+                }
+            } header: {
+                HStack {
+                    Text(String.startingPointsTitle)
+                    if !viewModel.pendingTrace.startingPoints.isEmpty {
+                        Spacer()
+                        Button(String.deleteAllStartingPoints, systemImage: "trash") {
+                            deleteAllStartingPointsConfirmationIsPresented = true
+                        }
+                        .buttonStyle(.plain)
+                        .labelStyle(.iconOnly)
+                        .confirmationDialog(
+                            String.deleteAllStartingPoints,
+                            isPresented: $deleteAllStartingPointsConfirmationIsPresented
+                        ) {
+                            Button(String.deleteAllStartingPoints, role: .destructive) {
+                                viewModel.pendingTrace.startingPoints.forEach { startingPoint in
+                                    viewModel.deleteStartingPoint(startingPoint)
+                                    externalStartingPoints.removeAll()
+                                }
+                            }
+                        } message: {
+                            Text(String.deleteAllStartingPointsMessage)
+                        }
+                        // Override default uppercase capitalization for list
+                        // section headers on iOS and iPadOS.
+                        .textCase(nil)
                     }
                 }
             }
@@ -345,7 +364,7 @@ public struct UtilityNetworkTrace: View {
                     currentActivity = .viewingTraces(nil)
                     if shouldZoomOnTraceCompletion,
                        let extent = viewModel.selectedTrace?.resultExtent {
-                        viewpoint = Viewpoint(boundingGeometry: extent)
+                        updateViewpoint(to: extent)
                     }
                 }
             }
@@ -361,6 +380,9 @@ public struct UtilityNetworkTrace: View {
                 if viewModel.completedTraces.count > 1 {
                     Button {
                         viewModel.selectPreviousTrace()
+                        if let extent = viewModel.selectedTrace?.resultExtent {
+                            updateViewpoint(to: extent)
+                        }
                     } label: {
                         Image(systemName: "chevron.backward")
                     }
@@ -370,6 +392,9 @@ public struct UtilityNetworkTrace: View {
                 if viewModel.completedTraces.count > 1 {
                     Button {
                         viewModel.selectNextTrace()
+                        if let extent = viewModel.selectedTrace?.resultExtent {
+                            updateViewpoint(to: extent)
+                        }
                     } label: {
                         Image(systemName: "chevron.forward")
                     }
@@ -386,12 +411,7 @@ public struct UtilityNetworkTrace: View {
             Menu(selectedTrace.name) {
                 if let resultExtent = selectedTrace.resultExtent {
                     Button(String.zoomToButtonLabel) {
-                        let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
-                        if let mapViewProxy {
-                            Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-                        } else {
-                            viewpoint = newViewpoint
-                        }
+                        updateViewpoint(to: resultExtent)
                     }
                 }
                 Button(String.deleteButtonLabel) {
@@ -429,7 +449,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.elementResults.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -464,7 +484,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -521,17 +541,13 @@ public struct UtilityNetworkTrace: View {
             Button(String.zoomToButtonLabel) {
                 if let selectedStartingPoint = selectedStartingPoint,
                    let extent = selectedStartingPoint.geoElement.geometry?.extent {
-                    let newViewpoint = Viewpoint(boundingGeometry: extent)
-                    if let mapViewProxy {
-                        Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-                    } else {
-                        viewpoint = newViewpoint
-                    }
+                    updateViewpoint(to: extent)
                 }
             }
             Button(String.deleteButtonLabel, role: .destructive) {
                 if let startingPoint = selectedStartingPoint {
                     viewModel.deleteStartingPoint(startingPoint)
+                    externalStartingPoints.removeAll { $0 == startingPoint }
                     currentActivity = .creatingTrace(.viewingStartingPoints)
                 }
             }
@@ -624,25 +640,20 @@ public struct UtilityNetworkTrace: View {
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
-    ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-    ///   - startingPoints: An optional list of programmatically provided starting points.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
-        screenPoint: Binding<CGPoint?>,
-        mapViewProxy: MapViewProxy?,
-        viewpoint: Binding<Viewpoint?>,
+        mapViewProxy: MapViewProxy,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
         self.mapViewProxy = mapViewProxy
         _activeDetent = .constant(nil)
-        _screenPoint = screenPoint
         _mapPoint = mapPoint
         _graphicsOverlay = graphicsOverlay
-        _viewpoint = viewpoint
         _externalStartingPoints = startingPoints
         _viewModel = StateObject(
             wrappedValue: UtilityNetworkTraceViewModel(
@@ -664,6 +675,16 @@ public struct UtilityNetworkTrace: View {
         var copy = self
         copy._activeDetent = Binding(detent)
         return copy
+    }
+    
+    /// Updates the viewpoint to the provided extent. If a map view proxy is provided, the update is
+    /// animated. Otherwise the bound viewpoint is set directly.
+    /// - Parameter extent: The new extent to be shown.
+    func updateViewpoint(to extent: Envelope) {
+        let newViewpoint = Viewpoint(boundingGeometry: extent)
+        if let mapViewProxy {
+            Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+        }
     }
     
     public var body: some View {
@@ -694,24 +715,22 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(of: screenPoint) { newScreenPoint in
+        .onChange(mapPoint) { newMapPoint in
             guard isFocused(traceCreationActivity: .addingStartingPoints),
-                  let mapViewProxy = mapViewProxy,
-                  let mapPoint = mapPoint,
-                  let screenPoint = newScreenPoint else {
+                  let mapPoint = newMapPoint,
+                  let mapViewProxy = mapViewProxy else {
                 return
             }
             currentActivity = .creatingTrace(.viewingStartingPoints)
             activeDetent = .half
             Task {
                 await viewModel.addStartingPoints(
-                    at: screenPoint,
                     mapPoint: mapPoint,
                     with: mapViewProxy
                 )
             }
         }
-        .onChange(of: externalStartingPoints) { _ in
+        .onChange(externalStartingPoints) { _ in
             viewModel.externalStartingPoints = externalStartingPoints
         }
         .alert(
@@ -860,6 +879,22 @@ private extension String {
             localized: "Color",
             bundle: .toolkitModule,
             comment: "A label in reference to the color used to display utility trace result graphics."
+        )
+    }
+    
+    static var deleteAllStartingPoints: Self {
+        .init(
+            localized: "Delete All Starting Points",
+            bundle: .toolkitModule,
+            comment: "A label for a button used to delete all starting points on a pending utility network trace."
+        )
+    }
+    
+    static var deleteAllStartingPointsMessage: Self {
+        .init(
+            localized: "All starting points will be deleted.",
+            bundle: .toolkitModule,
+            comment: "A message describing the outcome of clearing all starting points."
         )
     }
     
@@ -1025,6 +1060,55 @@ private extension String {
             localized: "Zoom To Result",
             bundle: .toolkitModule,
             comment: "A user option specifying that a map should automatically change to show completed trace results."
+        )
+    }
+}
+
+
+@available(visionOS, unavailable)
+public extension UtilityNetworkTrace /* Deprecated */ {
+    /// A graphical interface to run pre-configured traces on a map's utility networks.
+    /// - Parameters:
+    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
+    ///   - map: The map containing the utility network(s).
+    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
+    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
+    ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
+    /// - Attention: Deprecated at 200.7.
+    @available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
+    init(
+        graphicsOverlay: Binding<GraphicsOverlay>,
+        map: Map,
+        mapPoint: Binding<Point?>,
+        screenPoint: Binding<CGPoint?>,
+        mapViewProxy: MapViewProxy?,
+        viewpoint: Binding<Viewpoint?>,
+        startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
+    ) {
+        self.mapViewProxy = mapViewProxy
+        _activeDetent = .constant(nil)
+        _mapPoint = mapPoint
+        _graphicsOverlay = graphicsOverlay
+        _externalStartingPoints = startingPoints
+        _viewModel = StateObject(
+            wrappedValue: UtilityNetworkTraceViewModel(
+                map: map,
+                graphicsOverlay: graphicsOverlay.wrappedValue,
+                startingPoints: startingPoints.wrappedValue
+            )
+        )
+    }
+}
+
+private extension Text {
+    static func makeResultsLabel(_ results: Int) -> Self {
+        .init(
+            "^[\(results) Results](inflect: true)",
+            bundle: .toolkitModule,
+            comment: "A label indicating the number of results of a utility network trace."
         )
     }
 }

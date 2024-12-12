@@ -14,6 +14,7 @@
 
 import ArcGIS
 
+@available(visionOS, unavailable)
 extension AttachmentsFormElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
     ///

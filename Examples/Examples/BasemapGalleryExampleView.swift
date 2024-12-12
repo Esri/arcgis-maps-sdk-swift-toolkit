@@ -16,7 +16,6 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-@MainActor
 struct BasemapGalleryExampleView: View {
     /// A Boolean value indicating whether the basemap gallery is presented.
     @State private var basemapGalleryIsPresented = false
