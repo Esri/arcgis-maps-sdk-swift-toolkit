@@ -23,7 +23,11 @@ extension LocationButton {
 ***REMOVED******REMOVED***let locationDisplay: LocationDisplay
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The current status of the location display's datasource.
-***REMOVED******REMOVED***@Published var status: LocationDataSource.Status = .stopped
+***REMOVED******REMOVED***@Published var status: LocationDataSource.Status = .stopped {
+***REMOVED******REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED******REMOVED***buttonIsDisabled = status == .starting || status == .stopping
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The autopan mode of the location display.
 ***REMOVED******REMOVED***@Published var autoPanMode: LocationDisplay.AutoPanMode = .off {
@@ -40,16 +44,19 @@ extension LocationButton {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A value indicating whether the button is disabled.
+***REMOVED******REMOVED***@Published var buttonIsDisabled: Bool = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The last selected autopan mode by the user.
-***REMOVED******REMOVED***@Published var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
+***REMOVED******REMOVED***var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The auto pan options that the user can choose from the context menu of the button.
-***REMOVED******REMOVED***private let autoPanOptions: Set<LocationDisplay.AutoPanMode>
+***REMOVED******REMOVED***let autoPanOptions: Set<LocationDisplay.AutoPanMode>
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Creates a location button model with a location display.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter locationDisplay: The location display that the button will control.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
-***REMOVED******REMOVED***public init(
+***REMOVED******REMOVED***init(
 ***REMOVED******REMOVED******REMOVED***locationDisplay: LocationDisplay,
 ***REMOVED******REMOVED******REMOVED***autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
 ***REMOVED******REMOVED***) {
@@ -66,6 +73,33 @@ extension LocationButton {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***func observeStatus() async {
+***REMOVED******REMOVED******REMOVED***for await status in locationDisplay.dataSource.$status {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.status = status
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func observeAutoPanMode() async {
+***REMOVED******REMOVED******REMOVED***for await autoPanMode in locationDisplay.$autoPanMode {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.autoPanMode = autoPanMode
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Selects a new auto pan mode.
+***REMOVED******REMOVED******REMOVED***/ - Parameter autoPanMode: The new auto pan mode.
+***REMOVED******REMOVED***func select(autoPanMode: LocationDisplay.AutoPanMode) {
+***REMOVED******REMOVED******REMOVED***guard autoPanMode != locationDisplay.autoPanMode else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = autoPanMode
+***REMOVED******REMOVED******REMOVED***if autoPanMode != .off {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Do not update the last selected autopan mode here if
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `off` was selected by the user.
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSelectedAutoPanMode = autoPanMode
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The action to perform when the button is pressed.
 ***REMOVED******REMOVED***func buttonAction() {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Decide the button behavior based on the status.
 ***REMOVED******REMOVED******REMOVED***switch status {
@@ -101,6 +135,11 @@ extension LocationButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Hides the location.
+***REMOVED******REMOVED***func hideLocation() async {
+***REMOVED******REMOVED******REMOVED***await locationDisplay.dataSource.stop()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -126,22 +165,12 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED******REMOVED***buttonLabel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.contextMenu(
-***REMOVED******REMOVED******REMOVED******REMOVED***ContextMenu { contextMenuContent() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.disabled(status == .starting || status == .stopping)
-***REMOVED******REMOVED******REMOVED***.onReceive(locationDisplay.dataSource.$status) { status = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onReceive(locationDisplay.$autoPanMode) { autoPanMode = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: autoPanMode) { autoPanMode in
-***REMOVED******REMOVED******REMOVED******REMOVED***if autoPanMode != locationDisplay.autoPanMode {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = autoPanMode
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if autoPanMode != .off {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Do not update the last selected autopan mode here if
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `off` was selected by the user.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastSelectedAutoPanMode = autoPanMode
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***.contextMenu(
+***REMOVED******REMOVED******REMOVED***ContextMenu { contextMenuContent() ***REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.disabled(model.buttonIsDisabled)
+***REMOVED******REMOVED***.task { await model.observeStatus() ***REMOVED***
+***REMOVED******REMOVED***.task { await model.observeAutoPanMode() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -174,31 +203,33 @@ public struct LocationButton: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***@MainActor
-***REMOVED******REMOVED***@ViewBuilder
-***REMOVED******REMOVED***private func contextMenuContent() -> some View {
-***REMOVED******REMOVED******REMOVED***if model.status == .started {
-***REMOVED******REMOVED******REMOVED******REMOVED***if model.autoPanOptions.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("Autopan") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Autopan", selection: $autoPanMode) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(LocationDisplay.AutoPanMode.orderedOptions, id: \.self) { autoPanMode in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if autoPanOptions.contains(autoPanMode) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(autoPanMode.pickerText).tag(autoPanMode)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***private func contextMenuContent() -> some View {
+***REMOVED******REMOVED***if model.status == .started {
+***REMOVED******REMOVED******REMOVED***if model.autoPanOptions.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Autopan") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(LocationDisplay.AutoPanMode.orderedOptions, id: \.self) { autoPanMode in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.autoPanOptions.contains(autoPanMode) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.select(autoPanMode: autoPanMode)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(autoPanMode.pickerText).tag(autoPanMode)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await locationDisplay.dataSource.stop()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Hide Location", systemImage: "location.slash")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.hideLocation()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Hide Location", systemImage: "location.slash")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A button that allows a user to show their location on a map view.
