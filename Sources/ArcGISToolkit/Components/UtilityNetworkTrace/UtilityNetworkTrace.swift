@@ -326,6 +326,9 @@ public struct UtilityNetworkTrace: View {
                         } message: {
                             Text(String.deleteAllStartingPointsMessage)
                         }
+                        // Override default uppercase capitalization for list
+                        // section headers on iOS and iPadOS.
+                        .textCase(nil)
                     }
                 }
             }
