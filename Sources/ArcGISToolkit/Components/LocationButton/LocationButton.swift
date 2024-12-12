@@ -23,7 +23,11 @@ extension LocationButton {
         let locationDisplay: LocationDisplay
         
         /// The current status of the location display's datasource.
-        @Published var status: LocationDataSource.Status = .stopped
+        @Published var status: LocationDataSource.Status = .stopped {
+            didSet {
+                buttonIsDisabled = status == .starting || status == .stopping
+            }
+        }
         
         /// The autopan mode of the location display.
         @Published var autoPanMode: LocationDisplay.AutoPanMode = .off {
@@ -40,16 +44,19 @@ extension LocationButton {
             }
         }
         
+        /// A value indicating whether the button is disabled.
+        @Published var buttonIsDisabled: Bool = true
+        
         /// The last selected autopan mode by the user.
-        @Published var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
+        var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
         
         /// The auto pan options that the user can choose from the context menu of the button.
-        private let autoPanOptions: Set<LocationDisplay.AutoPanMode>
+        let autoPanOptions: Set<LocationDisplay.AutoPanMode>
         
         /// Creates a location button model with a location display.
         /// - Parameter locationDisplay: The location display that the button will control.
         /// - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
-        public init(
+        init(
             locationDisplay: LocationDisplay,
             autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
         ) {
@@ -66,6 +73,33 @@ extension LocationButton {
             }
         }
         
+        func observeStatus() async {
+            for await status in locationDisplay.dataSource.$status {
+                self.status = status
+            }
+        }
+        
+        func observeAutoPanMode() async {
+            for await autoPanMode in locationDisplay.$autoPanMode {
+                self.autoPanMode = autoPanMode
+            }
+        }
+        
+        /// Selects a new auto pan mode.
+        /// - Parameter autoPanMode: The new auto pan mode.
+        func select(autoPanMode: LocationDisplay.AutoPanMode) {
+            guard autoPanMode != locationDisplay.autoPanMode else {
+                return
+            }
+            locationDisplay.autoPanMode = autoPanMode
+            if autoPanMode != .off {
+                // Do not update the last selected autopan mode here if
+                // `off` was selected by the user.
+                lastSelectedAutoPanMode = autoPanMode
+            }
+        }
+        
+        /// The action to perform when the button is pressed.
         func buttonAction() {
             // Decide the button behavior based on the status.
             switch status {
@@ -101,6 +135,11 @@ extension LocationButton {
                 fatalError()
             }
         }
+        
+        /// Hides the location.
+        func hideLocation() async {
+            await locationDisplay.dataSource.stop()
+        }
     }
 }
 
@@ -126,22 +165,12 @@ public struct LocationButton: View {
             buttonLabel()
                 .padding(8)
         }
-//        .contextMenu(
-//            ContextMenu { contextMenuContent() }
-//        )
-//        .disabled(status == .starting || status == .stopping)
-//        .onReceive(locationDisplay.dataSource.$status) { status = $0 }
-//        .onReceive(locationDisplay.$autoPanMode) { autoPanMode = $0 }
-//        .onChange(of: autoPanMode) { autoPanMode in
-//            if autoPanMode != locationDisplay.autoPanMode {
-//                locationDisplay.autoPanMode = autoPanMode
-//                if autoPanMode != .off {
-//                    // Do not update the last selected autopan mode here if
-//                    // `off` was selected by the user.
-//                    lastSelectedAutoPanMode = autoPanMode
-//                }
-//            }
-//        }
+        .contextMenu(
+            ContextMenu { contextMenuContent() }
+        )
+        .disabled(model.buttonIsDisabled)
+        .task { await model.observeStatus() }
+        .task { await model.observeAutoPanMode() }
     }
     
     @ViewBuilder
@@ -174,31 +203,33 @@ public struct LocationButton: View {
         }
     }
     
-//    @MainActor
-//    @ViewBuilder
-//    private func contextMenuContent() -> some View {
-//        if model.status == .started {
-//            if model.autoPanOptions.count > 1 {
-//                Section("Autopan") {
-//                    Picker("Autopan", selection: $autoPanMode) {
-//                        ForEach(LocationDisplay.AutoPanMode.orderedOptions, id: \.self) { autoPanMode in
-//                            if autoPanOptions.contains(autoPanMode) {
-//                                Text(autoPanMode.pickerText).tag(autoPanMode)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            
-//            Button {
-//                Task {
-//                    await locationDisplay.dataSource.stop()
-//                }
-//            } label: {
-//                Label("Hide Location", systemImage: "location.slash")
-//            }
-//        }
-//    }
+    @MainActor
+    @ViewBuilder
+    private func contextMenuContent() -> some View {
+        if model.status == .started {
+            if model.autoPanOptions.count > 1 {
+                Section("Autopan") {
+                    ForEach(LocationDisplay.AutoPanMode.orderedOptions, id: \.self) { autoPanMode in
+                        if model.autoPanOptions.contains(autoPanMode) {
+                            Button {
+                                model.select(autoPanMode: autoPanMode)
+                            } label: {
+                                Text(autoPanMode.pickerText).tag(autoPanMode)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Button {
+                Task {
+                    await model.hideLocation()
+                }
+            } label: {
+                Label("Hide Location", systemImage: "location.slash")
+            }
+        }
+    }
 }
 
 /// A button that allows a user to show their location on a map view.
