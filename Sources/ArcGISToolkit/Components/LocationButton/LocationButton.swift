@@ -55,6 +55,7 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED******REMOVED***buttonAction()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***buttonLabel()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED***
 ***REMOVED******REMOVED***.contextMenu(
 ***REMOVED******REMOVED******REMOVED***ContextMenu { contextMenuContent() ***REMOVED***
@@ -195,5 +196,31 @@ private extension CLLocationManager {
 ***REMOVED***
 
 #Preview {
-***REMOVED***LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
+***REMOVED***MapView(map: Map.openStreetMap())
+***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonBorderShape(.circle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(radius: 8)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED***
+
+private extension Map {
+   static func openStreetMap() -> Map {
+***REMOVED***   let map = Map(spatialReference: .webMercator)
+***REMOVED***   map.addOperationalLayer(OpenStreetMapLayer())
+***REMOVED***   return map
+***REMOVED***
 ***REMOVED***

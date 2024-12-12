@@ -34,7 +34,7 @@ struct LocationButtonExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.locationDisplay(locationDisplay)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***LocationButton(locationDisplay: locationDisplay)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
