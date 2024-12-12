@@ -34,7 +34,7 @@ struct LocationButtonExampleView: View {
             .locationDisplay(locationDisplay)
             .overlay(alignment: .topTrailing) {
                 LocationButton(locationDisplay: locationDisplay)
-                    .padding()
+                    .padding(8)
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .padding()

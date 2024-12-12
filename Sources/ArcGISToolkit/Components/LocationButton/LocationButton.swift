@@ -55,6 +55,7 @@ public struct LocationButton: View {
             buttonAction()
         } label: {
             buttonLabel()
+                .padding(8)
         }
         .contextMenu(
             ContextMenu { contextMenuContent() }
@@ -195,5 +196,31 @@ private extension CLLocationManager {
 }
 
 #Preview {
-    LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
+    MapView(map: Map.openStreetMap())
+        .overlay(alignment: .topTrailing) {
+            VStack {
+                LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
+                    .padding(8)
+                    .background(.thinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                
+                if #available(iOS 17.0, *) {
+                    LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
+                        .imageScale(.large)
+                        .bold()
+                        .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.circle)
+                        .shadow(radius: 8)
+                }
+            }
+            .padding()
+        }
+}
+
+private extension Map {
+   static func openStreetMap() -> Map {
+       let map = Map(spatialReference: .webMercator)
+       map.addOperationalLayer(OpenStreetMapLayer())
+       return map
+    }
 }
