@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if !os(visionOS)
 ***REMOVED***
 ***REMOVED***
 import XCTest
@@ -54,3 +55,4 @@ final class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(compass3.shouldHide(forHeading: compass3Heading))
 ***REMOVED***
 ***REMOVED***
+#endif

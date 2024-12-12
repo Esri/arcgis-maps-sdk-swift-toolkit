@@ -18,6 +18,7 @@ import Combine
 
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
+@available(visionOS, unavailable)
 final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -33,13 +34,23 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.floorManager = floorManager
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***floorManagerLoadStatusTask = Task {
+***REMOVED******REMOVED******REMOVED***for await loadStatus in floorManager.$loadStatus {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = loadStatus
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***loadFloorManager()
+***REMOVED***
+***REMOVED***
+***REMOVED***deinit {
+***REMOVED******REMOVED***floorManagerLoadStatusTask?.cancel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Published members
 ***REMOVED***
-***REMOVED******REMOVED***/ `true` if the model is loading it's properties, `false` if not loading.
-***REMOVED***@Published private(set) var isLoading = true
+***REMOVED******REMOVED***/ Load status of the FloorManager.
+***REMOVED***@Published private(set) var loadStatus: LoadStatus?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
 ***REMOVED***@Published private(set) var selection: FloorFilterSelection?
@@ -152,6 +163,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Private items
 ***REMOVED***
+***REMOVED******REMOVED***/ A task to track the load status of the FloorManager.
+***REMOVED***private var floorManagerLoadStatusTask: Task<Void, Never>?
+***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facility.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
@@ -238,25 +252,18 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
+***REMOVED******REMOVED***/ Loads the `FloorManager` if needed.
 ***REMOVED***private func loadFloorManager() {
 ***REMOVED******REMOVED***guard floorManager.loadStatus == .notLoaded,
 ***REMOVED******REMOVED******REMOVED***  floorManager.loadStatus != .loading else {
-***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let firstSite = sites.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite, zoomTo: true)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

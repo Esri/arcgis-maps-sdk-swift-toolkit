@@ -16,7 +16,6 @@
 
 ***REMOVED***/ A floating panel is a view that overlays a view and supplies view-related
 ***REMOVED***/ content. For more information see <doc:FloatingPanel>.
-@MainActor
 struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of a geo-view's attribution bar.
 ***REMOVED******REMOVED***/
@@ -25,7 +24,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ attribution bar.
 ***REMOVED***let attributionBarHeight: CGFloat
 ***REMOVED******REMOVED***/ The background color of the floating panel.
-***REMOVED***let backgroundColor: Color
+***REMOVED***let backgroundColor: Color?
 ***REMOVED******REMOVED***/ A binding to the currently selected detent.
 ***REMOVED***@Binding var selectedDetent: FloatingPanelDetent
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
@@ -73,11 +72,16 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set frame width to infinity to prevent horizontal shrink on dismissal.
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED***.compositingGroup()
+#else
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
+#endif
 ***REMOVED******REMOVED******REMOVED***.clipShape(
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 10
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: .cornerRadius
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
@@ -92,14 +96,14 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = geometryProxy.size.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size.height) { height in
+***REMOVED******REMOVED******REMOVED***.onChange(geometryProxy.size.height) { height in
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = height
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(isPresented) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(selectedDetent) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onKeyboardStateChanged { state, height in
@@ -207,6 +211,7 @@ private struct Handle: View {
 ***REMOVED******REMOVED***RoundedRectangle(cornerRadius: 4.0)
 ***REMOVED******REMOVED******REMOVED***.foregroundColor(color)
 ***REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 8.0)
+***REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED***
 ***REMOVED***
 
@@ -218,6 +223,15 @@ private extension CGFloat {
 ***REMOVED***static let handleFrameHeight: CGFloat = 30
 ***REMOVED***
 ***REMOVED***static let minHeight: CGFloat = 66
+***REMOVED***
+***REMOVED******REMOVED***/ The corner radius of the floating panel.
+***REMOVED***static let cornerRadius: CGFloat = {
+#if os(visionOS)
+***REMOVED******REMOVED***32
+#else
+***REMOVED******REMOVED***10
+#endif
+***REMOVED***()
 ***REMOVED***
 
 private extension Color {

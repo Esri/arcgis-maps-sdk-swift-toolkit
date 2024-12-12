@@ -14,6 +14,7 @@
 
 import XCTest
 
+@MainActor
 final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***continueAfterFailure = false
@@ -1020,7 +1021,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 3.6: noValueOption is 'Hide'
-***REMOVED***func testCase_3_6() {
+***REMOVED***func testCase_3_6() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo No Value False"]
@@ -1049,10 +1050,17 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***fieldValue.label,
-***REMOVED******REMOVED******REMOVED***""
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if #available(iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED******REMOVED***fieldValue.exists,
+***REMOVED******REMOVED******REMOVED******REMOVED***"The field value exists but it should not because it is empty."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***optionsButton.tap()
 ***REMOVED******REMOVED***
@@ -1083,6 +1091,65 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
 ***REMOVED******REMOVED******REMOVED***"First"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 3.7: Unsupported value
+***REMOVED***func testCase_3_7() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Unsupported Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
+***REMOVED******REMOVED***let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
+***REMOVED******REMOVED***let unsupportedValue = app.buttons["0"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"0"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***unsupportedValueSectionHeader.waitForExistence(timeout: 1),
+***REMOVED******REMOVED******REMOVED***"The Unsupported Value section doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***unsupportedValue.exists,
+***REMOVED******REMOVED******REMOVED***"The Unsupported Value doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***noValueButton.exists,
+***REMOVED******REMOVED******REMOVED***"No Value doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***noValueButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***unsupportedValueSectionHeader.exists,
+***REMOVED******REMOVED******REMOVED***"The Unsupported Value section exists."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -1435,7 +1502,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 7.1: Test read only elements
-***REMOVED***func testCase_7_1() {
+***REMOVED***func testCase_7_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1524,7 +1591,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.exists)
+***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
 ***REMOVED******REMOVED***XCTAssertTrue(placeholderImage.exists)
 ***REMOVED******REMOVED***XCTAssertTrue(attachmentName.exists)
 ***REMOVED******REMOVED***XCTAssertTrue(sizeLabel.exists)
@@ -1630,6 +1697,39 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(plainText.exists)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 11.1: Barcode Scan and Clear buttons
+***REMOVED***func testCase_11_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 11.1 Layer"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let scanButton = app.buttons["Barcode Scan Button"]
+***REMOVED******REMOVED***let clearButton = app.buttons["Barcode Clear Button"]
+***REMOVED******REMOVED***let barcodeValidationString = app.staticTexts["Barcode Footer"]
+***REMOVED******REMOVED***let fieldValue = app.textFields["Barcode Text Input"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+***REMOVED******REMOVED***XCTAssertFalse(clearButton.exists, "The clear button exists.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***fieldValue.typeText("https:***REMOVED***esri.com")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+***REMOVED******REMOVED***XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
 ***REMOVED***
 ***REMOVED***
 

@@ -35,7 +35,7 @@ extension FeatureFormExampleView {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.first(where: { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = result.geoElements.first as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED******REMOVED***   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***   feature.featureFormDefinition != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false

@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for date/time input.
-@MainActor
 struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -53,10 +52,10 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***dateEditor
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: date) { date in
+***REMOVED******REMOVED******REMOVED***.onChange(date) { date in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(date)
 ***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
@@ -102,10 +101,11 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED*** else if !isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = nil

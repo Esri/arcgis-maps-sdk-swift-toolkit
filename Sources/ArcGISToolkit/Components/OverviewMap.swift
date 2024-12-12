@@ -47,8 +47,6 @@ import Combine
 ***REMOVED***/ the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [OverviewMapExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/OverviewMapExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `OverviewMap` see the <doc:OverviewMapTutorial>.
-@MainActor
-@preconcurrency
 public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`.
 ***REMOVED***let viewpoint: Viewpoint?
@@ -138,19 +136,19 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
 ***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = symbol
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: visibleArea) { visibleArea in
+***REMOVED******REMOVED***.onChange(visibleArea) { visibleArea in
 ***REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint) { viewpoint in
+***REMOVED******REMOVED***.onChange(viewpoint) { viewpoint in
 ***REMOVED******REMOVED******REMOVED***if visibleArea == nil,
 ***REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = point
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: symbol) {
+***REMOVED******REMOVED***.onChange(symbol) {
 ***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = $0
 ***REMOVED***
 ***REMOVED***

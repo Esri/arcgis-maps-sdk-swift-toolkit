@@ -27,6 +27,9 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***/ The content shown in the Carousel.
 ***REMOVED***let content: (_: CGSize, _: (() -> Void)?) -> Content
 ***REMOVED***
+***REMOVED******REMOVED***/ The amount to offset the scroll indicator.
+***REMOVED***let scrollIndicatorOffset = 10.0
+***REMOVED***
 ***REMOVED******REMOVED***/ This number is used to compute the final width that allows for a partially visible cell.
 ***REMOVED***var cellBaseWidth = 120.0
 ***REMOVED***
@@ -42,11 +45,9 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Note: The iOS 18 version currently uses `legacyImplementation` as
-***REMOVED******REMOVED***/ `iOS18Implementation` contains symbols not available in Xcode 15.4.
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if #available(iOS 18.0, *) {
-***REMOVED******REMOVED******REMOVED***legacyImplementation
+***REMOVED******REMOVED******REMOVED***iOS18Implementation
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***legacyImplementation
 ***REMOVED***
@@ -57,36 +58,32 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 10)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(geometry.size.width)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: geometry.size.width) { width in
+***REMOVED******REMOVED******REMOVED***.onChange(geometry.size.width) { width in
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(width)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** When a GeometryReader is within a List, height must be specified.
-***REMOVED******REMOVED***.frame(height: cellSize.height)
+***REMOVED******REMOVED***.frame(height: cellSize.height + scrollIndicatorOffset)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***The iOS 18 implementation is commented as it contains symbols not
-***REMOVED******REMOVED***available in Xcode 15.4.
-***REMOVED******REMOVED***@available(iOS 18.0, *)
-***REMOVED******REMOVED***var iOS18Implementation: some View {
-***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 10)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED***@available(iOS 18.0, *)
+***REMOVED***var iOS18Implementation: some View {
+***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeCommonScrollViewContent(scrollViewProxy)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry.containerSize.width
-***REMOVED******REMOVED*** action: { _, newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(newValue)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
+***REMOVED******REMOVED******REMOVED***geometry.containerSize.width
+***REMOVED*** action: { _, newValue in
+***REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(newValue)
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
 ***REMOVED******REMOVED***HStack(spacing: cellSpacing) {
@@ -98,6 +95,9 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***.id(contentIdentifier)
 ***REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
 ***REMOVED******REMOVED******REMOVED***.clipped()
+***REMOVED******REMOVED******REMOVED******REMOVED*** Pad the content such that the scroll indicator appears beneath it
+***REMOVED******REMOVED******REMOVED******REMOVED*** so that the content is not covered. 
+***REMOVED******REMOVED******REMOVED***.padding(.bottom, scrollIndicatorOffset)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

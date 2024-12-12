@@ -54,8 +54,10 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text.done
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

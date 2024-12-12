@@ -38,8 +38,8 @@ struct PopupElementHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***#if targetEnvironment(macCatalyst)
+#if targetEnvironment(macCatalyst) || os(visionOS)
 ***REMOVED******REMOVED***.padding(.leading, 4)
-***REMOVED******REMOVED***#endif
+#endif
 ***REMOVED***
 ***REMOVED***

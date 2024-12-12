@@ -17,7 +17,6 @@ import QuickLook
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an `AttachmentsFeatureElement`.
-@MainActor
 struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
 ***REMOVED***let featureElement: AttachmentsFeatureElement
@@ -159,7 +158,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a model for the new attachment for display.
 ***REMOVED******REMOVED***/ - Parameter attachment: The added attachment.
-***REMOVED***@MainActor
 ***REMOVED***func onAdd(attachment: FeatureAttachment) -> Void {
 ***REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED***let newModel = AttachmentModel(
@@ -178,7 +176,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to rename.
 ***REMOVED******REMOVED***/   - newAttachmentName: The new attachment name.
-***REMOVED***@MainActor
 ***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
 ***REMOVED******REMOVED***if let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
@@ -190,7 +187,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ Deletes the attachment associated with the given model.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to delete.
-***REMOVED***@MainActor
 ***REMOVED***func onDelete(attachmentModel: AttachmentModel) -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
@@ -245,7 +241,6 @@ extension View {
 ***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***func onAttachmentIsEditableChange(
 ***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
