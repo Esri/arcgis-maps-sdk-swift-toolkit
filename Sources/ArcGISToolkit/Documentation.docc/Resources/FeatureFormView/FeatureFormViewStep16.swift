@@ -236,7 +236,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureTableEditResults = try await database.applyEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureTableEditResults.flatMap { $0.editResults.errors ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureEditResults = try await table.applyEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureEditResults.errors
