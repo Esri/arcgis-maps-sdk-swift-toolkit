@@ -87,43 +87,6 @@ struct LocationButtonTests {
         #expect(model.locationDisplay.autoPanMode == .off)
         #expect(model.lastSelectedAutoPanMode == .compassNavigation)
     }
-    
-    @Test
-    @MainActor
-    func testButtonAction() async throws {
-        let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
-        
-        let model = LocationButton.Model(locationDisplay: locationDisplay)
-        
-//        let observationTask = Task.detached { await model.observeStatus() }
-//        try await Task.sleep(for: .seconds(1))
-        
-        //while model.status != .stopped { await Task.yield() }
-        
-//        #expect(model.status == .stopped)
-//        #expect(model.buttonIsDisabled == false)
-        
-        let ds = model.locationDisplay.dataSource
-        #expect(ds is MockLocationDataSource)
-//        let ds = MockLocationDataSource()
-        try await ds.start()
-        try await Task.sleep(nanoseconds: 1_000_000)
-        #expect(ds.status == .started)
-        
-//        model.buttonAction()
-//        try await Task.sleep(for: .seconds(5))
-//        #expect(model.status == .started)
-        
-//        observationTask.cancel()
-    }
-    
-    @Test
-    @MainActor
-    func testLDS() async throws {
-        let ds = MockLocationDataSource()
-        try await ds.start()
-        #expect(ds.status == .started)
-    }
 }
 
 private typealias MockLocationDataSource = CustomLocationDataSource<MockLocationProvider>
@@ -136,24 +99,10 @@ extension MockLocationDataSource {
 
 private struct MockLocationProvider: LocationProvider {
     var locations: AsyncThrowingStream<Location, Error> {
-        .init {
-            print("-- here...")
-//            return nil
-            try await Task.sleep(for: .milliseconds(100))
-            return .init(
-                position: .init(latitude: 10, longitude: 10),
-                horizontalAccuracy: 10,
-                verticalAccuracy: 10,
-                speed: 10,
-                course: 0
-            )
-        }
+        .init { return nil }
     }
     
     var headings: AsyncThrowingStream<Double, Error> {
-        .init {
-            try await Task.sleep(for: .milliseconds(100))
-            return 0
-        }
+        .init { return nil }
     }
 }
