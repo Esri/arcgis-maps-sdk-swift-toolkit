@@ -12,14 +12,15 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
+import Testing
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 
-final class LocationButtonTests: XCTestCase {
-***REMOVED******REMOVED***/ Tests the initializer.
+@Suite("LocationButton Tests")
+struct LocationButtonTests {
+***REMOVED***@Test
 ***REMOVED***@MainActor
-***REMOVED***func testInit() {
+***REMOVED***func testInit() async throws {
 ***REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -27,9 +28,9 @@ final class LocationButtonTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay: locationDisplay
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***XCTAssertIdentical(model.locationDisplay, locationDisplay)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.autoPanOptions, [.compassNavigation, .off, .navigation, .recenter])
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.lastSelectedAutoPanMode, .recenter)
+***REMOVED******REMOVED******REMOVED***#expect(model.locationDisplay === locationDisplay)
+***REMOVED******REMOVED******REMOVED***#expect(model.autoPanOptions == [.compassNavigation, .off, .navigation, .recenter])
+***REMOVED******REMOVED******REMOVED***#expect(model.lastSelectedAutoPanMode == .recenter)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -37,8 +38,8 @@ final class LocationButtonTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay: locationDisplay,
 ***REMOVED******REMOVED******REMOVED******REMOVED***autoPanOptions: [.recenter]
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.autoPanOptions, [.recenter])
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.lastSelectedAutoPanMode, .recenter)
+***REMOVED******REMOVED******REMOVED***#expect(model.autoPanOptions == [.recenter])
+***REMOVED******REMOVED******REMOVED***#expect(model.lastSelectedAutoPanMode == .recenter)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -46,8 +47,8 @@ final class LocationButtonTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay: locationDisplay,
 ***REMOVED******REMOVED******REMOVED******REMOVED***autoPanOptions: []
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.autoPanOptions, [])
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.lastSelectedAutoPanMode, .off)
+***REMOVED******REMOVED******REMOVED***#expect(model.autoPanOptions == [])
+***REMOVED******REMOVED******REMOVED***#expect(model.lastSelectedAutoPanMode == .off)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -55,8 +56,8 @@ final class LocationButtonTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay: locationDisplay,
 ***REMOVED******REMOVED******REMOVED******REMOVED***autoPanOptions: [.off, .recenter]
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.autoPanOptions, [.off, .recenter])
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.lastSelectedAutoPanMode, .recenter)
+***REMOVED******REMOVED******REMOVED***#expect(model.autoPanOptions == [.off, .recenter])
+***REMOVED******REMOVED******REMOVED***#expect(model.lastSelectedAutoPanMode == .recenter)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -64,8 +65,8 @@ final class LocationButtonTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay: locationDisplay,
 ***REMOVED******REMOVED******REMOVED******REMOVED***autoPanOptions: [.off]
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.autoPanOptions, [.off])
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(model.lastSelectedAutoPanMode, .off)
+***REMOVED******REMOVED******REMOVED***#expect(model.autoPanOptions == [.off])
+***REMOVED******REMOVED******REMOVED***#expect(model.lastSelectedAutoPanMode == .off)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
