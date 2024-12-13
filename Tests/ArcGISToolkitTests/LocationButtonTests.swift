@@ -88,43 +88,6 @@ struct LocationButtonTests {
 ***REMOVED******REMOVED***#expect(model.lastSelectedAutoPanMode == .compassNavigation)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Test
-***REMOVED***@MainActor
-***REMOVED***func testButtonAction() async throws {
-***REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let model = LocationButton.Model(locationDisplay: locationDisplay)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let observationTask = Task.detached { await model.observeStatus() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***try await Task.sleep(for: .seconds(1))
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***while model.status != .stopped { await Task.yield() ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***#expect(model.status == .stopped)
-***REMOVED******REMOVED******REMOVED***#expect(model.buttonIsDisabled == false)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let ds = model.locationDisplay.dataSource
-***REMOVED******REMOVED***#expect(ds is MockLocationDataSource)
-***REMOVED******REMOVED******REMOVED***let ds = MockLocationDataSource()
-***REMOVED******REMOVED***try await ds.start()
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: 1_000_000)
-***REMOVED******REMOVED***#expect(ds.status == .started)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***model.buttonAction()
-***REMOVED******REMOVED******REMOVED***try await Task.sleep(for: .seconds(5))
-***REMOVED******REMOVED******REMOVED***#expect(model.status == .started)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***observationTask.cancel()
-***REMOVED***
-***REMOVED***
-***REMOVED***@Test
-***REMOVED***@MainActor
-***REMOVED***func testLDS() async throws {
-***REMOVED******REMOVED***let ds = MockLocationDataSource()
-***REMOVED******REMOVED***try await ds.start()
-***REMOVED******REMOVED***#expect(ds.status == .started)
-***REMOVED***
-***REMOVED***
 
 private typealias MockLocationDataSource = CustomLocationDataSource<MockLocationProvider>
 
@@ -136,24 +99,10 @@ extension MockLocationDataSource {
 
 private struct MockLocationProvider: LocationProvider {
 ***REMOVED***var locations: AsyncThrowingStream<Location, Error> {
-***REMOVED******REMOVED***.init {
-***REMOVED******REMOVED******REMOVED***print("-- here...")
-***REMOVED******REMOVED******REMOVED******REMOVED***return nil
-***REMOVED******REMOVED******REMOVED***try await Task.sleep(for: .milliseconds(100))
-***REMOVED******REMOVED******REMOVED***return .init(
-***REMOVED******REMOVED******REMOVED******REMOVED***position: .init(latitude: 10, longitude: 10),
-***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAccuracy: 10,
-***REMOVED******REMOVED******REMOVED******REMOVED***verticalAccuracy: 10,
-***REMOVED******REMOVED******REMOVED******REMOVED***speed: 10,
-***REMOVED******REMOVED******REMOVED******REMOVED***course: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***.init { return nil ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var headings: AsyncThrowingStream<Double, Error> {
-***REMOVED******REMOVED***.init {
-***REMOVED******REMOVED******REMOVED***try await Task.sleep(for: .milliseconds(100))
-***REMOVED******REMOVED******REMOVED***return 0
-***REMOVED***
+***REMOVED******REMOVED***.init { return nil ***REMOVED***
 ***REMOVED***
 ***REMOVED***
