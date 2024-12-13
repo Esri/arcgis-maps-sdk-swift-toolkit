@@ -17,6 +17,7 @@ import CoreLocation
 ***REMOVED***
 
 extension LocationButton {
+***REMOVED******REMOVED***/ The model for the location button.
 ***REMOVED***@MainActor
 ***REMOVED***class Model: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***/ The location display which the button controls.
@@ -203,7 +204,7 @@ public struct LocationButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.select(autoPanMode: autoPanMode)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(autoPanMode.pickerText, systemImage: model.autoPanMode.imageSystemName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(autoPanMode.pickerText, systemImage: autoPanMode.imageSystemName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
