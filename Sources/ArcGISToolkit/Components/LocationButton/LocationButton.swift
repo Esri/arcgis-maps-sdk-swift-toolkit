@@ -17,6 +17,7 @@ import CoreLocation
 import SwiftUI
 
 extension LocationButton {
+    /// The model for the location button.
     @MainActor
     class Model: ObservableObject {
         /// The location display which the button controls.
@@ -203,7 +204,7 @@ public struct LocationButton: View {
                             Button {
                                 model.select(autoPanMode: autoPanMode)
                             } label: {
-                                Label(autoPanMode.pickerText, systemImage: model.autoPanMode.imageSystemName)
+                                Label(autoPanMode.pickerText, systemImage: autoPanMode.imageSystemName)
                             }
                         }
                     }
