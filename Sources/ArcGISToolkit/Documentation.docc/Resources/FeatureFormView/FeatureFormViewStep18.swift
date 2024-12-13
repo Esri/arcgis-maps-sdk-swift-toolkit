@@ -259,7 +259,7 @@ class Model: ObservableObject {
         do {
             if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
                 let featureTableEditResults = try await database.applyEdits()
-                resultErrors = featureTableEditResults.flatMap { $0.editResults.errors }
+                resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
             } else {
                 let featureEditResults = try await table.applyEdits()
                 resultErrors = featureEditResults.errors
