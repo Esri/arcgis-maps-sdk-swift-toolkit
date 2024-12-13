@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
+import Testing
 import ArcGIS
 @testable import ArcGISToolkit
 
-final class LocationButtonTests: XCTestCase {
-    /// Tests the initializer.
+@Suite("LocationButton Tests")
+struct LocationButtonTests {
+    @Test
     @MainActor
-    func testInit() {
+    func testInit() async throws {
         let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
         
         do {
@@ -27,9 +28,9 @@ final class LocationButtonTests: XCTestCase {
                 locationDisplay: locationDisplay
             )
             
-            XCTAssertIdentical(model.locationDisplay, locationDisplay)
-            XCTAssertEqual(model.autoPanOptions, [.compassNavigation, .off, .navigation, .recenter])
-            XCTAssertEqual(model.lastSelectedAutoPanMode, .recenter)
+            #expect(model.locationDisplay === locationDisplay)
+            #expect(model.autoPanOptions == [.compassNavigation, .off, .navigation, .recenter])
+            #expect(model.lastSelectedAutoPanMode == .recenter)
         }
         
         do {
@@ -37,8 +38,8 @@ final class LocationButtonTests: XCTestCase {
                 locationDisplay: locationDisplay,
                 autoPanOptions: [.recenter]
             )
-            XCTAssertEqual(model.autoPanOptions, [.recenter])
-            XCTAssertEqual(model.lastSelectedAutoPanMode, .recenter)
+            #expect(model.autoPanOptions == [.recenter])
+            #expect(model.lastSelectedAutoPanMode == .recenter)
         }
         
         do {
@@ -46,8 +47,8 @@ final class LocationButtonTests: XCTestCase {
                 locationDisplay: locationDisplay,
                 autoPanOptions: []
             )
-            XCTAssertEqual(model.autoPanOptions, [])
-            XCTAssertEqual(model.lastSelectedAutoPanMode, .off)
+            #expect(model.autoPanOptions == [])
+            #expect(model.lastSelectedAutoPanMode == .off)
         }
         
         do {
@@ -55,8 +56,8 @@ final class LocationButtonTests: XCTestCase {
                 locationDisplay: locationDisplay,
                 autoPanOptions: [.off, .recenter]
             )
-            XCTAssertEqual(model.autoPanOptions, [.off, .recenter])
-            XCTAssertEqual(model.lastSelectedAutoPanMode, .recenter)
+            #expect(model.autoPanOptions == [.off, .recenter])
+            #expect(model.lastSelectedAutoPanMode == .recenter)
         }
         
         do {
@@ -64,8 +65,8 @@ final class LocationButtonTests: XCTestCase {
                 locationDisplay: locationDisplay,
                 autoPanOptions: [.off]
             )
-            XCTAssertEqual(model.autoPanOptions, [.off])
-            XCTAssertEqual(model.lastSelectedAutoPanMode, .off)
+            #expect(model.autoPanOptions == [.off])
+            #expect(model.lastSelectedAutoPanMode == .off)
         }
     }
 }
