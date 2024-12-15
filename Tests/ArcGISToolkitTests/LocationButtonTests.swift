@@ -20,7 +20,7 @@ import Testing
 struct LocationButtonTests {
 ***REMOVED***@Test
 ***REMOVED***@MainActor
-***REMOVED***func testInit() async throws {
+***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -72,7 +72,7 @@ struct LocationButtonTests {
 ***REMOVED***
 ***REMOVED***@Test
 ***REMOVED***@MainActor
-***REMOVED***func testSelectAutoPanMode() async throws {
+***REMOVED***func testSelectAutoPanMode() {
 ***REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let model = LocationButton.Model(
@@ -86,6 +86,39 @@ struct LocationButtonTests {
 ***REMOVED******REMOVED***model.select(autoPanMode: .off)
 ***REMOVED******REMOVED***#expect(model.locationDisplay.autoPanMode == .off)
 ***REMOVED******REMOVED***#expect(model.lastSelectedAutoPanMode == .compassNavigation)
+***REMOVED***
+***REMOVED***
+***REMOVED***@Test
+***REMOVED***@MainActor
+***REMOVED***func testActionForButtonPress() async throws {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+***REMOVED******REMOVED******REMOVED***let model = LocationButton.Model(locationDisplay: locationDisplay)
+***REMOVED******REMOVED******REMOVED***#expect(model.actionForButtonPress == .start)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***let ds = MockLocationDataSource()
+***REMOVED******REMOVED******REMOVED***try await ds.start()
+***REMOVED******REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: ds)
+***REMOVED******REMOVED******REMOVED***let model = LocationButton.Model(locationDisplay: locationDisplay)
+***REMOVED******REMOVED******REMOVED***let observation = Task { await model.observeStatus() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***while model.status != .started { await Task.yield() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***#expect(model.actionForButtonPress == .autoPanOn)
+***REMOVED******REMOVED******REMOVED***observation.cancel()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***let ds = MockLocationDataSource()
+***REMOVED******REMOVED******REMOVED***try await ds.start()
+***REMOVED******REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: ds)
+***REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = .navigation
+***REMOVED******REMOVED******REMOVED***let model = LocationButton.Model(locationDisplay: locationDisplay)
+***REMOVED******REMOVED******REMOVED***let observation = Task { await model.observeStatus() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***while model.status != .started { await Task.yield() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***#expect(model.actionForButtonPress == .autoPanOff)
+***REMOVED******REMOVED******REMOVED***observation.cancel()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

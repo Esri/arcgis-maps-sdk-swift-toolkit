@@ -74,12 +74,14 @@ extension LocationButton {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Observe the status of the location display datasource.
 ***REMOVED******REMOVED***func observeStatus() async {
 ***REMOVED******REMOVED******REMOVED***for await status in locationDisplay.dataSource.$status {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.status = status
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Observe the auto pan mode of the location display.
 ***REMOVED******REMOVED***func observeAutoPanMode() async {
 ***REMOVED******REMOVED******REMOVED***for await autoPanMode in locationDisplay.$autoPanMode {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.autoPanMode = autoPanMode
@@ -100,11 +102,34 @@ extension LocationButton {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The action to perform when the button is pressed.
-***REMOVED******REMOVED***func buttonAction() {
+***REMOVED******REMOVED******REMOVED***/ The action that should occur if the button is pressed.
+***REMOVED******REMOVED***var actionForButtonPress: ButtonAction? {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Decide the button behavior based on the status.
 ***REMOVED******REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED******REMOVED***case .stopped, .failedToStart:
+***REMOVED******REMOVED******REMOVED******REMOVED***.start
+***REMOVED******REMOVED******REMOVED***case .started:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the datasource is started then decide what to do based
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** on the autopan mode.
+***REMOVED******REMOVED******REMOVED******REMOVED***switch autoPanMode {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .off:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If autopan is off, then set it to the last selected autopan mode.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.autoPanOn
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise set it to off.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.autoPanOff
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .starting, .stopping:
+***REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ This should be called when the button is pressed.
+***REMOVED******REMOVED***func buttonAction() {
+***REMOVED******REMOVED******REMOVED***switch actionForButtonPress {
+***REMOVED******REMOVED******REMOVED***case .start:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the datasource is a system location datasource, then request authorization.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if locationDisplay.dataSource is SystemLocationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   CLLocationManager.shared.authorizationStatus == .notDetermined {
@@ -119,21 +144,12 @@ extension LocationButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Error starting location display: \(error)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .started:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the datasource is started then decide what to do based
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** on the autopan mode.
-***REMOVED******REMOVED******REMOVED******REMOVED***switch autoPanMode {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .off:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If autopan is off, then set it to the last selected autopan mode.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = lastSelectedAutoPanMode
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise set it to off.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = .off
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .starting, .stopping:
-***REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***case .autoPanOn:
+***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = lastSelectedAutoPanMode
+***REMOVED******REMOVED******REMOVED***case .autoPanOff:
+***REMOVED******REMOVED******REMOVED******REMOVED***locationDisplay.autoPanMode = .off
+***REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -141,6 +157,18 @@ extension LocationButton {
 ***REMOVED******REMOVED***func hideLocation() async {
 ***REMOVED******REMOVED******REMOVED***await locationDisplay.dataSource.stop()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension LocationButton.Model {
+***REMOVED******REMOVED***/ The type of actions that can take place when the button is pressed.
+***REMOVED***enum ButtonAction {
+***REMOVED******REMOVED******REMOVED***/ Start the location display.
+***REMOVED******REMOVED***case start
+***REMOVED******REMOVED******REMOVED***/ Stop the auto pan of location display.
+***REMOVED******REMOVED***case autoPanOff
+***REMOVED******REMOVED******REMOVED***/ Set the last selected auto pan mode.
+***REMOVED******REMOVED***case autoPanOn
 ***REMOVED***
 ***REMOVED***
 
