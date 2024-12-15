@@ -68,6 +68,12 @@
         @TutorialReference(tutorial: "doc:JobManagerTutorial")
     }
     
+    @Chapter(name: "LocationButton") {
+        A `LocationButton` is a SwiftUI button that allows the user to manage viewing their location on a `MapView`.
+        @Image(source: LocationButton, alt: "The LocationButton component")
+        @TutorialReference(tutorial: "doc:LocationButtonTutorial")
+    }
+    
     @Chapter(name: "OverviewMap") {
         `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map")
         superimposed on an existing `GeoView`, which shows a representation of the current 
