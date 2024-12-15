@@ -20,7 +20,7 @@ import ArcGIS
 struct LocationButtonTests {
     @Test
     @MainActor
-    func testInit() async throws {
+    func testInit() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         
         do {
@@ -72,7 +72,7 @@ struct LocationButtonTests {
     
     @Test
     @MainActor
-    func testSelectAutoPanMode() async throws {
+    func testSelectAutoPanMode() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         
         let model = LocationButton.Model(
@@ -86,6 +86,39 @@ struct LocationButtonTests {
         model.select(autoPanMode: .off)
         #expect(model.locationDisplay.autoPanMode == .off)
         #expect(model.lastSelectedAutoPanMode == .compassNavigation)
+    }
+    
+    @Test
+    @MainActor
+    func testActionForButtonPress() async throws {
+        do {
+            let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+            let model = LocationButton.Model(locationDisplay: locationDisplay)
+            #expect(model.actionForButtonPress == .start)
+        }
+        
+        do {
+            let ds = MockLocationDataSource()
+            try await ds.start()
+            let locationDisplay = LocationDisplay(dataSource: ds)
+            let model = LocationButton.Model(locationDisplay: locationDisplay)
+            let observation = Task { await model.observeStatus() }
+            while model.status != .started { await Task.yield() }
+            #expect(model.actionForButtonPress == .autoPanOn)
+            observation.cancel()
+        }
+        
+        do {
+            let ds = MockLocationDataSource()
+            try await ds.start()
+            let locationDisplay = LocationDisplay(dataSource: ds)
+            locationDisplay.autoPanMode = .navigation
+            let model = LocationButton.Model(locationDisplay: locationDisplay)
+            let observation = Task { await model.observeStatus() }
+            while model.status != .started { await Task.yield() }
+            #expect(model.actionForButtonPress == .autoPanOff)
+            observation.cancel()
+        }
     }
 }
 

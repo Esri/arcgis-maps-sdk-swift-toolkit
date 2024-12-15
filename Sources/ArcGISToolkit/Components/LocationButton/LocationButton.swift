@@ -74,12 +74,14 @@ extension LocationButton {
             }
         }
         
+        /// Observe the status of the location display datasource.
         func observeStatus() async {
             for await status in locationDisplay.dataSource.$status {
                 self.status = status
             }
         }
         
+        /// Observe the auto pan mode of the location display.
         func observeAutoPanMode() async {
             for await autoPanMode in locationDisplay.$autoPanMode {
                 self.autoPanMode = autoPanMode
@@ -100,11 +102,34 @@ extension LocationButton {
             }
         }
         
-        /// The action to perform when the button is pressed.
-        func buttonAction() {
+        /// The action that should occur if the button is pressed.
+        var actionForButtonPress: ButtonAction? {
             // Decide the button behavior based on the status.
             switch status {
             case .stopped, .failedToStart:
+                .start
+            case .started:
+                // If the datasource is started then decide what to do based
+                // on the autopan mode.
+                switch autoPanMode {
+                case .off:
+                    // If autopan is off, then set it to the last selected autopan mode.
+                    .autoPanOn
+                default:
+                    // Otherwise set it to off.
+                    .autoPanOff
+                }
+            case .starting, .stopping:
+                nil
+            @unknown default:
+                fatalError()
+            }
+        }
+        
+        /// This should be called when the button is pressed.
+        func buttonAction() {
+            switch actionForButtonPress {
+            case .start:
                 // If the datasource is a system location datasource, then request authorization.
                 if locationDisplay.dataSource is SystemLocationDataSource,
                    CLLocationManager.shared.authorizationStatus == .notDetermined {
@@ -119,21 +144,12 @@ extension LocationButton {
                         print("Error starting location display: \(error)")
                     }
                 }
-            case .started:
-                // If the datasource is started then decide what to do based
-                // on the autopan mode.
-                switch autoPanMode {
-                case .off:
-                    // If autopan is off, then set it to the last selected autopan mode.
-                    locationDisplay.autoPanMode = lastSelectedAutoPanMode
-                default:
-                    // Otherwise set it to off.
-                    locationDisplay.autoPanMode = .off
-                }
-            case .starting, .stopping:
-                break
-            @unknown default:
-                fatalError()
+            case .autoPanOn:
+                locationDisplay.autoPanMode = lastSelectedAutoPanMode
+            case .autoPanOff:
+                locationDisplay.autoPanMode = .off
+            case .none:
+                return
             }
         }
         
@@ -141,6 +157,18 @@ extension LocationButton {
         func hideLocation() async {
             await locationDisplay.dataSource.stop()
         }
+    }
+}
+
+extension LocationButton.Model {
+    /// The type of actions that can take place when the button is pressed.
+    enum ButtonAction {
+        /// Start the location display.
+        case start
+        /// Stop the auto pan of location display.
+        case autoPanOff
+        /// Set the last selected auto pan mode.
+        case autoPanOn
     }
 }
 
