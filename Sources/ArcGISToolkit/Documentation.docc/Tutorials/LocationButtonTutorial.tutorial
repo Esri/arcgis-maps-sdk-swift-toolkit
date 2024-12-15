@@ -1,0 +1,34 @@
+@Tutorial(time: 5) {
+    @Intro(title: "LocationButton Tutorial") {
+        A `LocationButton` is a SwiftUI button that allows the user to manage viewing their location on a `MapView`.
+        @Image(source: LocationButton, alt: "The LocationButton component")
+    }
+    
+    @Section(title: "Using the LocationButton") {
+        @ContentAndMedia {
+            @Image(source: LocationButton, alt: "An image of the LocationButton component.")
+        }
+        
+        @Steps {
+            @Step {
+                Create a new view with a `MapView`.
+                @Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep1.swift)
+            }
+            
+            @Step {
+                Add a location display.
+                @Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep2.swift)
+            }
+            
+            @Step {
+                Add an overlay to the `MapView` with `LocationButton` as the content.
+                @Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep3.swift) {
+                    @Image(
+                        source: LocationButtonComplete, 
+                        alt: "An image of the LocationButton component overlaid on a map view."
+                    )
+                }
+            }
+        }
+    }
+}
