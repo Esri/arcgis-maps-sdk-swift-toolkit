@@ -180,6 +180,7 @@ public struct LocationButton: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a location button with a location display.
 ***REMOVED******REMOVED***/ - Parameter locationDisplay: The location display that the button will control.
+***REMOVED******REMOVED***/ - Parameter autoPanOptions: The auto pan options that are available for the user to choose.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***locationDisplay: LocationDisplay,
 ***REMOVED******REMOVED***autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
