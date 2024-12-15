@@ -1,0 +1,34 @@
+@Tutorial(time: 5) {
+***REMOVED***@Intro(title: "LocationButton Tutorial") {
+***REMOVED******REMOVED***A `LocationButton` is a SwiftUI button that allows the user to manage viewing their location on a `MapView`.
+***REMOVED******REMOVED***@Image(source: LocationButton, alt: "The LocationButton component")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Using the LocationButton") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: LocationButton, alt: "An image of the LocationButton component.")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Create a new view with a `MapView`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep1.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a location display.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep2.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add an overlay to the `MapView` with `LocationButton` as the content.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep3.swift) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@Image(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***source: LocationButtonComplete, 
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alt: "An image of the LocationButton component overlaid on a map view."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
