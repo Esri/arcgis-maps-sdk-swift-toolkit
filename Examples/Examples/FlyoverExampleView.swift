@@ -16,6 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+@available(macCatalyst, unavailable)
 struct FlyoverExampleView: View {
     @State private var scene = Scene(
         item: PortalItem(
@@ -23,7 +24,7 @@ struct FlyoverExampleView: View {
             id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
         )
     )
-
+    
     var body: some View {
         FlyoverSceneView(
             initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
@@ -32,7 +33,7 @@ struct FlyoverExampleView: View {
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
-                    Task.detached { @MainActor in
+                    Task { @MainActor in
                         let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
                         print("\(results.count) identify result(s).")
                     }

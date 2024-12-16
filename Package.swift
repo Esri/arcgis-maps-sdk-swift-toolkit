@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // Copyright 2021 Esri
 //
@@ -21,7 +21,8 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v16),
-        .macCatalyst(.v16)
+        .macCatalyst(.v16),
+        .visionOS(.v2)
     ],
     products: [
         .library(
@@ -30,16 +31,15 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.5.0"))
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.6.0")),
+        .package(url: "https://github.com/swiftlang/swift-markdown.git", .upToNextMinor(from: "0.4.0"))
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
             dependencies: [
-                .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
-            ],
-            resources: [
-                .copy("PrivacyInfo.xcprivacy")
+                .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
+                .product(name: "Markdown", package: "swift-markdown")
             ]
         ),
         .testTarget(
@@ -48,14 +48,3 @@ let package = Package(
         )
     ]
 )
-
-for target in package.targets {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        // Experimental Features.
-        .enableExperimentalFeature("AccessLevelOnImport"),
-        .enableExperimentalFeature("StrictConcurrency"),
-        // Upcoming Features.
-        .enableUpcomingFeature("BareSlashRegexLiterals"),
-        .enableUpcomingFeature("DisableOutwardActorInference")
-    ]
-}

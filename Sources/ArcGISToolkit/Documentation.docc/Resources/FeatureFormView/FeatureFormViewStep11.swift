@@ -35,7 +35,7 @@ extension FeatureFormExampleView {
         )
             .first(where: { result in
                 if let feature = result.geoElements.first as? ArcGISFeature,
-                   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
+                   feature.featureFormDefinition != nil {
                     return true
                 } else {
                     return false
@@ -172,7 +172,7 @@ class Model: ObservableObject {
         do {
             if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
                 let featureTableEditResults = try await database.applyEdits()
-                resultErrors = featureTableEditResults.flatMap { $0.editResults.errors }
+                resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
             } else {
                 let featureEditResults = try await table.applyEdits()
                 resultErrors = featureEditResults.errors

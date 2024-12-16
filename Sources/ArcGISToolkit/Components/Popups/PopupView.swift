@@ -51,12 +51,10 @@ import ArcGIS
 /// and refer to
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 /// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
-@MainActor
-@preconcurrency
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
-    /// - Parameters
-    ///     popup: The popup to display.
+    /// - Parameters:
+    ///   - popup: The popup to display.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = popup
@@ -69,35 +67,47 @@ public struct PopupView: View {
     /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the initializer,
     /// so that the the "close" button can close the view.
-    private var showCloseButton = false
+    var showCloseButton = false
+    
+    /// A Boolean value indicating whether the deprecated `PopupView.showCloseButton(_:)`
+    /// modifier is applied.
+    ///
+    /// Once the modifier is removed this property can be removed and the presence or lack of a value for
+    /// `isPresented` should be the sole criteria to show or hide the close button.
+    var showCloseButtonDeprecatedModifierIsApplied = false
+    
+    /// The visibility of the popup header.
+    var headerVisibility: Visibility = .automatic
     
     /// The result of evaluating the popup expressions.
     @State private var evaluation: Evaluation?
-
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
     
     public var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                if !popup.title.isEmpty {
-                    Text(popup.title)
+            if headerVisibility != .hidden {
+                HStack {
+                    if !popup.title.isEmpty {
+                        Text(popup.title)
+                            .font(.title)
+                            .fontWeight(.bold)
+                    }
+                    Spacer()
+                    if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
+                        || (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
+                        XButton(.dismiss) {
+                            isPresented?.wrappedValue = false
+                        }
+#if !os(visionOS)
                         .font(.title)
-                        .fontWeight(.bold)
+                        .padding([.top, .bottom, .trailing], 4)
+#endif
+                    }
                 }
-                Spacer()
-                if showCloseButton {
-                    Button(action: {
-                        isPresented?.wrappedValue = false
-                    }, label: {
-                        Image(systemName: "xmark.circle")
-                            .foregroundColor(.secondary)
-                            .padding([.top, .bottom, .trailing], 4)
-                    })
-                    .buttonStyle(.plain)
-                }
+                Divider()
             }
-            Divider()
             Group {
                 if let evaluation {
                     if let error = evaluation.error {
@@ -199,19 +209,5 @@ extension PopupView {
             self.elements = elements
             self.error = error
         }
-    }
-}
-
-extension PopupView {
-    /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
-    /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
-    /// initializer, so that the the "close" button can close the view.
-    /// Defaults to `false`.
-    /// - Parameter newShowCloseButton: The new value.
-    /// - Returns: A new `PopupView`.
-    public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
-        var copy = self
-        copy.showCloseButton = newShowCloseButton
-        return copy
     }
 }
