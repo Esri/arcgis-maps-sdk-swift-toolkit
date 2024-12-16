@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -102,6 +102,7 @@
 				7552A7522A573CBB0023DA5A /* Test Runner */,
 				7552A76A2A573DFB0023DA5A /* UI Tests */,
 				7552A7512A573CBB0023DA5A /* Products */,
+				8A836B072C7D4335004EC961 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -192,6 +193,13 @@
 			path = "Test Plans";
 			sourceTree = "<group>";
 		};
+		8A836B072C7D4335004EC961 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -229,6 +237,8 @@
 				7552A7702A573DFB0023DA5A /* PBXTargetDependency */,
 			);
 			name = UITests;
+			packageProductDependencies = (
+			);
 			productName = UITests;
 			productReference = 7552A7692A573DFB0023DA5A /* UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -241,7 +251,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					7552A74F2A573CBB0023DA5A = {
 						CreatedOnToolsVersion = 14.0;
@@ -253,7 +263,6 @@
 				};
 			};
 			buildConfigurationList = 7552A74B2A573CBB0023DA5A /* Build configuration list for PBXProject "Test Runner" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -261,6 +270,9 @@
 				Base,
 			);
 			mainGroup = 7552A7472A573CBB0023DA5A;
+			packageReferences = (
+			);
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 7552A7512A573CBB0023DA5A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -397,6 +409,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -452,6 +465,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -479,7 +493,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.5.0;
+				MARKETING_VERSION = 200.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -487,7 +501,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
@@ -515,7 +529,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.5.0;
+				MARKETING_VERSION = 200.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -523,7 +537,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
@@ -541,7 +555,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Test Runner";
 			};
@@ -560,7 +574,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Test Runner";
 			};

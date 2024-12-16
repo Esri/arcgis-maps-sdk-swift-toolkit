@@ -16,6 +16,7 @@ import ArcGIS
 import UIKit
 
 /// A starting point of a utility network trace.
+@available(visionOS, unavailable)
 public struct UtilityNetworkTraceStartingPoint: Sendable {
     /// The geo element to be used as a starting point.
     var geoElement: GeoElement
@@ -28,6 +29,9 @@ public struct UtilityNetworkTraceStartingPoint: Sendable {
     
     /// The symbol of the starting point as shown on the map.
     var image: UIImage?
+    
+    /// A Boolean value indicating whether the starting point was added externally (programmatically).
+    var isExternalStartingPoint = false
     
     /// A point on the map indicated as the location of this starting point. This can be used to indicate a
     /// specific location along an edge element.
@@ -46,6 +50,7 @@ public struct UtilityNetworkTraceStartingPoint: Sendable {
     }
 }
 
+@available(visionOS, unavailable)
 extension UtilityNetworkTraceStartingPoint: Hashable {
     public static func == (lhs: UtilityNetworkTraceStartingPoint, rhs: UtilityNetworkTraceStartingPoint) -> Bool {
         lhs.id == rhs.id

@@ -74,7 +74,7 @@ struct SwitchInput: View {
                     fallbackToComboBox = true
                 }
             }
-            .onChange(of: isOn) { isOn in
+            .onChange(isOn) { isOn in
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
             }

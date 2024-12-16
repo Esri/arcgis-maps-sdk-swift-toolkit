@@ -15,7 +15,6 @@
 import ArcGIS
 import SwiftUI
 
-@MainActor
 extension View {
     /// Modifier for watching ``FeatureForm.titleChanged`` events.
     /// - Parameters:

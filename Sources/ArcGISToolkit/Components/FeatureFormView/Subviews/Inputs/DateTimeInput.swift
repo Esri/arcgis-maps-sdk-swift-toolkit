@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view for date/time input.
-@MainActor
 struct DateTimeInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -53,10 +52,10 @@ struct DateTimeInput: View {
     
     var body: some View {
         dateEditor
-            .onChange(of: model.focusedElement) { focusedElement in
+            .onChange(model.focusedElement) { focusedElement in
                 isEditing = focusedElement == element
             }
-            .onChange(of: date) { date in
+            .onChange(date) { date in
                 element.updateValue(date)
                 formattedValue = element.formattedValue
                 model.evaluateExpressions()
@@ -102,10 +101,11 @@ struct DateTimeInput: View {
             } else {
                 if date == nil {
                     Image(systemName: "calendar")
+                        .font(.title2)
                         .accessibilityIdentifier("\(element.label) Calendar Image")
                         .foregroundColor(.secondary)
                 } else if !isRequired {
-                    ClearButton {
+                    XButton(.clear) {
                         model.focusedElement = element
                         defer { model.focusedElement = nil }
                         date = nil

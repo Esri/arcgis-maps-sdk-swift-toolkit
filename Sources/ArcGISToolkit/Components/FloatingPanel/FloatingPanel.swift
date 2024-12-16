@@ -16,7 +16,6 @@ import SwiftUI
 
 /// A floating panel is a view that overlays a view and supplies view-related
 /// content. For more information see <doc:FloatingPanel>.
-@MainActor
 struct FloatingPanel<Content>: View where Content: View {
     /// The height of a geo-view's attribution bar.
     ///
@@ -25,7 +24,7 @@ struct FloatingPanel<Content>: View where Content: View {
     /// attribution bar.
     let attributionBarHeight: CGFloat
     /// The background color of the floating panel.
-    let backgroundColor: Color
+    let backgroundColor: Color?
     /// A binding to the currently selected detent.
     @Binding var selectedDetent: FloatingPanelDetent
     /// A binding to a Boolean value that determines whether the view is presented.
@@ -73,11 +72,16 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             // Set frame width to infinity to prevent horizontal shrink on dismissal.
             .frame(maxWidth: .infinity)
+#if os(visionOS)
+            .background(.regularMaterial)
+            .compositingGroup()
+#else
             .background(backgroundColor)
+#endif
             .clipShape(
                 RoundedCorners(
                     corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
-                    radius: 10
+                    radius: .cornerRadius
                 )
             )
             .shadow(radius: 10)
@@ -92,14 +96,14 @@ struct FloatingPanel<Content>: View where Content: View {
                 maximumHeight = geometryProxy.size.height
                 updateHeight()
             }
-            .onChange(of: geometryProxy.size.height) { height in
+            .onChange(geometryProxy.size.height) { height in
                 maximumHeight = height
                 updateHeight()
             }
-            .onChange(of: isPresented) { _ in
+            .onChange(isPresented) { _ in
                 updateHeight()
             }
-            .onChange(of: selectedDetent) { _ in
+            .onChange(selectedDetent) { _ in
                 updateHeight()
             }
             .onKeyboardStateChanged { state, height in
@@ -207,6 +211,7 @@ private struct Handle: View {
         RoundedRectangle(cornerRadius: 4.0)
             .foregroundColor(color)
             .frame(width: 100, height: 8.0)
+            .hoverEffect()
     }
 }
 
@@ -218,6 +223,15 @@ private extension CGFloat {
     static let handleFrameHeight: CGFloat = 30
     
     static let minHeight: CGFloat = 66
+    
+    /// The corner radius of the floating panel.
+    static let cornerRadius: CGFloat = {
+#if os(visionOS)
+        32
+#else
+        10
+#endif
+    }()
 }
 
 private extension Color {

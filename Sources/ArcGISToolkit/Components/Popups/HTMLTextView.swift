@@ -144,7 +144,7 @@ extension HTMLTextView.Coordinator: WKNavigationDelegate {
     // `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
     // where the height calculation happens.
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        Task.detached { @MainActor [onHeightChanged] in
+        Task { @MainActor [onHeightChanged] in
             guard let readyState = try? await webView.evaluateJavaScript("document.readyState") as? String,
                   readyState == "complete" else {
                 return

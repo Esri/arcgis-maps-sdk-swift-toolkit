@@ -49,8 +49,6 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [ScalebarExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) 
 /// in the project. To learn more about using the `Scalebar` see the <doc:ScalebarTutorial>.
-@MainActor
-@preconcurrency
 public struct Scalebar: View {
     // - MARK: Internal/Private vars
     
@@ -175,9 +173,9 @@ public struct Scalebar: View {
             }
         }
         .opacity(opacity)
-        .onChange(of: spatialReference) { viewModel.update($0) }
-        .onChange(of: unitsPerPoint) { viewModel.update($0) }
-        .onChange(of: viewpoint) {
+        .onChange(spatialReference) { viewModel.update($0) }
+        .onChange(unitsPerPoint) { viewModel.update($0) }
+        .onChange(viewpoint) {
             viewModel.update($0)
             viewModel.updateScale()
             if settings.autoHide {
