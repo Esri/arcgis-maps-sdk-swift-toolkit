@@ -12,7 +12,7 @@
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add important stateful properties. A map containing at least one utility network is
-***REMOVED******REMOVED******REMOVED******REMOVED***required. A `Point` and `CGPoint` will help allow the component to create trace
+***REMOVED******REMOVED******REMOVED******REMOVED***required. A `Point` will help allow the component to create trace
 ***REMOVED******REMOVED******REMOVED******REMOVED***starting points at tap locations. A `GraphicsOverlay` will allow the component to
 ***REMOVED******REMOVED******REMOVED******REMOVED***visually display trace results.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep1.swift)
@@ -24,19 +24,14 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Track viewpoint changes.
+***REMOVED******REMOVED******REMOVED******REMOVED***Track any tap gestures on the map view. When the user is adding starting points,
+***REMOVED******REMOVED******REMOVED******REMOVED***the trace tool needs to know the tap location to detect the desired network element.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Track any tap gestures on the map view. When the user is adding starting points,
-***REMOVED******REMOVED******REMOVED******REMOVED***the trace tool needs to know the tap locations to detect the desired network element.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4.swift)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Overlay the `UtilityNetworkTrace` on the `MapView` with a `FloatingPanel`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep5.swift)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

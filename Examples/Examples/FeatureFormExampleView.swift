@@ -52,9 +52,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: identifyScreenPoint) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(FeatureForm(feature: feature, definition: formDefinition))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(FeatureForm(feature: feature))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
@@ -139,23 +138,18 @@ struct FeatureFormExampleView: View {
 extension FeatureFormExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
-***REMOVED******REMOVED***/ - Returns: The first identified feature in a layer with
-***REMOVED******REMOVED***/ a feature form definition.
+***REMOVED******REMOVED***/ - Returns: The first identified feature in a layer.
 ***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
 ***REMOVED******REMOVED***guard let identifyScreenPoint else { return nil ***REMOVED***
-***REMOVED******REMOVED***let identifyResult = try? await proxy.identifyLayers(
+***REMOVED******REMOVED***let identifyLayerResults = try? await proxy.identifyLayers(
 ***REMOVED******REMOVED******REMOVED***screenPoint: identifyScreenPoint,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.first(where: { result in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = result.geoElements.first as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED******REMOVED***   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***return identifyResult?.geoElements.first as? ArcGISFeature
+***REMOVED******REMOVED***return identifyLayerResults?.compactMap { result in
+***REMOVED******REMOVED******REMOVED***result.geoElements.compactMap { element in
+***REMOVED******REMOVED******REMOVED******REMOVED***element as? ArcGISFeature
+***REMOVED******REMOVED***.first
+***REMOVED***.first
 ***REMOVED***
 ***REMOVED***
 
@@ -317,7 +311,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureTableEditResults = try await database.applyEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureTableEditResults.flatMap { $0.editResults.errors ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureEditResults = try await table.applyEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureEditResults.errors

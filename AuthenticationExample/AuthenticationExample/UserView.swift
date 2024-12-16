@@ -65,7 +65,7 @@ struct UserView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension PortalUser.Role: CustomStringConvertible {
+extension PortalUser.Role: @retroactive CustomStringConvertible {
 ***REMOVED***public var description: String {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .user:

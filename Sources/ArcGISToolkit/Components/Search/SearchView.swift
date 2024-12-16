@@ -60,8 +60,7 @@
 ***REMOVED***/ To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [SearchExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `SearchView` see the <doc:SearchViewTutorial>.
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -235,6 +234,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -243,22 +243,22 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***onQueryChangedAction?(viewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.selectedResult) { _ in
+***REMOVED******REMOVED***.onChange(viewModel.selectedResult) { _ in
 ***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.currentSuggestion) { _ in
+***REMOVED******REMOVED***.onChange(viewModel.currentSuggestion) { _ in
 ***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: geoViewExtent) { _ in
+***REMOVED******REMOVED***.onChange(geoViewExtent) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: isGeoViewNavigating) { _ in
+***REMOVED******REMOVED***.onChange(isGeoViewNavigating) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.isGeoViewNavigating = isGeoViewNavigating
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: queryCenter) { _ in
+***REMOVED******REMOVED***.onChange(queryCenter) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.queryCenter = queryCenter
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: queryArea) { _ in
+***REMOVED******REMOVED***.onChange(queryArea) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.queryArea = queryArea
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
@@ -270,6 +270,7 @@ public struct SearchView: View {
 ***REMOVED***
 
 ***REMOVED*** MARK: Modifiers
+@available(visionOS, unavailable)
 extension SearchView {
 ***REMOVED******REMOVED***/ Specifies whether a built-in result view will be shown. If `false`, the result display/selection
 ***REMOVED******REMOVED***/ list is not shown. Set to `false` if you want to define a custom result list. You might use a
@@ -305,7 +306,7 @@ extension SearchView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the current query.
-***REMOVED******REMOVED***/ - Parameter newQueryString: The new value.
+***REMOVED******REMOVED***/ - Parameter newQuery: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func currentQuery(_ newQuery: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
@@ -316,7 +317,6 @@ extension SearchView {
 ***REMOVED******REMOVED***/ Sets a closure to perform when the query changes.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - action: The closure to performed when the query has changed.
-***REMOVED******REMOVED***/   - query: The new query.
 ***REMOVED***public func onQueryChanged(perform action: @escaping (_ query: String) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.onQueryChangedAction = action
@@ -380,6 +380,7 @@ extension SearchView {
 ***REMOVED***
 
 ***REMOVED***/ A View displaying the list of search results.
+@available(visionOS, unavailable)
 struct SearchResultList: View {
 ***REMOVED******REMOVED***/ The array of search results to display.
 ***REMOVED***var searchResults: [SearchResult]
@@ -412,6 +413,7 @@ struct SearchResultList: View {
 ***REMOVED***
 
 ***REMOVED***/ A View displaying the list of search suggestion results.
+@available(visionOS, unavailable)
 struct SearchSuggestionList: View {
 ***REMOVED******REMOVED***/ The array of suggestion results to display.
 ***REMOVED***var suggestionResults: [SearchSuggestion]
@@ -477,6 +479,7 @@ struct ResultRow: View {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 extension ResultRow {
 ***REMOVED******REMOVED***/ Creates a `ResultRow` from a search suggestion.
 ***REMOVED******REMOVED***/ - Parameter searchSuggestion: The search suggestion displayed in the row.

@@ -18,7 +18,6 @@
 ***REMOVED***/ A view for numerical value input.
 ***REMOVED***/
 ***REMOVED***/ This is the preferable input type for short lists of coded value domains.
-@MainActor
 struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -96,7 +95,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|| (input.noValueOption == .hide && !element.formattedValue.isEmpty)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
+***REMOVED******REMOVED******REMOVED***.onChange(selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***

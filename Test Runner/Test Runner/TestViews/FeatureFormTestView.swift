@@ -16,7 +16,6 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-@MainActor
 struct FeatureFormTestView: View {
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
@@ -51,7 +50,7 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - map: The map under test.
 ***REMOVED******REMOVED***/   - testCase: The test definition.
-***REMOVED***@MainActor func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
+***REMOVED***func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
 ***REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
@@ -64,9 +63,8 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await feature.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureLayer?.selectFeature(feature)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature, definition: formDefinition)
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
@@ -144,6 +142,7 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_3_4", objectID: 2, portalID: .comboBoxMapID),
 ***REMOVED******REMOVED***.init("testCase_3_5", objectID: 2, portalID: .comboBoxMapID),
 ***REMOVED******REMOVED***.init("testCase_3_6", objectID: 2, portalID: .comboBoxMapID),
+***REMOVED******REMOVED***.init("testCase_3_7", objectID: 2, portalID: .comboBoxMapID),
 ***REMOVED******REMOVED***.init("testCase_4_1", objectID: 1, portalID: .radioButtonMapID),
 ***REMOVED******REMOVED***.init("testCase_4_2", objectID: 1, portalID: .radioButtonMapID),
 ***REMOVED******REMOVED***.init("testCase_5_1", objectID: 1, portalID: .switchMapID),
@@ -153,7 +152,10 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_6_2", objectID: 2, portalID: .groupElementMapID),
 ***REMOVED******REMOVED***.init("testCase_7_1", objectID: 2, portalID: .readOnlyMapID),
 ***REMOVED******REMOVED***.init("testCase_8_1", objectID: 1, portalID: .attachmentMapID),
-***REMOVED******REMOVED***.init("testCase_9_1", objectID: 1, portalID: .testCase9)
+***REMOVED******REMOVED***.init("testCase_9_1", objectID: 1, portalID: .testCase9),
+***REMOVED******REMOVED***.init("testCase_10_1", objectID: 1, portalID: .testCase10),
+***REMOVED******REMOVED***.init("testCase_10_2", objectID: 1, portalID: .testCase10),
+***REMOVED******REMOVED***.init("testCase_11_1", objectID: 2, portalID: .testCase11),
 ***REMOVED***]***REMOVED***
 ***REMOVED***
 
@@ -168,4 +170,6 @@ private extension String {
 ***REMOVED***static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
 ***REMOVED***static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
 ***REMOVED***static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
+***REMOVED***static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
+***REMOVED***static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
 ***REMOVED***

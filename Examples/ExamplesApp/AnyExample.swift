@@ -16,9 +16,9 @@
 
 struct AnyExample<Content: View> {
 ***REMOVED***var name: String
-***REMOVED***var content: @MainActor () -> Content
+***REMOVED***var content: () -> Content
 ***REMOVED***
-***REMOVED***init(_ name: String, content: @autoclosure @escaping @MainActor () -> Content) {
+***REMOVED***init(_ name: String, content: @autoclosure @escaping () -> Content) {
 ***REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***

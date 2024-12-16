@@ -15,7 +15,6 @@
 ***REMOVED***
 ***REMOVED***
 
-@MainActor
 extension View {
 ***REMOVED******REMOVED***/ Modifier for watching ``FeatureForm.titleChanged`` events.
 ***REMOVED******REMOVED***/ - Parameters:

@@ -17,11 +17,13 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality fly over experience.
-@MainActor
-@preconcurrency
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 public struct FlyoverSceneView: View {
+#if os(iOS)
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@StateObject private var session = ObservableARSession()
+#endif
 ***REMOVED******REMOVED***/ The initial camera.
 ***REMOVED***let initialCamera: Camera
 ***REMOVED******REMOVED***/ The translation factor.
@@ -134,6 +136,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = ARPositionalTrackingConfiguration()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldOrientToCompass {
@@ -142,7 +145,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.start(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear { session.pause() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: session.currentFrame) { frame in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(session.currentFrame) { frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let frame, let interfaceOrientation else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
@@ -150,10 +153,11 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: initialCamera) { initialCamera in
+#endif
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(initialCamera) { initialCamera in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = initialCamera
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: translationFactor) { translationFactor in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(translationFactor) { translationFactor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
@@ -161,6 +165,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED***
 ***REMOVED***
 
+#if os(iOS)
 ***REMOVED***/ An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
 ***REMOVED******REMOVED***/ The backing AR session.
@@ -190,3 +195,4 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
 ***REMOVED******REMOVED***currentFrame = frame
 ***REMOVED***
 ***REMOVED***
+#endif

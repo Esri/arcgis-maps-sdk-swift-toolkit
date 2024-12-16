@@ -12,10 +12,9 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-@testable ***REMOVED***Toolkit
-***REMOVED***
 import XCTest
 
+@MainActor
 final class RepresentedUITextViewTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let app = XCUIApplication()

@@ -62,8 +62,7 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [FloorFilterExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
-@MainActor
-@preconcurrency
+@available(visionOS, unavailable)
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -103,6 +102,11 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
 ***REMOVED***@State private var siteAndFacilitySelectorIsPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value controlling whether a site is automatically selected upon load completion.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This property is only relevant when the FloorManager contains a single site.
+***REMOVED***private var automaticSingleSiteSelectionDisabled: Bool = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
 ***REMOVED***private var selection: Binding<FloorFilterSelection?>?
 ***REMOVED***
@@ -117,20 +121,26 @@ public struct FloorFilter: View {
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
+***REMOVED***@ViewBuilder
 ***REMOVED***private var sitesAndFacilitiesButton: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Floor Filter button")
+***REMOVED******REMOVED***if [.notLoaded, .loading].contains(viewModel.loadStatus) {
+***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(viewModel.isLoading ? .zero : 1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED*** else if viewModel.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Floor Filter button")
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -208,8 +218,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
-***REMOVED******REMOVED***.disabled(viewModel.isLoading)
-***REMOVED******REMOVED***.onChange(of: selection?.wrappedValue) { newValue in
+***REMOVED******REMOVED***.disabled(viewModel.loadStatus != .loaded)
+***REMOVED******REMOVED***.onChange(selection?.wrappedValue) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the view model triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard newValue != viewModel.selection else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch newValue {
@@ -219,12 +229,21 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***case .none: viewModel.clearSelection()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.selection) { newValue in
+***REMOVED******REMOVED***.onChange(viewModel.loadStatus) { newLoadStatus in
+***REMOVED******REMOVED******REMOVED***if newLoadStatus == .loaded,
+***REMOVED******REMOVED******REMOVED***   !automaticSingleSiteSelectionDisabled,
+***REMOVED******REMOVED******REMOVED***   viewModel.sites.count == 1,
+***REMOVED******REMOVED******REMOVED***   let firstSite = viewModel.sites.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(firstSite, zoomTo: true)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(viewModel.selection) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the user triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { newViewpoint in
+***REMOVED******REMOVED***.onChange(viewpoint.wrappedValue) { newViewpoint in
 ***REMOVED******REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let newViewpoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged(newViewpoint)
@@ -232,10 +251,29 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+@available(visionOS, unavailable)
+public extension FloorFilter {
+***REMOVED******REMOVED***/ Adds a condition that controls whether a site in the Floor Manager
+***REMOVED******REMOVED***/ is automatically selected upon loading.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Automatic selection only occurs when the Floor Manager contains a
+***REMOVED******REMOVED***/ single site.
+***REMOVED******REMOVED***/ - Parameter disabled: A Boolean value that determines whether
+***REMOVED******REMOVED***/ automatic single site selection is disabled..
+***REMOVED******REMOVED***/ - Returns: A view that conditionally disables automatic single site
+***REMOVED******REMOVED***/ selection.
+***REMOVED******REMOVED***/ - Since: 200.7
+***REMOVED***func automaticSingleSiteSelectionDisabled(_ disabled: Bool = true) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.automaticSingleSiteSelectionDisabled = disabled
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The width of the level selector.
 ***REMOVED******REMOVED***/ - Parameter width: The new width for the level selector.
 ***REMOVED******REMOVED***/ - Returns: The `FloorFilter`.
-***REMOVED***public func levelSelectorWidth(_ width: CGFloat) -> Self {
+***REMOVED***func levelSelectorWidth(_ width: CGFloat) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.levelSelectorWidth = width
 ***REMOVED******REMOVED***return copy

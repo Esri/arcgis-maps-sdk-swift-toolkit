@@ -18,7 +18,6 @@
 ***REMOVED***/ A view that loads a `LoadableImage` and displays it.
 ***REMOVED***/ While the image is loading a progress view is displayed.
 ***REMOVED***/ If there is an error displaying the image a red exclamation circle is displayed.
-@MainActor
 struct LoadableImageView: View {
 ***REMOVED******REMOVED***/ The loadable image to display.
 ***REMOVED***let loadableImage: LoadableImage

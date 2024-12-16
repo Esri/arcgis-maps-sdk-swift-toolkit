@@ -15,10 +15,11 @@
 import ARKit
 ***REMOVED***
 ***REMOVED***
+import CoreLocation
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
-@MainActor
-@preconcurrency
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The clipping distance of the scene view.
 ***REMOVED***let clippingDistance: Double?
@@ -30,8 +31,10 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***var calibrationButtonAlignment: Alignment = .bottom
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
 ***REMOVED***var calibrationViewIsHidden = false
+#if os(iOS)
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
+#endif
 ***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the geo-tracking configuration is available.
@@ -49,10 +52,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The closure to perform when the `isCalibrating` property has changed.
 ***REMOVED***private var onCalibratingChangedAction: ((Bool) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
+#if os(iOS)
 ***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
 ***REMOVED***private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
-***REMOVED***
+#endif
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
@@ -75,6 +79,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED***switch trackingMode {
 ***REMOVED******REMOVED******REMOVED***case .preferGeoTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** By default we try the geo-tracking configuration. If it is not available at
@@ -89,11 +94,12 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***case .worldTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED***worldTrackingSceneView
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***calibrationViewModel.cameraController.clippingDistance = clippingDistance
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: clippingDistance) { newClippingDistance in
+***REMOVED******REMOVED***.onChange(clippingDistance) { newClippingDistance in
 ***REMOVED******REMOVED******REMOVED***calibrationViewModel.cameraController.clippingDistance = newClippingDistance
 ***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
@@ -117,6 +123,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***geoTrackingIsAvailable = try await checkGeoTrackingAvailability()
@@ -124,6 +131,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
 ***REMOVED***
+#endif
 ***REMOVED******REMOVED***.ignoresSafeArea(.container, edges: [.horizontal, .bottom])
 ***REMOVED******REMOVED***.overlay(alignment: calibrationButtonAlignment) {
 ***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden && !isCalibrating {
@@ -149,11 +157,12 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.animation(.default.speed(0.25), value: initialCameraIsSet)
-***REMOVED******REMOVED***.onChange(of: isCalibrating) { value in
+***REMOVED******REMOVED***.onChange(isCalibrating) { value in
 ***REMOVED******REMOVED******REMOVED***onCalibratingChangedAction?(value)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***/ A world scale geo-tracking scene view.
 ***REMOVED***@ViewBuilder private var geoTrackingSceneView: some View {
 ***REMOVED******REMOVED***GeoTrackingSceneView(
@@ -203,6 +212,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
 ***REMOVED******REMOVED***onSingleTapGestureAction?(tapPoint, scenePoint)
 ***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experience.
 ***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
@@ -232,7 +242,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***view.onCalibratingChangedAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
-***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***/ Sets a closure to perform when the camera tracking state changes.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the camera tracking state has changed.
 ***REMOVED***public func onCameraTrackingStateChanged(
@@ -256,6 +266,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***view.onGeoTrackingStatusChangedAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED******REMOVED***/ Checks if GPS is providing the most accurate location and heading.
 ***REMOVED******REMOVED***/ - Parameter locationManager: The location manager to determine the accuracy authorization.
@@ -273,6 +284,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return headingAvailable && fullAccuracy
 ***REMOVED***
 ***REMOVED***
+#if os(iOS)
 ***REMOVED******REMOVED***/ Checks if the hardware and the current location supports geo-tracking.
 ***REMOVED******REMOVED***/ - Returns: A Boolean value that indicates whether geo-tracking is available.
 ***REMOVED***private func checkGeoTrackingAvailability() async throws -> Bool {
@@ -282,8 +294,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***return try await ARGeoTrackingConfiguration.checkAvailability()
 ***REMOVED***
+#endif
 ***REMOVED***
 
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ The type of tracking configuration used by the view.
 ***REMOVED***enum TrackingMode {
@@ -296,6 +311,7 @@ public extension WorldScaleSceneView {
 ***REMOVED***
 ***REMOVED***
 
+#if os(iOS)
 private extension ARGeoTrackingConfiguration {
 ***REMOVED******REMOVED***/ Determines the availability of geo tracking at the current location.
 ***REMOVED******REMOVED***/ - Returns: A Boolean that indicates whether geo-tracking is available at the current
@@ -313,7 +329,10 @@ private extension ARGeoTrackingConfiguration {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+#endif
 
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 private extension WorldScaleSceneView {
 ***REMOVED***var calibrateLabel: String {
 ***REMOVED******REMOVED***String(
@@ -326,7 +345,10 @@ private extension WorldScaleSceneView {
 ***REMOVED***
 ***REMOVED***
 
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 public extension WorldScaleSceneView {
+#if os(iOS)
 ***REMOVED******REMOVED***/ Determines the scene point for the given screen point.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ If the raycast fails due to certain reasons, this method returns `nil`.
@@ -340,6 +362,7 @@ public extension WorldScaleSceneView {
 ***REMOVED******REMOVED******REMOVED*** Create a camera from transformationMatrix and return its location.
 ***REMOVED******REMOVED***return Camera(transformationMatrix: scenePointMatrix).location
 ***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
 ***REMOVED***func onSingleTapGesture(

@@ -16,6 +16,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+@available(macCatalyst, unavailable)
 struct FlyoverExampleView: View {
 ***REMOVED***@State private var scene = Scene(
 ***REMOVED******REMOVED***item: PortalItem(
@@ -23,7 +24,7 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED******REMOVED***id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
 ***REMOVED******REMOVED***)
 ***REMOVED***)
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
@@ -32,7 +33,7 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) identify result(s).")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
