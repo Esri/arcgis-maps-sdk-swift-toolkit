@@ -1,6 +1,9 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
+/* A label indicating the number of results of a utility network trace. */
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "A certificate is required to access content on %@.";
@@ -12,7 +15,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Advanced Options";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "All sites";
+"All Sites" = "All Sites";
+
+/* A message describing the outcome of clearing all starting points. */
+"All starting points will be deleted." = "All starting points will be deleted.";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
@@ -66,7 +72,7 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Choose From Library";
 
-/* The label of a button that clears a form's input. */
+/* E.g. Remove text from a text field. */
 "Clear" = "Clear";
 
 /* A directive to clear all of the completed utility network traces. */
@@ -101,6 +107,12 @@ east, etc.). */
 
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Delete";
+
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "Delete All Starting Points";
+
+/* E.g. Close/hide a sheet or pop-up. */
+"Dismiss" = "Dismiss";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Done";
@@ -412,6 +424,9 @@ to be imported as an attachment. */
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
 
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "Unsupported Value";
+
 /* A label in reference to a credential username. */
 "Username" = "Username";
 
@@ -444,6 +459,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Value must not be empty";
+
+/* E.g. Open a hyperlink. */
+"View" = "View";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

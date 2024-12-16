@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if os(iOS)
 import ARKit
 ***REMOVED***
 
@@ -119,3 +120,4 @@ extension ARCoachingOverlay {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+#endif

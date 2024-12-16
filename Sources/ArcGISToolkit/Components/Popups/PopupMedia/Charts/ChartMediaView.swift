@@ -61,6 +61,7 @@ struct ChartMediaView: View {
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***isShowingDetailView = true
 ***REMOVED***
+***REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED***.sheet(isPresented: $isShowingDetailView) {
 ***REMOVED******REMOVED******REMOVED***MediaDetailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,

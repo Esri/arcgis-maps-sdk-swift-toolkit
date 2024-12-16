@@ -12,10 +12,12 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+#if !os(visionOS)
 import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
 
+@MainActor
 final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSearchResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
@@ -68,3 +70,4 @@ private extension Envelope {
 ***REMOVED******REMOVED***yRange: 7536778.456812576...7559866.706991681
 ***REMOVED***)
 ***REMOVED***
+#endif

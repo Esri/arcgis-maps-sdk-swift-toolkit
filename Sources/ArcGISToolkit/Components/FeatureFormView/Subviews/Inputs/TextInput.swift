@@ -16,7 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for text input.
-@MainActor
+@available(visionOS, unavailable)
 struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -27,8 +27,20 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the full screen text input is presented.
 ***REMOVED***@State private var fullScreenTextInputIsPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the code scanner is presented.
+***REMOVED***@State private var scannerIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the device camera is accessible for scanning.
+***REMOVED***private let cameraIsDisabled: Bool = {
+#if targetEnvironment(simulator)
+***REMOVED******REMOVED***return true
+#else
+***REMOVED******REMOVED***return false
+#endif
+***REMOVED***()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
@@ -38,28 +50,30 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED***init(element: FieldFormElement) {
 ***REMOVED******REMOVED***precondition(
-***REMOVED******REMOVED******REMOVED***element.input is TextAreaFormInput || element.input is TextBoxFormInput,
-***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
+***REMOVED******REMOVED******REMOVED***element.input is TextAreaFormInput
+***REMOVED******REMOVED******REMOVED***|| element.input is TextBoxFormInput
+***REMOVED******REMOVED******REMOVED***|| element.input is BarcodeScannerFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
 ***REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: text) { text in
+***REMOVED******REMOVED******REMOVED***.onChange(text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
@@ -69,22 +83,26 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***CodeScanner(code: $text, isPresented: $scannerIsPresented)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
-***REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input Preview")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element, model: model)
@@ -93,11 +111,12 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
 #endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: 100, alignment: .top)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: .horizontal
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
@@ -106,6 +125,7 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+#if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
@@ -114,9 +134,12 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty,
+***REMOVED******REMOVED******REMOVED***   !isBarcodeScanner,
+***REMOVED******REMOVED******REMOVED***   !element.isMultiline {
+***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** instantaneous focus to enable validation.
@@ -127,6 +150,19 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if isBarcodeScanner {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(cameraIsDisabled)
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Scan Button")
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED***
@@ -134,7 +170,19 @@ private extension TextInput {
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
 ***REMOVED***var keyboardType: UIKeyboardType {
 ***REMOVED******REMOVED***guard let fieldType = element.fieldType else { return .default ***REMOVED***
-***REMOVED******REMOVED***return fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return if fieldType.isNumeric {
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED*** The 'positiveNegativeButton' doesn't show on visionOS
+***REMOVED******REMOVED******REMOVED******REMOVED*** so we need to show this keyboard so the user can type
+***REMOVED******REMOVED******REMOVED******REMOVED*** a negative number.
+***REMOVED******REMOVED******REMOVED***.numbersAndPunctuation
+#else
+***REMOVED******REMOVED******REMOVED***if fieldType.isFloatingPoint { .decimalPad ***REMOVED*** else { .numberPad ***REMOVED***
+#endif
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***.default
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The button that allows a user to switch the numeric value between positive and negative.
@@ -153,6 +201,7 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
+@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
 ***REMOVED******REMOVED***/
@@ -199,29 +248,10 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
-private extension FieldFormElement {
-***REMOVED******REMOVED***/ Attempts to convert the value to a type suitable for the element's field type and then update
-***REMOVED******REMOVED***/ the element with the converted value.
-***REMOVED***func convertAndUpdateValue(_ value: String) {
-***REMOVED******REMOVED***if fieldType == .text {
-***REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED*** else if let fieldType {
-***REMOVED******REMOVED******REMOVED***if fieldType.isNumeric && value.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
-***REMOVED******REMOVED*** else if fieldType == .int16, let value = Int16(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .int32, let value = Int32(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .int64, let value = Int64(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .float32, let value = Float32(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
-***REMOVED******REMOVED***
-***REMOVED***
+@available(visionOS, unavailable)
+private extension TextInput {
+***REMOVED***private var isBarcodeScanner: Bool {
+***REMOVED******REMOVED***element.input is BarcodeScannerFormInput
 ***REMOVED***
 ***REMOVED***
 

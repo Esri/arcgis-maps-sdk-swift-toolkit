@@ -72,8 +72,16 @@ struct FieldsPopupElementView: View {
 ***REMOVED******REMOVED***let formattedValue: String
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***if formattedValue.lowercased().starts(with: "http") {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(.init("[View](\(formattedValue))"))
+***REMOVED******REMOVED******REMOVED***if formattedValue.lowercased().starts(with: "http"),
+***REMOVED******REMOVED******REMOVED***   let url = URL(string: formattedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Link(destination: url) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"View",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "E.g. Open a hyperlink."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(formattedValue)
 ***REMOVED******REMOVED***
