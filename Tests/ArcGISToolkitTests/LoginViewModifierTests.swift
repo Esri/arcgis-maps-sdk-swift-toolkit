@@ -15,6 +15,7 @@
 import XCTest
 @testable import ArcGISToolkit
 
+@MainActor
 final class LoginViewModifierTests: XCTestCase {
     func testMemberwiseInit() {
         var signInCalled = false

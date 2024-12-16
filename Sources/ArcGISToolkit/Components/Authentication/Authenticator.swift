@@ -61,7 +61,7 @@ public final class Authenticator: ObservableObject {
     /// - Parameters:
     ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
     ///   encountering an untrusted host.
-    ///   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
+    ///   - oAuthUserConfigurations: The OAuth configurations that this authenticator can work with.
     public init(
         promptForUntrustedHosts: Bool = false,
         oAuthUserConfigurations: [OAuthUserConfiguration] = []

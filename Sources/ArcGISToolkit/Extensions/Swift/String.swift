@@ -24,6 +24,24 @@ extension String {
         )
     }
     
+    /// A localized string for the word "Clear".
+    static var clear: Self {
+        .init(
+            localized: "Clear",
+            bundle: .toolkitModule,
+            comment: "E.g. Remove text from a text field."
+        )
+    }
+    
+    /// A localized string for the word "Dismiss".
+    static var dismiss: Self {
+        .init(
+            localized: "Dismiss",
+            bundle: .toolkitModule,
+            comment: "E.g. Close/hide a sheet or pop-up."
+        )
+    }
+    
     /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
     static var emptyAttachmentDownloadErrorMessage: Self {
         .init(
