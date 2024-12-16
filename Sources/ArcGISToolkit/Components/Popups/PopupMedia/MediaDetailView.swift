@@ -57,6 +57,7 @@ struct MediaDetailView : View {
                             UIApplication.shared.open(linkURL)
                         }
                     }
+                    .hoverEffect()
                     if popupMedia.value?.linkURL != nil {
                         HStack {
                             Text(

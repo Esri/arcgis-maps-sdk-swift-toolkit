@@ -37,48 +37,35 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    /// Provides the ability to detect tap locations in the context of the screen.
-    @State private var screenPoint: CGPoint?
-    
-    /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
-    @State private var viewpoint: Viewpoint?
-    
     var body: some View {
         GeometryReader { geometryProxy in
             MapViewReader { mapViewProxy in
                 MapView(
                     map: map,
-                    viewpoint: viewpoint,
                     graphicsOverlays: [resultGraphicsOverlay]
                 )
                 .onAttributionBarHeightChanged {
                     attributionBarHeight = $0
                 }
-                .onSingleTapGesture { screenPoint, mapPoint in
-                    self.screenPoint = screenPoint
+                .onSingleTapGesture { _, mapPoint in
                     self.mapPoint = mapPoint
-                }
-                .onViewpointChanged(kind: .centerAndScale) {
-                    viewpoint = $0
                 }
                 .task {
                     let publicSample = try? await ArcGISCredential.publicSample
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .floatingPanel(
-                        attributionBarHeight: attributionBarHeight,
-                        backgroundColor: Color(uiColor: .systemGroupedBackground),
-                        selectedDetent: $activeDetent,
-                        horizontalAlignment: .trailing,
-                        isPresented: .constant(true)
+                    attributionBarHeight: attributionBarHeight,
+                    backgroundColor: Color(uiColor: .systemGroupedBackground),
+                    selectedDetent: $activeDetent,
+                    horizontalAlignment: .trailing,
+                    isPresented: .constant(true)
                 ) {
                     UtilityNetworkTrace(
                         graphicsOverlay: $resultGraphicsOverlay,
                         map: map,
                         mapPoint: $mapPoint,
-                        screenPoint: $screenPoint,
-                        mapViewProxy: mapViewProxy,
-                        viewpoint: $viewpoint
+                        mapViewProxy: mapViewProxy
                     )
                     .floatingPanelDetent($activeDetent)
                     // Manually account for a device's bottom safe area when using a Floating Panel.

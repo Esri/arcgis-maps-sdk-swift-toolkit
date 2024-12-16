@@ -16,7 +16,6 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-@MainActor
 struct BasemapGalleryTestView: View {
     @State private var map = Map(basemapStyle: .arcGISImagery)
     

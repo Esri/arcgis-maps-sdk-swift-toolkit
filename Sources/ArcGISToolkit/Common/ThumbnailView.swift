@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view displaying a thumbnail image for an attachment.
-@MainActor
 struct ThumbnailView: View  {
     /// The model represented by the thumbnail.
     @ObservedObject var attachmentModel: AttachmentModel
