@@ -16,12 +16,32 @@ import SwiftUI
 
 /// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
 struct FormHeader: View {
+    @State private var formAssistantPhotoCaptureIsPresented = false
+    
+    @State private var formAssistantPhotoImportState: AttachmentImportState = .none
+    
+    @Binding var formAssistantPhoto: UIImage?
+    
     /// The title defined for the form.
     let title: String
     
     var body: some View {
-        Text(title)
+        HStack {
+            WandButton {
+                formAssistantPhotoCaptureIsPresented = true
+            }
             .font(.title)
-            .fontWeight(.bold)
+            .sheet(isPresented: $formAssistantPhotoCaptureIsPresented) {
+                AttachmentCameraController(importState: $formAssistantPhotoImportState)
+                    .edgesIgnoringSafeArea(.all)
+            }
+            Text(title)
+                .font(.title)
+                .fontWeight(.bold)
+        }
+        .onChange(formAssistantPhotoImportState) { newValue in
+            guard case let .finalizing(newAttachmentImportData) = newValue else { return }
+            formAssistantPhoto = UIImage(data: newAttachmentImportData.data)
+        }
     }
 }

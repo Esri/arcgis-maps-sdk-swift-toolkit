@@ -147,6 +147,7 @@ private extension TextInput {
                         model.focusedElement = nil
                     }
                     text.removeAll()
+                    model.formAssistantFields.removeAll { $0 == element }
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             }
@@ -164,7 +165,7 @@ private extension TextInput {
                 .accessibilityIdentifier("\(element.label) Scan Button")
             }
         }
-        .formInputStyle()
+        .formInputStyle(assistedStyle: model.formAssistantFields.contains(element))
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.

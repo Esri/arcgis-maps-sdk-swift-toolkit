@@ -17,12 +17,29 @@ import SwiftUI
 /// Provides a frame minimum height constraint, padding, background color and rounded corners for a
 /// form input.
 struct FormInputStyle: ViewModifier {
+    let assistedStyle: Bool
+    
+    @State private var colors: [Color] = [.red, .yellow, .green, .blue]
+    
     func body(content: Content) -> some View {
         content
             .frame(minHeight: 30)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
-            .background(Color(uiColor: .tertiarySystemFill))
+            .background {
+                if assistedStyle {
+                    LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing)
+                        .blur(radius: 50)
+                        .onAppear {
+                            withAnimation(.linear(duration: 5).repeatForever()) {
+                                colors.shuffle()
+                            }
+                        }
+                        .allowsHitTesting(false)
+                } else {
+                    Color(uiColor: .tertiarySystemFill)
+                }
+            }
             .cornerRadius(10)
     }
 }
@@ -30,7 +47,7 @@ struct FormInputStyle: ViewModifier {
 extension View {
     /// Provides a frame minimum height constraint, padding, background color and rounded corners
     /// for a form input.
-    func formInputStyle() -> some View {
-        modifier(FormInputStyle())
+    func formInputStyle(assistedStyle: Bool = false) -> some View {
+        modifier(FormInputStyle(assistedStyle: assistedStyle))
     }
 }

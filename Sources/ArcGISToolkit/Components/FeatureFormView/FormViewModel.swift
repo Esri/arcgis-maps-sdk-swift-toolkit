@@ -25,6 +25,9 @@ import SwiftUI
         }
     }
     
+    /// <#Description#>
+    @Published var formAssistantFields = [FieldFormElement]()
+    
     /// The set of all elements which previously held focus.
     @Published var previouslyFocusedElements = [FormElement]()
     
