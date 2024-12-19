@@ -70,6 +70,15 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var formAssistantOverlayIsPresented = false
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var formAssistantPhoto: UIImage?
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var formAssistantText = String.formAssistantDefaultMessage
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether initial expression evaluation is running.
 ***REMOVED***@State private var initialExpressionsAreEvaluating = true
 ***REMOVED***
@@ -102,7 +111,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty && headerVisibility != .hidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(formAssistantPhoto: $formAssistantPhoto, title: title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
@@ -125,6 +134,91 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $formAssistantOverlayIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formAssistantPhoto {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: formAssistantPhoto)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Resizable must come first
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Lock the aspect ratio
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Clip the shape
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 30))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Pad the outer edges, leave text at the bottom un-padded
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing], 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "wand.and.sparkles")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.pulseEffect()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolRenderingMode(.palette)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(formAssistantText)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.heavy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(ColorWheel())
+***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
+***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task(id: formAssistantPhoto) {
+***REMOVED******REMOVED******REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formAssistantPhoto = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formAssistantText = String.formAssistantDefaultMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formAssistantOverlayIsPresented = false
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let formAssistantPhoto else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***formAssistantOverlayIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED***model.formAssistantFields.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Build a Requester
+***REMOVED******REMOVED******REMOVED******REMOVED***let openAIRequester = Requester()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get photo overview
+***REMOVED******REMOVED******REMOVED******REMOVED***let photoResponse = await openAIRequester.makeImageRequest(formAssistantPhoto, detail: .high)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***formAssistantText = String.formAssistantProcessingMessage
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Prepare text question
+***REMOVED******REMOVED******REMOVED******REMOVED***let fieldFormElements = model.featureForm.elements.compactMap { $0 as? FieldFormElement ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let correlations = Dictionary(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***uniqueKeysWithValues: fieldFormElements.enumerated().map { key, value in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***("\(key + 1)", value)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***let questions = fieldFormElements.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !$0.description.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.description
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.label
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let formattedQuestions = joinQuestions(questions)
+***REMOVED******REMOVED******REMOVED******REMOVED***let question = makeTextQuestion(imageResponse: photoResponse, questions: formattedQuestions)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get question response
+***REMOVED******REMOVED******REMOVED******REMOVED***let questionResponse = await openAIRequester.makeTextRequest(request: question)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Fill out form fields
+***REMOVED******REMOVED******REMOVED******REMOVED***let decoder = JSONDecoder()
+***REMOVED******REMOVED******REMOVED******REMOVED***let data = questionResponse.data(using: .utf8)!
+***REMOVED******REMOVED******REMOVED******REMOVED***let answers: [String: String]
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***answers = try decoder.decode([String:String].self, from: data)
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("JSON Decoding Error:", error.localizedDescription)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***answers = [:]
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***var numberAnswered = 0
+***REMOVED******REMOVED******REMOVED******REMOVED***correlations.forEach { key, fieldFormElement in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let answer = answers[key], !answer.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***numberAnswered += 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fieldFormElement.updateValue(answer.capitalized)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.formAssistantFields.append(fieldFormElement)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 #if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
@@ -136,6 +230,31 @@ public struct FeatureFormView: View {
 
 @available(visionOS, unavailable)
 extension FeatureFormView {
+***REMOVED***func makeTextQuestion(imageResponse: String, questions: String) -> String {
+***REMOVED******REMOVED***"""
+***REMOVED******REMOVED***Given the following textual description of an object please answer the following questions about the object in JSON using the question numbers as keys.
+***REMOVED******REMOVED***If a question is not answerable, leave its answer blank.
+***REMOVED******REMOVED***Exclude Markdown formatting around the JSON.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***The description:
+***REMOVED******REMOVED***\(imageResponse)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***The questions:
+***REMOVED******REMOVED***\(questions)
+***REMOVED******REMOVED***"""
+***REMOVED***
+***REMOVED***
+***REMOVED***func joinQuestions(_ questions: [String]) -> String {
+***REMOVED******REMOVED***var result = ""
+***REMOVED******REMOVED***var q = 1
+***REMOVED******REMOVED***questions.forEach { question in
+***REMOVED******REMOVED******REMOVED***let terminator = q == questions.count ? "" : "\n\n"
+***REMOVED******REMOVED******REMOVED***result.append("\(q). \(question)\(terminator)")
+***REMOVED******REMOVED******REMOVED***q += 1
+***REMOVED***
+***REMOVED******REMOVED***return result
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
@@ -190,5 +309,41 @@ extension FeatureFormView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
 ***REMOVED******REMOVED******REMOVED******REMOVED***initialExpressionsAreEvaluating = false
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct ColorWheel: View {
+***REMOVED***@State private var angle = Angle(degrees: 0)
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***AngularGradient(colors: [.red, .orange, .yellow, .green, .blue, .indigo, .purple, .red], center: .center)
+***REMOVED******REMOVED******REMOVED***.frame(width: 1000, height: 1000)
+***REMOVED******REMOVED******REMOVED***.rotationEffect(angle)
+***REMOVED******REMOVED******REMOVED***.blur(radius: 125)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.linear(duration: 15).repeatForever(autoreverses: false)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***angle = Angle(degrees: 360)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension String {
+***REMOVED***static var formAssistantDefaultMessage: Self {
+***REMOVED******REMOVED***"Examining photo…"
+***REMOVED***
+***REMOVED***
+***REMOVED***static var formAssistantProcessingMessage: Self {
+***REMOVED******REMOVED***"Answering form questions…"
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED***@ViewBuilder
+***REMOVED***func pulseEffect() -> some View {
+***REMOVED******REMOVED***if #available(iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED***self.symbolEffect(.pulse, options: .repeat(.continuous))
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -17,12 +17,29 @@
 ***REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners for a
 ***REMOVED***/ form input.
 struct FormInputStyle: ViewModifier {
+***REMOVED***let assistedStyle: Bool
+***REMOVED***
+***REMOVED***@State private var colors: [Color] = [.red, .yellow, .green, .blue]
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.frame(minHeight: 30)
 ***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
-***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .tertiarySystemFill))
+***REMOVED******REMOVED******REMOVED***.background {
+***REMOVED******REMOVED******REMOVED******REMOVED***if assistedStyle {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.blur(radius: 50)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.linear(duration: 5).repeatForever()) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***colors.shuffle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color(uiColor: .tertiarySystemFill)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
 ***REMOVED***
 ***REMOVED***
@@ -30,7 +47,7 @@ struct FormInputStyle: ViewModifier {
 extension View {
 ***REMOVED******REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners
 ***REMOVED******REMOVED***/ for a form input.
-***REMOVED***func formInputStyle() -> some View {
-***REMOVED******REMOVED***modifier(FormInputStyle())
+***REMOVED***func formInputStyle(assistedStyle: Bool = false) -> some View {
+***REMOVED******REMOVED***modifier(FormInputStyle(assistedStyle: assistedStyle))
 ***REMOVED***
 ***REMOVED***

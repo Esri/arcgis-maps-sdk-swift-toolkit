@@ -25,6 +25,9 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@Published var formAssistantFields = [FieldFormElement]()
+***REMOVED***
 ***REMOVED******REMOVED***/ The set of all elements which previously held focus.
 ***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
 ***REMOVED***

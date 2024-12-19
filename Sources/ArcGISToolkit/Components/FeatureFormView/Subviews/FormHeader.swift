@@ -16,12 +16,32 @@
 
 ***REMOVED***/ A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
 struct FormHeader: View {
+***REMOVED***@State private var formAssistantPhotoCaptureIsPresented = false
+***REMOVED***
+***REMOVED***@State private var formAssistantPhotoImportState: AttachmentImportState = .none
+***REMOVED***
+***REMOVED***@Binding var formAssistantPhoto: UIImage?
+***REMOVED***
 ***REMOVED******REMOVED***/ The title defined for the form.
 ***REMOVED***let title: String
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***WandButton {
+***REMOVED******REMOVED******REMOVED******REMOVED***formAssistantPhotoCaptureIsPresented = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $formAssistantPhotoCaptureIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCameraController(importState: $formAssistantPhotoImportState)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED***
+***REMOVED******REMOVED***.onChange(formAssistantPhotoImportState) { newValue in
+***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = newValue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***formAssistantPhoto = UIImage(data: newAttachmentImportData.data)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
