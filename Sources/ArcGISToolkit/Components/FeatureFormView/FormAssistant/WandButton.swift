@@ -15,17 +15,30 @@
 ***REMOVED***
 
 struct WandButton: View {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var colors: [Color] = Color.rainbow
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let action: () -> Void
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***action()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "wand.and.sparkles")
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AngularGradient(colors: colors, center: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.linear(duration: 1.0).repeatForever()) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***colors.shuffle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.mask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "wand.and.sparkles")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***.foregroundStyle(.blue, .mint)
 ***REMOVED******REMOVED***.wiggleEffect()
-***REMOVED******REMOVED***.symbolRenderingMode(.palette)
 ***REMOVED***
 ***REMOVED***
 
@@ -45,4 +58,10 @@ private extension View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***.font(.largeTitle)
+***REMOVED***
+
+extension Color {
+***REMOVED***static var rainbow: [Self] {
+***REMOVED******REMOVED***[.red, .orange, .yellow, .green, .blue, .indigo, .purple]
+***REMOVED***
 ***REMOVED***
