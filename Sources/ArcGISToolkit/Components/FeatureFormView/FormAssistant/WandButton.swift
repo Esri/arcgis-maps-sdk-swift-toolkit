@@ -15,17 +15,30 @@
 import SwiftUI
 
 struct WandButton: View {
+    /// <#Description#>
+    @State private var colors: [Color] = Color.rainbow
+    
+    /// <#Description#>
     let action: () -> Void
+    
     var body: some View {
         Button {
             action()
         } label: {
             Image(systemName: "wand.and.sparkles")
+                .overlay {
+                    AngularGradient(colors: colors, center: .center)
+                        .onAppear {
+                            withAnimation(.linear(duration: 1.0).repeatForever()) {
+                                colors.shuffle()
+                            }
+                        }
+                        .mask {
+                            Image(systemName: "wand.and.sparkles")
+                        }
+                }
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(.blue, .mint)
         .wiggleEffect()
-        .symbolRenderingMode(.palette)
     }
 }
 
@@ -45,4 +58,10 @@ private extension View {
         
     }
     .font(.largeTitle)
+}
+
+extension Color {
+    static var rainbow: [Self] {
+        [.red, .orange, .yellow, .green, .blue, .indigo, .purple]
+    }
 }
