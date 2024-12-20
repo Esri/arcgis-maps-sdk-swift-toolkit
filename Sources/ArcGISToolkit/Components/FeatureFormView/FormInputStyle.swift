@@ -17,9 +17,11 @@
 ***REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners for a
 ***REMOVED***/ form input.
 struct FormInputStyle: ViewModifier {
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let assistedStyle: Bool
 ***REMOVED***
-***REMOVED***@State private var colors: [Color] = [.red, .yellow, .green, .blue]
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var colors: [Color] = [.red, .orange, .yellow, .green, .blue, .indigo, .purple]
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
@@ -31,7 +33,7 @@ struct FormInputStyle: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.blur(radius: 50)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.linear(duration: 5).repeatForever()) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.linear(duration: 1).repeatForever()) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***colors.shuffle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
