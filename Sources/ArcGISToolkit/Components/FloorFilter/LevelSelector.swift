@@ -121,7 +121,11 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeLevelButton(level)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange { contentHeight = $0.height ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onGeometryChange(for: CGRect.self) { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.frame(in: .global)
+***REMOVED******REMOVED******REMOVED*** action: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = newValue.height
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear { scrollToSelectedLevel(with: proxy) ***REMOVED***

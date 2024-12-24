@@ -82,8 +82,10 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED***width = $0.width * widthScaleFactor
+***REMOVED******REMOVED******REMOVED***.onGeometryChange(for: CGRect.self) { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***proxy.frame(in: .global)
+***REMOVED******REMOVED*** action: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***width = newValue.width * widthScaleFactor
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
