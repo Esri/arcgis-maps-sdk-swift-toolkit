@@ -121,7 +121,11 @@ extension LevelSelector {
                         makeLevelButton(level)
                     }
                 }
-                .onSizeChange { contentHeight = $0.height }
+                .onGeometryChange(for: CGRect.self) { proxy in
+                    proxy.frame(in: .global)
+                } action: { newValue in
+                    contentHeight = newValue.height
+                }
             }
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
