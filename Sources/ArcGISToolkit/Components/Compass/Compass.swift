@@ -35,7 +35,11 @@ public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
     
-    /// A Boolean value indicating whether  the compass should automatically
+    /// A Boolean value indicating whether sensory feedback is enabled
+    /// when the heading snaps to zero.
+    private var snapToZeroSensoryFeedbackEnabled: Bool = false
+    
+    /// A Boolean value indicating whether the compass should automatically
     /// hide/show itself when the heading is `0`.
     private var autoHide: Bool = true
     
@@ -110,8 +114,35 @@ public struct Compass: View {
                                  """
                     )
                 )
+                .snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
         }
     }
+}
+
+private extension View {
+    /// Enables the snap to zero sensory feedback
+    /// when it is available.
+    @ViewBuilder
+    func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
+        if #available(iOS 17.0, *) {
+            if enabled {
+                sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+                    if (!oldValue.isZero && newValue.isZero) ||
+                        (oldValue.isZero && !newValue.isZero) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            } else {
+                self
+            }
+        } else {
+            // Fallback on earlier versions
+            self
+        }
+    }
+
 }
 
 @available(visionOS, unavailable)
@@ -165,6 +196,14 @@ public extension Compass {
     func autoHideDisabled(_ disable: Bool = true) -> Self {
         var copy = self
         copy.autoHide = !disable
+        return copy
+    }
+    
+    /// Enables sensory feedback when the heading snaps to `zero`.
+    @available(iOS 17, *)
+    func snapToZeroSensoryFeedback() -> Self {
+        var copy = self
+        copy.snapToZeroSensoryFeedbackEnabled = true
         return copy
     }
 }
