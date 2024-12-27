@@ -55,7 +55,6 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ when the heading snaps to zero.
 ***REMOVED***private var snapToZeroSensoryFeedbackEnabled: Bool = false
 ***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
 ***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
