@@ -89,7 +89,7 @@ private extension String {
     static var noFeatureTemplatesTitle: String {
         String(
             localized: "No Feature Templates",
-            //bundle: .toolkitModule,
+            bundle: .toolkitModule,
             comment: """
                  A title for showing a view that tells the user there are no feature templates.
                  """
@@ -98,7 +98,7 @@ private extension String {
     static var noFeatureTemplatesDetail: String {
         String(
             localized: "There are no feature templates available for this map.",
-            //bundle: .toolkitModule,
+            bundle: .toolkitModule,
             comment: """
                  Details for showing a view that tells the user there are no feature templates
                  available in this map.
@@ -108,7 +108,7 @@ private extension String {
     static var searchTemplatesPrompt: String {
         String(
             localized: "Search templates",
-            //bundle: .toolkitModule,
+            bundle: .toolkitModule,
             comment: """
                  A prompt in the search templates text box that instructs the user that they
                  can type in the field to search for templates.
@@ -118,7 +118,7 @@ private extension String {
     static var noFeatureTemplatesFoundTitle: String {
         String(
             localized: "Nothing Found",
-            //bundle: .toolkitModule,
+            bundle: .toolkitModule,
             comment: """
                  A title for showing a view that tells the user there were no feature templates
                  found that match their search criteria.
@@ -128,7 +128,7 @@ private extension String {
     static var noFeatureTemplatesFoundDetail: String {
         String(
             localized: "There were no feature templates found that match the search criteria.",
-            //bundle: .toolkitModule,
+            bundle: .toolkitModule,
             comment: """
                  Details for showing a view that tells the user there were no feature templates
                  found that match their search criteria.
@@ -248,7 +248,35 @@ extension FeatureTemplatePicker {
     }
 }
 
+private extension Array<Layer> {
+    /// A flattened list of the nested layers that this array of layers may contain.
+    var flattened: [Layer] {
+        flatMap { layer in
+            guard let groupLayer = layer as? GroupLayer else { return [layer] }
+            return groupLayer.layers.flattened
+        }
+    }
+}
+
 private extension GeoModel {
+    /// All the layers in the geo model.
+    var layers: [Layer] {
+        operationalLayers
+        + (basemap?.baseLayers ?? [])
+        + (basemap?.referenceLayers ?? [])
+    }
+    
+    /// A flattened list of the layers in the geo model.
+    var flattenedLayers: [Layer] {
+        layers.flattened
+    }
+    
+    /// All the feature layers in the geo model.
+    var featureLayers: [FeatureLayer] {
+        flattenedLayers
+            .compactMap { $0 as? FeatureLayer }
+    }
+    
     /// A list containing tuples of the feature layers and the associated
     /// ArcGIS feature tables in the geo model.
     var arcGISFeatureLayersAndTables: [(layer: FeatureLayer, table: ArcGISFeatureTable)] {
