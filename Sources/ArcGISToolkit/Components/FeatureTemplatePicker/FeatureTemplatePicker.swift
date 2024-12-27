@@ -15,13 +15,25 @@
 import ArcGIS
 import SwiftUI
 
+/// A view that displays feature temmplates from a geo model.
 public struct FeatureTemplatePicker: View {
     /// The model backing the feature template picker.
-    @StateObject var model: Model
-    @Binding var selection: FeatureTemplateInfo?
+    @StateObject private var model: Model
+    /// The selection
+    @Binding private var selection: FeatureTemplateInfo?
     
-    init(geoModel: GeoModel, selection: Binding<FeatureTemplateInfo?>) {
-        _model = StateObject(wrappedValue: Model(geoModel: geoModel))
+    /// Creates a feature template picker.
+    /// - Parameters:
+    ///   - geoModel: The geo model from which feature templates will be displayed.
+    ///   - selection: The selected template.
+    ///   - includeNonCreatableFeatureTemplates: Include feature templates from tables where features cannot be created.
+    init(geoModel: GeoModel, selection: Binding<FeatureTemplateInfo?>, includeNonCreatableFeatureTemplates: Bool = false) {
+        _model = StateObject(
+            wrappedValue: Model(
+                geoModel: geoModel,
+                includeNonCreatableFeatureTemplates: includeNonCreatableFeatureTemplates
+            )
+        )
         _selection = selection
     }
     
@@ -32,13 +44,13 @@ public struct FeatureTemplatePicker: View {
             } else if model.showContentUnavailable {
                 if #available(iOS 17.0, *) {
                     ContentUnavailableView(
-                        "No Feature Templates",
-                        systemImage: "list.bullet",
-                        description: Text("No feature templates available for this map.")
+                        String.noFeatureTemplatesTitle,
+                        systemImage: "mappin.slash.circle",
+                        description: Text(String.noFeatureTemplatesDetail)
                     )
                 } else {
                     // Fallback on earlier versions
-                    Text("No feature templates available for this map.")
+                    Text(String.noFeatureTemplatesDetail)
                 }
             } else {
                 List {
@@ -50,6 +62,21 @@ public struct FeatureTemplatePicker: View {
                         }
                     }
                 }
+                .searchable(text: $model.searchText, prompt: String.searchTemplatesPrompt)
+                .overlay {
+                    if model.showNoTemplatesFound {
+                        if #available(iOS 17.0, *) {
+                            ContentUnavailableView(
+                                String.noFeatureTemplatesFoundTitle,
+                                systemImage: "magnifyingglass.circle",
+                                description: Text(String.noFeatureTemplatesFoundDetail)
+                            )
+                        } else {
+                            // Fallback on earlier versions
+                            Text(String.noFeatureTemplatesFoundDetail)
+                        }
+                    }
+                }
             }
         }
         .task {
@@ -58,6 +85,59 @@ public struct FeatureTemplatePicker: View {
     }
 }
 
+private extension String {
+    static var noFeatureTemplatesTitle: String {
+        String(
+            localized: "No Feature Templates",
+            //bundle: .toolkitModule,
+            comment: """
+                 A title for showing a view that tells the user there are no feature templates.
+                 """
+        )
+    }
+    static var noFeatureTemplatesDetail: String {
+        String(
+            localized: "There are no feature templates available for this map.",
+            //bundle: .toolkitModule,
+            comment: """
+                 Details for showing a view that tells the user there are no feature templates
+                 available in this map.
+                 """
+        )
+    }
+    static var searchTemplatesPrompt: String {
+        String(
+            localized: "Search templates",
+            //bundle: .toolkitModule,
+            comment: """
+                 A prompt in the search templates text box that instructs the user that they
+                 can type in the field to search for templates.
+                 """
+        )
+    }
+    static var noFeatureTemplatesFoundTitle: String {
+        String(
+            localized: "Nothing Found",
+            //bundle: .toolkitModule,
+            comment: """
+                 A title for showing a view that tells the user there were no feature templates
+                 found that match their search criteria.
+                 """
+        )
+    }
+    static var noFeatureTemplatesFoundDetail: String {
+        String(
+            localized: "There were no feature templates found that match the search criteria.",
+            //bundle: .toolkitModule,
+            comment: """
+                 Details for showing a view that tells the user there were no feature templates
+                 found that match their search criteria.
+                 """
+        )
+    }
+}
+
+/// View of a feature teamplate.
 private struct FeatureTemplateView: View {
     let info: FeatureTemplateInfo
     @Binding var selection: FeatureTemplateInfo?
@@ -88,20 +168,35 @@ private struct FeatureTemplateView: View {
 }
 
 extension FeatureTemplatePicker {
-    /// The model for the legend.
+    /// The model for the feature template picker.
     @MainActor
     final class Model: ObservableObject {
         /// The associated geo model.
         let geoModel: GeoModel
+        /// Include feature templates from tables where features cannot be created.
+        private let includeNonCreatableFeatureTemplates: Bool
+        /// Search text for filtering the list of templates.
+        var searchText: String = "" {
+            didSet { templatesOrSearchTextDidChange() }
+        }
+        /// The complete unfiltered list of feature template sections.
+        private var unfilteredFeatureTemplateSections = [FeatureTemplateSectionInfo]() {
+            didSet { templatesOrSearchTextDidChange() }
+        }
         
-        /// The templates.
-        @Published fileprivate var featureTemplateSections = [FeatureTemplateSectionInfo]()
+        /// The sections.
+        @Published fileprivate private(set) var featureTemplateSections = [FeatureTemplateSectionInfo]()
+        /// A Boolean value indicating whether templates are being generated.
         @Published var isGeneratingFeatureTemplates = false
+        /// A Boolean value indicating if content is unavailable.
         @Published var showContentUnavailable = false
+        /// A Boolean value indicating if no templates were found with the given search text.
+        @Published var showNoTemplatesFound = false
         
         /// Creates a model for a given geo model.
-        init(geoModel: GeoModel) {
+        init(geoModel: GeoModel, includeNonCreatableFeatureTemplates: Bool) {
             self.geoModel = geoModel
+            self.includeNonCreatableFeatureTemplates = includeNonCreatableFeatureTemplates
         }
         
         /// Generates the feature templates.
@@ -109,30 +204,17 @@ extension FeatureTemplatePicker {
             isGeneratingFeatureTemplates = true
             defer { isGeneratingFeatureTemplates = false }
             
-            featureTemplateSections = await geoModel.featureTemplateSections
+            unfilteredFeatureTemplateSections = await makeFeatureTemplateSections()
         }
-    }
-}
-
-extension GeoModel {
-    var arcGISFeatureLayersAndTables: [(layer: FeatureLayer, table: ArcGISFeatureTable)] {
-        featureLayers
-            .map { (layer: $0, table: $0.featureTable) }
-            .compactMap { tuple in
-                if let table = tuple.table as? ArcGISFeatureTable {
-                    return (layer: tuple.layer, table: table)
-                } else {
-                    return nil
-                }
-            }
-    }
-}
-
-private extension GeoModel {
-    var featureTemplateSections: [FeatureTemplateSectionInfo] {
-        get async {
+        
+        /// The feature template section information for the geo model.
+        private func makeFeatureTemplateSections() async -> [FeatureTemplateSectionInfo] {
+            try? await geoModel.load()
             var sections = [FeatureTemplateSectionInfo]()
-            for (layer, table) in self.arcGISFeatureLayersAndTables {
+            let layersAndTables = geoModel.arcGISFeatureLayersAndTables
+            await layersAndTables.map(\.table).load()
+            for (layer, table) in layersAndTables {
+                guard includeNonCreatableFeatureTemplates || table.canAddFeature else { continue }
                 var infos = [FeatureTemplateInfo]()
                 for template in table.allTemplates {
                     let feature = table.makeFeature(template: template)
@@ -151,12 +233,39 @@ private extension GeoModel {
                     .init(table: table, infos: infos)
                 )
             }
-            return sections
+            return sections.filter { !$0.infos.isEmpty }
+        }
+        
+        /// Re-filters based on the templates or the search text.
+        private func templatesOrSearchTextDidChange() {
+            featureTemplateSections = unfilteredFeatureTemplateSections.map {
+                $0.filtered(by: searchText)
+            }
+            .filter { !$0.infos.isEmpty }
+            showContentUnavailable = unfilteredFeatureTemplateSections.isEmpty
+            showNoTemplatesFound = !showContentUnavailable && featureTemplateSections.isEmpty
         }
     }
 }
 
-extension ArcGISFeatureTable {
+private extension GeoModel {
+    /// A list containing tuples of the feature layers and the associated
+    /// ArcGIS feature tables in the geo model.
+    var arcGISFeatureLayersAndTables: [(layer: FeatureLayer, table: ArcGISFeatureTable)] {
+        featureLayers
+            .map { (layer: $0, table: $0.featureTable) }
+            .compactMap { tuple in
+                if let table = tuple.table as? ArcGISFeatureTable {
+                    return (layer: tuple.layer, table: table)
+                } else {
+                    return nil
+                }
+            }
+    }
+}
+
+private extension ArcGISFeatureTable {
+    /// A flattened list of the feature templates in the table.
     var allTemplates: [FeatureTemplate] {
         let typeTemplates = featureTypes
             .lazy
@@ -165,15 +274,21 @@ extension ArcGISFeatureTable {
     }
 }
 
+/// A value that represents a section in the feature template picker.
 private struct FeatureTemplateSectionInfo: Identifiable {
     let table: ArcGISFeatureTable
-    let infos: [FeatureTemplateInfo]
+    var infos: [FeatureTemplateInfo]
+    let id: UUID = UUID()
     
-    var id: ObjectIdentifier {
-        ObjectIdentifier(table)
+    func filtered(by searchText: String) -> FeatureTemplateSectionInfo {
+        guard !searchText.isEmpty else { return self }
+        var copy = self
+        copy.infos = copy.infos.filter { $0.template.name.lowercased().contains(searchText.lowercased()) }
+        return copy
     }
 }
 
+/// A value that represents a feature template in the picker.
 struct FeatureTemplateInfo: Identifiable, Equatable {
     static func == (lhs: FeatureTemplateInfo, rhs: FeatureTemplateInfo) -> Bool {
         lhs.template === rhs.template
