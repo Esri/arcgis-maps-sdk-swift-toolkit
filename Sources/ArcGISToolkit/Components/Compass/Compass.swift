@@ -35,9 +35,8 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether sensory feedback is enabled
-***REMOVED******REMOVED***/ when the heading snaps to zero.
-***REMOVED***private var snapToZeroSensoryFeedbackEnabled: Bool = false
+***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
+***REMOVED***private var action: (() -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should automatically
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
@@ -52,8 +51,10 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The width and height of the compass.
 ***REMOVED***private var size: CGFloat = 44
 ***REMOVED***
-***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
-***REMOVED***private var action: (() -> Void)?
+***REMOVED******REMOVED***/ A Boolean value indicating whether sensory feedback is enabled
+***REMOVED******REMOVED***/ when the heading snaps to zero.
+***REMOVED***private var snapToZeroSensoryFeedbackEnabled: Bool = false
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
 ***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
