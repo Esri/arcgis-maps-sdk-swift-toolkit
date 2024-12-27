@@ -89,7 +89,7 @@ private extension String {
 ***REMOVED***static var noFeatureTemplatesTitle: String {
 ***REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED***localized: "No Feature Templates",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A title for showing a view that tells the user there are no feature templates.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
@@ -98,7 +98,7 @@ private extension String {
 ***REMOVED***static var noFeatureTemplatesDetail: String {
 ***REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED***localized: "There are no feature templates available for this map.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Details for showing a view that tells the user there are no feature templates
 ***REMOVED******REMOVED******REMOVED******REMOVED*** available in this map.
@@ -108,7 +108,7 @@ private extension String {
 ***REMOVED***static var searchTemplatesPrompt: String {
 ***REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED***localized: "Search templates",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A prompt in the search templates text box that instructs the user that they
 ***REMOVED******REMOVED******REMOVED******REMOVED*** can type in the field to search for templates.
@@ -118,7 +118,7 @@ private extension String {
 ***REMOVED***static var noFeatureTemplatesFoundTitle: String {
 ***REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED***localized: "Nothing Found",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A title for showing a view that tells the user there were no feature templates
 ***REMOVED******REMOVED******REMOVED******REMOVED*** found that match their search criteria.
@@ -128,7 +128,7 @@ private extension String {
 ***REMOVED***static var noFeatureTemplatesFoundDetail: String {
 ***REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED***localized: "There were no feature templates found that match the search criteria.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Details for showing a view that tells the user there were no feature templates
 ***REMOVED******REMOVED******REMOVED******REMOVED*** found that match their search criteria.
@@ -248,7 +248,35 @@ extension FeatureTemplatePicker {
 ***REMOVED***
 ***REMOVED***
 
+private extension Array<Layer> {
+***REMOVED******REMOVED***/ A flattened list of the nested layers that this array of layers may contain.
+***REMOVED***var flattened: [Layer] {
+***REMOVED******REMOVED***flatMap { layer in
+***REMOVED******REMOVED******REMOVED***guard let groupLayer = layer as? GroupLayer else { return [layer] ***REMOVED***
+***REMOVED******REMOVED******REMOVED***return groupLayer.layers.flattened
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 private extension GeoModel {
+***REMOVED******REMOVED***/ All the layers in the geo model.
+***REMOVED***var layers: [Layer] {
+***REMOVED******REMOVED***operationalLayers
+***REMOVED******REMOVED***+ (basemap?.baseLayers ?? [])
+***REMOVED******REMOVED***+ (basemap?.referenceLayers ?? [])
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A flattened list of the layers in the geo model.
+***REMOVED***var flattenedLayers: [Layer] {
+***REMOVED******REMOVED***layers.flattened
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ All the feature layers in the geo model.
+***REMOVED***var featureLayers: [FeatureLayer] {
+***REMOVED******REMOVED***flattenedLayers
+***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? FeatureLayer ***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A list containing tuples of the feature layers and the associated
 ***REMOVED******REMOVED***/ ArcGIS feature tables in the geo model.
 ***REMOVED***var arcGISFeatureLayersAndTables: [(layer: FeatureLayer, table: ArcGISFeatureTable)] {
