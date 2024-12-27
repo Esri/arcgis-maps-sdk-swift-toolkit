@@ -122,6 +122,7 @@ public struct Compass: View {
 private extension View {
 ***REMOVED******REMOVED***/ Enables the snap to zero sensory feedback
 ***REMOVED******REMOVED***/ when it is available.
+***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***@ViewBuilder
 ***REMOVED***func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
 ***REMOVED******REMOVED***if #available(iOS 17.0, *) {
@@ -142,7 +143,6 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
-
 ***REMOVED***
 
 @available(visionOS, unavailable)
