@@ -27,7 +27,7 @@ public struct FeatureTemplatePicker: View {
     ///   - geoModel: The geo model from which feature templates will be displayed.
     ///   - selection: The selected template.
     ///   - includeNonCreatableFeatureTemplates: Include feature templates from tables where features cannot be created.
-    init(geoModel: GeoModel, selection: Binding<FeatureTemplateInfo?>, includeNonCreatableFeatureTemplates: Bool = false) {
+    public init(geoModel: GeoModel, selection: Binding<FeatureTemplateInfo?>, includeNonCreatableFeatureTemplates: Bool = false) {
         _model = StateObject(
             wrappedValue: Model(
                 geoModel: geoModel,
@@ -317,8 +317,8 @@ private struct FeatureTemplateSectionInfo: Identifiable {
 }
 
 /// A value that represents a feature template in the picker.
-struct FeatureTemplateInfo: Identifiable, Equatable {
-    static func == (lhs: FeatureTemplateInfo, rhs: FeatureTemplateInfo) -> Bool {
+public struct FeatureTemplateInfo: Identifiable, Equatable {
+    public static func == (lhs: FeatureTemplateInfo, rhs: FeatureTemplateInfo) -> Bool {
         lhs.template === rhs.template
     }
     
@@ -327,7 +327,7 @@ struct FeatureTemplateInfo: Identifiable, Equatable {
     let template: FeatureTemplate
     let image: UIImage?
     
-    var id: ObjectIdentifier {
+    public var id: ObjectIdentifier {
         ObjectIdentifier(template)
     }
 }
