@@ -15,7 +15,8 @@
 import ArcGIS
 import SwiftUI
 
-/// A view that displays feature temmplates from a geo model.
+/// A view that displays feature temmplates from a geo model
+/// and allows the user to choose a template.
 public struct FeatureTemplatePicker: View {
     /// The model backing the feature template picker.
     @StateObject private var model: Model
