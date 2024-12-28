@@ -16,6 +16,8 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+/// Allows a user to select a feature template and displays
+/// the name of the template that was selected.
 struct FeatureTemplatePickerExampleView: View {
     static func makeMap() -> Map {
         let portalItem = PortalItem(
@@ -28,18 +30,34 @@ struct FeatureTemplatePickerExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = makeMap()
     
+    /// A Boolean value indicating if the feature template picker
+    /// is being displayed.
     @State private var isShowingTemplates = false
     
+    /// The selection of the feature template picker.
     @State private var selection: FeatureTemplateInfo?
     
     var body: some View {
         MapView(map: map)
             .sheet(isPresented: $isShowingTemplates) {
-                FeatureTemplatePicker(
-                    geoModel: map,
-                    selection: $selection,
-                    includeNonCreatableFeatureTemplates: true
-                )
+                NavigationStack {
+                    FeatureTemplatePicker(
+                        geoModel: map,
+                        selection: $selection,
+                        includeNonCreatableFeatureTemplates: true
+                    )
+                    .onAppear {
+                        // Reset selection when the picker appears.
+                        selection = nil
+                    }
+                    .navigationTitle("Feature Templates")
+                }
+            }
+            .onChange(of: selection) { _ in
+                // Dismiss the template picker upon selection.
+                if selection != nil {
+                    isShowingTemplates = false
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -48,6 +66,17 @@ struct FeatureTemplatePickerExampleView: View {
                     } label: {
                         Text("Templates")
                     }
+                }
+            }
+            .safeAreaInset(edge: .top) {
+                if let selection {
+                    HStack {
+                        if let image = selection.image {
+                            Image(uiImage: image)
+                        }
+                        Text("\(selection.template.name) Template Selected")
+                    }
+                    .font(.subheadline)
                 }
             }
     }

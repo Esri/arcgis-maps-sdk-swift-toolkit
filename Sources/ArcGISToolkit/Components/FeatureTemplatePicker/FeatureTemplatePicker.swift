@@ -322,10 +322,10 @@ public struct FeatureTemplateInfo: Identifiable, Equatable {
         lhs.template === rhs.template
     }
     
-    let layer: FeatureLayer
-    let table: ArcGISFeatureTable
-    let template: FeatureTemplate
-    let image: UIImage?
+    public let layer: FeatureLayer
+    public let table: ArcGISFeatureTable
+    public let template: FeatureTemplate
+    public let image: UIImage?
     
     public var id: ObjectIdentifier {
         ObjectIdentifier(template)
