@@ -15,7 +15,8 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view that displays feature temmplates from a geo model.
+***REMOVED***/ A view that displays feature temmplates from a geo model
+***REMOVED***/ and allows the user to choose a template.
 public struct FeatureTemplatePicker: View {
 ***REMOVED******REMOVED***/ The model backing the feature template picker.
 ***REMOVED***@StateObject private var model: Model
