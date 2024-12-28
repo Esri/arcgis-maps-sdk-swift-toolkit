@@ -27,7 +27,7 @@ public struct FeatureTemplatePicker: View {
 ***REMOVED******REMOVED***/   - geoModel: The geo model from which feature templates will be displayed.
 ***REMOVED******REMOVED***/   - selection: The selected template.
 ***REMOVED******REMOVED***/   - includeNonCreatableFeatureTemplates: Include feature templates from tables where features cannot be created.
-***REMOVED***init(geoModel: GeoModel, selection: Binding<FeatureTemplateInfo?>, includeNonCreatableFeatureTemplates: Bool = false) {
+***REMOVED***public init(geoModel: GeoModel, selection: Binding<FeatureTemplateInfo?>, includeNonCreatableFeatureTemplates: Bool = false) {
 ***REMOVED******REMOVED***_model = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: Model(
 ***REMOVED******REMOVED******REMOVED******REMOVED***geoModel: geoModel,
@@ -317,8 +317,8 @@ private struct FeatureTemplateSectionInfo: Identifiable {
 ***REMOVED***
 
 ***REMOVED***/ A value that represents a feature template in the picker.
-struct FeatureTemplateInfo: Identifiable, Equatable {
-***REMOVED***static func == (lhs: FeatureTemplateInfo, rhs: FeatureTemplateInfo) -> Bool {
+public struct FeatureTemplateInfo: Identifiable, Equatable {
+***REMOVED***public static func == (lhs: FeatureTemplateInfo, rhs: FeatureTemplateInfo) -> Bool {
 ***REMOVED******REMOVED***lhs.template === rhs.template
 ***REMOVED***
 ***REMOVED***
@@ -327,7 +327,7 @@ struct FeatureTemplateInfo: Identifiable, Equatable {
 ***REMOVED***let template: FeatureTemplate
 ***REMOVED***let image: UIImage?
 ***REMOVED***
-***REMOVED***var id: ObjectIdentifier {
+***REMOVED***public var id: ObjectIdentifier {
 ***REMOVED******REMOVED***ObjectIdentifier(template)
 ***REMOVED***
 ***REMOVED***
