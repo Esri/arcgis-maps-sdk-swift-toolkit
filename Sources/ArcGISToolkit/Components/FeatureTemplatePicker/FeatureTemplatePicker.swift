@@ -322,10 +322,10 @@ public struct FeatureTemplateInfo: Identifiable, Equatable {
 ***REMOVED******REMOVED***lhs.template === rhs.template
 ***REMOVED***
 ***REMOVED***
-***REMOVED***let layer: FeatureLayer
-***REMOVED***let table: ArcGISFeatureTable
-***REMOVED***let template: FeatureTemplate
-***REMOVED***let image: UIImage?
+***REMOVED***public let layer: FeatureLayer
+***REMOVED***public let table: ArcGISFeatureTable
+***REMOVED***public let template: FeatureTemplate
+***REMOVED***public let image: UIImage?
 ***REMOVED***
 ***REMOVED***public var id: ObjectIdentifier {
 ***REMOVED******REMOVED***ObjectIdentifier(template)
