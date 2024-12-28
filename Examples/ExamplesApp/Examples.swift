@@ -59,6 +59,7 @@ extension ExampleList {
             AnyExample("Bookmarks", content: BookmarksExampleView()),
             AnyExample("Compass", content: CompassExampleView()),
             AnyExample("Feature Form", content: FeatureFormExampleView()),
+            AnyExample("Feature Template Picker", content: FeatureTemplatePickerExampleView()),
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
