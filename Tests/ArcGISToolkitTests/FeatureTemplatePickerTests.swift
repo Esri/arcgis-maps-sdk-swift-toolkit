@@ -23,6 +23,7 @@
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 import Foundation
+import os
 ***REMOVED***
 import Testing
 
@@ -31,7 +32,7 @@ struct FeatureTemplatePickerTests {
 ***REMOVED***@Test
 ***REMOVED***@MainActor
 ***REMOVED***func testGeoModelWithTemplates() async throws {
-***REMOVED******REMOVED***let map = makeMap()
+***REMOVED******REMOVED***let map = makeMapWithTemplates()
 ***REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let model = FeatureTemplatePicker.Model(geoModel: map, includeNonCreatableFeatureTemplates: true)
@@ -39,6 +40,11 @@ struct FeatureTemplatePickerTests {
 ***REMOVED******REMOVED***#expect(!model.isGeneratingFeatureTemplates)
 ***REMOVED******REMOVED***#expect(!model.showContentUnavailable)
 ***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let lockedValues = OSAllocatedUnfairLock(initialState: Array<Bool>())
+***REMOVED******REMOVED***let subscription = model.$isGeneratingFeatureTemplates.sink { isGeneratingFeatureTemplates in
+***REMOVED******REMOVED******REMOVED***lockedValues.withLock { $0.append(isGeneratingFeatureTemplates) ***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***#expect(model.featureTemplateSections.isEmpty)
 ***REMOVED******REMOVED***await model.generateFeatureTemplates()
@@ -52,6 +58,9 @@ struct FeatureTemplatePickerTests {
 ***REMOVED******REMOVED***model.searchText = "foo"
 ***REMOVED******REMOVED***#expect(!model.showContentUnavailable)
 ***REMOVED******REMOVED***#expect(model.showNoTemplatesFound)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let values = lockedValues.withLock { $0 ***REMOVED***
+***REMOVED******REMOVED***#expect(values == [false, true, false])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Test
@@ -66,6 +75,11 @@ struct FeatureTemplatePickerTests {
 ***REMOVED******REMOVED***#expect(!model.showContentUnavailable)
 ***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let lockedValues = OSAllocatedUnfairLock(initialState: Array<Bool>())
+***REMOVED******REMOVED***let subscription = model.$isGeneratingFeatureTemplates.sink { isGeneratingFeatureTemplates in
+***REMOVED******REMOVED******REMOVED***lockedValues.withLock { $0.append(isGeneratingFeatureTemplates) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***#expect(model.featureTemplateSections.isEmpty)
 ***REMOVED******REMOVED***await model.generateFeatureTemplates()
 ***REMOVED******REMOVED***#expect(model.featureTemplateSections.isEmpty)
@@ -75,10 +89,13 @@ struct FeatureTemplatePickerTests {
 ***REMOVED******REMOVED***model.searchText = "foo"
 ***REMOVED******REMOVED***#expect(model.showContentUnavailable)
 ***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let values = lockedValues.withLock { $0 ***REMOVED***
+***REMOVED******REMOVED***#expect(values == [false, true, false])
 ***REMOVED***
 ***REMOVED***
 
-private func makeMap() -> Map {
+private func makeMapWithTemplates() -> Map {
 ***REMOVED***let map = Map(spatialReference: .webMercator)
 ***REMOVED***let featureTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0")!)
 ***REMOVED***let featureLayer = FeatureLayer(featureTable: featureTable)
