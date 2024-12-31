@@ -154,7 +154,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
         precondition(status.allowsDownload)
-        status = .downloading
         
         do {
             let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
