@@ -47,7 +47,15 @@
         @Image(source: FeatureFormView, alt: "An image of the FeatureFormView component.")
         @TutorialReference(tutorial: "doc:FeatureFormViewTutorial")
     }
-
+    
+    @Chapter(name: "FeatureTemplatePicker") {
+        A `FeatureTemplatePicker` allows the user to pick feature templates from a `Map` or `Scene`.
+        One situation this component is useful is the first step when you are allowing a user to
+        create a new feature.
+        @Image(source: FeatureTemplatePicker, alt: "An image of the FeatureTemplatePicker component.")
+        @TutorialReference(tutorial: "doc:FeatureTemplatePickerTutorial")
+    }
+    
     @Chapter(name: "FloatingPanel") {
         A `FloatingPanel` is a view that overlays a view and supplies view-related content.
         @Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")

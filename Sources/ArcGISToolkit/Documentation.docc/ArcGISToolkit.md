@@ -16,6 +16,7 @@ Learn how to use ArcGISToolkit with <doc:ToolkitTutorials>
 - ``Bookmarks``
 - ``Compass``
 - ``FeatureFormView``
+- ``FeatureTemplatePicker``
 - <doc:FloatingPanel>
 - ``FloorFilter``
 - ``JobManager``
