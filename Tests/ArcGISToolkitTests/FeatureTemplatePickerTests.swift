@@ -30,15 +30,51 @@ import Testing
 struct FeatureTemplatePickerTests {
 ***REMOVED***@Test
 ***REMOVED***@MainActor
-***REMOVED***func testModel() async throws {
+***REMOVED***func testGeoModelWithTemplates() async throws {
 ***REMOVED******REMOVED***let map = makeMap()
 ***REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let model = FeatureTemplatePicker.Model(geoModel: map, includeNonCreatableFeatureTemplates: true)
-***REMOVED******REMOVED***#expect(model.includeNonCreatableFeatureTemplates == true)
-***REMOVED******REMOVED***#expect(model.isGeneratingFeatureTemplates == false)
-***REMOVED******REMOVED***#expect(model.showContentUnavailable == false)
-***REMOVED******REMOVED***#expect(model.showNoTemplatesFound == false)
+***REMOVED******REMOVED***#expect(model.includeNonCreatableFeatureTemplates)
+***REMOVED******REMOVED***#expect(!model.isGeneratingFeatureTemplates)
+***REMOVED******REMOVED***#expect(!model.showContentUnavailable)
+***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***#expect(model.featureTemplateSections.isEmpty)
+***REMOVED******REMOVED***await model.generateFeatureTemplates()
+***REMOVED******REMOVED***#expect(model.featureTemplateSections.count == 1)
+***REMOVED******REMOVED***if let section = model.featureTemplateSections.first {
+***REMOVED******REMOVED******REMOVED***#expect(section.infos.count == 5)
+***REMOVED***
+***REMOVED******REMOVED***#expect(!model.showContentUnavailable)
+***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.searchText = "foo"
+***REMOVED******REMOVED***#expect(!model.showContentUnavailable)
+***REMOVED******REMOVED***#expect(model.showNoTemplatesFound)
+***REMOVED***
+***REMOVED***
+***REMOVED***@Test
+***REMOVED***@MainActor
+***REMOVED***func testGeoModelNoTemplates() async throws {
+***REMOVED******REMOVED***let map = Map(spatialReference: .webMercator)
+***REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let model = FeatureTemplatePicker.Model(geoModel: map, includeNonCreatableFeatureTemplates: false)
+***REMOVED******REMOVED***#expect(!model.includeNonCreatableFeatureTemplates)
+***REMOVED******REMOVED***#expect(!model.isGeneratingFeatureTemplates)
+***REMOVED******REMOVED***#expect(!model.showContentUnavailable)
+***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***#expect(model.featureTemplateSections.isEmpty)
+***REMOVED******REMOVED***await model.generateFeatureTemplates()
+***REMOVED******REMOVED***#expect(model.featureTemplateSections.isEmpty)
+***REMOVED******REMOVED***#expect(model.showContentUnavailable)
+***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.searchText = "foo"
+***REMOVED******REMOVED***#expect(model.showContentUnavailable)
+***REMOVED******REMOVED***#expect(!model.showNoTemplatesFound)
 ***REMOVED***
 ***REMOVED***
 
