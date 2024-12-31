@@ -220,6 +220,12 @@ extension FeatureTemplatePicker {
                 for template in table.allTemplates {
                     let feature = table.makeFeature(template: template)
                     let symbol = layer.renderer?.symbol(for: feature)
+                    let scale: CGFloat
+#if os(visionOS)
+                    scale = 1
+#else
+                    scale = UIScreen.main.scale
+#endif
                     let image = try? await symbol?.makeSwatch(scale: UIScreen.main.scale)
                     infos.append(
                         FeatureTemplateInfo(
