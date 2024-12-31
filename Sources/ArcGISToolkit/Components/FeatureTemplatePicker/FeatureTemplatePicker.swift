@@ -175,24 +175,24 @@ extension FeatureTemplatePicker {
         /// The associated geo model.
         let geoModel: GeoModel
         /// Include feature templates from tables where features cannot be created.
-        private let includeNonCreatableFeatureTemplates: Bool
+        let includeNonCreatableFeatureTemplates: Bool
         /// Search text for filtering the list of templates.
         var searchText: String = "" {
             didSet { templatesOrSearchTextDidChange() }
         }
         /// The complete unfiltered list of feature template sections.
-        private var unfilteredFeatureTemplateSections = [FeatureTemplateSectionInfo]() {
+        private(set) var unfilteredFeatureTemplateSections = [FeatureTemplateSectionInfo]() {
             didSet { templatesOrSearchTextDidChange() }
         }
         
         /// The sections.
-        @Published fileprivate private(set) var featureTemplateSections = [FeatureTemplateSectionInfo]()
+        @Published private(set) var featureTemplateSections = [FeatureTemplateSectionInfo]()
         /// A Boolean value indicating whether templates are being generated.
-        @Published var isGeneratingFeatureTemplates = false
+        @Published private(set) var isGeneratingFeatureTemplates = false
         /// A Boolean value indicating if content is unavailable.
-        @Published var showContentUnavailable = false
+        @Published private(set) var showContentUnavailable = false
         /// A Boolean value indicating if no templates were found with the given search text.
-        @Published var showNoTemplatesFound = false
+        @Published private(set) var showNoTemplatesFound = false
         
         /// Creates a model for a given geo model.
         init(geoModel: GeoModel, includeNonCreatableFeatureTemplates: Bool) {
@@ -310,7 +310,7 @@ private extension ArcGISFeatureTable {
 }
 
 /// A value that represents a section in the feature template picker.
-private struct FeatureTemplateSectionInfo: Identifiable {
+struct FeatureTemplateSectionInfo: Identifiable {
     let table: ArcGISFeatureTable
     var infos: [FeatureTemplateInfo]
     let id: UUID = UUID()
