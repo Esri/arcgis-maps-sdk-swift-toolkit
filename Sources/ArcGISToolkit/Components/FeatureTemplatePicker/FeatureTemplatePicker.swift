@@ -220,6 +220,12 @@ extension FeatureTemplatePicker {
 ***REMOVED******REMOVED******REMOVED******REMOVED***for template in table.allTemplates {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let feature = table.makeFeature(template: template)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let symbol = layer.renderer?.symbol(for: feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let scale: CGFloat
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale = 1
+#else
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale = UIScreen.main.scale
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await symbol?.makeSwatch(scale: UIScreen.main.scale)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***infos.append(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureTemplateInfo(
