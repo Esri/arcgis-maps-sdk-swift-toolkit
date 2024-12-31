@@ -15,7 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view that displays feature temmplates from a geo model
+***REMOVED***/ A view that displays feature templates from a geo model
 ***REMOVED***/ and allows the user to choose a template.
 public struct FeatureTemplatePicker: View {
 ***REMOVED******REMOVED***/ The model backing the feature template picker.
@@ -98,7 +98,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static var noFeatureTemplatesDetail: String {
 ***REMOVED******REMOVED***String(
-***REMOVED******REMOVED******REMOVED***localized: "There are no feature templates available for this map.",
+***REMOVED******REMOVED******REMOVED***localized: "There are no feature templates available.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Details for showing a view that tells the user there are no feature templates
@@ -138,7 +138,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ View of a feature teamplate.
+***REMOVED***/ View of a feature template.
 private struct FeatureTemplateView: View {
 ***REMOVED***let info: FeatureTemplateInfo
 ***REMOVED***@Binding var selection: FeatureTemplateInfo?
@@ -260,24 +260,6 @@ private extension Array<Layer> {
 ***REMOVED***
 
 private extension GeoModel {
-***REMOVED******REMOVED***/ All the layers in the geo model.
-***REMOVED***var layers: [Layer] {
-***REMOVED******REMOVED***operationalLayers
-***REMOVED******REMOVED***+ (basemap?.baseLayers ?? [])
-***REMOVED******REMOVED***+ (basemap?.referenceLayers ?? [])
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A flattened list of the layers in the geo model.
-***REMOVED***var flattenedLayers: [Layer] {
-***REMOVED******REMOVED***layers.flattened
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ All the feature layers in the geo model.
-***REMOVED***var featureLayers: [FeatureLayer] {
-***REMOVED******REMOVED***flattenedLayers
-***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? FeatureLayer ***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A list containing tuples of the feature layers and the associated
 ***REMOVED******REMOVED***/ ArcGIS feature tables in the geo model.
 ***REMOVED***var arcGISFeatureLayersAndTables: [(layer: FeatureLayer, table: ArcGISFeatureTable)] {
@@ -290,6 +272,24 @@ private extension GeoModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ All the feature layers in the geo model.
+***REMOVED***var featureLayers: [FeatureLayer] {
+***REMOVED******REMOVED***flattenedLayers
+***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? FeatureLayer ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A flattened list of the layers in the geo model.
+***REMOVED***var flattenedLayers: [Layer] {
+***REMOVED******REMOVED***layers.flattened
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ All the layers in the geo model.
+***REMOVED***var layers: [Layer] {
+***REMOVED******REMOVED***operationalLayers
+***REMOVED******REMOVED***+ (basemap?.baseLayers ?? [])
+***REMOVED******REMOVED***+ (basemap?.referenceLayers ?? [])
 ***REMOVED***
 ***REMOVED***
 
@@ -312,7 +312,7 @@ private struct FeatureTemplateSectionInfo: Identifiable {
 ***REMOVED***func filtered(by searchText: String) -> FeatureTemplateSectionInfo {
 ***REMOVED******REMOVED***guard !searchText.isEmpty else { return self ***REMOVED***
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.infos = copy.infos.filter { $0.template.name.lowercased().contains(searchText.lowercased()) ***REMOVED***
+***REMOVED******REMOVED***copy.infos = copy.infos.filter { $0.template.name.localizedStandardContains(searchText) ***REMOVED***
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

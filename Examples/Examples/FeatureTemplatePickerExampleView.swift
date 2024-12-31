@@ -31,8 +31,8 @@ struct FeatureTemplatePickerExampleView: View {
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the feature template picker
-***REMOVED******REMOVED***/ is being displayed.
-***REMOVED***@State private var isShowingTemplates = false
+***REMOVED******REMOVED***/ is presented.
+***REMOVED***@State private var templatePickerIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selection of the feature template picker.
 ***REMOVED***@State private var selection: FeatureTemplateInfo?
