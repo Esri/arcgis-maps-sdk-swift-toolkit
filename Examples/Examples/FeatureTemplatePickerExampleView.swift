@@ -31,8 +31,8 @@ struct FeatureTemplatePickerExampleView: View {
     @State private var map = makeMap()
     
     /// A Boolean value indicating if the feature template picker
-    /// is being displayed.
-    @State private var isShowingTemplates = false
+    /// is presented.
+    @State private var templatePickerIsPresented = false
     
     /// The selection of the feature template picker.
     @State private var selection: FeatureTemplateInfo?

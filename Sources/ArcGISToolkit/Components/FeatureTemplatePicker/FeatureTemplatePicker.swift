@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A view that displays feature temmplates from a geo model
+/// A view that displays feature templates from a geo model
 /// and allows the user to choose a template.
 public struct FeatureTemplatePicker: View {
     /// The model backing the feature template picker.
@@ -98,7 +98,7 @@ private extension String {
     }
     static var noFeatureTemplatesDetail: String {
         String(
-            localized: "There are no feature templates available for this map.",
+            localized: "There are no feature templates available.",
             bundle: .toolkitModule,
             comment: """
                  Details for showing a view that tells the user there are no feature templates
@@ -138,7 +138,7 @@ private extension String {
     }
 }
 
-/// View of a feature teamplate.
+/// View of a feature template.
 private struct FeatureTemplateView: View {
     let info: FeatureTemplateInfo
     @Binding var selection: FeatureTemplateInfo?
@@ -260,24 +260,6 @@ private extension Array<Layer> {
 }
 
 private extension GeoModel {
-    /// All the layers in the geo model.
-    var layers: [Layer] {
-        operationalLayers
-        + (basemap?.baseLayers ?? [])
-        + (basemap?.referenceLayers ?? [])
-    }
-    
-    /// A flattened list of the layers in the geo model.
-    var flattenedLayers: [Layer] {
-        layers.flattened
-    }
-    
-    /// All the feature layers in the geo model.
-    var featureLayers: [FeatureLayer] {
-        flattenedLayers
-            .compactMap { $0 as? FeatureLayer }
-    }
-    
     /// A list containing tuples of the feature layers and the associated
     /// ArcGIS feature tables in the geo model.
     var arcGISFeatureLayersAndTables: [(layer: FeatureLayer, table: ArcGISFeatureTable)] {
@@ -290,6 +272,24 @@ private extension GeoModel {
                     return nil
                 }
             }
+    }
+    
+    /// All the feature layers in the geo model.
+    var featureLayers: [FeatureLayer] {
+        flattenedLayers
+            .compactMap { $0 as? FeatureLayer }
+    }
+    
+    /// A flattened list of the layers in the geo model.
+    var flattenedLayers: [Layer] {
+        layers.flattened
+    }
+    
+    /// All the layers in the geo model.
+    var layers: [Layer] {
+        operationalLayers
+        + (basemap?.baseLayers ?? [])
+        + (basemap?.referenceLayers ?? [])
     }
 }
 
@@ -312,7 +312,7 @@ private struct FeatureTemplateSectionInfo: Identifiable {
     func filtered(by searchText: String) -> FeatureTemplateSectionInfo {
         guard !searchText.isEmpty else { return self }
         var copy = self
-        copy.infos = copy.infos.filter { $0.template.name.lowercased().contains(searchText.lowercased()) }
+        copy.infos = copy.infos.filter { $0.template.name.localizedStandardContains(searchText) }
         return copy
     }
 }
