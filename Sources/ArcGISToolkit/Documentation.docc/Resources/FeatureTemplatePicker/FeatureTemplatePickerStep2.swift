@@ -15,7 +15,20 @@ struct FeatureTemplatePickerExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = makeMap()
     
+    /// A Boolean value indicating if the feature template picker
+    /// is presented.
+    @State private var templatePickerIsPresented = false
+    
     var body: some View {
         MapView(map: map)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        templatePickerIsPresented = true
+                    } label: {
+                        Text("Templates")
+                    }
+                }
+            }
     }
 }
