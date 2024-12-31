@@ -24,7 +24,6 @@
 @testable ***REMOVED***Toolkit
 import Foundation
 import os
-***REMOVED***
 import Testing
 
 @Suite("FeatureTemplatePicker Tests")
