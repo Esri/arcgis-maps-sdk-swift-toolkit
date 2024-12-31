@@ -23,6 +23,7 @@
 import ArcGIS
 @testable import ArcGISToolkit
 import Foundation
+import os
 import SwiftUI
 import Testing
 
@@ -31,7 +32,7 @@ struct FeatureTemplatePickerTests {
     @Test
     @MainActor
     func testGeoModelWithTemplates() async throws {
-        let map = makeMap()
+        let map = makeMapWithTemplates()
         try await map.load()
         
         let model = FeatureTemplatePicker.Model(geoModel: map, includeNonCreatableFeatureTemplates: true)
@@ -39,6 +40,11 @@ struct FeatureTemplatePickerTests {
         #expect(!model.isGeneratingFeatureTemplates)
         #expect(!model.showContentUnavailable)
         #expect(!model.showNoTemplatesFound)
+        
+        let lockedValues = OSAllocatedUnfairLock(initialState: Array<Bool>())
+        let subscription = model.$isGeneratingFeatureTemplates.sink { isGeneratingFeatureTemplates in
+            lockedValues.withLock { $0.append(isGeneratingFeatureTemplates) }
+        }
         
         #expect(model.featureTemplateSections.isEmpty)
         await model.generateFeatureTemplates()
@@ -52,6 +58,9 @@ struct FeatureTemplatePickerTests {
         model.searchText = "foo"
         #expect(!model.showContentUnavailable)
         #expect(model.showNoTemplatesFound)
+        
+        let values = lockedValues.withLock { $0 }
+        #expect(values == [false, true, false])
     }
     
     @Test
@@ -66,6 +75,11 @@ struct FeatureTemplatePickerTests {
         #expect(!model.showContentUnavailable)
         #expect(!model.showNoTemplatesFound)
         
+        let lockedValues = OSAllocatedUnfairLock(initialState: Array<Bool>())
+        let subscription = model.$isGeneratingFeatureTemplates.sink { isGeneratingFeatureTemplates in
+            lockedValues.withLock { $0.append(isGeneratingFeatureTemplates) }
+        }
+        
         #expect(model.featureTemplateSections.isEmpty)
         await model.generateFeatureTemplates()
         #expect(model.featureTemplateSections.isEmpty)
@@ -75,10 +89,13 @@ struct FeatureTemplatePickerTests {
         model.searchText = "foo"
         #expect(model.showContentUnavailable)
         #expect(!model.showNoTemplatesFound)
+        
+        let values = lockedValues.withLock { $0 }
+        #expect(values == [false, true, false])
     }
 }
 
-private func makeMap() -> Map {
+private func makeMapWithTemplates() -> Map {
     let map = Map(spatialReference: .webMercator)
     let featureTable = ServiceFeatureTable(url: URL(string: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0")!)
     let featureLayer = FeatureLayer(featureTable: featureTable)
