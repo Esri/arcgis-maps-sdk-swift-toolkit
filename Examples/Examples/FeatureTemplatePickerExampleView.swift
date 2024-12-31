@@ -16,8 +16,9 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+/// Allows a user to select a feature template and displays
+/// the name of the template that was selected.
 struct FeatureTemplatePickerExampleView: View {
-    /// Creates a map with a feature table that has templates.
     static func makeMap() -> Map {
         let map = Map(basemapStyle: .arcGISTopographic)
         let featureTable = ServiceFeatureTable(url: URL(string: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0")!)
@@ -53,13 +54,10 @@ struct FeatureTemplatePickerExampleView: View {
                 }
             }
             .onChange(of: selection) { _ in
-                guard let selection else { return }
-                
                 // Dismiss the template picker upon selection.
-                templatePickerIsPresented = false
-                
-                // Print out selected template name.
-                print("\(selection.template.name) Template Selected")
+                if selection != nil {
+                    templatePickerIsPresented = false
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -70,6 +68,16 @@ struct FeatureTemplatePickerExampleView: View {
                     }
                 }
             }
+            .safeAreaInset(edge: .top) {
+                if let selection {
+                    HStack {
+                        if let image = selection.image {
+                            Image(uiImage: image)
+                        }
+                        Text("\(selection.template.name) Template Selected")
+                    }
+                    .font(.subheadline)
+                }
+            }
     }
 }
-
