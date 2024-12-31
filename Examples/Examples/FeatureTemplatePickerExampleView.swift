@@ -20,11 +20,11 @@
 ***REMOVED***/ the name of the template that was selected.
 struct FeatureTemplatePickerExampleView: View {
 ***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***let portalItem = PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED***id: Item.ID("9f3a674e998f461580006e626611f9ad")!
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***return Map(item: portalItem)
+***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED******REMOVED***let featureTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0")!)
+***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: featureTable)
+***REMOVED******REMOVED***map.addOperationalLayer(featureLayer)
+***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
