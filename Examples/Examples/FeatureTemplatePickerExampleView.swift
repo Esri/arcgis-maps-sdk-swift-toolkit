@@ -39,7 +39,7 @@ struct FeatureTemplatePickerExampleView: View {
     
     var body: some View {
         MapView(map: map)
-            .sheet(isPresented: $isShowingTemplates) {
+            .sheet(isPresented: $templatePickerIsPresented) {
                 NavigationStack {
                     FeatureTemplatePicker(
                         geoModel: map,
@@ -56,13 +56,13 @@ struct FeatureTemplatePickerExampleView: View {
             .onChange(of: selection) { _ in
                 // Dismiss the template picker upon selection.
                 if selection != nil {
-                    isShowingTemplates = false
+                    templatePickerIsPresented = false
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        isShowingTemplates = true
+                        templatePickerIsPresented = true
                     } label: {
                         Text("Templates")
                     }
