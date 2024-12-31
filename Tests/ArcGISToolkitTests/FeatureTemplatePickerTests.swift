@@ -30,15 +30,51 @@ import Testing
 struct FeatureTemplatePickerTests {
     @Test
     @MainActor
-    func testModel() async throws {
+    func testGeoModelWithTemplates() async throws {
         let map = makeMap()
         try await map.load()
         
         let model = FeatureTemplatePicker.Model(geoModel: map, includeNonCreatableFeatureTemplates: true)
-        #expect(model.includeNonCreatableFeatureTemplates == true)
-        #expect(model.isGeneratingFeatureTemplates == false)
-        #expect(model.showContentUnavailable == false)
-        #expect(model.showNoTemplatesFound == false)
+        #expect(model.includeNonCreatableFeatureTemplates)
+        #expect(!model.isGeneratingFeatureTemplates)
+        #expect(!model.showContentUnavailable)
+        #expect(!model.showNoTemplatesFound)
+        
+        #expect(model.featureTemplateSections.isEmpty)
+        await model.generateFeatureTemplates()
+        #expect(model.featureTemplateSections.count == 1)
+        if let section = model.featureTemplateSections.first {
+            #expect(section.infos.count == 5)
+        }
+        #expect(!model.showContentUnavailable)
+        #expect(!model.showNoTemplatesFound)
+        
+        model.searchText = "foo"
+        #expect(!model.showContentUnavailable)
+        #expect(model.showNoTemplatesFound)
+    }
+    
+    @Test
+    @MainActor
+    func testGeoModelNoTemplates() async throws {
+        let map = Map(spatialReference: .webMercator)
+        try await map.load()
+        
+        let model = FeatureTemplatePicker.Model(geoModel: map, includeNonCreatableFeatureTemplates: false)
+        #expect(!model.includeNonCreatableFeatureTemplates)
+        #expect(!model.isGeneratingFeatureTemplates)
+        #expect(!model.showContentUnavailable)
+        #expect(!model.showNoTemplatesFound)
+        
+        #expect(model.featureTemplateSections.isEmpty)
+        await model.generateFeatureTemplates()
+        #expect(model.featureTemplateSections.isEmpty)
+        #expect(model.showContentUnavailable)
+        #expect(!model.showNoTemplatesFound)
+        
+        model.searchText = "foo"
+        #expect(model.showContentUnavailable)
+        #expect(!model.showNoTemplatesFound)
     }
 }
 
