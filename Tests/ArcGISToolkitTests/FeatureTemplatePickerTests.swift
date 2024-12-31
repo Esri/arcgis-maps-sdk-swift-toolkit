@@ -24,7 +24,6 @@ import ArcGIS
 @testable import ArcGISToolkit
 import Foundation
 import os
-import SwiftUI
 import Testing
 
 @Suite("FeatureTemplatePicker Tests")
