@@ -39,7 +39,7 @@ struct FeatureTemplatePickerExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingTemplates) {
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $templatePickerIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureTemplatePicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map,
@@ -56,13 +56,13 @@ struct FeatureTemplatePickerExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selection) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Dismiss the template picker upon selection.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if selection != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingTemplates = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***templatePickerIsPresented = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingTemplates = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***templatePickerIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Templates")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
