@@ -154,7 +154,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(status.allowsDownload)
-***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
