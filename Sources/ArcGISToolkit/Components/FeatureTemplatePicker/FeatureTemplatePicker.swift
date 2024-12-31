@@ -175,24 +175,24 @@ extension FeatureTemplatePicker {
 ***REMOVED******REMOVED******REMOVED***/ The associated geo model.
 ***REMOVED******REMOVED***let geoModel: GeoModel
 ***REMOVED******REMOVED******REMOVED***/ Include feature templates from tables where features cannot be created.
-***REMOVED******REMOVED***private let includeNonCreatableFeatureTemplates: Bool
+***REMOVED******REMOVED***let includeNonCreatableFeatureTemplates: Bool
 ***REMOVED******REMOVED******REMOVED***/ Search text for filtering the list of templates.
 ***REMOVED******REMOVED***var searchText: String = "" {
 ***REMOVED******REMOVED******REMOVED***didSet { templatesOrSearchTextDidChange() ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The complete unfiltered list of feature template sections.
-***REMOVED******REMOVED***private var unfilteredFeatureTemplateSections = [FeatureTemplateSectionInfo]() {
+***REMOVED******REMOVED***private(set) var unfilteredFeatureTemplateSections = [FeatureTemplateSectionInfo]() {
 ***REMOVED******REMOVED******REMOVED***didSet { templatesOrSearchTextDidChange() ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The sections.
-***REMOVED******REMOVED***@Published fileprivate private(set) var featureTemplateSections = [FeatureTemplateSectionInfo]()
+***REMOVED******REMOVED***@Published private(set) var featureTemplateSections = [FeatureTemplateSectionInfo]()
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether templates are being generated.
-***REMOVED******REMOVED***@Published var isGeneratingFeatureTemplates = false
+***REMOVED******REMOVED***@Published private(set) var isGeneratingFeatureTemplates = false
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if content is unavailable.
-***REMOVED******REMOVED***@Published var showContentUnavailable = false
+***REMOVED******REMOVED***@Published private(set) var showContentUnavailable = false
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if no templates were found with the given search text.
-***REMOVED******REMOVED***@Published var showNoTemplatesFound = false
+***REMOVED******REMOVED***@Published private(set) var showNoTemplatesFound = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Creates a model for a given geo model.
 ***REMOVED******REMOVED***init(geoModel: GeoModel, includeNonCreatableFeatureTemplates: Bool) {
@@ -310,7 +310,7 @@ private extension ArcGISFeatureTable {
 ***REMOVED***
 
 ***REMOVED***/ A value that represents a section in the feature template picker.
-private struct FeatureTemplateSectionInfo: Identifiable {
+struct FeatureTemplateSectionInfo: Identifiable {
 ***REMOVED***let table: ArcGISFeatureTable
 ***REMOVED***var infos: [FeatureTemplateInfo]
 ***REMOVED***let id: UUID = UUID()
