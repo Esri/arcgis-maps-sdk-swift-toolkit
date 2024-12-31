@@ -1,12 +1,4 @@
-***REMOVED***
-***REMOVED***  CompassTests 2.swift
-***REMOVED***  arcgis-maps-sdk-swift-toolkit
-***REMOVED***
-***REMOVED***  Created by Ryan Olson on 12/31/24.
-***REMOVED***
-
-
-***REMOVED*** Copyright 2022 Esri
+***REMOVED*** Copyright 2024 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
