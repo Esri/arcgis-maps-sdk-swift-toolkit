@@ -102,7 +102,7 @@ private extension String {
             bundle: .toolkitModule,
             comment: """
                  Details for showing a view that tells the user there are no feature templates
-                 available in this map.
+                 available.
                  """
         )
     }
