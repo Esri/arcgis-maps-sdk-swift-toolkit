@@ -102,7 +102,7 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Details for showing a view that tells the user there are no feature templates
-***REMOVED******REMOVED******REMOVED******REMOVED*** available in this map.
+***REMOVED******REMOVED******REMOVED******REMOVED*** available.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED***)
 ***REMOVED***
