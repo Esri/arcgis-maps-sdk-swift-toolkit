@@ -151,6 +151,8 @@ private struct FeatureTemplateView: View {
             } icon: {
                 if let image = info.image {
                     Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 } else {
                     Image(systemName: "minus")
                         .foregroundStyle(.secondary)
