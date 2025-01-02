@@ -150,9 +150,15 @@ private struct FeatureTemplateView: View {
                     .lineLimit(1)
             } icon: {
                 if let image = info.image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
+                    if image.size.width > 50 || image.size.height > 50 {
+                        // Limit icon to 50x50.
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } else {
+                        // But don't restrict how small the icon can be.
+                        Image(uiImage: image)
+                    }
                 } else {
                     Image(systemName: "minus")
                         .foregroundStyle(.secondary)
