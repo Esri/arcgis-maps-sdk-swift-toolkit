@@ -217,7 +217,10 @@ extension FeatureTemplatePicker {
             let layersAndTables = geoModel.arcGISFeatureLayersAndTables
             await layersAndTables.map(\.table).load()
             for (layer, table) in layersAndTables {
-                guard includeNonCreatableFeatureTemplates || table.canAddFeature else { continue }
+                guard includeNonCreatableFeatureTemplates || table.canAddFeature,
+                      // If the table failed to load then makeFeature will precondition fail.
+                      table.loadStatus == .loaded
+                else { continue }
                 var infos = [FeatureTemplateInfo]()
                 for template in table.allTemplates {
                     let feature = table.makeFeature(template: template)
