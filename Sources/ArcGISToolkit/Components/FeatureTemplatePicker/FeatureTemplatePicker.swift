@@ -180,9 +180,9 @@ private struct FeatureTemplateView: View {
     /// This will scale down images that are bigger than the max,
     /// but for images smaller than that it will not scale them up.
     private func size(for image: UIImage, maxSize: CGFloat) -> (width: CGFloat, height: CGFloat) {
-        var xScale = min(1, maxSize / image.size.width)
-        var yScale = min(1, maxSize / image.size.height)
-        var scale = min(xScale, yScale)
+        let xScale = min(1, maxSize / image.size.width)
+        let yScale = min(1, maxSize / image.size.height)
+        let scale = min(xScale, yScale)
         return (
             width: image.size.width * xScale,
             height: image.size.height * yScale
