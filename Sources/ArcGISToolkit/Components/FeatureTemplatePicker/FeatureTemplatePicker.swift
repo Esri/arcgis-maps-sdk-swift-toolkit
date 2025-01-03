@@ -153,23 +153,11 @@ private struct FeatureTemplateView: View {
                     .lineLimit(1)
             } icon: {
                 if let image = info.image {
-                    if #available(iOS 17.0, *) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .containerRelativeFrame(.horizontal) { size, axis in
-                                let maxSize = maxImageSize
-                                if image.size.width > maxSize {
-                                    // Limit icon to max size.
-                                    return maxSize
-                                } else {
-                                    // But don't restrict how small the icon can be.
-                                    return image.size.width
-                                }
-                            }
-                    } else {
-                        // Fallback on earlier versions
-                    }
+                    let size = size(for: image, maxSize: maxImageSize)
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: size.width, height: size.height)
                 } else {
                     Image(systemName: "minus")
                         .foregroundStyle(.secondary)
@@ -186,6 +174,19 @@ private struct FeatureTemplateView: View {
         .onTapGesture {
             selection = info
         }
+    }
+    
+    /// Returns the size that the icon should be in the feature template view.
+    /// This will scale down images that are bigger than the max,
+    /// but for images smaller than that it will not scale them up.
+    private func size(for image: UIImage, maxSize: CGFloat) -> (width: CGFloat, height: CGFloat) {
+        var xScale = min(1, maxSize / image.size.width)
+        var yScale = min(1, maxSize / image.size.height)
+        var scale = min(xScale, yScale)
+        return (
+            width: image.size.width * xScale,
+            height: image.size.height * yScale
+        )
     }
 }
 
