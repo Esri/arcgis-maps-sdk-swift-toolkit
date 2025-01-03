@@ -143,6 +143,9 @@ private struct FeatureTemplateView: View {
     let info: FeatureTemplateInfo
     @Binding var selection: FeatureTemplateInfo?
     
+    // The maximum size of the image when the font is body.
+    @ScaledMetric(relativeTo: .body) var maxImageSize = 44
+    
     var body: some View {
         HStack {
             Label {
@@ -150,20 +153,25 @@ private struct FeatureTemplateView: View {
                     .lineLimit(1)
             } icon: {
                 if let image = info.image {
-                    if image.size.width > 50 || image.size.height > 50 {
-                        // Limit icon to 50x50.
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } else {
-                        // But don't restrict how small the icon can be.
-                        Image(uiImage: image)
-                    }
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .containerRelativeFrame(.horizontal) { size, axis in
+                            let maxSize = maxImageSize
+                            if image.size.width > maxSize {
+                                // Limit icon to max size.
+                                return maxSize
+                            } else {
+                                // But don't restrict how small the icon can be.
+                                return image.size.width
+                            }
+                        }
                 } else {
                     Image(systemName: "minus")
                         .foregroundStyle(.secondary)
                 }
             }
+            .font(.body)
             Spacer()
             if info == selection {
                 Image(systemName: "checkmark")
