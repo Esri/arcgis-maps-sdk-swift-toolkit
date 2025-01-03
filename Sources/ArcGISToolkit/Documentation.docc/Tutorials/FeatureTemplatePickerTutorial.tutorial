@@ -16,7 +16,7 @@
             }
             
             @Step {
-                Add button that, when tapped, will display the feature template picker.
+                Add a button that, when tapped, will display the feature template picker.
                 @Code(name: "FeatureTemplatePicker.swift", file: FeatureTemplatePickerStep2.swift)
             }
             
