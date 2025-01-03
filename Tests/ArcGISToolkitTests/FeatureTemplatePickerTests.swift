@@ -52,6 +52,8 @@ struct FeatureTemplatePickerTests {
         
         let values = lockedValues.withLock { $0 }
         #expect(values == [false, true, false])
+        
+        subscription.cancel()
     }
     
     @Test
@@ -83,6 +85,8 @@ struct FeatureTemplatePickerTests {
         
         let values = lockedValues.withLock { $0 }
         #expect(values == [false, true, false])
+        
+        subscription.cancel()
     }
 }
 
