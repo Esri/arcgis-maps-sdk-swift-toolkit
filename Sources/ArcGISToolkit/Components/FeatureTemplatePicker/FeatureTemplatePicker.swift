@@ -153,19 +153,23 @@ private struct FeatureTemplateView: View {
                     .lineLimit(1)
             } icon: {
                 if let image = info.image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .containerRelativeFrame(.horizontal) { size, axis in
-                            let maxSize = maxImageSize
-                            if image.size.width > maxSize {
-                                // Limit icon to max size.
-                                return maxSize
-                            } else {
-                                // But don't restrict how small the icon can be.
-                                return image.size.width
+                    if #available(iOS 17.0, *) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .containerRelativeFrame(.horizontal) { size, axis in
+                                let maxSize = maxImageSize
+                                if image.size.width > maxSize {
+                                    // Limit icon to max size.
+                                    return maxSize
+                                } else {
+                                    // But don't restrict how small the icon can be.
+                                    return image.size.width
+                                }
                             }
-                        }
+                    } else {
+                        // Fallback on earlier versions
+                    }
                 } else {
                     Image(systemName: "minus")
                         .foregroundStyle(.secondary)
@@ -175,6 +179,7 @@ private struct FeatureTemplateView: View {
             Spacer()
             if info == selection {
                 Image(systemName: "checkmark")
+                    .foregroundStyle(Color.accentColor)
             }
         }
         .contentShape(Rectangle())
@@ -245,7 +250,7 @@ extension FeatureTemplatePicker {
 #else
                     scale = UIScreen.main.scale
 #endif
-                    let image = try? await symbol?.makeSwatch(scale: UIScreen.main.scale)
+                    let image = try? await symbol?.makeSwatch(scale: scale)
                     infos.append(
                         FeatureTemplateInfo(
                             layer: layer,
