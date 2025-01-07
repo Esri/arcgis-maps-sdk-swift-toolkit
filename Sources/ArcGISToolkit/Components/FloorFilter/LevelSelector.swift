@@ -16,7 +16,6 @@ import SwiftUI
 import ArcGIS
 
 /// A view which allows selection of levels represented in `FloorFacility`.
-@available(visionOS, unavailable)
 struct LevelSelector: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
@@ -50,7 +49,6 @@ struct LevelSelector: View {
     }
 }
 
-@available(visionOS, unavailable)
 extension LevelSelector {
     /// A list of all the levels to be displayed.
     ///
@@ -95,20 +93,23 @@ extension LevelSelector {
     /// - Parameter level: The level represented by the button.
     /// - Returns: The button representing the provided level.
     @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-        Text(level.shortName)
-            .foregroundColor(.primary)
-            .padding([.vertical], 4)
-            .frame(maxWidth: .infinity)
-            .background {
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(buttonColorFor(level))
+        Button {
+            viewModel.setLevel(level)
+            if isCollapsed && levels.count > 1 {
+                isCollapsed.toggle()
             }
-            .onTapGesture {
-                viewModel.setLevel(level)
-                if isCollapsed && levels.count > 1 {
-                    isCollapsed.toggle()
-                }
-            }
+        } label: {
+            Text(level.shortName)
+        }
+        .foregroundColor(.primary)
+        .padding([.vertical], 4)
+        .frame(maxWidth: .infinity)
+#if !os(visionOS)
+        .background {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(buttonColorFor(level))
+        }
+#endif
     }
     
     /// A scrollable list of buttons; one for each level to be displayed.

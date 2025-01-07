@@ -18,7 +18,6 @@ import SwiftUI
 
 /// Manages the state for a `FloorFilter`.
 @MainActor
-@available(visionOS, unavailable)
 final class FloorFilterViewModel: ObservableObject {
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
