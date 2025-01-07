@@ -88,7 +88,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct Group: Identifiable{
+***REMOVED***struct Group: Identifiable {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let associations: [Association]
 ***REMOVED******REMOVED***
