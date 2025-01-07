@@ -62,7 +62,6 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [FloorFilterExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
-@available(visionOS, unavailable)
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -136,8 +135,12 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Floor Filter button")
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+#else
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
+#endif
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
@@ -252,7 +255,6 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 public extension FloorFilter {
 ***REMOVED******REMOVED***/ Adds a condition that controls whether a site in the Floor Manager
 ***REMOVED******REMOVED***/ is automatically selected upon loading.

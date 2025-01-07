@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view which allows selection of levels represented in `FloorFacility`.
-@available(visionOS, unavailable)
 struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
@@ -50,7 +49,6 @@ struct LevelSelector: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension LevelSelector {
 ***REMOVED******REMOVED***/ A list of all the levels to be displayed.
 ***REMOVED******REMOVED***/
@@ -95,20 +93,23 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The button representing the provided level.
 ***REMOVED***@ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-***REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED***.background {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColorFor(level))
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED***
+***REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED***.padding([.vertical], 4)
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+#if !os(visionOS)
+***REMOVED******REMOVED***.background {
+***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColorFor(level))
+***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scrollable list of buttons; one for each level to be displayed.
