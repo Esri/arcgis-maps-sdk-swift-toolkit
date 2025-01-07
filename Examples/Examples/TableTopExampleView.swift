@@ -16,7 +16,6 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-@available(macCatalyst, unavailable)
 struct TableTopExampleView: View {
     @State private var scene: ArcGIS.Scene = {
         // Creates a scene layer from buildings REST service.
