@@ -88,7 +88,7 @@ extension UtilityNetworkAssociationFormElementView {
         }
     }
     
-    struct Group: Identifiable{
+    struct Group: Identifiable {
         /// <#Description#>
         let associations: [Association]
         
