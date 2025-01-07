@@ -16,7 +16,6 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-@available(macCatalyst, unavailable)
 struct TableTopExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates a scene layer from buildings REST service.
