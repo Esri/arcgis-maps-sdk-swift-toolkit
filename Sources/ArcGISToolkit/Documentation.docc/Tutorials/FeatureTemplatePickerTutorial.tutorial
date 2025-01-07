@@ -1,0 +1,39 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Feature Template Picker Tutorial") {
+        A `FeatureTemplatePicker` allows the user to pick feature templates from a `Map` or `Scene`. One situation this component is useful is the first step when you are allowing a user to create a new feature.
+        @Image(source: FeatureTemplatePicker, alt: "The FeatureTemplatePicker component")
+    }
+    
+    @Section(title: "Using the Feature Template Picker") {
+        @ContentAndMedia {
+            @Image(source: FeatureTemplatePicker, alt: "The FeatureTemplatePicker component")
+        }
+        
+        @Steps {
+            @Step {
+                Create a new view with a `MapView`.
+                @Code(name: "FeatureTemplatePicker.swift", file: FeatureTemplatePickerStep1.swift)
+            }
+            
+            @Step {
+                Add a button that, when tapped, will display the feature template picker.
+                @Code(name: "FeatureTemplatePicker.swift", file: FeatureTemplatePickerStep2.swift)
+            }
+            
+            @Step {
+                Add the sheet with the feature template picker that is presented when the button is tapped.
+                @Code(name: "FeatureTemplatePicker.swift", file: FeatureTemplatePickerStep3.swift)
+            }
+            
+            @Step {
+                When the sheet appears, clear the selection.
+                @Code(name: "FeatureTemplatePicker.swift", file: FeatureTemplatePickerStep4.swift)
+            }
+            
+            @Step {
+                When the user selects a template, dismiss the sheet and perform some action. In this case we just print the name of the template that was chosen.
+                @Code(name: "FeatureTemplatePicker.swift", file: FeatureTemplatePickerStep5.swift)
+            }
+        }
+    }
+}
