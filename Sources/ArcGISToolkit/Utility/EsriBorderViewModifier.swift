@@ -15,7 +15,6 @@
 import SwiftUI
 
 /// A modifier which displays a 2 point width border and a shadow around a view.
-@available(visionOS, unavailable)
 struct EsriBorderViewModifier: ViewModifier {
     var padding: EdgeInsets
     
@@ -23,7 +22,11 @@ struct EsriBorderViewModifier: ViewModifier {
         let roundedRect = RoundedRectangle(cornerRadius: 8)
         content
             .padding(padding)
+#if os(visionOS)
+            .background(.regularMaterial)
+#else
             .background(Color(uiColor: .systemBackground))
+#endif
             .clipShape(roundedRect)
             .overlay(
                 roundedRect
@@ -39,7 +42,6 @@ struct EsriBorderViewModifier: ViewModifier {
     }
 }
 
-@available(visionOS, unavailable)
 public extension View {
     func esriBorder(
         padding: EdgeInsets = .toolkitDefault
