@@ -33,7 +33,7 @@ struct Examples: View {
             .geoview,
             .views
         ]
-#if !targetEnvironment(macCatalyst)
+#if os(iOS) && !targetEnvironment(macCatalyst)
         return [.augmentedReality] + common
 #else
         return common
@@ -42,36 +42,50 @@ struct Examples: View {
 }
 
 extension ExampleList {
-    @available(macCatalyst, unavailable)
-    static let augmentedReality = Self(
-        name: "Augmented Reality",
-        examples: [
-            AnyExample("Flyover", content: FlyoverExampleView()),
-            AnyExample("Tabletop", content: TableTopExampleView()),
-            AnyExample("World Scale", content: WorldScaleExampleView())
-        ]
-    )
+#if os(iOS) && !targetEnvironment(macCatalyst)
+    static var augmentedReality: Self {
+        .init(
+            name: "Augmented Reality",
+            examples: [
+                AnyExample("Flyover", content: FlyoverExampleView()),
+                AnyExample("Tabletop", content: TableTopExampleView()),
+                AnyExample("World Scale", content: WorldScaleExampleView())
+            ]
+        )
+    }
+#endif
     
-    static let geoview = Self(
-        name: "GeoView",
-        examples: [
+    static var geoview: Self {
+        var examples: [any Example] = [
             AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
             AnyExample("Bookmarks", content: BookmarksExampleView()),
-            AnyExample("Compass", content: CompassExampleView()),
-            AnyExample("Feature Form", content: FeatureFormExampleView()),
-            AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
-            AnyExample("Scalebar", content: ScalebarExampleView()),
-            AnyExample("Search", content: SearchExampleView()),
-            AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+            AnyExample("Scalebar", content: ScalebarExampleView())
         ]
-    )
+#if !os(visionOS)
+        examples.append(
+            contentsOf: [
+                AnyExample("Compass", content: CompassExampleView()),
+                AnyExample("Feature Form", content: FeatureFormExampleView()),
+                AnyExample("Floor Filter", content: FloorFilterExampleView()),
+                AnyExample("Search", content: SearchExampleView()),
+                AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+            ] as [any Example]
+        )
+#endif
+        return .init(
+            name: "GeoView",
+            examples: examples.sorted(by: { $0.name < $1.name })
+        )
+    }
     
-    static let views = Self(
-        name: "Views",
-        examples: [
-            AnyExample("Floating Panel", content: FloatingPanelExampleView())
-        ]
-    )
+    static var views: Self {
+        .init(
+            name: "Views",
+            examples: [
+                AnyExample("Floating Panel", content: FloatingPanelExampleView())
+            ]
+        )
+    }
 }
