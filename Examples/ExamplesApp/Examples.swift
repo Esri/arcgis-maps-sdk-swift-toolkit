@@ -33,7 +33,7 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED***.geoview,
 ***REMOVED******REMOVED******REMOVED***.views
 ***REMOVED******REMOVED***]
-#if !targetEnvironment(macCatalyst)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***return [.augmentedReality] + common
 #else
 ***REMOVED******REMOVED***return common
@@ -42,36 +42,50 @@ struct Examples: View {
 ***REMOVED***
 
 extension ExampleList {
-***REMOVED***@available(macCatalyst, unavailable)
-***REMOVED***static let augmentedReality = Self(
-***REMOVED******REMOVED***name: "Augmented Reality",
-***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Flyover", content: FlyoverExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Tabletop", content: TableTopExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("World Scale", content: WorldScaleExampleView())
-***REMOVED******REMOVED***]
-***REMOVED***)
+#if os(iOS) && !targetEnvironment(macCatalyst)
+***REMOVED***static var augmentedReality: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***name: "Augmented Reality",
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Flyover", content: FlyoverExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Tabletop", content: TableTopExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("World Scale", content: WorldScaleExampleView())
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let geoview = Self(
-***REMOVED******REMOVED***name: "GeoView",
-***REMOVED******REMOVED***examples: [
+#endif
+***REMOVED***
+***REMOVED***static var geoview: Self {
+***REMOVED******REMOVED***var examples: [any Example] = [
 ***REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Bookmarks", content: BookmarksExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView())
 ***REMOVED******REMOVED***]
-***REMOVED***)
+#if !os(visionOS)
+***REMOVED******REMOVED***examples.append(
+***REMOVED******REMOVED******REMOVED***contentsOf: [
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED******REMOVED******REMOVED***] as [any Example]
+***REMOVED******REMOVED***)
+#endif
+***REMOVED******REMOVED***return .init(
+***REMOVED******REMOVED******REMOVED***name: "GeoView",
+***REMOVED******REMOVED******REMOVED***examples: examples.sorted(by: { $0.name < $1.name ***REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let views = Self(
-***REMOVED******REMOVED***name: "Views",
-***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Floating Panel", content: FloatingPanelExampleView())
-***REMOVED******REMOVED***]
-***REMOVED***)
+***REMOVED***
+***REMOVED***static var views: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***name: "Views",
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Floating Panel", content: FloatingPanelExampleView())
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
