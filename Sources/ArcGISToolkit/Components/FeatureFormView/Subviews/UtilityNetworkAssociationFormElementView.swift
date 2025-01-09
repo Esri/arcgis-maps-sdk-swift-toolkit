@@ -35,14 +35,11 @@ struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(groups) { group in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GroupView(group: group)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ForEach(groups) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GroupView(group: group)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -60,18 +57,25 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let imageGenerationAction: (() async -> UIImage?)?
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationView: View {
-***REMOVED******REMOVED***let association: Association
+***REMOVED******REMOVED***var association: Association
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@State private var fallbackIcon: UIImage?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let image = association.icon {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED*** else if let fallbackIcon {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: fallbackIcon)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
@@ -84,6 +88,13 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***if association.icon == nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let imageGenerationAction = association.imageGenerationAction,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let icon = await imageGenerationAction() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackIcon = icon
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -111,6 +122,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(group.associations) { association in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: association)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
