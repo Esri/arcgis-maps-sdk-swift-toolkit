@@ -93,25 +93,23 @@ extension LevelSelector {
     /// - Parameter level: The level represented by the button.
     /// - Returns: The button representing the provided level.
     @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-        Button {
+        Button(level.shortName) {
             viewModel.setLevel(level)
             if isCollapsed && levels.count > 1 {
-                isCollapsed.toggle()
+                isCollapsed = false
             }
-        } label: {
-            Text(level.shortName)
         }
-        .foregroundColor(textColorFor(level))
+        .foregroundColor(textColor(for: level))
         .frame(maxWidth: .infinity)
 #if os(visionOS)
         .buttonStyle(.borderless)
-        .background(buttonColorFor(level))
+        .background(buttonColor(for: level))
         .clipShape(.circle)
 #else
         .padding([.vertical], 4)
         .background {
             RoundedRectangle(cornerRadius: 5)
-                .fill(buttonColorFor(level))
+                .fill(buttonColor(for: level))
         }
 #endif
     }
@@ -137,31 +135,31 @@ extension LevelSelector {
     /// Determines a appropriate color for a button in the floor level list.
     /// - Parameter level: The level represented by the button.
     /// - Returns: The color for the button representing the provided level.
-    func buttonColorFor(_ level: FloorLevel) -> Color {
-        if viewModel.selection?.level == level {
+    func buttonColor(for level: FloorLevel) -> Color {
+        return if viewModel.selection?.level == level {
 #if os(visionOS)
-            return Color.white
+            .white
 #else
-            return Color.accentColor
+            .accentColor
 #endif
         } else {
-            return Color.secondary.opacity(0.1)
+            .secondary.opacity(0.1)
         }
     }
     
     /// Determines a appropriate text color for a button in the floor level list.
     /// - Parameter level: The level represented by the button.
     /// - Returns: The color for the text on the button that is representing the provided level.
-    func textColorFor(_ level: FloorLevel) -> Color {
+    func textColor(for level: FloorLevel) -> Color {
 #if os(visionOS)
         if viewModel.selection?.level == level {
             // We need to change the text color on visionOS when a level is selected
             // because the background is now white so the text needs to be black
             // so the text is visible.
-            return Color.black
+            return .black
         }
 #endif
-        return Color.primary
+        return .primary
     }
     
     /// Scrolls the list within the provided proxy to the button representing the selected level.
