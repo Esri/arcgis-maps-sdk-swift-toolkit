@@ -27,7 +27,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***@State private var map = Map(url: .sampleData)!
+***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***@State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
@@ -56,6 +56,10 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(FeatureForm(feature: feature))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
@@ -64,7 +68,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: model.formIsPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, 16)
@@ -134,6 +138,15 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Makes a map from a portal item.
+***REMOVED***static func makeMap() -> Map {
+***REMOVED******REMOVED***let portalItem = PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return Map(item: portalItem)
+***REMOVED***
+***REMOVED***
 
 extension FeatureFormExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
@@ -156,6 +169,18 @@ extension FeatureFormExampleView {
 private extension URL {
 ***REMOVED***static var sampleData: Self {
 ***REMOVED******REMOVED***.init(string: "https:***REMOVED***www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
+***REMOVED***
+***REMOVED***
+
+private extension ArcGISCredential {
+***REMOVED***static var publicSample: ArcGISCredential {
+***REMOVED******REMOVED***get async throws {
+***REMOVED******REMOVED******REMOVED***try await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED***for: URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
+***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
