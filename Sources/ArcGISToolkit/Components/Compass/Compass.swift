@@ -110,6 +110,7 @@ public struct Compass: View {
                     )
                 )
 #if os(visionOS)
+                .hoverEffect()
                 .hoverEffect { effect, isActive, _ in
                     effect.scaleEffect(isActive ? 1.05 : 1.0)
                 }
