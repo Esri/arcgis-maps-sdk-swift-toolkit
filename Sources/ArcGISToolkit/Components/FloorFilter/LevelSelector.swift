@@ -100,13 +100,12 @@ extension LevelSelector {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.foregroundColor(textColor(for: level))
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 #if os(visionOS)
-***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED***.background(buttonColor(for: level))
 ***REMOVED******REMOVED***.clipShape(.circle)
-#else
+#elseif !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***.padding([.vertical], 4)
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.background {
 ***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColor(for: level))
