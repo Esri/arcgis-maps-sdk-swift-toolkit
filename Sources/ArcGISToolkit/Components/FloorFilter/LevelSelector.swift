@@ -93,25 +93,23 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The button representing the provided level.
 ***REMOVED***@ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED***Button(level.shortName) {
 ***REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
 ***REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed = false
 ***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED***
-***REMOVED******REMOVED***.foregroundColor(textColorFor(level))
+***REMOVED******REMOVED***.foregroundColor(textColor(for: level))
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 #if os(visionOS)
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
-***REMOVED******REMOVED***.background(buttonColorFor(level))
+***REMOVED******REMOVED***.background(buttonColor(for: level))
 ***REMOVED******REMOVED***.clipShape(.circle)
 #else
 ***REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED***.background {
 ***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColorFor(level))
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColor(for: level))
 ***REMOVED***
 #endif
 ***REMOVED***
@@ -137,31 +135,31 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ Determines a appropriate color for a button in the floor level list.
 ***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The color for the button representing the provided level.
-***REMOVED***func buttonColorFor(_ level: FloorLevel) -> Color {
-***REMOVED******REMOVED***if viewModel.selection?.level == level {
+***REMOVED***func buttonColor(for level: FloorLevel) -> Color {
+***REMOVED******REMOVED***return if viewModel.selection?.level == level {
 #if os(visionOS)
-***REMOVED******REMOVED******REMOVED***return Color.white
+***REMOVED******REMOVED******REMOVED***.white
 #else
-***REMOVED******REMOVED******REMOVED***return Color.accentColor
+***REMOVED******REMOVED******REMOVED***.accentColor
 #endif
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return Color.secondary.opacity(0.1)
+***REMOVED******REMOVED******REMOVED***.secondary.opacity(0.1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines a appropriate text color for a button in the floor level list.
 ***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The color for the text on the button that is representing the provided level.
-***REMOVED***func textColorFor(_ level: FloorLevel) -> Color {
+***REMOVED***func textColor(for level: FloorLevel) -> Color {
 #if os(visionOS)
 ***REMOVED******REMOVED***if viewModel.selection?.level == level {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** We need to change the text color on visionOS when a level is selected
 ***REMOVED******REMOVED******REMOVED******REMOVED*** because the background is now white so the text needs to be black
 ***REMOVED******REMOVED******REMOVED******REMOVED*** so the text is visible.
-***REMOVED******REMOVED******REMOVED***return Color.black
+***REMOVED******REMOVED******REMOVED***return .black
 ***REMOVED***
 #endif
-***REMOVED******REMOVED***return Color.primary
+***REMOVED******REMOVED***return .primary
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Scrolls the list within the provided proxy to the button representing the selected level.
