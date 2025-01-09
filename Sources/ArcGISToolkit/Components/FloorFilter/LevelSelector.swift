@@ -100,13 +100,12 @@ extension LevelSelector {
             }
         }
         .foregroundColor(textColor(for: level))
-        .frame(maxWidth: .infinity)
 #if os(visionOS)
-        .buttonStyle(.borderless)
         .background(buttonColor(for: level))
         .clipShape(.circle)
-#else
+#elseif !targetEnvironment(macCatalyst)
         .padding([.vertical], 4)
+        .frame(maxWidth: .infinity)
         .background {
             RoundedRectangle(cornerRadius: 5)
                 .fill(buttonColor(for: level))
