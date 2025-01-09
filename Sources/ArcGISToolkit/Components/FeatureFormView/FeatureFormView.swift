@@ -70,11 +70,17 @@ public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
+    /// <#Description#>
+    @State private var groups: [UtilityNetworkAssociationFormElementView.Group]?
+    
     /// A Boolean value indicating whether initial expression evaluation is running.
     @State private var initialExpressionsAreEvaluating = true
     
     /// The title of the feature form view.
     @State private var title = ""
+    
+    /// <#Description#>
+    let utilityNetwork: UtilityNetwork?
     
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
@@ -85,8 +91,9 @@ public struct FeatureFormView: View {
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm) {
+    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+        self.utilityNetwork = utilityNetwork
     }
     
     public var body: some View {
@@ -115,6 +122,14 @@ public struct FeatureFormView: View {
                         // case added for AttachmentsFormElement.
                         AttachmentsFeatureElementView(featureElement: attachmentsElement)
                     }
+                    if let groups = groups, groups.count > 0 {
+                        UtilityNetworkAssociationFormElementView(
+                            description: "[Utility Associations Element Description]",
+                            groups: groups,
+                            title: "[Utility Associations Element Title]"
+                        )
+                        .padding(.bottom)
+                    }
                 }
             }
             .onChange(model.focusedElement) { _ in
@@ -131,6 +146,47 @@ public struct FeatureFormView: View {
 #endif
         .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
+        .task {
+            try? await utilityNetwork?.load()
+            if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
+                if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
+                    var groups = [UtilityNetworkAssociationFormElementView.Group]()
+                    let uniqueGroups = Array(Set(associations.map { $0.kind }))
+                    uniqueGroups.forEach { kind in
+                        let groupMembers = associations.filter { $0.kind == kind }
+                        var associations: [UtilityNetworkAssociationFormElementView.Association] = []
+                        groupMembers.forEach { association in
+                            let associatedElement = association.toElement
+                            let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                description: "[Association Description]",
+                                icon: nil,
+                                name: associatedElement.assetType.name
+                            ) {
+                                if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first,
+                                   let featureLayer = feature.table?.layer as? FeatureLayer,
+                                   let renderer = featureLayer.renderer,
+                                   let symbol = renderer.symbol(for: feature) {
+                                    let scale: CGFloat
+#if os(visionOS)
+                                    scale = 1
+#else
+                                    scale = UIScreen.main.scale
+#endif
+                                    return try? await symbol.makeSwatch(scale: scale)
+                                } else {
+                                    return nil
+                                }
+                            }
+                            associations.append(newAssociation)
+                        }
+                        groups.append(.init(associations: associations, description: "[Group Description]", name: "\(kind)".capitalized))
+                    }
+                    self.groups = groups
+                }
+            } else {
+                print("Not a Utility Element")
+            }
+        }
     }
 }
 
