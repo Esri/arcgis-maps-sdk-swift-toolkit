@@ -70,11 +70,17 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var groups: [UtilityNetworkAssociationFormElementView.Group]?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether initial expression evaluation is running.
 ***REMOVED***@State private var initialExpressionsAreEvaluating = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let utilityNetwork: UtilityNetwork?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
@@ -85,8 +91,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm) {
+***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+***REMOVED******REMOVED***self.utilityNetwork = utilityNetwork
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -115,6 +122,14 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let groups = groups, groups.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[Utility Associations Element Description]",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups: groups,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "[Utility Associations Element Title]"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
@@ -131,6 +146,47 @@ public struct FeatureFormView: View {
 #endif
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***try? await utilityNetwork?.load()
+***REMOVED******REMOVED******REMOVED***if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var groups = [UtilityNetworkAssociationFormElementView.Group]()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let uniqueGroups = Array(Set(associations.map { $0.kind ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***uniqueGroups.forEach { kind in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let groupMembers = associations.filter { $0.kind == kind ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groupMembers.forEach { association in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = association.toElement
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[Association Description]",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***icon: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: associatedElement.assetType.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let featureLayer = feature.table?.layer as? FeatureLayer,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let renderer = featureLayer.renderer,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let symbol = renderer.symbol(for: feature) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let scale: CGFloat
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale = 1
+#else
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale = UIScreen.main.scale
+#endif
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return try? await symbol.makeSwatch(scale: scale)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(.init(associations: associations, description: "[Group Description]", name: "\(kind)".capitalized))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.groups = groups
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Not a Utility Element")
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
