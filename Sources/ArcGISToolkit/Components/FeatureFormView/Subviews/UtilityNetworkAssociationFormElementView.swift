@@ -35,14 +35,11 @@ struct UtilityNetworkAssociationFormElementView: View {
             }
             Text(description)
                 .font(.caption)
-            List {
-                ForEach(groups) { group in
-                    Section {
-                        GroupView(group: group)
-                    }
+            ForEach(groups) { group in
+                Section {
+                    GroupView(group: group)
                 }
             }
-            .listStyle(.plain)
         }
     }
 }
@@ -60,18 +57,25 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let name: String
+        
+        let imageGenerationAction: (() async -> UIImage?)?
     }
     
     struct AssociationView: View {
-        let association: Association
+        var association: Association
+        
+        @State private var fallbackIcon: UIImage?
         
         var body: some View {
             HStack {
                 if let image = association.icon {
                     Image(uiImage: image)
+                } else if let fallbackIcon {
+                    Image(uiImage: fallbackIcon)
                 }
                 VStack(alignment: .leading) {
                     Text(association.name)
+                        .lineLimit(1)
                     if let description = association.description {
                         Text(description)
                             .font(.caption2)
@@ -84,6 +88,13 @@ extension UtilityNetworkAssociationFormElementView {
                     Image(systemName: "chevron.right")
                 }
                 .font(.caption2)
+            }
+            .task {
+                if association.icon == nil,
+                   let imageGenerationAction = association.imageGenerationAction,
+                   let icon = await imageGenerationAction() {
+                    fallbackIcon = icon
+                }
             }
         }
     }
@@ -111,6 +122,7 @@ extension UtilityNetworkAssociationFormElementView {
             DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(group.associations) { association in
                     AssociationView(association: association)
+                        .padding(.leading)
                 }
             } label: {
                 VStack(alignment: .leading) {
