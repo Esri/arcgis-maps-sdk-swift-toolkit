@@ -96,9 +96,7 @@ struct SiteAndFacilitySelector: View {
                     }
                 }
                 .contentShape(Rectangle())
-#if !os(visionOS)
-                .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : Color.clear)
-#endif
+                .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : nil)
             }
 #if !os(visionOS)
             .listStyle(.plain)
