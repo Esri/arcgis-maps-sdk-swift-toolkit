@@ -12,7 +12,6 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-#if !os(visionOS)
 ***REMOVED***
 import Combine
 ***REMOVED***
@@ -300,4 +299,3 @@ private extension Viewpoint {
 ***REMOVED******REMOVED***scale: 10_000
 ***REMOVED***)
 ***REMOVED***
-#endif

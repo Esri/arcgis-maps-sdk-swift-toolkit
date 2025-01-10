@@ -60,6 +60,7 @@ extension ExampleList {
 ***REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Bookmarks", content: BookmarksExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView())
@@ -68,7 +69,6 @@ extension ExampleList {
 ***REMOVED******REMOVED***examples.append(
 ***REMOVED******REMOVED******REMOVED***contentsOf: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
 ***REMOVED******REMOVED******REMOVED***] as [any Example]

@@ -17,7 +17,7 @@
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; ***REMOVED***;
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; platformFilter = ios; ***REMOVED***;
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; platformFilters = (ios, maccatalyst, ); ***REMOVED***;
-		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; platformFilters = (ios, maccatalyst, ); ***REMOVED***;
+		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; ***REMOVED***;
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; ***REMOVED***;
 		E47ABE482652FE0C00FD2FE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */; ***REMOVED***;
 		E47ABE4B2652FE0C00FD2FE3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */; ***REMOVED***;
