@@ -87,6 +87,7 @@ extension UtilityNetworkAssociationFormElementView {
                 } label: {
                     Image(systemName: "chevron.right")
                 }
+                .buttonStyle(.plain)
                 .font(.caption2)
             }
             .task {
