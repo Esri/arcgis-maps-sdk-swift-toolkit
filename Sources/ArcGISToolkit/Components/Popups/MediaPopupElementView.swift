@@ -58,7 +58,7 @@ struct MediaPopupElementView: View {
         @State private var width: CGFloat = .zero
         
         var body: some View {
-            ScrollView(.horizontal) {
+            let scrollView = ScrollView(.horizontal) {
                 HStack(alignment: .top, spacing: 8) {
                     ForEach(popupMedia) { media in
                         Group {
@@ -82,10 +82,20 @@ struct MediaPopupElementView: View {
                     }
                 }
             }
-            .onGeometryChange(for: CGRect.self) { proxy in
-                proxy.frame(in: .global)
-            } action: { newValue in
-                width = newValue.width * widthScaleFactor
+            if #available(iOS 18.0, *) {
+                scrollView
+                    .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                        geometry.contentSize.width
+                    } action: { _, newValue in
+                        width = newValue * widthScaleFactor
+                    }
+            } else {
+                scrollView
+                    .onGeometryChange(for: CGFloat.self) { proxy in
+                        proxy.frame(in: .global).width
+                    } action: { newValue in
+                        width = newValue * widthScaleFactor
+                    }
             }
         }
         
