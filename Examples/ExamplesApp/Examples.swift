@@ -59,6 +59,7 @@ extension ExampleList {
         var examples: [any Example] = [
             AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
             AnyExample("Bookmarks", content: BookmarksExampleView()),
+            AnyExample("Compass", content: CompassExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
             AnyExample("Scalebar", content: ScalebarExampleView())
@@ -66,7 +67,6 @@ extension ExampleList {
 #if !os(visionOS)
         examples.append(
             contentsOf: [
-                AnyExample("Compass", content: CompassExampleView()),
                 AnyExample("Feature Form", content: FeatureFormExampleView()),
                 AnyExample("Floor Filter", content: FloorFilterExampleView()),
                 AnyExample("Search", content: SearchExampleView()),
