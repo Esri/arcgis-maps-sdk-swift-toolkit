@@ -149,30 +149,25 @@ public struct FeatureFormView: View {
         .task {
             try? await utilityNetwork?.load()
             if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
+                // Grab Utility Network Associations for the element being edited
                 if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
                     var groups = [UtilityNetworkAssociationFormElementView.Group]()
+                    // Create a set of the unique association kinds present
                     let uniqueGroups = Array(Set(associations.map { $0.kind }))
-                    uniqueGroups.forEach { kind in
+                    for kind in uniqueGroups {
+                        // Filter the associations by kind
                         let groupMembers = associations.filter { $0.kind == kind }
                         var associations: [UtilityNetworkAssociationFormElementView.Association] = []
-                        groupMembers.forEach { association in
+                        // For each association, create a Toolkit representation and add it to the group
+                        for association in groupMembers {
                             let associatedElement = association.toElement
                             let newAssociation = UtilityNetworkAssociationFormElementView.Association(
                                 description: "[Association Description]",
                                 icon: nil,
                                 name: associatedElement.assetType.name
                             ) {
-                                if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first,
-                                   let featureLayer = feature.table?.layer as? FeatureLayer,
-                                   let renderer = featureLayer.renderer,
-                                   let symbol = renderer.symbol(for: feature) {
-                                    let scale: CGFloat
-#if os(visionOS)
-                                    scale = 1
-#else
-                                    scale = UIScreen.main.scale
-#endif
-                                    return try? await symbol.makeSwatch(scale: scale)
+                                if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first {
+                                   return await feature.makeSymbol()
                                 } else {
                                     return nil
                                 }
