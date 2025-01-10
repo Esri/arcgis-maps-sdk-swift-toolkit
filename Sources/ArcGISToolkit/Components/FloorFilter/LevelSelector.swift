@@ -93,23 +93,28 @@ extension LevelSelector {
     /// - Parameter level: The level represented by the button.
     /// - Returns: The button representing the provided level.
     @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-        Button(level.shortName) {
+        Button {
             viewModel.setLevel(level)
             if isCollapsed && levels.count > 1 {
                 isCollapsed = false
             }
+        } label: {
+            Text(level.shortName)
+                .foregroundColor(textColor(for: level))
+#if !os(visionOS)
+                .frame(maxWidth: .infinity)
+                .padding([.vertical], 4)
+                .background {
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(buttonColor(for: level))
+                }
+#endif
         }
-        .foregroundColor(textColor(for: level))
 #if os(visionOS)
         .background(buttonColor(for: level))
         .clipShape(.circle)
-#elseif !targetEnvironment(macCatalyst)
-        .padding([.vertical], 4)
-        .frame(maxWidth: .infinity)
-        .background {
-            RoundedRectangle(cornerRadius: 5)
-                .fill(buttonColor(for: level))
-        }
+#else
+        .buttonStyle(.plain)
 #endif
     }
     
