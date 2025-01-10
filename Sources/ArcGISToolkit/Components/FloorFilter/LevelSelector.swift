@@ -99,23 +99,19 @@ extension LevelSelector {
                 isCollapsed = false
             }
         } label: {
+            let roundedRectangle = RoundedRectangle(cornerRadius: 5)
             Text(level.shortName)
                 .foregroundColor(textColor(for: level))
-#if !os(visionOS)
                 .frame(maxWidth: .infinity)
                 .padding([.vertical], 4)
                 .background {
-                    RoundedRectangle(cornerRadius: 5)
+                    roundedRectangle
                         .fill(buttonColor(for: level))
                 }
-#endif
+                .contentShape(.hoverEffect, roundedRectangle)
+                .hoverEffect()
         }
-#if os(visionOS)
-        .background(buttonColor(for: level))
-        .clipShape(.circle)
-#else
         .buttonStyle(.plain)
-#endif
     }
     
     /// A scrollable list of buttons; one for each level to be displayed.

@@ -132,13 +132,12 @@ public struct FloorFilter: View {
             } label: {
                 Image(systemName: "building.2")
                     .padding(.toolkitDefault)
-                    .contentShape(Rectangle())
+                    .contentShape(.rect(cornerRadius: 5))
+                    .hoverEffect()
             }
             .accessibilityIdentifier("Floor Filter button")
-#if os(visionOS)
-            .buttonStyle(.borderless)
-#else
             .buttonStyle(.plain)
+#if !os(visionOS)
             .foregroundStyle(.tint)
 #endif
         } else {
