@@ -99,23 +99,19 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed = false
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***let roundedRectangle = RoundedRectangle(cornerRadius: 5)
 ***REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(textColor(for: level))
-#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roundedRectangle
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColor(for: level))
 ***REMOVED******REMOVED******REMOVED***
-#endif
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, roundedRectangle)
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED***
-#if os(visionOS)
-***REMOVED******REMOVED***.background(buttonColor(for: level))
-***REMOVED******REMOVED***.clipShape(.circle)
-#else
 ***REMOVED******REMOVED***.buttonStyle(.plain)
-#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scrollable list of buttons; one for each level to be displayed.

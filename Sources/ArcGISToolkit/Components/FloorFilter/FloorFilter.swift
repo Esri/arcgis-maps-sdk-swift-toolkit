@@ -132,13 +132,12 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect(cornerRadius: 5))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Floor Filter button")
-#if os(visionOS)
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
-#else
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tint)
 #endif
 ***REMOVED*** else {
