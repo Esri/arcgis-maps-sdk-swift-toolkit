@@ -62,7 +62,6 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FloorFilterExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 /// in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
-@available(visionOS, unavailable)
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -133,11 +132,14 @@ public struct FloorFilter: View {
             } label: {
                 Image(systemName: "building.2")
                     .padding(.toolkitDefault)
-                    .contentShape(Rectangle())
+                    .contentShape(.rect(cornerRadius: 5))
+                    .hoverEffect()
             }
             .accessibilityIdentifier("Floor Filter button")
             .buttonStyle(.plain)
+#if !os(visionOS)
             .foregroundStyle(.tint)
+#endif
         } else {
             Image(systemName: "exclamationmark.circle")
                 .padding(.toolkitDefault)
@@ -252,7 +254,6 @@ public struct FloorFilter: View {
     }
 }
 
-@available(visionOS, unavailable)
 public extension FloorFilter {
     /// Adds a condition that controls whether a site in the Floor Manager
     /// is automatically selected upon loading.
