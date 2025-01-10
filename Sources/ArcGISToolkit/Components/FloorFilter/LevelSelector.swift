@@ -93,23 +93,28 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The button representing the provided level.
 ***REMOVED***@ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-***REMOVED******REMOVED***Button(level.shortName) {
+***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
 ***REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed = false
 ***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(textColor(for: level))
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColor(for: level))
+***REMOVED******REMOVED******REMOVED***
+#endif
 ***REMOVED***
-***REMOVED******REMOVED***.foregroundColor(textColor(for: level))
 #if os(visionOS)
 ***REMOVED******REMOVED***.background(buttonColor(for: level))
 ***REMOVED******REMOVED***.clipShape(.circle)
-#elseif !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED***.padding([.vertical], 4)
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED***.background {
-***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColor(for: level))
-***REMOVED***
+#else
+***REMOVED******REMOVED***.buttonStyle(.plain)
 #endif
 ***REMOVED***
 ***REMOVED***
