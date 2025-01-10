@@ -59,6 +59,7 @@ extension ExampleList {
 ***REMOVED******REMOVED***var examples: [any Example] = [
 ***REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Bookmarks", content: BookmarksExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
@@ -67,7 +68,6 @@ extension ExampleList {
 #if !os(visionOS)
 ***REMOVED******REMOVED***examples.append(
 ***REMOVED******REMOVED******REMOVED***contentsOf: [
-***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
