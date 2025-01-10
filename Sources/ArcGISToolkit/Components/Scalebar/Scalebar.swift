@@ -197,10 +197,10 @@ public struct Scalebar: View {
                 }
             }
         }
-        .onGeometryChange(for: CGRect.self) { proxy in
-            proxy.frame(in: .global)
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.frame(in: .global).height
         } action: { newValue in
-            height = newValue.height
+            height = newValue
         }
         .frame(
             width: $viewModel.displayLength.wrappedValue,
