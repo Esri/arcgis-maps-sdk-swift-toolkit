@@ -197,10 +197,10 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onGeometryChange(for: CGRect.self) { proxy in
-***REMOVED******REMOVED******REMOVED***proxy.frame(in: .global)
+***REMOVED******REMOVED***.onGeometryChange(for: CGFloat.self) { proxy in
+***REMOVED******REMOVED******REMOVED***proxy.frame(in: .global).height
 ***REMOVED*** action: { newValue in
-***REMOVED******REMOVED******REMOVED***height = newValue.height
+***REMOVED******REMOVED******REMOVED***height = newValue
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
