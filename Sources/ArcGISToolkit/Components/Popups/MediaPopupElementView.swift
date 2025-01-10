@@ -58,7 +58,7 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED***@State private var width: CGFloat = .zero
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED***let scrollView = ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: 8) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(popupMedia) { media in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
@@ -82,10 +82,20 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onGeometryChange(for: CGRect.self) { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***proxy.frame(in: .global)
-***REMOVED******REMOVED*** action: { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***width = newValue.width * widthScaleFactor
+***REMOVED******REMOVED******REMOVED***if #available(iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED***scrollView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry.contentSize.width
+***REMOVED******REMOVED******REMOVED******REMOVED*** action: { _, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width = newValue * widthScaleFactor
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***scrollView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onGeometryChange(for: CGFloat.self) { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.frame(in: .global).width
+***REMOVED******REMOVED******REMOVED******REMOVED*** action: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width = newValue * widthScaleFactor
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
