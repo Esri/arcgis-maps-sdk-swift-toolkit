@@ -121,10 +121,10 @@ extension LevelSelector {
                         makeLevelButton(level)
                     }
                 }
-                .onGeometryChange(for: CGRect.self) { proxy in
-                    proxy.frame(in: .global)
-                } action: { newValue in
-                    contentHeight = newValue.height
+                .onGeometryChange(for: CGFloat.self) { proxy in
+                    proxy.frame(in: .global).height
+                } action: { newHeight in
+                    contentHeight = newHeight
                 }
             }
             .frame(maxHeight: contentHeight)
