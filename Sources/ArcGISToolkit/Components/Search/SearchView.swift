@@ -392,18 +392,9 @@ struct SearchResultList: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if searchResults.count != 1 {
 ***REMOVED******REMOVED******REMOVED***if searchResults.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show the list if we have more than one result.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(searchResults) { result in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchResult: result)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(result == selectedResult)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***List(searchResults, selection: $selectedResult) { result in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchResult: result)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(result)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if searchResults.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***NoResultsView(message: noResultsMessage)
@@ -424,13 +415,9 @@ struct SearchSuggestionList: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if !suggestionResults.isEmpty {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestionResults) { suggestion in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchSuggestion: suggestion)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***List(suggestionResults, selection: $currentSuggestion) { suggestion in
+***REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchSuggestion: suggestion)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(suggestion)
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***NoResultsView(message: noResultsMessage)
@@ -469,7 +456,7 @@ struct ResultRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !subtitle.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)

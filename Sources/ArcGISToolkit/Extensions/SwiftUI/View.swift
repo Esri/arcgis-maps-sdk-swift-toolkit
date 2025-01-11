@@ -38,26 +38,6 @@ struct KeyboardStateChangedModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A modifier which displays a background and shadow for a view. Used to represent a selected view.
-struct SelectedModifier: ViewModifier {
-***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
-***REMOVED***var isSelected: Bool
-***REMOVED***
-***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.secondary.opacity(0.8))
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
-***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .secondary.opacity(0.8),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 extension View {
 ***REMOVED******REMOVED***/ Sets a closure to perform when the keyboard state has changed.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the keyboard state has changed.
@@ -90,15 +70,6 @@ extension View {
 ***REMOVED***func catalystPadding(_ length: CGFloat? = nil) -> some View {
 ***REMOVED******REMOVED***return self
 ***REMOVED******REMOVED******REMOVED***.padding(isMacCatalyst ? [.horizontal] : [], length)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
-***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
-***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***func selected(
-***REMOVED******REMOVED***_ isSelected: Bool = false
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Performs the provided action when the view appears after a slight delay.
