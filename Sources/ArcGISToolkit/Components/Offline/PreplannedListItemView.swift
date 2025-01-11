@@ -96,7 +96,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: downloadState) {
-***REMOVED******REMOVED******REMOVED***if previousDownloadState == .notDownloaded && downloadState == .downloaded {
+***REMOVED******REMOVED******REMOVED***if previousDownloadState == .notDownloaded && downloadState == .downloading {
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDownloadAction?()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if previousDownloadState == .downloaded && downloadState == .notDownloaded {
