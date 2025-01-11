@@ -96,7 +96,7 @@ struct PreplannedListItemView: View {
             }
         }
         .task(id: downloadState) {
-            if previousDownloadState == .notDownloaded && downloadState == .downloaded {
+            if previousDownloadState == .notDownloaded && downloadState == .downloading {
                 onDownloadAction?()
             }
             if previousDownloadState == .downloaded && downloadState == .notDownloaded {
