@@ -29,6 +29,7 @@ struct UtilityNetworkAssociationFormElementView: View {
             HStack {
                 Label {
                     Text(title)
+                        .lineLimit(1)
                 } icon: {
                     Image(systemName: "point.3.filled.connected.trianglepath.dotted")
                 }
