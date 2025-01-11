@@ -35,6 +35,9 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The current download state of the preplanned map model.
 ***REMOVED***@State private var downloadState: DownloadState = .notDownloaded
 ***REMOVED***
+***REMOVED******REMOVED***/ The previous download state of the preplanned map model.
+***REMOVED***@State private var previousDownloadState: DownloadState = .notDownloaded
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
 ***REMOVED******REMOVED***/ The title of a preplanned map area is guaranteed to be unique when it
@@ -42,6 +45,12 @@ struct PreplannedListItemView: View {
 ***REMOVED***var isSelected: Bool {
 ***REMOVED******REMOVED***selectedMap?.item?.title == model.preplannedMapArea.title
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The closure to perform when the preplanned map area is downloaded.
+***REMOVED***var onDownloadAction: (() -> Void)? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ The closure to perform when the preplanned map area download is removed.
+***REMOVED***var onRemoveDownloadAction: (() -> Void)? = nil
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -76,6 +85,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
+***REMOVED******REMOVED******REMOVED***previousDownloadState = downloadState
 ***REMOVED***
 ***REMOVED******REMOVED***.onReceive(model.$status) { status in
 ***REMOVED******REMOVED******REMOVED***let downloadState = DownloadState(status)
@@ -83,6 +93,14 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***downloadState == .downloaded ? .easeInOut : nil
 ***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.downloadState = downloadState
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task(id: downloadState) {
+***REMOVED******REMOVED******REMOVED***if previousDownloadState == .notDownloaded && downloadState == .downloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***onDownloadAction?()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if previousDownloadState == .downloaded && downloadState == .notDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownloadAction?()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -186,6 +204,26 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the preplanned map area is downloaded.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the preplanned map area is downloaded.
+***REMOVED***public func onDownload(
+***REMOVED******REMOVED***perform action: @escaping () -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onDownloadAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the preplanned map area download is removed.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the preplanned map area download is removed.
+***REMOVED***public func onRemoveDownload(
+***REMOVED******REMOVED***perform action: @escaping () -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onRemoveDownloadAction = action
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 

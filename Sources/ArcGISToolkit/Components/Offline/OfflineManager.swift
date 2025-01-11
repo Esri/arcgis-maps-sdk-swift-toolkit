@@ -18,9 +18,9 @@ import OSLog
 
 ***REMOVED***/ An object that maintains state for the offline components.
 @MainActor
-class OfflineManager {
+public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared offline manager.
-***REMOVED***static let shared = OfflineManager()
+***REMOVED***public static let shared = OfflineManager()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when a job completes.
 ***REMOVED***var jobCompletionAction: ((any JobProtocol) -> Void)?
@@ -30,6 +30,10 @@ class OfflineManager {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs managed by this instance.
 ***REMOVED***var jobs: [any JobProtocol] { jobManager.jobs ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The webmap portal items that have downloaded map areas.
+***REMOVED***@Published
+***REMOVED***private(set) public var offlineMaps: [PortalItem] = []
 ***REMOVED***
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
@@ -42,6 +46,9 @@ class OfflineManager {
 ***REMOVED******REMOVED******REMOVED*** Resume all paused jobs.
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Resuming all paused jobs")
 ***REMOVED******REMOVED***jobManager.resumeAllPausedJobs()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Loads webmap portal items.
+***REMOVED******REMOVED***loadMaps()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
@@ -72,6 +79,49 @@ class OfflineManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Call job completion action.
 ***REMOVED******REMOVED******REMOVED***jobCompletionAction?(job)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Saves the portal item to UserDefaults.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - id: The portal item ID.
+***REMOVED******REMOVED***/   - itemJSON: The portal item JSON.
+***REMOVED***func savePortalItem(_ portalItemID: PortalItem.ID, itemJSON: String) {
+***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: "offline") ?? []
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let id = portalItemID.description
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if !savedMapIDs.contains(id) {
+***REMOVED******REMOVED******REMOVED***savedMapIDs.append(id)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save portal item ID.
+***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: "offline")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save portal item JSON.
+***REMOVED******REMOVED***UserDefaults.standard.set(itemJSON, forKey: id)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***loadMaps()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Deletes a given portal item from UserDefaults.
+***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
+***REMOVED***func deletePortalItem(_ portalItemID: PortalItem.ID) {
+***REMOVED******REMOVED***UserDefaults.standard.removeObject(forKey: portalItemID.description)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***loadMaps()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads webmap portal items that have been saved to UserDefaults.
+***REMOVED***private func loadMaps() {
+***REMOVED******REMOVED***guard let mapIDs = UserDefaults.standard.array(forKey: "offline") as? [String] else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***offlineMaps = mapIDs
+***REMOVED******REMOVED******REMOVED***.flatMap {
+***REMOVED******REMOVED******REMOVED******REMOVED***UserDefaults.standard.string(forKey: $0) ***REMOVED*** Portal item JSON string for webmap ID.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.flatMap {
+***REMOVED******REMOVED******REMOVED******REMOVED***return PortalItem(json: $0, portal: .arcGISOnline(connection: .anonymous))
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
