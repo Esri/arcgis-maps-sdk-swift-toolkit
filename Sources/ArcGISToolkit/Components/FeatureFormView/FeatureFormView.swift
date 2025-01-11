@@ -152,11 +152,11 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Grab Utility Network Associations for the element being edited
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var groups = [UtilityNetworkAssociationFormElementView.Group]()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique association kinds present
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let uniqueGroups = Array(Set(associations.map { $0.kind ***REMOVED***))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for kind in uniqueGroups {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique network sources present
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSources = Array(Set(associations.map { $0.toElement.networkSource ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for source in networkSources {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by kind
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let groupMembers = associations.filter { $0.kind == kind ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let groupMembers = associations.filter { $0.toElement.networkSource == source ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for association in groupMembers {
@@ -174,7 +174,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(.init(associations: associations, description: "[Group Description]", name: "\(kind)".capitalized))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.groups = groups
 ***REMOVED******REMOVED******REMOVED***
@@ -241,5 +241,21 @@ extension FeatureFormView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
 ***REMOVED******REMOVED******REMOVED******REMOVED***initialExpressionsAreEvaluating = false
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED*** TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension UtilityNetworkSource: @retroactive Equatable {
+***REMOVED***public static func == (lhs: UtilityNetworkSource, rhs: UtilityNetworkSource) -> Bool {
+***REMOVED******REMOVED***lhs.id == rhs.id
+***REMOVED******REMOVED***&& lhs.name == rhs.name
+***REMOVED***
+***REMOVED***
+
+extension UtilityNetworkSource: @retroactive Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(name)
+***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***
 ***REMOVED***
