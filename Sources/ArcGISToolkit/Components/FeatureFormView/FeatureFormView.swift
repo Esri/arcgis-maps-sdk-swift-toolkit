@@ -152,11 +152,11 @@ public struct FeatureFormView: View {
                 // Grab Utility Network Associations for the element being edited
                 if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
                     var groups = [UtilityNetworkAssociationFormElementView.Group]()
-                    // Create a set of the unique association kinds present
-                    let uniqueGroups = Array(Set(associations.map { $0.kind }))
-                    for kind in uniqueGroups {
+                    // Create a set of the unique network sources present
+                    let networkSources = Array(Set(associations.map { $0.toElement.networkSource }))
+                    for source in networkSources {
                         // Filter the associations by kind
-                        let groupMembers = associations.filter { $0.kind == kind }
+                        let groupMembers = associations.filter { $0.toElement.networkSource == source }
                         var associations: [UtilityNetworkAssociationFormElementView.Association] = []
                         // For each association, create a Toolkit representation and add it to the group
                         for association in groupMembers {
@@ -174,7 +174,7 @@ public struct FeatureFormView: View {
                             }
                             associations.append(newAssociation)
                         }
-                        groups.append(.init(associations: associations, description: "[Group Description]", name: "\(kind)".capitalized))
+                        groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
                     }
                     self.groups = groups
                 }
@@ -241,5 +241,21 @@ extension FeatureFormView {
                 await model.initialEvaluation()
                 initialExpressionsAreEvaluating = false
             }
+    }
+}
+
+// TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension UtilityNetworkSource: @retroactive Equatable {
+    public static func == (lhs: UtilityNetworkSource, rhs: UtilityNetworkSource) -> Bool {
+        lhs.id == rhs.id
+        && lhs.name == rhs.name
+    }
+}
+
+extension UtilityNetworkSource: @retroactive Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(id)
     }
 }
