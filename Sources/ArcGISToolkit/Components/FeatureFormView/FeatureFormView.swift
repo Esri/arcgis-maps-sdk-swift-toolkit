@@ -124,9 +124,9 @@ public struct FeatureFormView: View {
                     }
                     if let groups = groups, groups.count > 0 {
                         UtilityNetworkAssociationFormElementView(
-                            description: "[Utility Associations Element Description]",
+                            description: "[UtilityNetworkAssociationsFormElementDefinition.description]",
                             groups: groups,
-                            title: "[Utility Associations Element Title]"
+                            title: "[UtilityNetworkAssociationsFormElementDefinition.label]"
                         )
                         .padding(.bottom)
                     }
