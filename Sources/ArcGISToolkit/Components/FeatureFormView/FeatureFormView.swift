@@ -162,7 +162,7 @@ public struct FeatureFormView: View {
                         for association in groupMembers {
                             let associatedElement = association.toElement
                             let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                description: "[Association Description]",
+                                description: "\(associatedElement.objectID)",
                                 icon: nil,
                                 name: associatedElement.assetType.name
                             ) {
