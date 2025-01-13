@@ -113,12 +113,13 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect { effect, isActive, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effect.scaleEffect(isActive ? 1.05 : 1.0)
 ***REMOVED******REMOVED******REMOVED***
+#else
+***REMOVED******REMOVED******REMOVED******REMOVED***.snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
 #endif
 ***REMOVED***
 ***REMOVED***
