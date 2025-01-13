@@ -35,6 +35,9 @@ public class OfflineManager: ObservableObject {
     @Published
     private(set) public var offlineMaps: [PortalItem] = []
     
+    /// The key for which offline maps will be serialized under the user defaults.
+    let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
+    
     private init() {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
@@ -47,8 +50,8 @@ public class OfflineManager: ObservableObject {
         Logger.offlineManager.debug("Resuming all paused jobs")
         jobManager.resumeAllPausedJobs()
         
-        // Loads webmap portal items.
-        loadMaps()
+        // Loads webmap portal items from UserDefaults.
+        loadFromDefaults()
     }
     
     /// Starts a job that will be managed by this instance.
@@ -82,40 +85,47 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Saves the portal item to UserDefaults.
-    /// - Parameters:
-    ///   - id: The portal item ID.
-    ///   - itemJSON: The portal item JSON.
-    func savePortalItem(_ portalItemID: PortalItem.ID, itemJSON: String) {
-        var savedMapIDs = UserDefaults.standard.stringArray(forKey: "offline") ?? []
+    /// - Parameter item: The portal item.
+    func savePortalItem(_ item: PortalItem) {
+        var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
         
-        let id = portalItemID.description
+        guard let portalItemID = item.id?.description,
+              !savedMapIDs.contains(portalItemID) else { return }
         
-        if !savedMapIDs.contains(id) {
-            savedMapIDs.append(id)
-        }
+        savedMapIDs.append(portalItemID)
         
         // Save portal item ID.
-        UserDefaults.standard.set(savedMapIDs, forKey: "offline")
+        UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
+        
+        let itemJSON = item.toJSON()
         
         // Save portal item JSON.
-        UserDefaults.standard.set(itemJSON, forKey: id)
+        UserDefaults.standard.set(itemJSON, forKey: portalItemID)
         
-        loadMaps()
+        offlineMaps.append(item)
     }
     
     /// Deletes a given portal item from UserDefaults.
-    /// - Parameter portalItemID: The portal item ID.
-    func deletePortalItem(_ portalItemID: PortalItem.ID) {
-        UserDefaults.standard.removeObject(forKey: portalItemID.description)
+    /// - Parameter item: The portal item.
+    func deletePortalItem(_ item: PortalItem) {
+        guard let portalItemID = item.id?.description else { return }
         
-        loadMaps()
+        UserDefaults.standard.removeObject(forKey: portalItemID)
+        
+        offlineMaps.removeAll(where: { $0.id?.description == portalItemID })
+        
+        var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
+        
+        savedMapIDs.removeAll(where: { $0 == portalItemID })
+        
+        UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
     }
     
     /// Loads webmap portal items that have been saved to UserDefaults.
-    private func loadMaps() {
-        guard let mapIDs = UserDefaults.standard.array(forKey: "offline") as? [String] else { return }
+    private func loadFromDefaults() {
+        let savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
         
-        offlineMaps = mapIDs
+        offlineMaps = savedMapIDs
             .flatMap {
                 UserDefaults.standard.string(forKey: $0) // Portal item JSON string for webmap ID.
             }

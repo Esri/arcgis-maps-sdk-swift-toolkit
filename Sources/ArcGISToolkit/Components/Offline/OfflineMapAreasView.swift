@@ -80,16 +80,13 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
                         .onDownload {
-                            guard let portalItem = onlineMap.item as? PortalItem,
-                                  let portalItemID = portalItem.id else { return }
-                            let itemJSON = portalItem.toJSON()
-                            OfflineManager.shared.savePortalItem(portalItemID, itemJSON: itemJSON)
+                            guard let portalItem = onlineMap.item as? PortalItem else { return }
+                            OfflineManager.shared.savePortalItem(portalItem)
                         }
                         .onRemoveDownload {
                             guard let portalItem = onlineMap.item as? PortalItem,
-                                  let portalItemID = portalItem.id,
                                   models.filter(\.status.isDownloaded).isEmpty else { return }
-                            OfflineManager.shared.deletePortalItem(portalItemID)
+                            OfflineManager.shared.deletePortalItem(portalItem)
                         }
                         .onChange(of: selectedMap) { _ in
                             dismiss()
@@ -117,16 +114,13 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
                         .onDownload {
-                            guard let portalItem = onlineMap.item as? PortalItem,
-                                  let portalItemID = portalItem.id else { return }      
-                            let itemJSON = portalItem.toJSON()
-                            OfflineManager.shared.savePortalItem(portalItemID, itemJSON: itemJSON)
+                            guard let portalItem = onlineMap.item as? PortalItem else { return }
+                            OfflineManager.shared.savePortalItem(portalItem)
                         }
                         .onRemoveDownload {
                             guard let portalItem = onlineMap.item as? PortalItem,
-                                  let portalItemID = portalItem.id,
                                   models.filter(\.status.isDownloaded).isEmpty else { return }
-                            OfflineManager.shared.deletePortalItem(portalItemID)
+                            OfflineManager.shared.deletePortalItem(portalItem)
                         }
                         .onChange(of: selectedMap) { _ in
                             dismiss()
