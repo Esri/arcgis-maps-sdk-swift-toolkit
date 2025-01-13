@@ -28,6 +28,9 @@ import SwiftUI
     /// The set of all elements which previously held focus.
     @Published var previouslyFocusedElements = [FormElement]()
     
+    /// <#Description#>
+    @Published var selectedAssociation: ArcGISFeature?
+    
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
