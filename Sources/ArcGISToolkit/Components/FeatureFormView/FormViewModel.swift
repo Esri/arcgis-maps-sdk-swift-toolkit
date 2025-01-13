@@ -28,6 +28,9 @@
 ***REMOVED******REMOVED***/ The set of all elements which previously held focus.
 ***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@Published var selectedAssociation: ArcGISFeature?
+***REMOVED***
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
