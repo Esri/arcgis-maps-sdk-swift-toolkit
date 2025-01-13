@@ -113,12 +113,13 @@ public struct Compass: View {
                                  """
                     )
                 )
-                .snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
 #if os(visionOS)
                 .hoverEffect()
                 .hoverEffect { effect, isActive, _ in
                     effect.scaleEffect(isActive ? 1.05 : 1.0)
                 }
+#else
+                .snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
 #endif
         }
     }
