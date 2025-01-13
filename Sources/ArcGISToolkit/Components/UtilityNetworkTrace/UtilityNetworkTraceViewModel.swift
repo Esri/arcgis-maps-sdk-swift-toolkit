@@ -17,7 +17,6 @@ import Combine
 import Foundation
 ***REMOVED***
 
-@available(visionOS, unavailable)
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
 ***REMOVED******REMOVED*** MARK: Published Properties
 ***REMOVED***
@@ -507,7 +506,6 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***/ Finds the location on a polyline nearest the point.
 ***REMOVED******REMOVED***/ - Parameters:
