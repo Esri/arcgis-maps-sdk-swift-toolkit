@@ -13,6 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***
 
 struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED***/ <#Description#>
@@ -59,10 +60,15 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let object: ArcGISFeature
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let imageGenerationAction: (() async -> UIImage?)?
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationView: View {
+***REMOVED******REMOVED******REMOVED***/ The view model for the form.
+***REMOVED******REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var association: Association
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var fallbackIcon: UIImage?
@@ -84,7 +90,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.selectedAssociation = association.object
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
 ***REMOVED******REMOVED******REMOVED***
