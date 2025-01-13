@@ -69,6 +69,9 @@ struct FeatureFormExampleView: View {
                 ) {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+                            .onUtilityAssociationSelected { feature in
+                                print(feature)
+                            }
                             .validationErrors(validationErrorVisibility)
                             .padding(.horizontal)
                             .padding(.top, 16)
