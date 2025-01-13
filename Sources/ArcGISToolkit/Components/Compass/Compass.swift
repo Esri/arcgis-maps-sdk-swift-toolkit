@@ -34,7 +34,10 @@ public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
     
-    /// A Boolean value indicating whether  the compass should automatically
+    /// An action to perform when the compass is tapped.
+    private var action: (() -> Void)?
+    
+    /// A Boolean value indicating whether the compass should automatically
     /// hide/show itself when the heading is `0`.
     private var autoHide: Bool = true
     
@@ -47,8 +50,9 @@ public struct Compass: View {
     /// The width and height of the compass.
     private var size: CGFloat = 44
     
-    /// An action to perform when the compass is tapped.
-    private var action: (() -> Void)?
+    /// A Boolean value indicating whether sensory feedback is enabled
+    /// when the heading snaps to zero.
+    private var snapToZeroSensoryFeedbackEnabled: Bool = false
     
     /// Creates a compass with a heading based on compass directions (0° indicates a direction
     /// toward true North, 90° indicates a direction toward true East, etc.).
@@ -109,12 +113,39 @@ public struct Compass: View {
                                  """
                     )
                 )
+                .snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
 #if os(visionOS)
                 .hoverEffect()
                 .hoverEffect { effect, isActive, _ in
                     effect.scaleEffect(isActive ? 1.05 : 1.0)
                 }
 #endif
+        }
+    }
+}
+
+private extension View {
+    /// Enables the snap to zero sensory feedback
+    /// when it is available.
+    @available(visionOS, unavailable)
+    @ViewBuilder
+    func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
+        if #available(iOS 17.0, *) {
+            if enabled {
+                sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+                    if (!oldValue.isZero && newValue.isZero) ||
+                        (oldValue.isZero && !newValue.isZero) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            } else {
+                self
+            }
+        } else {
+            // Fallback on earlier versions
+            self
         }
     }
 }
@@ -168,6 +199,14 @@ public extension Compass {
     func autoHideDisabled(_ disable: Bool = true) -> Self {
         var copy = self
         copy.autoHide = !disable
+        return copy
+    }
+    
+    /// Enables sensory feedback when the heading snaps to `zero`.
+    @available(iOS 17, *)
+    func snapToZeroSensoryFeedback() -> Self {
+        var copy = self
+        copy.snapToZeroSensoryFeedbackEnabled = true
         return copy
     }
 }
