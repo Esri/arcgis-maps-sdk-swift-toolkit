@@ -208,7 +208,7 @@ struct PreplannedListItemView: View {
     
     /// Sets a closure to perform when the preplanned map area is downloaded.
     /// - Parameter action: The closure to perform when the preplanned map area is downloaded.
-    public func onDownload(
+    func onDownload(
         perform action: @escaping () -> Void
     ) -> Self {
         var view = self
@@ -218,7 +218,7 @@ struct PreplannedListItemView: View {
     
     /// Sets a closure to perform when the preplanned map area download is removed.
     /// - Parameter action: The closure to perform when the preplanned map area download is removed.
-    public func onRemoveDownload(
+    func onRemoveDownload(
         perform action: @escaping () -> Void
     ) -> Self {
         var view = self
