@@ -140,6 +140,11 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(model.selectedAssociation?.globalID) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let association = model.selectedAssociation else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let utilityAssociationChangedAction else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationChangedAction(association)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
