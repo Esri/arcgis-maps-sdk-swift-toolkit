@@ -34,7 +34,10 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
+***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
+***REMOVED***private var action: (() -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should automatically
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
 ***REMOVED***private var autoHide: Bool = true
 ***REMOVED***
@@ -47,8 +50,9 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The width and height of the compass.
 ***REMOVED***private var size: CGFloat = 44
 ***REMOVED***
-***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
-***REMOVED***private var action: (() -> Void)?
+***REMOVED******REMOVED***/ A Boolean value indicating whether sensory feedback is enabled
+***REMOVED******REMOVED***/ when the heading snaps to zero.
+***REMOVED***private var snapToZeroSensoryFeedbackEnabled: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
 ***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
@@ -109,12 +113,39 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect { effect, isActive, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effect.scaleEffect(isActive ? 1.05 : 1.0)
 ***REMOVED******REMOVED******REMOVED***
 #endif
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ Enables the snap to zero sensory feedback
+***REMOVED******REMOVED***/ when it is available.
+***REMOVED***@available(visionOS, unavailable)
+***REMOVED***@ViewBuilder
+***REMOVED***func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
+***REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED***if enabled {
+***REMOVED******REMOVED******REMOVED******REMOVED***sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (!oldValue.isZero && newValue.isZero) ||
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(oldValue.isZero && !newValue.isZero) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***self
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Fallback on earlier versions
+***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -168,6 +199,14 @@ public extension Compass {
 ***REMOVED***func autoHideDisabled(_ disable: Bool = true) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.autoHide = !disable
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Enables sensory feedback when the heading snaps to `zero`.
+***REMOVED***@available(iOS 17, *)
+***REMOVED***func snapToZeroSensoryFeedback() -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.snapToZeroSensoryFeedbackEnabled = true
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
