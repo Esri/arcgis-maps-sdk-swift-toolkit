@@ -30,7 +30,6 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [CompassExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `Compass` see the <doc:CompassTutorial>.
-@available(visionOS, unavailable)
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
@@ -115,6 +114,12 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect { effect, isActive, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effect.scaleEffect(isActive ? 1.05 : 1.0)
+***REMOVED******REMOVED******REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -145,7 +150,6 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension Compass {
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/ provided heading and whether the compass has been configured to automatically hide.
@@ -156,7 +160,6 @@ extension Compass {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 public extension Compass {
 ***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
 ***REMOVED******REMOVED***/ a direction toward true West, etc.).
@@ -208,7 +211,6 @@ public extension Compass {
 ***REMOVED***
 ***REMOVED***
 
-#if !os(visionOS)
 #Preview("Compass") {
 ***REMOVED***Compass(rotation: .zero) { ***REMOVED***
 ***REMOVED******REMOVED***.autoHideDisabled()
@@ -221,4 +223,3 @@ public extension Compass {
 ***REMOVED******REMOVED***.compassSize(size: 100)
 ***REMOVED******REMOVED***.environment(\.layoutDirection, .rightToLeft)
 ***REMOVED***
-#endif
