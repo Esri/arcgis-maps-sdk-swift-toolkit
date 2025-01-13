@@ -17,7 +17,6 @@ import Combine
 import Foundation
 import SwiftUI
 
-@available(visionOS, unavailable)
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
     // MARK: Published Properties
     
@@ -507,7 +506,6 @@ import SwiftUI
     }
 }
 
-@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
     /// Finds the location on a polyline nearest the point.
     /// - Parameters:
