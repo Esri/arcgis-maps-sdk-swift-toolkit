@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import SwiftUI
 
 struct UtilityNetworkAssociationFormElementView: View {
@@ -59,10 +60,15 @@ extension UtilityNetworkAssociationFormElementView {
         /// <#Description#>
         let name: String
         
+        let object: ArcGISFeature
+        
         let imageGenerationAction: (() async -> UIImage?)?
     }
     
     struct AssociationView: View {
+        /// The view model for the form.
+        @EnvironmentObject var model: FormViewModel
+        
         var association: Association
         
         @State private var fallbackIcon: UIImage?
@@ -84,7 +90,7 @@ extension UtilityNetworkAssociationFormElementView {
                 }
                 Spacer()
                 Button {
-                    
+                    model.selectedAssociation = association.object
                 } label: {
                     Image(systemName: "chevron.right")
                 }
