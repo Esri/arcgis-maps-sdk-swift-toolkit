@@ -169,18 +169,17 @@ public struct FeatureFormView: View {
                         // For each association, create a Toolkit representation and add it to the group
                         for association in groupMembers {
                             let associatedElement = association.toElement
-                            let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                description: "\(associatedElement.objectID)",
-                                icon: nil,
-                                name: associatedElement.assetType.name
-                            ) {
-                                if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first {
-                                   return await feature.makeSymbol()
-                                } else {
-                                    return nil
+                            if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first {
+                                let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                    description: "\(associatedElement.objectID)",
+                                    icon: nil,
+                                    name: associatedElement.assetType.name,
+                                    object: feature
+                                ) {
+                                    return await feature.makeSymbol()
                                 }
+                                associations.append(newAssociation)
                             }
-                            associations.append(newAssociation)
                         }
                         groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
                     }
