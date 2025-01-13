@@ -140,6 +140,11 @@ public struct FeatureFormView: View {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
+            .onChange(model.selectedAssociation?.globalID) { _ in
+                guard let association = model.selectedAssociation else { return }
+                guard let utilityAssociationChangedAction else { return }
+                utilityAssociationChangedAction(association)
+            }
             .onTitleChange(of: model.featureForm) { newTitle in
                 title = newTitle
             }
