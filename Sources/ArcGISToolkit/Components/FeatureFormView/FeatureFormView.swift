@@ -266,3 +266,15 @@ extension UtilityNetworkSource: @retroactive Hashable {
 ***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***
 ***REMOVED***
+
+@available(visionOS, unavailable)
+public extension FeatureFormView {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ - Parameter action: <#action description#>
+***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED***func onUtilityAssociationSelected(_ action: @escaping (ArcGISFeature) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.utilityAssociationChangedAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
