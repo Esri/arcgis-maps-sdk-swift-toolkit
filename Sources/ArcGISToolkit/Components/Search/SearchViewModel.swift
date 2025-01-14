@@ -180,7 +180,7 @@ public enum SearchOutcome: Sendable {
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
-    var selectedResult: SearchResult? {
+    @Published var selectedResult: SearchResult? {
         willSet {
             (selectedResult?.geoElement as? Graphic)?.isSelected = false
         }
@@ -227,7 +227,7 @@ public enum SearchOutcome: Sendable {
     }
     
     /// The suggestion currently selected by the user.
-    var currentSuggestion: SearchSuggestion? {
+    @Published var currentSuggestion: SearchSuggestion? {
         didSet {
             if let currentSuggestion = currentSuggestion {
                 acceptSuggestion(currentSuggestion)
