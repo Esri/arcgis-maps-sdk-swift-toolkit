@@ -392,18 +392,9 @@ struct SearchResultList: View {
     var body: some View {
         if searchResults.count != 1 {
             if searchResults.count > 1 {
-                List {
-                    // Only show the list if we have more than one result.
-                    ForEach(searchResults) { result in
-                        HStack {
-                            ResultRow(searchResult: result)
-                                .onTapGesture {
-                                    selectedResult = result
-                                }
-                            Spacer()
-                        }
-                        .selected(result == selectedResult)
-                    }
+                List(searchResults, selection: $selectedResult) { result in
+                    ResultRow(searchResult: result)
+                        .tag(result)
                 }
             } else if searchResults.isEmpty {
                 NoResultsView(message: noResultsMessage)
@@ -424,13 +415,9 @@ struct SearchSuggestionList: View {
     
     var body: some View {
         if !suggestionResults.isEmpty {
-            List {
-                ForEach(suggestionResults) { suggestion in
-                    ResultRow(searchSuggestion: suggestion)
-                        .onTapGesture() {
-                            currentSuggestion = suggestion
-                        }
-                }
+            List(suggestionResults, selection: $currentSuggestion) { suggestion in
+                ResultRow(searchSuggestion: suggestion)
+                    .tag(suggestion)
             }
         } else {
             NoResultsView(message: noResultsMessage)
@@ -469,7 +456,7 @@ struct ResultRow: View {
                 if !subtitle.isEmpty {
                     Text(subtitle)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
