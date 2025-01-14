@@ -70,11 +70,17 @@ public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
+    /// <#Description#>
+    @State private var groups: [UtilityNetworkAssociationFormElementView.Group]?
+    
     /// A Boolean value indicating whether initial expression evaluation is running.
     @State private var initialExpressionsAreEvaluating = true
     
     /// The title of the feature form view.
     @State private var title = ""
+    
+    /// <#Description#>
+    let utilityNetwork: UtilityNetwork?
     
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
@@ -85,8 +91,9 @@ public struct FeatureFormView: View {
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm) {
+    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+        self.utilityNetwork = utilityNetwork
     }
     
     public var body: some View {
@@ -115,6 +122,14 @@ public struct FeatureFormView: View {
                         // case added for AttachmentsFormElement.
                         AttachmentsFeatureElementView(featureElement: attachmentsElement)
                     }
+                    if let groups = groups, groups.count > 0 {
+                        UtilityNetworkAssociationFormElementView(
+                            description: "[UtilityNetworkAssociationsFormElementDefinition.description]",
+                            groups: groups,
+                            title: "[UtilityNetworkAssociationsFormElementDefinition.label]"
+                        )
+                        .padding(.bottom)
+                    }
                 }
             }
             .onChange(model.focusedElement) { _ in
@@ -131,6 +146,42 @@ public struct FeatureFormView: View {
 #endif
         .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
+        .task {
+            try? await utilityNetwork?.load()
+            if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
+                // Grab Utility Network Associations for the element being edited
+                if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
+                    var groups = [UtilityNetworkAssociationFormElementView.Group]()
+                    // Create a set of the unique network sources present
+                    let networkSources = Array(Set(associations.map { $0.toElement.networkSource }))
+                    for source in networkSources {
+                        // Filter the associations by kind
+                        let groupMembers = associations.filter { $0.toElement.networkSource == source }
+                        var associations: [UtilityNetworkAssociationFormElementView.Association] = []
+                        // For each association, create a Toolkit representation and add it to the group
+                        for association in groupMembers {
+                            let associatedElement = association.toElement
+                            let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                description: "\(associatedElement.objectID)",
+                                icon: nil,
+                                name: associatedElement.assetType.name
+                            ) {
+                                if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first {
+                                   return await feature.makeSymbol()
+                                } else {
+                                    return nil
+                                }
+                            }
+                            associations.append(newAssociation)
+                        }
+                        groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
+                    }
+                    self.groups = groups
+                }
+            } else {
+                print("Not a Utility Element")
+            }
+        }
     }
 }
 
@@ -190,5 +241,21 @@ extension FeatureFormView {
                 await model.initialEvaluation()
                 initialExpressionsAreEvaluating = false
             }
+    }
+}
+
+// TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension UtilityNetworkSource: @retroactive Equatable {
+    public static func == (lhs: UtilityNetworkSource, rhs: UtilityNetworkSource) -> Bool {
+        lhs.id == rhs.id
+        && lhs.name == rhs.name
+    }
+}
+
+extension UtilityNetworkSource: @retroactive Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(id)
     }
 }

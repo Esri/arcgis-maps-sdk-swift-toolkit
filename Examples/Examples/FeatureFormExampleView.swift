@@ -27,7 +27,7 @@ struct FeatureFormExampleView: View {
     @State private var identifyScreenPoint: CGPoint?
     
     /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(url: .sampleData)!
+    @State private var map = makeMap()
     
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
@@ -56,6 +56,10 @@ struct FeatureFormExampleView: View {
                         model.state = .editing(FeatureForm(feature: feature))
                     }
                 }
+                .task {
+                    let publicSample = try? await ArcGISCredential.publicSample
+                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+                }
                 .ignoresSafeArea(.keyboard)
                 .floatingPanel(
                     attributionBarHeight: attributionBarHeight,
@@ -64,7 +68,7 @@ struct FeatureFormExampleView: View {
                     isPresented: model.formIsPresented
                 ) {
                     if let featureForm = model.featureForm {
-                        FeatureFormView(featureForm: featureForm)
+                        FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
                             .validationErrors(validationErrorVisibility)
                             .padding(.horizontal)
                             .padding(.top, 16)
@@ -133,6 +137,15 @@ struct FeatureFormExampleView: View {
                 }
         }
     }
+    
+    /// Makes a map from a portal item.
+    static func makeMap() -> Map {
+        let portalItem = PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
+        )
+        return Map(item: portalItem)
+    }
 }
 
 extension FeatureFormExampleView {
@@ -156,6 +169,18 @@ extension FeatureFormExampleView {
 private extension URL {
     static var sampleData: Self {
         .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
+    }
+}
+
+private extension ArcGISCredential {
+    static var publicSample: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+                username: "viewer01",
+                password: "I68VGU^nMurF"
+            )
+        }
     }
 }
 
