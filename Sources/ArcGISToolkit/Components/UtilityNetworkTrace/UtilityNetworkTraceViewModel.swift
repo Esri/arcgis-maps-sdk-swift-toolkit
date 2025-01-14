@@ -67,15 +67,13 @@ import SwiftUI
     }
     
     /// The map's utility networks.
-    var networks: [UtilityNetwork] {
-        return map.utilityNetworks
-    }
+    var networks: [UtilityNetwork] { map.utilityNetworks }
     
     /// The overlay on which trace graphics will be drawn.
-    private var graphicsOverlay: GraphicsOverlay
+    private let graphicsOverlay: GraphicsOverlay
     
     /// A map containing one or more utility networks.
-    private var map: Map
+    private let map: Map
     
     /// Starting points programmatically provided to the trace tool.
     var externalStartingPoints = [UtilityNetworkTraceStartingPoint]() {
