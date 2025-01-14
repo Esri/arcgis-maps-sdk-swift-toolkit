@@ -82,8 +82,10 @@ struct MediaPopupElementView: View {
                     }
                 }
             }
-            .onSizeChange {
-                width = $0.width * widthScaleFactor
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                proxy.frame(in: .global).width
+            } action: { newValue in
+                width = newValue * widthScaleFactor
             }
         }
         
