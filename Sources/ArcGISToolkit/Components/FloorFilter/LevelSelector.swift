@@ -117,18 +117,37 @@ extension LevelSelector {
     /// A scrollable list of buttons; one for each level to be displayed.
     /// - Returns: The scrollable list of level buttons.
     @ViewBuilder func makeLevelButtons() -> some View {
-        ScrollViewReader { proxy in
+        let scrollView = ScrollViewReader { proxy in
             ScrollView {
-                VStack(spacing: 4) {
+                let list = VStack(spacing: 4) {
                     ForEach(filteredLevels, id: \.id) { level in
                         makeLevelButton(level)
                     }
                 }
-                .onSizeChange { contentHeight = $0.height }
+                if #available (iOS 18.0, *) {
+                    list
+                } else {
+                    list
+                        .onGeometryChange(for: CGFloat.self) { proxy in
+                            proxy.frame(in: .global).height
+                        } action: { newHeight in
+                            contentHeight = newHeight
+                        }
+                }
             }
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
             .onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
+        }
+        if #available (iOS 18.0, *) {
+            scrollView
+                .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                    geometry.contentSize.height
+                } action: { _, newValue in
+                    contentHeight = newValue
+                }
+        } else {
+            scrollView
         }
     }
     
