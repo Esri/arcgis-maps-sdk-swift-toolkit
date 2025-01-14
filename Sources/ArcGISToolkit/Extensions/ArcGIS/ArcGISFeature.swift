@@ -14,8 +14,27 @@
 
 ***REMOVED***
 import Foundation
+import UIKit
 
 extension ArcGISFeature {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED***func makeSymbol() async -> UIImage? {
+***REMOVED******REMOVED***if let featureLayer = table?.layer as? FeatureLayer,
+***REMOVED******REMOVED***   let renderer = featureLayer.renderer,
+***REMOVED******REMOVED***   let symbol = renderer.symbol(for: self) {
+***REMOVED******REMOVED******REMOVED***let scale: CGFloat
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***scale = 1
+#else
+***REMOVED******REMOVED******REMOVED***scale = await UIScreen.main.scale
+#endif
+***REMOVED******REMOVED******REMOVED***return try? await symbol.makeSwatch(scale: scale)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The global ID of the feature.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This property is `nil` if there is no global ID.

@@ -70,11 +70,17 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var groups: [UtilityNetworkAssociationFormElementView.Group]?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether initial expression evaluation is running.
 ***REMOVED***@State private var initialExpressionsAreEvaluating = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let utilityNetwork: UtilityNetwork?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
@@ -85,8 +91,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm) {
+***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+***REMOVED******REMOVED***self.utilityNetwork = utilityNetwork
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -115,6 +122,14 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let groups = groups, groups.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[UtilityNetworkAssociationsFormElementDefinition.description]",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups: groups,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "[UtilityNetworkAssociationsFormElementDefinition.label]"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
@@ -131,6 +146,42 @@ public struct FeatureFormView: View {
 #endif
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***try? await utilityNetwork?.load()
+***REMOVED******REMOVED******REMOVED***if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Grab Utility Network Associations for the element being edited
+***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var groups = [UtilityNetworkAssociationFormElementView.Group]()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique network sources present
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSources = Array(Set(associations.map { $0.toElement.networkSource ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for source in networkSources {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by kind
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let groupMembers = associations.filter { $0.toElement.networkSource == source ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for association in groupMembers {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = association.toElement
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "\(associatedElement.objectID)",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***icon: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: associatedElement.assetType.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   return await feature.makeSymbol()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.groups = groups
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Not a Utility Element")
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -190,5 +241,21 @@ extension FeatureFormView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
 ***REMOVED******REMOVED******REMOVED******REMOVED***initialExpressionsAreEvaluating = false
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED*** TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension UtilityNetworkSource: @retroactive Equatable {
+***REMOVED***public static func == (lhs: UtilityNetworkSource, rhs: UtilityNetworkSource) -> Bool {
+***REMOVED******REMOVED***lhs.id == rhs.id
+***REMOVED******REMOVED***&& lhs.name == rhs.name
+***REMOVED***
+***REMOVED***
+
+extension UtilityNetworkSource: @retroactive Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(name)
+***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***
 ***REMOVED***
