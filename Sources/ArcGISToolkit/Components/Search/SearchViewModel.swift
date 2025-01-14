@@ -180,7 +180,7 @@ public enum SearchOutcome: Sendable {
 ***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
 ***REMOVED******REMOVED***/ this property upon user selection. This property is observable. The view should observe this
 ***REMOVED******REMOVED***/ property and update the associated GeoView's viewpoint, if configured.
-***REMOVED***var selectedResult: SearchResult? {
+***REMOVED***@Published var selectedResult: SearchResult? {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***(selectedResult?.geoElement as? Graphic)?.isSelected = false
 ***REMOVED***
@@ -227,7 +227,7 @@ public enum SearchOutcome: Sendable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The suggestion currently selected by the user.
-***REMOVED***var currentSuggestion: SearchSuggestion? {
+***REMOVED***@Published var currentSuggestion: SearchSuggestion? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if let currentSuggestion = currentSuggestion {
 ***REMOVED******REMOVED******REMOVED******REMOVED***acceptSuggestion(currentSuggestion)
