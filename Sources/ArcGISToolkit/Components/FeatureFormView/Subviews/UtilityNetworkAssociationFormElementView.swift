@@ -89,13 +89,10 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.selectedAssociation = association.object
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.selectedAssociation = association.object
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if association.icon == nil,
