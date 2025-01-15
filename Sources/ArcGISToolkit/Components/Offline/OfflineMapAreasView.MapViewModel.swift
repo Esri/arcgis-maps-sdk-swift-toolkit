@@ -39,6 +39,11 @@ extension OfflineMapAreasView {
             portalItemID = map.item?.id
         }
         
+        init(portalItem: PortalItem) {
+            offlineMapTask = OfflineMapTask(portalItem: portalItem)
+            portalItemID = portalItem.id
+        }
+        
         /// Gets the preplanned map areas from the offline map task and loads the map models.
         func loadPreplannedMapModels() async {
             guard let portalItemID else { return }
