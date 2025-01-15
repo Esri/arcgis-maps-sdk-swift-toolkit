@@ -48,9 +48,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The combined status of the preplanned map area.
     @Published private(set) var status: Status = .notLoaded
     
-    /// A Boolean value indicating if a user notification should be shown when a job completes.
-    let showsUserNotificationOnCompletion: Bool
-    
     /// The first map from the mobile map package.
     var map: Map? { 
         get async {
@@ -73,8 +70,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
         portalItemID: PortalItem.ID,
-        preplannedMapAreaID: PortalItem.ID,
-        showsUserNotificationOnCompletion: Bool = true
+        preplannedMapAreaID: PortalItem.ID
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
@@ -84,7 +80,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
-        self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
             Logger.offlineManager.debug("Found executing job for area \(preplannedMapAreaID.rawValue, privacy: .public)")

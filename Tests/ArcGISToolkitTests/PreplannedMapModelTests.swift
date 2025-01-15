@@ -195,10 +195,7 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            preplannedMapAreaID: areaID
         )
         
         XCTAssertEqual(model.status, .downloading)
@@ -219,10 +216,7 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            preplannedMapAreaID: areaID
         )
         
         defer {
@@ -283,10 +277,7 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            preplannedMapAreaID: areaID
         )
         
         defer {
@@ -341,10 +332,7 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            preplannedMapAreaID: areaID
         )
         
         var statuses: [PreplannedMapModel.Status] = []
@@ -390,10 +378,7 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            preplannedMapAreaID: areaID
         )
         
         // Verify description does not contain HTML tags.
