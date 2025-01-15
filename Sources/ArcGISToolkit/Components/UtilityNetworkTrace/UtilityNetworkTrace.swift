@@ -222,11 +222,9 @@ public struct UtilityNetworkTrace: View {
             Text(String.noConfigurationsAvailable)
         } else {
             ForEach(viewModel.configurations.sorted { $0.name < $1.name }, id: \.name) { configuration in
-                Button {
+                Button(configuration.name) {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
-                } label: {
-                    Text(configuration.name)
                 }
                 .listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
             }
@@ -812,16 +810,10 @@ public struct UtilityNetworkTrace: View {
     /// - Parameter title: The button's title.
     /// - Parameter action: The action to be performed.
     /// - Returns: The configured button.
-    private func makeBackButton(title: String, _ action: @escaping () -> Void) -> some View {
-        Button { action() } label: {
-            Label {
-                Text(title)
-            } icon: {
-                Image(systemName: "chevron.backward")
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
+    private func makeBackButton(title: String, action: @escaping () -> Void) -> some View {
+        Button(title, systemImage: "chevron.backward", action: action)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     /// Returns a section header.
