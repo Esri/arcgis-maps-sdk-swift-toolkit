@@ -49,7 +49,7 @@ public struct OfflineMapAreasView: View {
     }
     
     public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
-        let item = PortalItem(url: mapInfo.portalURL)!
+        let item = PortalItem(url: mapInfo.portalItemURL)!
         let map = Map(item: item)
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
         onlineMap = map
