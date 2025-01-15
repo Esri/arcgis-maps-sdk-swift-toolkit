@@ -23,6 +23,9 @@ struct FeatureFormExampleView: View {
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
+    /// <#Description#>
+    @State private var forms = [FeatureForm]()
+    
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
@@ -61,21 +64,34 @@ struct FeatureFormExampleView: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .ignoresSafeArea(.keyboard)
-                .floatingPanel(
-                    attributionBarHeight: attributionBarHeight,
-                    selectedDetent: $detent,
-                    horizontalAlignment: .leading,
+            // NavigationStacks aren't working inside of floatingPanels
+//                .floatingPanel(
+                .sheet(
+//                    attributionBarHeight: attributionBarHeight,
+//                    selectedDetent: $detent,
+//                    horizontalAlignment: .leading,
                     isPresented: model.formIsPresented
                 ) {
-                    if let featureForm = model.featureForm {
+                    let makeFeatureFormView: (_ featureForm: FeatureForm) -> some View = { featureForm in
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
                             .onUtilityAssociationSelected { feature in
-                                print(feature)
+                                print(#file, #function, feature)
+                                forms.append(FeatureForm(feature: feature))
                             }
                             .validationErrors(validationErrorVisibility)
                             .padding(.horizontal)
                             .padding(.top, 16)
                     }
+                    NavigationStack(path: $forms) {
+                        if let featureForm = model.featureForm {
+                            makeFeatureFormView(featureForm)
+                                .navigationDestination(for: FeatureForm.self) { featureForm in
+                                    makeFeatureFormView(featureForm)
+                                }
+                        }
+                    }
+                    .backgroundInteractionEnabled()
+                    .presentationDetents([.medium])
                 }
                 .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
@@ -385,5 +401,31 @@ private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
         compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func backgroundInteractionEnabled() -> some View {
+        if #available(iOS 16.4, *) {
+            self
+                .presentationBackgroundInteraction(.enabled)
+        } else {
+            self
+        }
+    }
+}
+
+// TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension FeatureForm: @retroactive Equatable {
+    public static func == (lhs: FeatureForm, rhs: FeatureForm) -> Bool {
+        lhs.title == rhs.title
+    }
+}
+
+extension FeatureForm: @retroactive Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.title)
     }
 }
