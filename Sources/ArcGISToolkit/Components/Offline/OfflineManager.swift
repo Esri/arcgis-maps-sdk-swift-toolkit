@@ -36,7 +36,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private(set) public var offlineMapsInfo: [OfflineMapInfo] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which offline maps will be serialized under the user defaults.
-***REMOVED***let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
+***REMOVED***static let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
 ***REMOVED***
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
@@ -87,7 +87,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ Saves map information for a given portal item to UserDefaults.
 ***REMOVED******REMOVED***/ - Parameter portalItem: The portal item.
 ***REMOVED***func saveMapInfo(for portalItem: PortalItem) {
-***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
+***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let portalItemURL = portalItem.url,
 ***REMOVED******REMOVED******REMOVED***  let portalItemID = portalItem.id?.description,
@@ -96,7 +96,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***savedMapIDs.append(portalItemID)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save portal item ID.
-***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
+***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: OfflineManager.defaultsKey)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let description = portalItem.description.replacing(/<[^>]+>/, with: "")
 ***REMOVED******REMOVED***
@@ -123,16 +123,16 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***offlineMapsInfo.removeAll(where: { $0.id == id ***REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
+***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***savedMapIDs.removeAll(where: { $0 == id ***REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
+***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: OfflineManager.defaultsKey)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads webmap portal items that have been saved to UserDefaults.
 ***REMOVED***private func loadFromDefaults() {
-***REMOVED******REMOVED***let savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
+***REMOVED******REMOVED***let savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***offlineMapsInfo = savedMapIDs
 ***REMOVED******REMOVED******REMOVED***.flatMap {
