@@ -23,6 +23,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var forms = [FeatureForm]()
+***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
@@ -61,21 +64,34 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
-***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
+***REMOVED******REMOVED******REMOVED******REMOVED*** NavigationStacks aren't working inside of floatingPanels
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: model.formIsPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let makeFeatureFormView: (_ featureForm: FeatureForm) -> some View = { featureForm in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUtilityAssociationSelected { feature in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(#file, #function, feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forms.append(FeatureForm(feature: feature))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, 16)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationStack(path: $forms) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureForm.self) { featureForm in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.backgroundInteractionEnabled()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !formIsPresented { validationErrorVisibility = .automatic ***REMOVED***
@@ -385,5 +401,31 @@ private extension Array where Element == FeatureEditResult {
 ***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
 ***REMOVED***var errors: [Error] {
 ***REMOVED******REMOVED***compactMap { $0.error ***REMOVED*** + flatMap { $0.attachmentResults.compactMap { $0.error ***REMOVED*** ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension View {
+***REMOVED***@ViewBuilder
+***REMOVED***func backgroundInteractionEnabled() -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.4, *) {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteraction(.enabled)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED*** TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension FeatureForm: @retroactive Equatable {
+***REMOVED***public static func == (lhs: FeatureForm, rhs: FeatureForm) -> Bool {
+***REMOVED******REMOVED***lhs.title == rhs.title
+***REMOVED***
+***REMOVED***
+
+extension FeatureForm: @retroactive Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(self.title)
 ***REMOVED***
 ***REMOVED***
