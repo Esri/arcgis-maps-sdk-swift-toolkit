@@ -31,9 +31,9 @@ public class OfflineManager: ObservableObject {
     /// The jobs managed by this instance.
     var jobs: [any JobProtocol] { jobManager.jobs }
     
-    /// The webmap portal items that have downloaded map areas.
+    /// The portal item information for webmaps that have downloaded map areas.
     @Published
-    private(set) public var offlineMaps: [PortalItem] = []
+    private(set) public var offlineMapsInfo: [OfflineMapInfo] = []
     
     /// The key for which offline maps will be serialized under the user defaults.
     let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
@@ -84,12 +84,13 @@ public class OfflineManager: ObservableObject {
         }
     }
     
-    /// Saves the portal item to UserDefaults.
-    /// - Parameter item: The portal item.
-    func savePortalItem(_ item: PortalItem) {
+    /// Saves map information for a given portal item to UserDefaults.
+    /// - Parameter portalItem: The portal item.
+    func saveMapInfo(for portalItem: PortalItem) {
         var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
         
-        guard let portalItemID = item.id?.description,
+        guard let portalItemURL = portalItem.url,
+              let portalItemID = portalItem.id?.description,
               !savedMapIDs.contains(portalItemID) else { return }
         
         savedMapIDs.append(portalItemID)
@@ -97,26 +98,34 @@ public class OfflineManager: ObservableObject {
         // Save portal item ID.
         UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
         
-        let itemJSON = item.toJSON()
+        let description = portalItem.description.replacing(/<[^>]+>/, with: "")
         
-        // Save portal item JSON.
-        UserDefaults.standard.set(itemJSON, forKey: portalItemID)
+        let offlineMapInfo = OfflineMapInfo(
+            id: portalItemID,
+            title: portalItem.title,
+            description: description,
+            portalURL: portalItemURL
+        )
         
-        offlineMaps.append(item)
+        offlineMapsInfo.append(offlineMapInfo)
+        
+        if let data = try? JSONEncoder().encode(offlineMapInfo) {
+            UserDefaults.standard.setValue(data, forKey: portalItemID)
+        }
     }
     
-    /// Deletes a given portal item from UserDefaults.
-    /// - Parameter item: The portal item.
-    func deletePortalItem(_ item: PortalItem) {
-        guard let portalItemID = item.id?.description else { return }
+    /// Deletes map information for a given portal item ID from UserDefaults.
+    /// - Parameter portalItemID: The portal item ID.
+    func deleteMapInfo(for portalItemID: PortalItem.ID) {
+        let id = portalItemID.description
         
-        UserDefaults.standard.removeObject(forKey: portalItemID)
+        UserDefaults.standard.removeObject(forKey: id)
         
-        offlineMaps.removeAll(where: { $0.id?.description == portalItemID })
+        offlineMapsInfo.removeAll(where: { $0.id == id })
         
         var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
         
-        savedMapIDs.removeAll(where: { $0 == portalItemID })
+        savedMapIDs.removeAll(where: { $0 == id })
         
         UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
     }
@@ -125,12 +134,13 @@ public class OfflineManager: ObservableObject {
     private func loadFromDefaults() {
         let savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
         
-        offlineMaps = savedMapIDs
+        offlineMapsInfo = savedMapIDs
             .flatMap {
-                UserDefaults.standard.string(forKey: $0) // Portal item JSON string for webmap ID.
+                let data = UserDefaults.standard.object(forKey: $0) as! Data
+                return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
             }
             .flatMap {
-                return PortalItem(json: $0, portal: .arcGISOnline(connection: .anonymous))
+                return OfflineMapInfo(id: $0.id, title: $0.title, description: $0.description, portalURL: $0.portalURL)
             }
     }
 }
@@ -176,4 +186,11 @@ extension Logger {
             .init(.disabled)
         }
     }
+}
+
+public struct OfflineMapInfo: Codable {
+    public var id: String
+    public var title: String
+    public var description: String
+    public var portalURL: URL
 }

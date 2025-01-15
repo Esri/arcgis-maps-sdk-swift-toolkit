@@ -24,13 +24,19 @@ public struct OfflineMapAreasView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     /// The web map to be taken offline.
-    private let onlineMap: Map
+    private let onlineMap: Map?
+    /// The portal item for the web map to be taken offline.
+    private let portalItem: PortalItem?
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     
     /// A Boolean value indicating whether the web map is offline disabled.
     private var mapIsOfflineDisabled: Bool {
-        onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+        if let onlineMap {
+            onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+        } else {
+            false
+        }
     }
     
     /// Creates a view with a given web map.
@@ -40,6 +46,15 @@ public struct OfflineMapAreasView: View {
     public init(online: Map, selection: Binding<Map?>) {
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
         onlineMap = online
+        portalItem = nil
+        _selectedMap = selection
+    }
+    
+    public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
+        let item = PortalItem(url: mapInfo.portalURL)!
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(portalItem: item))
+        portalItem = item
+        onlineMap = nil
         _selectedMap = selection
     }
     
@@ -80,13 +95,14 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
                         .onDownload {
-                            guard let portalItem = onlineMap.item as? PortalItem else { return }
-                            OfflineManager.shared.savePortalItem(portalItem)
+                            guard let portalItem = onlineMap?.item as? PortalItem
+                            ?? portalItem else { return }
+                            OfflineManager.shared.saveMapInfo(for: portalItem)
                         }
                         .onRemoveDownload {
-                            guard let portalItem = onlineMap.item as? PortalItem,
+                            guard let portalItemID = portalItem?.id,
                                   models.filter(\.status.isDownloaded).isEmpty else { return }
-                            OfflineManager.shared.deletePortalItem(portalItem)
+                            OfflineManager.shared.deleteMapInfo(for: portalItemID)
                         }
                         .onChange(of: selectedMap) { _ in
                             dismiss()
@@ -114,13 +130,14 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
                         .onDownload {
-                            guard let portalItem = onlineMap.item as? PortalItem else { return }
-                            OfflineManager.shared.savePortalItem(portalItem)
+                            guard let portalItem = onlineMap?.item as? PortalItem
+                            ?? portalItem else { return }
+                            OfflineManager.shared.saveMapInfo(for: portalItem)
                         }
                         .onRemoveDownload {
-                            guard let portalItem = onlineMap.item as? PortalItem,
+                            guard let portalItemID = portalItem?.id,
                                   models.filter(\.status.isDownloaded).isEmpty else { return }
-                            OfflineManager.shared.deletePortalItem(portalItem)
+                            OfflineManager.shared.deleteMapInfo(for: portalItemID)
                         }
                         .onChange(of: selectedMap) { _ in
                             dismiss()
