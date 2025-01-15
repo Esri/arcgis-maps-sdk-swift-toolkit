@@ -51,7 +51,7 @@ public class OfflineManager: ObservableObject {
         jobManager.resumeAllPausedJobs()
         
         // Retrieves the offline map infos from the user defaults.
-        retrieveOfflineMapInfosFromDefaults()
+        loadOfflineMapInfosFromDefaults()
     }
     
     /// Starts a job that will be managed by this instance.
@@ -88,6 +88,7 @@ public class OfflineManager: ObservableObject {
     /// - Parameter portalItem: The portal item.
     func saveMapInfo(for portalItem: PortalItem) {
         guard let offlineMapInfo = OfflineMapInfo(portalItem: portalItem) else { return }
+        guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItem.id }) else { return }
         offlineMapInfos.append(offlineMapInfo)
         saveOfflineMapInfosToDefaults()
     }
@@ -102,17 +103,24 @@ public class OfflineManager: ObservableObject {
     /// Saves the offline map information to the defaults.
     private func saveOfflineMapInfosToDefaults() {
         Logger.offlineManager.debug("Saving offline map info to user defaults")
-        let encoder = JSONEncoder()
-        let datas = offlineMapInfos.compactMap { try? encoder.encode($0) }
-        UserDefaults.standard.set(datas, forKey: Self.defaultsKey)
+        do {
+            UserDefaults.standard.set(
+                try JSONEncoder().encode(offlineMapInfos),
+                forKey: Self.defaultsKey
+            )
+        } catch {
+            Logger.offlineManager.error("Error saving offline map info to user defaults: \(error.localizedDescription)")
+        }
     }
     
     /// Loads webmap portal items that have been saved to UserDefaults.
-    private func retrieveOfflineMapInfosFromDefaults() {
+    private func loadOfflineMapInfosFromDefaults() {
         Logger.offlineManager.debug("Loading offline map info from user defaults")
-        guard let datas = UserDefaults.standard.array(forKey: Self.defaultsKey) as? [Data] else { return }
-        offlineMapInfos = datas.compactMap { data in
-            try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
+        guard let data = UserDefaults.standard.data(forKey: Self.defaultsKey) else { return }
+        do {
+            offlineMapInfos = try JSONDecoder().decode([OfflineMapInfo].self, from: data)
+        } catch {
+            Logger.offlineManager.error("Error loading offline map info from user defaults: \(error.localizedDescription)")
         }
     }
 }
@@ -164,7 +172,7 @@ public struct OfflineMapInfo: Codable {
     private var portalItemIDRawValue: String
     public var title: String
     public var description: String
-    public var portalURL: URL
+    public var portalItemURL: URL
     
     internal init?(portalItem: PortalItem) {
         guard let idRawValue = portalItem.id?.rawValue,
@@ -174,7 +182,7 @@ public struct OfflineMapInfo: Codable {
         self.portalItemIDRawValue = idRawValue
         self.title = portalItem.title
         self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
-        self.portalURL = url
+        self.portalItemURL = url
     }
 }
 
