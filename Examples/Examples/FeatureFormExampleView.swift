@@ -412,8 +412,7 @@ extension View {
 ***REMOVED***@ViewBuilder
 ***REMOVED***func backgroundInteractionEnabled() -> some View {
 ***REMOVED******REMOVED***if #available(iOS 16.4, *) {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteraction(.enabled)
+***REMOVED******REMOVED******REMOVED***self.presentationBackgroundInteraction(.enabled)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
