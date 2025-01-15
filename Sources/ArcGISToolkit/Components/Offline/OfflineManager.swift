@@ -33,7 +33,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal item information for webmaps that have downloaded map areas.
 ***REMOVED***@Published
-***REMOVED***private(set) public var offlineMapsInfo: [OfflineMapInfo] = []
+***REMOVED***private(set) public var offlineMapInfos: [OfflineMapInfo] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which offline maps will be serialized under the user defaults.
 ***REMOVED***static let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
@@ -107,7 +107,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***portalURL: portalItemURL
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMapsInfo.append(offlineMapInfo)
+***REMOVED******REMOVED***offlineMapInfos.append(offlineMapInfo)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let data = try? JSONEncoder().encode(offlineMapInfo) {
 ***REMOVED******REMOVED******REMOVED***UserDefaults.standard.setValue(data, forKey: portalItemID)
@@ -121,7 +121,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UserDefaults.standard.removeObject(forKey: id)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMapsInfo.removeAll(where: { $0.id == id ***REMOVED***)
+***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.id == id ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
 ***REMOVED******REMOVED***
@@ -134,7 +134,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private func loadFromDefaults() {
 ***REMOVED******REMOVED***let savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMapsInfo = savedMapIDs
+***REMOVED******REMOVED***offlineMapInfos = savedMapIDs
 ***REMOVED******REMOVED******REMOVED***.flatMap {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let data = UserDefaults.standard.object(forKey: $0) as! Data
 ***REMOVED******REMOVED******REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
