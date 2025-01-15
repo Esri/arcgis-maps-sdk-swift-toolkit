@@ -188,7 +188,7 @@ extension Bookmarks {
                     Text(bookmark.name)
                         // Make the entire row tappable.
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
+                        .contentShape(.rect)
                 }
 #if !os(visionOS)
                 .buttonStyle(.plain)
