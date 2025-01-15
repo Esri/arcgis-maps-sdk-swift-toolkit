@@ -64,18 +64,16 @@ struct FeatureFormExampleView: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .ignoresSafeArea(.keyboard)
-            // NavigationStacks aren't working inside of floatingPanels
-//                .floatingPanel(
-                .sheet(
-//                    attributionBarHeight: attributionBarHeight,
-//                    selectedDetent: $detent,
-//                    horizontalAlignment: .leading,
-                    isPresented: model.formIsPresented
-                ) {
-                    let makeFeatureFormView: (_ featureForm: FeatureForm) -> some View = { featureForm in
+            
+            // NavigationStack doesn't work properly inside of a FloatingPanel
+            // so we need to use a sheet instead for now.
+            // Similar to https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/706
+            
+                .sheet(isPresented: model.formIsPresented) {
+                    let makeFeatureFormView: (_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View = { featureForm, headerVisibility in
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+                            .formHeader(headerVisibility)
                             .onUtilityAssociationSelected { feature in
-                                print(#file, #function, feature)
                                 forms.append(FeatureForm(feature: feature))
                             }
                             .validationErrors(validationErrorVisibility)
@@ -84,15 +82,18 @@ struct FeatureFormExampleView: View {
                     }
                     NavigationStack(path: $forms) {
                         if let featureForm = model.featureForm {
-                            makeFeatureFormView(featureForm)
+                            makeFeatureFormView(featureForm, .visible)
                                 .navigationDestination(for: FeatureForm.self) { featureForm in
-                                    makeFeatureFormView(featureForm)
+                                    makeFeatureFormView(featureForm, .hidden)
+                                        .navigationTitle(featureForm.title)
                                 }
                         }
                     }
                     .backgroundInteractionEnabled()
-                    .presentationDetents([.medium])
+                    .interactiveDismissDisabled()
+                    .presentationDetents([.medium, .large])
                 }
+            
                 .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
