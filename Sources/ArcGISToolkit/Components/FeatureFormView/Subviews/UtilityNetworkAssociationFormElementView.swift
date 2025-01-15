@@ -89,13 +89,10 @@ extension UtilityNetworkAssociationFormElementView {
                     }
                 }
                 Spacer()
-                Button {
-                    model.selectedAssociation = association.object
-                } label: {
-                    Image(systemName: "chevron.right")
-                }
-                .buttonStyle(.plain)
-                .font(.caption2)
+                Image(systemName: "chevron.right")
+            }
+            .onTapGesture {
+                model.selectedAssociation = association.object
             }
             .task {
                 if association.icon == nil,
