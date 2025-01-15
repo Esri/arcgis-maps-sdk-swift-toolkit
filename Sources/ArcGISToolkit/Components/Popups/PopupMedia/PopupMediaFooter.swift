@@ -34,14 +34,14 @@ struct PopupMediaFooter: View {
                 VStack(alignment: .leading) {
                     if !popupMedia.title.isEmpty {
                         Text(popupMedia.title)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(.body)
                     }
                     
                     if !popupMedia.caption.isEmpty {
                         Text(popupMedia.caption)
                             .font(.subheadline)
-                            .foregroundColor(.init(white: 0.75))
+                            .foregroundStyle(Color(white: 0.75))
                     }
                 }
                 .lineLimit(1)

@@ -218,7 +218,7 @@ struct CredentialInputSheetView: View {
                         .multilineTextAlignment(.center)
                     Text(message)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.vertical)

@@ -228,7 +228,7 @@ extension Bookmarks {
         } icon: {
             Image(systemName: "bookmark.slash")
         }
-        .foregroundColor(.primary)
+        .foregroundStyle(.primary)
         .padding()
     }
 }
