@@ -26,10 +26,9 @@ struct BasemapGalleryCell: View {
 ***REMOVED***let onSelection: () -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
-***REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***onSelection()
-***REMOVED***, label: {
+***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the thumbnail, if available.
@@ -38,7 +37,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeOverlay()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -62,7 +61,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: 12))
 ***REMOVED******REMOVED******REMOVED***.hoverEffect()
 #endif
-***REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.disabled(item.isBasemapLoading)
 ***REMOVED***
@@ -108,7 +107,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***trailing: 12)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
-***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 8))
 ***REMOVED***
 ***REMOVED***
 

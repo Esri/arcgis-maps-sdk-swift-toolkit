@@ -151,7 +151,7 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding(10)
-***REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label) Radio Button")
 ***REMOVED******REMOVED***.buttonStyle(.plain)

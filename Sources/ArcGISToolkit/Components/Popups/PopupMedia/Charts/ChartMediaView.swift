@@ -57,7 +57,7 @@ struct ChartMediaView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
-***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+***REMOVED******REMOVED***.clipShape(.rect(cornerRadius: cornerRadius))
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***isShowingDetailView = true
 ***REMOVED***
