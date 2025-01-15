@@ -36,7 +36,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private(set) public var offlineMapInfos: [OfflineMapInfo] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which offline maps will be serialized under the user defaults.
-***REMOVED***static let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
+***REMOVED***static private let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
 ***REMOVED***
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
@@ -50,8 +50,8 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Resuming all paused jobs")
 ***REMOVED******REMOVED***jobManager.resumeAllPausedJobs()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Loads webmap portal items from UserDefaults.
-***REMOVED******REMOVED***loadFromDefaults()
+***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos from the user defaults.
+***REMOVED******REMOVED***retrieveOfflineMapInfosFromDefaults()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
@@ -87,61 +87,33 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ Saves map information for a given portal item to UserDefaults.
 ***REMOVED******REMOVED***/ - Parameter portalItem: The portal item.
 ***REMOVED***func saveMapInfo(for portalItem: PortalItem) {
-***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let portalItemURL = portalItem.url,
-***REMOVED******REMOVED******REMOVED***  let portalItemID = portalItem.id?.description,
-***REMOVED******REMOVED******REMOVED***  !savedMapIDs.contains(portalItemID) else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***savedMapIDs.append(portalItemID)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Save portal item ID.
-***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: OfflineManager.defaultsKey)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let description = portalItem.description.replacing(/<[^>]+>/, with: "")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let offlineMapInfo = OfflineMapInfo(
-***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED***title: portalItem.title,
-***REMOVED******REMOVED******REMOVED***description: description,
-***REMOVED******REMOVED******REMOVED***portalURL: portalItemURL
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let offlineMapInfo = OfflineMapInfo(portalItem: portalItem) else { return ***REMOVED***
 ***REMOVED******REMOVED***offlineMapInfos.append(offlineMapInfo)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let data = try? JSONEncoder().encode(offlineMapInfo) {
-***REMOVED******REMOVED******REMOVED***UserDefaults.standard.setValue(data, forKey: portalItemID)
-***REMOVED***
+***REMOVED******REMOVED***saveOfflineMapInfosToDefaults()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes map information for a given portal item ID from UserDefaults.
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
 ***REMOVED***func deleteMapInfo(for portalItemID: PortalItem.ID) {
-***REMOVED******REMOVED***let id = portalItemID.description
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***UserDefaults.standard.removeObject(forKey: id)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == id ***REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***savedMapIDs.removeAll(where: { $0 == id ***REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: OfflineManager.defaultsKey)
+***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID ***REMOVED***)
+***REMOVED******REMOVED***saveOfflineMapInfosToDefaults()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Saves the offline map information to the defaults.
+***REMOVED***private func saveOfflineMapInfosToDefaults() {
+***REMOVED******REMOVED***Logger.offlineManager.debug("Saving offline map info to user defaults")
+***REMOVED******REMOVED***let encoder = JSONEncoder()
+***REMOVED******REMOVED***let datas = offlineMapInfos.compactMap { try? encoder.encode($0) ***REMOVED***
+***REMOVED******REMOVED***UserDefaults.standard.set(datas, forKey: Self.defaultsKey)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads webmap portal items that have been saved to UserDefaults.
-***REMOVED***private func loadFromDefaults() {
-***REMOVED******REMOVED***let savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMapInfos = savedMapIDs
-***REMOVED******REMOVED******REMOVED***.flatMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***let data = UserDefaults.standard.object(forKey: $0) as! Data
-***REMOVED******REMOVED******REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.flatMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***return OfflineMapInfo(portalItemID: $0.portalItemID, title: $0.title, description: $0.description, portalURL: $0.portalURL)
-***REMOVED******REMOVED***
+***REMOVED***private func retrieveOfflineMapInfosFromDefaults() {
+***REMOVED******REMOVED***Logger.offlineManager.debug("Loading offline map info from user defaults")
+***REMOVED******REMOVED***guard let datas = UserDefaults.standard.array(forKey: Self.defaultsKey) as? [Data] else { return ***REMOVED***
+***REMOVED******REMOVED***offlineMapInfos = datas.compactMap { data in
+***REMOVED******REMOVED******REMOVED***try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -189,8 +161,26 @@ extension Logger {
 ***REMOVED***
 
 public struct OfflineMapInfo: Codable {
-***REMOVED***public var portalItemID: String
+***REMOVED***private var portalItemIDRawValue: String
 ***REMOVED***public var title: String
 ***REMOVED***public var description: String
 ***REMOVED***public var portalURL: URL
 ***REMOVED***
+***REMOVED***internal init?(portalItem: PortalItem) {
+***REMOVED******REMOVED***guard let idRawValue = portalItem.id?.rawValue,
+***REMOVED******REMOVED******REMOVED***  let url = portalItem.url
+***REMOVED******REMOVED***else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.portalItemIDRawValue = idRawValue
+***REMOVED******REMOVED***self.title = portalItem.title
+***REMOVED******REMOVED***self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
+***REMOVED******REMOVED***self.portalURL = url
+***REMOVED***
+***REMOVED***
+
+public extension OfflineMapInfo {
+***REMOVED***var portalItemID: Item.ID {
+***REMOVED******REMOVED***.init(portalItemIDRawValue)!
+***REMOVED***
+***REMOVED***
+
