@@ -33,7 +33,7 @@ public class OfflineManager: ObservableObject {
     
     /// The portal item information for webmaps that have downloaded map areas.
     @Published
-    private(set) public var offlineMapsInfo: [OfflineMapInfo] = []
+    private(set) public var offlineMapInfos: [OfflineMapInfo] = []
     
     /// The key for which offline maps will be serialized under the user defaults.
     static let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
@@ -107,7 +107,7 @@ public class OfflineManager: ObservableObject {
             portalURL: portalItemURL
         )
         
-        offlineMapsInfo.append(offlineMapInfo)
+        offlineMapInfos.append(offlineMapInfo)
         
         if let data = try? JSONEncoder().encode(offlineMapInfo) {
             UserDefaults.standard.setValue(data, forKey: portalItemID)
@@ -121,7 +121,7 @@ public class OfflineManager: ObservableObject {
         
         UserDefaults.standard.removeObject(forKey: id)
         
-        offlineMapsInfo.removeAll(where: { $0.id == id })
+        offlineMapInfos.removeAll(where: { $0.id == id })
         
         var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
         
@@ -134,7 +134,7 @@ public class OfflineManager: ObservableObject {
     private func loadFromDefaults() {
         let savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
         
-        offlineMapsInfo = savedMapIDs
+        offlineMapInfos = savedMapIDs
             .flatMap {
                 let data = UserDefaults.standard.object(forKey: $0) as! Data
                 return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
