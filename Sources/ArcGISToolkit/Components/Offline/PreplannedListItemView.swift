@@ -62,9 +62,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***if model.status.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
