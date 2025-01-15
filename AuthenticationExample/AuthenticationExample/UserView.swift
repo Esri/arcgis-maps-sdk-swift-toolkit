@@ -26,7 +26,7 @@ struct UserView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = user.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 100, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(Circle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.circle)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "person.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()

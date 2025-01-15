@@ -221,7 +221,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED***.frame(width: cellSize.width, height: cellSize.height)
 ***REMOVED******REMOVED******REMOVED***.background(Color.gray.opacity(0.2))
-***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
@@ -254,9 +254,7 @@ struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
 ***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: size.height * 0.25)
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.name.isEmpty {

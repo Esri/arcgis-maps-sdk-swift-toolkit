@@ -83,7 +83,7 @@ extension LevelSelector {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: iconForCollapsedState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.disabled(levels.count == 1)
