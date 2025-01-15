@@ -412,8 +412,7 @@ extension View {
     @ViewBuilder
     func backgroundInteractionEnabled() -> some View {
         if #available(iOS 16.4, *) {
-            self
-                .presentationBackgroundInteraction(.enabled)
+            self.presentationBackgroundInteraction(.enabled)
         } else {
             self
         }
