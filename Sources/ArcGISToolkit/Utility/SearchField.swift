@@ -58,7 +58,7 @@ public struct SearchField: View {
         HStack {
             // Search icon
             Image(systemName: "magnifyingglass.circle.fill")
-                .foregroundColor(Color.secondary)
+                .foregroundStyle(Color.secondary)
             
             // Search text field
             TextField(
@@ -90,7 +90,7 @@ public struct SearchField: View {
                         "chevron.down" :
                             "chevron.up"
                     )
-                    .foregroundColor(Color.secondary)
+                    .foregroundStyle(Color.secondary)
                 }
                 .buttonStyle(.plain)
             }

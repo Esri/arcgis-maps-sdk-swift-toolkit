@@ -32,7 +32,7 @@ struct InputHeader: View {
         HStack {
             Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             Spacer()
         }
         .padding(.top, elementPadding)

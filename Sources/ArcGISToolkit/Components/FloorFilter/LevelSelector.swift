@@ -101,7 +101,7 @@ extension LevelSelector {
         } label: {
             let roundedRectangle = RoundedRectangle(cornerRadius: 5)
             Text(level.shortName)
-                .foregroundColor(textColor(for: level))
+                .foregroundStyle(textColor(for: level))
                 .frame(maxWidth: .infinity)
                 .padding([.vertical], 4)
                 .background {
