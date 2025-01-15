@@ -228,7 +228,7 @@ extension Bookmarks {
 ***REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark.slash")
 ***REMOVED***
-***REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED***.foregroundStyle(.primary)
 ***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

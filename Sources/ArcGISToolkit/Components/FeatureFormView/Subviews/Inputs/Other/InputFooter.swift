@@ -63,7 +63,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED***.foregroundColor(isShowingError ? .red : .secondary)
+***REMOVED******REMOVED***.foregroundStyle(isShowingError ? .red : .secondary)
 ***REMOVED******REMOVED***.id(id)
 ***REMOVED******REMOVED***.padding(.vertical, elementPadding / 2)
 ***REMOVED******REMOVED***.task {

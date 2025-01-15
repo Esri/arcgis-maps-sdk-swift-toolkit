@@ -129,7 +129,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused)

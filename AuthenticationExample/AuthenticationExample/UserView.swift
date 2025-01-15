@@ -30,7 +30,7 @@ struct UserView: View {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "person.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 100, alignment: .center)
@@ -92,7 +92,7 @@ struct UserAttributeView: View {
 ***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 2) {
 ***REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED***Text(detail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
@@ -113,7 +113,7 @@ struct UserAttributeListView: View {
 ***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 2) {
 ***REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED***Text(details.map(\.description).joined(separator: "\r"))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
