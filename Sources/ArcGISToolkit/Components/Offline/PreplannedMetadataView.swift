@@ -57,26 +57,43 @@ struct PreplannedMetadataView: View {
                             .font(.subheadline)
                     }
                 }
-                VStack(alignment: .leading) {
-                    Text("Size")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-                        .font(.subheadline)
+                if model.status.isDownloaded {
+                    VStack(alignment: .leading) {
+                        
+                        Text("Size")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+                            .font(.subheadline)
+                    }
                 }
             }
             if !isSelected {
-                Section {
-                    HStack {
-                        Image(systemName: "trash.circle.fill")
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.red, .gray.opacity(0.1))
-                            .font(.title)
-                        Button("Remove Download", role: .destructive) {
-                            dismiss()
-                            model.removeDownloadedPreplannedMapArea()
+                if model.status.isDownloaded {
+                    Section {
+                        HStack {
+                            Image(systemName: "trash.circle.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.red, .gray.opacity(0.1))
+                                .font(.title)
+                            Button("Remove Download", role: .destructive) {
+                                dismiss()
+                                model.removeDownloadedPreplannedMapArea()
+                            }
                         }
                     }
+                } else {
+                    Button {
+                        dismiss()
+                        Task { await model.downloadPreplannedMapArea() }
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.down.circle")
+                            Text("Download")
+                        }
+                    }
+                    .foregroundStyle(Color.accentColor)
+                    .disabled(!model.status.allowsDownload)
                 }
             }
         }
