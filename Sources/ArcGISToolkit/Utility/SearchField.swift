@@ -58,7 +58,7 @@ public struct SearchField: View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Search icon
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Search text field
 ***REMOVED******REMOVED******REMOVED***TextField(
@@ -90,7 +90,7 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"chevron.down" :
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"chevron.up"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***

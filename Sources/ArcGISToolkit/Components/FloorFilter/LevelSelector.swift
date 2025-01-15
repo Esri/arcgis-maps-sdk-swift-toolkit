@@ -101,7 +101,7 @@ extension LevelSelector {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***let roundedRectangle = RoundedRectangle(cornerRadius: 5)
 ***REMOVED******REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(textColor(for: level))
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(textColor(for: level))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background {

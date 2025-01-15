@@ -31,7 +31,7 @@ struct EsriBorderViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: 2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(uiColor: .separator))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color(uiColor: .separator))
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.shadow(
 ***REMOVED******REMOVED******REMOVED******REMOVED***color: .gray.opacity(0.4),

@@ -22,7 +22,7 @@ struct ScalebarTextModifier: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.font(Scalebar.font.font)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(settings.textColor)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(settings.textColor)
 ***REMOVED******REMOVED******REMOVED***.shadow(
 ***REMOVED******REMOVED******REMOVED******REMOVED***color: settings.textShadowColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED***radius: settings.shadowRadius

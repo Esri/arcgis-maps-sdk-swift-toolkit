@@ -48,14 +48,14 @@ struct SignInView: View {
 #else
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 #endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***signInButton
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if let error = error, !error.isChallengeCancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {

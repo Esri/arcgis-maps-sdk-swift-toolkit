@@ -56,7 +56,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.name ?? "")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Font.custom("AvenirNext-Regular", fixedSize: 12))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(item.hasError ? .secondary : .primary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(item.hasError ? .secondary : .primary)
 ***REMOVED******REMOVED***
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: 12))
@@ -78,10 +78,10 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For a white background behind the exclamation mark.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.white)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 16, height: 16)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 32, height: 32)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -91,7 +91,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: isSelected ? 2 : 0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
