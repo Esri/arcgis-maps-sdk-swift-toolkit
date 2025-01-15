@@ -236,13 +236,14 @@ public struct UtilityNetworkTrace: View {
     /// Displays the list of available networks.
     @ViewBuilder private var networksList: some View {
         ForEach(viewModel.networks, id: \.name) { network in
-            Text(network.name)
-                .lineLimit(1)
-                .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
-                .onTapGesture {
-                    viewModel.setNetwork(network)
-                    currentActivity = .creatingTrace(nil)
-                }
+            Button {
+                viewModel.setNetwork(network)
+                currentActivity = .creatingTrace(nil)
+            } label: {
+                Text(network.name)
+                    .lineLimit(1)
+            }
+            .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
         }
     }
     
@@ -347,7 +348,9 @@ public struct UtilityNetworkTrace: View {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
+#if !os(visionOS)
                             .foregroundStyle(.blue)
+#endif
                     }
                     ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
                     Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
@@ -435,15 +438,18 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
-                                HStack {
-                                    Text(assetGroupName)
-                                    Spacer()
-                                    Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
-                                }
-                                .foregroundStyle(.blue)
-                                .contentShape(.rect)
-                                .onTapGesture {
+                                Button {
                                     currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+                                } label: {
+                                    HStack {
+                                        Text(assetGroupName)
+                                        Spacer()
+                                        Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
+                                    }
+#if !os(visionOS)
+                                    .foregroundStyle(.blue)
+                                    .contentShape(.rect)
+#endif
                                 }
                             }
                         }
@@ -583,18 +589,23 @@ public struct UtilityNetworkTrace: View {
                             viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
                         }
                     ) {
-                        ForEach(viewModel.pendingTrace.startingPoints.first {
-                            $0 == selectedStartingPoint
-                        }?.utilityElement?.assetType.terminalConfiguration?.terminals ?? [], id: \.self) {
+                        ForEach(
+                            viewModel.pendingTrace.startingPoints
+                                .first(where: { $0 == selectedStartingPoint })?
+                                .utilityElement?.assetType.terminalConfiguration?.terminals ?? [],
+                            id: \.self
+                        ) {
                             Text($0.name)
                         }
                     }
+#if !os(visionOS)
                     .foregroundStyle(.blue)
+#endif
                 }
             }
             Section(String.attributesSectionTitle) {
                 ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
-                    HStack{
+                    HStack {
                         Text(item.key)
                         Spacer()
                         Text(item.value as? String ?? "")
