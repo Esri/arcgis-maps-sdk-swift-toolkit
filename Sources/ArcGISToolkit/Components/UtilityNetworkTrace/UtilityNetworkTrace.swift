@@ -222,11 +222,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Text(String.noConfigurationsAvailable)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations.sorted { $0.name < $1.name ***REMOVED***, id: \.name) { configuration in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(configuration.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setPendingTrace(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(configuration.name)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED******REMOVED***
@@ -812,16 +810,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ - Parameter title: The button's title.
 ***REMOVED******REMOVED***/ - Parameter action: The action to be performed.
 ***REMOVED******REMOVED***/ - Returns: The configured button.
-***REMOVED***private func makeBackButton(title: String, _ action: @escaping () -> Void) -> some View {
-***REMOVED******REMOVED***Button { action() ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.backward")
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED***private func makeBackButton(title: String, action: @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***Button(title, systemImage: "chevron.backward", action: action)
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a section header.
