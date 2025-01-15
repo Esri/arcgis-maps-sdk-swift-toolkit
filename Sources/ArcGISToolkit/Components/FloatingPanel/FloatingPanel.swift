@@ -209,7 +209,7 @@ private struct Handle: View {
     
     var body: some View {
         RoundedRectangle(cornerRadius: 4.0)
-            .foregroundColor(color)
+            .foregroundStyle(color)
             .frame(width: 100, height: 8.0)
             .hoverEffect()
     }

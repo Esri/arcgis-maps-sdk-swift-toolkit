@@ -30,7 +30,7 @@ struct UserView: View {
                 } else {
                     Image(systemName: "person.circle")
                         .resizable()
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
             .frame(width: 100, height: 100, alignment: .center)
@@ -92,7 +92,7 @@ struct UserAttributeView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .lineLimit(1)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .font(.footnote)
             Text(detail)
                 .font(.caption)
@@ -113,7 +113,7 @@ struct UserAttributeListView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .lineLimit(1)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .font(.footnote)
             Text(details.map(\.description).joined(separator: "\r"))
                 .font(.caption)

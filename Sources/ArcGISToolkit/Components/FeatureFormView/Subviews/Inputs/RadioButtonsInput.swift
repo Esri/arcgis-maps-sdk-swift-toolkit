@@ -147,7 +147,7 @@ extension RadioButtonsInput {
                 if selected {
                     Image(systemName: "checkmark")
                         .accessibilityIdentifier("\(element.label) \(label) Checkmark")
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor)
                 }
             }
             .padding(10)
@@ -155,7 +155,7 @@ extension RadioButtonsInput {
         }
         .accessibilityIdentifier("\(element.label) \(label) Radio Button")
         .buttonStyle(.plain)
-        .foregroundColor(.primary)
+        .foregroundStyle(.primary)
         if addDivider {
             Divider()
                 .padding(.leading, 10)

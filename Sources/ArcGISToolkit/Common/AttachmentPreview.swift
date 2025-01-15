@@ -215,7 +215,7 @@ struct AttachmentPreview: View {
                         Image(systemName: "square.and.arrow.down")
                         Spacer()
                     }
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 }
             }
             .font(.caption)
@@ -261,7 +261,7 @@ struct ThumbnailViewFooter: View {
             HStack {
                 if !attachmentModel.name.isEmpty {
                     Text(attachmentModel.name)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .font(.caption)
                         .lineLimit(1)
                 }

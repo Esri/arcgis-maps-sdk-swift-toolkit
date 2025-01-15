@@ -129,7 +129,7 @@ struct SiteAndFacilitySelector: View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
                     .disableAutocorrection(true)
                     .focused($textFieldIsFocused)

@@ -485,7 +485,7 @@ extension ResultRow {
                         )!
                     )
                 )
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             )
         )
     }
