@@ -51,7 +51,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***jobManager.resumeAllPausedJobs()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos from the user defaults.
-***REMOVED******REMOVED***retrieveOfflineMapInfosFromDefaults()
+***REMOVED******REMOVED***loadOfflineMapInfosFromDefaults()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
@@ -88,6 +88,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter portalItem: The portal item.
 ***REMOVED***func saveMapInfo(for portalItem: PortalItem) {
 ***REMOVED******REMOVED***guard let offlineMapInfo = OfflineMapInfo(portalItem: portalItem) else { return ***REMOVED***
+***REMOVED******REMOVED***guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItem.id ***REMOVED***) else { return ***REMOVED***
 ***REMOVED******REMOVED***offlineMapInfos.append(offlineMapInfo)
 ***REMOVED******REMOVED***saveOfflineMapInfosToDefaults()
 ***REMOVED***
@@ -102,17 +103,24 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ Saves the offline map information to the defaults.
 ***REMOVED***private func saveOfflineMapInfosToDefaults() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Saving offline map info to user defaults")
-***REMOVED******REMOVED***let encoder = JSONEncoder()
-***REMOVED******REMOVED***let datas = offlineMapInfos.compactMap { try? encoder.encode($0) ***REMOVED***
-***REMOVED******REMOVED***UserDefaults.standard.set(datas, forKey: Self.defaultsKey)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***UserDefaults.standard.set(
+***REMOVED******REMOVED******REMOVED******REMOVED***try JSONEncoder().encode(offlineMapInfos),
+***REMOVED******REMOVED******REMOVED******REMOVED***forKey: Self.defaultsKey
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error saving offline map info to user defaults: \(error.localizedDescription)")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads webmap portal items that have been saved to UserDefaults.
-***REMOVED***private func retrieveOfflineMapInfosFromDefaults() {
+***REMOVED***private func loadOfflineMapInfosFromDefaults() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Loading offline map info from user defaults")
-***REMOVED******REMOVED***guard let datas = UserDefaults.standard.array(forKey: Self.defaultsKey) as? [Data] else { return ***REMOVED***
-***REMOVED******REMOVED***offlineMapInfos = datas.compactMap { data in
-***REMOVED******REMOVED******REMOVED***try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
+***REMOVED******REMOVED***guard let data = UserDefaults.standard.data(forKey: Self.defaultsKey) else { return ***REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***offlineMapInfos = try JSONDecoder().decode([OfflineMapInfo].self, from: data)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error loading offline map info from user defaults: \(error.localizedDescription)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -164,7 +172,7 @@ public struct OfflineMapInfo: Codable {
 ***REMOVED***private var portalItemIDRawValue: String
 ***REMOVED***public var title: String
 ***REMOVED***public var description: String
-***REMOVED***public var portalURL: URL
+***REMOVED***public var portalItemURL: URL
 ***REMOVED***
 ***REMOVED***internal init?(portalItem: PortalItem) {
 ***REMOVED******REMOVED***guard let idRawValue = portalItem.id?.rawValue,
@@ -174,7 +182,7 @@ public struct OfflineMapInfo: Codable {
 ***REMOVED******REMOVED***self.portalItemIDRawValue = idRawValue
 ***REMOVED******REMOVED***self.title = portalItem.title
 ***REMOVED******REMOVED***self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
-***REMOVED******REMOVED***self.portalURL = url
+***REMOVED******REMOVED***self.portalItemURL = url
 ***REMOVED***
 ***REMOVED***
 
