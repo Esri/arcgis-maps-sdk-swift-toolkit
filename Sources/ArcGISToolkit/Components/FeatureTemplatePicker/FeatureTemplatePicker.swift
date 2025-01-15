@@ -184,8 +184,8 @@ private struct FeatureTemplateView: View {
         let yScale = min(1, maxSize / image.size.height)
         let scale = min(xScale, yScale)
         return (
-            width: image.size.width * xScale,
-            height: image.size.height * yScale
+            width: image.size.width * scale,
+            height: image.size.height * scale
         )
     }
 }
