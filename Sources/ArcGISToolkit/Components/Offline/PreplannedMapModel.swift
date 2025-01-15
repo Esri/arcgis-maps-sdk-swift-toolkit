@@ -48,9 +48,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The combined status of the preplanned map area.
 ***REMOVED***@Published private(set) var status: Status = .notLoaded
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
-***REMOVED***let showsUserNotificationOnCompletion: Bool
-***REMOVED***
 ***REMOVED******REMOVED***/ The first map from the mobile map package.
 ***REMOVED***var map: Map? { 
 ***REMOVED******REMOVED***get async {
@@ -73,8 +70,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID,
-***REMOVED******REMOVED***showsUserNotificationOnCompletion: Bool = true
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
@@ -84,7 +80,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for area \(preplannedMapAreaID.rawValue, privacy: .public)")

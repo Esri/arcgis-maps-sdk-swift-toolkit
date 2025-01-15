@@ -195,10 +195,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
-***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
-***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(model.status, .downloading)
@@ -219,10 +216,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
-***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
-***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
@@ -283,10 +277,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
-***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
-***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
@@ -341,10 +332,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
-***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
-***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var statuses: [PreplannedMapModel.Status] = []
@@ -390,10 +378,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
-***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
-***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify description does not contain HTML tags.
