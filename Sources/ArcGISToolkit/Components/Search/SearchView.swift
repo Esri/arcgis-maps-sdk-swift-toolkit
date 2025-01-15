@@ -460,7 +460,7 @@ struct ResultRow: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
+            .contentShape(.rect)
         }
         .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
     }

@@ -83,7 +83,7 @@ extension LevelSelector {
         } label: {
             Image(systemName: iconForCollapsedState)
                 .padding(.toolkitDefault)
-                .contentShape(Rectangle())
+                .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .disabled(levels.count == 1)

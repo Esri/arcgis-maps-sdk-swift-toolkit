@@ -78,7 +78,7 @@ struct MediaPopupElementView: View {
                             }
                         }
                         .frame(width: mediaSize.width, height: mediaSize.height)
-                        .contentShape(RoundedRectangle(cornerRadius: 8))
+                        .contentShape(.rect(cornerRadius: 8))
                     }
                 }
             }

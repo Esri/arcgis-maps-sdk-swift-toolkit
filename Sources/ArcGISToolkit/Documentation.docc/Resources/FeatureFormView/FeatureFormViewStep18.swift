@@ -87,7 +87,7 @@ struct FeatureFormExampleView: View {
                             }
                             .padding()
                             .background(.thinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .clipShape(.rect(cornerRadius: 10))
                         default:
                             EmptyView()
                         }

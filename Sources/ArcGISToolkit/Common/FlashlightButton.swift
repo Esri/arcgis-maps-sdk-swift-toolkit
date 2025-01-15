@@ -56,7 +56,7 @@ struct FlashlightButton: View {
                     .foregroundStyle(torchIsOn ? .white : .black)
                     .contentTransition(.interpolate)
                     .background(.tint)
-                    .clipShape(Circle())
+                    .clipShape(.circle)
             }
             .buttonStyle(.plain)
             .disabled(!hasTorch)

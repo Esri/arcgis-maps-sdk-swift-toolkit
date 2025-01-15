@@ -26,10 +26,9 @@ struct BasemapGalleryCell: View {
     let onSelection: () -> Void
     
     var body: some View {
-        let roundedRect = RoundedRectangle(cornerRadius: 8)
-        Button(action: {
+        Button {
             onSelection()
-        }, label: {
+        } label: {
             VStack {
                 ZStack(alignment: .center) {
                     // Display the thumbnail, if available.
@@ -38,7 +37,7 @@ struct BasemapGalleryCell: View {
                             Image(uiImage: thumbnailImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .clipShape(roundedRect)
+                                .clipShape(.rect(cornerRadius: 8))
                                 .overlay(
                                     makeOverlay()
                                 )
@@ -62,7 +61,7 @@ struct BasemapGalleryCell: View {
             .contentShape(.hoverEffect, .rect(cornerRadius: 12))
             .hoverEffect()
 #endif
-        })
+        }
         .buttonStyle(.plain)
         .disabled(item.isBasemapLoading)
     }
@@ -108,7 +107,7 @@ struct BasemapGalleryCell: View {
                 trailing: 12)
             )
             .background(Color(uiColor: .systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(.rect(cornerRadius: 8))
     }
 }
 
