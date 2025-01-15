@@ -31,9 +31,9 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ The jobs managed by this instance.
 ***REMOVED***var jobs: [any JobProtocol] { jobManager.jobs ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The webmap portal items that have downloaded map areas.
+***REMOVED******REMOVED***/ The portal item information for webmaps that have downloaded map areas.
 ***REMOVED***@Published
-***REMOVED***private(set) public var offlineMaps: [PortalItem] = []
+***REMOVED***private(set) public var offlineMapsInfo: [OfflineMapInfo] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which offline maps will be serialized under the user defaults.
 ***REMOVED***let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
@@ -84,12 +84,13 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Saves the portal item to UserDefaults.
-***REMOVED******REMOVED***/ - Parameter item: The portal item.
-***REMOVED***func savePortalItem(_ item: PortalItem) {
+***REMOVED******REMOVED***/ Saves map information for a given portal item to UserDefaults.
+***REMOVED******REMOVED***/ - Parameter portalItem: The portal item.
+***REMOVED***func saveMapInfo(for portalItem: PortalItem) {
 ***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let portalItemID = item.id?.description,
+***REMOVED******REMOVED***guard let portalItemURL = portalItem.url,
+***REMOVED******REMOVED******REMOVED***  let portalItemID = portalItem.id?.description,
 ***REMOVED******REMOVED******REMOVED***  !savedMapIDs.contains(portalItemID) else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***savedMapIDs.append(portalItemID)
@@ -97,26 +98,34 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Save portal item ID.
 ***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let itemJSON = item.toJSON()
+***REMOVED******REMOVED***let description = portalItem.description.replacing(/<[^>]+>/, with: "")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Save portal item JSON.
-***REMOVED******REMOVED***UserDefaults.standard.set(itemJSON, forKey: portalItemID)
+***REMOVED******REMOVED***let offlineMapInfo = OfflineMapInfo(
+***REMOVED******REMOVED******REMOVED***id: portalItemID,
+***REMOVED******REMOVED******REMOVED***title: portalItem.title,
+***REMOVED******REMOVED******REMOVED***description: description,
+***REMOVED******REMOVED******REMOVED***portalURL: portalItemURL
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMaps.append(item)
+***REMOVED******REMOVED***offlineMapsInfo.append(offlineMapInfo)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let data = try? JSONEncoder().encode(offlineMapInfo) {
+***REMOVED******REMOVED******REMOVED***UserDefaults.standard.setValue(data, forKey: portalItemID)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Deletes a given portal item from UserDefaults.
-***REMOVED******REMOVED***/ - Parameter item: The portal item.
-***REMOVED***func deletePortalItem(_ item: PortalItem) {
-***REMOVED******REMOVED***guard let portalItemID = item.id?.description else { return ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Deletes map information for a given portal item ID from UserDefaults.
+***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
+***REMOVED***func deleteMapInfo(for portalItemID: PortalItem.ID) {
+***REMOVED******REMOVED***let id = portalItemID.description
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***UserDefaults.standard.removeObject(forKey: portalItemID)
+***REMOVED******REMOVED***UserDefaults.standard.removeObject(forKey: id)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMaps.removeAll(where: { $0.id?.description == portalItemID ***REMOVED***)
+***REMOVED******REMOVED***offlineMapsInfo.removeAll(where: { $0.id == id ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***savedMapIDs.removeAll(where: { $0 == portalItemID ***REMOVED***)
+***REMOVED******REMOVED***savedMapIDs.removeAll(where: { $0 == id ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UserDefaults.standard.set(savedMapIDs, forKey: defaultsKey)
 ***REMOVED***
@@ -125,12 +134,13 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private func loadFromDefaults() {
 ***REMOVED******REMOVED***let savedMapIDs = UserDefaults.standard.stringArray(forKey: defaultsKey) ?? []
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMaps = savedMapIDs
+***REMOVED******REMOVED***offlineMapsInfo = savedMapIDs
 ***REMOVED******REMOVED******REMOVED***.flatMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***UserDefaults.standard.string(forKey: $0) ***REMOVED*** Portal item JSON string for webmap ID.
+***REMOVED******REMOVED******REMOVED******REMOVED***let data = UserDefaults.standard.object(forKey: $0) as! Data
+***REMOVED******REMOVED******REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.flatMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***return PortalItem(json: $0, portal: .arcGISOnline(connection: .anonymous))
+***REMOVED******REMOVED******REMOVED******REMOVED***return OfflineMapInfo(id: $0.id, title: $0.title, description: $0.description, portalURL: $0.portalURL)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -176,4 +186,11 @@ extension Logger {
 ***REMOVED******REMOVED******REMOVED***.init(.disabled)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+public struct OfflineMapInfo: Codable {
+***REMOVED***public var id: String
+***REMOVED***public var title: String
+***REMOVED***public var description: String
+***REMOVED***public var portalURL: URL
 ***REMOVED***
