@@ -24,19 +24,18 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED******REMOVED***/ The web map to be taken offline.
-***REMOVED***private let onlineMap: Map?
-***REMOVED******REMOVED***/ The portal item for the web map to be taken offline.
-***REMOVED***private let portalItem: PortalItem?
+***REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding private var selectedMap: Map?
 ***REMOVED***
+***REMOVED******REMOVED***/ The portal item for the web map to be taken offline.
+***REMOVED***private var portalItem: PortalItem? {
+***REMOVED******REMOVED***onlineMap.item as? PortalItem
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
 ***REMOVED***private var mapIsOfflineDisabled: Bool {
-***REMOVED******REMOVED***if let onlineMap {
-***REMOVED******REMOVED******REMOVED***onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED***
+***REMOVED******REMOVED***onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view with a given web map.
@@ -46,15 +45,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***public init(online: Map, selection: Binding<Map?>) {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
 ***REMOVED******REMOVED***onlineMap = online
-***REMOVED******REMOVED***portalItem = nil
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
 ***REMOVED******REMOVED***let item = PortalItem(url: mapInfo.portalURL)!
-***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(portalItem: item))
-***REMOVED******REMOVED***portalItem = item
-***REMOVED******REMOVED***onlineMap = nil
+***REMOVED******REMOVED***let map = Map(item: item)
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
+***REMOVED******REMOVED***onlineMap = map
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
@@ -95,8 +93,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let portalItem = onlineMap?.item as? PortalItem
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***?? portalItem else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let portalItem else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OfflineManager.shared.saveMapInfo(for: portalItem)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRemoveDownload {
@@ -130,8 +127,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let portalItem = onlineMap?.item as? PortalItem
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***?? portalItem else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let portalItem else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OfflineManager.shared.saveMapInfo(for: portalItem)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRemoveDownload {
