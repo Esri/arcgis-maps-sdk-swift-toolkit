@@ -109,7 +109,7 @@ extension WorldScaleSceneView {
             }
             .padding()
             .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .clipShape(.rect(cornerRadius: 15))
             .frame(maxWidth: 430)
             .padding()
         }

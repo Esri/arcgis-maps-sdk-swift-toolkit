@@ -151,7 +151,7 @@ extension RadioButtonsInput {
                 }
             }
             .padding(10)
-            .contentShape(Rectangle())
+            .contentShape(.rect)
         }
         .accessibilityIdentifier("\(element.label) \(label) Radio Button")
         .buttonStyle(.plain)
