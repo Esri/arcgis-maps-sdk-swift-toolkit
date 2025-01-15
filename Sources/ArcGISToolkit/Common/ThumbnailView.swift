@@ -43,7 +43,7 @@ struct ThumbnailView: View  {
         .frame(width: size.width, height: size.height, alignment: .center)
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .contentShape(RoundedRectangle(cornerRadius: 4))
-        .foregroundColor(foregroundColor(for: attachmentModel))
+        .foregroundStyle(foregroundColor(for: attachmentModel))
     }
     
     /// The foreground color of the thumbnail image.

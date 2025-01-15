@@ -41,7 +41,7 @@ struct BookmarksHeader: View {
                     comment: "A label prompting the user to make a selection from the available bookmarks."
                 )
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             }
             .frame(
                 maxWidth: .infinity,

@@ -348,7 +348,7 @@ public struct UtilityNetworkTrace: View {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(.blue)
+                            .foregroundStyle(.blue)
                     }
                     ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
                     Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
@@ -441,7 +441,7 @@ public struct UtilityNetworkTrace: View {
                                     Spacer()
                                     Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
                                 }
-                                .foregroundColor(.blue)
+                                .foregroundStyle(.blue)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
@@ -469,7 +469,7 @@ public struct UtilityNetworkTrace: View {
                                     VStack(alignment: .trailing) {
                                         Text(item.function.functionType.title)
                                             .font(.caption)
-                                            .foregroundColor(.secondary)
+                                            .foregroundStyle(.secondary)
                                         if let result = item.result as? Double {
                                             Text(result, format: .number)
                                         } else {
@@ -590,7 +590,7 @@ public struct UtilityNetworkTrace: View {
                             Text($0.name)
                         }
                     }
-                    .foregroundColor(.blue)
+                    .foregroundStyle(.blue)
                 }
             }
             Section(String.attributesSectionTitle) {
