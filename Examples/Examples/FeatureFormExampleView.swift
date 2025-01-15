@@ -64,11 +64,15 @@ struct FeatureFormExampleView: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .ignoresSafeArea(.keyboard)
-            
             // NavigationStack doesn't work properly inside of a FloatingPanel
             // so we need to use a sheet instead for now.
             // Similar to https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/706
-            
+//                .floatingPanel(
+//                    attributionBarHeight: attributionBarHeight,
+//                    selectedDetent: $detent,
+//                    horizontalAlignment: .leading,
+//                    isPresented: model.formIsPresented
+//                ) {
                 .sheet(isPresented: model.formIsPresented) {
                     let makeFeatureFormView: (_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View = { featureForm, headerVisibility in
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
@@ -93,7 +97,6 @@ struct FeatureFormExampleView: View {
                     .interactiveDismissDisabled()
                     .presentationDetents([.medium, .large])
                 }
-            
                 .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
