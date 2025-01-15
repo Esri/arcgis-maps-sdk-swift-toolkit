@@ -442,7 +442,7 @@ public struct UtilityNetworkTrace: View {
                                     Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
                                 }
                                 .foregroundStyle(.blue)
-                                .contentShape(Rectangle())
+                                .contentShape(.rect)
                                 .onTapGesture {
                                     currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
                                 }
