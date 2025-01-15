@@ -101,7 +101,7 @@ public class OfflineManager: ObservableObject {
         let description = portalItem.description.replacing(/<[^>]+>/, with: "")
         
         let offlineMapInfo = OfflineMapInfo(
-            id: portalItemID,
+            portalItemID: portalItemID,
             title: portalItem.title,
             description: description,
             portalURL: portalItemURL
@@ -121,7 +121,7 @@ public class OfflineManager: ObservableObject {
         
         UserDefaults.standard.removeObject(forKey: id)
         
-        offlineMapInfos.removeAll(where: { $0.id == id })
+        offlineMapInfos.removeAll(where: { $0.portalItemID == id })
         
         var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
         
@@ -140,7 +140,7 @@ public class OfflineManager: ObservableObject {
                 return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
             }
             .flatMap {
-                return OfflineMapInfo(id: $0.id, title: $0.title, description: $0.description, portalURL: $0.portalURL)
+                return OfflineMapInfo(portalItemID: $0.portalItemID, title: $0.title, description: $0.description, portalURL: $0.portalURL)
             }
     }
 }
@@ -189,7 +189,7 @@ extension Logger {
 }
 
 public struct OfflineMapInfo: Codable {
-    public var id: String
+    public var portalItemID: String
     public var title: String
     public var description: String
     public var portalURL: URL
