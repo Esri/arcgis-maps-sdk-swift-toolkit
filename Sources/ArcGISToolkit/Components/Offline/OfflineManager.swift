@@ -101,7 +101,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***let description = portalItem.description.replacing(/<[^>]+>/, with: "")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let offlineMapInfo = OfflineMapInfo(
-***REMOVED******REMOVED******REMOVED***id: portalItemID,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***title: portalItem.title,
 ***REMOVED******REMOVED******REMOVED***description: description,
 ***REMOVED******REMOVED******REMOVED***portalURL: portalItemURL
@@ -121,7 +121,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UserDefaults.standard.removeObject(forKey: id)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.id == id ***REMOVED***)
+***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == id ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var savedMapIDs = UserDefaults.standard.stringArray(forKey: OfflineManager.defaultsKey) ?? []
 ***REMOVED******REMOVED***
@@ -140,7 +140,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.flatMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***return OfflineMapInfo(id: $0.id, title: $0.title, description: $0.description, portalURL: $0.portalURL)
+***REMOVED******REMOVED******REMOVED******REMOVED***return OfflineMapInfo(portalItemID: $0.portalItemID, title: $0.title, description: $0.description, portalURL: $0.portalURL)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -189,7 +189,7 @@ extension Logger {
 ***REMOVED***
 
 public struct OfflineMapInfo: Codable {
-***REMOVED***public var id: String
+***REMOVED***public var portalItemID: String
 ***REMOVED***public var title: String
 ***REMOVED***public var description: String
 ***REMOVED***public var portalURL: URL
