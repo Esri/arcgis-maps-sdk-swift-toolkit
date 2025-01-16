@@ -60,7 +60,6 @@ import ArcGIS
 /// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 /// in the project. To learn more about using the `SearchView` see the <doc:SearchViewTutorial>.
-@available(visionOS, unavailable)
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
@@ -270,7 +269,7 @@ public struct SearchView: View {
 }
 
 // MARK: Modifiers
-@available(visionOS, unavailable)
+
 extension SearchView {
     /// Specifies whether a built-in result view will be shown. If `false`, the result display/selection
     /// list is not shown. Set to `false` if you want to define a custom result list. You might use a
@@ -380,7 +379,6 @@ extension SearchView {
 }
 
 /// A View displaying the list of search results.
-@available(visionOS, unavailable)
 struct SearchResultList: View {
     /// The array of search results to display.
     var searchResults: [SearchResult]
@@ -404,7 +402,6 @@ struct SearchResultList: View {
 }
 
 /// A View displaying the list of search suggestion results.
-@available(visionOS, unavailable)
 struct SearchSuggestionList: View {
     /// The array of suggestion results to display.
     var suggestionResults: [SearchSuggestion]
@@ -466,7 +463,6 @@ struct ResultRow: View {
     }
 }
 
-@available(visionOS, unavailable)
 extension ResultRow {
     /// Creates a `ResultRow` from a search suggestion.
     /// - Parameter searchSuggestion: The search suggestion displayed in the row.
