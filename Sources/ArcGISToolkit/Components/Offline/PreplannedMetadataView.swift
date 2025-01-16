@@ -57,15 +57,17 @@ struct PreplannedMetadataView: View {
                             .font(.subheadline)
                     }
                 }
-                VStack(alignment: .leading) {
-                    Text("Size")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-                        .font(.subheadline)
+                if model.status.isDownloaded {
+                    VStack(alignment: .leading) {
+                        Text("Size")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+                            .font(.subheadline)
+                    }
                 }
             }
-            if !isSelected {
+            if model.status.isDownloaded && !isSelected {
                 Section {
                     HStack {
                         Image(systemName: "trash.circle.fill")
@@ -78,6 +80,14 @@ struct PreplannedMetadataView: View {
                         }
                     }
                 }
+            }
+            if !model.status.isDownloaded {
+                Button("Download", systemImage: "arrow.down.circle") {
+                    dismiss()
+                    Task { await model.downloadPreplannedMapArea() }
+                }
+                .foregroundStyle(Color.accentColor)
+                .disabled(!model.status.allowsDownload)
             }
         }
         .navigationTitle(model.preplannedMapArea.title)
