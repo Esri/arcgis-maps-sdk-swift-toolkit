@@ -179,38 +179,38 @@ public struct UtilityNetworkTrace: View {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
             makeDetailSectionHeader(title: assetGroupName)
-            List {
-                ForEach(
-                    assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
-                    id: \.key
-                ) { (name, elements) in
-                    Section(name) {
-                        DisclosureGroup {
-                            ForEach(elements, id: \.globalID) { element in
-                                Button {
-                                    Task {
-                                        if let feature = await viewModel.feature(for: element),
-                                           let geometry = feature.geometry {
-                                            updateViewpoint(to: geometry.extent)
-                                        }
-                                    }
-                                } label: {
-                                    Label {
-                                        Text(
-                                            "Object ID: \(element.objectID, format: .number.grouping(.never))",
-                                            bundle: .toolkitModule,
-                                            comment: "A string identifying a utility network object."
-                                        )
-                                    } icon: {
-                                        Image(systemName: "scope")
+            List(
+                assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
+                id: \.key
+            ) { (name, elements) in
+                Section(name) {
+                    DisclosureGroup {
+                        ForEach(elements, id: \.globalID) { element in
+                            Button {
+                                Task {
+                                    if let feature = await viewModel.feature(for: element),
+                                       let geometry = feature.geometry {
+                                        updateViewpoint(to: geometry.extent)
                                     }
                                 }
+                            } label: {
+                                Label(
+                                    String(
+                                        localized: "Object ID: \(element.objectID, format: .number.grouping(.never))",
+                                        bundle: .toolkitModule,
+                                        comment: "A string identifying a utility network object."
+                                    ),
+                                    systemImage: "scope"
+                                )
                             }
-                        } label: {
-                            Text(elements.count, format: .number)
-                                .catalystPadding(4)
                         }
+                    } label: {
+                        Text(elements.count, format: .number)
+                            .catalystPadding(4)
                     }
+#if os(visionOS)
+                    .listItemTint(.monochrome)
+#endif
                 }
             }
         }
