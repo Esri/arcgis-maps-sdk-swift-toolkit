@@ -35,6 +35,11 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The online map.
 ***REMOVED******REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
+***REMOVED******REMOVED***var mapIsOfflineDisabled: Bool {
+***REMOVED******REMOVED******REMOVED***onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Creates an offline map areas view model for a given web map.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter map: The web map.
 ***REMOVED******REMOVED******REMOVED***/ - Precondition: `map.item?.id` is not `nil`.
@@ -137,12 +142,6 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***id: preplannedMapAreaID,
 ***REMOVED******REMOVED******REMOVED******REMOVED***thumbnail: item.thumbnail
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
-***REMOVED******REMOVED***var mapIsOfflineDisabled: Bool {
-***REMOVED******REMOVED******REMOVED***onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
