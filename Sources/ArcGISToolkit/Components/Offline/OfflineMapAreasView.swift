@@ -37,9 +37,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - online: The web map to be taken offline.
 ***REMOVED******REMOVED***/   - selection: A binding to the currently selected map.
-***REMOVED***public init(online: Map, selection: Binding<Map?>) {
-***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
-***REMOVED******REMOVED***onlineMap = online
+***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
+***REMOVED***public init(onlineMap: Map, selection: Binding<Map?>) {
+***REMOVED******REMOVED***precondition(onlineMap.item?.id != nil)
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+***REMOVED******REMOVED***self.onlineMap = onlineMap
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
@@ -164,7 +166,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***OfflineMapAreasView(
-***REMOVED******REMOVED******REMOVED******REMOVED***online: Map(
+***REMOVED******REMOVED******REMOVED******REMOVED***onlineMap: Map(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
