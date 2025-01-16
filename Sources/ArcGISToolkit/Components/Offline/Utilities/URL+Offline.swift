@@ -41,3 +41,15 @@ extension URL {
 ***REMOVED******REMOVED***return url
 ***REMOVED***
 ***REMOVED***
+***REMOVED***static func onDemandDirectory(
+***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***onDemandMapAreaID: UUID? = nil
+***REMOVED***) -> URL {
+***REMOVED******REMOVED***var url = portalItemDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED***.appending(component: "OnDemand/")
+***REMOVED******REMOVED***if let onDemandMapAreaID {
+***REMOVED******REMOVED******REMOVED***url = url.appending(component: "\(onDemandMapAreaID.uuidString)/")
+***REMOVED***
+***REMOVED******REMOVED***return url
+***REMOVED***
+***REMOVED***

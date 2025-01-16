@@ -27,6 +27,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding private var selectedMap: Map?
+***REMOVED******REMOVED***/ A Boolean value indicating whether an on-demand map area is being added.
+***REMOVED***@State private var isAddingOnDemandArea = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
 ***REMOVED***private var mapIsOfflineDisabled: Bool {
@@ -46,14 +48,33 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !mapIsOfflineDisabled {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !mapIsOfflineDisabled {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("Preplanned") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("On Demand") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(map: onlineMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onComplete { title, minScale, maxScale, areaOfInterest in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let area = OnDemandMapArea(title: title, minScale: minScale.scale, maxScale: maxScale.scale, areaOfInterest: areaOfInterest)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(area)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(mapViewModel.onDemandMapModels == nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED***await loadMapModels()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -69,7 +90,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.refreshable {
-***REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
+***REMOVED******REMOVED******REMOVED***await loadMapModels()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -96,6 +117,21 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var onDemandMapAreasView: some View {
+***REMOVED******REMOVED***if let models = mapViewModel.onDemandMapModels {
+***REMOVED******REMOVED******REMOVED***List(models) { onDemandMapModel in
+***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -184,12 +220,15 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the online and offline preplanned map models.
-***REMOVED***private func loadPreplannedMapModels() async {
+***REMOVED******REMOVED***/ Loads the online and offline map models.
+***REMOVED***private func loadMapModels() async {
+***REMOVED******REMOVED******REMOVED*** Load preplanned map models.
 ***REMOVED******REMOVED***await mapViewModel.loadPreplannedMapModels()
 ***REMOVED******REMOVED***if case .failure = mapViewModel.preplannedMapModels {
 ***REMOVED******REMOVED******REMOVED***await mapViewModel.loadOfflinePreplannedMapModels()
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Load on-demand map models.
+***REMOVED******REMOVED***await mapViewModel.loadOnDemandMapModels()
 ***REMOVED***
 ***REMOVED***
 
