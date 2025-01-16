@@ -82,14 +82,9 @@ struct PreplannedMetadataView: View {
                 }
             }
             if !model.status.isDownloaded {
-                Button {
+                Button("Download", systemImage: "arrow.down.circle") {
                     dismiss()
                     Task { await model.downloadPreplannedMapArea() }
-                } label: {
-                    HStack {
-                        Image(systemName: "arrow.down.circle")
-                        Text("Download")
-                    }
                 }
                 .foregroundStyle(Color.accentColor)
                 .disabled(!model.status.allowsDownload)
