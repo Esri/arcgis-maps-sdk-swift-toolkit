@@ -27,6 +27,8 @@ public struct OfflineMapAreasView: View {
     private let onlineMap: Map
     /// The currently selected map.
     @Binding private var selectedMap: Map?
+    /// A Boolean value indicating whether an on-demand map area is being added.
+    @State private var isAddingOnDemandArea = false
     
     /// A Boolean value indicating whether the web map is offline disabled.
     private var mapIsOfflineDisabled: Bool {
@@ -46,14 +48,33 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    if !mapIsOfflineDisabled {
+                if !mapIsOfflineDisabled {
+                    Section("Preplanned") {
                         preplannedMapAreasView
+                    }
+                    
+                    Section("On Demand") {
+                        onDemandMapAreasView
+                    }
+                    
+                    Section {
+                        Button("Add Offline Area") {
+                            isAddingOnDemandArea = true
+                        }
+                        .sheet(isPresented: $isAddingOnDemandArea) {
+                            OnDemandConfigurationView(map: onlineMap)
+                                .onComplete { title, minScale, maxScale, areaOfInterest in
+                                    let area = OnDemandMapArea(title: title, minScale: minScale.scale, maxScale: maxScale.scale, areaOfInterest: areaOfInterest)
+                                    mapViewModel.addOnDemandMapArea(area)
+                                }
+                                .highPriorityGesture(DragGesture())
+                        }
+                        .disabled(mapViewModel.onDemandMapModels == nil)
                     }
                 }
             }
             .task {
-                await loadPreplannedMapModels()
+                await loadMapModels()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -69,7 +90,7 @@ public struct OfflineMapAreasView: View {
             }
         }
         .refreshable {
-            await loadPreplannedMapModels()
+            await loadMapModels()
         }
     }
     
@@ -98,6 +119,21 @@ public struct OfflineMapAreasView: View {
                 .frame(maxWidth: .infinity)
         }
     }
+    
+    @ViewBuilder private var onDemandMapAreasView: some View {
+        if let models = mapViewModel.onDemandMapModels {
+            List(models) { onDemandMapModel in
+                OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+                    .onChange(of: selectedMap) { _ in
+                        dismiss()
+                    }
+            }
+        } else {
+            ProgressView()
+                .frame(maxWidth: .infinity)
+        }
+    }
+    
     
     @ViewBuilder private var offlinePreplannedMapAreasView: some View {
         if let models = mapViewModel.offlinePreplannedMapModels {
@@ -184,12 +220,15 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    /// Loads the online and offline preplanned map models.
-    private func loadPreplannedMapModels() async {
+    /// Loads the online and offline map models.
+    private func loadMapModels() async {
+        // Load preplanned map models.
         await mapViewModel.loadPreplannedMapModels()
         if case .failure = mapViewModel.preplannedMapModels {
             await mapViewModel.loadOfflinePreplannedMapModels()
         }
+        // Load on-demand map models.
+        await mapViewModel.loadOnDemandMapModels()
     }
 }
 

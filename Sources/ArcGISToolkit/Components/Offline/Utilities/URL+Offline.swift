@@ -40,4 +40,16 @@ extension URL {
         }
         return url
     }
+    
+    static func onDemandDirectory(
+        forPortalItemID portalItemID: PortalItem.ID,
+        onDemandMapAreaID: UUID? = nil
+    ) -> URL {
+        var url = portalItemDirectory(forPortalItemID: portalItemID)
+            .appending(component: "OnDemand/")
+        if let onDemandMapAreaID {
+            url = url.appending(component: "\(onDemandMapAreaID.uuidString)/")
+        }
+        return url
+    }
 }
