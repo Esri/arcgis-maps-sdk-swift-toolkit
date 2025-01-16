@@ -56,7 +56,7 @@ extension OfflineMapAreasView {
                 try? await offlineMapTask.retryLoad()
             }
             
-            // Reset flag
+            // Reset flag.
             isShowingOnlyOfflineModels = false
             
             preplannedMapModels = await Result { @MainActor in
