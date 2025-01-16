@@ -37,9 +37,11 @@ public struct OfflineMapAreasView: View {
     /// - Parameters:
     ///   - online: The web map to be taken offline.
     ///   - selection: A binding to the currently selected map.
-    public init(online: Map, selection: Binding<Map?>) {
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
-        onlineMap = online
+    /// - Precondition: `onlineMap.item?.id` is not `nil`.
+    public init(onlineMap: Map, selection: Binding<Map?>) {
+        precondition(onlineMap.item?.id != nil)
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+        self.onlineMap = onlineMap
         _selectedMap = selection
     }
     
@@ -164,7 +166,7 @@ public struct OfflineMapAreasView: View {
         
         var body: some View {
             OfflineMapAreasView(
-                online: Map(
+                onlineMap: Map(
                     item: PortalItem(
                         portal: .arcGISOnline(connection: .anonymous),
                         id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
