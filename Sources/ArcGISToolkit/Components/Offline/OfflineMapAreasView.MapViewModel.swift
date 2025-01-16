@@ -35,6 +35,11 @@ extension OfflineMapAreasView {
         /// The online map.
         private let onlineMap: Map
         
+        /// A Boolean value indicating whether the web map is offline disabled.
+        var mapIsOfflineDisabled: Bool {
+            onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+        }
+        
         /// Creates an offline map areas view model for a given web map.
         /// - Parameter map: The web map.
         /// - Precondition: `map.item?.id` is not `nil`.
@@ -137,12 +142,6 @@ extension OfflineMapAreasView {
                 id: preplannedMapAreaID,
                 thumbnail: item.thumbnail
             )
-        }
-        
-        
-        /// A Boolean value indicating whether the web map is offline disabled.
-        var mapIsOfflineDisabled: Bool {
-            onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
         }
     }
 }
