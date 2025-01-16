@@ -21,7 +21,7 @@ extension OfflineMapAreasView {
     @MainActor
     class MapViewModel: ObservableObject {
         /// The portal item ID of the web map.
-        private let portalItemID: PortalItem.ID?
+        private let portalItemID: PortalItem.ID
         
         /// The offline map task.
         private let offlineMapTask: OfflineMapTask
@@ -29,47 +29,63 @@ extension OfflineMapAreasView {
         /// The preplanned map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
         
-        /// The offline preplanned map information sourced from downloaded mobile map packages.
-        @Published private(set) var offlinePreplannedMapModels: [PreplannedMapModel]?
+        /// A Boolean value indicating if only offline models are being shown.
+        @Published private(set) var isShowingOnlyOfflineModels = false
+        
+        /// The online map.
+        private let onlineMap: Map
         
         /// Creates an offline map areas view model for a given web map.
         /// - Parameter map: The web map.
+        /// - Precondition: `map.item?.id` is not `nil`.
         init(map: Map) {
+            precondition(map.item?.id != nil)
             offlineMapTask = OfflineMapTask(onlineMap: map)
-            portalItemID = map.item?.id
+            onlineMap = map
+            portalItemID = map.item!.id!
         }
         
         /// Gets the preplanned map areas from the offline map task and loads the map models.
         func loadPreplannedMapModels() async {
-            guard let portalItemID else { return }
-            
             if offlineMapTask.loadStatus != .loaded {
                 try? await offlineMapTask.retryLoad()
             }
             
+            // Reset flag
+            isShowingOnlyOfflineModels = false
+            
             preplannedMapModels = await Result { @MainActor in
-                try await offlineMapTask.preplannedMapAreas
-                    .filter { $0.portalItem.id != nil }
-                    .sorted(using: KeyPathComparator(\.portalItem.title))
-                    .map {
-                        PreplannedMapModel(
-                            offlineMapTask: offlineMapTask,
-                            mapArea: $0,
-                            portalItemID: portalItemID,
-                            preplannedMapAreaID: $0.portalItem.id!
-                        )
+                do {
+                    return try await offlineMapTask.preplannedMapAreas
+                        .filter { $0.portalItem.id != nil }
+                        .sorted(using: KeyPathComparator(\.portalItem.title))
+                        .map {
+                            PreplannedMapModel(
+                                offlineMapTask: offlineMapTask,
+                                mapArea: $0,
+                                portalItemID: portalItemID,
+                                preplannedMapAreaID: $0.portalItem.id!
+                            )
+                        }
+                } catch {
+                    // If not connected to the internet, then return only the offline models.
+                    if let urlError = error as? URLError,
+                       urlError.code == .notConnectedToInternet {
+                        isShowingOnlyOfflineModels = true
+                        return await loadOfflinePreplannedMapModels()
+                    } else {
+                        throw error
                     }
+                }
             }
         }
         
         /// Loads the offline preplanned map models with information from the downloaded mobile map
         /// packages for the online map.
-        func loadOfflinePreplannedMapModels() async {
-            guard let portalItemID else { return }
-            
+        func loadOfflinePreplannedMapModels() async -> [PreplannedMapModel] {
             let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
             
-            guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return }
+            guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return [] }
             
             var preplannedMapModels: [PreplannedMapModel] = []
             
@@ -90,7 +106,7 @@ extension OfflineMapAreasView {
                 preplannedMapModels.append(model)
             }
             
-            offlinePreplannedMapModels = preplannedMapModels
+            return preplannedMapModels
                 .filter(\.status.isDownloaded)
                 .sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title })
         }
@@ -121,6 +137,12 @@ extension OfflineMapAreasView {
                 id: preplannedMapAreaID,
                 thumbnail: item.thumbnail
             )
+        }
+        
+        
+        /// A Boolean value indicating whether the web map is offline disabled.
+        var mapIsOfflineDisabled: Bool {
+            onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
         }
     }
 }
