@@ -56,7 +56,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await offlineMapTask.retryLoad()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Reset flag
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reset flag.
 ***REMOVED******REMOVED******REMOVED***isShowingOnlyOfflineModels = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result { @MainActor in
