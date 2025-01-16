@@ -55,7 +55,7 @@ struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingOfflineMapAreasView) {
-***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView(online: onlineMap, selection: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView(onlineMap: onlineMap, selection: $selectedMap)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await requestUserNotificationAuthorization()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
