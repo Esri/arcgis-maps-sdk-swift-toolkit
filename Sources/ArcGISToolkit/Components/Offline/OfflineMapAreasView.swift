@@ -33,18 +33,15 @@ public struct OfflineMapAreasView: View {
         onlineMap.item as? PortalItem
     }
     
-    /// A Boolean value indicating whether the web map is offline disabled.
-    private var mapIsOfflineDisabled: Bool {
-        onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
-    }
-    
     /// Creates a view with a given web map.
     /// - Parameters:
-    ///   - online: The web map to be taken offline.
+    ///   - onlineMap: The web map to be taken offline.
     ///   - selection: A binding to the currently selected map.
-    public init(online: Map, selection: Binding<Map?>) {
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
-        onlineMap = online
+    /// - Precondition: `onlineMap.item?.id` is not `nil`.
+    public init(onlineMap: Map, selection: Binding<Map?>) {
+        precondition(onlineMap.item?.id != nil)
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+        self.onlineMap = onlineMap
         _selectedMap = selection
     }
     
@@ -60,13 +57,13 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 Section {
-                    if !mapIsOfflineDisabled {
+                    if !mapViewModel.mapIsOfflineDisabled {
                         preplannedMapAreasView
                     }
                 }
             }
             .task {
-                await loadPreplannedMapModels()
+                await mapViewModel.loadPreplannedMapModels()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -76,13 +73,13 @@ public struct OfflineMapAreasView: View {
             .navigationTitle("Map Areas")
             .navigationBarTitleDisplayMode(.inline)
             .overlay {
-                if mapIsOfflineDisabled {
+                if mapViewModel.mapIsOfflineDisabled {
                     offlineDisabledView
                 }
             }
         }
         .refreshable {
-            await loadPreplannedMapModels()
+            await mapViewModel.loadPreplannedMapModels()
         }
     }
     
@@ -109,63 +106,18 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            if let urlError = error as? URLError,
-               urlError.code == .notConnectedToInternet {
-                offlinePreplannedMapAreasView
-            } else {
-                view(for: error)
-            }
+            view(for: error)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
         }
     }
     
-    @ViewBuilder private var offlinePreplannedMapAreasView: some View {
-        if let models = mapViewModel.offlinePreplannedMapModels {
-            if !models.isEmpty {
-                List(models) { preplannedMapModel in
-                    PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-                        .onDownload {
-                            guard let portalItem else { return }
-                            OfflineManager.shared.saveMapInfo(for: portalItem)
-                        }
-                        .onRemoveDownload {
-                            guard let portalItemID = portalItem?.id,
-                                  models.filter(\.status.isDownloaded).isEmpty else { return }
-                            OfflineManager.shared.deleteMapInfo(for: portalItemID)
-                        }
-                        .onChange(of: selectedMap) { _ in
-                            dismiss()
-                        }
-                }
-            } else {
-                emptyOfflinePreplannedMapAreasView
-            }
-        } else {
-            // Models are loading map areas from disk.
-            ProgressView()
-                .frame(maxWidth: .infinity)
-        }
-    }
-    
-    private var emptyPreplannedMapAreasView: some View {
+    @ViewBuilder private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
             Text("No map areas")
                 .bold()
             Text("There are no map areas defined for this web map.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-    }
-    
-    private var emptyOfflinePreplannedMapAreasView: some View {
-        VStack(alignment: .center) {
-            Text("No map areas")
-                .bold()
-            Text("There are no downloaded map areas for this web map.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -196,15 +148,6 @@ public struct OfflineMapAreasView: View {
         }
     }
     
-    private var offlineBannerView: some View {
-        Text("Network Offline")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity)
-            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-            .background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
-    }
-    
     private func view(for error: Error) -> some View {
         VStack(alignment: .center) {
             Image(systemName: "exclamationmark.circle")
@@ -213,14 +156,6 @@ public struct OfflineMapAreasView: View {
             Text(error.localizedDescription)
         }
         .frame(maxWidth: .infinity)
-    }
-    
-    /// Loads the online and offline preplanned map models.
-    private func loadPreplannedMapModels() async {
-        await mapViewModel.loadPreplannedMapModels()
-        if case .failure = mapViewModel.preplannedMapModels {
-            await mapViewModel.loadOfflinePreplannedMapModels()
-        }
     }
 }
 
@@ -231,7 +166,7 @@ public struct OfflineMapAreasView: View {
         
         var body: some View {
             OfflineMapAreasView(
-                online: Map(
+                onlineMap: Map(
                     item: PortalItem(
                         portal: .arcGISOnline(connection: .anonymous),
                         id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
