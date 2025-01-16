@@ -21,7 +21,7 @@ extension OfflineMapAreasView {
 ***REMOVED***@MainActor
 ***REMOVED***class MapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***/ The portal item ID of the web map.
-***REMOVED******REMOVED***private let portalItemID: PortalItem.ID?
+***REMOVED******REMOVED***private let portalItemID: PortalItem.ID
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The offline map task.
 ***REMOVED******REMOVED***private let offlineMapTask: OfflineMapTask
@@ -29,47 +29,63 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The preplanned map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The offline preplanned map information sourced from downloaded mobile map packages.
-***REMOVED******REMOVED***@Published private(set) var offlinePreplannedMapModels: [PreplannedMapModel]?
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if only offline models are being shown.
+***REMOVED******REMOVED***@Published private(set) var isShowingOnlyOfflineModels = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The online map.
+***REMOVED******REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Creates an offline map areas view model for a given web map.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter map: The web map.
+***REMOVED******REMOVED******REMOVED***/ - Precondition: `map.item?.id` is not `nil`.
 ***REMOVED******REMOVED***init(map: Map) {
+***REMOVED******REMOVED******REMOVED***precondition(map.item?.id != nil)
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
-***REMOVED******REMOVED******REMOVED***portalItemID = map.item?.id
+***REMOVED******REMOVED******REMOVED***onlineMap = map
+***REMOVED******REMOVED******REMOVED***portalItemID = map.item!.id!
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and loads the map models.
 ***REMOVED******REMOVED***func loadPreplannedMapModels() async {
-***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if offlineMapTask.loadStatus != .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await offlineMapTask.retryLoad()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reset flag
+***REMOVED******REMOVED******REMOVED***isShowingOnlyOfflineModels = false
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED***try await offlineMapTask.preplannedMapAreas
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.portalItem.id != nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: $0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: $0.portalItem.id!
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return try await offlineMapTask.preplannedMapAreas
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.portalItem.id != nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: $0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: $0.portalItem.id!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If not connected to the internet, then return only the offline models.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let urlError = error as? URLError,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   urlError.code == .notConnectedToInternet {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingOnlyOfflineModels = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return await loadOfflinePreplannedMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***throw error
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Loads the offline preplanned map models with information from the downloaded mobile map
 ***REMOVED******REMOVED******REMOVED***/ packages for the online map.
-***REMOVED******REMOVED***func loadOfflinePreplannedMapModels() async {
-***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***func loadOfflinePreplannedMapModels() async -> [PreplannedMapModel] {
 ***REMOVED******REMOVED******REMOVED***let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return [] ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var preplannedMapModels: [PreplannedMapModel] = []
 ***REMOVED******REMOVED******REMOVED***
@@ -90,7 +106,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapModels.append(model)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***offlinePreplannedMapModels = preplannedMapModels
+***REMOVED******REMOVED******REMOVED***return preplannedMapModels
 ***REMOVED******REMOVED******REMOVED******REMOVED***.filter(\.status.isDownloaded)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title ***REMOVED***)
 ***REMOVED***
@@ -121,6 +137,12 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***id: preplannedMapAreaID,
 ***REMOVED******REMOVED******REMOVED******REMOVED***thumbnail: item.thumbnail
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
+***REMOVED******REMOVED***var mapIsOfflineDisabled: Bool {
+***REMOVED******REMOVED******REMOVED***onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
