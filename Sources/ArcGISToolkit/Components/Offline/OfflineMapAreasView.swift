@@ -35,7 +35,7 @@ public struct OfflineMapAreasView: View {
     
     /// Creates a view with a given web map.
     /// - Parameters:
-    ///   - online: The web map to be taken offline.
+    ///   - onlineMap: The web map to be taken offline.
     ///   - selection: A binding to the currently selected map.
     /// - Precondition: `onlineMap.item?.id` is not `nil`.
     public init(onlineMap: Map, selection: Binding<Map?>) {
