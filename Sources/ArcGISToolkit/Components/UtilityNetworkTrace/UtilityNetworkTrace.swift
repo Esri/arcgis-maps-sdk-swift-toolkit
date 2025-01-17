@@ -347,7 +347,10 @@ public struct UtilityNetworkTrace: View {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
-#if !os(visionOS)
+#if os(visionOS)
+                            .contentShape(.hoverEffect, .rect(cornerRadius: 12))
+                            .hoverEffect()
+#else
                             .foregroundStyle(.blue)
 #endif
                     }
