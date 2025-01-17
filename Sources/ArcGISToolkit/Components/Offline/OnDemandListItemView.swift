@@ -23,10 +23,10 @@ struct OnDemandListItemView: View {
     
     /// The download state of the preplanned map model.
     fileprivate enum DownloadState {
-        case notDownloaded, downloading, downloaded
+        case initialized, downloading, downloaded
     }
     
-    @State private var downloadState: DownloadState = .notDownloaded
+    @State private var downloadState: DownloadState = .initialized
     
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
@@ -63,9 +63,6 @@ struct OnDemandListItemView: View {
                 OnDemandMetadataView(model: model, isSelected: isSelected)
             }
         }
-        .task {
-            await model.load()
-        }
         .onAppear {
             downloadState = .init(model.status)
         }
@@ -81,7 +78,8 @@ struct OnDemandListItemView: View {
     
     // What should we do with the thumbnail? Save our own or use the default one?
     @ViewBuilder private var thumbnailView: some View {
-        if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
+        if downloadState == .downloaded,
+           let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
            let thumbnail = area.thumbnail {
             LoadableImageView(loadableImage: thumbnail)
                 .frame(width: 64, height: 44)
@@ -135,10 +133,10 @@ struct OnDemandListItemView: View {
                 ProgressView(job.progress)
                     .progressViewStyle(.gauge)
             }
-        case .notDownloaded:
+        case .initialized:
+            // This state shouldn't be reached.
             Button {
                 Task {
-                    // Download map area.
                     await model.downloadOnDemandMapArea()
                 }
             } label: {
@@ -161,9 +159,9 @@ struct OnDemandListItemView: View {
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
             switch model.status {
-            case .initialized, .notLoaded, .loading:
+            case .initialized:
                 Text("Loading")
-            case .loadFailure, .mmpkLoadFailure:
+            case .mmpkLoadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Loading failed")
             case .downloading:
@@ -187,7 +185,7 @@ private extension OnDemandListItemView.DownloadState {
         self = switch state {
         case .downloaded: .downloaded
         case .downloading: .downloading
-        default: .notDownloaded
+        default: .initialized
         }
     }
 }

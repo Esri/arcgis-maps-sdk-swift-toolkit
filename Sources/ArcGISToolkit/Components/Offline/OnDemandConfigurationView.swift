@@ -21,16 +21,8 @@ struct OnDemandConfigurationView: View {
     @State private var titleInput = ""
     @State private var maxScale: CacheScale = .room
     @State private var polygon: Polygon?
-    /// The map view's visible area.
     @State private var currentVisibleArea: Polygon?
-    /// The geometry editor.
     @State private var geometryEditor = GeometryEditor()
-    /// The location display to set on the map view.
-    @State private var locationDisplay = {
-        let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
-        locationDisplay.autoPanMode = .recenter
-        return locationDisplay
-    }()
     
     var onCompleteAction: ((String, CacheScale, CacheScale, Polygon) -> Void)? = nil
     
@@ -38,7 +30,6 @@ struct OnDemandConfigurationView: View {
         titleInput.isEmpty || polygon == nil
     }
     
-    // title: String, minScale: CacheScale, maxScale: CacheScale, areaOfInterest: Polygon
     func onComplete(
         perform action: @escaping (String, CacheScale, CacheScale, Polygon) -> Void
     ) -> Self {
@@ -50,12 +41,10 @@ struct OnDemandConfigurationView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                HStack {
-                    Text("Drag the selector to define the area")
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 6)
-                .background(.thinMaterial, ignoresSafeAreaEdges: .horizontal)
+                Text("Drag the selector to define the area")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 6)
+                    .background(.thinMaterial, ignoresSafeAreaEdges: .horizontal)
                 
                 mapSelectorView
                 
@@ -102,7 +91,7 @@ struct OnDemandConfigurationView: View {
                         polygon = nil
                     }
                 } label: {
-                    Text(polygon == nil ? "Select": "Unselect")
+                    Text(polygon == nil ? "Show Selector": "Hide Selector")
                         .bold()
                         .font(.body)
                         .tint(.blue)
@@ -157,11 +146,16 @@ struct OnDemandConfigurationView: View {
                 currentVisibleArea = area
             }
             .overlay(alignment: .topTrailing) {
-                LocationButton(locationDisplay: locationDisplay)
-                    .padding(8)
-                    .background(.thinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .padding()
+                Button {
+                    print("Location Button tapped")
+                } label: {
+                    Image(systemName: "location.slash")
+                        .padding(8)
+                }
+                .padding(8)
+                .background(.thinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .padding()
             }
             .task {
                 for await polygon in geometryEditor.$geometry {
@@ -171,7 +165,6 @@ struct OnDemandConfigurationView: View {
             }
     }
     
-    /// Starts editing with the specified tool and geometry type.
     func startEditing(polygon: Polygon) {
         let tool = ShapeTool(kind: .rectangle)
         tool.configuration.scaleMode = .stretch

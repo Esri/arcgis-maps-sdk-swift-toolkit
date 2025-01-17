@@ -53,7 +53,6 @@ struct OnDemandMetadataView: View {
                        !area.description.isEmpty {
                         Text(area.description)
                             .font(.subheadline)
-                        
                     } else {
                         Text("This area has no description.")
                             .font(.subheadline)
