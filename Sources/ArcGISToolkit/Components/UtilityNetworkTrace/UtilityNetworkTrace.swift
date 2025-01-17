@@ -309,20 +309,21 @@ public struct UtilityNetworkTrace: View {
                         Button(String.deleteAllStartingPoints, systemImage: "trash") {
                             deleteAllStartingPointsConfirmationIsPresented = true
                         }
+#if !os(visionOS)
                         .buttonStyle(.plain)
+#endif
                         .labelStyle(.iconOnly)
                         .confirmationDialog(
-                            String.deleteAllStartingPoints,
-                            isPresented: $deleteAllStartingPointsConfirmationIsPresented
+                            String.deleteAllStartingPointsQuestion,
+                            isPresented: $deleteAllStartingPointsConfirmationIsPresented,
+                            titleVisibility: .visible
                         ) {
-                            Button(String.deleteAllStartingPoints, role: .destructive) {
-                                viewModel.pendingTrace.startingPoints.forEach { startingPoint in
+                            Button(String.deleteButtonLabel, role: .destructive) {
+                                for startingPoint in viewModel.pendingTrace.startingPoints {
                                     viewModel.deleteStartingPoint(startingPoint)
                                     externalStartingPoints.removeAll()
                                 }
                             }
-                        } message: {
-                            Text(String.deleteAllStartingPointsMessage)
                         }
                         // Override default uppercase capitalization for list
                         // section headers on iOS and iPadOS.
@@ -892,11 +893,11 @@ private extension String {
         )
     }
     
-    static var deleteAllStartingPointsMessage: Self {
+    static var deleteAllStartingPointsQuestion: Self {
         .init(
-            localized: "All starting points will be deleted.",
+            localized: "Delete all starting points?",
             bundle: .toolkitModule,
-            comment: "A message describing the outcome of clearing all starting points."
+            comment: "The title of the dialogue confirming deletion of all points."
         )
     }
     
