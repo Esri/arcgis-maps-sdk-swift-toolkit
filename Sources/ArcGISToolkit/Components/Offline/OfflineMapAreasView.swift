@@ -16,8 +16,6 @@ import SwiftUI
 import ArcGIS
 
 /// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
-@MainActor
-@preconcurrency
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
@@ -49,6 +47,7 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 if !mapIsOfflineDisabled {
+                    // This is only for demo purpose. In reality it only use 1 of 2 workflow at a time.
                     Section("Preplanned") {
                         preplannedMapAreasView
                     }
@@ -62,9 +61,15 @@ public struct OfflineMapAreasView: View {
                             isAddingOnDemandArea = true
                         }
                         .sheet(isPresented: $isAddingOnDemandArea) {
-                            OnDemandConfigurationView(map: onlineMap)
+                            OnDemandConfigurationView(map: onlineMap.clone())
                                 .onComplete { title, minScale, maxScale, areaOfInterest in
-                                    let area = OnDemandMapArea(title: title, minScale: minScale.scale, maxScale: maxScale.scale, areaOfInterest: areaOfInterest)
+                                    let area = OnDemandMapArea(
+                                        id: UUID(),
+                                        title: title,
+                                        minScale: minScale.scale,
+                                        maxScale: maxScale.scale,
+                                        areaOfInterest: areaOfInterest
+                                    )
                                     mapViewModel.addOnDemandMapArea(area)
                                 }
                                 .highPriorityGesture(DragGesture())

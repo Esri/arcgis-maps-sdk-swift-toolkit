@@ -169,13 +169,12 @@ extension OfflineMapAreasView {
                 }
             
             for job in ongoingJobs {
-                let onDemandMapAreaID = UUID(uuidString: job.downloadDirectoryURL.deletingPathExtension().lastPathComponent)!
-                guard let mapArea = await makeOnDemandMapArea(
-                    portalItemID: portalItemID,
-                    onDemandMapAreaID: onDemandMapAreaID
-                ) else {
+                let id = UUID(uuidString: job.downloadDirectoryURL.deletingPathExtension().lastPathComponent)!
+                let parameters = job.parameters
+                guard let info = parameters.itemInfo, let minScale = parameters.minScale, let maxScale = parameters.maxScale, let aoi = parameters.areaOfInterest else {
                     continue
                 }
+                let mapArea = OnDemandMapArea(id: id, title: info.title, minScale: minScale, maxScale: maxScale, areaOfInterest: aoi)
                 let model = OnDemandMapModel(
                     offlineMapTask: offlineMapTask,
                     onDemandMapArea: mapArea,
@@ -213,6 +212,11 @@ extension OfflineMapAreasView {
                 onDemandMapModels!.append(model)
                 onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })
             }
+            
+            Task {
+                // Download map area.
+                await model.downloadOnDemandMapArea()
+            }
         }
     }
 }
@@ -231,6 +235,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     }
 }
 
+// This struct represents an on-demand area that is downloaded.
 struct OfflineOnDemandMapArea: OnDemandMapAreaProtocol {
     var id: UUID
     var title: String

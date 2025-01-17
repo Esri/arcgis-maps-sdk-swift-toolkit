@@ -32,10 +32,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     
     private(set) var directorySize = 0
     
-    /// The currently running download job.
     @Published private(set) var job: GenerateOfflineMapJob?
     
-    @Published private(set) var status: Status = .notLoaded
+    @Published private(set) var status: Status = .initialized
     
     /// A Boolean value indicating if a user notification should be shown when a job completes.
     let showsUserNotificationOnCompletion: Bool
@@ -76,6 +75,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         if let foundJob = lookupDownloadJob() {
             Logger.offlineManager.debug("Found executing job for area \(onDemandMapArea.id.uuidString, privacy: .public)")
             observeJob(foundJob)
+            status = .downloading
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(onDemandMapArea.id.uuidString, privacy: .public)")
             mobileMapPackage = mmpk
@@ -86,30 +86,13 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Loads the preplanned map area and updates the status.
-    func load() async {
-        guard status.needsToBeLoaded else { return }
-        do {
-            // Load on-demand map area.
-            status = .loading
-//            try await onDemandMapArea.retryLoad()
-            // Note: Packaging status is `nil` for compatibility with
-            // legacy webmaps that have incomplete metadata.
-            // If the area loads, then you know for certain the status is complete.
-            status = .downloaded
-        } catch {
-            // Normal load failure.
-            status = .loadFailure(error)
-        }
-    }
-    
-    /// Look up the job associated with this preplanned map model.
+    /// Look up the job associated with this map model.
     private func lookupDownloadJob() -> GenerateOfflineMapJob? {
         OfflineManager.shared.jobs
             .lazy
             .compactMap { $0 as? GenerateOfflineMapJob }
             .first {
-                $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == onDemandMapArea.id.uuidString
+                UUID(uuidString: $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent) == onDemandMapArea.id
             }
     }
     
@@ -125,7 +108,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Looks up the mobile map package directory for locally downloaded package.
+    /// Looks up the mobile map package directory for downloaded package.
     private func lookupMobileMapPackage() -> MobileMapPackage? {
         let fileURL = URL.onDemandDirectory(
             forPortalItemID: portalItemID,
@@ -141,7 +124,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         guard let onDemandMapArea = onDemandMapArea as? OnDemandMapArea else { return }
         
         do {
-            // Create the parameters for the download preplanned offline map job.
             let parameters = try await offlineMapTask.makeDefaultGenerateOfflineMapParameters(
                 areaOfInterest: onDemandMapArea.areaOfInterest,
                 minScale: onDemandMapArea.minScale,
@@ -154,7 +136,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             itemInfo.title = onDemandMapArea.title
             itemInfo.description = ""
             
-            // Create the download preplanned offline map job.
             let job = offlineMapTask.makeGenerateOfflineMapJob(
                 parameters: parameters,
                 downloadDirectory: mmpkDirectoryURL
@@ -167,12 +148,11 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Removes the downloaded preplanned map area from disk and resets the status.
+    /// Removes the downloaded map area from disk and resets the status.
     func removeDownloadedOnDemandMapArea() {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         // Reload the model after local files removal.
-        status = .notLoaded
-        Task { await load() }
+        status = .initialized
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and
@@ -195,20 +175,14 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 }
 
 extension OnDemandMapModel {
-    /// The status of the preplanned map area model.
+    /// The status of the map area model.
     enum Status {
-        /// Preplanned map area not loaded.
-        case notLoaded
-        /// Preplanned map area is loading.
-        case loading
-        /// Preplanned map area failed to load.
-        case loadFailure(Error)
         case initialized
-        /// Preplanned map area is being downloaded.
+        /// Map area is being downloaded.
         case downloading
-        /// Preplanned map area is downloaded.
+        /// Map area is downloaded.
         case downloaded
-        /// Preplanned map area failed to download.
+        /// Map area failed to download.
         case downloadFailure(Error)
         /// Downloaded mobile map package failed to load.
         case mmpkLoadFailure(Error)
@@ -217,7 +191,7 @@ extension OnDemandMapModel {
         /// where it needs to be loaded or reloaded.
         var needsToBeLoaded: Bool {
             switch self {
-            case .initialized, .loading, .downloading, .downloaded, .mmpkLoadFailure:
+            case .downloading, .downloaded, .mmpkLoadFailure:
                 false
             default:
                 true
@@ -227,24 +201,14 @@ extension OnDemandMapModel {
         /// A Boolean value indicating if download is allowed for this status.
         var allowsDownload: Bool {
             switch self {
-            case .notLoaded, .loading, .loadFailure, .downloading, .downloaded, .mmpkLoadFailure:
+            case .downloading, .downloaded, .mmpkLoadFailure:
                 false
             case .initialized, .downloadFailure:
                 true
             }
         }
         
-        /// A Boolean value indicating whether the local files can be removed.
-        var allowsRemoval: Bool {
-            switch self {
-            case .mmpkLoadFailure, .downloadFailure, .loadFailure:
-                true
-            default:
-                false
-            }
-        }
-        
-        /// A Boolean value indicating whether the preplanned map area is downloaded.
+        /// A Boolean value indicating whether the map area is downloaded.
         var isDownloaded: Bool {
             if case .downloaded = self { true } else { false }
         }
@@ -269,8 +233,9 @@ protocol OnDemandMapAreaProtocol: Sendable {
     var title: String { get }
 }
 
+// This struct represents an on-demand area that hasn't been downloaded to disk.
 struct OnDemandMapArea: OnDemandMapAreaProtocol {
-    let id = UUID()
+    let id: UUID
     let title: String
     let minScale: Double
     let maxScale: Double
