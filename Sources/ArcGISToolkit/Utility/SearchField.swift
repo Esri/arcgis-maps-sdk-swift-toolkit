@@ -92,9 +92,13 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"chevron.down" :
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"chevron.up"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.secondary)
+#endif
 ***REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.esriBorder()
