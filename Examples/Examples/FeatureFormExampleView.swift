@@ -17,12 +17,6 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FeatureFormExampleView: View {
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
-    
-    /// The height to present the form at.
-    @State private var detent: FloatingPanelDetent = .full
-    
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
@@ -38,9 +32,6 @@ struct FeatureFormExampleView: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
-                .onAttributionBarHeightChanged {
-                    attributionBarHeight = $0
-                }
                 .onSingleTapGesture { screenPoint, _ in
                     switch model.state {
                     case .idle:
@@ -61,12 +52,7 @@ struct FeatureFormExampleView: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .ignoresSafeArea(.keyboard)
-                .floatingPanel(
-                    attributionBarHeight: attributionBarHeight,
-                    selectedDetent: $detent,
-                    horizontalAlignment: .leading,
-                    isPresented: model.formIsPresented
-                ) {
+                .sheet(isPresented: model.formIsPresented) {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
                             .validationErrors(validationErrorVisibility)
