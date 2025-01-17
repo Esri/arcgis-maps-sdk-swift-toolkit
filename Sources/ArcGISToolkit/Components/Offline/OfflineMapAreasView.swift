@@ -102,17 +102,6 @@ public struct OfflineMapAreasView: View {
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-                    // TODO: this logic needs to move out of the view.
-                        .onDownload {
-                            OfflineManager.shared.saveMapInfo(for: portalItem)
-                        }
-                        .onRemoveDownload {
-                            guard models.filter(\.status.isDownloaded).isEmpty else { return }
-                            OfflineManager.shared.deleteMapInfo(for: portalItemID)
-                        }
-                        .onChange(of: selectedMap) { _ in
-                            dismiss()
-                        }
                 }
             } else {
                 emptyPreplannedMapAreasView

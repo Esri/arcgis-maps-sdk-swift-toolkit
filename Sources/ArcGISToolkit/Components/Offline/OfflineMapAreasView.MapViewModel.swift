@@ -68,7 +68,8 @@ class OfflineMapViewModel: ObservableObject {
                             offlineMapTask: offlineMapTask,
                             mapArea: $0,
                             portalItemID: portalItemID,
-                            preplannedMapAreaID: $0.portalItem.id!
+                            preplannedMapAreaID: $0.portalItem.id!,
+                            onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
                         )
                     }
             } catch {
@@ -105,7 +106,8 @@ class OfflineMapViewModel: ObservableObject {
                 offlineMapTask: offlineMapTask,
                 mapArea: mapArea,
                 portalItemID: portalItemID,
-                preplannedMapAreaID: mapArea.id!
+                preplannedMapAreaID: mapArea.id!,
+                onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
             )
             preplannedMapModels.append(model)
         }
@@ -113,6 +115,16 @@ class OfflineMapViewModel: ObservableObject {
         return preplannedMapModels
             .filter(\.status.isDownloaded)
             .sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title })
+    }
+    
+    /// The function called when a downloaded preplanned map area is removed.
+    func onRemoveDownloadOfPreplannedArea(withID preplannedAreaID: Item.ID) {
+        // Delete the saved map info if there are no more downloads for the
+        // represented online map.
+        guard case.success(let models) = preplannedMapModels,
+              models.filter(\.status.isDownloaded).isEmpty
+        else { return }
+        OfflineManager.shared.deleteMapInfo(for: portalItemID)
     }
     
     /// Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
