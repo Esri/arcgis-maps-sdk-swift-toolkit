@@ -38,6 +38,9 @@ struct PreplannedListItemView: View {
     /// The previous download state of the preplanned map model.
     @State private var previousDownloadState: DownloadState = .notDownloaded
     
+    /// The action to dismiss the view.
+    @Environment(\.dismiss) private var dismiss: DismissAction
+    
     /// A Boolean value indicating whether the selected map area is the same
     /// as the map area from this model.
     /// The title of a preplanned map area is guaranteed to be unique when it
@@ -45,12 +48,6 @@ struct PreplannedListItemView: View {
     var isSelected: Bool {
         selectedMap?.item?.title == model.preplannedMapArea.title
     }
-    
-    /// The closure to perform when the preplanned map area is downloaded.
-    var onDownloadAction: (() -> Void)? = nil
-    
-    /// The closure to perform when the preplanned map area download is removed.
-    var onRemoveDownloadAction: (() -> Void)? = nil
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -95,14 +92,6 @@ struct PreplannedListItemView: View {
                 self.downloadState = downloadState
             }
         }
-        .task(id: downloadState) {
-            if previousDownloadState == .notDownloaded && downloadState == .downloading {
-                onDownloadAction?()
-            }
-            if previousDownloadState == .downloaded && downloadState == .notDownloaded {
-                onRemoveDownloadAction?()
-            }
-        }
     }
     
     @ViewBuilder private var thumbnailView: some View {
@@ -123,10 +112,9 @@ struct PreplannedListItemView: View {
         switch downloadState {
         case .downloaded:
             Button {
-                Task {
-                    if let map = await model.map {
-                        selectedMap = map
-                    }
+                if let map = model.map {
+                    selectedMap = map
+                    dismiss()
                 }
             } label: {
                 Text("Open")
@@ -205,26 +193,6 @@ struct PreplannedListItemView: View {
         .font(.caption2)
         .foregroundStyle(.tertiary)
     }
-    
-    /// Sets a closure to perform when the preplanned map area is downloaded.
-    /// - Parameter action: The closure to perform when the preplanned map area is downloaded.
-    func onDownload(
-        perform action: @escaping () -> Void
-    ) -> Self {
-        var view = self
-        view.onDownloadAction = action
-        return view
-    }
-    
-    /// Sets a closure to perform when the preplanned map area download is removed.
-    /// - Parameter action: The closure to perform when the preplanned map area download is removed.
-    func onRemoveDownload(
-        perform action: @escaping () -> Void
-    ) -> Self {
-        var view = self
-        view.onRemoveDownloadAction = action
-        return view
-    }
 }
 
 private extension PreplannedListItemView.DownloadState {
@@ -257,7 +225,8 @@ private extension PreplannedListItemView.DownloadState {
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
-            preplannedMapAreaID: .init("preview")!
+            preplannedMapAreaID: .init("preview")!,
+            onRemoveDownload: { _ in }
         ),
         selectedMap: .constant(nil)
     )

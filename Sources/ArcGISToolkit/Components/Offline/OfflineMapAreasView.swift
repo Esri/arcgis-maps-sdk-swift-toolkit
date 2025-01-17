@@ -20,7 +20,7 @@ import ArcGIS
 @preconcurrency
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
-    @StateObject private var mapViewModel: MapViewModel
+    @StateObject private var mapViewModel: OfflineMapViewModel
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     /// The web map to be taken offline.
@@ -29,27 +29,40 @@ public struct OfflineMapAreasView: View {
     @Binding private var selectedMap: Map?
     
     /// The portal item for the web map to be taken offline.
-    private var portalItem: PortalItem? {
-        onlineMap.item as? PortalItem
+    private var portalItem: PortalItem {
+        // Safe to force cast because of the precondition in the initializer.
+        onlineMap.item as! PortalItem
+    }
+    
+    /// The `ID` of the portal item.
+    private var portalItemID: Item.ID {
+        // Safe to force unwrap because of the precondition in the initializer.
+        portalItem.id!
     }
     
     /// Creates a view with a given web map.
     /// - Parameters:
     ///   - onlineMap: The web map to be taken offline.
-    ///   - selection: A binding to the currently selected map.
+    ///   - selection: A binding to the currently selected offline map.
     /// - Precondition: `onlineMap.item?.id` is not `nil`.
+    /// - Precondition: `onlineMap.item` is of type `PortalItem`.
     public init(onlineMap: Map, selection: Binding<Map?>) {
         precondition(onlineMap.item?.id != nil)
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+        precondition(onlineMap.item is PortalItem)
+        _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
         self.onlineMap = onlineMap
         _selectedMap = selection
     }
     
-    public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
-        let item = PortalItem(url: mapInfo.portalItemURL)!
-        let map = Map(item: item)
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
-        onlineMap = map
+    /// Creates a view with a given offline map info.
+    /// - Parameters:
+    ///   - offlineMapInfo: The offline map info for which to create the view.
+    ///   - selection: A binding to the currently selected offline map.
+    public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
+        let item = PortalItem(url: offlineMapInfo.portalItemURL)!
+        let onlineMap = Map(item: item)
+        _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
+        self.onlineMap = onlineMap
         _selectedMap = selection
     }
     
@@ -89,18 +102,6 @@ public struct OfflineMapAreasView: View {
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-                        .onDownload {
-                            guard let portalItem else { return }
-                            OfflineManager.shared.saveMapInfo(for: portalItem)
-                        }
-                        .onRemoveDownload {
-                            guard let portalItemID = portalItem?.id,
-                                  models.filter(\.status.isDownloaded).isEmpty else { return }
-                            OfflineManager.shared.deleteMapInfo(for: portalItemID)
-                        }
-                        .onChange(of: selectedMap) { _ in
-                            dismiss()
-                        }
                 }
             } else {
                 emptyPreplannedMapAreasView
@@ -169,7 +170,7 @@ public struct OfflineMapAreasView: View {
                 onlineMap: Map(
                     item: PortalItem(
                         portal: .arcGISOnline(connection: .anonymous),
-                        id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+                        id: Item.ID("acc027394bc84c2fb04d1ed317aac674")!
                     )
                 ),
                 selection: $map
