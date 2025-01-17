@@ -38,6 +38,9 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The previous download state of the preplanned map model.
 ***REMOVED***@State private var previousDownloadState: DownloadState = .notDownloaded
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to dismiss the view.
+***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
 ***REMOVED******REMOVED***/ The title of a preplanned map area is guaranteed to be unique when it
@@ -45,12 +48,6 @@ struct PreplannedListItemView: View {
 ***REMOVED***var isSelected: Bool {
 ***REMOVED******REMOVED***selectedMap?.item?.title == model.preplannedMapArea.title
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when the preplanned map area is downloaded.
-***REMOVED***var onDownloadAction: (() -> Void)? = nil
-***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when the preplanned map area download is removed.
-***REMOVED***var onRemoveDownloadAction: (() -> Void)? = nil
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -95,14 +92,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.downloadState = downloadState
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: downloadState) {
-***REMOVED******REMOVED******REMOVED***if previousDownloadState == .notDownloaded && downloadState == .downloading {
-***REMOVED******REMOVED******REMOVED******REMOVED***onDownloadAction?()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if previousDownloadState == .downloaded && downloadState == .notDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownloadAction?()
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
@@ -123,10 +112,9 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***switch downloadState {
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
@@ -206,26 +194,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when the preplanned map area is downloaded.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the preplanned map area is downloaded.
-***REMOVED***func onDownload(
-***REMOVED******REMOVED***perform action: @escaping () -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onDownloadAction = action
-***REMOVED******REMOVED***return view
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when the preplanned map area download is removed.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the preplanned map area download is removed.
-***REMOVED***func onRemoveDownload(
-***REMOVED******REMOVED***perform action: @escaping () -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onRemoveDownloadAction = action
-***REMOVED******REMOVED***return view
-***REMOVED***
-***REMOVED***
 
 private extension PreplannedListItemView.DownloadState {
 ***REMOVED******REMOVED***/ Creates an instance.
@@ -257,7 +225,8 @@ private extension PreplannedListItemView.DownloadState {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!,
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***selectedMap: .constant(nil)
 ***REMOVED***)

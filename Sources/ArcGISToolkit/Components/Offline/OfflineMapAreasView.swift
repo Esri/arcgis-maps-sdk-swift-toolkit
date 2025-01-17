@@ -20,7 +20,7 @@
 @preconcurrency
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
-***REMOVED***@StateObject private var mapViewModel: MapViewModel
+***REMOVED***@StateObject private var mapViewModel: OfflineMapViewModel
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED******REMOVED***/ The web map to be taken offline.
@@ -29,27 +29,40 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***@Binding private var selectedMap: Map?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal item for the web map to be taken offline.
-***REMOVED***private var portalItem: PortalItem? {
-***REMOVED******REMOVED***onlineMap.item as? PortalItem
+***REMOVED***private var portalItem: PortalItem {
+***REMOVED******REMOVED******REMOVED*** Safe to force cast because of the precondition in the initializer.
+***REMOVED******REMOVED***onlineMap.item as! PortalItem
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The `ID` of the portal item.
+***REMOVED***private var portalItemID: Item.ID {
+***REMOVED******REMOVED******REMOVED*** Safe to force unwrap because of the precondition in the initializer.
+***REMOVED******REMOVED***portalItem.id!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view with a given web map.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - onlineMap: The web map to be taken offline.
-***REMOVED******REMOVED***/   - selection: A binding to the currently selected map.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
 ***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
+***REMOVED******REMOVED***/ - Precondition: `onlineMap.item` is of type `PortalItem`.
 ***REMOVED***public init(onlineMap: Map, selection: Binding<Map?>) {
 ***REMOVED******REMOVED***precondition(onlineMap.item?.id != nil)
-***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+***REMOVED******REMOVED***precondition(onlineMap.item is PortalItem)
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
 ***REMOVED******REMOVED***self.onlineMap = onlineMap
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
-***REMOVED******REMOVED***let item = PortalItem(url: mapInfo.portalItemURL)!
-***REMOVED******REMOVED***let map = Map(item: item)
-***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
-***REMOVED******REMOVED***onlineMap = map
+***REMOVED******REMOVED***/ Creates a view with a given offline map info.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - offlineMapInfo: The offline map info for which to create the view.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
+***REMOVED***public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
+***REMOVED******REMOVED***let item = PortalItem(url: offlineMapInfo.portalItemURL)!
+***REMOVED******REMOVED***let onlineMap = Map(item: item)
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
+***REMOVED******REMOVED***self.onlineMap = onlineMap
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
@@ -89,18 +102,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let portalItem else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OfflineManager.shared.saveMapInfo(for: portalItem)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRemoveDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let portalItemID = portalItem?.id,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  models.filter(\.status.isDownloaded).isEmpty else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OfflineManager.shared.deleteMapInfo(for: portalItemID)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
@@ -169,7 +170,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***onlineMap: Map(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: Item.ID("acc027394bc84c2fb04d1ed317aac674")!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***selection: $map

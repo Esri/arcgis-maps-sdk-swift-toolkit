@@ -38,8 +38,14 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ The key for which offline maps will be serialized under the user defaults.
 ***REMOVED***static private let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
 ***REMOVED***
+***REMOVED******REMOVED***/ The available offline map view models.
+***REMOVED***private var models: [Item.ID: OfflineMapViewModel] = [:]
+***REMOVED***
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos from the user defaults.
+***REMOVED******REMOVED***loadOfflineMapInfosFromDefaults()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Observe each job's status.
 ***REMOVED******REMOVED***for job in jobManager.jobs {
@@ -49,9 +55,6 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Resume all paused jobs.
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Resuming all paused jobs")
 ***REMOVED******REMOVED***jobManager.resumeAllPausedJobs()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos from the user defaults.
-***REMOVED******REMOVED***loadOfflineMapInfosFromDefaults()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
@@ -84,6 +87,13 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Retrieves the model for a given online map.
+***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
+***REMOVED***func model(for onlineMap: Map) -> OfflineMapViewModel {
+***REMOVED******REMOVED***precondition(onlineMap.item?.id != nil)
+***REMOVED******REMOVED***return models[onlineMap.item!.id!, setDefault: .init(onlineMap: onlineMap)]
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Saves map information for a given portal item to UserDefaults.
 ***REMOVED******REMOVED***/ - Parameter portalItem: The portal item.
 ***REMOVED***func saveMapInfo(for portalItem: PortalItem) {
@@ -95,7 +105,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes map information for a given portal item ID from UserDefaults.
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
-***REMOVED***func deleteMapInfo(for portalItemID: PortalItem.ID) {
+***REMOVED***func deleteMapInfo(for portalItemID: Item.ID) {
 ***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID ***REMOVED***)
 ***REMOVED******REMOVED***saveOfflineMapInfosToDefaults()
 ***REMOVED***
@@ -192,3 +202,16 @@ public extension OfflineMapInfo {
 ***REMOVED***
 ***REMOVED***
 
+private extension Dictionary {
+***REMOVED******REMOVED***/ Returns the value for the key, and if the value is nil it first stores
+***REMOVED******REMOVED***/ the default value in the dictionary then returns the default value.
+***REMOVED***subscript(key: Key, setDefault defaultValue: @autoclosure () -> Value) -> Value {
+***REMOVED******REMOVED***mutating get {
+***REMOVED******REMOVED******REMOVED***return self[key] ?? {
+***REMOVED******REMOVED******REMOVED******REMOVED***let value = defaultValue()
+***REMOVED******REMOVED******REMOVED******REMOVED***self[key] = value
+***REMOVED******REMOVED******REMOVED******REMOVED***return value
+***REMOVED******REMOVED***()
+***REMOVED***
+***REMOVED***
+***REMOVED***
