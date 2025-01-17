@@ -55,12 +55,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***var map: Map? { 
 ***REMOVED******REMOVED***get async {
 ***REMOVED******REMOVED******REMOVED***if let mobileMapPackage {
-***REMOVED******REMOVED******REMOVED******REMOVED***if mobileMapPackage.loadStatus != .loaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await mobileMapPackage.load()
-***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await mobileMapPackage.load()
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: it's odd to have this as a side effect of simply asking
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** for the map. This needs to be fixed.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***return mobileMapPackage.maps.first
 ***REMOVED******REMOVED*** else {
