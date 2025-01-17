@@ -25,7 +25,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the preplanned map area.
-***REMOVED***let preplannedMapAreaID: PortalItem.ID
+***REMOVED***let preplannedMapAreaID: Item.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package directory URL.
 ***REMOVED***private let mmpkDirectoryURL: URL
@@ -57,8 +57,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
-***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID,
+***REMOVED******REMOVED***portalItemID: Item.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: Item.ID,
 ***REMOVED******REMOVED***onRemoveDownload: @escaping (Item.ID) -> Void
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
