@@ -195,7 +195,8 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
+            preplannedMapAreaID: areaID,
+            onRemoveDownload: { _ in }
         )
         
         XCTAssertEqual(model.status, .downloading)
@@ -216,7 +217,8 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
+            preplannedMapAreaID: areaID,
+            onRemoveDownload: { _ in }
         )
         
         defer {
@@ -259,7 +261,8 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
+            preplannedMapAreaID: areaID,
+            onRemoveDownload: { _ in }
         )
         
         XCTAssertEqual(model2.status, .downloaded)
@@ -277,7 +280,8 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
+            preplannedMapAreaID: areaID,
+            onRemoveDownload: { _ in }
         )
         
         defer {
@@ -303,12 +307,11 @@ class PreplannedMapModelTests: XCTestCase {
         // Wait for job to finish.
         _ = await model.job?.result
         
-        // Verify that mobile map package can be loaded.
-        let map = await model.map
-        XCTAssertNotNil(map)
-        
         // Give the final status some time to be updated.
         try? await Task.sleep(nanoseconds: 1_000_000)
+        
+        // Verify that mobile map package can be loaded.
+        XCTAssertNotNil(model.map)
         
         // Verify statuses.
         XCTAssertEqual(
@@ -332,7 +335,8 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
+            preplannedMapAreaID: areaID,
+            onRemoveDownload: { _ in }
         )
         
         var statuses: [PreplannedMapModel.Status] = []
@@ -378,7 +382,8 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
+            preplannedMapAreaID: areaID,
+            onRemoveDownload: { _ in }
         )
         
         // Verify description does not contain HTML tags.
@@ -415,7 +420,8 @@ private extension PreplannedMapModel {
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: mapArea,
             portalItemID: .init("test-item-id")!,
-            preplannedMapAreaID: .init("test-preplanned-map-area-id")!
+            preplannedMapAreaID: .init("test-preplanned-map-area-id")!,
+            onRemoveDownload: { _ in }
         )
     }
 }
