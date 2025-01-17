@@ -34,6 +34,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***onlineMap.item as! PortalItem
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The `ID` of the portal item.
 ***REMOVED***private var portalItemID: Item.ID {
 ***REMOVED******REMOVED******REMOVED*** Safe to force unwrap because of the precondition in the initializer.
 ***REMOVED******REMOVED***portalItem.id!
@@ -42,7 +43,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ Creates a view with a given web map.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - onlineMap: The web map to be taken offline.
-***REMOVED******REMOVED***/   - selection: A binding to the currently selected map.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
 ***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
 ***REMOVED******REMOVED***/ - Precondition: `onlineMap.item` is of type `PortalItem`.
 ***REMOVED***public init(onlineMap: Map, selection: Binding<Map?>) {
@@ -53,8 +54,12 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
-***REMOVED******REMOVED***let item = PortalItem(url: mapInfo.portalItemURL)!
+***REMOVED******REMOVED***/ Creates a view with a given offline map info.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - offlineMapInfo: The offline map info for which to create the view.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
+***REMOVED***public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
+***REMOVED******REMOVED***let item = PortalItem(url: offlineMapInfo.portalItemURL)!
 ***REMOVED******REMOVED***let onlineMap = Map(item: item)
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
 ***REMOVED******REMOVED***self.onlineMap = onlineMap
