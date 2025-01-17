@@ -94,6 +94,16 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***return models[onlineMap.item!.id!, setDefault: .init(onlineMap: onlineMap)]
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Retrieves the model for a given `OfflineMapInfo`.
+***REMOVED***private func model(for offlineMapInfo: OfflineMapInfo) -> OfflineMapViewModel {
+***REMOVED******REMOVED***if let model = models[offlineMapInfo.portalItemID] {
+***REMOVED******REMOVED******REMOVED***return model
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***let onlineMap = Map(item: PortalItem(url: offlineMapInfo.portalItemURL)!)
+***REMOVED******REMOVED******REMOVED***return model(for: onlineMap)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Saves map information for a given portal item to UserDefaults.
 ***REMOVED******REMOVED***/ - Parameter portalItem: The portal item.
 ***REMOVED***func saveMapInfo(for portalItem: PortalItem) {
@@ -132,6 +142,29 @@ public class OfflineManager: ObservableObject {
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error loading offline map info from user defaults: \(error.localizedDescription)")
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public func removeAllDownloads() {
+***REMOVED******REMOVED***for offlineMapInfo in offlineMapInfos {
+***REMOVED******REMOVED******REMOVED***try? removeDownload(for: offlineMapInfo)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public func removeDownload(for offlineMapInfo: OfflineMapInfo) throws {
+***REMOVED******REMOVED***let model = model(for: offlineMapInfo)
+***REMOVED******REMOVED******REMOVED*** Don't load the preplanned models, only iterate the one we have in memory.
+***REMOVED******REMOVED******REMOVED*** This allows any views depending on these models to update accordingly.
+***REMOVED******REMOVED******REMOVED*** If more are downloaded that aren't in memory, we will delete the directory
+***REMOVED******REMOVED******REMOVED*** to take care of those.
+***REMOVED******REMOVED***if case .success(let preplannedModels) = model.preplannedMapModels {
+***REMOVED******REMOVED******REMOVED***for preplannedModel in preplannedModels {
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedModel.removeDownloadedPreplannedMapArea()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Now remove any offline map areas whose model isn't loaded by simply deleting the
+***REMOVED******REMOVED******REMOVED*** preplanned directory.
+***REMOVED******REMOVED***let preplannedDir = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+***REMOVED******REMOVED***try FileManager.default.removeItem(at: preplannedDir)
 ***REMOVED***
 ***REMOVED***
 
