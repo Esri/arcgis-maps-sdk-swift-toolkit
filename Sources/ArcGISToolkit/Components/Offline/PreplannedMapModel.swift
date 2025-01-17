@@ -33,14 +33,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
-    /// The ID of the web map.
-    private let portalItemID: PortalItem.ID
+    /// The ID of the online map.
+    private let portalItemID: Item.ID
     
     /// The mobile map package for the preplanned map area.
     private var mobileMapPackage: MobileMapPackage?
     
     /// The file size of the preplanned map area.
     private(set) var directorySize = 0
+    
+    /// The action to perform when a preplanned map area is deleted.
+    private let onRemoveDownloadAction: (Item.ID) -> Void
     
     /// The currently running download job.
     @Published private(set) var job: DownloadPreplannedOfflineMapJob?
@@ -70,12 +73,15 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
         portalItemID: PortalItem.ID,
-        preplannedMapAreaID: PortalItem.ID
+        preplannedMapAreaID: PortalItem.ID,
+        onRemoveDownload: @escaping (Item.ID) -> Void
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
         self.portalItemID = portalItemID
         self.preplannedMapAreaID = preplannedMapAreaID
+        self.onRemoveDownloadAction = onRemoveDownload
+        
         mmpkDirectoryURL = .preplannedDirectory(
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
@@ -163,6 +169,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             
             OfflineManager.shared.start(job: job)
             observeJob(job)
+            
+            // Save offline map info.
+            if let portalItem = offlineMapTask.portalItem {
+                OfflineManager.shared.saveMapInfo(for: portalItem)
+            }
         } catch {
             status = .downloadFailure(error)
         }
@@ -171,9 +182,13 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// Removes the downloaded preplanned map area from disk and resets the status.
     func removeDownloadedPreplannedMapArea() {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+        
         // Reload the model after local files removal.
         status = .notLoaded
         Task { await load() }
+        
+        // Call the closure for the remove download action.
+        onRemoveDownloadAction(preplannedMapAreaID)
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and
