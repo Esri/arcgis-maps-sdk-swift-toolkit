@@ -20,7 +20,7 @@ import Foundation
 @MainActor
 class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The portal item ID of the web map.
-***REMOVED***private let portalItemID: PortalItem.ID
+***REMOVED***private let portalItemID: Item.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The offline map task.
 ***REMOVED***private let offlineMapTask: OfflineMapTask
@@ -95,7 +95,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***var preplannedMapModels: [PreplannedMapModel] = []
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***for mapAreaID in mapAreaIDs {
-***REMOVED******REMOVED******REMOVED***guard let preplannedMapAreaID = PortalItem.ID(mapAreaID),
+***REMOVED******REMOVED******REMOVED***guard let preplannedMapAreaID = Item.ID(mapAreaID),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapArea = await makeMapArea(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
@@ -134,8 +134,8 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - preplannedMapAreaID: The preplanned map area ID.
 ***REMOVED******REMOVED***/ - Returns: The preplanned map area.
 ***REMOVED***private func makeMapArea(
-***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
+***REMOVED******REMOVED***portalItemID: Item.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
 ***REMOVED***) async -> OfflinePreplannedMapArea? {
 ***REMOVED******REMOVED***let fileURL = URL.preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
@@ -159,7 +159,7 @@ class OfflineMapViewModel: ObservableObject {
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var title: String
 ***REMOVED***var description: String
-***REMOVED***var id: PortalItem.ID?
+***REMOVED***var id: Item.ID?
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus?
 ***REMOVED***var thumbnail: LoadableImage?
 ***REMOVED***

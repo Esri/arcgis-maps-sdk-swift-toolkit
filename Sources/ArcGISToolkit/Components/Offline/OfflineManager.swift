@@ -105,7 +105,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes map information for a given portal item ID from UserDefaults.
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
-***REMOVED***func deleteMapInfo(for portalItemID: PortalItem.ID) {
+***REMOVED***func deleteMapInfo(for portalItemID: Item.ID) {
 ***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID ***REMOVED***)
 ***REMOVED******REMOVED***saveOfflineMapInfosToDefaults()
 ***REMOVED***

@@ -19,7 +19,7 @@ extension URL {
 ***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***static private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
+***REMOVED***static private func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
 ***REMOVED******REMOVED***return .documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
 ***REMOVED***
 ***REMOVED***
@@ -30,8 +30,8 @@ extension URL {
 ***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area portal item.
 ***REMOVED******REMOVED***/ - Returns: A URL to the preplanned map area directory.
 ***REMOVED***static func preplannedDirectory(
-***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID? = nil
+***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: Item.ID? = nil
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***var url = portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(component: "Preplanned/")
