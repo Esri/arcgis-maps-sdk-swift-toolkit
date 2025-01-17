@@ -99,6 +99,7 @@ public class OfflineManager: ObservableObject {
         if let model = models[offlineMapInfo.portalItemID] {
             return model
         } else {
+            // Only create the map here if we don't already have the model in memory.
             let onlineMap = Map(item: PortalItem(url: offlineMapInfo.portalItemURL)!)
             return model(for: onlineMap)
         }
@@ -144,7 +145,7 @@ public class OfflineManager: ObservableObject {
         }
     }
     
-    /// Removes all downloads from all offline maps.
+    /// Removes all downloads for all offline maps.
     public func removeAllDownloads() throws {
         for offlineMapInfo in offlineMapInfos {
             try removeDownloads(for: offlineMapInfo)
@@ -152,6 +153,8 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Removes any downloaded map areas for a particular map.
+    /// - Parameter offlineMapInfo: The information for the offline map for which all downloads will
+    /// be removed.
     public func removeDownloads(for offlineMapInfo: OfflineMapInfo) throws {
         let model = model(for: offlineMapInfo)
         // Don't load the preplanned models, only iterate the ones we have in memory.
