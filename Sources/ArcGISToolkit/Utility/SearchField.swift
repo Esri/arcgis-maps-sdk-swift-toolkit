@@ -74,6 +74,10 @@ public struct SearchField: View {
                 )
             }
             .focused(isFocused)
+#if os(visionOS)
+            .contentShape(.hoverEffect, .rect(cornerRadius: 12))
+            .hoverEffect()
+#endif
             
             // Delete text button
             if !query.wrappedValue.isEmpty {
