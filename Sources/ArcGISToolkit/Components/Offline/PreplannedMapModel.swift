@@ -36,14 +36,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The ID of the online map.
     private let portalItemID: Item.ID
     
-    /// The mobile map package for the preplanned map area.
-    private var mobileMapPackage: MobileMapPackage?
-    
-    /// The file size of the preplanned map area.
-    private(set) var directorySize = 0
-    
     /// The action to perform when a preplanned map area is deleted.
     private let onRemoveDownloadAction: (Item.ID) -> Void
+    
+    /// The mobile map package for the preplanned map area.
+    @Published private(set) var mobileMapPackage: MobileMapPackage?
+    
+    /// The file size of the preplanned map area.
+    @Published private(set) var directorySize = 0
     
     /// The currently running download job.
     @Published private(set) var job: DownloadPreplannedOfflineMapJob?
@@ -52,22 +52,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var status: Status = .notLoaded
     
     /// The first map from the mobile map package.
-    var map: Map? { 
-        get async {
-            if let mobileMapPackage {
-                do {
-                    try await mobileMapPackage.load()
-                } catch {
-                    // TODO: it's odd to have this as a side effect of simply asking
-                    // for the map. This needs to be fixed.
-                    status = .mmpkLoadFailure(error)
-                }
-                return mobileMapPackage.maps.first
-            } else {
-                return nil
-            }
-        }
-    }
+    @Published private(set) var map: Map?
     
     init(
         offlineMapTask: OfflineMapTask,
@@ -92,9 +77,24 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
+            status = .downloaded
+            Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
+        }
+    }
+    
+    /// Tries to load a mobile map package and if successful, then updates state
+    /// associated with it.
+    private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
+        do {
+            try await mmpk.load()
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
-            status = .downloaded
+            map = mmpk.maps.first
+        } catch {
+            status = .mmpkLoadFailure(error)
+            mobileMapPackage = nil
+            directorySize = 0
+            map = nil
         }
     }
     
@@ -201,9 +201,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             let result = await job.result
             guard let self else { return }
             self.updateDownloadStatus(for: result)
-            if status.isDownloaded {
-                self.mobileMapPackage = try? result.get().mobileMapPackage
-                self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            if let mmpk = try? result.get().mobileMapPackage {
+                await loadAndUpdateMobileMapPackage(mmpk: mmpk)
             }
             self.job = nil
         }
