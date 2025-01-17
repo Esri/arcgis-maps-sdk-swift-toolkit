@@ -160,7 +160,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Don't load the preplanned models, only iterate the ones we have in memory.
 ***REMOVED******REMOVED******REMOVED*** This allows any views depending on these models to update accordingly,
 ***REMOVED******REMOVED******REMOVED*** without going over the network to get the preplanned map models.
-***REMOVED******REMOVED******REMOVED*** If thre are more downloaded that aren't in memory, we will delete the directory
+***REMOVED******REMOVED******REMOVED*** If there are more downloaded that aren't in memory, we will delete the directory
 ***REMOVED******REMOVED******REMOVED*** to take care of those.
 ***REMOVED******REMOVED***if case .success(let preplannedModels) = model.preplannedMapModels {
 ***REMOVED******REMOVED******REMOVED***for preplannedModel in preplannedModels {
@@ -169,8 +169,8 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now remove any offline map areas whose model isn't in memory by simply deleting the
 ***REMOVED******REMOVED******REMOVED*** preplanned directory.
-***REMOVED******REMOVED***let preplannedDir = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
-***REMOVED******REMOVED***try FileManager.default.removeItem(at: preplannedDir)
+***REMOVED******REMOVED***let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+***REMOVED******REMOVED***try FileManager.default.removeItem(at: preplannedDirectory)
 ***REMOVED***
 ***REMOVED***
 
