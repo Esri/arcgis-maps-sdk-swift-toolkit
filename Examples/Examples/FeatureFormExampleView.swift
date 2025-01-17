@@ -17,12 +17,6 @@
 ***REMOVED***
 
 struct FeatureFormExampleView: View {
-***REMOVED******REMOVED***/ The height of the map view's attribution bar.
-***REMOVED***@State private var attributionBarHeight: CGFloat = 0
-***REMOVED***
-***REMOVED******REMOVED***/ The height to present the form at.
-***REMOVED***@State private var detent: FloatingPanelDetent = .full
-***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
@@ -38,9 +32,6 @@ struct FeatureFormExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch model.state {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .idle:
@@ -61,12 +52,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
-***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: model.formIsPresented
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: model.formIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
