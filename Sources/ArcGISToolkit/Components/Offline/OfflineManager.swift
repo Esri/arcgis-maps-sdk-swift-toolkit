@@ -144,16 +144,19 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func removeAllDownloads() {
+***REMOVED******REMOVED***/ Removes all downloads from all offline maps.
+***REMOVED***public func removeAllDownloads() throws {
 ***REMOVED******REMOVED***for offlineMapInfo in offlineMapInfos {
-***REMOVED******REMOVED******REMOVED***try? removeDownload(for: offlineMapInfo)
+***REMOVED******REMOVED******REMOVED***try removeDownloads(for: offlineMapInfo)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func removeDownload(for offlineMapInfo: OfflineMapInfo) throws {
+***REMOVED******REMOVED***/ Removes any downloaded map areas for a particular map.
+***REMOVED***public func removeDownloads(for offlineMapInfo: OfflineMapInfo) throws {
 ***REMOVED******REMOVED***let model = model(for: offlineMapInfo)
-***REMOVED******REMOVED******REMOVED*** Don't load the preplanned models, only iterate the one we have in memory.
-***REMOVED******REMOVED******REMOVED*** This allows any views depending on these models to update accordingly.
+***REMOVED******REMOVED******REMOVED*** Don't load the preplanned models, only iterate the ones we have in memory.
+***REMOVED******REMOVED******REMOVED*** This allows any views depending on these models to update accordingly,
+***REMOVED******REMOVED******REMOVED*** without going over the network to get the preplanned map models.
 ***REMOVED******REMOVED******REMOVED*** If more are downloaded that aren't in memory, we will delete the directory
 ***REMOVED******REMOVED******REMOVED*** to take care of those.
 ***REMOVED******REMOVED***if case .success(let preplannedModels) = model.preplannedMapModels {
@@ -161,7 +164,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***preplannedModel.removeDownloadedPreplannedMapArea()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Now remove any offline map areas whose model isn't loaded by simply deleting the
+***REMOVED******REMOVED******REMOVED*** Now remove any offline map areas whose model isn't in memory by simply deleting the
 ***REMOVED******REMOVED******REMOVED*** preplanned directory.
 ***REMOVED******REMOVED***let preplannedDir = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
 ***REMOVED******REMOVED***try FileManager.default.removeItem(at: preplannedDir)
