@@ -57,35 +57,58 @@ extension UtilityNetworkAssociationFormElementView {
         let id = UUID()
         
         /// <#Description#>
+        let imageGenerationAction: (() async -> UIImage?)?
+        
+        /// <#Description#>
         let name: String
         
-        let imageGenerationAction: (() async -> UIImage?)?
+        /// <#Description#>
+        let selectionAction: (() async -> Void)
+        
+        init(
+            description: String?,
+            icon: UIImage?,
+            name: String,
+            imageGenerationAction: (() async -> UIImage?)?,
+            selectionAction: @escaping () async -> Void
+        ) {
+            self.description = description
+            self.icon = icon
+            self.name = name
+            self.imageGenerationAction = imageGenerationAction
+            self.selectionAction = selectionAction
+        }
     }
     
     struct AssociationView: View {
         var association: Association
         
+        @State private var selectionTask: Task<Void, Never>?
+        
         @State private var fallbackIcon: UIImage?
         
         var body: some View {
-            HStack {
-                if let image = association.icon {
-                    Image(uiImage: image)
-                } else if let fallbackIcon {
-                    Image(uiImage: fallbackIcon)
+            Button {
+                selectionTask?.cancel()
+                selectionTask = Task {
+                    await association.selectionAction()
                 }
-                VStack(alignment: .leading) {
-                    Text(association.name)
-                        .lineLimit(1)
-                    if let description = association.description {
-                        Text(description)
-                            .font(.caption2)
+            } label: {
+                HStack {
+                    if let image = association.icon {
+                        Image(uiImage: image)
+                    } else if let fallbackIcon {
+                        Image(uiImage: fallbackIcon)
                     }
-                }
-                Spacer()
-                Button {
-                    
-                } label: {
+                    VStack(alignment: .leading) {
+                        Text(association.name)
+                            .lineLimit(1)
+                        if let description = association.description {
+                            Text(description)
+                                .font(.caption2)
+                        }
+                    }
+                    Spacer()
                     Image(systemName: "chevron.right")
                 }
                 .buttonStyle(.plain)
