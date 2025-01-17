@@ -25,6 +25,8 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@Published var presentedForm: FeatureFormView?
+***REMOVED***
 ***REMOVED******REMOVED***/ The set of all elements which previously held focus.
 ***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
 ***REMOVED***
@@ -40,10 +42,13 @@
 ***REMOVED******REMOVED***/ The visibility tasks group.
 ***REMOVED***private var isVisibleTask: Task<Void, Never>?
 ***REMOVED***
+***REMOVED***let utilityNetwork: UtilityNetwork?
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm) {
+***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork?) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED******REMOVED***self.utilityNetwork = utilityNetwork
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {

@@ -57,35 +57,58 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let id = UUID()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let imageGenerationAction: (() async -> UIImage?)?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let imageGenerationAction: (() async -> UIImage?)?
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let selectionAction: (() async -> Void)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(
+***REMOVED******REMOVED******REMOVED***description: String?,
+***REMOVED******REMOVED******REMOVED***icon: UIImage?,
+***REMOVED******REMOVED******REMOVED***name: String,
+***REMOVED******REMOVED******REMOVED***imageGenerationAction: (() async -> UIImage?)?,
+***REMOVED******REMOVED******REMOVED***selectionAction: @escaping () async -> Void
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***self.description = description
+***REMOVED******REMOVED******REMOVED***self.icon = icon
+***REMOVED******REMOVED******REMOVED***self.name = name
+***REMOVED******REMOVED******REMOVED***self.imageGenerationAction = imageGenerationAction
+***REMOVED******REMOVED******REMOVED***self.selectionAction = selectionAction
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationView: View {
 ***REMOVED******REMOVED***var association: Association
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***@State private var selectionTask: Task<Void, Never>?
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var fallbackIcon: UIImage?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let image = association.icon {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
-***REMOVED******REMOVED******REMOVED*** else if let fallbackIcon {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: fallbackIcon)
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectionTask?.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***selectionTask = Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await association.selectionAction()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = association.icon {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let fallbackIcon {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: fallbackIcon)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
