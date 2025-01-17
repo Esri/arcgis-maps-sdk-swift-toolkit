@@ -92,9 +92,13 @@ public struct SearchField: View {
                         "chevron.down" :
                             "chevron.up"
                     )
+#if !os(visionOS)
                     .foregroundStyle(Color.secondary)
+#endif
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
+#endif
             }
         }
         .esriBorder()
