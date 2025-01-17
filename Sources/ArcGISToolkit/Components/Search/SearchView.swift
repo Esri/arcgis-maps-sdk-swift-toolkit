@@ -220,21 +220,23 @@ public struct SearchView: View {
             }
             Spacer()
             if viewModel.isEligibleForRequery {
-                Button {
-                    viewModel.repeatSearch()
-                } label: {
-                    Text(
-                        "Repeat Search Here",
+                Button(
+                    String(
+                        localized: "Repeat Search Here",
                         bundle: .toolkitModule,
                         comment: """
-                                  A label for button to show when the user has panned the map away
-                                  from the original search location. 'Here' is in reference to the
-                                  current visible extent of the map or scene.
-                                  """
+                            A label for button to show when the user has panned the map away
+                            from the original search location. 'Here' is in reference to the
+                            current visible extent of the map or scene.
+                            """
                     )
+                ) {
+                    viewModel.repeatSearch()
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
                 .esriBorder()
+#endif
             }
         }
         .listStyle(.plain)
