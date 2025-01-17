@@ -38,8 +38,14 @@ public class OfflineManager: ObservableObject {
     /// The key for which offline maps will be serialized under the user defaults.
     static private let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
     
+    /// The available offline map view models.
+    private var models: [Item.ID: OfflineMapViewModel] = [:]
+    
     private init() {
         Logger.offlineManager.debug("Initializing OfflineManager")
+        
+        // Retrieves the offline map infos from the user defaults.
+        loadOfflineMapInfosFromDefaults()
         
         // Observe each job's status.
         for job in jobManager.jobs {
@@ -49,9 +55,6 @@ public class OfflineManager: ObservableObject {
         // Resume all paused jobs.
         Logger.offlineManager.debug("Resuming all paused jobs")
         jobManager.resumeAllPausedJobs()
-        
-        // Retrieves the offline map infos from the user defaults.
-        loadOfflineMapInfosFromDefaults()
     }
     
     /// Starts a job that will be managed by this instance.
@@ -84,6 +87,13 @@ public class OfflineManager: ObservableObject {
         }
     }
     
+    /// Retrieves the model for a given online map.
+    /// - Precondition: `onlineMap.item?.id` is not `nil`.
+    func model(for onlineMap: Map) -> OfflineMapViewModel {
+        precondition(onlineMap.item?.id != nil)
+        return models[onlineMap.item!.id!, setDefault: .init(onlineMap: onlineMap)]
+    }
+    
     /// Saves map information for a given portal item to UserDefaults.
     /// - Parameter portalItem: The portal item.
     func saveMapInfo(for portalItem: PortalItem) {
@@ -95,7 +105,7 @@ public class OfflineManager: ObservableObject {
     
     /// Deletes map information for a given portal item ID from UserDefaults.
     /// - Parameter portalItemID: The portal item ID.
-    func deleteMapInfo(for portalItemID: PortalItem.ID) {
+    func deleteMapInfo(for portalItemID: Item.ID) {
         offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID })
         saveOfflineMapInfosToDefaults()
     }
@@ -192,3 +202,16 @@ public extension OfflineMapInfo {
     }
 }
 
+private extension Dictionary {
+    /// Returns the value for the key, and if the value is nil it first stores
+    /// the default value in the dictionary then returns the default value.
+    subscript(key: Key, setDefault defaultValue: @autoclosure () -> Value) -> Value {
+        mutating get {
+            return self[key] ?? {
+                let value = defaultValue()
+                self[key] = value
+                return value
+            }()
+        }
+    }
+}

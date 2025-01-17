@@ -108,7 +108,8 @@ struct PreplannedMetadataView: View {
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
-            preplannedMapAreaID: .init("preview")!
+            preplannedMapAreaID: .init("preview")!,
+            onRemoveDownload: { _ in }
         ),
         isSelected: false
     )
