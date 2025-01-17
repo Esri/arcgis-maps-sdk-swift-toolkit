@@ -115,7 +115,7 @@ public class OfflineManager: ObservableObject {
     
     /// Deletes map information for a given portal item ID from UserDefaults.
     /// - Parameter portalItemID: The portal item ID.
-    func deleteMapInfo(for portalItemID: PortalItem.ID) {
+    func deleteMapInfo(for portalItemID: Item.ID) {
         offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID })
         saveOfflineMapInfosToDefaults()
     }

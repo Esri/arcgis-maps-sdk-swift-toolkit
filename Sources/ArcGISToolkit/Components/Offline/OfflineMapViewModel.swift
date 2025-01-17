@@ -20,7 +20,7 @@ import Foundation
 @MainActor
 class OfflineMapViewModel: ObservableObject {
     /// The portal item ID of the web map.
-    private let portalItemID: PortalItem.ID
+    private let portalItemID: Item.ID
     
     /// The offline map task.
     private let offlineMapTask: OfflineMapTask
@@ -95,7 +95,7 @@ class OfflineMapViewModel: ObservableObject {
         var preplannedMapModels: [PreplannedMapModel] = []
         
         for mapAreaID in mapAreaIDs {
-            guard let preplannedMapAreaID = PortalItem.ID(mapAreaID),
+            guard let preplannedMapAreaID = Item.ID(mapAreaID),
                   let mapArea = await makeMapArea(
                     portalItemID: portalItemID,
                     preplannedMapAreaID: preplannedMapAreaID
@@ -134,8 +134,8 @@ class OfflineMapViewModel: ObservableObject {
     ///   - preplannedMapAreaID: The preplanned map area ID.
     /// - Returns: The preplanned map area.
     private func makeMapArea(
-        portalItemID: PortalItem.ID,
-        preplannedMapAreaID: PortalItem.ID
+        portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID
     ) async -> OfflinePreplannedMapArea? {
         let fileURL = URL.preplannedDirectory(
             forPortalItemID: portalItemID,
@@ -159,7 +159,7 @@ class OfflineMapViewModel: ObservableObject {
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var title: String
     var description: String
-    var id: PortalItem.ID?
+    var id: Item.ID?
     var packagingStatus: PreplannedMapArea.PackagingStatus?
     var thumbnail: LoadableImage?
     
