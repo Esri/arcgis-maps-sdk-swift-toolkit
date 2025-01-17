@@ -220,21 +220,23 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if viewModel.isEligibleForRequery {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Repeat Search Here",
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Repeat Search Here",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A label for button to show when the user has panned the map away
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  from the original search location. 'Here' is in reference to the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  current visible extent of the map or scene.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***A label for button to show when the user has panned the map away
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***from the original search location. 'Here' is in reference to the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***current visible extent of the map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
 ***REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
