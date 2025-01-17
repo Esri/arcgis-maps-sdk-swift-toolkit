@@ -160,7 +160,7 @@ public class OfflineManager: ObservableObject {
         // Don't load the preplanned models, only iterate the ones we have in memory.
         // This allows any views depending on these models to update accordingly,
         // without going over the network to get the preplanned map models.
-        // If thre are more downloaded that aren't in memory, we will delete the directory
+        // If there are more downloaded that aren't in memory, we will delete the directory
         // to take care of those.
         if case .success(let preplannedModels) = model.preplannedMapModels {
             for preplannedModel in preplannedModels {
