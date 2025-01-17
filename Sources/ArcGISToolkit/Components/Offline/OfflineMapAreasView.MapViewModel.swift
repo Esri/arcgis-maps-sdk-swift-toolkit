@@ -68,7 +68,8 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: $0,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: $0.portalItem.id!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: $0.portalItem.id!,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
@@ -105,7 +106,8 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapArea.id!
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapArea.id!,
+***REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***preplannedMapModels.append(model)
 ***REMOVED***
@@ -113,6 +115,16 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***return preplannedMapModels
 ***REMOVED******REMOVED******REMOVED***.filter(\.status.isDownloaded)
 ***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title ***REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The function called when a downloaded preplanned map area is removed.
+***REMOVED***func onRemoveDownloadOfPreplannedArea(withID preplannedAreaID: Item.ID) {
+***REMOVED******REMOVED******REMOVED*** Delete the saved map info if there are no more downloads for the
+***REMOVED******REMOVED******REMOVED*** represented online map.
+***REMOVED******REMOVED***guard case.success(let models) = preplannedMapModels,
+***REMOVED******REMOVED******REMOVED***  models.filter(\.status.isDownloaded).isEmpty
+***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***OfflineManager.shared.deleteMapInfo(for: portalItemID)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a preplanned map area using a given portal item and map area ID to search for a corresponding

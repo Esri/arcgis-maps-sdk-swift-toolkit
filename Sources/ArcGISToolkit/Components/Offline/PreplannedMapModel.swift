@@ -33,14 +33,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED***
-***REMOVED******REMOVED***/ The ID of the web map.
-***REMOVED***private let portalItemID: PortalItem.ID
+***REMOVED******REMOVED***/ The ID of the online map.
+***REMOVED***private let portalItemID: Item.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
 ***REMOVED***private var mobileMapPackage: MobileMapPackage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The file size of the preplanned map area.
 ***REMOVED***private(set) var directorySize = 0
+***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when a preplanned map area is deleted.
+***REMOVED***private let onRemoveDownloadAction: (Item.ID) -> Void
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently running download job.
 ***REMOVED***@Published private(set) var job: DownloadPreplannedOfflineMapJob?
@@ -70,12 +73,15 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID,
+***REMOVED******REMOVED***onRemoveDownload: @escaping (Item.ID) -> Void
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
+***REMOVED******REMOVED***self.onRemoveDownloadAction = onRemoveDownload
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***mmpkDirectoryURL = .preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
@@ -163,6 +169,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job)
 ***REMOVED******REMOVED******REMOVED***observeJob(job)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Save offline map info.
+***REMOVED******REMOVED******REMOVED***if let portalItem = offlineMapTask.portalItem {
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineManager.shared.saveMapInfo(for: portalItem)
+***REMOVED******REMOVED***
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED***
@@ -171,9 +182,13 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Removes the downloaded preplanned map area from disk and resets the status.
 ***REMOVED***func removeDownloadedPreplannedMapArea() {
 ***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Reload the model after local files removal.
 ***REMOVED******REMOVED***status = .notLoaded
 ***REMOVED******REMOVED***Task { await load() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Call the closure for the remove download action.
+***REMOVED******REMOVED***onRemoveDownloadAction(preplannedMapAreaID)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
