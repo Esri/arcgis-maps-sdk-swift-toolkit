@@ -55,12 +55,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     var map: Map? { 
         get async {
             if let mobileMapPackage {
-                if mobileMapPackage.loadStatus != .loaded {
-                    do {
-                        try await mobileMapPackage.load()
-                    } catch {
-                        status = .mmpkLoadFailure(error)
-                    }
+                do {
+                    try await mobileMapPackage.load()
+                } catch {
+                    // TODO: it's odd to have this as a side effect of simply asking
+                    // for the map. This needs to be fixed.
+                    status = .mmpkLoadFailure(error)
                 }
                 return mobileMapPackage.maps.first
             } else {
