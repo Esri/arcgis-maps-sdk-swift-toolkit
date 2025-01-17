@@ -144,16 +144,19 @@ public class OfflineManager: ObservableObject {
         }
     }
     
-    public func removeAllDownloads() {
+    /// Removes all downloads from all offline maps.
+    public func removeAllDownloads() throws {
         for offlineMapInfo in offlineMapInfos {
-            try? removeDownload(for: offlineMapInfo)
+            try removeDownloads(for: offlineMapInfo)
         }
     }
     
-    public func removeDownload(for offlineMapInfo: OfflineMapInfo) throws {
+    /// Removes any downloaded map areas for a particular map.
+    public func removeDownloads(for offlineMapInfo: OfflineMapInfo) throws {
         let model = model(for: offlineMapInfo)
-        // Don't load the preplanned models, only iterate the one we have in memory.
-        // This allows any views depending on these models to update accordingly.
+        // Don't load the preplanned models, only iterate the ones we have in memory.
+        // This allows any views depending on these models to update accordingly,
+        // without going over the network to get the preplanned map models.
         // If more are downloaded that aren't in memory, we will delete the directory
         // to take care of those.
         if case .success(let preplannedModels) = model.preplannedMapModels {
@@ -161,7 +164,7 @@ public class OfflineManager: ObservableObject {
                 preplannedModel.removeDownloadedPreplannedMapArea()
             }
         }
-        // Now remove any offline map areas whose model isn't loaded by simply deleting the
+        // Now remove any offline map areas whose model isn't in memory by simply deleting the
         // preplanned directory.
         let preplannedDir = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
         try FileManager.default.removeItem(at: preplannedDir)
