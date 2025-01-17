@@ -169,8 +169,8 @@ public class OfflineManager: ObservableObject {
         }
         // Now remove any offline map areas whose model isn't in memory by simply deleting the
         // preplanned directory.
-        let preplannedDir = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
-        try FileManager.default.removeItem(at: preplannedDir)
+        let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+        try FileManager.default.removeItem(at: preplannedDirectory)
     }
 }
 
