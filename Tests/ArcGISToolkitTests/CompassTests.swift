@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !os(visionOS)
 import ArcGIS
 import SwiftUI
 import XCTest
@@ -55,4 +54,3 @@ final class CompassTests: XCTestCase {
         XCTAssertTrue(compass3.shouldHide(forHeading: compass3Heading))
     }
 }
-#endif
