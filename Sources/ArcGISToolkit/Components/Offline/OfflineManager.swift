@@ -99,6 +99,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***if let model = models[offlineMapInfo.portalItemID] {
 ***REMOVED******REMOVED******REMOVED***return model
 ***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Only create the map here if we don't already have the model in memory.
 ***REMOVED******REMOVED******REMOVED***let onlineMap = Map(item: PortalItem(url: offlineMapInfo.portalItemURL)!)
 ***REMOVED******REMOVED******REMOVED***return model(for: onlineMap)
 ***REMOVED***
@@ -144,7 +145,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Removes all downloads from all offline maps.
+***REMOVED******REMOVED***/ Removes all downloads for all offline maps.
 ***REMOVED***public func removeAllDownloads() throws {
 ***REMOVED******REMOVED***for offlineMapInfo in offlineMapInfos {
 ***REMOVED******REMOVED******REMOVED***try removeDownloads(for: offlineMapInfo)
@@ -152,6 +153,8 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes any downloaded map areas for a particular map.
+***REMOVED******REMOVED***/ - Parameter offlineMapInfo: The information for the offline map for which all downloads will
+***REMOVED******REMOVED***/ be removed.
 ***REMOVED***public func removeDownloads(for offlineMapInfo: OfflineMapInfo) throws {
 ***REMOVED******REMOVED***let model = model(for: offlineMapInfo)
 ***REMOVED******REMOVED******REMOVED*** Don't load the preplanned models, only iterate the ones we have in memory.
