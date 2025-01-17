@@ -112,11 +112,9 @@ struct PreplannedListItemView: View {
         switch downloadState {
         case .downloaded:
             Button {
-                Task {
-                    if let map = await model.map {
-                        selectedMap = map
-                        dismiss()
-                    }
+                if let map = model.map {
+                    selectedMap = map
+                    dismiss()
                 }
             } label: {
                 Text("Open")
