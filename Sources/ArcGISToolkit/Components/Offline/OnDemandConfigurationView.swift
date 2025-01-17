@@ -21,16 +21,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@State private var titleInput = ""
 ***REMOVED***@State private var maxScale: CacheScale = .room
 ***REMOVED***@State private var polygon: Polygon?
-***REMOVED******REMOVED***/ The map view's visible area.
 ***REMOVED***@State private var currentVisibleArea: Polygon?
-***REMOVED******REMOVED***/ The geometry editor.
 ***REMOVED***@State private var geometryEditor = GeometryEditor()
-***REMOVED******REMOVED***/ The location display to set on the map view.
-***REMOVED***@State private var locationDisplay = {
-***REMOVED******REMOVED***let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
-***REMOVED******REMOVED***locationDisplay.autoPanMode = .recenter
-***REMOVED******REMOVED***return locationDisplay
-***REMOVED***()
 ***REMOVED***
 ***REMOVED***var onCompleteAction: ((String, CacheScale, CacheScale, Polygon) -> Void)? = nil
 ***REMOVED***
@@ -38,7 +30,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***titleInput.isEmpty || polygon == nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** title: String, minScale: CacheScale, maxScale: CacheScale, areaOfInterest: Polygon
 ***REMOVED***func onComplete(
 ***REMOVED******REMOVED***perform action: @escaping (String, CacheScale, CacheScale, Polygon) -> Void
 ***REMOVED***) -> Self {
@@ -50,12 +41,10 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Drag the selector to define the area")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 6)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial, ignoresSafeAreaEdges: .horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Drag the selector to define the area")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 6)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial, ignoresSafeAreaEdges: .horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapSelectorView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -102,7 +91,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***polygon = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(polygon == nil ? "Select": "Unselect")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(polygon == nil ? "Show Selector": "Hide Selector")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.blue)
@@ -157,11 +146,16 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentVisibleArea = area
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***LocationButton(locationDisplay: locationDisplay)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Location Button tapped")
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.slash")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***for await polygon in geometryEditor.$geometry {
@@ -171,7 +165,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Starts editing with the specified tool and geometry type.
 ***REMOVED***func startEditing(polygon: Polygon) {
 ***REMOVED******REMOVED***let tool = ShapeTool(kind: .rectangle)
 ***REMOVED******REMOVED***tool.configuration.scaleMode = .stretch

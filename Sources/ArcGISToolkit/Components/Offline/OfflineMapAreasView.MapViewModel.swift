@@ -169,13 +169,12 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***for job in ongoingJobs {
-***REMOVED******REMOVED******REMOVED******REMOVED***let onDemandMapAreaID = UUID(uuidString: job.downloadDirectoryURL.deletingPathExtension().lastPathComponent)!
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let mapArea = await makeOnDemandMapArea(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapAreaID: onDemandMapAreaID
-***REMOVED******REMOVED******REMOVED******REMOVED***) else {
+***REMOVED******REMOVED******REMOVED******REMOVED***let id = UUID(uuidString: job.downloadDirectoryURL.deletingPathExtension().lastPathComponent)!
+***REMOVED******REMOVED******REMOVED******REMOVED***let parameters = job.parameters
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let info = parameters.itemInfo, let minScale = parameters.minScale, let maxScale = parameters.maxScale, let aoi = parameters.areaOfInterest else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continue
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let mapArea = OnDemandMapArea(id: id, title: info.title, minScale: minScale, maxScale: maxScale, areaOfInterest: aoi)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let model = OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapArea: mapArea,
@@ -213,6 +212,11 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels!.append(model)
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title ***REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download map area.
+***REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadOnDemandMapArea()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -231,6 +235,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED*** This struct represents an on-demand area that is downloaded.
 struct OfflineOnDemandMapArea: OnDemandMapAreaProtocol {
 ***REMOVED***var id: UUID
 ***REMOVED***var title: String

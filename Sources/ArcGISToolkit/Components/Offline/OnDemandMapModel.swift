@@ -32,10 +32,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***private(set) var directorySize = 0
 ***REMOVED***
-***REMOVED******REMOVED***/ The currently running download job.
 ***REMOVED***@Published private(set) var job: GenerateOfflineMapJob?
 ***REMOVED***
-***REMOVED***@Published private(set) var status: Status = .notLoaded
+***REMOVED***@Published private(set) var status: Status = .initialized
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
 ***REMOVED***let showsUserNotificationOnCompletion: Bool
@@ -76,6 +75,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for area \(onDemandMapArea.id.uuidString, privacy: .public)")
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
+***REMOVED******REMOVED******REMOVED***status = .downloading
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(onDemandMapArea.id.uuidString, privacy: .public)")
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = mmpk
@@ -86,30 +86,13 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
-***REMOVED***func load() async {
-***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Load on-demand map area.
-***REMOVED******REMOVED******REMOVED***status = .loading
-***REMOVED******REMOVED******REMOVED******REMOVED***try await onDemandMapArea.retryLoad()
-***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
-***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
-***REMOVED******REMOVED******REMOVED******REMOVED*** If the area loads, then you know for certain the status is complete.
-***REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Normal load failure.
-***REMOVED******REMOVED******REMOVED***status = .loadFailure(error)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Look up the job associated with this preplanned map model.
+***REMOVED******REMOVED***/ Look up the job associated with this map model.
 ***REMOVED***private func lookupDownloadJob() -> GenerateOfflineMapJob? {
 ***REMOVED******REMOVED***OfflineManager.shared.jobs
 ***REMOVED******REMOVED******REMOVED***.lazy
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? GenerateOfflineMapJob ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == onDemandMapArea.id.uuidString
+***REMOVED******REMOVED******REMOVED******REMOVED***UUID(uuidString: $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent) == onDemandMapArea.id
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -125,7 +108,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Looks up the mobile map package directory for locally downloaded package.
+***REMOVED******REMOVED***/ Looks up the mobile map package directory for downloaded package.
 ***REMOVED***private func lookupMobileMapPackage() -> MobileMapPackage? {
 ***REMOVED******REMOVED***let fileURL = URL.onDemandDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
@@ -141,7 +124,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***guard let onDemandMapArea = onDemandMapArea as? OnDemandMapArea else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Create the parameters for the download preplanned offline map job.
 ***REMOVED******REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultGenerateOfflineMapParameters(
 ***REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: onDemandMapArea.areaOfInterest,
 ***REMOVED******REMOVED******REMOVED******REMOVED***minScale: onDemandMapArea.minScale,
@@ -154,7 +136,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***itemInfo.title = onDemandMapArea.title
 ***REMOVED******REMOVED******REMOVED***itemInfo.description = ""
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Create the download preplanned offline map job.
 ***REMOVED******REMOVED******REMOVED***let job = offlineMapTask.makeGenerateOfflineMapJob(
 ***REMOVED******REMOVED******REMOVED******REMOVED***parameters: parameters,
 ***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectoryURL
@@ -167,12 +148,11 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Removes the downloaded preplanned map area from disk and resets the status.
+***REMOVED******REMOVED***/ Removes the downloaded map area from disk and resets the status.
 ***REMOVED***func removeDownloadedOnDemandMapArea() {
 ***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED******REMOVED*** Reload the model after local files removal.
-***REMOVED******REMOVED***status = .notLoaded
-***REMOVED******REMOVED***Task { await load() ***REMOVED***
+***REMOVED******REMOVED***status = .initialized
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
@@ -195,20 +175,14 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 
 extension OnDemandMapModel {
-***REMOVED******REMOVED***/ The status of the preplanned map area model.
+***REMOVED******REMOVED***/ The status of the map area model.
 ***REMOVED***enum Status {
-***REMOVED******REMOVED******REMOVED***/ Preplanned map area not loaded.
-***REMOVED******REMOVED***case notLoaded
-***REMOVED******REMOVED******REMOVED***/ Preplanned map area is loading.
-***REMOVED******REMOVED***case loading
-***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to load.
-***REMOVED******REMOVED***case loadFailure(Error)
 ***REMOVED******REMOVED***case initialized
-***REMOVED******REMOVED******REMOVED***/ Preplanned map area is being downloaded.
+***REMOVED******REMOVED******REMOVED***/ Map area is being downloaded.
 ***REMOVED******REMOVED***case downloading
-***REMOVED******REMOVED******REMOVED***/ Preplanned map area is downloaded.
+***REMOVED******REMOVED******REMOVED***/ Map area is downloaded.
 ***REMOVED******REMOVED***case downloaded
-***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
+***REMOVED******REMOVED******REMOVED***/ Map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
 ***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
@@ -217,7 +191,7 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
 ***REMOVED******REMOVED***var needsToBeLoaded: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .initialized, .loading, .downloading, .downloaded, .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
@@ -227,24 +201,14 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if download is allowed for this status.
 ***REMOVED******REMOVED***var allowsDownload: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .downloading, .downloaded, .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED******REMOVED***case .initialized, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the local files can be removed.
-***REMOVED******REMOVED***var allowsRemoval: Bool {
-***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .mmpkLoadFailure, .downloadFailure, .loadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area is downloaded.
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the map area is downloaded.
 ***REMOVED******REMOVED***var isDownloaded: Bool {
 ***REMOVED******REMOVED******REMOVED***if case .downloaded = self { true ***REMOVED*** else { false ***REMOVED***
 ***REMOVED***
@@ -269,8 +233,9 @@ protocol OnDemandMapAreaProtocol: Sendable {
 ***REMOVED***var title: String { get ***REMOVED***
 ***REMOVED***
 
+***REMOVED*** This struct represents an on-demand area that hasn't been downloaded to disk.
 struct OnDemandMapArea: OnDemandMapAreaProtocol {
-***REMOVED***let id = UUID()
+***REMOVED***let id: UUID
 ***REMOVED***let title: String
 ***REMOVED***let minScale: Double
 ***REMOVED***let maxScale: Double

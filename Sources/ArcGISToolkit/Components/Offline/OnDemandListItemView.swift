@@ -23,10 +23,10 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The download state of the preplanned map model.
 ***REMOVED***fileprivate enum DownloadState {
-***REMOVED******REMOVED***case notDownloaded, downloading, downloaded
+***REMOVED******REMOVED***case initialized, downloading, downloaded
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var downloadState: DownloadState = .notDownloaded
+***REMOVED***@State private var downloadState: DownloadState = .initialized
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
@@ -63,9 +63,6 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMetadataView(model: model, isSelected: isSelected)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***await model.load()
-***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
 ***REMOVED***
@@ -81,7 +78,8 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** What should we do with the thumbnail? Save our own or use the default one?
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
-***REMOVED******REMOVED***if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
+***REMOVED******REMOVED***if downloadState == .downloaded,
+***REMOVED******REMOVED***   let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
 ***REMOVED******REMOVED***   let thumbnail = area.thumbnail {
 ***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
@@ -135,10 +133,10 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .notDownloaded:
+***REMOVED******REMOVED***case .initialized:
+***REMOVED******REMOVED******REMOVED******REMOVED*** This state shouldn't be reached.
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download map area.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadOnDemandMapArea()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -161,9 +159,9 @@ struct OnDemandListItemView: View {
 ***REMOVED***@ViewBuilder private var statusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
 ***REMOVED******REMOVED******REMOVED***switch model.status {
-***REMOVED******REMOVED******REMOVED***case .initialized, .notLoaded, .loading:
+***REMOVED******REMOVED******REMOVED***case .initialized:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
-***REMOVED******REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED***case .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
 ***REMOVED******REMOVED******REMOVED***case .downloading:
@@ -187,7 +185,7 @@ private extension OnDemandListItemView.DownloadState {
 ***REMOVED******REMOVED***self = switch state {
 ***REMOVED******REMOVED***case .downloaded: .downloaded
 ***REMOVED******REMOVED***case .downloading: .downloading
-***REMOVED******REMOVED***default: .notDownloaded
+***REMOVED******REMOVED***default: .initialized
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
