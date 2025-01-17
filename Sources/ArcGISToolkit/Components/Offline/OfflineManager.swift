@@ -94,6 +94,16 @@ public class OfflineManager: ObservableObject {
         return models[onlineMap.item!.id!, setDefault: .init(onlineMap: onlineMap)]
     }
     
+    /// Retrieves the model for a given `OfflineMapInfo`.
+    private func model(for offlineMapInfo: OfflineMapInfo) -> OfflineMapViewModel {
+        if let model = models[offlineMapInfo.portalItemID] {
+            return model
+        } else {
+            let onlineMap = Map(item: PortalItem(url: offlineMapInfo.portalItemURL)!)
+            return model(for: onlineMap)
+        }
+    }
+    
     /// Saves map information for a given portal item to UserDefaults.
     /// - Parameter portalItem: The portal item.
     func saveMapInfo(for portalItem: PortalItem) {
@@ -132,6 +142,29 @@ public class OfflineManager: ObservableObject {
         } catch {
             Logger.offlineManager.error("Error loading offline map info from user defaults: \(error.localizedDescription)")
         }
+    }
+    
+    public func removeAllDownloads() {
+        for offlineMapInfo in offlineMapInfos {
+            try? removeDownload(for: offlineMapInfo)
+        }
+    }
+    
+    public func removeDownload(for offlineMapInfo: OfflineMapInfo) throws {
+        let model = model(for: offlineMapInfo)
+        // Don't load the preplanned models, only iterate the one we have in memory.
+        // This allows any views depending on these models to update accordingly.
+        // If more are downloaded that aren't in memory, we will delete the directory
+        // to take care of those.
+        if case .success(let preplannedModels) = model.preplannedMapModels {
+            for preplannedModel in preplannedModels {
+                preplannedModel.removeDownloadedPreplannedMapArea()
+            }
+        }
+        // Now remove any offline map areas whose model isn't loaded by simply deleting the
+        // preplanned directory.
+        let preplannedDir = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+        try FileManager.default.removeItem(at: preplannedDir)
     }
 }
 
