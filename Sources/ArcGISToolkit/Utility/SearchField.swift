@@ -56,7 +56,10 @@ public struct SearchField: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Search icon
-***REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass.circle.fill")
+***REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass")
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.circle.fill)
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Search text field
