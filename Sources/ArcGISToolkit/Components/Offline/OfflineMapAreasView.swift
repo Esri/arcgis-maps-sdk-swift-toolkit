@@ -20,7 +20,7 @@ import ArcGIS
 @preconcurrency
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
-    @StateObject private var mapViewModel: MapViewModel
+    @StateObject private var mapViewModel: OfflineMapViewModel
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     /// The web map to be taken offline.
@@ -29,8 +29,14 @@ public struct OfflineMapAreasView: View {
     @Binding private var selectedMap: Map?
     
     /// The portal item for the web map to be taken offline.
-    private var portalItem: PortalItem? {
-        onlineMap.item as? PortalItem
+    private var portalItem: PortalItem {
+        // Safe to force cast because of the precondition in the initializer.
+        onlineMap.item as! PortalItem
+    }
+    
+    private var portalItemID: Item.ID {
+        // Safe to force unwrap because of the precondition in the initializer.
+        portalItem.id!
     }
     
     /// Creates a view with a given web map.
@@ -38,18 +44,20 @@ public struct OfflineMapAreasView: View {
     ///   - onlineMap: The web map to be taken offline.
     ///   - selection: A binding to the currently selected map.
     /// - Precondition: `onlineMap.item?.id` is not `nil`.
+    /// - Precondition: `onlineMap.item` is of type `PortalItem`.
     public init(onlineMap: Map, selection: Binding<Map?>) {
         precondition(onlineMap.item?.id != nil)
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: onlineMap))
+        precondition(onlineMap.item is PortalItem)
+        _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
         self.onlineMap = onlineMap
         _selectedMap = selection
     }
     
     public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
         let item = PortalItem(url: mapInfo.portalItemURL)!
-        let map = Map(item: item)
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
-        onlineMap = map
+        let onlineMap = Map(item: item)
+        _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
+        self.onlineMap = onlineMap
         _selectedMap = selection
     }
     
@@ -89,13 +97,12 @@ public struct OfflineMapAreasView: View {
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+                    // TODO: this logic needs to move out of the view.
                         .onDownload {
-                            guard let portalItem else { return }
                             OfflineManager.shared.saveMapInfo(for: portalItem)
                         }
                         .onRemoveDownload {
-                            guard let portalItemID = portalItem?.id,
-                                  models.filter(\.status.isDownloaded).isEmpty else { return }
+                            guard models.filter(\.status.isDownloaded).isEmpty else { return }
                             OfflineManager.shared.deleteMapInfo(for: portalItemID)
                         }
                         .onChange(of: selectedMap) { _ in
