@@ -34,6 +34,7 @@ public struct OfflineMapAreasView: View {
         onlineMap.item as! PortalItem
     }
     
+    /// The `ID` of the portal item.
     private var portalItemID: Item.ID {
         // Safe to force unwrap because of the precondition in the initializer.
         portalItem.id!
@@ -42,7 +43,7 @@ public struct OfflineMapAreasView: View {
     /// Creates a view with a given web map.
     /// - Parameters:
     ///   - onlineMap: The web map to be taken offline.
-    ///   - selection: A binding to the currently selected map.
+    ///   - selection: A binding to the currently selected offline map.
     /// - Precondition: `onlineMap.item?.id` is not `nil`.
     /// - Precondition: `onlineMap.item` is of type `PortalItem`.
     public init(onlineMap: Map, selection: Binding<Map?>) {
@@ -53,8 +54,12 @@ public struct OfflineMapAreasView: View {
         _selectedMap = selection
     }
     
-    public init(mapInfo: OfflineMapInfo, selection: Binding<Map?>) {
-        let item = PortalItem(url: mapInfo.portalItemURL)!
+    /// Creates a view with a given offline map info.
+    /// - Parameters:
+    ///   - offlineMapInfo: The offline map info for which to create the view.
+    ///   - selection: A binding to the currently selected offline map.
+    public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
+        let item = PortalItem(url: offlineMapInfo.portalItemURL)!
         let onlineMap = Map(item: item)
         _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
         self.onlineMap = onlineMap
