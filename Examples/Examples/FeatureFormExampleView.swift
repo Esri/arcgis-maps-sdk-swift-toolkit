@@ -62,32 +62,29 @@ struct FeatureFormExampleView: View {
                             .presentationBackgroundInteractionEnabled()
                             .presentationContentInteractionScrolls()
                             .presentationDetents([.medium, .large])
+                            .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
+                                Button("Discard edits", role: .destructive) {
+                                    model.discardEdits()
+                                }
+                                if case let .cancellationPending(featureForm) = model.state {
+                                    Button("Continue editing", role: .cancel) {
+                                        model.state = .editing(featureForm)
+                                    }
+                                }
+                            } message: {
+                                Text("Updates to this feature will be lost.")
+                            }
+                            .alert("The form wasn't submitted", isPresented: model.alertIsPresented) {
+                                // No actions.
+                            } message: {
+                                if case let .generalError(_, errorMessage) = model.state {
+                                    errorMessage
+                                }
+                            }
                     }
                 }
                 .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
-                }
-                .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
-                    Button("Discard edits", role: .destructive) {
-                        model.discardEdits()
-                    }
-                    if case let .cancellationPending(featureForm) = model.state {
-                        Button("Continue editing", role: .cancel) {
-                            model.state = .editing(featureForm)
-                        }
-                    }
-                } message: {
-                    Text("Updates to this feature will be lost.")
-                }
-                .alert(
-                    "The form wasn't submitted",
-                    isPresented: model.alertIsPresented
-                ) {
-                    // No actions.
-                } message: {
-                    if case let .generalError(_, errorMessage) = model.state {
-                        errorMessage
-                    }
                 }
                 .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
                 .overlay {
