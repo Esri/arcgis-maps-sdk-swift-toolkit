@@ -42,7 +42,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos from the user defaults.
-***REMOVED******REMOVED***try? loadOfflineMapInfos()
+***REMOVED******REMOVED***loadOfflineMapInfos()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Observe each job's status.
 ***REMOVED******REMOVED***for job in jobManager.jobs {
@@ -62,7 +62,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***observeJob(job)
 ***REMOVED******REMOVED***job.start()
 ***REMOVED******REMOVED***Task.detached {
-***REMOVED******REMOVED******REMOVED***try? await self.savePendingMapInfo(for: portalItem)
+***REMOVED******REMOVED******REMOVED***await self.savePendingMapInfo(for: portalItem)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -140,21 +140,23 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads offline map information from offline manager directory.
-***REMOVED***private func loadOfflineMapInfos() throws {
+***REMOVED***private func loadOfflineMapInfos() {
 ***REMOVED******REMOVED***let url = URL.offlineManagerDirectory()
 ***REMOVED******REMOVED***var infos = [OfflineMapInfo]()
 ***REMOVED******REMOVED***defer { self.offlineMapInfos = infos ***REMOVED***
-***REMOVED******REMOVED***for dir in try FileManager.default.contentsOfDirectory(atPath: url.path()) {
+***REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: url.path()) else { return ***REMOVED***
+***REMOVED******REMOVED***for dir in contents {
 ***REMOVED******REMOVED******REMOVED***let infoURL = url.appending(components: dir, "info.json")
 ***REMOVED******REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: infoURL.path()) else { continue ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
-***REMOVED******REMOVED******REMOVED***let data = try Data(contentsOf: infoURL)
-***REMOVED******REMOVED******REMOVED***let info = try JSONDecoder().decode(OfflineMapInfo.self, from: data)
+***REMOVED******REMOVED******REMOVED***guard let data = try? Data(contentsOf: infoURL),
+***REMOVED******REMOVED******REMOVED******REMOVED***  let info = try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
+***REMOVED******REMOVED******REMOVED***else { continue ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***infos.append(info)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func savePendingMapInfo(for portalItem: PortalItem) async throws {
+***REMOVED***private func savePendingMapInfo(for portalItem: PortalItem) async {
 ***REMOVED******REMOVED***guard let portalItemID = portalItem.id,
 ***REMOVED******REMOVED******REMOVED***  let info = OfflineMapInfo(portalItem: portalItem)
 ***REMOVED******REMOVED***else { return ***REMOVED***
@@ -175,32 +177,34 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Returning, info already exists in pending directory: \(url.path())")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save json to file.
-***REMOVED******REMOVED***let data = try JSONEncoder().encode(info)
-***REMOVED******REMOVED***try data.write(to: infoURL, options: .atomic)
+***REMOVED******REMOVED***if let data = try? JSONEncoder().encode(info) {
+***REMOVED******REMOVED******REMOVED***try? data.write(to: infoURL, options: .atomic)
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save thumbnail to file.
 ***REMOVED******REMOVED***if let thumbnail = portalItem.thumbnail {
 ***REMOVED******REMOVED******REMOVED***try? await thumbnail.load()
 ***REMOVED******REMOVED******REMOVED***if let image = thumbnail.image, let pngData = image.pngData() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailURL = url.appending(path: "thumbnail.png")
-***REMOVED******REMOVED******REMOVED******REMOVED***try pngData.write(to: thumbnailURL, options: .atomic)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? pngData.write(to: thumbnailURL, options: .atomic)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func handlePendingMapInfo<Output>(
+***REMOVED***private func handlePendingMapInfo<Output>(
 ***REMOVED******REMOVED***for result: Result<Output, Error>,
-***REMOVED******REMOVED***portalItemID: Item.ID)
-***REMOVED***throws {
+***REMOVED******REMOVED***portalItemID: Item.ID) {
 ***REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Move the pending info into the correct folder.
 ***REMOVED******REMOVED******REMOVED***let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
 ***REMOVED******REMOVED******REMOVED***let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***for file in try FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) {
+***REMOVED******REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for file in contents {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let source = pendingURL.appending(path: file)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let dest = portalItemDir.appending(path: file)
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: dest.path()) else { continue ***REMOVED***
