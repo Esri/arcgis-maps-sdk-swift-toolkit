@@ -42,7 +42,7 @@ public class OfflineManager: ObservableObject {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
         // Retrieves the offline map infos from the user defaults.
-        try? loadOfflineMapInfos()
+        loadOfflineMapInfos()
         
         // Observe each job's status.
         for job in jobManager.jobs {
@@ -62,7 +62,7 @@ public class OfflineManager: ObservableObject {
         observeJob(job)
         job.start()
         Task.detached {
-            try? await self.savePendingMapInfo(for: portalItem)
+            await self.savePendingMapInfo(for: portalItem)
         }
     }
     
@@ -140,21 +140,23 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Loads offline map information from offline manager directory.
-    private func loadOfflineMapInfos() throws {
+    private func loadOfflineMapInfos() {
         let url = URL.offlineManagerDirectory()
         var infos = [OfflineMapInfo]()
         defer { self.offlineMapInfos = infos }
-        for dir in try FileManager.default.contentsOfDirectory(atPath: url.path()) {
+        guard let contents = try? FileManager.default.contentsOfDirectory(atPath: url.path()) else { return }
+        for dir in contents {
             let infoURL = url.appending(components: dir, "info.json")
             guard FileManager.default.fileExists(atPath: infoURL.path()) else { continue }
             Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
-            let data = try Data(contentsOf: infoURL)
-            let info = try JSONDecoder().decode(OfflineMapInfo.self, from: data)
+            guard let data = try? Data(contentsOf: infoURL),
+                  let info = try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
+            else { continue }
             infos.append(info)
         }
     }
     
-    private func savePendingMapInfo(for portalItem: PortalItem) async throws {
+    private func savePendingMapInfo(for portalItem: PortalItem) async {
         guard let portalItemID = portalItem.id,
               let info = OfflineMapInfo(portalItem: portalItem)
         else { return }
@@ -175,32 +177,34 @@ public class OfflineManager: ObservableObject {
             Logger.offlineManager.debug("Returning, info already exists in pending directory: \(url.path())")
             return
         }
-        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        
+        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         
         // Save json to file.
-        let data = try JSONEncoder().encode(info)
-        try data.write(to: infoURL, options: .atomic)
+        if let data = try? JSONEncoder().encode(info) {
+            try? data.write(to: infoURL, options: .atomic)
+        }
         
         // Save thumbnail to file.
         if let thumbnail = portalItem.thumbnail {
             try? await thumbnail.load()
             if let image = thumbnail.image, let pngData = image.pngData() {
                 let thumbnailURL = url.appending(path: "thumbnail.png")
-                try pngData.write(to: thumbnailURL, options: .atomic)
+                try? pngData.write(to: thumbnailURL, options: .atomic)
             }
         }
     }
     
-    func handlePendingMapInfo<Output>(
+    private func handlePendingMapInfo<Output>(
         for result: Result<Output, Error>,
-        portalItemID: Item.ID)
-    throws {
+        portalItemID: Item.ID) {
         switch result {
         case .success:
             // Move the pending info into the correct folder.
             let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
             let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-            for file in try FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) {
+            guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return }
+            for file in contents {
                 let source = pendingURL.appending(path: file)
                 let dest = portalItemDir.appending(path: file)
                 guard !FileManager.default.fileExists(atPath: dest.path()) else { continue }
