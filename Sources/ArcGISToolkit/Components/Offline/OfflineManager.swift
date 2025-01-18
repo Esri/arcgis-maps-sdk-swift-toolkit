@@ -41,7 +41,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos from the user defaults.
+***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos.
 ***REMOVED******REMOVED***loadOfflineMapInfos()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Observe each job's status.
@@ -119,24 +119,14 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Deletes map information for a given portal item ID from UserDefaults.
+***REMOVED******REMOVED***/ Deletes map information from disk for a given portal item ID.
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
-***REMOVED***func deleteMapInfo(for portalItemID: Item.ID) {
+***REMOVED***func removeMapInfo(for portalItemID: Item.ID) {
 ***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID ***REMOVED***)
-***REMOVED******REMOVED***saveOfflineMapInfosToDefaults()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Saves the offline map information to the defaults.
-***REMOVED***private func saveOfflineMapInfosToDefaults() {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Saving offline map info to user defaults")
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***UserDefaults.standard.set(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try JSONEncoder().encode(offlineMapInfos),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forKey: Self.defaultsKey
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error saving offline map info to user defaults: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let dir = URL.portalItemDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED***try? FileManager.default.removeItem(at: dir.appending(path: "info.json"))
+***REMOVED******REMOVED***try? FileManager.default.removeItem(at: dir.appending(path: "thumbnail.png"))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads offline map information from offline manager directory.
@@ -146,14 +136,17 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***defer { self.offlineMapInfos = infos ***REMOVED***
 ***REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: url.path()) else { return ***REMOVED***
 ***REMOVED******REMOVED***for dir in contents {
-***REMOVED******REMOVED******REMOVED***let infoURL = url.appending(components: dir, "info.json")
-***REMOVED******REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: infoURL.path()) else { continue ***REMOVED***
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
-***REMOVED******REMOVED******REMOVED***guard let data = try? Data(contentsOf: infoURL),
-***REMOVED******REMOVED******REMOVED******REMOVED***  let info = try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
-***REMOVED******REMOVED******REMOVED***else { continue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let info = offlineMapInfo(for: url.appending(path: dir)) else { continue ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***infos.append(info)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func offlineMapInfo(for url: URL) -> OfflineMapInfo? {
+***REMOVED******REMOVED***let infoURL = url.appending(components: "info.json")
+***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil ***REMOVED***
+***REMOVED******REMOVED***Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
+***REMOVED******REMOVED***guard let data = try? Data(contentsOf: infoURL) else { return nil ***REMOVED***
+***REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func savePendingMapInfo(for portalItem: PortalItem) async {
@@ -214,6 +207,10 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***   let info = offlineMapInfo(for: portalItemDir) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapInfos.append(info)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If job failed then do nothing. Pending info can stay in the caches directory
@@ -246,9 +243,12 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now remove any offline map areas whose model isn't in memory by simply deleting the
-***REMOVED******REMOVED******REMOVED*** preplanned directory.
-***REMOVED******REMOVED***let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
-***REMOVED******REMOVED***try FileManager.default.removeItem(at: preplannedDirectory)
+***REMOVED******REMOVED******REMOVED*** whole portal item directory. This will also delete the map info.
+***REMOVED******REMOVED***let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+***REMOVED******REMOVED***try FileManager.default.removeItem(at: portalItemDirectory)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Remove offline map info for this map.
+***REMOVED******REMOVED***offlineMapInfos.removeAll { $0.portalItemID == offlineMapInfo.portalItemID ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
