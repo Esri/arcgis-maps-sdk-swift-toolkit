@@ -16,11 +16,15 @@ import ArcGIS
 import Foundation
 
 extension URL {
+    static func offlineManagerDirectory() -> URL {
+        return .documentsDirectory.appending(path: "com.esri.ArcGISToolkit.offlineManager")
+    }
+    
     /// The path to the web map directory for a specific portal item.
     /// `Documents/OfflineMapAreas/<Portal Item ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
-    static private func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
-        return .documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
+    static func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+        return offlineManagerDirectory().appending(path: "\(portalItemID)/")
     }
     
     /// The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
@@ -39,5 +43,11 @@ extension URL {
             url = url.appending(component: "\(preplannedMapAreaID)/")
         }
         return url
+    }
+    
+    static func pendingMapInfoDirectory(
+        forPortalItem portalItemID: Item.ID
+    ) -> URL {
+        return .cachesDirectory.appending(components: "PendingDownloads", "\(portalItemID)/")
     }
 }

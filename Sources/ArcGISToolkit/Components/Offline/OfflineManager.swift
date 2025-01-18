@@ -35,9 +35,6 @@ public class OfflineManager: ObservableObject {
     @Published
     private(set) public var offlineMapInfos: [OfflineMapInfo] = []
     
-    /// The key for which offline maps will be serialized under the user defaults.
-    static private let defaultsKey = "com.esri.ArcGISToolkit.offlineManager.offlineMaps"
-    
     /// The available offline map view models.
     private var models: [Item.ID: OfflineMapViewModel] = [:]
     
@@ -45,7 +42,7 @@ public class OfflineManager: ObservableObject {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
         // Retrieves the offline map infos from the user defaults.
-        loadOfflineMapInfosFromDefaults()
+        try? loadOfflineMapInfos()
         
         // Observe each job's status.
         for job in jobManager.jobs {
@@ -59,20 +56,23 @@ public class OfflineManager: ObservableObject {
     
     /// Starts a job that will be managed by this instance.
     /// - Parameter job: The job to start.
-    func start(job: any JobProtocol) {
+    func start(job: any JobProtocol, portalItem: PortalItem) {
         Logger.offlineManager.debug("Starting Job from offline manager")
         jobManager.jobs.append(job)
         observeJob(job)
         job.start()
+        Task.detached {
+            try? await self.savePendingMapInfo(for: portalItem)
+        }
     }
     
     /// Observes a job for completion.
-    private func observeJob(_ job: any JobProtocol) {
+    private func observeJob<Job: JobProtocol>(_ job: Job) {
         Task {
             Logger.offlineManager.debug("Observing job completion")
             
             // Wait for job to finish.
-            _ = try? await job.output
+            let result = await job.result
             
             // Remove completed job from JobManager.
             Logger.offlineManager.debug("Removing completed job from job manager")
@@ -84,6 +84,20 @@ public class OfflineManager: ObservableObject {
             
             // Call job completion action.
             jobCompletionAction?(job)
+            
+            // Check pending map infos.
+            if let portalItem = onlineMapPrtalItem(for: job), let id = portalItem.id {
+                try? handlePendingMapInfo(for: result, portalItemID: id)
+            }
+        }
+    }
+    
+    private func onlineMapPrtalItem<Job: JobProtocol>(for job: Job) -> PortalItem? {
+        switch job {
+        case let downloadPreplanned as DownloadPreplannedOfflineMapJob:
+            downloadPreplanned.onlineMap?.item as? PortalItem
+        default:
+            nil
         }
     }
     
@@ -105,15 +119,6 @@ public class OfflineManager: ObservableObject {
         }
     }
     
-    /// Saves map information for a given portal item to UserDefaults.
-    /// - Parameter portalItem: The portal item.
-    func saveMapInfo(for portalItem: PortalItem) {
-        guard let offlineMapInfo = OfflineMapInfo(portalItem: portalItem) else { return }
-        guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItem.id }) else { return }
-        offlineMapInfos.append(offlineMapInfo)
-        saveOfflineMapInfosToDefaults()
-    }
-    
     /// Deletes map information for a given portal item ID from UserDefaults.
     /// - Parameter portalItemID: The portal item ID.
     func deleteMapInfo(for portalItemID: Item.ID) {
@@ -123,25 +128,94 @@ public class OfflineManager: ObservableObject {
     
     /// Saves the offline map information to the defaults.
     private func saveOfflineMapInfosToDefaults() {
-        Logger.offlineManager.debug("Saving offline map info to user defaults")
-        do {
-            UserDefaults.standard.set(
-                try JSONEncoder().encode(offlineMapInfos),
-                forKey: Self.defaultsKey
-            )
-        } catch {
-            Logger.offlineManager.error("Error saving offline map info to user defaults: \(error.localizedDescription)")
+//        Logger.offlineManager.debug("Saving offline map info to user defaults")
+//        do {
+//            UserDefaults.standard.set(
+//                try JSONEncoder().encode(offlineMapInfos),
+//                forKey: Self.defaultsKey
+//            )
+//        } catch {
+//            Logger.offlineManager.error("Error saving offline map info to user defaults: \(error.localizedDescription)")
+//        }
+    }
+    
+    /// Loads offline map information from offline manager directory.
+    private func loadOfflineMapInfos() throws {
+        let url = URL.offlineManagerDirectory()
+        var infos = [OfflineMapInfo]()
+        defer { self.offlineMapInfos = infos }
+        for dir in try FileManager.default.contentsOfDirectory(atPath: url.path()) {
+            let infoURL = url.appending(components: dir, "info.json")
+            guard FileManager.default.fileExists(atPath: infoURL.path()) else { continue }
+            Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
+            let data = try Data(contentsOf: infoURL)
+            let info = try JSONDecoder().decode(OfflineMapInfo.self, from: data)
+            infos.append(info)
         }
     }
     
-    /// Loads webmap portal items that have been saved to UserDefaults.
-    private func loadOfflineMapInfosFromDefaults() {
-        Logger.offlineManager.debug("Loading offline map info from user defaults")
-        guard let data = UserDefaults.standard.data(forKey: Self.defaultsKey) else { return }
-        do {
-            offlineMapInfos = try JSONDecoder().decode([OfflineMapInfo].self, from: data)
-        } catch {
-            Logger.offlineManager.error("Error loading offline map info from user defaults: \(error.localizedDescription)")
+    private func savePendingMapInfo(for portalItem: PortalItem) async throws {
+        guard let portalItemID = portalItem.id,
+              let info = OfflineMapInfo(portalItem: portalItem)
+        else { return }
+        
+        // First create directory for what we need to save to json
+        let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
+        let infoURL = url.appending(path: "info.json")
+        
+        Logger.offlineManager.debug("Saving pending offline map info to \(url.path())")
+        
+        // If already exists, return.
+        let completedDir = URL.portalItemDirectory(forPortalItemID: portalItemID).appending(path: "info.json")
+        guard !FileManager.default.fileExists(atPath: completedDir.path()) else {
+            Logger.offlineManager.debug("Returning, info already exists in job completion directory: \(completedDir.path())")
+            return
+        }
+        guard !FileManager.default.fileExists(atPath: infoURL.path()) else {
+            Logger.offlineManager.debug("Returning, info already exists in pending directory: \(url.path())")
+            return
+        }
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        
+        // Save json to file.
+        let data = try JSONEncoder().encode(info)
+        try data.write(to: infoURL, options: .atomic)
+        
+        // Save thumbnail to file.
+        if let thumbnail = portalItem.thumbnail {
+            try? await thumbnail.load()
+            if let image = thumbnail.image, let pngData = image.pngData() {
+                let thumbnailURL = url.appending(path: "thumbnail.png")
+                try pngData.write(to: thumbnailURL, options: .atomic)
+            }
+        }
+    }
+    
+    func handlePendingMapInfo<Output>(
+        for result: Result<Output, Error>,
+        portalItemID: Item.ID)
+    throws {
+        switch result {
+        case .success:
+            // Move the pending info into the correct folder.
+            let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
+            let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
+            for file in try FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) {
+                let source = pendingURL.appending(path: file)
+                let dest = portalItemDir.appending(path: file)
+                guard !FileManager.default.fileExists(atPath: dest.path()) else { continue }
+                Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
+                do {
+                    try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
+                } catch {
+                    Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
+                }
+            }
+        case .failure:
+            // If job failed then do nothing. Pending info can stay in the caches directory
+            // as it is likely going to be used when then user tries again.
+            // If not, the OS will eventually delete it.
+            break
         }
     }
     
