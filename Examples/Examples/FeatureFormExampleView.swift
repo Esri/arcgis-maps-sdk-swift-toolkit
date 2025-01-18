@@ -58,6 +58,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, 16)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteractionEnabled()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationContentInteractionScrolls()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium, .large])
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
@@ -149,6 +152,26 @@ extension FeatureFormExampleView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element as? ArcGISFeature
 ***REMOVED******REMOVED***.first
 ***REMOVED***.first
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED***@ViewBuilder
+***REMOVED***func presentationBackgroundInteractionEnabled() -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.4, *) {
+***REMOVED******REMOVED******REMOVED***self.presentationBackgroundInteraction(.enabled)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder
+***REMOVED***func presentationContentInteractionScrolls() -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.4, *) {
+***REMOVED******REMOVED******REMOVED***self.presentationContentInteraction(.scrolls)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
