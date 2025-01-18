@@ -56,6 +56,7 @@ struct FeatureFormExampleView: View {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
                             .validationErrors(validationErrorVisibility)
+                            .interactiveDismissDisabled()
                             .padding(.horizontal)
                             .padding(.top, 16)
                             .presentationBackgroundInteractionEnabled()
