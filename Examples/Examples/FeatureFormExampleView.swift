@@ -58,6 +58,9 @@ struct FeatureFormExampleView: View {
                             .validationErrors(validationErrorVisibility)
                             .padding(.horizontal)
                             .padding(.top, 16)
+                            .presentationBackgroundInteractionEnabled()
+                            .presentationContentInteractionScrolls()
+                            .presentationDetents([.medium, .large])
                     }
                 }
                 .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
@@ -149,6 +152,26 @@ extension FeatureFormExampleView {
                 element as? ArcGISFeature
             }.first
         }.first
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func presentationBackgroundInteractionEnabled() -> some View {
+        if #available(iOS 16.4, *) {
+            self.presentationBackgroundInteraction(.enabled)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder
+    func presentationContentInteractionScrolls() -> some View {
+        if #available(iOS 16.4, *) {
+            self.presentationContentInteraction(.scrolls)
+        } else {
+            self
+        }
     }
 }
 
