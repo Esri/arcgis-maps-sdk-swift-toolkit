@@ -41,7 +41,7 @@ public class OfflineManager: ObservableObject {
     private init() {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
-        // Retrieves the offline map infos from the user defaults.
+        // Retrieves the offline map infos.
         loadOfflineMapInfos()
         
         // Observe each job's status.
@@ -119,24 +119,14 @@ public class OfflineManager: ObservableObject {
         }
     }
     
-    /// Deletes map information for a given portal item ID from UserDefaults.
+    /// Deletes map information from disk for a given portal item ID.
     /// - Parameter portalItemID: The portal item ID.
-    func deleteMapInfo(for portalItemID: Item.ID) {
+    func removeMapInfo(for portalItemID: Item.ID) {
         offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID })
-        saveOfflineMapInfosToDefaults()
-    }
-    
-    /// Saves the offline map information to the defaults.
-    private func saveOfflineMapInfosToDefaults() {
-//        Logger.offlineManager.debug("Saving offline map info to user defaults")
-//        do {
-//            UserDefaults.standard.set(
-//                try JSONEncoder().encode(offlineMapInfos),
-//                forKey: Self.defaultsKey
-//            )
-//        } catch {
-//            Logger.offlineManager.error("Error saving offline map info to user defaults: \(error.localizedDescription)")
-//        }
+        
+        let dir = URL.portalItemDirectory(forPortalItemID: portalItemID)
+        try? FileManager.default.removeItem(at: dir.appending(path: "info.json"))
+        try? FileManager.default.removeItem(at: dir.appending(path: "thumbnail.png"))
     }
     
     /// Loads offline map information from offline manager directory.
@@ -146,14 +136,17 @@ public class OfflineManager: ObservableObject {
         defer { self.offlineMapInfos = infos }
         guard let contents = try? FileManager.default.contentsOfDirectory(atPath: url.path()) else { return }
         for dir in contents {
-            let infoURL = url.appending(components: dir, "info.json")
-            guard FileManager.default.fileExists(atPath: infoURL.path()) else { continue }
-            Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
-            guard let data = try? Data(contentsOf: infoURL),
-                  let info = try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
-            else { continue }
+            guard let info = offlineMapInfo(for: url.appending(path: dir)) else { continue }
             infos.append(info)
         }
+    }
+    
+    private func offlineMapInfo(for url: URL) -> OfflineMapInfo? {
+        let infoURL = url.appending(components: "info.json")
+        guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil }
+        Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
+        guard let data = try? Data(contentsOf: infoURL) else { return nil }
+        return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
     }
     
     private func savePendingMapInfo(for portalItem: PortalItem) async {
@@ -214,6 +207,10 @@ public class OfflineManager: ObservableObject {
                 } catch {
                     Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
                 }
+                if !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }),
+                   let info = offlineMapInfo(for: portalItemDir) {
+                    offlineMapInfos.append(info)
+                }
             }
         case .failure:
             // If job failed then do nothing. Pending info can stay in the caches directory
@@ -246,9 +243,12 @@ public class OfflineManager: ObservableObject {
             }
         }
         // Now remove any offline map areas whose model isn't in memory by simply deleting the
-        // preplanned directory.
-        let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: offlineMapInfo.portalItemID)
-        try FileManager.default.removeItem(at: preplannedDirectory)
+        // whole portal item directory. This will also delete the map info.
+        let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+        try FileManager.default.removeItem(at: portalItemDirectory)
+        
+        // Remove offline map info for this map.
+        offlineMapInfos.removeAll { $0.portalItemID == offlineMapInfo.portalItemID }
     }
 }
 
