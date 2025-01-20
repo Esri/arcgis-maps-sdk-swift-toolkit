@@ -72,6 +72,7 @@ struct UtilityNetworkTraceExampleView: View {
                         // Manually account for a device's bottom safe area when using a Floating Panel.
                         // See also #518.
                         .padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
+                        .padding(.top)
                     }
 #else
                 mapView
