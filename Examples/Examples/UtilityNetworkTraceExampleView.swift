@@ -72,6 +72,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Manually account for a device's bottom safe area when using a Floating Panel.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** See also #518.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 #else
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapView
