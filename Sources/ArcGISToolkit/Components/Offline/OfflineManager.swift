@@ -151,7 +151,9 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
 ***REMOVED******REMOVED***guard let data = try? Data(contentsOf: infoURL) else { return nil ***REMOVED***
-***REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
+***REMOVED******REMOVED******REMOVED*** TODO: 
+***REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Saves the map info to the pending folder for a particular portal item.
@@ -159,7 +161,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private func savePendingMapInfo(for portalItem: PortalItem) async {
 ***REMOVED******REMOVED***guard let portalItemID = portalItem.id,
 ***REMOVED******REMOVED******REMOVED***  !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***),
-***REMOVED******REMOVED******REMOVED***  let info = OfflineMapInfo(portalItem: portalItem)
+***REMOVED******REMOVED******REMOVED***  let info = await OfflineMapInfo(portalItem: portalItem)
 ***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First create directory for what we need to save to json
@@ -182,9 +184,10 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save json to file.
-***REMOVED******REMOVED***if let data = try? JSONEncoder().encode(info) {
-***REMOVED******REMOVED******REMOVED***try? data.write(to: infoURL, options: .atomic)
-***REMOVED***
+***REMOVED******REMOVED******REMOVED*** TODO:
+***REMOVED******REMOVED******REMOVED***if let data = try? JSONEncoder().encode(info) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? data.write(to: infoURL, options: .atomic)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save thumbnail to file.
 ***REMOVED******REMOVED***if let thumbnail = portalItem.thumbnail {

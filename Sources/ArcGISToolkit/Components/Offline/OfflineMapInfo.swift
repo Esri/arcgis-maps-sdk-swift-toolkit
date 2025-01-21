@@ -14,32 +14,53 @@
 
 ***REMOVED***
 import Foundation
+import UIKit.UIImage
 
 ***REMOVED***/ Information for an online map that has been taken offline.
-public struct OfflineMapInfo: Codable {
-***REMOVED***private var portalItemIDRawValue: String
-***REMOVED******REMOVED***/ The title of the portal item associated with the map.
-***REMOVED***public var title: String
-***REMOVED******REMOVED***/ The description of the portal item associated with the map.
-***REMOVED***public var description: String
-***REMOVED******REMOVED***/ The URL of the portal item associated with the map.
-***REMOVED***public var portalItemURL: URL
+public struct OfflineMapInfo: Sendable {
+***REMOVED******REMOVED***/ The thumbnail of the portal item associated with the map.
+***REMOVED***public var thumbnail: UIImage?
+***REMOVED***private var info: CodableInfo
 ***REMOVED***
-***REMOVED***internal init?(portalItem: PortalItem) {
-***REMOVED******REMOVED***guard let idRawValue = portalItem.id?.rawValue,
+***REMOVED***init?(portalItem: PortalItem) async {
+***REMOVED******REMOVED***guard let id = portalItem.id?.rawValue,
 ***REMOVED******REMOVED******REMOVED***  let url = portalItem.url
 ***REMOVED******REMOVED***else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.portalItemIDRawValue = idRawValue
-***REMOVED******REMOVED***self.title = portalItem.title
-***REMOVED******REMOVED***self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
-***REMOVED******REMOVED***self.portalItemURL = url
+***REMOVED******REMOVED******REMOVED*** Get the thumbnail.
+***REMOVED******REMOVED***try? await portalItem.load()
+***REMOVED******REMOVED***if let loadableImage = portalItem.thumbnail {
+***REMOVED******REMOVED******REMOVED***try? await loadableImage.load()
+***REMOVED******REMOVED******REMOVED***thumbnail = loadableImage.image
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Save the codable info.
+***REMOVED******REMOVED***info = .init(
+***REMOVED******REMOVED******REMOVED***portalItemID: id,
+***REMOVED******REMOVED******REMOVED***title: portalItem.title,
+***REMOVED******REMOVED******REMOVED***description: portalItem.description.replacing(/<[^>]+>/, with: ""),
+***REMOVED******REMOVED******REMOVED***portalItemURL: url
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
 public extension OfflineMapInfo {
+***REMOVED******REMOVED***/ The title of the portal item associated with the map.
+***REMOVED***var title: String { info.title ***REMOVED***
+***REMOVED******REMOVED***/ The description of the portal item associated with the map.
+***REMOVED***var description: String { info.description ***REMOVED***
+***REMOVED******REMOVED***/ The URL of the portal item associated with the map.
+***REMOVED***var portalItemURL: URL { info.portalItemURL ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the portal item associated with the map.
-***REMOVED***var portalItemID: Item.ID {
-***REMOVED******REMOVED***.init(portalItemIDRawValue)!
+***REMOVED***var portalItemID: Item.ID { .init(info.portalItemID)! ***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Information for an online map that has been taken offline.
+private extension OfflineMapInfo {
+***REMOVED***struct CodableInfo: Codable {
+***REMOVED******REMOVED***let portalItemID: String
+***REMOVED******REMOVED***let title: String
+***REMOVED******REMOVED***let description: String
+***REMOVED******REMOVED***let portalItemURL: URL
 ***REMOVED***
 ***REMOVED***
