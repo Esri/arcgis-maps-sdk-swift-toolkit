@@ -38,22 +38,12 @@ struct GroupView<Content>: View where Content: View {
     }
     
     var body: some View {
-        Group {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(visibleElements, id: \.self) { element in
-                    viewCreator(element)
-                        .padding(.leading, 16)
-                }
-            } label: {
-                VStack {
-                    HStack {
-                        Header(element: element)
-                            .catalystPadding(4)
-                        Spacer()
-                    }
-                    Divider()
-                }
+        DisclosureGroup(isExpanded: $isExpanded) {
+            ForEach(visibleElements, id: \.self) { element in
+                viewCreator(element)
             }
+        } label: {
+            Header(element: element)
         }
         .onAppear {
             isExpanded = element.initialState == .expanded

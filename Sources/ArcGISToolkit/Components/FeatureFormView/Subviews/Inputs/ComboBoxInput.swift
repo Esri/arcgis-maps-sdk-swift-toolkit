@@ -80,10 +80,16 @@ struct ComboBoxInput: View {
     
     var body: some View {
         HStack {
-            Text(displayedValue)
-                .accessibilityIdentifier("\(element.label) Combo Box Value")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+            Button {
+                model.focusedElement = element
+                isPresented = true
+            } label: {
+                Text(displayedValue)
+                    .accessibilityIdentifier("\(element.label) Combo Box Value")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+            }
+            
             if let _ = selectedValue.codedValue, !isRequired {
                 // Only show clear button if we have a value
                 // and we're not required. (i.e., Don't show clear if
@@ -101,7 +107,6 @@ struct ComboBoxInput: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .formInputStyle()
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
@@ -115,10 +120,6 @@ struct ComboBoxInput: View {
             } else {
                 selectedValue = .noValue
             }
-        }
-        .onTapGesture {
-            model.focusedElement = element
-            isPresented = true
         }
         .sheet(isPresented: $isPresented) {
             makePicker()

@@ -98,13 +98,9 @@ public struct FeatureFormView: View {
     }
     
     var evaluatedForm: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    if !title.isEmpty && headerVisibility != .hidden {
-                        FormHeader(title: title)
-                        Divider()
-                    }
+        NavigationStack {
+            ScrollViewReader { scrollViewProxy in
+                Form {
                     ForEach(model.visibleElements, id: \.self) { element in
                         makeElement(element)
                     }
@@ -116,21 +112,22 @@ public struct FeatureFormView: View {
                         AttachmentsFeatureElementView(featureElement: attachmentsElement)
                     }
                 }
-            }
-            .onChange(model.focusedElement) { _ in
-                if let focusedElement = model.focusedElement {
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                .navigationTitle(Text(title))
+                .onChange(model.focusedElement) { _ in
+                    if let focusedElement = model.focusedElement {
+                        withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                    }
+                }
+                .onTitleChange(of: model.featureForm) { newTitle in
+                    title = newTitle
                 }
             }
-            .onTitleChange(of: model.featureForm) { newTitle in
-                title = newTitle
-            }
-        }
 #if os(iOS)
-        .scrollDismissesKeyboard(.immediately)
+            .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(\.validationErrorVisibility, validationErrorVisibility)
-        .environmentObject(model)
+            .environment(\.validationErrorVisibility, validationErrorVisibility)
+            .environmentObject(model)
+        }
     }
 }
 
@@ -169,7 +166,6 @@ extension FeatureFormView {
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         if !(element.input is UnsupportedFormInput) {
             InputWrapper(element: element)
-            Divider()
         }
     }
     
@@ -177,7 +173,6 @@ extension FeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
         TextFormElementView(element: element)
-        Divider()
     }
     
     /// The progress view to be shown while initial expression evaluation is running.

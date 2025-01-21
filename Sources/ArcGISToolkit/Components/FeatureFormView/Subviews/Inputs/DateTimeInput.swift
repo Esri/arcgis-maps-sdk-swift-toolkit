@@ -90,9 +90,25 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
-                .accessibilityIdentifier("\(element.label) Value")
-                .foregroundStyle(displayColor)
+            Button {
+                withAnimation {
+                    if date == nil {
+                        if dateRange.contains(.now) {
+                            date = .now
+                        } else if let min = input.min {
+                            date = min
+                        } else if let max = input.max {
+                            date = max
+                        }
+                    }
+                    isEditing.toggle()
+                    model.focusedElement = isEditing ? element : nil
+                }
+            } label: {
+                Text(!formattedValue.isEmpty ? formattedValue : .noValue)
+                    .accessibilityIdentifier("\(element.label) Value")
+                    .foregroundStyle(displayColor)
+            }
             
             Spacer()
             
@@ -114,23 +130,7 @@ struct DateTimeInput: View {
                 }
             }
         }
-        .formInputStyle()
         .frame(maxWidth: .infinity)
-        .onTapGesture {
-            withAnimation {
-                if date == nil {
-                    if dateRange.contains(.now) {
-                        date = .now
-                    } else if let min = input.min {
-                        date = min
-                    } else if let max = input.max {
-                        date = max
-                    }
-                }
-                isEditing.toggle()
-                model.focusedElement = isEditing ? element : nil
-            }
-        }
     }
     
     /// Makes control for date selection.

@@ -17,8 +17,6 @@ import SwiftUI
 
 /// A view shown at the top of a field element in a form.
 struct InputHeader: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
@@ -29,13 +27,7 @@ struct InputHeader: View {
     let element: FieldFormElement
     
     var body: some View {
-        HStack {
-            Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Spacer()
-        }
-        .padding(.top, elementPadding)
+        Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
         .onIsEditableChange(of: element) { newIsEditable in
             isEditable = newIsEditable
         }

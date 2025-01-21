@@ -104,13 +104,6 @@ private extension TextInput {
                         .fixedSize(horizontal: false, vertical: true)
                         .lineLimit(5)
                         .truncationMode(.tail)
-                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, model: model)
-                                .padding()
-#if targetEnvironment(macCatalyst)
-                                .environmentObject(model)
-#endif
-                        }
                         .frame(minHeight: 100, alignment: .top)
                 } else {
                     TextField(
@@ -122,6 +115,12 @@ private extension TextInput {
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .keyboardType(keyboardType)
                 }
+            }
+            .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                FullScreenTextInput(text: $text, element: element, model: model)
+    #if targetEnvironment(macCatalyst)
+                    .environmentObject(model)
+    #endif
             }
             .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -164,7 +163,7 @@ private extension TextInput {
                 .accessibilityIdentifier("\(element.label) Scan Button")
             }
         }
-        .formInputStyle()
+        .contentShape(.rect)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
@@ -224,26 +223,29 @@ private extension TextInput {
         let model: FormViewModel
         
         var body: some View {
-            HStack {
-                InputHeader(element: element)
-                Button("Done") {
-                    dismiss()
+            Section {
+                RepresentedUITextView(initialText: text) { text in
+                    element.convertAndUpdateValue(text)
+                    model.evaluateExpressions()
+                } onTextViewDidEndEditing: { text in
+                    self.text = text
                 }
-                .buttonStyle(.plain)
-                .foregroundStyle(Color.accentColor)
+                .focused($textFieldIsFocused, equals: true)
+                .onAppear {
+                    textFieldIsFocused = true
+                }
+            } header: {
+                HStack {
+                    InputHeader(element: element)
+                    Spacer()
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            } footer: {
+                InputFooter(element: element)
             }
-            RepresentedUITextView(initialText: text) { text in
-                element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
-            } onTextViewDidEndEditing: { text in
-                self.text = text
-            }
-            .focused($textFieldIsFocused, equals: true)
-            .onAppear {
-                textFieldIsFocused = true
-            }
-            Spacer()
-            InputFooter(element: element)
+            .padding()
         }
     }
 }
