@@ -122,6 +122,8 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Deletes map information from disk for a given portal item ID.
+    /// This should be called when an online map no longer contains any offline
+    /// map areas.
     /// - Parameter portalItemID: The portal item ID.
     func removeMapInfo(for portalItemID: Item.ID) {
         offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID })
