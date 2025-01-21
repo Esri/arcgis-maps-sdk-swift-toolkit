@@ -92,7 +92,7 @@ public class OfflineManager: ObservableObject {
         }
     }
     
-    private func onlineMapPrtalItem<Job: JobProtocol>(for job: Job) -> PortalItem? {
+    private func onlineMapPortalItem<Job: JobProtocol>(for job: Job) -> PortalItem? {
         switch job {
         case let downloadPreplanned as DownloadPreplannedOfflineMapJob:
             downloadPreplanned.onlineMap?.item as? PortalItem

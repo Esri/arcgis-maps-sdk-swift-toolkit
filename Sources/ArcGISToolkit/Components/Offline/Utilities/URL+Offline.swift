@@ -16,6 +16,9 @@ import ArcGIS
 import Foundation
 
 extension URL {
+    /// The path to the offline manager directory.
+    /// `Documents/com.esri.ArcGISToolkit.offlineManager/`
+    /// - Returns: A URL to the offline manager directory.
     static func offlineManagerDirectory() -> URL {
         return .documentsDirectory.appending(path: "com.esri.ArcGISToolkit.offlineManager")
     }
@@ -45,6 +48,10 @@ extension URL {
         return url
     }
     
+    /// The path to the pending map info directory for a specific portal item.
+    /// `Caches/PendingDownloads/<Portal Item ID>/`
+    /// - Parameter portalItemID: The ID of the web map portal item.
+    /// - Returns: A URL to the pending map info directory.
     static func pendingMapInfoDirectory(
         forPortalItem portalItemID: Item.ID
     ) -> URL {
