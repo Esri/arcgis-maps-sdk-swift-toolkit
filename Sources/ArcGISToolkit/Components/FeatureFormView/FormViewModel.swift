@@ -42,7 +42,7 @@
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm) {
+***REMOVED***init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***
 ***REMOVED***
