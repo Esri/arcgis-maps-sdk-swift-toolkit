@@ -16,7 +16,6 @@ import UIKit.UIImage
 import ArcGIS
 
 /// Wraps a search result for display.
-@available(visionOS, unavailable)
 public struct SearchResult: @unchecked Sendable {
     /// Creates a `SearchResult`.
     /// - Parameters:
@@ -71,24 +70,20 @@ public struct SearchResult: @unchecked Sendable {
 
 // MARK: Extensions
 
-@available(visionOS, unavailable)
 extension SearchResult: Identifiable {}
 
-@available(visionOS, unavailable)
 extension SearchResult: Equatable {
     public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-@available(visionOS, unavailable)
 extension SearchResult: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-@available(visionOS, unavailable)
 extension SearchResult {
     init(
         geocodeResult: GeocodeResult,
