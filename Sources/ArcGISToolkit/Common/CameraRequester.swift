@@ -23,19 +23,17 @@ import AVFoundation
 ***REMOVED***
 ***REMOVED***var onAccessDenied: (() -> Void)?
 ***REMOVED***
-***REMOVED***func request(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) {
+***REMOVED***func request(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) async {
 ***REMOVED******REMOVED***self.onAccessDenied = onAccessDenied
 ***REMOVED******REMOVED***switch AVCaptureDevice.authorizationStatus(for: .video) {
 ***REMOVED******REMOVED***case .authorized:
 ***REMOVED******REMOVED******REMOVED***onAccessGranted()
 ***REMOVED******REMOVED***case .notDetermined:
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***let isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
-***REMOVED******REMOVED******REMOVED******REMOVED***if isAuthorized {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessGranted()
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessDenied()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
+***REMOVED******REMOVED******REMOVED***if isAuthorized {
+***REMOVED******REMOVED******REMOVED******REMOVED***onAccessGranted()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***onAccessDenied()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***alertIsPresented = true

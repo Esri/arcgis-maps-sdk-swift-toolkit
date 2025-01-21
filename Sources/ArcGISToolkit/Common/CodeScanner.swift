@@ -46,10 +46,12 @@ struct CodeScanner: View {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraRequester.request {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraAccessIsAuthorized = true
-***REMOVED******REMOVED******REMOVED******REMOVED*** onAccessDenied: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await cameraRequester.request {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraAccessIsAuthorized = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** onAccessDenied: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cameraRequester(cameraRequester)

@@ -73,9 +73,11 @@ struct AttachmentImportMenu: View {
 ***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***cameraRequester.request {
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
-***REMOVED******REMOVED*** onAccessDenied: { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await cameraRequester.request {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
+***REMOVED******REMOVED******REMOVED*** onAccessDenied: { ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
