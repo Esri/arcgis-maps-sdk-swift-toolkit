@@ -14,32 +14,53 @@
 
 import ArcGIS
 import Foundation
+import UIKit.UIImage
 
 /// Information for an online map that has been taken offline.
-public struct OfflineMapInfo: Codable {
-    private var portalItemIDRawValue: String
-    /// The title of the portal item associated with the map.
-    public var title: String
-    /// The description of the portal item associated with the map.
-    public var description: String
-    /// The URL of the portal item associated with the map.
-    public var portalItemURL: URL
+public struct OfflineMapInfo: Sendable {
+    /// The thumbnail of the portal item associated with the map.
+    public var thumbnail: UIImage?
+    private var info: CodableInfo
     
-    internal init?(portalItem: PortalItem) {
-        guard let idRawValue = portalItem.id?.rawValue,
+    init?(portalItem: PortalItem) async {
+        guard let id = portalItem.id?.rawValue,
               let url = portalItem.url
         else { return nil }
         
-        self.portalItemIDRawValue = idRawValue
-        self.title = portalItem.title
-        self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
-        self.portalItemURL = url
+        // Get the thumbnail.
+        try? await portalItem.load()
+        if let loadableImage = portalItem.thumbnail {
+            try? await loadableImage.load()
+            thumbnail = loadableImage.image
+        }
+        
+        /// Save the codable info.
+        info = .init(
+            portalItemID: id,
+            title: portalItem.title,
+            description: portalItem.description.replacing(/<[^>]+>/, with: ""),
+            portalItemURL: url
+        )
     }
 }
 
 public extension OfflineMapInfo {
+    /// The title of the portal item associated with the map.
+    var title: String { info.title }
+    /// The description of the portal item associated with the map.
+    var description: String { info.description }
+    /// The URL of the portal item associated with the map.
+    var portalItemURL: URL { info.portalItemURL }
     /// The ID of the portal item associated with the map.
-    var portalItemID: Item.ID {
-        .init(portalItemIDRawValue)!
+    var portalItemID: Item.ID { .init(info.portalItemID)! }
+}
+
+/// Information for an online map that has been taken offline.
+private extension OfflineMapInfo {
+    struct CodableInfo: Codable {
+        let portalItemID: String
+        let title: String
+        let description: String
+        let portalItemURL: URL
     }
 }
