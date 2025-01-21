@@ -16,7 +16,6 @@ import SwiftUI
 
 /// A custom view implementing a SearchField. It contains a search button, text field, delete text button,
 /// and a button to allow users to hide/show the search results list.
-@available(visionOS, unavailable)
 public struct SearchField: View {
     /// Creates a `SearchField`.
     /// - Parameters:
@@ -57,7 +56,10 @@ public struct SearchField: View {
     public var body: some View {
         HStack {
             // Search icon
-            Image(systemName: "magnifyingglass.circle.fill")
+            Image(systemName: "magnifyingglass")
+#if !os(visionOS)
+                .symbolVariant(.circle.fill)
+#endif
                 .foregroundStyle(Color.secondary)
             
             // Search text field
@@ -72,6 +74,10 @@ public struct SearchField: View {
                 )
             }
             .focused(isFocused)
+#if os(visionOS)
+            .contentShape(.hoverEffect, .rect(cornerRadius: 12))
+            .hoverEffect()
+#endif
             
             // Delete text button
             if !query.wrappedValue.isEmpty {
@@ -90,9 +96,13 @@ public struct SearchField: View {
                         "chevron.down" :
                             "chevron.up"
                     )
+#if !os(visionOS)
                     .foregroundStyle(Color.secondary)
+#endif
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
+#endif
             }
         }
         .esriBorder()
