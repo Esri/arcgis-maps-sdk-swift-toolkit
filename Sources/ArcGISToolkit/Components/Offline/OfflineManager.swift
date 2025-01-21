@@ -306,30 +306,6 @@ extension Logger {
     }
 }
 
-public struct OfflineMapInfo: Codable {
-    private var portalItemIDRawValue: String
-    public var title: String
-    public var description: String
-    public var portalItemURL: URL
-    
-    internal init?(portalItem: PortalItem) {
-        guard let idRawValue = portalItem.id?.rawValue,
-              let url = portalItem.url
-        else { return nil }
-        
-        self.portalItemIDRawValue = idRawValue
-        self.title = portalItem.title
-        self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
-        self.portalItemURL = url
-    }
-}
-
-public extension OfflineMapInfo {
-    var portalItemID: Item.ID {
-        .init(portalItemIDRawValue)!
-    }
-}
-
 private extension Dictionary {
     /// Returns the value for the key, and if the value is nil it first stores
     /// the default value in the dictionary then returns the default value.
