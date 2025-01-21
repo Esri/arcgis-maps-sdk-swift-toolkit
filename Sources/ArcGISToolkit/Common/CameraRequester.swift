@@ -29,8 +29,9 @@ import AVFoundation
 ***REMOVED******REMOVED***case .authorized:
 ***REMOVED******REMOVED******REMOVED***onAccessGranted()
 ***REMOVED******REMOVED***case .notDetermined:
-***REMOVED******REMOVED******REMOVED***AVCaptureDevice.requestAccess(for: .video) { granted in
-***REMOVED******REMOVED******REMOVED******REMOVED***if granted {
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***let isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
+***REMOVED******REMOVED******REMOVED******REMOVED***if isAuthorized {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessGranted()
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAccessDenied()
