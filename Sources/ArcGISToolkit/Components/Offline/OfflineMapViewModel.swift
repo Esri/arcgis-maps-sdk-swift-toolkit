@@ -124,7 +124,7 @@ class OfflineMapViewModel: ObservableObject {
         guard case.success(let models) = preplannedMapModels,
               models.filter(\.status.isDownloaded).isEmpty
         else { return }
-        OfflineManager.shared.deleteMapInfo(for: portalItemID)
+        OfflineManager.shared.removeMapInfo(for: portalItemID)
     }
     
     /// Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
