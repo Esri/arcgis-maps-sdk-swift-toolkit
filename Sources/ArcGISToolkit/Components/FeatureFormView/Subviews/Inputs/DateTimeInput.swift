@@ -90,9 +90,25 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across input views for consistency.
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(!formattedValue.isEmpty ? formattedValue : .noValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(displayColor)
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let min = input.min {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = min
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let max = input.max {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = max
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isEditing ? element : nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(!formattedValue.isEmpty ? formattedValue : .noValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(displayColor)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
@@ -114,23 +130,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let min = input.min {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = min
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let max = input.max {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = max
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isEditing ? element : nil
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes control for date selection.

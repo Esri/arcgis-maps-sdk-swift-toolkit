@@ -98,13 +98,9 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var evaluatedForm: some View {
-***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
-***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty && headerVisibility != .hidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***NavigationStack {
+***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -116,21 +112,22 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(Text(title))
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
-***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
-***REMOVED******REMOVED***
-***REMOVED***
 #if os(iOS)
-***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
+***REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
-***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
-***REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -169,7 +166,6 @@ extension FeatureFormView {
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput) {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
-***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -177,7 +173,6 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
 ***REMOVED******REMOVED***TextFormElementView(element: element)
-***REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The progress view to be shown while initial expression evaluation is running.

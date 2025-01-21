@@ -58,32 +58,26 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: input.noValueOption
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placeholderValue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue == nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!element.codedValues.isEmpty,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useNoValueStyle: true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.codedValues, id: \.self) { codedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue.name,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue == selectedValue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue != element.codedValues.last
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValue
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placeholderValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue == nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!element.codedValues.isEmpty,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useNoValueStyle: true
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.background(
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .tertiarySystemFill))
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***List(element.codedValues, id: \.self) { codedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue == selectedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue != element.codedValues.last
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValue
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
@@ -150,15 +144,10 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(10)
 ***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label) Radio Button")
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundStyle(.primary)
-***REMOVED******REMOVED***if addDivider {
-***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 10)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
