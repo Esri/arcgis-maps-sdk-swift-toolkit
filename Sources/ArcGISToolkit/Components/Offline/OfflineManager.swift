@@ -151,7 +151,9 @@ public class OfflineManager: ObservableObject {
         guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil }
         Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
         guard let data = try? Data(contentsOf: infoURL) else { return nil }
-        return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
+        // TODO: 
+        fatalError()
+        //return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
     }
     
     /// Saves the map info to the pending folder for a particular portal item.
@@ -159,7 +161,7 @@ public class OfflineManager: ObservableObject {
     private func savePendingMapInfo(for portalItem: PortalItem) async {
         guard let portalItemID = portalItem.id,
               !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }),
-              let info = OfflineMapInfo(portalItem: portalItem)
+              let info = await OfflineMapInfo(portalItem: portalItem)
         else { return }
         
         // First create directory for what we need to save to json
@@ -182,9 +184,10 @@ public class OfflineManager: ObservableObject {
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         
         // Save json to file.
-        if let data = try? JSONEncoder().encode(info) {
-            try? data.write(to: infoURL, options: .atomic)
-        }
+        // TODO:
+//        if let data = try? JSONEncoder().encode(info) {
+//            try? data.write(to: infoURL, options: .atomic)
+//        }
         
         // Save thumbnail to file.
         if let thumbnail = portalItem.thumbnail {
