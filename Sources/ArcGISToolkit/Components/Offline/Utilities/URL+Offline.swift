@@ -16,11 +16,18 @@
 import Foundation
 
 extension URL {
+***REMOVED******REMOVED***/ The path to the offline manager directory.
+***REMOVED******REMOVED***/ `Documents/com.esri.ArcGISToolkit.offlineManager/`
+***REMOVED******REMOVED***/ - Returns: A URL to the offline manager directory.
+***REMOVED***static func offlineManagerDirectory() -> URL {
+***REMOVED******REMOVED***return .documentsDirectory.appending(path: "com.esri.ArcGISToolkit.offlineManager")
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***static private func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
-***REMOVED******REMOVED***return .documentsDirectory.appending(components: "OfflineMapAreas", "\(portalItemID)/")
+***REMOVED***static func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+***REMOVED******REMOVED***return offlineManagerDirectory().appending(path: "\(portalItemID)/")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
@@ -39,5 +46,15 @@ extension URL {
 ***REMOVED******REMOVED******REMOVED***url = url.appending(component: "\(preplannedMapAreaID)/")
 ***REMOVED***
 ***REMOVED******REMOVED***return url
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the pending map info directory for a specific portal item.
+***REMOVED******REMOVED***/ `Caches/PendingDownloads/<Portal Item ID>/`
+***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/ - Returns: A URL to the pending map info directory.
+***REMOVED***static func pendingMapInfoDirectory(
+***REMOVED******REMOVED***forPortalItem portalItemID: Item.ID
+***REMOVED***) -> URL {
+***REMOVED******REMOVED***return .cachesDirectory.appending(components: "PendingDownloads", "\(portalItemID)/")
 ***REMOVED***
 ***REMOVED***

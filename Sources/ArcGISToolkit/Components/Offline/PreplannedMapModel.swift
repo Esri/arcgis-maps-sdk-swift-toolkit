@@ -167,13 +167,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectoryURL
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job)
+***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job, portalItem: offlineMapTask.portalItem!)
 ***REMOVED******REMOVED******REMOVED***observeJob(job)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Save offline map info.
-***REMOVED******REMOVED******REMOVED***if let portalItem = offlineMapTask.portalItem {
-***REMOVED******REMOVED******REMOVED******REMOVED***OfflineManager.shared.saveMapInfo(for: portalItem)
-***REMOVED******REMOVED***
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED***
