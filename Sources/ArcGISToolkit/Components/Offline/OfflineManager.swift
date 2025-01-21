@@ -86,12 +86,14 @@ public class OfflineManager: ObservableObject {
             jobCompletionAction?(job)
             
             // Check pending map infos.
-            if let portalItem = onlineMapPrtalItem(for: job), let id = portalItem.id {
-                try? handlePendingMapInfo(for: result, portalItemID: id)
+            if let portalItem = onlineMapPortalItem(for: job), let id = portalItem.id {
+                handlePendingMapInfo(for: result, portalItemID: id)
             }
         }
     }
     
+    /// Figures out and returns the portal item associated with the online map for a particular
+    /// offline job.
     private func onlineMapPortalItem<Job: JobProtocol>(for job: Job) -> PortalItem? {
         switch job {
         case let downloadPreplanned as DownloadPreplannedOfflineMapJob:
@@ -136,12 +138,13 @@ public class OfflineManager: ObservableObject {
         defer { self.offlineMapInfos = infos }
         guard let contents = try? FileManager.default.contentsOfDirectory(atPath: url.path()) else { return }
         for dir in contents {
-            guard let info = offlineMapInfo(for: url.appending(path: dir)) else { continue }
+            guard let info = makeOfflineMapInfo(url: url.appending(path: dir)) else { continue }
             infos.append(info)
         }
     }
     
-    private func offlineMapInfo(for url: URL) -> OfflineMapInfo? {
+    /// Creates an offline map info for a given URL.
+    private func makeOfflineMapInfo(url: URL) -> OfflineMapInfo? {
         let infoURL = url.appending(components: "info.json")
         guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil }
         Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
@@ -149,8 +152,11 @@ public class OfflineManager: ObservableObject {
         return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
     }
     
+    /// Saves the map info to the pending folder for a particular portal item.
+    /// The info will stay in that folder until the job completes.
     private func savePendingMapInfo(for portalItem: PortalItem) async {
         guard let portalItemID = portalItem.id,
+              !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }),
               let info = OfflineMapInfo(portalItem: portalItem)
         else { return }
         
@@ -188,37 +194,40 @@ public class OfflineManager: ObservableObject {
         }
     }
     
+    /// For a successful job, this function moves the pending map info from the pending
+    /// folder to its final destination.
     private func handlePendingMapInfo<Output>(
         for result: Result<Output, Error>,
         portalItemID: Item.ID) {
-        switch result {
-        case .success:
-            // Move the pending info into the correct folder.
-            let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
-            let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-            guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return }
-            for file in contents {
-                let source = pendingURL.appending(path: file)
-                let dest = portalItemDir.appending(path: file)
-                guard !FileManager.default.fileExists(atPath: dest.path()) else { continue }
-                Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
-                do {
-                    try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
-                } catch {
-                    Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
+            guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }) else { return }
+            switch result {
+            case .success:
+                // Move the pending info into the correct folder.
+                let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
+                let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
+                guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return }
+                for file in contents {
+                    let source = pendingURL.appending(path: file)
+                    let dest = portalItemDir.appending(path: file)
+                    // Don't overwrite if file already exists.
+                    guard !FileManager.default.fileExists(atPath: dest.path()) else { continue }
+                    Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
+                    do {
+                        try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
+                    } catch {
+                        Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
+                    }
+                    if let info = makeOfflineMapInfo(url: portalItemDir) {
+                        offlineMapInfos.append(info)
+                    }
                 }
-                if !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }),
-                   let info = offlineMapInfo(for: portalItemDir) {
-                    offlineMapInfos.append(info)
-                }
+            case .failure:
+                // If job failed then do nothing. Pending info can stay in the caches directory
+                // as it is likely going to be used when then user tries again.
+                // If not, the OS will eventually delete it.
+                break
             }
-        case .failure:
-            // If job failed then do nothing. Pending info can stay in the caches directory
-            // as it is likely going to be used when then user tries again.
-            // If not, the OS will eventually delete it.
-            break
         }
-    }
     
     /// Removes all downloads for all offline maps.
     public func removeAllDownloads() throws {
