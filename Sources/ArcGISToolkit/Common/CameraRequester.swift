@@ -29,8 +29,9 @@ import SwiftUI
         case .authorized:
             onAccessGranted()
         case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { granted in
-                if granted {
+            Task {
+                let isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
+                if isAuthorized {
                     onAccessGranted()
                 } else {
                     onAccessDenied()
