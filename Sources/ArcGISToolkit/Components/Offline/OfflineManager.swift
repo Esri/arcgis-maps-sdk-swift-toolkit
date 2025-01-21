@@ -306,30 +306,6 @@ extension Logger {
 ***REMOVED***
 ***REMOVED***
 
-public struct OfflineMapInfo: Codable {
-***REMOVED***private var portalItemIDRawValue: String
-***REMOVED***public var title: String
-***REMOVED***public var description: String
-***REMOVED***public var portalItemURL: URL
-***REMOVED***
-***REMOVED***internal init?(portalItem: PortalItem) {
-***REMOVED******REMOVED***guard let idRawValue = portalItem.id?.rawValue,
-***REMOVED******REMOVED******REMOVED***  let url = portalItem.url
-***REMOVED******REMOVED***else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.portalItemIDRawValue = idRawValue
-***REMOVED******REMOVED***self.title = portalItem.title
-***REMOVED******REMOVED***self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
-***REMOVED******REMOVED***self.portalItemURL = url
-***REMOVED***
-***REMOVED***
-
-public extension OfflineMapInfo {
-***REMOVED***var portalItemID: Item.ID {
-***REMOVED******REMOVED***.init(portalItemIDRawValue)!
-***REMOVED***
-***REMOVED***
-
 private extension Dictionary {
 ***REMOVED******REMOVED***/ Returns the value for the key, and if the value is nil it first stores
 ***REMOVED******REMOVED***/ the default value in the dictionary then returns the default value.
