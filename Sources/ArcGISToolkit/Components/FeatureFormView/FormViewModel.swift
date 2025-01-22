@@ -31,6 +31,12 @@
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the full screen text input is presented.
+***REMOVED***@Published var fullScreenTextInputIsPresented = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ Text that will be displayed in a view showing multi line text.
+***REMOVED***@Published var fullScreenText = ""
+***REMOVED***
 ***REMOVED******REMOVED***/ The expression evaluation task.
 ***REMOVED***private var evaluateTask: Task<Void, Never>?
 ***REMOVED***

@@ -122,6 +122,20 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** The sheet view modifier needs to be used here or it will
+***REMOVED******REMOVED******REMOVED******REMOVED*** be dismissed on the first open by SwiftUI.
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $model.fullScreenTextInputIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let element = model.focusedElement as? FieldFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $model.fullScreenText,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: model
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED***#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED***#endif
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 #if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
