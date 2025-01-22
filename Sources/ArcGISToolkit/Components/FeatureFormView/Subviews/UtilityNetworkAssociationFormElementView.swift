@@ -60,6 +60,9 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let imageGenerationAction: (() async -> UIImage?)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let linkDestination: (any Hashable)?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
@@ -68,12 +71,14 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***init(
 ***REMOVED******REMOVED******REMOVED***description: String?,
 ***REMOVED******REMOVED******REMOVED***icon: UIImage?,
+***REMOVED******REMOVED******REMOVED***linkDestination: (any Hashable)?,
 ***REMOVED******REMOVED******REMOVED***name: String,
 ***REMOVED******REMOVED******REMOVED***imageGenerationAction: (() async -> UIImage?)?,
 ***REMOVED******REMOVED******REMOVED***selectionAction: @escaping () async -> Void
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***self.description = description
 ***REMOVED******REMOVED******REMOVED***self.icon = icon
+***REMOVED******REMOVED******REMOVED***self.linkDestination = linkDestination
 ***REMOVED******REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED******REMOVED***self.imageGenerationAction = imageGenerationAction
 ***REMOVED******REMOVED******REMOVED***self.selectionAction = selectionAction
@@ -88,12 +93,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***@State private var fallbackIcon: UIImage?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectionTask?.cancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***selectionTask = Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await association.selectionAction()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***NavigationLink(value: association.linkDestination!) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = association.icon {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
@@ -111,9 +111,8 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if association.icon == nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let imageGenerationAction = association.imageGenerationAction,
