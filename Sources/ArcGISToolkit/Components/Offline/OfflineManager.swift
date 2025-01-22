@@ -147,18 +147,27 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private func savePendingMapInfo(for portalItem: PortalItem) async {
 ***REMOVED******REMOVED***guard let portalItemID = portalItem.id,
 ***REMOVED******REMOVED******REMOVED***  !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***)
-***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("No need to save pending info as we may already have offline map info.")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First create directory for what we need to save to json
 ***REMOVED******REMOVED***let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If already exists, return.
-***REMOVED******REMOVED***guard OfflineMapInfo.doesInfoExists(at: url) else {
+***REMOVED******REMOVED******REMOVED*** This check is helpful if two jobs are kicked off in a row that the second one
+***REMOVED******REMOVED******REMOVED*** doesn't try to re-add the pending info.
+***REMOVED******REMOVED***guard !OfflineMapInfo.doesInfoExists(at: url) else {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("No need to save pending info as pending offline map info already exists.")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the info.
-***REMOVED******REMOVED***guard let info = await OfflineMapInfo(portalItem: portalItem) else { return ***REMOVED***
+***REMOVED******REMOVED***guard let info = await OfflineMapInfo(portalItem: portalItem) else {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Cannot save pending info as offline info could not be created.")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure the directory exists.
 ***REMOVED******REMOVED***try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED*** Save the info to the pending directory.
