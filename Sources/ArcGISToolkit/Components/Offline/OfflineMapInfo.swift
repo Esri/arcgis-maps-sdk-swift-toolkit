@@ -53,13 +53,15 @@ public struct OfflineMapInfo: Sendable {
     }
     
     static func make(from url: URL) -> Self? {
-        let infoURL = url.appending(components: "info.json")
+        let infoURL = url.appending(component: "info.json")
         guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil }
         Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
         guard let data = try? Data(contentsOf: infoURL),
               let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
         else { return nil }
-        return .init(info: info, thumbnail: nil)
+        let thumbnailURL = url.appending(component: "thumbnail.png")
+        let thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
+        return .init(info: info, thumbnail: thumbnail)
     }
     
     func save(to url: URL) {
