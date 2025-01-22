@@ -65,23 +65,18 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let selectionAction: (() async -> Void)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(
 ***REMOVED******REMOVED******REMOVED***description: String?,
 ***REMOVED******REMOVED******REMOVED***icon: UIImage?,
 ***REMOVED******REMOVED******REMOVED***linkDestination: (any Hashable)?,
 ***REMOVED******REMOVED******REMOVED***name: String,
-***REMOVED******REMOVED******REMOVED***imageGenerationAction: (() async -> UIImage?)?,
-***REMOVED******REMOVED******REMOVED***selectionAction: @escaping () async -> Void
+***REMOVED******REMOVED******REMOVED***imageGenerationAction: (() async -> UIImage?)?
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***self.description = description
 ***REMOVED******REMOVED******REMOVED***self.icon = icon
 ***REMOVED******REMOVED******REMOVED***self.linkDestination = linkDestination
 ***REMOVED******REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED******REMOVED***self.imageGenerationAction = imageGenerationAction
-***REMOVED******REMOVED******REMOVED***self.selectionAction = selectionAction
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
