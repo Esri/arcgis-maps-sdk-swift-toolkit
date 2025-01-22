@@ -60,6 +60,9 @@ extension UtilityNetworkAssociationFormElementView {
         let imageGenerationAction: (() async -> UIImage?)?
         
         /// <#Description#>
+        let linkDestination: (any Hashable)?
+        
+        /// <#Description#>
         let name: String
         
         /// <#Description#>
@@ -68,12 +71,14 @@ extension UtilityNetworkAssociationFormElementView {
         init(
             description: String?,
             icon: UIImage?,
+            linkDestination: (any Hashable)?,
             name: String,
             imageGenerationAction: (() async -> UIImage?)?,
             selectionAction: @escaping () async -> Void
         ) {
             self.description = description
             self.icon = icon
+            self.linkDestination = linkDestination
             self.name = name
             self.imageGenerationAction = imageGenerationAction
             self.selectionAction = selectionAction
@@ -88,12 +93,7 @@ extension UtilityNetworkAssociationFormElementView {
         @State private var fallbackIcon: UIImage?
         
         var body: some View {
-            Button {
-                selectionTask?.cancel()
-                selectionTask = Task {
-                    await association.selectionAction()
-                }
-            } label: {
+            NavigationLink(value: association.linkDestination!) {
                 HStack {
                     if let image = association.icon {
                         Image(uiImage: image)
@@ -111,9 +111,8 @@ extension UtilityNetworkAssociationFormElementView {
                     Spacer()
                     Image(systemName: "chevron.right")
                 }
-                .buttonStyle(.plain)
-                .font(.caption2)
             }
+            .buttonStyle(.plain)
             .task {
                 if association.icon == nil,
                    let imageGenerationAction = association.imageGenerationAction,
