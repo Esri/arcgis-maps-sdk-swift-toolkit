@@ -12,7 +12,6 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-#if !os(visionOS)
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 import XCTest
@@ -309,4 +308,3 @@ private extension PortalItem {
 private extension URL {
 ***REMOVED***static let sampleServer7 = URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!
 ***REMOVED***
-#endif

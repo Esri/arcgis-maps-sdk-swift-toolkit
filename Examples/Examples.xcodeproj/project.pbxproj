@@ -11,7 +11,7 @@
 		1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */; platformFilter = ios; ***REMOVED***;
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; ***REMOVED***;
 		4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */; platformFilters = (ios, maccatalyst, ); ***REMOVED***;
-		75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */; platformFilters = (ios, maccatalyst, ); ***REMOVED***;
+		75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */; ***REMOVED***;
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; ***REMOVED***;
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; ***REMOVED***;
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; ***REMOVED***;
