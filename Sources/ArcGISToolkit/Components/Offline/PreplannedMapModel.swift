@@ -25,7 +25,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
     /// The ID of the preplanned map area.
-    let preplannedMapAreaID: PortalItem.ID
+    let preplannedMapAreaID: Item.ID
     
     /// The mobile map package directory URL.
     private let mmpkDirectoryURL: URL
@@ -33,14 +33,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
-    /// The ID of the web map.
-    private let portalItemID: PortalItem.ID
+    /// The ID of the online map.
+    private let portalItemID: Item.ID
+    
+    /// The action to perform when a preplanned map area is deleted.
+    private let onRemoveDownloadAction: (Item.ID) -> Void
     
     /// The mobile map package for the preplanned map area.
-    private var mobileMapPackage: MobileMapPackage?
+    @Published private(set) var mobileMapPackage: MobileMapPackage?
     
     /// The file size of the preplanned map area.
-    private(set) var directorySize = 0
+    @Published private(set) var directorySize = 0
     
     /// The currently running download job.
     @Published private(set) var job: DownloadPreplannedOfflineMapJob?
@@ -48,52 +51,50 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// The combined status of the preplanned map area.
     @Published private(set) var status: Status = .notLoaded
     
-    /// A Boolean value indicating if a user notification should be shown when a job completes.
-    let showsUserNotificationOnCompletion: Bool
-    
     /// The first map from the mobile map package.
-    var map: Map? { 
-        get async {
-            if let mobileMapPackage {
-                if mobileMapPackage.loadStatus != .loaded {
-                    do {
-                        try await mobileMapPackage.load()
-                    } catch {
-                        status = .mmpkLoadFailure(error)
-                    }
-                }
-                return mobileMapPackage.maps.first
-            } else {
-                return nil
-            }
-        }
-    }
+    @Published private(set) var map: Map?
     
     init(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
-        portalItemID: PortalItem.ID,
-        preplannedMapAreaID: PortalItem.ID,
-        showsUserNotificationOnCompletion: Bool = true
+        portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID,
+        onRemoveDownload: @escaping (Item.ID) -> Void
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
         self.portalItemID = portalItemID
         self.preplannedMapAreaID = preplannedMapAreaID
+        self.onRemoveDownloadAction = onRemoveDownload
+        
         mmpkDirectoryURL = .preplannedDirectory(
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
-        self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
             Logger.offlineManager.debug("Found executing job for area \(preplannedMapAreaID.rawValue, privacy: .public)")
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
+            status = .downloaded
+            Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
+        }
+    }
+    
+    /// Tries to load a mobile map package and if successful, then updates state
+    /// associated with it.
+    private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
+        do {
+            try await mmpk.load()
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
-            status = .downloaded
+            map = mmpk.maps.first
+        } catch {
+            status = .mmpkLoadFailure(error)
+            mobileMapPackage = nil
+            directorySize = 0
+            map = nil
         }
     }
     
@@ -165,7 +166,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
                 downloadDirectory: mmpkDirectoryURL
             )
             
-            OfflineManager.shared.start(job: job)
+            OfflineManager.shared.start(job: job, portalItem: offlineMapTask.portalItem!)
             observeJob(job)
         } catch {
             status = .downloadFailure(error)
@@ -175,9 +176,13 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// Removes the downloaded preplanned map area from disk and resets the status.
     func removeDownloadedPreplannedMapArea() {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+        
         // Reload the model after local files removal.
         status = .notLoaded
         Task { await load() }
+        
+        // Call the closure for the remove download action.
+        onRemoveDownloadAction(preplannedMapAreaID)
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and
@@ -190,9 +195,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             let result = await job.result
             guard let self else { return }
             self.updateDownloadStatus(for: result)
-            if status.isDownloaded {
-                self.mobileMapPackage = try? result.get().mobileMapPackage
-                self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            if let mmpk = try? result.get().mobileMapPackage {
+                await loadAndUpdateMobileMapPackage(mmpk: mmpk)
             }
             self.job = nil
         }
