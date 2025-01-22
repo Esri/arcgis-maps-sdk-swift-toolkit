@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import Foundation
 
 /// The model class that represents information for an offline map.

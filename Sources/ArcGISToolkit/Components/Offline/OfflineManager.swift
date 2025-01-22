@@ -127,10 +127,7 @@ public class OfflineManager: ObservableObject {
     /// - Parameter portalItemID: The portal item ID.
     func removeMapInfo(for portalItemID: Item.ID) {
         offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID })
-        
-        let dir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-        try? FileManager.default.removeItem(at: dir.appending(path: "info.json"))
-        try? FileManager.default.removeItem(at: dir.appending(path: "thumbnail.png"))
+        OfflineMapInfo.remove(from: URL.portalItemDirectory(forPortalItemID: portalItemID))
     }
     
     /// Loads offline map information from offline manager directory.
@@ -140,60 +137,41 @@ public class OfflineManager: ObservableObject {
         defer { self.offlineMapInfos = infos }
         guard let contents = try? FileManager.default.contentsOfDirectory(atPath: url.path()) else { return }
         for dir in contents {
-            guard let info = makeOfflineMapInfo(url: url.appending(path: dir)) else { continue }
+            guard let info = OfflineMapInfo.make(from: url.appending(path: dir)) else { continue }
             infos.append(info)
         }
-    }
-    
-    /// Creates an offline map info for a given URL.
-    private func makeOfflineMapInfo(url: URL) -> OfflineMapInfo? {
-        let infoURL = url.appending(components: "info.json")
-        guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil }
-        Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
-        guard let data = try? Data(contentsOf: infoURL) else { return nil }
-        return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
     }
     
     /// Saves the map info to the pending folder for a particular portal item.
     /// The info will stay in that folder until the job completes.
     private func savePendingMapInfo(for portalItem: PortalItem) async {
         guard let portalItemID = portalItem.id,
-              !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }),
-              let info = OfflineMapInfo(portalItem: portalItem)
-        else { return }
+              !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID })
+        else {
+            Logger.offlineManager.debug("No need to save pending info as we may already have offline map info.")
+            return
+        }
         
         // First create directory for what we need to save to json
         let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
-        let infoURL = url.appending(path: "info.json")
-        
-        Logger.offlineManager.debug("Saving pending offline map info to \(url.path())")
         
         // If already exists, return.
-        let completedDir = URL.portalItemDirectory(forPortalItemID: portalItemID).appending(path: "info.json")
-        guard !FileManager.default.fileExists(atPath: completedDir.path()) else {
-            Logger.offlineManager.debug("Returning, info already exists in job completion directory: \(completedDir.path())")
-            return
-        }
-        guard !FileManager.default.fileExists(atPath: infoURL.path()) else {
-            Logger.offlineManager.debug("Returning, info already exists in pending directory: \(url.path())")
+        // This check is helpful if two jobs are kicked off in a row that the second one
+        // doesn't try to re-add the pending info.
+        guard !OfflineMapInfo.doesInfoExists(at: url) else {
+            Logger.offlineManager.debug("No need to save pending info as pending offline map info already exists.")
             return
         }
         
+        // Create the info.
+        guard let info = await OfflineMapInfo(portalItem: portalItem) else {
+            Logger.offlineManager.debug("Cannot save pending info as offline info could not be created.")
+            return
+        }
+        // Make sure the directory exists.
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-        
-        // Save json to file.
-        if let data = try? JSONEncoder().encode(info) {
-            try? data.write(to: infoURL, options: .atomic)
-        }
-        
-        // Save thumbnail to file.
-        if let thumbnail = portalItem.thumbnail {
-            try? await thumbnail.load()
-            if let image = thumbnail.image, let pngData = image.pngData() {
-                let thumbnailURL = url.appending(path: "thumbnail.png")
-                try? pngData.write(to: thumbnailURL, options: .atomic)
-            }
-        }
+        // Save the info to the pending directory.
+        info.save(to: url)
     }
     
     /// For a successful job, this function moves the pending map info from the pending
@@ -219,7 +197,7 @@ public class OfflineManager: ObservableObject {
                     } catch {
                         Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
                     }
-                    if let info = makeOfflineMapInfo(url: portalItemDir) {
+                    if let info = OfflineMapInfo.make(from: portalItemDir) {
                         offlineMapInfos.append(info)
                     }
                 }
@@ -303,30 +281,6 @@ extension Logger {
         } else {
             .init(.disabled)
         }
-    }
-}
-
-public struct OfflineMapInfo: Codable {
-    private var portalItemIDRawValue: String
-    public var title: String
-    public var description: String
-    public var portalItemURL: URL
-    
-    internal init?(portalItem: PortalItem) {
-        guard let idRawValue = portalItem.id?.rawValue,
-              let url = portalItem.url
-        else { return nil }
-        
-        self.portalItemIDRawValue = idRawValue
-        self.title = portalItem.title
-        self.description = portalItem.description.replacing(/<[^>]+>/, with: "")
-        self.portalItemURL = url
-    }
-}
-
-public extension OfflineMapInfo {
-    var portalItemID: Item.ID {
-        .init(portalItemIDRawValue)!
     }
 }
 
