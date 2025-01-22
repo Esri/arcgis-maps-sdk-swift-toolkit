@@ -127,10 +127,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
 ***REMOVED***func removeMapInfo(for portalItemID: Item.ID) {
 ***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID ***REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let dir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED***try? FileManager.default.removeItem(at: dir.appending(path: "info.json"))
-***REMOVED******REMOVED***try? FileManager.default.removeItem(at: dir.appending(path: "thumbnail.png"))
+***REMOVED******REMOVED***OfflineMapInfo.remove(from: URL.portalItemDirectory(forPortalItemID: portalItemID))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads offline map information from offline manager directory.
@@ -140,63 +137,33 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***defer { self.offlineMapInfos = infos ***REMOVED***
 ***REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: url.path()) else { return ***REMOVED***
 ***REMOVED******REMOVED***for dir in contents {
-***REMOVED******REMOVED******REMOVED***guard let info = makeOfflineMapInfo(url: url.appending(path: dir)) else { continue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let info = OfflineMapInfo.make(from: url.appending(path: dir)) else { continue ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***infos.append(info)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates an offline map info for a given URL.
-***REMOVED***private func makeOfflineMapInfo(url: URL) -> OfflineMapInfo? {
-***REMOVED******REMOVED***let infoURL = url.appending(components: "info.json")
-***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil ***REMOVED***
-***REMOVED******REMOVED***Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
-***REMOVED******REMOVED***guard let data = try? Data(contentsOf: infoURL) else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO: 
-***REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED***return try? JSONDecoder().decode(OfflineMapInfo.self, from: data)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Saves the map info to the pending folder for a particular portal item.
 ***REMOVED******REMOVED***/ The info will stay in that folder until the job completes.
 ***REMOVED***private func savePendingMapInfo(for portalItem: PortalItem) async {
 ***REMOVED******REMOVED***guard let portalItemID = portalItem.id,
-***REMOVED******REMOVED******REMOVED***  !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***),
-***REMOVED******REMOVED******REMOVED***  let info = await OfflineMapInfo(portalItem: portalItem)
+***REMOVED******REMOVED******REMOVED***  !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***)
 ***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First create directory for what we need to save to json
 ***REMOVED******REMOVED***let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
 ***REMOVED******REMOVED***let infoURL = url.appending(path: "info.json")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Logger.offlineManager.debug("Saving pending offline map info to \(url.path())")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If already exists, return.
-***REMOVED******REMOVED***let completedDir = URL.portalItemDirectory(forPortalItemID: portalItemID).appending(path: "info.json")
-***REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: completedDir.path()) else {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Returning, info already exists in job completion directory: \(completedDir.path())")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
 ***REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: infoURL.path()) else {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Returning, info already exists in pending directory: \(url.path())")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create the info.
+***REMOVED******REMOVED***guard let info = await OfflineMapInfo(portalItem: portalItem) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Make sure the directory exists.
 ***REMOVED******REMOVED***try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Save json to file.
-***REMOVED******REMOVED******REMOVED*** TODO:
-***REMOVED******REMOVED******REMOVED***if let data = try? JSONEncoder().encode(info) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try? data.write(to: infoURL, options: .atomic)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Save thumbnail to file.
-***REMOVED******REMOVED***if let thumbnail = portalItem.thumbnail {
-***REMOVED******REMOVED******REMOVED***try? await thumbnail.load()
-***REMOVED******REMOVED******REMOVED***if let image = thumbnail.image, let pngData = image.pngData() {
-***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailURL = url.appending(path: "thumbnail.png")
-***REMOVED******REMOVED******REMOVED******REMOVED***try? pngData.write(to: thumbnailURL, options: .atomic)
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save the info to the pending directory.
+***REMOVED******REMOVED***info.save(to: url)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ For a successful job, this function moves the pending map info from the pending
@@ -222,7 +189,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let info = makeOfflineMapInfo(url: portalItemDir) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let info = OfflineMapInfo.make(from: portalItemDir) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapInfos.append(info)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
