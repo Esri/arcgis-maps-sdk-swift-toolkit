@@ -67,6 +67,65 @@ import SwiftUI
 /// - Since: 200.4
 @available(visionOS, unavailable)
 public struct FeatureFormView: View {
+    /// <#Description#>
+    @State private var path = [ArcGISFeature]()
+    
+    /// <#Description#>
+    let featureForm: FeatureForm
+    
+    /// <#Description#>
+    let utilityNetwork: UtilityNetwork?
+    
+    /// The visibility of the form header.
+    var headerVisibility: Visibility = .automatic
+    
+    /// <#Description#>
+    var onPresentedFeatureChangedAction: ((ArcGISFeature?) -> Void)?
+    
+    /// The validation error visibility configuration of the form.
+    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+    
+    /// Initializes a form view.
+    /// - Parameters:
+    ///   - featureForm: The feature form defining the editing experience.
+    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+        self.featureForm = featureForm
+        self.utilityNetwork = utilityNetwork
+    }
+    
+    public var body: some View {
+        NavigationStack(path: $path) {
+            FeatureFormViewInternal(
+                featureForm: featureForm,
+                headerVisibility: headerVisibility,
+                utilityNetwork: utilityNetwork
+            )
+            .navigationDestination(for: ArcGISFeature.self) { feature in
+                FeatureFormViewInternal(
+                    featureForm: FeatureForm(feature: feature),
+                    headerVisibility: headerVisibility,
+                    utilityNetwork: utilityNetwork
+                )
+            }
+        }
+        .environment(\.validationErrorVisibility, validationErrorVisibility)
+        .onChange(of: path) { newValue in
+            onPresentedFeatureChangedAction?(newValue.last)
+        }
+    }
+    
+    /// <#Description#>
+    /// - Parameter action: <#action description#>
+    /// - Returns: <#description#>
+    public func onPresentedFeatureChanged(action: @escaping (ArcGISFeature?) -> Void) -> Self {
+        var copy = self
+        copy.onPresentedFeatureChangedAction = action
+        return copy
+    }
+}
+
+/// <#Description#>
+struct FeatureFormViewInternal: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
@@ -79,50 +138,35 @@ public struct FeatureFormView: View {
     /// The title of the feature form view.
     @State private var title = ""
     
-    /// <#Description#>
-    var ancestor: Any?
-    
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
-    
-    /// The validation error visibility configuration of the form.
-    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+    ///   - headerVisibility: The visibility of the form header.
+    init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
+        self.headerVisibility = headerVisibility
     }
     
     public var body: some View {
-        if initialExpressionsAreEvaluating {
-            initialBody
-        } else if let presentedForm = model.presentedForm {
-            presentedForm
-                .ancestorForm(self)
-        } else {
-            evaluatedForm
-                .transition(.move(edge: model.presentedForm == nil ? .leading : .trailing))
+        Group {
+            if initialExpressionsAreEvaluating {
+                initialBody
+            } else {
+                evaluatedForm
+            }
         }
+        .navigationBarBackButtonHidden(headerVisibility == .hidden)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(headerVisibility != .hidden ? title : "")
     }
     
     var evaluatedForm: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty && headerVisibility != .hidden {
-                        if let ancestor = ancestor as? FeatureFormView {
-                            FormHeader(title: title) {
-                                withAnimation {
-                                    ancestor.model.presentedForm = nil
-                                }
-                            }
-                        } else {
-                            FormHeader(title: title)
-                        }
-                        Divider()
-                    }
                     ForEach(model.visibleElements, id: \.self) { element in
                         makeElement(element)
                     }
@@ -155,7 +199,6 @@ public struct FeatureFormView: View {
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
         .task {
             try? await model.utilityNetwork?.load()
@@ -172,29 +215,25 @@ public struct FeatureFormView: View {
                         // For each association, create a Toolkit representation and add it to the group
                         for association in groupMembers {
                             let associatedElement = association.toElement
-                            let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                description: "\(associatedElement.objectID)",
-                                icon: nil,
-                                name: associatedElement.assetType.name
-                            ) {
-                                if let feature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
-                                   return await feature.makeSymbol()
-                                } else {
-                                    return nil
+                            if let feature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+                                let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                    description: "\(associatedElement.objectID)",
+                                    icon: nil,
+                                    linkDestination: feature,
+                                    name: associatedElement.assetType.name
+                                ) {
+                                    await feature.makeSymbol()
                                 }
-                            } selectionAction: {
-                                if let feature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
-                                    withAnimation(.default) {
-                                        model.presentedForm = FeatureFormView(
-                                            featureForm: FeatureForm(feature: feature),
-                                            utilityNetwork: model.utilityNetwork
-                                        )
-                                    }
-                                }
+                                associations.append(newAssociation)
                             }
-                            associations.append(newAssociation)
                         }
-                        groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
+                        groups.append(
+                            .init(
+                                associations: associations,
+                                description: "[Network Source Description]",
+                                name: "\(source.name)".capitalized
+                            )
+                        )
                     }
                     self.groups = groups
                 }
@@ -206,16 +245,7 @@ public struct FeatureFormView: View {
 }
 
 @available(visionOS, unavailable)
-extension FeatureFormView {
-    /// <#Description#>
-    /// - Parameter ancestor: <#ancestor description#>
-    /// - Returns: <#description#>
-    func ancestorForm(_ ancestor: FeatureFormView) -> Self {
-        var copy = self
-        copy.ancestor = ancestor
-        return copy
-    }
-    
+extension FeatureFormViewInternal {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
@@ -274,6 +304,18 @@ extension FeatureFormView {
 }
 
 // TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension ArcGISFeature: @retroactive Equatable {
+    public static func == (lhs: ArcGISFeature, rhs: ArcGISFeature) -> Bool {
+        lhs.globalID == rhs.globalID
+    }
+}
+
+extension ArcGISFeature: @retroactive Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(globalID)
+    }
+}
 
 extension UtilityNetworkSource: @retroactive Equatable {
     public static func == (lhs: UtilityNetworkSource, rhs: UtilityNetworkSource) -> Bool {
