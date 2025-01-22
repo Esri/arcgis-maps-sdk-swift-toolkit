@@ -55,6 +55,9 @@ struct FeatureFormExampleView: View {
                 .sheet(isPresented: model.formIsPresented) {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+                            .onPresentedFeatureChanged { presentedFeature in
+                                print("Presented feature: \(presentedFeature?.attributes["globalid"] ?? "?")")
+                            }
                             .validationErrors(validationErrorVisibility)
                             .interactiveDismissDisabled()
                             .padding(.horizontal)
