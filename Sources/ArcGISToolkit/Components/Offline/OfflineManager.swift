@@ -147,18 +147,27 @@ public class OfflineManager: ObservableObject {
     private func savePendingMapInfo(for portalItem: PortalItem) async {
         guard let portalItemID = portalItem.id,
               !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID })
-        else { return }
+        else {
+            Logger.offlineManager.debug("No need to save pending info as we may already have offline map info.")
+            return
+        }
         
         // First create directory for what we need to save to json
         let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
         
         // If already exists, return.
-        guard OfflineMapInfo.doesInfoExists(at: url) else {
+        // This check is helpful if two jobs are kicked off in a row that the second one
+        // doesn't try to re-add the pending info.
+        guard !OfflineMapInfo.doesInfoExists(at: url) else {
+            Logger.offlineManager.debug("No need to save pending info as pending offline map info already exists.")
             return
         }
         
         // Create the info.
-        guard let info = await OfflineMapInfo(portalItem: portalItem) else { return }
+        guard let info = await OfflineMapInfo(portalItem: portalItem) else {
+            Logger.offlineManager.debug("Cannot save pending info as offline info could not be created.")
+            return
+        }
         // Make sure the directory exists.
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         // Save the info to the pending directory.
