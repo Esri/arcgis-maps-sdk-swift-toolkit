@@ -14,13 +14,15 @@
 
 import ArcGIS
 import Foundation
+import OSLog
 import UIKit.UIImage
 
 /// Information for an online map that has been taken offline.
 public struct OfflineMapInfo: Sendable {
+    private let info: CodableInfo
+    
     /// The thumbnail of the portal item associated with the map.
-    public var thumbnail: UIImage?
-    private var info: CodableInfo
+    public let thumbnail: UIImage?
     
     init?(portalItem: PortalItem) async {
         guard let id = portalItem.id?.rawValue,
@@ -32,15 +34,53 @@ public struct OfflineMapInfo: Sendable {
         if let loadableImage = portalItem.thumbnail {
             try? await loadableImage.load()
             thumbnail = loadableImage.image
+        } else {
+            thumbnail = nil
         }
         
         /// Save the codable info.
         info = .init(
             portalItemID: id,
             title: portalItem.title,
-            description: portalItem.description.replacing(/<[^>]+>/, with: ""),
+            description: portalItem.description,
             portalItemURL: url
         )
+    }
+    
+    private init(info: OfflineMapInfo.CodableInfo, thumbnail: UIImage?) {
+        self.info = info
+        self.thumbnail = thumbnail
+    }
+    
+    static func make(from url: URL) -> Self? {
+        let infoURL = url.appending(components: "info.json")
+        guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil }
+        Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
+        guard let data = try? Data(contentsOf: infoURL),
+              let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
+        else { return nil }
+        return .init(info: info, thumbnail: nil)
+    }
+    
+    func save(to url: URL) {
+        Logger.offlineManager.debug("Saving pending offline map info to \(url.path())")
+        let infoURL = url.appending(path: "info.json")
+        
+        // Save info json to file.
+        if let data = try? JSONEncoder().encode(info) {
+            try? data.write(to: infoURL, options: .atomic)
+        }
+        
+        // Save thumbnail to file.
+        if let thumbnail, let pngData = thumbnail.pngData() {
+            let thumbnailURL = url.appending(path: "thumbnail.png")
+            try? pngData.write(to: thumbnailURL, options: .atomic)
+        }
+    }
+    
+    static func remove(from url: URL) {
+        try? FileManager.default.removeItem(at: url.appending(path: "info.json"))
+        try? FileManager.default.removeItem(at: url.appending(path: "thumbnail.png"))
     }
 }
 
