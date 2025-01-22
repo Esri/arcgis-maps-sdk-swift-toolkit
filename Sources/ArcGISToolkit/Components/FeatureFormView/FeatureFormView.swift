@@ -122,6 +122,20 @@ public struct FeatureFormView: View {
                     title = newTitle
                 }
             }
+            // The sheet view modifier needs to be used here or it will
+            // be dismissed on the first open by SwiftUI.
+            .sheet(isPresented: $model.fullScreenTextInputIsPresented) {
+                if let element = model.focusedElement as? FieldFormElement {
+                    FullScreenTextInput(
+                        text: $model.fullScreenText,
+                        element: element,
+                        model: model
+                    )
+    #if targetEnvironment(macCatalyst)
+                .environmentObject(model)
+    #endif
+                }
+            }
 #if os(iOS)
             .scrollDismissesKeyboard(.immediately)
 #endif

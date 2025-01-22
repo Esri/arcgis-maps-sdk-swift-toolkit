@@ -31,6 +31,12 @@ import SwiftUI
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
+    /// A Boolean value indicating whether the full screen text input is presented.
+    @Published var fullScreenTextInputIsPresented = false
+        
+    /// Text that will be displayed in a view showing multi line text.
+    @Published var fullScreenText = ""
+    
     /// The expression evaluation task.
     private var evaluateTask: Task<Void, Never>?
     
