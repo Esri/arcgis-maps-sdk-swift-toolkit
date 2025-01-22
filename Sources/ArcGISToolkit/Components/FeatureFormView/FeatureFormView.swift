@@ -67,6 +67,65 @@
 ***REMOVED***/ - Since: 200.4
 @available(visionOS, unavailable)
 public struct FeatureFormView: View {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var path = [ArcGISFeature]()
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let featureForm: FeatureForm
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let utilityNetwork: UtilityNetwork?
+***REMOVED***
+***REMOVED******REMOVED***/ The visibility of the form header.
+***REMOVED***var headerVisibility: Visibility = .automatic
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***var onPresentedFeatureChangedAction: ((ArcGISFeature?) -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
+***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+***REMOVED***
+***REMOVED******REMOVED***/ Initializes a form view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
+***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED******REMOVED***self.utilityNetwork = utilityNetwork
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***NavigationStack(path: $path) {
+***REMOVED******REMOVED******REMOVED***FeatureFormViewInternal(
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
+***REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.navigationDestination(for: ArcGISFeature.self) { feature in
+***REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormViewInternal(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: feature),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED******REMOVED***.onChange(of: path) { newValue in
+***REMOVED******REMOVED******REMOVED***onPresentedFeatureChangedAction?(newValue.last)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ - Parameter action: <#action description#>
+***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED***public func onPresentedFeatureChanged(action: @escaping (ArcGISFeature?) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onPresentedFeatureChangedAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ <#Description#>
+struct FeatureFormViewInternal: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
@@ -79,50 +138,35 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***var ancestor: Any?
-***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
-***REMOVED***
-***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
-***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+***REMOVED******REMOVED***/   - headerVisibility: The visibility of the form header.
+***REMOVED***init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
+***REMOVED******REMOVED***self.headerVisibility = headerVisibility
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***if initialExpressionsAreEvaluating {
-***REMOVED******REMOVED******REMOVED***initialBody
-***REMOVED*** else if let presentedForm = model.presentedForm {
-***REMOVED******REMOVED******REMOVED***presentedForm
-***REMOVED******REMOVED******REMOVED******REMOVED***.ancestorForm(self)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***evaluatedForm
-***REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: model.presentedForm == nil ? .leading : .trailing))
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if initialExpressionsAreEvaluating {
+***REMOVED******REMOVED******REMOVED******REMOVED***initialBody
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***evaluatedForm
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.navigationBarBackButtonHidden(headerVisibility == .hidden)
+***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED***.navigationTitle(headerVisibility != .hidden ? title : "")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var evaluatedForm: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty && headerVisibility != .hidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let ancestor = ancestor as? FeatureFormView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ancestor.model.presentedForm = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -155,7 +199,6 @@ public struct FeatureFormView: View {
 #if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
-***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***try? await model.utilityNetwork?.load()
@@ -172,29 +215,25 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for association in groupMembers {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = association.toElement
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "\(associatedElement.objectID)",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***icon: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: associatedElement.assetType.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   return await feature.makeSymbol()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "\(associatedElement.objectID)",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***icon: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***linkDestination: feature,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: associatedElement.assetType.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await feature.makeSymbol()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** selectionAction: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.presentedForm = FeatureFormView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: feature),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: model.utilityNetwork
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations: associations,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[Network Source Description]",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "\(source.name)".capitalized
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.groups = groups
 ***REMOVED******REMOVED******REMOVED***
@@ -206,16 +245,7 @@ public struct FeatureFormView: View {
 ***REMOVED***
 
 @available(visionOS, unavailable)
-extension FeatureFormView {
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***/ - Parameter ancestor: <#ancestor description#>
-***REMOVED******REMOVED***/ - Returns: <#description#>
-***REMOVED***func ancestorForm(_ ancestor: FeatureFormView) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.ancestor = ancestor
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
+extension FeatureFormViewInternal {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
@@ -274,6 +304,18 @@ extension FeatureFormView {
 ***REMOVED***
 
 ***REMOVED*** TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+
+extension ArcGISFeature: @retroactive Equatable {
+***REMOVED***public static func == (lhs: ArcGISFeature, rhs: ArcGISFeature) -> Bool {
+***REMOVED******REMOVED***lhs.globalID == rhs.globalID
+***REMOVED***
+***REMOVED***
+
+extension ArcGISFeature: @retroactive Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(globalID)
+***REMOVED***
+***REMOVED***
 
 extension UtilityNetworkSource: @retroactive Equatable {
 ***REMOVED***public static func == (lhs: UtilityNetworkSource, rhs: UtilityNetworkSource) -> Bool {
