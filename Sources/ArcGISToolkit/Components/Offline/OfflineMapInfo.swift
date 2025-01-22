@@ -47,42 +47,10 @@ public struct OfflineMapInfo: Sendable {
         )
     }
     
+    /// Creates offline map info.
     private init(info: OfflineMapInfo.CodableInfo, thumbnail: UIImage?) {
         self.info = info
         self.thumbnail = thumbnail
-    }
-    
-    static func make(from url: URL) -> Self? {
-        let infoURL = url.appending(component: "info.json")
-        guard FileManager.default.fileExists(atPath: infoURL.path()) else { return nil }
-        Logger.offlineManager.debug("Found offline map info at \(infoURL.path())")
-        guard let data = try? Data(contentsOf: infoURL),
-              let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
-        else { return nil }
-        let thumbnailURL = url.appending(component: "thumbnail.png")
-        let thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
-        return .init(info: info, thumbnail: thumbnail)
-    }
-    
-    func save(to url: URL) {
-        Logger.offlineManager.debug("Saving pending offline map info to \(url.path())")
-        let infoURL = url.appending(path: "info.json")
-        
-        // Save info json to file.
-        if let data = try? JSONEncoder().encode(info) {
-            try? data.write(to: infoURL, options: .atomic)
-        }
-        
-        // Save thumbnail to file.
-        if let thumbnail, let pngData = thumbnail.pngData() {
-            let thumbnailURL = url.appending(path: "thumbnail.png")
-            try? pngData.write(to: thumbnailURL, options: .atomic)
-        }
-    }
-    
-    static func remove(from url: URL) {
-        try? FileManager.default.removeItem(at: url.appending(path: "info.json"))
-        try? FileManager.default.removeItem(at: url.appending(path: "thumbnail.png"))
     }
 }
 
@@ -99,10 +67,72 @@ public extension OfflineMapInfo {
 
 /// Information for an online map that has been taken offline.
 private extension OfflineMapInfo {
+    /// The codable info is stored in json.
     struct CodableInfo: Codable {
         let portalItemID: String
         let title: String
         let description: String
         let portalItemURL: URL
+    }
+}
+
+private extension OfflineMapInfo {
+    /// The URLs for serialized offline map info.
+    struct URLs {
+        let info: URL
+        let thumbnail: URL
+    }
+    
+    /// The URLs that offline map info is serialized to for a given directory.
+    static func urls(for directory: URL) -> URLs {
+        .init(
+            info: directory.appending(path: "info.json"),
+            thumbnail: directory.appending(path: "thumbnail.png")
+        )
+    }
+}
+
+extension OfflineMapInfo {
+    /// Creates offline map info from a directory.
+    static func make(from directory: URL) -> Self? {
+        let urls = Self.urls(for: directory)
+        guard FileManager.default.fileExists(atPath: urls.info.path()) else { return nil }
+        Logger.offlineManager.debug("Found offline map info at \(urls.info.path())")
+        guard let data = try? Data(contentsOf: urls.info),
+              let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
+        else { return nil }
+        let thumbnail = UIImage(contentsOfFile: urls.thumbnail.path())
+        return .init(info: info, thumbnail: thumbnail)
+    }
+    
+    /// Saves offline map info to a directory.
+    func save(to directory: URL) {
+        Logger.offlineManager.debug("Saving pending offline map info to \(directory.path())")
+        
+        let urls = Self.urls(for: directory)
+        
+        // Save info json to file.
+        if let data = try? JSONEncoder().encode(info) {
+            try? data.write(to: urls.info, options: .atomic)
+        }
+        
+        // Save thumbnail to file.
+        if let thumbnail, let pngData = thumbnail.pngData() {
+            try? pngData.write(to: urls.thumbnail, options: .atomic)
+        }
+    }
+    
+    /// Removes saved offline map info from a directory.
+    static func remove(from directory: URL) {
+        Logger.offlineManager.debug("Removing offline map info from \(directory.path())")
+        let urls = Self.urls(for: directory)
+        try? FileManager.default.removeItem(at: urls.info)
+        try? FileManager.default.removeItem(at: urls.thumbnail)
+    }
+    
+    /// Whether or not saved offline map info exists in a directory.
+    static func doesInfoExists(at directory: URL) -> Bool {
+        let urls = Self.urls(for: directory)
+        return FileManager.default.fileExists(atPath: urls.info.path())
     }
 }
