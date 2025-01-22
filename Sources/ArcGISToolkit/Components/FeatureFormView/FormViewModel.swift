@@ -25,8 +25,6 @@ import SwiftUI
         }
     }
     
-    @Published var presentedForm: FeatureFormView?
-    
     /// The set of all elements which previously held focus.
     @Published var previouslyFocusedElements = [FormElement]()
     
