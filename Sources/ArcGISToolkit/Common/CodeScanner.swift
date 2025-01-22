@@ -45,13 +45,11 @@ struct CodeScanner: View {
                 }
         } else {
             Color.clear
-                .onAppear {
-                    Task {
-                        await cameraRequester.request {
-                            cameraAccessIsAuthorized = true
-                        } onAccessDenied: {
-                            isPresented = false
-                        }
+                .task {
+                    await cameraRequester.request {
+                        cameraAccessIsAuthorized = true
+                    } onAccessDenied: {
+                        isPresented = false
                     }
                 }
                 .cameraRequester(cameraRequester)
