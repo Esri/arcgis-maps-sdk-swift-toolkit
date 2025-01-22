@@ -151,10 +151,9 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First create directory for what we need to save to json
 ***REMOVED******REMOVED***let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
-***REMOVED******REMOVED***let infoURL = url.appending(path: "info.json")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If already exists, return.
-***REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: infoURL.path()) else {
+***REMOVED******REMOVED***guard OfflineMapInfo.doesInfoExists(at: url) else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
