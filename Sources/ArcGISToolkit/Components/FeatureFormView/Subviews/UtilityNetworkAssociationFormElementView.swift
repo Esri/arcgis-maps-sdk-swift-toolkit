@@ -65,23 +65,18 @@ extension UtilityNetworkAssociationFormElementView {
         /// <#Description#>
         let name: String
         
-        /// <#Description#>
-        let selectionAction: (() async -> Void)
-        
         init(
             description: String?,
             icon: UIImage?,
             linkDestination: (any Hashable)?,
             name: String,
-            imageGenerationAction: (() async -> UIImage?)?,
-            selectionAction: @escaping () async -> Void
+            imageGenerationAction: (() async -> UIImage?)?
         ) {
             self.description = description
             self.icon = icon
             self.linkDestination = linkDestination
             self.name = name
             self.imageGenerationAction = imageGenerationAction
-            self.selectionAction = selectionAction
         }
     }
     
