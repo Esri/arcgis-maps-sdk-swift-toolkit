@@ -24,6 +24,7 @@ public struct OfflineMapInfo: Sendable {
     /// The thumbnail of the portal item associated with the map.
     public let thumbnail: UIImage?
     
+    /// Creates offline map info from a portal item.
     init?(portalItem: PortalItem) async {
         guard let id = portalItem.id?.rawValue,
               let url = portalItem.url
