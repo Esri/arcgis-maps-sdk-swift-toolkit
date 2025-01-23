@@ -141,7 +141,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectoryURL
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job)
+***REMOVED******REMOVED******REMOVED***OfflineManager.shared.start(job: job, portalItem: offlineMapTask.portalItem!)
 ***REMOVED******REMOVED******REMOVED***observeJob(job)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
