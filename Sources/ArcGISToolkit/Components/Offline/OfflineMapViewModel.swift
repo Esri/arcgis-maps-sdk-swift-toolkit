@@ -30,6 +30,9 @@ class OfflineMapViewModel: ObservableObject {
     /// A Boolean value indicating if only offline models are being shown.
     @Published private(set) var isShowingOnlyOfflineModels = false
     
+    /// The on-demand map information.
+    @Published private(set) var onDemandMapModels: [OnDemandMapModel]?
+    
     /// The online map.
     private let onlineMap: Map
     
@@ -153,6 +156,95 @@ class OfflineMapViewModel: ObservableObject {
             thumbnail: item.thumbnail
         )
     }
+    
+    private func makeOnDemandMapArea(
+        portalItemID: PortalItem.ID,
+        onDemandMapAreaID: UUID
+    ) async -> OfflineOnDemandMapArea? {
+        let fileURL = URL.onDemandDirectory(
+            forPortalItemID: portalItemID,
+            onDemandMapAreaID: onDemandMapAreaID
+        )
+        guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil }
+        let mmpk = MobileMapPackage(fileURL: fileURL)
+        
+        try? await mmpk.load()
+        guard let item = mmpk.item else { return nil }
+
+        return .init(
+            id: onDemandMapAreaID,
+            title: item.title,
+            description: item.description,
+            thumbnail: item.thumbnail
+        )
+    }
+    
+    func loadOnDemandMapModels() async {
+        let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
+        
+        guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) else {
+            onDemandMapModels = []
+            return
+        }
+        
+        var onDemandMapModels: [OnDemandMapModel] = []
+        
+        // Look up the ongoing jobs for on-demand map models.
+        let ongoingJobs = OfflineManager.shared.jobs
+            .lazy
+            .compactMap { $0 as? GenerateOfflineMapJob }
+            .filter {
+                UUID(uuidString: $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent) != nil
+            }
+        
+        for job in ongoingJobs {
+            let id = UUID(uuidString: job.downloadDirectoryURL.deletingPathExtension().lastPathComponent)!
+            let parameters = job.parameters
+            guard let info = parameters.itemInfo, let minScale = parameters.minScale, let maxScale = parameters.maxScale, let aoi = parameters.areaOfInterest else {
+                continue
+            }
+            let mapArea = OnDemandMapArea(id: id, title: info.title, minScale: minScale, maxScale: maxScale, areaOfInterest: aoi)
+            let model = OnDemandMapModel(
+                offlineMapTask: offlineMapTask,
+                onDemandMapArea: mapArea,
+                portalItemID: portalItemID
+            )
+            onDemandMapModels.append(model)
+        }
+        
+        // Look up the downloaded on-demand map models.
+        for mapAreaID in mapAreaIDs {
+            guard let onDemandMapAreaID = UUID(uuidString: mapAreaID),
+                  let mapArea = await makeOnDemandMapArea(
+                    portalItemID: portalItemID,
+                    onDemandMapAreaID: onDemandMapAreaID
+                  ) else {
+                continue
+            }
+            let model = OnDemandMapModel(
+                offlineMapTask: offlineMapTask,
+                onDemandMapArea: mapArea,
+                portalItemID: portalItemID
+            )
+            onDemandMapModels.append(model)
+        }
+        
+        self.onDemandMapModels = onDemandMapModels
+            .sorted(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })
+    }
+    
+    func addOnDemandMapArea(_ onDemandMapArea: OnDemandMapArea) {
+        let model = OnDemandMapModel(offlineMapTask: offlineMapTask, onDemandMapArea: onDemandMapArea, portalItemID: portalItemID)
+        if onDemandMapModels != nil {
+            onDemandMapModels!.append(model)
+            onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })
+        }
+        
+        Task {
+            // Download map area.
+            await model.downloadOnDemandMapArea()
+        }
+    }
 }
 
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
@@ -167,4 +259,12 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         fatalError()
     }
+}
+
+// This struct represents an on-demand area that is downloaded.
+struct OfflineOnDemandMapArea: OnDemandMapAreaProtocol {
+    var id: UUID
+    var title: String
+    var description: String
+    var thumbnail: LoadableImage?
 }
