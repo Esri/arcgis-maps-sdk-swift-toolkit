@@ -18,7 +18,7 @@ import ArcGIS
 /// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
-    @StateObject private var mapViewModel: MapViewModel
+    @StateObject private var mapViewModel: OfflineMapViewModel
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     /// The web map to be taken offline.
@@ -28,54 +28,76 @@ public struct OfflineMapAreasView: View {
     /// A Boolean value indicating whether an on-demand map area is being added.
     @State private var isAddingOnDemandArea = false
     
-    /// A Boolean value indicating whether the web map is offline disabled.
-    private var mapIsOfflineDisabled: Bool {
-        onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+    /// The portal item for the web map to be taken offline.
+    private var portalItem: PortalItem {
+        // Safe to force cast because of the precondition in the initializer.
+        onlineMap.item as! PortalItem
+    }
+    
+    /// The `ID` of the portal item.
+    private var portalItemID: Item.ID {
+        // Safe to force unwrap because of the precondition in the initializer.
+        portalItem.id!
     }
     
     /// Creates a view with a given web map.
     /// - Parameters:
-    ///   - online: The web map to be taken offline.
-    ///   - selection: A binding to the currently selected map.
-    public init(online: Map, selection: Binding<Map?>) {
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
-        onlineMap = online
+    ///   - onlineMap: The web map to be taken offline.
+    ///   - selection: A binding to the currently selected offline map.
+    /// - Precondition: `onlineMap.item?.id` is not `nil`.
+    /// - Precondition: `onlineMap.item` is of type `PortalItem`.
+    public init(onlineMap: Map, selection: Binding<Map?>) {
+        precondition(onlineMap.item?.id != nil)
+        precondition(onlineMap.item is PortalItem)
+        _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
+        self.onlineMap = onlineMap
+        _selectedMap = selection
+    }
+    
+    /// Creates a view with a given offline map info.
+    /// - Parameters:
+    ///   - offlineMapInfo: The offline map info for which to create the view.
+    ///   - selection: A binding to the currently selected offline map.
+    public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
+        let item = PortalItem(url: offlineMapInfo.portalItemURL)!
+        let onlineMap = Map(item: item)
+        _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
+        self.onlineMap = onlineMap
         _selectedMap = selection
     }
     
     public var body: some View {
         NavigationStack {
             Form {
-                if !mapIsOfflineDisabled {
-                    // This is only for demo purpose. In reality it only use 1 of 2 workflow at a time.
-                    Section("Preplanned") {
+                Section("Preplanned") {
+                    if !mapViewModel.mapIsOfflineDisabled {
                         preplannedMapAreasView
                     }
-                    
-                    Section("On Demand") {
-                        onDemandMapAreasView
+                }
+                
+                Section("On Demand") {
+                    onDemandMapAreasView
+                }
+                
+                Section {
+                    Button("Add Offline Area") {
+                        isAddingOnDemandArea = true
                     }
-                    
-                    Section {
-                        Button("Add Offline Area") {
-                            isAddingOnDemandArea = true
-                        }
-                        .sheet(isPresented: $isAddingOnDemandArea) {
-                            OnDemandConfigurationView(map: onlineMap.clone())
-                                .onComplete { title, minScale, maxScale, areaOfInterest in
-                                    let area = OnDemandMapArea(
-                                        id: UUID(),
-                                        title: title,
-                                        minScale: minScale.scale,
-                                        maxScale: maxScale.scale,
-                                        areaOfInterest: areaOfInterest
-                                    )
-                                    mapViewModel.addOnDemandMapArea(area)
-                                }
-                                .highPriorityGesture(DragGesture())
-                        }
-                        .disabled(mapViewModel.onDemandMapModels == nil)
+                    .sheet(isPresented: $isAddingOnDemandArea) {
+                        OnDemandConfigurationView(map: onlineMap.clone())
+                            .onComplete { title, minScale, maxScale, areaOfInterest in
+                                let area = OnDemandMapArea(
+                                    id: UUID(),
+                                    title: title,
+                                    minScale: minScale.scale,
+                                    maxScale: maxScale.scale,
+                                    areaOfInterest: areaOfInterest
+                                )
+                                mapViewModel.addOnDemandMapArea(area)
+                            }
+                            .highPriorityGesture(DragGesture())
                     }
+                    .disabled(mapViewModel.onDemandMapModels == nil)
                 }
             }
             .task {
@@ -89,7 +111,7 @@ public struct OfflineMapAreasView: View {
             .navigationTitle("Map Areas")
             .navigationBarTitleDisplayMode(.inline)
             .overlay {
-                if mapIsOfflineDisabled {
+                if mapViewModel.mapIsOfflineDisabled {
                     offlineDisabledView
                 }
             }
@@ -105,20 +127,12 @@ public struct OfflineMapAreasView: View {
             if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-                        .onChange(of: selectedMap) { _ in
-                            dismiss()
-                        }
                 }
             } else {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            if let urlError = error as? URLError,
-               urlError.code == .notConnectedToInternet {
-                offlinePreplannedMapAreasView
-            } else {
-                view(for: error)
-            }
+            view(for: error)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
@@ -139,43 +153,11 @@ public struct OfflineMapAreasView: View {
         }
     }
     
-    
-    @ViewBuilder private var offlinePreplannedMapAreasView: some View {
-        if let models = mapViewModel.offlinePreplannedMapModels {
-            if !models.isEmpty {
-                List(models) { preplannedMapModel in
-                    PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-                        .onChange(of: selectedMap) { _ in
-                            dismiss()
-                        }
-                }
-            } else {
-                emptyOfflinePreplannedMapAreasView
-            }
-        } else {
-            // Models are loading map areas from disk.
-            ProgressView()
-                .frame(maxWidth: .infinity)
-        }
-    }
-    
-    private var emptyPreplannedMapAreasView: some View {
+    @ViewBuilder private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
             Text("No map areas")
                 .bold()
             Text("There are no map areas defined for this web map.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-    }
-    
-    private var emptyOfflinePreplannedMapAreasView: some View {
-        VStack(alignment: .center) {
-            Text("No map areas")
-                .bold()
-            Text("There are no downloaded map areas for this web map.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -206,15 +188,6 @@ public struct OfflineMapAreasView: View {
         }
     }
     
-    private var offlineBannerView: some View {
-        Text("Network Offline")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity)
-            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-            .background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
-    }
-    
     private func view(for error: Error) -> some View {
         VStack(alignment: .center) {
             Image(systemName: "exclamationmark.circle")
@@ -229,9 +202,6 @@ public struct OfflineMapAreasView: View {
     private func loadMapModels() async {
         // Load preplanned map models.
         await mapViewModel.loadPreplannedMapModels()
-        if case .failure = mapViewModel.preplannedMapModels {
-            await mapViewModel.loadOfflinePreplannedMapModels()
-        }
         // Load on-demand map models.
         await mapViewModel.loadOnDemandMapModels()
     }
@@ -244,10 +214,10 @@ public struct OfflineMapAreasView: View {
         
         var body: some View {
             OfflineMapAreasView(
-                online: Map(
+                onlineMap: Map(
                     item: PortalItem(
                         portal: .arcGISOnline(connection: .anonymous),
-                        id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+                        id: Item.ID("acc027394bc84c2fb04d1ed317aac674")!
                     )
                 ),
                 selection: $map

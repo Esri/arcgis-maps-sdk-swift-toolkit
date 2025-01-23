@@ -35,6 +35,12 @@ struct PreplannedListItemView: View {
     /// The current download state of the preplanned map model.
     @State private var downloadState: DownloadState = .notDownloaded
     
+    /// The previous download state of the preplanned map model.
+    @State private var previousDownloadState: DownloadState = .notDownloaded
+    
+    /// The action to dismiss the view.
+    @Environment(\.dismiss) private var dismiss: DismissAction
+    
     /// A Boolean value indicating whether the selected map area is the same
     /// as the map area from this model.
     /// The title of a preplanned map area is guaranteed to be unique when it
@@ -76,6 +82,7 @@ struct PreplannedListItemView: View {
         }
         .onAppear {
             downloadState = .init(model.status)
+            previousDownloadState = downloadState
         }
         .onReceive(model.$status) { status in
             let downloadState = DownloadState(status)
@@ -105,10 +112,9 @@ struct PreplannedListItemView: View {
         switch downloadState {
         case .downloaded:
             Button {
-                Task {
-                    if let map = await model.map {
-                        selectedMap = map
-                    }
+                if let map = model.map {
+                    selectedMap = map
+                    dismiss()
                 }
             } label: {
                 Text("Open")
@@ -219,7 +225,8 @@ private extension PreplannedListItemView.DownloadState {
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
-            preplannedMapAreaID: .init("preview")!
+            preplannedMapAreaID: .init("preview")!,
+            onRemoveDownload: { _ in }
         ),
         selectedMap: .constant(nil)
     )
