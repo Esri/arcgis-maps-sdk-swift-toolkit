@@ -35,6 +35,12 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The current download state of the preplanned map model.
 ***REMOVED***@State private var downloadState: DownloadState = .notDownloaded
 ***REMOVED***
+***REMOVED******REMOVED***/ The previous download state of the preplanned map model.
+***REMOVED***@State private var previousDownloadState: DownloadState = .notDownloaded
+***REMOVED***
+***REMOVED******REMOVED***/ The action to dismiss the view.
+***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
 ***REMOVED******REMOVED***/ The title of a preplanned map area is guaranteed to be unique when it
@@ -76,6 +82,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
+***REMOVED******REMOVED******REMOVED***previousDownloadState = downloadState
 ***REMOVED***
 ***REMOVED******REMOVED***.onReceive(model.$status) { status in
 ***REMOVED******REMOVED******REMOVED***let downloadState = DownloadState(status)
@@ -105,10 +112,9 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***switch downloadState {
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
@@ -219,7 +225,8 @@ private extension PreplannedListItemView.DownloadState {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!,
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***selectedMap: .constant(nil)
 ***REMOVED***)

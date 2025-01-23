@@ -18,7 +18,7 @@
 ***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
-***REMOVED***@StateObject private var mapViewModel: MapViewModel
+***REMOVED***@StateObject private var mapViewModel: OfflineMapViewModel
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED******REMOVED***/ The web map to be taken offline.
@@ -28,54 +28,76 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether an on-demand map area is being added.
 ***REMOVED***@State private var isAddingOnDemandArea = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
-***REMOVED***private var mapIsOfflineDisabled: Bool {
-***REMOVED******REMOVED***onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+***REMOVED******REMOVED***/ The portal item for the web map to be taken offline.
+***REMOVED***private var portalItem: PortalItem {
+***REMOVED******REMOVED******REMOVED*** Safe to force cast because of the precondition in the initializer.
+***REMOVED******REMOVED***onlineMap.item as! PortalItem
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The `ID` of the portal item.
+***REMOVED***private var portalItemID: Item.ID {
+***REMOVED******REMOVED******REMOVED*** Safe to force unwrap because of the precondition in the initializer.
+***REMOVED******REMOVED***portalItem.id!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view with a given web map.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - online: The web map to be taken offline.
-***REMOVED******REMOVED***/   - selection: A binding to the currently selected map.
-***REMOVED***public init(online: Map, selection: Binding<Map?>) {
-***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: online))
-***REMOVED******REMOVED***onlineMap = online
+***REMOVED******REMOVED***/   - onlineMap: The web map to be taken offline.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
+***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
+***REMOVED******REMOVED***/ - Precondition: `onlineMap.item` is of type `PortalItem`.
+***REMOVED***public init(onlineMap: Map, selection: Binding<Map?>) {
+***REMOVED******REMOVED***precondition(onlineMap.item?.id != nil)
+***REMOVED******REMOVED***precondition(onlineMap.item is PortalItem)
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
+***REMOVED******REMOVED***self.onlineMap = onlineMap
+***REMOVED******REMOVED***_selectedMap = selection
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view with a given offline map info.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - offlineMapInfo: The offline map info for which to create the view.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
+***REMOVED***public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
+***REMOVED******REMOVED***let item = PortalItem(url: offlineMapInfo.portalItemURL)!
+***REMOVED******REMOVED***let onlineMap = Map(item: item)
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
+***REMOVED******REMOVED***self.onlineMap = onlineMap
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !mapIsOfflineDisabled {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is only for demo purpose. In reality it only use 1 of 2 workflow at a time.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("Preplanned") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Preplanned") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !mapViewModel.mapIsOfflineDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("On Demand") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapAreasView
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(map: onlineMap.clone())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onComplete { title, minScale, maxScale, areaOfInterest in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let area = OnDemandMapArea(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: UUID(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: minScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: areaOfInterest
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(area)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(mapViewModel.onDemandMapModels == nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("On Demand") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapAreasView
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(map: onlineMap.clone())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onComplete { title, minScale, maxScale, areaOfInterest in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let area = OnDemandMapArea(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: UUID(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: minScale.scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: areaOfInterest
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(area)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(mapViewModel.onDemandMapModels == nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
@@ -89,7 +111,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Map Areas")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED***if mapIsOfflineDisabled {
+***REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.mapIsOfflineDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineDisabledView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -105,20 +127,12 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***if let urlError = error as? URLError,
-***REMOVED******REMOVED******REMOVED***   urlError.code == .notConnectedToInternet {
-***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedMapAreasView
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***view(for: error)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***view(for: error)
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
@@ -139,43 +153,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var offlinePreplannedMapAreasView: some View {
-***REMOVED******REMOVED***if let models = mapViewModel.offlinePreplannedMapModels {
-***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflinePreplannedMapAreasView
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Models are loading map areas from disk.
-***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***private var emptyPreplannedMapAreasView: some View {
+***REMOVED***@ViewBuilder private var emptyPreplannedMapAreasView: some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***Text("No map areas")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED***Text("There are no map areas defined for this web map.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED***
-***REMOVED***
-***REMOVED***private var emptyOfflinePreplannedMapAreasView: some View {
-***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text("No map areas")
-***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("There are no downloaded map areas for this web map.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
@@ -206,15 +188,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var offlineBannerView: some View {
-***REMOVED******REMOVED***Text("Network Offline")
-***REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-***REMOVED******REMOVED******REMOVED***.background(.ultraThinMaterial, ignoresSafeAreaEdges: [.bottom, .horizontal])
-***REMOVED***
-***REMOVED***
 ***REMOVED***private func view(for error: Error) -> some View {
 ***REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
@@ -229,9 +202,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***private func loadMapModels() async {
 ***REMOVED******REMOVED******REMOVED*** Load preplanned map models.
 ***REMOVED******REMOVED***await mapViewModel.loadPreplannedMapModels()
-***REMOVED******REMOVED***if case .failure = mapViewModel.preplannedMapModels {
-***REMOVED******REMOVED******REMOVED***await mapViewModel.loadOfflinePreplannedMapModels()
-***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Load on-demand map models.
 ***REMOVED******REMOVED***await mapViewModel.loadOnDemandMapModels()
 ***REMOVED***
@@ -244,10 +214,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***OfflineMapAreasView(
-***REMOVED******REMOVED******REMOVED******REMOVED***online: Map(
+***REMOVED******REMOVED******REMOVED******REMOVED***onlineMap: Map(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: Item.ID("acc027394bc84c2fb04d1ed317aac674")!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***selection: $map
