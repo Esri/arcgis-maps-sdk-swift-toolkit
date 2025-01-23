@@ -55,7 +55,7 @@ struct OfflineMapAreasExampleView: View {
                 }
             }
             .sheet(isPresented: $isShowingOfflineMapAreasView) {
-                OfflineMapAreasView(online: onlineMap, selection: $selectedMap)
+                OfflineMapAreasView(onlineMap: onlineMap, selection: $selectedMap)
                     .task {
                         await requestUserNotificationAuthorization()
                     }

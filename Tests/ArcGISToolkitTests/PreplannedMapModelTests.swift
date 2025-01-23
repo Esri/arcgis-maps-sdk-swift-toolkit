@@ -196,9 +196,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItem.id!,
             preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            onRemoveDownload: { _ in }
         )
         
         XCTAssertEqual(model.status, .downloading)
@@ -220,9 +218,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItem.id!,
             preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            onRemoveDownload: { _ in }
         )
         
         defer {
@@ -265,7 +261,8 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: portalItem.id!,
-            preplannedMapAreaID: areaID
+            preplannedMapAreaID: areaID,
+            onRemoveDownload: { _ in }
         )
         
         XCTAssertEqual(model2.status, .downloaded)
@@ -284,9 +281,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItem.id!,
             preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            onRemoveDownload: { _ in }
         )
         
         defer {
@@ -312,12 +307,11 @@ class PreplannedMapModelTests: XCTestCase {
         // Wait for job to finish.
         _ = await model.job?.result
         
-        // Verify that mobile map package can be loaded.
-        let map = await model.map
-        XCTAssertNotNil(map)
-        
         // Give the final status some time to be updated.
         try? await Task.sleep(nanoseconds: 1_000_000)
+        
+        // Verify that mobile map package can be loaded.
+        XCTAssertNotNil(model.map)
         
         // Verify statuses.
         XCTAssertEqual(
@@ -342,9 +336,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItem.id!,
             preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            onRemoveDownload: { _ in }
         )
         
         var statuses: [PreplannedMapModel.Status] = []
@@ -391,9 +383,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItem.id!,
             preplannedMapAreaID: areaID,
-            // User notifications in unit tests are not supported, must pass false here
-            // or the test process will crash.
-            showsUserNotificationOnCompletion: false
+            onRemoveDownload: { _ in }
         )
         
         // Verify description does not contain HTML tags.
@@ -430,7 +420,8 @@ private extension PreplannedMapModel {
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: mapArea,
             portalItemID: .init("test-item-id")!,
-            preplannedMapAreaID: .init("test-preplanned-map-area-id")!
+            preplannedMapAreaID: .init("test-preplanned-map-area-id")!,
+            onRemoveDownload: { _ in }
         )
     }
 }
