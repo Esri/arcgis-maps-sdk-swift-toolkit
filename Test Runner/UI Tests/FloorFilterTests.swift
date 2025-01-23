@@ -27,9 +27,9 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let filterButton = app.buttons["Floor Filter button"]
 ***REMOVED******REMOVED***let researchAnnexButton = app.buttons["Research Annex"]
-***REMOVED******REMOVED***let latticeText = app.staticTexts["Lattice"]
-***REMOVED******REMOVED***let levelEightText = app.scrollViews.otherElements.staticTexts["8"]
-***REMOVED******REMOVED***let levelOneText = app.staticTexts["1"]
+***REMOVED******REMOVED***let latticeText = app.buttons["Lattice"]
+***REMOVED******REMOVED***let levelEightText = app.scrollViews.otherElements.buttons["8"]
+***REMOVED******REMOVED***let levelOneText = app.buttons["1"]
 ***REMOVED******REMOVED***let collapseButton = app.buttons["Go Down"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Floor Filter component test view.
