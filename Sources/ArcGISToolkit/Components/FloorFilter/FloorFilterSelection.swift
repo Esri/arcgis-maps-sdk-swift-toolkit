@@ -15,7 +15,6 @@
 ***REMOVED***
 
 ***REMOVED***/  A selected site, facility, or level.
-@available(visionOS, unavailable)
 public enum FloorFilterSelection: Hashable, Sendable {
 ***REMOVED******REMOVED***/ A selected site.
 ***REMOVED***case site(FloorSite)
@@ -25,7 +24,6 @@ public enum FloorFilterSelection: Hashable, Sendable {
 ***REMOVED***case level(FloorLevel)
 ***REMOVED***
 
-@available(visionOS, unavailable)
 public extension FloorFilterSelection {
 ***REMOVED******REMOVED***/ The selected site.
 ***REMOVED***var site: FloorSite? {
