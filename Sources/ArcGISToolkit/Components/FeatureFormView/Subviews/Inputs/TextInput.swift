@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for text input.
-@available(visionOS, unavailable)
 struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -83,16 +82,17 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CodeScanner(code: $text, isPresented: $scannerIsPresented)
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
@@ -121,6 +121,11 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The hover effect isn't needed because 'formInputStyle()'
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** will add the hover effect on the entire row.
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffectDisabled()
+#endif
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
@@ -136,6 +141,7 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 #endif
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty,
 ***REMOVED******REMOVED******REMOVED***   !isBarcodeScanner,
 ***REMOVED******REMOVED******REMOVED***   !element.isMultiline {
@@ -163,8 +169,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Scan Button")
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED***.formInputStyle(hoverEffectIsEnabled: true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
@@ -201,7 +208,6 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
 ***REMOVED******REMOVED***/
@@ -229,8 +235,11 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***RepresentedUITextView(initialText: text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
@@ -248,8 +257,8 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension TextInput {
+***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***private var isBarcodeScanner: Bool {
 ***REMOVED******REMOVED***element.input is BarcodeScannerFormInput
 ***REMOVED***

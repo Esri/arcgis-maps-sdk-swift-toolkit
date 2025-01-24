@@ -38,11 +38,12 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 16)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.red)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
@@ -53,6 +54,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.border(.yellow)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
