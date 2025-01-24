@@ -38,11 +38,12 @@ struct GroupView<Content>: View where Content: View {
     }
     
     var body: some View {
-        Group {
+        VStack {
             DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(visibleElements, id: \.self) { element in
                     viewCreator(element)
                         .padding(.leading, 16)
+                        .border(.red)
                 }
             } label: {
                 VStack {
@@ -53,6 +54,7 @@ struct GroupView<Content>: View where Content: View {
                     }
                     Divider()
                 }
+                .border(.yellow)
             }
         }
         .onAppear {

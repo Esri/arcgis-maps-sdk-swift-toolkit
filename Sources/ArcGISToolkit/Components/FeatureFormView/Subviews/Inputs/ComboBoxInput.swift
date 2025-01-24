@@ -101,7 +101,7 @@ struct ComboBoxInput: View {
                     .foregroundColor(.secondary)
             }
         }
-        .formInputStyle()
+        .formInputStyle(hoverEffectIsEnabled: true)
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
@@ -194,7 +194,9 @@ extension ComboBoxInput {
                         .accessibilityIdentifier("\(element.label) Unsupported Value Section")
                     }
                 }
+#if !os(visionOS)
                 .listStyle(.plain)
+#endif
                 .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
                 .navigationTitle(element.label)
                 .navigationBarTitleDisplayMode(.inline)
@@ -205,22 +207,32 @@ extension ComboBoxInput {
                         } label: {
                             Text.done
                                 .fontWeight(.semibold)
+#if !os(visionOS)
                                 .foregroundColor(.accentColor)
+#endif
                         }
+#if !os(visionOS)
                         .buttonStyle(.plain)
+#endif
                     }
                 }
             }
         }
     }
     
-    private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+    private func makePickerRow(
+        label: String,
+        selected: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
         HStack {
             Button(label) { action() }
             Spacer()
             if selected {
                 Image(systemName: "checkmark")
+#if !os(visionOS)
                     .foregroundColor(.accentColor)
+#endif
             }
         }
     }

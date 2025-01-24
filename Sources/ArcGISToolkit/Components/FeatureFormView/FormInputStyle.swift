@@ -17,20 +17,32 @@ import SwiftUI
 /// Provides a frame minimum height constraint, padding, background color and rounded corners for a
 /// form input.
 struct FormInputStyle: ViewModifier {
+    let hoverEffectIsEnabled: Bool
+    
     func body(content: Content) -> some View {
-        content
+        let cornerRadius: CGFloat = 10
+        let content = content
             .frame(minHeight: 30)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(Color(uiColor: .tertiarySystemFill))
-            .cornerRadius(10)
+            .cornerRadius(cornerRadius)
+        if hoverEffectIsEnabled {
+            content
+                .contentShape(.hoverEffect, .rect(cornerRadius: cornerRadius))
+                .hoverEffect()
+        } else {
+            content
+        }
     }
 }
 
 extension View {
     /// Provides a frame minimum height constraint, padding, background color and rounded corners
     /// for a form input.
-    func formInputStyle() -> some View {
-        modifier(FormInputStyle())
+    /// - Parameter hoverEffectIsEnabled: A Boolean value indicating if a hover effect should
+    /// be enabled for this form input.
+    func formInputStyle(hoverEffectIsEnabled: Bool) -> some View {
+        modifier(FormInputStyle(hoverEffectIsEnabled: hoverEffectIsEnabled))
     }
 }
