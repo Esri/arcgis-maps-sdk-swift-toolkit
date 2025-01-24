@@ -175,11 +175,16 @@ public struct FeatureFormView: View {
                             // For each association, create a Toolkit representation and add it to the group
                             for networkSourceMember in networkSourceMembers {
                                 let associatedElement = networkSourceMember.toElement
-                                let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                    description: nil,
-                                    name: "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
-                                )
-                                associations.append(newAssociation)
+                                if let arcGISFeature = try? await utilityNetwork?.features(for: [associatedElement]).first {
+                                    let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                        description: nil,
+                                        name: "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)",
+                                        selectionAction: {
+                                            model.selectedAssociation = arcGISFeature
+                                        }
+                                    )
+                                    associations.append(newAssociation)
+                                }
                             }
                             let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
                                 associations: associations,

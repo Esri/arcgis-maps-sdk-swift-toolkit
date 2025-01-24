@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
 import SwiftUI
 
 struct UtilityNetworkAssociationFormElementView: View {
@@ -63,7 +62,7 @@ extension UtilityNetworkAssociationFormElementView {
         let name: String
         
         /// <#Description#>
-        let object: ArcGISFeature
+        let selectionAction: (() -> Void)
     }
     
     struct AssociationView: View {
@@ -73,21 +72,23 @@ extension UtilityNetworkAssociationFormElementView {
         var association: Association
         
         var body: some View {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(association.name)
-                        .lineLimit(1)
-                    if let description = association.description {
-                        Text(description)
-                            .font(.caption2)
+            Button {
+                association.selectionAction()
+            } label: {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(association.name)
+                            .lineLimit(1)
+                        if let description = association.description {
+                            Text(description)
+                                .font(.caption2)
+                        }
                     }
+                    Spacer()
+                    Image(systemName: "chevron.right")
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
             }
-            .onTapGesture {
-                model.selectedAssociation = association.object
-            }
+            .buttonStyle(.plain)
             .padding(.leading)
         }
     }
