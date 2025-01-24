@@ -71,7 +71,7 @@ public struct FeatureFormView: View {
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var groups: [UtilityNetworkAssociationFormElementView.Group]?
+***REMOVED***@State private var groups: [UtilityNetworkAssociationFormElementView.AssociationKindGroup]?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether initial expression evaluation is running.
 ***REMOVED***@State private var initialExpressionsAreEvaluating = true
@@ -124,9 +124,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let groups = groups, groups.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[UtilityNetworkAssociationsFormElementDefinition.description]",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups: groups,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "[UtilityNetworkAssociationsFormElementDefinition.label]"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[UtilityNetworkAssociationsFormElement.description]",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationKindGroups: groups,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "[UtilityNetworkAssociationsFormElement.label]"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -151,30 +151,40 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Grab Utility Network Associations for the element being edited
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var groups = [UtilityNetworkAssociationFormElementView.Group]()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique network sources present
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSources = Array(Set(associations.map { $0.toElement.networkSource ***REMOVED***))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for source in networkSources {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique association kinds present
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associationKinds = Array(Set(associations.map { $0.kind ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for associationKind in associationKinds {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by kind
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let groupMembers = associations.filter { $0.toElement.networkSource == source ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for association in groupMembers {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = association.toElement
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "\(associatedElement.objectID)",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***icon: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: associatedElement.assetType.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   return await feature.makeSymbol()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associationKindMembers = associations.filter { $0.kind == associationKind ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique network sources within the association kind group.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceNames = Array(Set(associationKindMembers.map { $0.toElement.networkSource.name ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for networkSourceName in networkSourceNames {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by kind
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceMembers = associationKindMembers.filter { $0.toElement.networkSource.name == networkSourceName ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for networkSourceMember in networkSourceMembers {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = networkSourceMember.toElement
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations: associations,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: networkSourceName
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networkSourceGroups.append(networkSourceGroup)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView.AssociationKindGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networkSourceGroups: networkSourceGroups,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "\(associationKind)".capitalized
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.groups = groups
 ***REMOVED******REMOVED******REMOVED***
