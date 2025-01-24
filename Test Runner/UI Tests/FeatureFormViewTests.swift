@@ -28,7 +28,7 @@ final class FeatureFormViewTests: XCTestCase {
         // Wait and verify that the form is opened.
         XCTAssertTrue(
             titleElement.waitForExistence(timeout: 30),
-            "The form failed to open after 10 seconds."
+            "The form failed to open after 30 seconds."
         )
     }
     
