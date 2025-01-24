@@ -153,24 +153,36 @@ public struct FeatureFormView: View {
                 if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
                     var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
                     // Create a set of the unique association kinds present
-                    let kinds = Array(Set(associations.map { $0.kind }))
-                    for kind in kinds {
+                    let associationKinds = Array(Set(associations.map { $0.kind }))
+                    for associationKind in associationKinds {
                         // Filter the associations by kind
-                        let groupMembers = associations.filter { $0.kind == kind }
-                        var associations: [UtilityNetworkAssociationFormElementView.Association] = []
-                        // For each association, create a Toolkit representation and add it to the group
-                        for association in groupMembers {
-                            let associatedElement = association.toElement
-                            let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                description: "\(associatedElement.objectID)",
-                                name: associatedElement.assetType.name
+                        let associationKindMembers = associations.filter { $0.kind == associationKind }
+                        // Create a set of the unique network sources within the association kind group.
+                        let networkSourceNames = Array(Set(associationKindMembers.map { $0.toElement.networkSource.name }))
+                        var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
+                        for networkSourceName in networkSourceNames {
+                            // Filter the associations by kind
+                            let networkSourceMembers = associationKindMembers.filter { $0.toElement.networkSource.name == networkSourceName }
+                            var associations: [UtilityNetworkAssociationFormElementView.Association] = []
+                            // For each association, create a Toolkit representation and add it to the group
+                            for networkSourceMember in networkSourceMembers {
+                                let associatedElement = networkSourceMember.toElement
+                                let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                    description: nil,
+                                    name: "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+                                )
+                                associations.append(newAssociation)
+                            }
+                            let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
+                                associations: associations,
+                                name: networkSourceName
                             )
-                            associations.append(newAssociation)
+                            networkSourceGroups.append(networkSourceGroup)
                         }
                         groups.append(
                             UtilityNetworkAssociationFormElementView.AssociationKindGroup(
-                                associations: associations,
-                                name: "\(kind)".capitalized
+                                networkSourceGroups: networkSourceGroups,
+                                name: "\(associationKind)".capitalized
                             )
                         )
                     }
