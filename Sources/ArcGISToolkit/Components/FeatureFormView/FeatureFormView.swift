@@ -71,7 +71,7 @@ public struct FeatureFormView: View {
     @StateObject private var model: FormViewModel
     
     /// <#Description#>
-    @State private var groups: [UtilityNetworkAssociationFormElementView.Group]?
+    @State private var groups: [UtilityNetworkAssociationFormElementView.AssociationKindGroup]?
     
     /// A Boolean value indicating whether initial expression evaluation is running.
     @State private var initialExpressionsAreEvaluating = true
@@ -124,9 +124,9 @@ public struct FeatureFormView: View {
                     }
                     if let groups = groups, groups.count > 0 {
                         UtilityNetworkAssociationFormElementView(
-                            description: "[UtilityNetworkAssociationsFormElementDefinition.description]",
-                            groups: groups,
-                            title: "[UtilityNetworkAssociationsFormElementDefinition.label]"
+                            description: "[UtilityNetworkAssociationsFormElement.description]",
+                            associationKindGroups: groups,
+                            title: "[UtilityNetworkAssociationsFormElement.label]"
                         )
                         .padding(.bottom)
                     }
@@ -151,30 +151,28 @@ public struct FeatureFormView: View {
             if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
                 // Grab Utility Network Associations for the element being edited
                 if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
-                    var groups = [UtilityNetworkAssociationFormElementView.Group]()
-                    // Create a set of the unique network sources present
-                    let networkSources = Array(Set(associations.map { $0.toElement.networkSource }))
-                    for source in networkSources {
+                    var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
+                    // Create a set of the unique association kinds present
+                    let kinds = Array(Set(associations.map { $0.kind }))
+                    for kind in kinds {
                         // Filter the associations by kind
-                        let groupMembers = associations.filter { $0.toElement.networkSource == source }
+                        let groupMembers = associations.filter { $0.kind == kind }
                         var associations: [UtilityNetworkAssociationFormElementView.Association] = []
                         // For each association, create a Toolkit representation and add it to the group
                         for association in groupMembers {
                             let associatedElement = association.toElement
                             let newAssociation = UtilityNetworkAssociationFormElementView.Association(
                                 description: "\(associatedElement.objectID)",
-                                icon: nil,
                                 name: associatedElement.assetType.name
-                            ) {
-                                if let feature = try? await utilityNetwork?.features(for: [associatedElement]).first {
-                                   return await feature.makeSymbol()
-                                } else {
-                                    return nil
-                                }
-                            }
+                            )
                             associations.append(newAssociation)
                         }
-                        groups.append(.init(associations: associations, description: "[Network Source Description]", name: "\(source.name)".capitalized))
+                        groups.append(
+                            UtilityNetworkAssociationFormElementView.AssociationKindGroup(
+                                associations: associations,
+                                name: "\(kind)".capitalized
+                            )
+                        )
                     }
                     self.groups = groups
                 }
