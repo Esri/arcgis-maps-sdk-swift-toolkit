@@ -13,7 +13,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 
 struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED***/ <#Description#>
@@ -63,7 +62,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let object: ArcGISFeature
+***REMOVED******REMOVED***let selectionAction: (() -> Void)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationView: View {
@@ -73,21 +72,23 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***var association: Association
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***association.selectionAction()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.selectedAssociation = association.object
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED***
 ***REMOVED***
