@@ -98,6 +98,8 @@ public class OfflineManager: ObservableObject {
         switch job {
         case let downloadPreplanned as DownloadPreplannedOfflineMapJob:
             downloadPreplanned.onlineMap?.item as? PortalItem
+        case let generateOfflineMapJob as GenerateOfflineMapJob:
+            generateOfflineMapJob.onlineMap?.item as? PortalItem
         default:
             nil
         }
