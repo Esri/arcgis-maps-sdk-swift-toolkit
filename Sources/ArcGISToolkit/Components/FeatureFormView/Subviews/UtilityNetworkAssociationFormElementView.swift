@@ -19,28 +19,33 @@ struct UtilityNetworkAssociationFormElementView: View {
     let description: String
     
     /// <#Description#>
-    let groups: [Group]
+    let associationKindGroups: [AssociationKindGroup]
     
     /// <#Description#>
     let title: String
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Label {
-                    Text(title)
-                        .lineLimit(1)
-                } icon: {
-                    Image(systemName: "point.3.filled.connected.trianglepath.dotted")
-                }
+            // TODO: InputHeader to replace following in final implementation --
+            ///
+            Text(title)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .lineLimit(1)
+            //
+            // TODO: End InputHeader replacement section -----------------------
+            
+            ForEach(associationKindGroups) { group in
+                AssociationKindGroupView(associationKindGroup: group)
             }
+            
+            // TODO: InputFooter to replace following in final implementation --
+            ///
             Text(description)
                 .font(.caption)
-            ForEach(groups) { group in
-                Section {
-                    GroupView(group: group)
-                }
-            }
+                .foregroundColor(.secondary)
+            //
+            // TODO: End InputFooter replacement section -----------------------
         }
     }
 }
@@ -51,29 +56,17 @@ extension UtilityNetworkAssociationFormElementView {
         let description: String?
         
         /// <#Description#>
-        let icon: UIImage?
-        
-        /// <#Description#>
         let id = UUID()
         
         /// <#Description#>
         let name: String
-        
-        let imageGenerationAction: (() async -> UIImage?)?
     }
     
     struct AssociationView: View {
         var association: Association
         
-        @State private var fallbackIcon: UIImage?
-        
         var body: some View {
             HStack {
-                if let image = association.icon {
-                    Image(uiImage: image)
-                } else if let fallbackIcon {
-                    Image(uiImage: fallbackIcon)
-                }
                 VStack(alignment: .leading) {
                     Text(association.name)
                         .lineLimit(1)
@@ -91,22 +84,13 @@ extension UtilityNetworkAssociationFormElementView {
                 .buttonStyle(.plain)
                 .font(.caption2)
             }
-            .task {
-                if association.icon == nil,
-                   let imageGenerationAction = association.imageGenerationAction,
-                   let icon = await imageGenerationAction() {
-                    fallbackIcon = icon
-                }
-            }
+            .padding(.leading)
         }
     }
     
-    struct Group: Identifiable {
+    struct AssociationKindGroup: Identifiable {
         /// <#Description#>
-        let associations: [Association]
-        
-        /// <#Description#>
-        let description: String?
+        let networkSourceGroups: [NetworkSourceGroup]
         
         /// <#Description#>
         let id = UUID()
@@ -115,26 +99,53 @@ extension UtilityNetworkAssociationFormElementView {
         let name: String
     }
     
-    struct GroupView: View {
-        let group: Group
+    struct AssociationKindGroupView: View {
+        let associationKindGroup: AssociationKindGroup
         
-        @State private var isExpanded = true
+        @State private var isExpanded = false
         
         var body: some View {
             DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(group.associations) { association in
-                    AssociationView(association: association)
-                        .padding(.leading)
+                ForEach(associationKindGroup.networkSourceGroups) {
+                    NetworkSourceGroupView(networkSourceGroup: $0)
                 }
             } label: {
-                VStack(alignment: .leading) {
-                    Text(group.name)
-                    if let description = group.description {
-                        Text(description)
-                            .font(.caption)
-                    }
+                HStack {
+                    Text(associationKindGroup.name)
+                    Spacer()
+                    Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count }).count.formatted())
                 }
             }
+        }
+    }
+    
+    struct NetworkSourceGroup: Identifiable {
+        /// <#Description#>
+        let associations: [Association]
+        
+        /// <#Description#>
+        let id = UUID()
+        
+        /// <#Description#>
+        let name: String
+    }
+    
+    struct NetworkSourceGroupView: View {
+        let networkSourceGroup:  NetworkSourceGroup
+        
+        var body: some View {
+            DisclosureGroup {
+                ForEach(networkSourceGroup.associations) {
+                    AssociationView(association: $0)
+                }
+            } label: {
+                HStack {
+                    Text(networkSourceGroup.name)
+                    Spacer()
+                    Text(networkSourceGroup.associations.count.formatted())
+                }
+            }
+            .padding(.leading)
         }
     }
 }
