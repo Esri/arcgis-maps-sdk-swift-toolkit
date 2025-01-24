@@ -28,7 +28,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***titleElement.waitForExistence(timeout: 30),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 30 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
