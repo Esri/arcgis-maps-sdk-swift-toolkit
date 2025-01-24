@@ -20,6 +20,18 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***continueAfterFailure = false
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Verifies that the form is opened by asserting the existence of the form title.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ A timeout is added for resiliency when forms are occasionally slow to load.
+***REMOVED******REMOVED***/ - Parameter titleElement: The query for the form title element.
+***REMOVED***func assertFormOpened(titleElement: XCUIElement) {
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***titleElement.waitForExistence(timeout: 30),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets the map and feature based on the current test case.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - app: The current application.
@@ -53,11 +65,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -124,11 +132,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
@@ -210,11 +214,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
@@ -301,11 +301,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***textField.value as? String,
@@ -367,11 +363,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fieldValue.label != "No Value" {
 ***REMOVED******REMOVED******REMOVED***clearButton.tap()
@@ -438,11 +430,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
@@ -507,11 +495,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.isHittable,
@@ -571,11 +555,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fieldValue.label != "No Value" {
 ***REMOVED******REMOVED******REMOVED***clearButton.tap()
@@ -643,11 +623,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
@@ -702,11 +678,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -745,11 +717,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -805,11 +773,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -849,11 +813,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -909,11 +869,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -967,11 +923,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1039,11 +991,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1112,11 +1060,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1173,11 +1117,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1228,11 +1168,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify the Radio Button fallback to Combo Box was successful.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -1271,11 +1207,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1311,11 +1243,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -1355,11 +1283,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1397,11 +1321,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***expandedGroup.exists,
@@ -1459,11 +1379,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***hiddenElementsGroup.exists,
@@ -1532,11 +1448,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
 ***REMOVED******REMOVED***
@@ -1585,11 +1497,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
 ***REMOVED******REMOVED***XCTAssertTrue(placeholderImage.exists)
@@ -1621,11 +1529,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(singleCharacterString.label, "Value must be 1 character")
 ***REMOVED******REMOVED***XCTAssertEqual(lengthRangeString.label, "Value must be 2 to 5 characters")
@@ -1650,11 +1554,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***titleTextField.waitForExistence(timeout: 10),
@@ -1690,11 +1590,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(plainText.exists)
 ***REMOVED***
@@ -1716,11 +1612,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
 ***REMOVED******REMOVED***XCTAssertFalse(clearButton.exists, "The clear button exists.")
