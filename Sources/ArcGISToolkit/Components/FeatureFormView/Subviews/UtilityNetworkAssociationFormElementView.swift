@@ -36,7 +36,7 @@ struct UtilityNetworkAssociationFormElementView: View {
             // TODO: End InputHeader replacement section -----------------------
             
             ForEach(associationKindGroups) { group in
-                AssociationKindGroupView(group: group)
+                AssociationKindGroupView(associationKindGroup: group)
             }
             
             // TODO: InputFooter to replace following in final implementation --
@@ -84,10 +84,42 @@ extension UtilityNetworkAssociationFormElementView {
                 .buttonStyle(.plain)
                 .font(.caption2)
             }
+            .padding(.leading)
         }
     }
     
     struct AssociationKindGroup: Identifiable {
+        /// <#Description#>
+        let networkSourceGroups: [NetworkSourceGroup]
+        
+        /// <#Description#>
+        let id = UUID()
+        
+        /// <#Description#>
+        let name: String
+    }
+    
+    struct AssociationKindGroupView: View {
+        let associationKindGroup: AssociationKindGroup
+        
+        @State private var isExpanded = false
+        
+        var body: some View {
+            DisclosureGroup(isExpanded: $isExpanded) {
+                ForEach(associationKindGroup.networkSourceGroups) {
+                    NetworkSourceGroupView(networkSourceGroup: $0)
+                }
+            } label: {
+                HStack {
+                    Text(associationKindGroup.name)
+                    Spacer()
+                    Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count }).count.formatted())
+                }
+            }
+        }
+    }
+    
+    struct NetworkSourceGroup: Identifiable {
         /// <#Description#>
         let associations: [Association]
         
@@ -98,24 +130,22 @@ extension UtilityNetworkAssociationFormElementView {
         let name: String
     }
     
-    struct AssociationKindGroupView: View {
-        let group: AssociationKindGroup
-        
-        @State private var isExpanded = false
+    struct NetworkSourceGroupView: View {
+        let networkSourceGroup:  NetworkSourceGroup
         
         var body: some View {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(group.associations) { association in
-                    AssociationView(association: association)
-                        .padding(.leading)
+            DisclosureGroup {
+                ForEach(networkSourceGroup.associations) {
+                    AssociationView(association: $0)
                 }
             } label: {
                 HStack {
-                    Text(group.name)
+                    Text(networkSourceGroup.name)
                     Spacer()
-                    Text(group.associations.count.formatted())
+                    Text(networkSourceGroup.associations.count.formatted())
                 }
             }
+            .padding(.leading)
         }
     }
 }
