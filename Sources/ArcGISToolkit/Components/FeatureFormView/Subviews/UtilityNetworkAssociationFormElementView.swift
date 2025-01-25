@@ -62,36 +62,15 @@ extension UtilityNetworkAssociationFormElementView {
         let name: String
         
         /// <#Description#>
-        let selectionAction: (() async -> Void)
-        
-        init(
-            description: String?,
-            icon: UIImage?,
-            name: String,
-            imageGenerationAction: (() async -> UIImage?)?,
-            selectionAction: @escaping () async -> Void
-        ) {
-            self.description = description
-            self.icon = icon
-            self.name = name
-            self.imageGenerationAction = imageGenerationAction
-            self.selectionAction = selectionAction
-        }
+        let selectionAction: (() -> Void)
     }
     
     struct AssociationView: View {
         var association: Association
         
-        @State private var selectionTask: Task<Void, Never>?
-        
-        @State private var fallbackIcon: UIImage?
-        
         var body: some View {
             Button {
-                selectionTask?.cancel()
-                selectionTask = Task {
-                    await association.selectionAction()
-                }
+                association.selectionAction()
             } label: {
                 HStack {
                     VStack(alignment: .leading) {
