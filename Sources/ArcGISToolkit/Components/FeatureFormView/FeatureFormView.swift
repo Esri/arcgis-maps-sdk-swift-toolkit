@@ -204,7 +204,7 @@ struct FeatureFormViewInternal: View {
             try? await model.utilityNetwork?.load()
             if let utilityElement = model.utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
                 // Grab Utility Network Associations for the element being edited
-                if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
+                if let associations = try? await model.utilityNetwork?.associations(for: utilityElement) {
                     var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
                     // Create a set of the unique association kinds present
                     let associationKinds = Array(Set(associations.map { $0.kind }))
@@ -221,11 +221,14 @@ struct FeatureFormViewInternal: View {
                             // For each association, create a Toolkit representation and add it to the group
                             for networkSourceMember in networkSourceMembers {
                                 let associatedElement = networkSourceMember.toElement
-                                let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                    description: nil,
-                                    name: "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
-                                )
-                                associations.append(newAssociation)
+                                if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+                                    let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                        description: nil,
+                                        linkDestination: arcGISFeature,
+                                        name: "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+                                    )
+                                    associations.append(newAssociation)
+                                }
                             }
                             let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
                                 associations: associations,

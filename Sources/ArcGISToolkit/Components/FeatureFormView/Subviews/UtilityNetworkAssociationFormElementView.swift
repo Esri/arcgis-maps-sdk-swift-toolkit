@@ -71,82 +71,81 @@ extension UtilityNetworkAssociationFormElementView {
         @State private var selectionTask: Task<Void, Never>?
         
         var body: some View {
-            HStack {
-                NavigationLink(value: association.linkDestination!) {
-                    VStack(alignment: .leading) {
-                        Text(association.name)
-                            .lineLimit(1)
-                        if let description = association.description {
-                            Text(description)
-                                .font(.caption2)
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.right")
+            NavigationLink(value: association.linkDestination!) {
+                VStack(alignment: .leading) {
+                    Text(association.name)
+                        .lineLimit(1)
+                    if let description = association.description {
+                        Text(description)
+                            .font(.caption2)
                     }
-                }
-                .buttonStyle(.plain)
-                .padding(.leading)
-            }
-        }
-        
-        struct AssociationKindGroup: Identifiable {
-            /// <#Description#>
-            let networkSourceGroups: [NetworkSourceGroup]
-            
-            /// <#Description#>
-            let id = UUID()
-            
-            /// <#Description#>
-            let name: String
-        }
-        
-        struct AssociationKindGroupView: View {
-            let associationKindGroup: AssociationKindGroup
-            
-            @State private var isExpanded = false
-            
-            var body: some View {
-                DisclosureGroup(isExpanded: $isExpanded) {
-                    ForEach(associationKindGroup.networkSourceGroups) {
-                        NetworkSourceGroupView(networkSourceGroup: $0)
-                    }
-                } label: {
-                    HStack {
-                        Text(associationKindGroup.name)
-                        Spacer()
-                        Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count }).count.formatted())
-                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
                 }
             }
+            .buttonStyle(.plain)
+            .padding(.leading)
         }
+    }
+    
+    struct AssociationKindGroup: Identifiable {
+        /// <#Description#>
+        let networkSourceGroups: [NetworkSourceGroup]
         
-        struct NetworkSourceGroup: Identifiable {
-            /// <#Description#>
-            let associations: [Association]
-            
-            /// <#Description#>
-            let id = UUID()
-            
-            /// <#Description#>
-            let name: String
-        }
+        /// <#Description#>
+        let id = UUID()
         
-        struct NetworkSourceGroupView: View {
-            let networkSourceGroup:  NetworkSourceGroup
-            
-            var body: some View {
-                DisclosureGroup {
-                    ForEach(networkSourceGroup.associations) {
-                        AssociationView(association: $0)
-                    }
-                } label: {
-                    HStack {
-                        Text(networkSourceGroup.name)
-                        Spacer()
-                        Text(networkSourceGroup.associations.count.formatted())
-                    }
+        /// <#Description#>
+        let name: String
+    }
+        
+    struct AssociationKindGroupView: View {
+        let associationKindGroup: AssociationKindGroup
+        
+        @State private var isExpanded = false
+        
+        var body: some View {
+            DisclosureGroup(isExpanded: $isExpanded) {
+                ForEach(associationKindGroup.networkSourceGroups) {
+                    NetworkSourceGroupView(networkSourceGroup: $0)
                 }
-                .padding(.leading)
+            } label: {
+                HStack {
+                    Text(associationKindGroup.name)
+                    Spacer()
+                    Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count }).count.formatted())
+                }
             }
         }
     }
+        
+    struct NetworkSourceGroup: Identifiable {
+        /// <#Description#>
+        let associations: [Association]
+        
+        /// <#Description#>
+        let id = UUID()
+        
+        /// <#Description#>
+        let name: String
+    }
+        
+    struct NetworkSourceGroupView: View {
+        let networkSourceGroup:  NetworkSourceGroup
+        
+        var body: some View {
+            DisclosureGroup {
+                ForEach(networkSourceGroup.associations) {
+                    AssociationView(association: $0)
+                }
+            } label: {
+                HStack {
+                    Text(networkSourceGroup.name)
+                    Spacer()
+                    Text(networkSourceGroup.associations.count.formatted())
+                }
+            }
+            .padding(.leading)
+        }
+    }
+}
