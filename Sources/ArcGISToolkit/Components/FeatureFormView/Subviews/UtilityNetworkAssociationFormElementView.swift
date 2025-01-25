@@ -62,36 +62,15 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let selectionAction: (() async -> Void)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***description: String?,
-***REMOVED******REMOVED******REMOVED***icon: UIImage?,
-***REMOVED******REMOVED******REMOVED***name: String,
-***REMOVED******REMOVED******REMOVED***imageGenerationAction: (() async -> UIImage?)?,
-***REMOVED******REMOVED******REMOVED***selectionAction: @escaping () async -> Void
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***self.description = description
-***REMOVED******REMOVED******REMOVED***self.icon = icon
-***REMOVED******REMOVED******REMOVED***self.name = name
-***REMOVED******REMOVED******REMOVED***self.imageGenerationAction = imageGenerationAction
-***REMOVED******REMOVED******REMOVED***self.selectionAction = selectionAction
-***REMOVED***
+***REMOVED******REMOVED***let selectionAction: (() -> Void)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationView: View {
 ***REMOVED******REMOVED***var association: Association
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@State private var selectionTask: Task<Void, Never>?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***@State private var fallbackIcon: UIImage?
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectionTask?.cancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***selectionTask = Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await association.selectionAction()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***association.selectionAction()
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
