@@ -71,82 +71,81 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***@State private var selectionTask: Task<Void, Never>?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(value: association.linkDestination!) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED***NavigationLink(value: association.linkDestination!) {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.padding(.leading)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***struct AssociationKindGroup: Identifiable {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let networkSourceGroups: [NetworkSourceGroup]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let id = UUID()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let name: String
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***struct AssociationKindGroup: Identifiable {
-***REMOVED******REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***let networkSourceGroups: [NetworkSourceGroup]
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***let id = UUID()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***let name: String
-***REMOVED***
+***REMOVED***struct AssociationKindGroupView: View {
+***REMOVED******REMOVED***let associationKindGroup: AssociationKindGroup
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***struct AssociationKindGroupView: View {
-***REMOVED******REMOVED******REMOVED***let associationKindGroup: AssociationKindGroup
+***REMOVED******REMOVED***@State private var isExpanded = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(associationKindGroup.networkSourceGroups) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NetworkSourceGroupView(networkSourceGroup: $0)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@State private var isExpanded = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(associationKindGroup.networkSourceGroups) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NetworkSourceGroupView(networkSourceGroup: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count ***REMOVED***).count.formatted())
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count ***REMOVED***).count.formatted())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***struct NetworkSourceGroup: Identifiable {
-***REMOVED******REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***let associations: [Association]
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***let id = UUID()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***let name: String
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***struct NetworkSourceGroupView: View {
-***REMOVED******REMOVED******REMOVED***let networkSourceGroup:  NetworkSourceGroup
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(networkSourceGroup.associations) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.associations.count.formatted())
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading)
+***REMOVED***struct NetworkSourceGroup: Identifiable {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let associations: [Association]
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let id = UUID()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let name: String
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***struct NetworkSourceGroupView: View {
+***REMOVED******REMOVED***let networkSourceGroup:  NetworkSourceGroup
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***DisclosureGroup {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(networkSourceGroup.associations) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.associations.count.formatted())
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding(.leading)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
