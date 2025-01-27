@@ -143,9 +143,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***if let models = mapViewModel.onDemandMapModels {
 ***REMOVED******REMOVED******REMOVED***List(models) { onDemandMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedMap) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ProgressView()

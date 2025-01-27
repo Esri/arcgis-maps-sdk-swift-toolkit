@@ -31,6 +31,9 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to dismiss the view.
+***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***
 ***REMOVED***var isSelected: Bool {
 ***REMOVED******REMOVED***selectedMap?.item?.title == model.onDemandMapArea.title
 ***REMOVED***
@@ -118,6 +121,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = await model.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
