@@ -20,17 +20,21 @@ internal import os
 
 @MainActor
 class OnDemandMapModel: ObservableObject, Identifiable {
+    /// The on-demand map area.
     let onDemandMapArea: any OnDemandMapAreaProtocol
     
+    /// The mobile map package directory URL.
     let mmpkDirectoryURL: URL
     
+    /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
-    private let portalItemID: PortalItem.ID
+    /// The ID of the online map.
+    private let portalItemID: Item.ID
     
-    private var mobileMapPackage: MobileMapPackage?
+    @Published private(set) var mobileMapPackage: MobileMapPackage?
     
-    private(set) var directorySize = 0
+    @Published private(set) var directorySize = 0
     
     @Published private(set) var job: GenerateOfflineMapJob?
     
@@ -236,21 +240,3 @@ struct OnDemandMapArea: OnDemandMapAreaProtocol {
     let maxScale: Double
     let areaOfInterest: Geometry
 }
-
-private extension FileManager {
-    /// Calculates the size of a directory and all its contents.
-    /// - Parameter url: The directory's URL.
-    /// - Returns: The total size in bytes.
-    func sizeOfDirectory(at url: URL) -> Int {
-        guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 }
-        var totalSize = 0
-        for case let fileURL as URL in enumerator {
-            guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
-                continue
-            }
-            totalSize += fileSize
-        }
-        return totalSize
-    }
-}
-
