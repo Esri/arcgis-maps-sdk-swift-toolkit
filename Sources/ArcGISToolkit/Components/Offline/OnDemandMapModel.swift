@@ -36,9 +36,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***@Published private(set) var status: Status = .initialized
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
-***REMOVED***let showsUserNotificationOnCompletion: Bool
-***REMOVED***
 ***REMOVED******REMOVED***/ The first map from the mobile map package.
 ***REMOVED***var map: Map? {
 ***REMOVED******REMOVED***get async {
@@ -60,8 +57,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***onDemandMapArea: OnDemandMapAreaProtocol,
-***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***showsUserNotificationOnCompletion: Bool = true
+***REMOVED******REMOVED***portalItemID: PortalItem.ID
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.onDemandMapArea = onDemandMapArea
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
@@ -70,10 +66,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: onDemandMapArea.id
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for area \(onDemandMapArea.id.uuidString, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(onDemandMapArea.id.uuidString, privacy: .public)")
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED******REMOVED******REMOVED***status = .downloading
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
@@ -92,7 +87,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***.lazy
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? GenerateOfflineMapJob ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***UUID(uuidString: $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent) == onDemandMapArea.id
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == onDemandMapArea.id.uuidString
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
