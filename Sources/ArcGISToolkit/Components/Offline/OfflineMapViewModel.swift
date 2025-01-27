@@ -206,7 +206,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***let mapArea = OnDemandMapArea(id: id, title: info.title, minScale: minScale, maxScale: maxScale, areaOfInterest: aoi)
 ***REMOVED******REMOVED******REMOVED***let model = OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapArea: mapArea,
+***REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***onDemandMapModels.append(model)
@@ -223,7 +223,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let model = OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapArea: mapArea,
+***REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***onDemandMapModels.append(model)
@@ -234,7 +234,11 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addOnDemandMapArea(_ onDemandMapArea: OnDemandMapArea) {
-***REMOVED******REMOVED***let model = OnDemandMapModel(offlineMapTask: offlineMapTask, onDemandMapArea: onDemandMapArea, portalItemID: portalItemID)
+***REMOVED******REMOVED***let model = OnDemandMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
+***REMOVED******REMOVED******REMOVED***mapArea: onDemandMapArea,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***if onDemandMapModels != nil {
 ***REMOVED******REMOVED******REMOVED***onDemandMapModels!.append(model)
 ***REMOVED******REMOVED******REMOVED***onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title ***REMOVED***)
