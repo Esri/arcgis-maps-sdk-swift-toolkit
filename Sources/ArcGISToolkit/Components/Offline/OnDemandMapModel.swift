@@ -146,7 +146,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Removes the downloaded map area from disk and resets the status.
 ***REMOVED***func removeDownloadedOnDemandMapArea() {
 ***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
-***REMOVED******REMOVED******REMOVED*** Reload the model after local files removal.
 ***REMOVED******REMOVED***status = .initialized
 ***REMOVED***
 ***REMOVED***
@@ -172,6 +171,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 extension OnDemandMapModel {
 ***REMOVED******REMOVED***/ The status of the map area model.
 ***REMOVED***enum Status {
+***REMOVED******REMOVED******REMOVED***/ The model is initialized but a job hasn't been started and the area has not been downloaded.
 ***REMOVED******REMOVED***case initialized
 ***REMOVED******REMOVED******REMOVED***/ Map area is being downloaded.
 ***REMOVED******REMOVED***case downloading
@@ -243,14 +243,14 @@ private extension FileManager {
 ***REMOVED******REMOVED***/ - Returns: The total size in bytes.
 ***REMOVED***func sizeOfDirectory(at url: URL) -> Int {
 ***REMOVED******REMOVED***guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 ***REMOVED***
-***REMOVED******REMOVED***var accumulatedSize = 0
+***REMOVED******REMOVED***var totalSize = 0
 ***REMOVED******REMOVED***for case let fileURL as URL in enumerator {
-***REMOVED******REMOVED******REMOVED***guard let size = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+***REMOVED******REMOVED******REMOVED***guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***continue
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***accumulatedSize += size
+***REMOVED******REMOVED******REMOVED***totalSize += fileSize
 ***REMOVED***
-***REMOVED******REMOVED***return accumulatedSize
+***REMOVED******REMOVED***return totalSize
 ***REMOVED***
 ***REMOVED***
 
