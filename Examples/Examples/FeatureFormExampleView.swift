@@ -23,6 +23,9 @@ struct FeatureFormExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = makeMap()
     
+    /// <#Description#>
+    @State private var selectedDetent = PresentationDetent.large
+    
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
     
@@ -64,7 +67,7 @@ struct FeatureFormExampleView: View {
                             .padding(.top, 16)
                             .presentationBackgroundInteractionEnabled()
                             .presentationContentInteractionScrolls()
-                            .presentationDetents([.medium, .large])
+                            .presentationDetents([.medium, .large], selection: $selectedDetent)
                             .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
                                 Button("Discard edits", role: .destructive) {
                                     model.discardEdits()
