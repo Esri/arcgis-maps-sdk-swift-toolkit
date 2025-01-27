@@ -23,6 +23,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var selectedDetent = PresentationDetent.large
+***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***@State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
 ***REMOVED***
@@ -64,7 +67,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, 16)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteractionEnabled()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationContentInteractionScrolls()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium, .large])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium, .large], selection: $selectedDetent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.discardEdits()
