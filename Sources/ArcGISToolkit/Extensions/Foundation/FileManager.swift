@@ -14,7 +14,7 @@
 
 import Foundation
 
-private extension FileManager {
+extension FileManager {
 ***REMOVED******REMOVED***/ Calculates the size of a directory and all its contents.
 ***REMOVED******REMOVED***/ - Parameter url: The directory's URL.
 ***REMOVED******REMOVED***/ - Returns: The total size in bytes.
