@@ -32,6 +32,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var selectedDetent = PresentationDetent.large
+***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***@State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
 ***REMOVED***
@@ -95,7 +98,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.backgroundInteractionEnabled()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium, .large])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium, .large], selection: $selectedDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !formIsPresented { validationErrorVisibility = .automatic ***REMOVED***
