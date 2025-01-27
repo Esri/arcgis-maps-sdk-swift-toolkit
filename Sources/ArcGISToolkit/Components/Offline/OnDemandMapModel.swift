@@ -146,7 +146,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// Removes the downloaded map area from disk and resets the status.
     func removeDownloadedOnDemandMapArea() {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
-        // Reload the model after local files removal.
         status = .initialized
     }
     
@@ -172,6 +171,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 extension OnDemandMapModel {
     /// The status of the map area model.
     enum Status {
+        /// The model is initialized but a job hasn't been started and the area has not been downloaded.
         case initialized
         /// Map area is being downloaded.
         case downloading
@@ -243,14 +243,14 @@ private extension FileManager {
     /// - Returns: The total size in bytes.
     func sizeOfDirectory(at url: URL) -> Int {
         guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 }
-        var accumulatedSize = 0
+        var totalSize = 0
         for case let fileURL as URL in enumerator {
-            guard let size = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
+            guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
                 continue
             }
-            accumulatedSize += size
+            totalSize += fileSize
         }
-        return accumulatedSize
+        return totalSize
     }
 }
 
