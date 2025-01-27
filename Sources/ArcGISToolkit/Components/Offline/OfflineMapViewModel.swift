@@ -206,7 +206,7 @@ class OfflineMapViewModel: ObservableObject {
             let mapArea = OnDemandMapArea(id: id, title: info.title, minScale: minScale, maxScale: maxScale, areaOfInterest: aoi)
             let model = OnDemandMapModel(
                 offlineMapTask: offlineMapTask,
-                onDemandMapArea: mapArea,
+                mapArea: mapArea,
                 portalItemID: portalItemID
             )
             onDemandMapModels.append(model)
@@ -223,7 +223,7 @@ class OfflineMapViewModel: ObservableObject {
             }
             let model = OnDemandMapModel(
                 offlineMapTask: offlineMapTask,
-                onDemandMapArea: mapArea,
+                mapArea: mapArea,
                 portalItemID: portalItemID
             )
             onDemandMapModels.append(model)
@@ -234,7 +234,11 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     func addOnDemandMapArea(_ onDemandMapArea: OnDemandMapArea) {
-        let model = OnDemandMapModel(offlineMapTask: offlineMapTask, onDemandMapArea: onDemandMapArea, portalItemID: portalItemID)
+        let model = OnDemandMapModel(
+            offlineMapTask: offlineMapTask,
+            mapArea: onDemandMapArea,
+            portalItemID: portalItemID
+        )
         if onDemandMapModels != nil {
             onDemandMapModels!.append(model)
             onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })

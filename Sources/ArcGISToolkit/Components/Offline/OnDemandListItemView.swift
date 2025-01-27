@@ -119,7 +119,7 @@ struct OnDemandListItemView: View {
         case .downloaded:
             Button {
                 Task {
-                    if let map = await model.map {
+                    if let map = model.map {
                         selectedMap = map
                         dismiss()
                     }
