@@ -35,10 +35,6 @@ struct UtilityNetworkAssociationFormElementView: View {
             //
             // TODO: End InputHeader replacement section -----------------------
             
-            ForEach(associationKindGroups) { group in
-                AssociationKindGroupView(associationKindGroup: group)
-            }
-            
             // TODO: InputFooter to replace following in final implementation --
             ///
             Text(description)
@@ -46,6 +42,10 @@ struct UtilityNetworkAssociationFormElementView: View {
                 .foregroundColor(.secondary)
             //
             // TODO: End InputFooter replacement section -----------------------
+            
+            ForEach(associationKindGroups) { group in
+                AssociationKindGroupView(associationKindGroup: group)
+            }
         }
     }
 }
