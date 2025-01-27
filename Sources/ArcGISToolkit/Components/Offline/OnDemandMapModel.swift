@@ -36,9 +36,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     
     @Published private(set) var status: Status = .initialized
     
-    /// A Boolean value indicating if a user notification should be shown when a job completes.
-    let showsUserNotificationOnCompletion: Bool
-    
     /// The first map from the mobile map package.
     var map: Map? {
         get async {
@@ -60,8 +57,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     init(
         offlineMapTask: OfflineMapTask,
         onDemandMapArea: OnDemandMapAreaProtocol,
-        portalItemID: PortalItem.ID,
-        showsUserNotificationOnCompletion: Bool = true
+        portalItemID: PortalItem.ID
     ) {
         self.onDemandMapArea = onDemandMapArea
         self.offlineMapTask = offlineMapTask
@@ -70,10 +66,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             forPortalItemID: portalItemID,
             onDemandMapAreaID: onDemandMapArea.id
         )
-        self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
-            Logger.offlineManager.debug("Found executing job for area \(onDemandMapArea.id.uuidString, privacy: .public)")
+            Logger.offlineManager.debug("Found executing job for on-demand area \(onDemandMapArea.id.uuidString, privacy: .public)")
             observeJob(foundJob)
             status = .downloading
         } else if let mmpk = lookupMobileMapPackage() {
@@ -92,7 +87,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             .lazy
             .compactMap { $0 as? GenerateOfflineMapJob }
             .first {
-                UUID(uuidString: $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent) == onDemandMapArea.id
+                $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == onDemandMapArea.id.uuidString
             }
     }
     

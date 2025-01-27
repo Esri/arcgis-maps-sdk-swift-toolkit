@@ -73,7 +73,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         )
         
         if let foundJob = lookupDownloadJob() {
-            Logger.offlineManager.debug("Found executing job for area \(preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Found executing job for preplanned area \(preplannedMapAreaID.rawValue, privacy: .public)")
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
