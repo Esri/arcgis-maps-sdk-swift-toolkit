@@ -27,7 +27,7 @@ extension URL {
     /// `Documents/OfflineMapAreas/<Portal Item ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
     static func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
-        return offlineManagerDirectory().appending(path: "\(portalItemID)/")
+        return offlineManagerDirectory().appending(path: portalItemID.rawValue)
     }
     
     /// The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
@@ -43,7 +43,7 @@ extension URL {
         var url = portalItemDirectory(forPortalItemID: portalItemID)
             .appending(component: "Preplanned/")
         if let preplannedMapAreaID {
-            url = url.appending(component: "\(preplannedMapAreaID)/")
+            url = url.appending(component: preplannedMapAreaID.rawValue)
         }
         return url
     }
@@ -55,7 +55,7 @@ extension URL {
         var url = portalItemDirectory(forPortalItemID: portalItemID)
             .appending(component: "OnDemand/")
         if let onDemandMapAreaID {
-            url = url.appending(component: "\(onDemandMapAreaID.uuidString)/")
+            url = url.appending(component: onDemandMapAreaID.uuidString)
         }
         return url
     }
@@ -67,6 +67,6 @@ extension URL {
     static func pendingMapInfoDirectory(
         forPortalItem portalItemID: Item.ID
     ) -> URL {
-        return .cachesDirectory.appending(components: "PendingDownloads", "\(portalItemID)/")
+        return .cachesDirectory.appending(components: "PendingDownloads", portalItemID.rawValue)
     }
 }
