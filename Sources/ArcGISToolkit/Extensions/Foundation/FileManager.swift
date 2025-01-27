@@ -14,7 +14,7 @@
 
 import Foundation
 
-private extension FileManager {
+extension FileManager {
     /// Calculates the size of a directory and all its contents.
     /// - Parameter url: The directory's URL.
     /// - Returns: The total size in bytes.
