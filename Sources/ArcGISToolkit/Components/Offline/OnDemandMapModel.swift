@@ -20,17 +20,21 @@ internal import os
 
 @MainActor
 class OnDemandMapModel: ObservableObject, Identifiable {
+***REMOVED******REMOVED***/ The on-demand map area.
 ***REMOVED***let onDemandMapArea: any OnDemandMapAreaProtocol
 ***REMOVED***
+***REMOVED******REMOVED***/ The mobile map package directory URL.
 ***REMOVED***let mmpkDirectoryURL: URL
 ***REMOVED***
+***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED***
-***REMOVED***private let portalItemID: PortalItem.ID
+***REMOVED******REMOVED***/ The ID of the online map.
+***REMOVED***private let portalItemID: Item.ID
 ***REMOVED***
-***REMOVED***private var mobileMapPackage: MobileMapPackage?
+***REMOVED***@Published private(set) var mobileMapPackage: MobileMapPackage?
 ***REMOVED***
-***REMOVED***private(set) var directorySize = 0
+***REMOVED***@Published private(set) var directorySize = 0
 ***REMOVED***
 ***REMOVED***@Published private(set) var job: GenerateOfflineMapJob?
 ***REMOVED***
@@ -236,21 +240,3 @@ struct OnDemandMapArea: OnDemandMapAreaProtocol {
 ***REMOVED***let maxScale: Double
 ***REMOVED***let areaOfInterest: Geometry
 ***REMOVED***
-
-private extension FileManager {
-***REMOVED******REMOVED***/ Calculates the size of a directory and all its contents.
-***REMOVED******REMOVED***/ - Parameter url: The directory's URL.
-***REMOVED******REMOVED***/ - Returns: The total size in bytes.
-***REMOVED***func sizeOfDirectory(at url: URL) -> Int {
-***REMOVED******REMOVED***guard let enumerator = enumerator(at: url, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 ***REMOVED***
-***REMOVED******REMOVED***var totalSize = 0
-***REMOVED******REMOVED***for case let fileURL as URL in enumerator {
-***REMOVED******REMOVED******REMOVED***guard let fileSize = try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize else {
-***REMOVED******REMOVED******REMOVED******REMOVED***continue
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***totalSize += fileSize
-***REMOVED***
-***REMOVED******REMOVED***return totalSize
-***REMOVED***
-***REMOVED***
-
