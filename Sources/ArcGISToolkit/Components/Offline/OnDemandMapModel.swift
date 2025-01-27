@@ -32,38 +32,27 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// The ID of the online map.
     private let portalItemID: Item.ID
     
+    /// The mobile map package for the preplanned map area.
     @Published private(set) var mobileMapPackage: MobileMapPackage?
     
+    /// The file size of the on-demand map area.
     @Published private(set) var directorySize = 0
     
+    /// The currently running offline map job.
     @Published private(set) var job: GenerateOfflineMapJob?
     
+    /// The combined status of the on-demand map area.
     @Published private(set) var status: Status = .initialized
     
     /// The first map from the mobile map package.
-    var map: Map? {
-        get async {
-            if let mobileMapPackage {
-                if mobileMapPackage.loadStatus != .loaded {
-                    do {
-                        try await mobileMapPackage.load()
-                    } catch {
-                        status = .mmpkLoadFailure(error)
-                    }
-                }
-                return mobileMapPackage.maps.first
-            } else {
-                return nil
-            }
-        }
-    }
+    @Published private(set) var map: Map?
     
     init(
         offlineMapTask: OfflineMapTask,
-        onDemandMapArea: OnDemandMapAreaProtocol,
+        mapArea: OnDemandMapAreaProtocol,
         portalItemID: PortalItem.ID
     ) {
-        self.onDemandMapArea = onDemandMapArea
+        self.onDemandMapArea = mapArea
         self.offlineMapTask = offlineMapTask
         self.portalItemID = portalItemID
         mmpkDirectoryURL = .onDemandDirectory(
@@ -72,16 +61,31 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         )
         
         if let foundJob = lookupDownloadJob() {
-            Logger.offlineManager.debug("Found executing job for on-demand area \(onDemandMapArea.id.uuidString, privacy: .public)")
+            Logger.offlineManager.debug("Found executing job for on-demand area \(mapArea.id.uuidString, privacy: .public)")
             observeJob(foundJob)
-            status = .downloading
         } else if let mmpk = lookupMobileMapPackage() {
-            Logger.offlineManager.debug("Found MMPK for area \(onDemandMapArea.id.uuidString, privacy: .public)")
-            mobileMapPackage = mmpk
-            directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            Logger.offlineManager.debug("Found MMPK for area \(mapArea.id.uuidString, privacy: .public)")
+            // TODO: ?
             status = .downloaded
+            Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
         } else {
             status = .initialized
+        }
+    }
+    
+    /// Tries to load a mobile map package and if successful, then updates state
+    /// associated with it.
+    private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
+        do {
+            try await mmpk.load()
+            mobileMapPackage = mmpk
+            directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            map = mmpk.maps.first
+        } catch {
+            status = .mmpkLoadFailure(error)
+            mobileMapPackage = nil
+            directorySize = 0
+            map = nil
         }
     }
     
@@ -163,9 +167,8 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             let result = await job.result
             guard let self else { return }
             self.updateDownloadStatus(for: result)
-            if status.isDownloaded {
-                self.mobileMapPackage = try? result.get().mobileMapPackage
-                self.directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            if let mmpk = try? result.get().mobileMapPackage {
+                await loadAndUpdateMobileMapPackage(mmpk: mmpk)
             }
             self.job = nil
         }
