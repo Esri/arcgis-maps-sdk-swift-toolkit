@@ -143,9 +143,6 @@ public struct OfflineMapAreasView: View {
         if let models = mapViewModel.onDemandMapModels {
             List(models) { onDemandMapModel in
                 OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
-                    .onChange(of: selectedMap) { _ in
-                        dismiss()
-                    }
             }
         } else {
             ProgressView()

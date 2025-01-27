@@ -31,6 +31,9 @@ struct OnDemandListItemView: View {
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
+    /// The action to dismiss the view.
+    @Environment(\.dismiss) private var dismiss: DismissAction
+    
     var isSelected: Bool {
         selectedMap?.item?.title == model.onDemandMapArea.title
     }
@@ -118,6 +121,7 @@ struct OnDemandListItemView: View {
                 Task {
                     if let map = await model.map {
                         selectedMap = map
+                        dismiss()
                     }
                 }
             } label: {
