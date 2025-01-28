@@ -163,22 +163,20 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-***REMOVED******REMOVED******REMOVED*** TODO:
-***REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED***let model = OnDemandMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***configuration: configuration,
-***REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***if onDemandMapModels != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels!.append(model)
-***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title ***REMOVED***)
+***REMOVED******REMOVED***guard var onDemandMapModels else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download map area.
-***REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadOnDemandMapArea()
+***REMOVED******REMOVED***let model = OnDemandMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
+***REMOVED******REMOVED******REMOVED***configuration: configuration,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***onDemandMapModels.append(model)
+***REMOVED******REMOVED***onDemandMapModels.sort(by: { $0.title < $1.title ***REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Download map area.
+***REMOVED******REMOVED******REMOVED***await model.downloadOnDemandMapArea()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -194,12 +192,4 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
 ***REMOVED******REMOVED***fatalError()
 ***REMOVED***
-***REMOVED***
-
-***REMOVED*** This struct represents an on-demand area that is downloaded.
-struct OfflineOnDemandMapArea {
-***REMOVED***var id: UUID
-***REMOVED***var title: String
-***REMOVED***var description: String
-***REMOVED******REMOVED***var thumbnail: LoadableImage?
 ***REMOVED***
