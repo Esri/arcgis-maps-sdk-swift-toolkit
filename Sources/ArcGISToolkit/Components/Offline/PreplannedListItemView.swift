@@ -46,7 +46,7 @@ struct PreplannedListItemView: View {
     /// The title of a preplanned map area is guaranteed to be unique when it
     /// is created.
     var isSelected: Bool {
-        selectedMap == model.map
+        selectedMap?.item?.title == model.preplannedMapArea.title
     }
     
     var body: some View {

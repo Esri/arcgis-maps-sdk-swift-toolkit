@@ -35,7 +35,7 @@ struct OnDemandListItemView: View {
     @Environment(\.dismiss) private var dismiss: DismissAction
     
     var isSelected: Bool {
-        selectedMap == model.map
+        selectedMap?.item?.title == model.title
     }
     
     var body: some View {
