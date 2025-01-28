@@ -140,11 +140,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
-***REMOVED******REMOVED***/ - Precondition: `canDownload`
+***REMOVED******REMOVED***/ - Precondition: `allowsDownload == true`
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(status.allowsDownload)
-***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
 ***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)

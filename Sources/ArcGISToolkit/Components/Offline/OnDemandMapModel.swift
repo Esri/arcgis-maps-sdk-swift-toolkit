@@ -108,23 +108,34 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***return MobileMapPackage(fileURL: fileURL)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Downloads the on-demand map area.
+***REMOVED******REMOVED***/ - Precondition: `allowsDownload == true`
 ***REMOVED***func downloadOnDemandMapArea() async {
 ***REMOVED******REMOVED***precondition(status.allowsDownload)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***status = .downloading
+***REMOVED******REMOVED******REMOVED*** TODO: shouldn't do this
 ***REMOVED******REMOVED***guard let onDemandMapArea = onDemandMapArea as? OnDemandMapArea else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: this should be part of the protocol
 ***REMOVED******REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultGenerateOfflineMapParameters(
 ***REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: onDemandMapArea.areaOfInterest,
 ***REMOVED******REMOVED******REMOVED******REMOVED***minScale: onDemandMapArea.minScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxScale: onDemandMapArea.maxScale
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set the update mode to no updates as the offline map is display-only.
 ***REMOVED******REMOVED******REMOVED***parameters.updateMode = .noUpdates
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Update item info on parameters
+***REMOVED******REMOVED******REMOVED***if let itemInfo = parameters.itemInfo {
+***REMOVED******REMOVED******REMOVED******REMOVED***itemInfo.title = onDemandMapArea.title
+***REMOVED******REMOVED******REMOVED******REMOVED***itemInfo.description = ""
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Make sure the directory exists.
 ***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
-***REMOVED******REMOVED******REMOVED***guard let itemInfo = parameters.itemInfo else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***itemInfo.title = onDemandMapArea.title
-***REMOVED******REMOVED******REMOVED***itemInfo.description = ""
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let job = offlineMapTask.makeGenerateOfflineMapJob(
 ***REMOVED******REMOVED******REMOVED******REMOVED***parameters: parameters,
