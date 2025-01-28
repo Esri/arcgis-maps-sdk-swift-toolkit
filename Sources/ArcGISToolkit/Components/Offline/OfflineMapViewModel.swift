@@ -163,22 +163,20 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-        // TODO:
-        fatalError()
-//        let model = OnDemandMapModel(
-//            offlineMapTask: offlineMapTask,
-//            configuration: configuration,
-//            portalItemID: portalItemID
-//        )
-//        if onDemandMapModels != nil {
-//            onDemandMapModels!.append(model)
-//            onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })
-//        }
-//        
-//        Task {
-//            // Download map area.
-//            await model.downloadOnDemandMapArea()
-//        }
+        guard var onDemandMapModels else { return }
+        
+        let model = OnDemandMapModel(
+            offlineMapTask: offlineMapTask,
+            configuration: configuration,
+            portalItemID: portalItemID
+        )
+        onDemandMapModels.append(model)
+        onDemandMapModels.sort(by: { $0.title < $1.title })
+        
+        Task {
+            // Download map area.
+            await model.downloadOnDemandMapArea()
+        }
     }
 }
 
@@ -194,12 +192,4 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         fatalError()
     }
-}
-
-// This struct represents an on-demand area that is downloaded.
-struct OfflineOnDemandMapArea {
-    var id: UUID
-    var title: String
-    var description: String
-    //var thumbnail: LoadableImage?
 }
