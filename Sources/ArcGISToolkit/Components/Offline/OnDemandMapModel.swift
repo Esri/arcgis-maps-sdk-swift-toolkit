@@ -74,6 +74,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// Tries to load a mobile map package and if successful, then updates state
     /// associated with it.
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
+        guard status.needsToBeLoaded else { return }
         do {
             try await mmpk.load()
             status = .downloaded
