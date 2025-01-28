@@ -163,15 +163,15 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-        guard var onDemandMapModels else { return }
+        guard onDemandMapModels != nil else { return }
         
         let model = OnDemandMapModel(
             offlineMapTask: offlineMapTask,
             configuration: configuration,
             portalItemID: portalItemID
         )
-        onDemandMapModels.append(model)
-        onDemandMapModels.sort(by: { $0.title < $1.title })
+        onDemandMapModels?.append(model)
+        onDemandMapModels?.sort(by: { $0.title < $1.title })
         
         Task {
             // Download map area.
