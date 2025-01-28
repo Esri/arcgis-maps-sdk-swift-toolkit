@@ -114,7 +114,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***configuration = nil
 ***REMOVED******REMOVED***title = item.title
 ***REMOVED******REMOVED***description = item.description
-***REMOVED******REMOVED***thumbnail = item.thumbnail
 ***REMOVED******REMOVED***mmpkDirectoryURL = mmpkURL
 ***REMOVED******REMOVED***areaID = mmpkURL.deletingPathExtension().lastPathComponent
 ***REMOVED******REMOVED***offlineMapTask = nil
@@ -130,10 +129,12 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED******REMOVED***map = mmpk.maps.first
+***REMOVED******REMOVED******REMOVED***thumbnail = mmpk.item?.thumbnail
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = nil
 ***REMOVED******REMOVED******REMOVED***directorySize = 0
+***REMOVED******REMOVED******REMOVED***thumbnail = nil
 ***REMOVED******REMOVED******REMOVED***map = nil
 ***REMOVED***
 ***REMOVED***

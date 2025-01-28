@@ -24,14 +24,14 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@State private var currentVisibleArea: Polygon?
 ***REMOVED***@State private var geometryEditor = GeometryEditor()
 ***REMOVED***
-***REMOVED***var onCompleteAction: ((String, CacheScale, CacheScale, Polygon) -> Void)? = nil
+***REMOVED***var onCompleteAction: ((OnDemandMapAreaConfiguration) -> Void)? = nil
 ***REMOVED***
 ***REMOVED***var cannotAddOnDemandArea: Bool {
 ***REMOVED******REMOVED***titleInput.isEmpty || polygon == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func onComplete(
-***REMOVED******REMOVED***perform action: @escaping (String, CacheScale, CacheScale, Polygon) -> Void
+***REMOVED******REMOVED***perform action: @escaping (OnDemandMapAreaConfiguration) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.onCompleteAction = action
@@ -106,7 +106,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometryEditor.stop()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction?(titleInput, .worldSmall, maxScale, polygon!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: titleInput,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: CacheScale.worldSmall.scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: polygon!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction?(configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** label: {
