@@ -107,6 +107,9 @@ public struct FeatureFormView: View {
                     utilityNetwork: utilityNetwork
                 )
             }
+            .navigationDestination(for: UtilityNetworkAssociationFormElementView.AssociationKindGroup.self) { group in
+                UtilityNetworkAssociationFormElementView.AssociationKindGroupView(associationKindGroup: group)
+            }
         }
         .environment(\.validationErrorVisibility, validationErrorVisibility)
         .onChange(of: path) { newValue in
