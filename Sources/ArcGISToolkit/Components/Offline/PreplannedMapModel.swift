@@ -129,18 +129,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             }
     }
     
-    /// Updates the status based on the download result of the mobile map package.
-    func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
-        switch downloadResult {
-        case .success:
-            status = .downloaded
-        case .failure(let error):
-            status = .downloadFailure(error)
-            // Remove contents of mmpk directory when download fails.
-            try? FileManager.default.removeItem(at: mmpkDirectoryURL)
-        }
-    }
-    
     /// Looks up the mobile map package directory for locally downloaded package.
     private func lookupMobileMapPackage() -> MobileMapPackage? {
         let fileURL = URL.preplannedDirectory(
@@ -202,6 +190,19 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             self.job = nil
         }
     }
+    
+    /// Updates the status based on the download result of the mobile map package.
+    private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
+        switch downloadResult {
+        case .success:
+            status = .downloaded
+        case .failure(let error):
+            status = .downloadFailure(error)
+            // Remove contents of mmpk directory when download fails.
+            try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+        }
+    }
+    
 }
 
 extension PreplannedMapModel {
