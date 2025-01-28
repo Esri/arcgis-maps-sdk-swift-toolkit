@@ -63,14 +63,14 @@ extension ExampleList {
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
-            AnyExample("Scalebar", content: ScalebarExampleView())
+            AnyExample("Scalebar", content: ScalebarExampleView()),
+            AnyExample("Search", content: SearchExampleView()),
+            AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
         ]
 #if !os(visionOS)
         examples.append(
             contentsOf: [
-                AnyExample("Feature Form", content: FeatureFormExampleView()),
-                AnyExample("Search", content: SearchExampleView()),
-                AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+                AnyExample("Feature Form", content: FeatureFormExampleView())
             ] as [any Example]
         )
 #endif

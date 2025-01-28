@@ -48,7 +48,7 @@ import SwiftUI
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm) {
+    init(featureForm: FeatureForm) {
         self.featureForm = featureForm
     }
     
