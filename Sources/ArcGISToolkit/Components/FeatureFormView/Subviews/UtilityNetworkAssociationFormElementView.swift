@@ -43,9 +43,24 @@ struct UtilityNetworkAssociationFormElementView: View {
             //
             // TODO: End InputFooter replacement section -----------------------
             
-            ForEach(associationKindGroups) { group in
-                AssociationKindGroupView(associationKindGroup: group)
-            }
+//            ForEach(associationKindGroups) { group in
+//                AssociationKindGroupView(associationKindGroup: group)
+//            }
+            FeatureFormGroupedContentView(
+                content: associationKindGroups.map { group in
+                    NavigationLink(value: 0) {
+                        Text(group.name)
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Group {
+                            Text(group.networkSourceGroups.map({ $0.associations.count }).count.formatted())
+                            Image(systemName: "chevron.right")
+                        }
+                        .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            )
         }
     }
 }
