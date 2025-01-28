@@ -35,7 +35,7 @@ struct OnDemandListItemView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED***
 ***REMOVED***var isSelected: Bool {
-***REMOVED******REMOVED***selectedMap == model.map
+***REMOVED******REMOVED***selectedMap?.item?.title == model.title
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {

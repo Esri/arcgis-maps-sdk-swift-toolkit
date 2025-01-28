@@ -46,7 +46,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The title of a preplanned map area is guaranteed to be unique when it
 ***REMOVED******REMOVED***/ is created.
 ***REMOVED***var isSelected: Bool {
-***REMOVED******REMOVED***selectedMap == model.map
+***REMOVED******REMOVED***selectedMap?.item?.title == model.preplannedMapArea.title
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
