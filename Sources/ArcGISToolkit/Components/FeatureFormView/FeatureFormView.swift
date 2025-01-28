@@ -68,7 +68,7 @@ import SwiftUI
 @available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// <#Description#>
-    @State private var path = [ArcGISFeature]()
+    @State private var path = NavigationPath()
     
     /// <#Description#>
     let featureForm: FeatureForm
