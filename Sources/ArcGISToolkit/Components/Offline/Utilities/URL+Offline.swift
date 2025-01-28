@@ -48,14 +48,19 @@ extension URL {
         return url
     }
     
+    /// The path to the directory for a specific on-demand map area. Or if `nil` is passed for the
+    /// map area ID, then the on-demand directory.
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - onDemandMapAreaID: The unique ID of the on-demand map area.
     static func onDemandDirectory(
         forPortalItemID portalItemID: PortalItem.ID,
-        onDemandMapAreaID: UUID? = nil
+        onDemandMapAreaID: String? = nil
     ) -> URL {
         var url = portalItemDirectory(forPortalItemID: portalItemID)
             .appending(component: "OnDemand/")
         if let onDemandMapAreaID {
-            url = url.appending(component: onDemandMapAreaID.uuidString)
+            url = url.appending(component: onDemandMapAreaID)
         }
         return url
     }
