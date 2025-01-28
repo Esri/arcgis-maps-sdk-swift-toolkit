@@ -129,18 +129,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
-***REMOVED***func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
-***REMOVED******REMOVED***switch downloadResult {
-***REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
-***REMOVED******REMOVED******REMOVED******REMOVED*** Remove contents of mmpk directory when download fails.
-***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Looks up the mobile map package directory for locally downloaded package.
 ***REMOVED***private func lookupMobileMapPackage() -> MobileMapPackage? {
 ***REMOVED******REMOVED***let fileURL = URL.preplannedDirectory(
@@ -200,6 +188,19 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await loadAndUpdateMobileMapPackage(mmpk: mmpk)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.job = nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
+***REMOVED***private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
+***REMOVED******REMOVED***switch downloadResult {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Remove contents of mmpk directory when download fails.
+***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
