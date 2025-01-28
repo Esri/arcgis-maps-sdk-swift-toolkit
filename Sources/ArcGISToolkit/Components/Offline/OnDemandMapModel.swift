@@ -74,6 +74,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Tries to load a mobile map package and if successful, then updates state
 ***REMOVED******REMOVED***/ associated with it.
 ***REMOVED***private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
+***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await mmpk.load()
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
