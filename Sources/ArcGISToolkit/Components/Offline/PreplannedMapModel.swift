@@ -140,11 +140,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Downloads the preplanned map area.
-    /// - Precondition: `canDownload`
+    /// - Precondition: `allowsDownload == true`
     func downloadPreplannedMapArea() async {
         precondition(status.allowsDownload)
-        status = .downloading
         
+        status = .downloading
         do {
             let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
             try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)

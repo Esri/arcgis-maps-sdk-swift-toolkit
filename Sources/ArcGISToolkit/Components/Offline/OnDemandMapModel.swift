@@ -108,23 +108,34 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         return MobileMapPackage(fileURL: fileURL)
     }
     
+    /// Downloads the on-demand map area.
+    /// - Precondition: `allowsDownload == true`
     func downloadOnDemandMapArea() async {
         precondition(status.allowsDownload)
+        
         status = .downloading
+        // TODO: shouldn't do this
         guard let onDemandMapArea = onDemandMapArea as? OnDemandMapArea else { return }
         
         do {
+            // TODO: this should be part of the protocol
             let parameters = try await offlineMapTask.makeDefaultGenerateOfflineMapParameters(
                 areaOfInterest: onDemandMapArea.areaOfInterest,
                 minScale: onDemandMapArea.minScale,
                 maxScale: onDemandMapArea.maxScale
             )
+            
             // Set the update mode to no updates as the offline map is display-only.
             parameters.updateMode = .noUpdates
+            
+            // Update item info on parameters
+            if let itemInfo = parameters.itemInfo {
+                itemInfo.title = onDemandMapArea.title
+                itemInfo.description = ""
+            }
+            
+            // Make sure the directory exists.
             try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
-            guard let itemInfo = parameters.itemInfo else { return }
-            itemInfo.title = onDemandMapArea.title
-            itemInfo.description = ""
             
             let job = offlineMapTask.makeGenerateOfflineMapJob(
                 parameters: parameters,
