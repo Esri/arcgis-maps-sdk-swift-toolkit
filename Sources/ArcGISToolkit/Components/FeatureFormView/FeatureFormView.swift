@@ -98,50 +98,54 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var evaluatedForm: some View {
-***REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***Form {
+***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get rid of background color.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Make header align with the leading edge of the Form.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The Toolkit currently only supports AttachmentsFormElements via the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** default attachments element. Once AttachmentsFormElements can be authored
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this can call makeElement(_:) instead and makeElement(_:) should have a
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(Text(title))
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The Toolkit currently only supports AttachmentsFormElements via the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** default attachments element. Once AttachmentsFormElements can be authored
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this can call makeElement(_:) instead and makeElement(_:) should have a
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** The sheet view modifier needs to be used here or it will
-***REMOVED******REMOVED******REMOVED******REMOVED*** be dismissed on the first open by SwiftUI.
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $model.fullScreenTextInputIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let element = model.focusedElement as? FieldFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $model.fullScreenText,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: model
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED***#if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
-***REMOVED***#endif
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
+***REMOVED******REMOVED******REMOVED******REMOVED***print(title)
+***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
-#if os(iOS)
-***REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
-#endif
-***REMOVED******REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
-***REMOVED******REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** The sheet view modifier needs to be used here or it will
+***REMOVED******REMOVED******REMOVED*** be dismissed on the first open by SwiftUI.
+***REMOVED******REMOVED***.sheet(isPresented: $model.fullScreenTextInputIsPresented) {
+***REMOVED******REMOVED******REMOVED***if let element = model.focusedElement as? FieldFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $model.fullScreenText,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: model
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
+#endif
+***REMOVED******REMOVED***
+***REMOVED***
+#if os(iOS)
+***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
+#endif
+***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 

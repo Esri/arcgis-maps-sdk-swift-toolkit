@@ -77,8 +77,28 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If showing a form element, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED*** header: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(featureElement.displayTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isEditable,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentsFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element, onAdd: onAdd)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil) ***REMOVED*** Keep original text casing.
+***REMOVED******REMOVED******REMOVED******REMOVED*** footer: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(featureElement.description)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows us to adopt a flat design which
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** enhances simplicity and helps users to
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** focus on the main content.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Make content align with the leading edge of the section.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else if !attachmentModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)

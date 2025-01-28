@@ -47,5 +47,7 @@ struct ReadOnlyInput: View {
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Read Only Input")
 ***REMOVED******REMOVED******REMOVED***.lineLimit(element.isMultiline ? nil : 1)
 ***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Use secondary to indicate this field is read only.
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED***

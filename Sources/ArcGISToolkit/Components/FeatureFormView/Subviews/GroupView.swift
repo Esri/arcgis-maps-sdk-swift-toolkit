@@ -90,9 +90,6 @@ extension GroupView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-#if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED***.padding(.leading, 4)
-#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

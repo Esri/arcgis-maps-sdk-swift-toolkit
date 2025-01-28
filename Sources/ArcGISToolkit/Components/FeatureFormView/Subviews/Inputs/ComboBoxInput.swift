@@ -87,25 +87,12 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(displayedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Combo Box Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let _ = selectedValue.codedValue, !isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show clear button if we have a value
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
-***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, always show chevron.
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Always show chevron.
+***REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired

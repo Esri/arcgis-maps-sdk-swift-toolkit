@@ -80,9 +80,12 @@ struct DateTimeInput: View {
 ***REMOVED***@ViewBuilder var dateEditor: some View {
 ***REMOVED******REMOVED***dateDisplay
 ***REMOVED******REMOVED***if isEditing, let date {
-***REMOVED******REMOVED******REMOVED***makeDatePicker(
-***REMOVED******REMOVED******REMOVED******REMOVED***with: Binding(get: { date ***REMOVED***, set: { self.date = $0 ***REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
+***REMOVED******REMOVED******REMOVED******REMOVED***makeDatePicker(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: Binding(get: { date ***REMOVED***, set: { self.date = $0 ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -111,26 +114,20 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED*** else if !isRequired {
+***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isEditing {
-***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED*** else if !isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes control for date selection.
@@ -181,19 +178,19 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = dateRange.lowerBound
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***input.includesTime ? Text.now : .today
+***REMOVED******REMOVED******REMOVED***Label(input.includesTime ? String.now : .today, systemImage: "clock")
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED***.foregroundStyle(.primary)
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
-***REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***.foregroundStyle(.tint)
 ***REMOVED***
 ***REMOVED***
 
-private extension Text {
+private extension String {
 ***REMOVED******REMOVED***/ A label for a button to choose the current time and date for a field.
 ***REMOVED***static var now: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***"Now",
+***REMOVED******REMOVED******REMOVED***localized: "Now",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current time and date for a field."
 ***REMOVED******REMOVED***)
@@ -202,7 +199,7 @@ private extension Text {
 ***REMOVED******REMOVED***/ A label for a button to choose the current date for a field.
 ***REMOVED***static var today: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***"Today",
+***REMOVED******REMOVED******REMOVED***localized: "Today",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current date for a field."
 ***REMOVED******REMOVED***)
