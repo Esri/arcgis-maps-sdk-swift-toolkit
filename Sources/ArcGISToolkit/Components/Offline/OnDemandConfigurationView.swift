@@ -24,14 +24,14 @@ struct OnDemandConfigurationView: View {
     @State private var currentVisibleArea: Polygon?
     @State private var geometryEditor = GeometryEditor()
     
-    var onCompleteAction: ((String, CacheScale, CacheScale, Polygon) -> Void)? = nil
+    var onCompleteAction: ((OnDemandMapAreaConfiguration) -> Void)? = nil
     
     var cannotAddOnDemandArea: Bool {
         titleInput.isEmpty || polygon == nil
     }
     
     func onComplete(
-        perform action: @escaping (String, CacheScale, CacheScale, Polygon) -> Void
+        perform action: @escaping (OnDemandMapAreaConfiguration) -> Void
     ) -> Self {
         var view = self
         view.onCompleteAction = action
@@ -106,7 +106,13 @@ struct OnDemandConfigurationView: View {
                 Button {
                     Task {
                         geometryEditor.stop()
-                        onCompleteAction?(titleInput, .worldSmall, maxScale, polygon!)
+                        let configuration = OnDemandMapAreaConfiguration(
+                            title: titleInput,
+                            minScale: CacheScale.worldSmall.scale,
+                            maxScale: maxScale.scale,
+                            areaOfInterest: polygon!
+                        )
+                        onCompleteAction?(configuration)
                         dismiss()
                     }
                 } label: {

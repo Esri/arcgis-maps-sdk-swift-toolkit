@@ -114,7 +114,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         configuration = nil
         title = item.title
         description = item.description
-        thumbnail = item.thumbnail
         mmpkDirectoryURL = mmpkURL
         areaID = mmpkURL.deletingPathExtension().lastPathComponent
         offlineMapTask = nil
@@ -130,10 +129,12 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
+            thumbnail = mmpk.item?.thumbnail
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
             directorySize = 0
+            thumbnail = nil
             map = nil
         }
     }
