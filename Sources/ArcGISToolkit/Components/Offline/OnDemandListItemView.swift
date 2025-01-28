@@ -35,7 +35,9 @@ struct OnDemandListItemView: View {
     @Environment(\.dismiss) private var dismiss: DismissAction
     
     var isSelected: Bool {
-        selectedMap?.item?.title == model.onDemandMapArea.title
+        // TODO:
+        fatalError()
+        //selectedMap?.item?.title == model.onDemandMapArea.title
     }
     
     var body: some View {
@@ -82,8 +84,7 @@ struct OnDemandListItemView: View {
     // What should we do with the thumbnail? Save our own or use the default one?
     @ViewBuilder private var thumbnailView: some View {
         if downloadState == .downloaded,
-           let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-           let thumbnail = area.thumbnail {
+           let thumbnail = model.thumbnail {
             LoadableImageView(loadableImage: thumbnail)
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
@@ -95,15 +96,14 @@ struct OnDemandListItemView: View {
     }
     
     @ViewBuilder private var titleView: some View {
-        Text(model.onDemandMapArea.title)
+        Text(model.title)
             .font(.body)
             .lineLimit(2)
     }
     
     @ViewBuilder private var descriptionView: some View {
-        if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-           !area.description.isEmpty {
-            Text(area.description)
+        if !model.description.isEmpty {
+            Text(model.description)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)

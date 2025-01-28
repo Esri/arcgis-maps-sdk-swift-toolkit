@@ -28,8 +28,7 @@ struct OnDemandMetadataView: View {
     var body: some View {
         Form {
             Section {
-                if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-                   let thumbnail = area.thumbnail {
+                if let thumbnail = model.thumbnail {
                     HStack {
                         Spacer()
                         LoadableImageView(loadableImage: thumbnail)
@@ -42,16 +41,15 @@ struct OnDemandMetadataView: View {
                     Text("Name")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text(model.onDemandMapArea.title)
+                    Text(model.title)
                         .font(.subheadline)
                 }
                 VStack(alignment: .leading) {
                     Text("Description")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-                       !area.description.isEmpty {
-                        Text(area.description)
+                    if !model.description.isEmpty {
+                        Text(model.description)
                             .font(.subheadline)
                     } else {
                         Text("This area has no description.")
@@ -82,7 +80,7 @@ struct OnDemandMetadataView: View {
                 }
             }
         }
-        .navigationTitle(model.onDemandMapArea.title)
+        .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {

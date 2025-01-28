@@ -51,6 +51,7 @@ class OfflineMapViewModel: ObservableObject {
         portalItemID = onlineMap.item!.id!
     }
     
+    // TODO: move to PreplannedMapModel as static
     /// Gets the preplanned map areas from the offline map task and loads the map models.
     func loadPreplannedMapModels() async {
         if offlineMapTask.loadStatus != .loaded {
@@ -157,97 +158,27 @@ class OfflineMapViewModel: ObservableObject {
         )
     }
     
-    private func makeOnDemandMapArea(
-        portalItemID: PortalItem.ID,
-        onDemandMapAreaID: UUID
-    ) async -> OfflineOnDemandMapArea? {
-        let fileURL = URL.onDemandDirectory(
-            forPortalItemID: portalItemID,
-            onDemandMapAreaID: onDemandMapAreaID
-        )
-        guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil }
-        let mmpk = MobileMapPackage(fileURL: fileURL)
-        
-        try? await mmpk.load()
-        guard let item = mmpk.item else { return nil }
-
-        return .init(
-            id: onDemandMapAreaID,
-            title: item.title,
-            description: item.description,
-            thumbnail: item.thumbnail
-        )
-    }
-    
     func loadOnDemandMapModels() async {
-        let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
-        
-        guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) else {
-            onDemandMapModels = []
-            return
-        }
-        
-        var onDemandMapModels: [OnDemandMapModel] = []
-        
-        // Look up the ongoing jobs for on-demand map models.
-        let ongoingJobs = OfflineManager.shared.jobs
-            .lazy
-            .compactMap { $0 as? GenerateOfflineMapJob }
-            .filter {
-                UUID(uuidString: $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent) != nil
-            }
-        
-        for job in ongoingJobs {
-            let id = UUID(uuidString: job.downloadDirectoryURL.deletingPathExtension().lastPathComponent)!
-            let parameters = job.parameters
-            guard let info = parameters.itemInfo, let minScale = parameters.minScale, let maxScale = parameters.maxScale, let aoi = parameters.areaOfInterest else {
-                continue
-            }
-            let mapArea = OnDemandMapArea(id: id, title: info.title, minScale: minScale, maxScale: maxScale, areaOfInterest: aoi)
-            let model = OnDemandMapModel(
-                offlineMapTask: offlineMapTask,
-                mapArea: mapArea,
-                portalItemID: portalItemID
-            )
-            onDemandMapModels.append(model)
-        }
-        
-        // Look up the downloaded on-demand map models.
-        for mapAreaID in mapAreaIDs {
-            guard let onDemandMapAreaID = UUID(uuidString: mapAreaID),
-                  let mapArea = await makeOnDemandMapArea(
-                    portalItemID: portalItemID,
-                    onDemandMapAreaID: onDemandMapAreaID
-                  ) else {
-                continue
-            }
-            let model = OnDemandMapModel(
-                offlineMapTask: offlineMapTask,
-                mapArea: mapArea,
-                portalItemID: portalItemID
-            )
-            onDemandMapModels.append(model)
-        }
-        
-        self.onDemandMapModels = onDemandMapModels
-            .sorted(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })
+        onDemandMapModels = await OnDemandMapModel.loadModels(portalItemID: portalItemID)
     }
     
-    func addOnDemandMapArea(_ onDemandMapArea: OnDemandMapArea) {
-        let model = OnDemandMapModel(
-            offlineMapTask: offlineMapTask,
-            mapArea: onDemandMapArea,
-            portalItemID: portalItemID
-        )
-        if onDemandMapModels != nil {
-            onDemandMapModels!.append(model)
-            onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })
-        }
-        
-        Task {
-            // Download map area.
-            await model.downloadOnDemandMapArea()
-        }
+    func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
+        // TODO:
+        fatalError()
+//        let model = OnDemandMapModel(
+//            offlineMapTask: offlineMapTask,
+//            configuration: configuration,
+//            portalItemID: portalItemID
+//        )
+//        if onDemandMapModels != nil {
+//            onDemandMapModels!.append(model)
+//            onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title })
+//        }
+//        
+//        Task {
+//            // Download map area.
+//            await model.downloadOnDemandMapArea()
+//        }
     }
 }
 
@@ -266,9 +197,9 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 }
 
 // This struct represents an on-demand area that is downloaded.
-struct OfflineOnDemandMapArea: OnDemandMapAreaProtocol {
+struct OfflineOnDemandMapArea {
     var id: UUID
     var title: String
     var description: String
-    var thumbnail: LoadableImage?
+    //var thumbnail: LoadableImage?
 }
