@@ -87,25 +87,12 @@ struct ComboBoxInput: View {
                 Text(displayedValue)
                     .accessibilityIdentifier("\(element.label) Combo Box Value")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
             }
-            
-            if let _ = selectedValue.codedValue, !isRequired {
-                // Only show clear button if we have a value
-                // and we're not required. (i.e., Don't show clear if
-                // the field is required.)
-                XButton(.clear) {
-                    model.focusedElement = element
-                    defer { model.focusedElement = nil }
-                    updateValue(nil)
-                }
-                .accessibilityIdentifier("\(element.label) Clear Button")
-            } else {
-                // Otherwise, always show chevron.
-                Image(systemName: "chevron.right")
-                    .accessibilityIdentifier("\(element.label) Options Button")
-                    .foregroundStyle(.secondary)
-            }
+            .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+            // Always show chevron.
+            Image(systemName: "chevron.right")
+                .accessibilityIdentifier("\(element.label) Options Button")
+                .foregroundStyle(.secondary)
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired

@@ -77,8 +77,28 @@ struct AttachmentsFeatureElementView: View {
                     // If showing a form element, don't show attachments in
                     // a disclosure group, but also ALWAYS show
                     // the list of attachments, even if there are none.
-                    attachmentHeader
-                    attachmentBody(attachmentModels: attachmentModels)
+                    Section {
+                        attachmentBody(attachmentModels: attachmentModels)
+                    } header: {
+                        HStack {
+                            Text(featureElement.displayTitle)
+                            Spacer()
+                            if isEditable,
+                               let element = featureElement as? AttachmentsFormElement {
+                                AttachmentImportMenu(element: element, onAdd: onAdd)
+                            }
+                        }
+                        .textCase(nil) // Keep original text casing.
+                    } footer: {
+                        Text(featureElement.description)
+                    }
+                    // This allows us to adopt a flat design which
+                    // enhances simplicity and helps users to
+                    // focus on the main content.
+                    .listRowBackground(Color.clear)
+                    // Make content align with the leading edge of the section.
+                    .listRowInsets(.init())
+                    
                 } else if !attachmentModels.isEmpty {
                     DisclosureGroup(isExpanded: $isExpanded) {
                         attachmentBody(attachmentModels: attachmentModels)

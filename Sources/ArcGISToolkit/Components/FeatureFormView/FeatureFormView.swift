@@ -98,50 +98,54 @@ public struct FeatureFormView: View {
     }
     
     var evaluatedForm: some View {
-        NavigationStack {
-            ScrollViewReader { scrollViewProxy in
-                Form {
-                    ForEach(model.visibleElements, id: \.self) { element in
-                        makeElement(element)
-                    }
-                    if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
-                        // The Toolkit currently only supports AttachmentsFormElements via the
-                        // default attachments element. Once AttachmentsFormElements can be authored
-                        // this can call makeElement(_:) instead and makeElement(_:) should have a
-                        // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(featureElement: attachmentsElement)
-                    }
+        ScrollViewReader { scrollViewProxy in
+            Form {
+                FormHeader(title: title)
+                    // Get rid of background color.
+                    .listRowBackground(Color.clear)
+                    // Make header align with the leading edge of the Form.
+                    .listRowInsets(.init())
+                
+                ForEach(model.visibleElements, id: \.self) { element in
+                    makeElement(element)
                 }
-                .navigationTitle(Text(title))
-                .onChange(model.focusedElement) { _ in
-                    if let focusedElement = model.focusedElement {
-                        withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
-                    }
+                if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+                    // The Toolkit currently only supports AttachmentsFormElements via the
+                    // default attachments element. Once AttachmentsFormElements can be authored
+                    // this can call makeElement(_:) instead and makeElement(_:) should have a
+                    // case added for AttachmentsFormElement.
+                    AttachmentsFeatureElementView(featureElement: attachmentsElement)
                 }
-                .onTitleChange(of: model.featureForm) { newTitle in
-                    title = newTitle
-                }
-            }
-            // The sheet view modifier needs to be used here or it will
-            // be dismissed on the first open by SwiftUI.
-            .sheet(isPresented: $model.fullScreenTextInputIsPresented) {
-                if let element = model.focusedElement as? FieldFormElement {
-                    FullScreenTextInput(
-                        text: $model.fullScreenText,
-                        element: element,
-                        model: model
-                    )
-    #if targetEnvironment(macCatalyst)
-                .environmentObject(model)
-    #endif
+            }            .onChange(model.focusedElement) { _ in
+                if let focusedElement = model.focusedElement {
+                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
-#if os(iOS)
-            .scrollDismissesKeyboard(.immediately)
-#endif
-            .environment(\.validationErrorVisibility, validationErrorVisibility)
-            .environmentObject(model)
+            .onTitleChange(of: model.featureForm) { newTitle in
+                print(title)
+                title = newTitle
+            }
         }
+        // The sheet view modifier needs to be used here or it will
+        // be dismissed on the first open by SwiftUI.
+        .sheet(isPresented: $model.fullScreenTextInputIsPresented) {
+            if let element = model.focusedElement as? FieldFormElement {
+                FullScreenTextInput(
+                    text: $model.fullScreenText,
+                    element: element,
+                    model: model
+                )
+#if targetEnvironment(macCatalyst)
+                .environmentObject(model)
+#endif
+            }
+        }
+#if os(iOS)
+        .scrollDismissesKeyboard(.immediately)
+#endif
+        .environment(\.validationErrorVisibility, validationErrorVisibility)
+        .environmentObject(model)
+        
     }
 }
 

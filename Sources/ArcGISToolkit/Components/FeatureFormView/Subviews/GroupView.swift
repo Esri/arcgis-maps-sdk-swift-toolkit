@@ -90,9 +90,6 @@ extension GroupView {
                         .foregroundStyle(.secondary)
                 }
             }
-#if targetEnvironment(macCatalyst)
-            .padding(.leading, 4)
-#endif
         }
     }
 }

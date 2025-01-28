@@ -47,5 +47,7 @@ struct ReadOnlyInput: View {
             .accessibilityIdentifier("\(element.label) Read Only Input")
             .lineLimit(element.isMultiline ? nil : 1)
             .textSelection(.enabled)
+            // Use secondary to indicate this field is read only.
+            .foregroundStyle(.secondary)
     }
 }
