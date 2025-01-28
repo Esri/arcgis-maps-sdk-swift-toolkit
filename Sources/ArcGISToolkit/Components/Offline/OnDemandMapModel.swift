@@ -65,8 +65,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(mapArea.id.uuidString, privacy: .public)")
-***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: ?
-***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED******REMOVED***Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) ***REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***status = .initialized
@@ -78,6 +76,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await mmpk.load()
+***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED******REMOVED***map = mmpk.maps.first
