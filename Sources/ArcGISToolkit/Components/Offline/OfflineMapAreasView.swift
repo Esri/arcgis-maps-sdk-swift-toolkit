@@ -86,14 +86,13 @@ public struct OfflineMapAreasView: View {
                     .sheet(isPresented: $isAddingOnDemandArea) {
                         OnDemandConfigurationView(map: onlineMap.clone())
                             .onComplete { title, minScale, maxScale, areaOfInterest in
-                                let area = OnDemandMapArea(
-                                    id: UUID(),
+                                let configuration = OnDemandMapAreaConfiguration(
                                     title: title,
                                     minScale: minScale.scale,
                                     maxScale: maxScale.scale,
                                     areaOfInterest: areaOfInterest
                                 )
-                                mapViewModel.addOnDemandMapArea(area)
+                                mapViewModel.addOnDemandMapArea(with: configuration)
                             }
                             .highPriorityGesture(DragGesture())
                     }
