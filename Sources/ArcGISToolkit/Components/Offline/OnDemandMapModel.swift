@@ -65,8 +65,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(mapArea.id.uuidString, privacy: .public)")
-            // TODO: ?
-            status = .downloaded
             Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
         } else {
             status = .initialized
@@ -78,6 +76,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()
+            status = .downloaded
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first

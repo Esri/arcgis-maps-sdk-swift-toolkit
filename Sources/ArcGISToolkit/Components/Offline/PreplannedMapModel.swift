@@ -77,7 +77,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-            status = .downloaded
             Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
         }
     }
@@ -87,6 +86,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()
+            status = .downloaded
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
