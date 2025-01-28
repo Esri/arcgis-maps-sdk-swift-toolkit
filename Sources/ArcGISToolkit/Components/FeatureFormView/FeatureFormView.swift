@@ -68,7 +68,7 @@
 @available(visionOS, unavailable)
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var path = [ArcGISFeature]()
+***REMOVED***@State private var path = NavigationPath()
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let featureForm: FeatureForm
