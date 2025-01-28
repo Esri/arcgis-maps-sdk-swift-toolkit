@@ -103,7 +103,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct AssociationKindGroup: Identifiable {
+***REMOVED***struct AssociationKindGroup: Equatable, Hashable, Identifiable {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let networkSourceGroups: [NetworkSourceGroup]
 ***REMOVED******REMOVED***
@@ -112,6 +112,16 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***static func == (lhs: UtilityNetworkAssociationFormElementView.AssociationKindGroup, rhs: UtilityNetworkAssociationFormElementView.AssociationKindGroup) -> Bool {
+***REMOVED******REMOVED******REMOVED***lhs.name == rhs.name
+***REMOVED******REMOVED******REMOVED***&& lhs.id == rhs.id
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED******REMOVED***hasher.combine(name)
+***REMOVED******REMOVED******REMOVED***hasher.combine(id)
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***struct AssociationKindGroupView: View {
