@@ -28,8 +28,7 @@ struct OnDemandMetadataView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let thumbnail = area.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = model.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
@@ -42,16 +41,15 @@ struct OnDemandMetadataView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.onDemandMapArea.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Description")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !area.description.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(area.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !model.description.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("This area has no description.")
@@ -82,7 +80,7 @@ struct OnDemandMetadataView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationTitle(model.onDemandMapArea.title)
+***REMOVED******REMOVED***.navigationTitle(model.title)
 ***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {

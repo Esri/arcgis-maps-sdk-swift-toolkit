@@ -35,7 +35,9 @@ struct OnDemandListItemView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED***
 ***REMOVED***var isSelected: Bool {
-***REMOVED******REMOVED***selectedMap?.item?.title == model.onDemandMapArea.title
+***REMOVED******REMOVED******REMOVED*** TODO:
+***REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***selectedMap?.item?.title == model.onDemandMapArea.title
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -82,8 +84,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED*** What should we do with the thumbnail? Save our own or use the default one?
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
 ***REMOVED******REMOVED***if downloadState == .downloaded,
-***REMOVED******REMOVED***   let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-***REMOVED******REMOVED***   let thumbnail = area.thumbnail {
+***REMOVED******REMOVED***   let thumbnail = model.thumbnail {
 ***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
@@ -95,15 +96,14 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var titleView: some View {
-***REMOVED******REMOVED***Text(model.onDemandMapArea.title)
+***REMOVED******REMOVED***Text(model.title)
 ***REMOVED******REMOVED******REMOVED***.font(.body)
 ***REMOVED******REMOVED******REMOVED***.lineLimit(2)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var descriptionView: some View {
-***REMOVED******REMOVED***if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-***REMOVED******REMOVED***   !area.description.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(area.description)
+***REMOVED******REMOVED***if !model.description.isEmpty {
+***REMOVED******REMOVED******REMOVED***Text(model.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
