@@ -60,7 +60,6 @@
 ***REMOVED***/ To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [SearchExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `SearchView` see the <doc:SearchViewTutorial>.
-@available(visionOS, unavailable)
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -221,21 +220,23 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if viewModel.isEligibleForRequery {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Repeat Search Here",
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Repeat Search Here",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A label for button to show when the user has panned the map away
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  from the original search location. 'Here' is in reference to the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  current visible extent of the map or scene.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***A label for button to show when the user has panned the map away
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***from the original search location. 'Here' is in reference to the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***current visible extent of the map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
 ***REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
@@ -270,7 +271,7 @@ public struct SearchView: View {
 ***REMOVED***
 
 ***REMOVED*** MARK: Modifiers
-@available(visionOS, unavailable)
+
 extension SearchView {
 ***REMOVED******REMOVED***/ Specifies whether a built-in result view will be shown. If `false`, the result display/selection
 ***REMOVED******REMOVED***/ list is not shown. Set to `false` if you want to define a custom result list. You might use a
@@ -380,7 +381,6 @@ extension SearchView {
 ***REMOVED***
 
 ***REMOVED***/ A View displaying the list of search results.
-@available(visionOS, unavailable)
 struct SearchResultList: View {
 ***REMOVED******REMOVED***/ The array of search results to display.
 ***REMOVED***var searchResults: [SearchResult]
@@ -404,7 +404,6 @@ struct SearchResultList: View {
 ***REMOVED***
 
 ***REMOVED***/ A View displaying the list of search suggestion results.
-@available(visionOS, unavailable)
 struct SearchSuggestionList: View {
 ***REMOVED******REMOVED***/ The array of suggestion results to display.
 ***REMOVED***var suggestionResults: [SearchSuggestion]
@@ -466,7 +465,6 @@ struct ResultRow: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension ResultRow {
 ***REMOVED******REMOVED***/ Creates a `ResultRow` from a search suggestion.
 ***REMOVED******REMOVED***/ - Parameter searchSuggestion: The search suggestion displayed in the row.
