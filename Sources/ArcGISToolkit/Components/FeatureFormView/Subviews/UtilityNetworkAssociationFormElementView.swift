@@ -48,15 +48,18 @@ struct UtilityNetworkAssociationFormElementView: View {
 //            }
             FeatureFormGroupedContentView(
                 content: associationKindGroups.map { group in
-                    NavigationLink(value: 0) {
-                        Text(group.name)
-                            .foregroundStyle(.primary)
-                        Spacer()
-                        Group {
-                            Text(group.networkSourceGroups.map({ $0.associations.count }).count.formatted())
-                            Image(systemName: "chevron.right")
+                    NavigationLink(value: group) {
+                        HStack {
+                            Text(group.name)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Group {
+                                Text(group.networkSourceGroups.map({ $0.associations.count }).count.formatted())
+                                Image(systemName: "chevron.right")
+                            }
+                            .foregroundStyle(.secondary)
                         }
-                        .foregroundStyle(.secondary)
+                        .contentShape(.rect)
                     }
                     .buttonStyle(.plain)
                 }
