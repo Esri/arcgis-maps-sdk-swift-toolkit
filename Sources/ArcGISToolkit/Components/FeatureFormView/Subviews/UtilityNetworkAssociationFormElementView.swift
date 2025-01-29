@@ -128,27 +128,28 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***struct AssociationKindGroupView: View {
 ***REMOVED******REMOVED***let associationKindGroup: AssociationKindGroup
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@State private var isExpanded = false
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(associationKindGroup.networkSourceGroups) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NetworkSourceGroupView(networkSourceGroup: $0)
+***REMOVED******REMOVED******REMOVED***List(associationKindGroup.networkSourceGroups) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NetworkSourceGroupView(networkSourceGroup: group)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.associations.count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count ***REMOVED***).count.formatted())
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disclosureGroupStyle(.automatic)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***struct NetworkSourceGroup: Identifiable {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let associations: [Association]
@@ -159,7 +160,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
 ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***struct NetworkSourceGroupView: View {
 ***REMOVED******REMOVED***let networkSourceGroup:  NetworkSourceGroup
 ***REMOVED******REMOVED***
