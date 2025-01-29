@@ -90,12 +90,14 @@ extension UtilityNetworkAssociationFormElementView {
         
         var body: some View {
             NavigationLink(value: association.linkDestination!) {
-                VStack(alignment: .leading) {
-                    Text(association.name)
-                        .lineLimit(1)
-                    if let description = association.description {
-                        Text(description)
-                            .font(.caption2)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(association.name)
+                            .lineLimit(1)
+                        if let description = association.description {
+                            Text(description)
+                                .font(.caption2)
+                        }
                     }
                     Spacer()
                     Image(systemName: "chevron.right")
