@@ -140,7 +140,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.associations.count.formatted())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disclosureGroupStyle(.automatic)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disclosureGroupStyle(.leadingEdge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
