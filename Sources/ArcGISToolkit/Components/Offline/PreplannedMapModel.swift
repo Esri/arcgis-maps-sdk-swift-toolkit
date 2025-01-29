@@ -37,7 +37,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***private let portalItemID: Item.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when a preplanned map area is deleted.
-***REMOVED***private let onRemoveDownloadAction: (Item.ID) -> Void
+***REMOVED***private let onRemoveDownloadAction: () -> Void
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
 ***REMOVED***@Published private(set) var mobileMapPackage: MobileMapPackage?
@@ -59,7 +59,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
 ***REMOVED******REMOVED***portalItemID: Item.ID,
 ***REMOVED******REMOVED***preplannedMapAreaID: Item.ID,
-***REMOVED******REMOVED***onRemoveDownload: @escaping (Item.ID) -> Void
+***REMOVED******REMOVED***onRemoveDownload: @escaping () -> Void
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
@@ -171,7 +171,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***Task { await load() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Call the closure for the remove download action.
-***REMOVED******REMOVED***onRemoveDownloadAction(preplannedMapAreaID)
+***REMOVED******REMOVED***onRemoveDownloadAction()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
@@ -343,7 +343,7 @@ extension PreplannedMapModel {
 ***REMOVED***static func loadPreplannedMapModels(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***portalItemID: Item.ID,
-***REMOVED******REMOVED***onRemoveDownload: @escaping (Item.ID) -> Void
+***REMOVED******REMOVED***onRemoveDownload: @escaping () -> Void
 ***REMOVED***) async -> PreplannedModels {
 ***REMOVED******REMOVED***if offlineMapTask.loadStatus != .loaded {
 ***REMOVED******REMOVED******REMOVED***try? await offlineMapTask.retryLoad()
@@ -389,7 +389,7 @@ extension PreplannedMapModel {
 ***REMOVED***private static func loadOfflinePreplannedMapModels(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***portalItemID: Item.ID,
-***REMOVED******REMOVED***onRemoveDownload: @escaping (Item.ID) -> Void
+***REMOVED******REMOVED***onRemoveDownload: @escaping () -> Void
 ***REMOVED***) async -> [PreplannedMapModel] {
 ***REMOVED******REMOVED***let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED***
