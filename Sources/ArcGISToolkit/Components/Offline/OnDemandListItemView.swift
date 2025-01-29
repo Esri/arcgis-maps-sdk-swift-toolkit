@@ -22,13 +22,6 @@ struct OnDemandListItemView: View {
     /// The currently selected map.
     @Binding var selectedMap: Map?
     
-    /// The download state of the preplanned map model.
-    fileprivate enum DownloadState {
-        case initialized, downloading, downloaded
-    }
-    
-    @State private var downloadState: DownloadState = .initialized
-    
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
@@ -67,23 +60,11 @@ struct OnDemandListItemView: View {
                 OnDemandMetadataView(model: model, isSelected: isSelected)
             }
         }
-        .onAppear {
-            downloadState = .init(model.status)
-        }
-        .onReceive(model.$status) { status in
-            let downloadState = DownloadState(status)
-            withAnimation(
-                downloadState == .downloaded ? .easeInOut : nil
-            ) {
-                self.downloadState = downloadState
-            }
-        }
     }
     
     // What should we do with the thumbnail? Save our own or use the default one?
     @ViewBuilder private var thumbnailView: some View {
-        if downloadState == .downloaded,
-           let thumbnail = model.thumbnail {
+        if let thumbnail = model.thumbnail {
             LoadableImageView(loadableImage: thumbnail)
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
@@ -110,7 +91,12 @@ struct OnDemandListItemView: View {
     }
     
     @ViewBuilder private var downloadButton: some View {
-        switch downloadState {
+        switch model.status {
+        case .downloading:
+            if let job = model.job {
+                ProgressView(job.progress)
+                    .progressViewStyle(.gauge)
+            }
         case .downloaded:
             Button {
                 Task {
@@ -127,12 +113,7 @@ struct OnDemandListItemView: View {
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
             .disabled(isSelected)
-        case .downloading:
-            if let job = model.job {
-                ProgressView(job.progress)
-                    .progressViewStyle(.gauge)
-            }
-        case .initialized:
+        case .initialized, .downloadFailure, .mmpkLoadFailure:
             Button {
                 Task {
                     await model.downloadOnDemandMapArea()
@@ -171,17 +152,5 @@ struct OnDemandListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
-    }
-}
-
-private extension OnDemandListItemView.DownloadState {
-    /// Creates an instance.
-    /// - Parameter state: The preplanned map model download state.
-    init(_ state: OnDemandMapModel.Status) {
-        self = switch state {
-        case .downloaded: .downloaded
-        case .downloading: .downloading
-        default: .initialized
-        }
     }
 }
