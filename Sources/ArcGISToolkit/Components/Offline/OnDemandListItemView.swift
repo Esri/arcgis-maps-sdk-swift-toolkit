@@ -16,6 +16,7 @@ import SwiftUI
 import ArcGIS
 
 struct OnDemandListItemView: View {
+    /// The model for this view.
     @ObservedObject var model: OnDemandMapModel
     
     /// The currently selected map.
