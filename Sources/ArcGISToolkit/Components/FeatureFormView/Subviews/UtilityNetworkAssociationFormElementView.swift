@@ -43,9 +43,6 @@ struct UtilityNetworkAssociationFormElementView: View {
             //
             // TODO: End InputFooter replacement section -----------------------
             
-//            ForEach(associationKindGroups) { group in
-//                AssociationKindGroupView(associationKindGroup: group)
-//            }
             FeatureFormGroupedContentView(
                 content: associationKindGroups.map { group in
                     NavigationLink(value: group) {
