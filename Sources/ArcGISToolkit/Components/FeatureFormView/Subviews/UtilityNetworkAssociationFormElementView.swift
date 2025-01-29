@@ -162,18 +162,9 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let networkSourceGroup:  NetworkSourceGroup
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***DisclosureGroup {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(networkSourceGroup.associations) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.associations.count.formatted())
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ForEach(networkSourceGroup.associations) {
+***REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
