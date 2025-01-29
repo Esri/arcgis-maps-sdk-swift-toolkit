@@ -45,15 +45,6 @@ struct OnDemandMetadataView: View {
                         .font(.subheadline)
                 }
                 VStack(alignment: .leading) {
-                    Text("Description")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    if !model.description.isEmpty {
-                        Text(model.description)
-                            .font(.subheadline)
-                    }
-                }
-                VStack(alignment: .leading) {
                     Text("Size")
                         .font(.caption)
                         .foregroundStyle(.secondary)
