@@ -19,4 +19,13 @@ extension DisclosureGroupStyle where Self == LeadingEdgeDisclosureGroupStyle {
     static var leadingEdge: LeadingEdgeDisclosureGroupStyle {
         LeadingEdgeDisclosureGroupStyle()
     }
+    
+    /// A disclosure group style that places disclosure arrow at the leading edge.
+    static func leadingEdge(arrowColor: Color? = nil) -> LeadingEdgeDisclosureGroupStyle {
+        if let arrowColor {
+            LeadingEdgeDisclosureGroupStyle(arrowColor: arrowColor)
+        } else {
+            leadingEdge
+        }
+    }
 }
