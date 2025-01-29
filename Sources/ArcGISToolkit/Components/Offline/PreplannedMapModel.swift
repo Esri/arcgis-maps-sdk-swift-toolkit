@@ -37,7 +37,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private let portalItemID: Item.ID
     
     /// The action to perform when a preplanned map area is deleted.
-    private let onRemoveDownloadAction: (Item.ID) -> Void
+    private let onRemoveDownloadAction: () -> Void
     
     /// The mobile map package for the preplanned map area.
     @Published private(set) var mobileMapPackage: MobileMapPackage?
@@ -59,7 +59,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         mapArea: PreplannedMapAreaProtocol,
         portalItemID: Item.ID,
         preplannedMapAreaID: Item.ID,
-        onRemoveDownload: @escaping (Item.ID) -> Void
+        onRemoveDownload: @escaping () -> Void
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
@@ -171,7 +171,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         Task { await load() }
         
         // Call the closure for the remove download action.
-        onRemoveDownloadAction(preplannedMapAreaID)
+        onRemoveDownloadAction()
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and
@@ -343,7 +343,7 @@ extension PreplannedMapModel {
     static func loadPreplannedMapModels(
         offlineMapTask: OfflineMapTask,
         portalItemID: Item.ID,
-        onRemoveDownload: @escaping (Item.ID) -> Void
+        onRemoveDownload: @escaping () -> Void
     ) async -> PreplannedModels {
         if offlineMapTask.loadStatus != .loaded {
             try? await offlineMapTask.retryLoad()
@@ -389,7 +389,7 @@ extension PreplannedMapModel {
     private static func loadOfflinePreplannedMapModels(
         offlineMapTask: OfflineMapTask,
         portalItemID: Item.ID,
-        onRemoveDownload: @escaping (Item.ID) -> Void
+        onRemoveDownload: @escaping () -> Void
     ) async -> [PreplannedMapModel] {
         let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
         

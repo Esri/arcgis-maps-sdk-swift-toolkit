@@ -52,7 +52,7 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     /// The function called when a downloaded preplanned map area is removed.
-    func onRemoveDownloadOfPreplannedArea(withID preplannedAreaID: Item.ID) {
+    func onRemoveDownloadOfPreplannedArea() {
         // Delete the saved map info if there are no more downloads for the
         // represented online map.
         guard case.success(let models) = preplannedMapModels,
@@ -65,7 +65,7 @@ class OfflineMapViewModel: ObservableObject {
         let models = await PreplannedMapModel.loadPreplannedMapModels(
             offlineMapTask: offlineMapTask,
             portalItemID: portalItemID,
-            onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
+            onRemoveDownload: onRemoveDownloadOfPreplannedArea
         )
         preplannedMapModels = models.result
         isShowingOnlyOfflineModels = models.onlyOfflineModelsAreAvailable
