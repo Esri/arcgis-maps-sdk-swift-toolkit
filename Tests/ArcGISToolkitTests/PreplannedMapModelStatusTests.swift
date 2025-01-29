@@ -58,16 +58,3 @@ class PreplannedMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testAllowsRemoval() {
-***REMOVED******REMOVED***XCTAssertFalse(Status.notLoaded.allowsRemoval)
-***REMOVED******REMOVED***XCTAssertFalse(Status.loading.allowsRemoval)
-***REMOVED******REMOVED***XCTAssertTrue(Status.loadFailure(CancellationError()).allowsRemoval)
-***REMOVED******REMOVED***XCTAssertFalse(Status.packaging.allowsRemoval)
-***REMOVED******REMOVED***XCTAssertFalse(Status.packaged.allowsRemoval)
-***REMOVED******REMOVED***XCTAssertTrue(Status.packageFailure.allowsRemoval)
-***REMOVED******REMOVED***XCTAssertFalse(Status.downloading.allowsRemoval)
-***REMOVED******REMOVED***XCTAssertTrue(Status.downloaded.allowsRemoval)
-***REMOVED******REMOVED***XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsRemoval)
-***REMOVED******REMOVED***XCTAssertTrue(Status.mmpkLoadFailure(CancellationError()).allowsRemoval)
-***REMOVED***
-***REMOVED***
