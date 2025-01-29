@@ -217,7 +217,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 }
 
 extension OnDemandMapModel {
-    static func loadModels(portalItemID: Item.ID) async -> [OnDemandMapModel] {
+    static func loadOnDemandMapModels(portalItemID: Item.ID) async -> [OnDemandMapModel] {
         var onDemandMapModels: [OnDemandMapModel] = []
         
         // Look up the ongoing jobs for on-demand map models.
