@@ -217,7 +217,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 
 extension OnDemandMapModel {
-***REMOVED***static func loadModels(portalItemID: Item.ID) async -> [OnDemandMapModel] {
+***REMOVED***static func loadOnDemandMapModels(portalItemID: Item.ID) async -> [OnDemandMapModel] {
 ***REMOVED******REMOVED***var onDemandMapModels: [OnDemandMapModel] = []
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Look up the ongoing jobs for on-demand map models.
