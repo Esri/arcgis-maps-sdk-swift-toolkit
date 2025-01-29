@@ -51,7 +51,7 @@ struct UtilityNetworkAssociationFormElementView: View {
                                 .foregroundStyle(.primary)
                             Spacer()
                             Group {
-                                Text(group.networkSourceGroups.map({ $0.associations.count }).count.formatted())
+                                Text(group.networkSourceGroups.flatMap( { $0.associations.compactMap { $0 } } ).count.formatted())
                                 Image(systemName: "chevron.right")
                             }
                             .foregroundStyle(.secondary)
