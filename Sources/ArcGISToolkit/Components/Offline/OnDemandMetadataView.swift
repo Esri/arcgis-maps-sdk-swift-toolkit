@@ -51,10 +51,6 @@ struct OnDemandMetadataView: View {
                     if !model.description.isEmpty {
                         Text(model.description)
                             .font(.subheadline)
-                    } else {
-                        Text("This area has no description.")
-                            .font(.subheadline)
-                            .foregroundStyle(.tertiary)
                     }
                 }
                 VStack(alignment: .leading) {

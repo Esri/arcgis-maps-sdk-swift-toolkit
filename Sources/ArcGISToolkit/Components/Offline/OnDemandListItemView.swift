@@ -105,10 +105,6 @@ struct OnDemandListItemView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
-        } else {
-            Text("This area has no description.")
-                .font(.footnote)
-                .foregroundStyle(.tertiary)
         }
     }
     
@@ -136,7 +132,6 @@ struct OnDemandListItemView: View {
                     .progressViewStyle(.gauge)
             }
         case .initialized:
-            // This state shouldn't be reached.
             Button {
                 Task {
                     await model.downloadOnDemandMapArea()
@@ -151,11 +146,9 @@ struct OnDemandListItemView: View {
     }
     
     private var openStatusView: some View {
-        HStack(spacing: 4) {
-            Text("Currently open")
-        }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
+        Text("Currently open")
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
     }
     
     @ViewBuilder private var statusView: some View {
