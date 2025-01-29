@@ -15,39 +15,32 @@
 import ArcGIS
 import SwiftUI
 
+// TODO: doc
 struct OnDemandConfigurationView: View {
-    @Environment(\.dismiss) private var dismiss
     let map: Map
+    let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
+    
     @State private var titleInput = ""
     @State private var maxScale: CacheScale = .room
     @State private var polygon: Polygon?
     @State private var currentVisibleArea: Polygon?
-    @State private var geometryEditor = GeometryEditor()
     
-    var onCompleteAction: ((OnDemandMapAreaConfiguration) -> Void)? = nil
+    @Environment(\.dismiss) private var dismiss
     
     var cannotAddOnDemandArea: Bool {
-        titleInput.isEmpty || polygon == nil
-    }
-    
-    func onComplete(
-        perform action: @escaping (OnDemandMapAreaConfiguration) -> Void
-    ) -> Self {
-        var view = self
-        view.onCompleteAction = action
-        return view
+        titleInput.isEmpty || currentVisibleArea == nil
     }
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                Text("Drag the selector to define the area")
+                // TODO: this should extend the top safe area
+                Text("Pan and zoom to define the area")
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
                     .background(.thinMaterial, ignoresSafeAreaEdges: .horizontal)
                 
-                mapSelectorView
-                
+                mapView
                 bottomPane
             }
             .toolbar {
@@ -83,38 +76,15 @@ struct OnDemandConfigurationView: View {
             
             HStack {
                 Button {
-                    if polygon == nil {
-                        polygon = currentVisibleArea
-                        startEditing(polygon: polygon!)
-                    } else {
-                        geometryEditor.stop()
-                        polygon = nil
-                    }
-                } label: {
-                    Text(polygon == nil ? "Show Selector": "Hide Selector")
-                        .bold()
-                        .font(.body)
-                        .tint(.blue)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                }
-                .frame(maxWidth: .infinity)
-                .background(.secondary.opacity(0.4))
-                .cornerRadius(10)
-                .disabled(currentVisibleArea == nil)
-                
-                Button {
-                    Task {
-                        geometryEditor.stop()
-                        let configuration = OnDemandMapAreaConfiguration(
-                            title: titleInput,
-                            minScale: CacheScale.worldSmall.scale,
-                            maxScale: maxScale.scale,
-                            areaOfInterest: polygon!
-                        )
-                        onCompleteAction?(configuration)
-                        dismiss()
-                    }
+                    guard let currentVisibleArea else { return }
+                    let configuration = OnDemandMapAreaConfiguration(
+                        title: titleInput,
+                        minScale: CacheScale.worldSmall.scale,
+                        maxScale: maxScale.scale,
+                        areaOfInterest: currentVisibleArea
+                    )
+                    onCompleteAction(configuration)
+                    dismiss()
                 } label: {
                     Text("Download")
                         .bold()
@@ -144,42 +114,9 @@ struct OnDemandConfigurationView: View {
     }
     
     @ViewBuilder
-    private var mapSelectorView: some View {
+    private var mapView: some View {
         MapView(map: map)
             .interactionModes([.pan, .zoom])
-            .geometryEditor(geometryEditor)
-            .onVisibleAreaChanged { area in
-                currentVisibleArea = area
-            }
-            .overlay(alignment: .topTrailing) {
-                Button {
-                    print("Location Button tapped")
-                } label: {
-                    Image(systemName: "location.slash")
-                        .padding(8)
-                }
-                .padding(8)
-                .background(.thinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                .padding()
-            }
-            .task {
-                for await polygon in geometryEditor.$geometry {
-                    // Update geometry when there is an update.
-                    self.polygon = polygon as? Polygon
-                }
-            }
-    }
-    
-    func startEditing(polygon: Polygon) {
-        let tool = ShapeTool(kind: .rectangle)
-        tool.configuration.scaleMode = .stretch
-        tool.configuration.allowsRotatingSelectedElement = false
-        tool.style.fillSymbol = SimpleFillSymbol(style: .solid, color: .lightGray.withAlphaComponent(0.3))
-        geometryEditor.tool = tool
-        
-        geometryEditor.start(withInitial: polygon)
-        geometryEditor.selectGeometry()
-        geometryEditor.scaleSelectedElementBy(factorX: 0.8, factorY: 0.8)
+            .onVisibleAreaChanged { currentVisibleArea = $0 }
     }
 }
