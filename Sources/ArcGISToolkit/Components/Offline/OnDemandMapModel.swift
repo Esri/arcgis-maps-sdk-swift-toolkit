@@ -224,6 +224,7 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED***let ongoingJobs = OfflineManager.shared.jobs
 ***REMOVED******REMOVED******REMOVED***.lazy
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? GenerateOfflineMapJob ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.filter { $0.onlineMap?.item?.id == portalItemID ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let areaID = $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent
 ***REMOVED******REMOVED******REMOVED******REMOVED***return OnDemandMapModel(job: $0, areaID: areaID, portalItemID: portalItemID)
