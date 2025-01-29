@@ -224,6 +224,7 @@ extension OnDemandMapModel {
         let ongoingJobs = OfflineManager.shared.jobs
             .lazy
             .compactMap { $0 as? GenerateOfflineMapJob }
+            .filter { $0.onlineMap?.item?.id == portalItemID }
             .map {
                 let areaID = $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent
                 return OnDemandMapModel(job: $0, areaID: areaID, portalItemID: portalItemID)
