@@ -78,7 +78,7 @@ struct OnDemandListItemView: View {
 ***REMOVED***@ViewBuilder private var titleView: some View {
 ***REMOVED******REMOVED***Text(model.title)
 ***REMOVED******REMOVED******REMOVED***.font(.body)
-***REMOVED******REMOVED******REMOVED***.lineLimit(2)
+***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var descriptionView: some View {
