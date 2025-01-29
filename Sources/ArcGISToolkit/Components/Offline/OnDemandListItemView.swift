@@ -105,10 +105,6 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Text("This area has no description.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -136,7 +132,6 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .initialized:
-***REMOVED******REMOVED******REMOVED******REMOVED*** This state shouldn't be reached.
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadOnDemandMapArea()
@@ -151,11 +146,9 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private var openStatusView: some View {
-***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***Text("Currently open")
-***REMOVED***
-***REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED******REMOVED***Text("Currently open")
+***REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var statusView: some View {

@@ -51,10 +51,6 @@ struct OnDemandMetadataView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !model.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("This area has no description.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
