@@ -71,8 +71,19 @@ class OfflineMapViewModel: ObservableObject {
         isShowingOnlyOfflineModels = models.onlyOfflineModelsAreAvailable
     }
     
+    /// The function called when a downloaded on demand map area is removed.
+    /// - Parameter areaID: The ID of the on demand map area.
+    func onRemoveDownloadOfOnDemandArea(with areaID: String) {
+        guard let models = onDemandMapModels else { return }
+        onDemandMapModels = models.filter { $0.areaID != areaID }
+        // Delete the saved map info if there are no more downloads for the
+        // represented online map.
+        guard models.filter(\.status.isDownloaded).isEmpty else { return }
+        OfflineManager.shared.removeMapInfo(for: portalItemID)
+    }
+    
     func loadOnDemandMapModels() async {
-        onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID)
+        onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID, onRemoveDownload: onRemoveDownloadOfOnDemandArea(with:))
     }
     
     func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
@@ -81,7 +92,8 @@ class OfflineMapViewModel: ObservableObject {
         let model = OnDemandMapModel(
             offlineMapTask: offlineMapTask,
             configuration: configuration,
-            portalItemID: portalItemID
+            portalItemID: portalItemID,
+            onRemoveDownload: onRemoveDownloadOfOnDemandArea(with:)
         )
         onDemandMapModels?.append(model)
         onDemandMapModels?.sort(by: { $0.title < $1.title })
