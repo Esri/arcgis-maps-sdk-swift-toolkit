@@ -19,8 +19,10 @@ import SwiftUI
 struct OnDemandConfigurationView: View {
     /// The online map.
     let map: Map
+    
     /// The title of the map area.
     let title: String = "hello"
+    
     /// The action to call when creating a configuration is complete.
     let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
     
