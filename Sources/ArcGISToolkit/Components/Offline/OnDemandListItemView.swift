@@ -16,6 +16,7 @@
 ***REMOVED***
 
 struct OnDemandListItemView: View {
+***REMOVED******REMOVED***/ The model for this view.
 ***REMOVED***@ObservedObject var model: OnDemandMapModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently selected map.
