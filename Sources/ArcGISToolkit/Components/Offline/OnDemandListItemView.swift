@@ -78,7 +78,7 @@ struct OnDemandListItemView: View {
     @ViewBuilder private var titleView: some View {
         Text(model.title)
             .font(.body)
-            .lineLimit(2)
+            .lineLimit(1)
     }
     
     @ViewBuilder private var descriptionView: some View {
