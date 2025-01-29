@@ -92,3 +92,17 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Returns the next title for the on-demand map area.
+***REMOVED***func nextOnDemandAreaTitle() -> String {
+***REMOVED******REMOVED***func title(forIndex index: Int) -> String {
+***REMOVED******REMOVED******REMOVED***"Area \(index)"
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let onDemandMapModels else { return title(forIndex: 1) ***REMOVED***
+***REMOVED******REMOVED***var index = onDemandMapModels.count + 1
+***REMOVED******REMOVED***while onDemandMapModels.contains(where: { $0.title == title(forIndex: index) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***index += 1
+***REMOVED***
+***REMOVED******REMOVED***return title(forIndex: index)
+***REMOVED***
+***REMOVED***
