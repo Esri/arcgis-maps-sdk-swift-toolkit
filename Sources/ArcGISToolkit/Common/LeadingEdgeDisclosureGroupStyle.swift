@@ -18,6 +18,14 @@ import SwiftUI
 ///
 /// Use ``DisclosureGroupStyle/leadingEdge`` to construct this style.
 struct LeadingEdgeDisclosureGroupStyle: DisclosureGroupStyle {
+    let arrowColor: Color
+    
+    /// Creates a leading edge disclosure group style.
+    /// - Parameter arrowColor: The color of the disclosure group arrow.
+    init(arrowColor: Color = .accentColor) {
+        self.arrowColor = arrowColor
+    }
+    
     func makeBody(configuration: Configuration) -> some View {
         Button {
             withAnimation {
@@ -26,7 +34,7 @@ struct LeadingEdgeDisclosureGroupStyle: DisclosureGroupStyle {
         } label: {
             HStack(alignment: .firstTextBaseline) {
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(arrowColor)
                     .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
                     .animation(
                         .easeInOut(duration: 0.3),
@@ -66,6 +74,12 @@ struct LeadingEdgeDisclosureGroupStyle: DisclosureGroupStyle {
                 makeDemoContent()
             }
             .disclosureGroupStyle(.leadingEdge)
+        }
+        Section {
+            DisclosureGroup("\(LeadingEdgeDisclosureGroupStyle.self)") {
+                makeDemoContent()
+            }
+            .disclosureGroupStyle(.leadingEdge(arrowColor: .secondary))
         }
     }
 }
