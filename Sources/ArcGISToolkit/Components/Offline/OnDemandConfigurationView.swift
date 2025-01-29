@@ -15,19 +15,27 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** TODO: doc
+***REMOVED***/ A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
+***REMOVED******REMOVED***/ The online map.
 ***REMOVED***let map: Map
+***REMOVED******REMOVED***/ The title of the map area.
 ***REMOVED***let title: String = "hello"
+***REMOVED******REMOVED***/ The action to call when creating a configuration is complete.
 ***REMOVED***let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
 ***REMOVED***
+***REMOVED******REMOVED***/ The max scale of the map to take offline.
 ***REMOVED***@State private var maxScale: CacheScale = .room
-***REMOVED***@State private var currentVisibleArea: Polygon?
 ***REMOVED***
+***REMOVED******REMOVED***/ The visible area of the map.
+***REMOVED***@State private var visibleArea: Envelope?
+***REMOVED***
+***REMOVED******REMOVED*** The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
 ***REMOVED***var downloadIsDisabled: Bool {
-***REMOVED******REMOVED***currentVisibleArea == nil
+***REMOVED******REMOVED***visibleArea == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -65,7 +73,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
 ***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { currentVisibleArea = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0.extent ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -83,12 +91,12 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let currentVisibleArea else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let visibleArea else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: CacheScale.worldSmall.scale,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: currentVisibleArea.extent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: visibleArea
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction(configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
@@ -106,10 +114,15 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view that displays a card with rounded top edges that will be
+***REMOVED***/ anchored to the bottom.
 private struct BottomCard<Content: View, Background: ShapeStyle>: View {
+***REMOVED******REMOVED***/ The content to display in the card.
 ***REMOVED***let content: () -> Content
+***REMOVED******REMOVED***/ The background of the card.
 ***REMOVED***let background: Background
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a bottom card.
 ***REMOVED***init(background: Background,@ViewBuilder content: @escaping () -> Content) {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED******REMOVED***self.background = background
