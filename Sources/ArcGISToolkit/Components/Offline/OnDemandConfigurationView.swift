@@ -19,8 +19,10 @@
 struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The online map.
 ***REMOVED***let map: Map
+***REMOVED***
 ***REMOVED******REMOVED***/ The title of the map area.
 ***REMOVED***let title: String = "hello"
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to call when creating a configuration is complete.
 ***REMOVED***let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
 ***REMOVED***
