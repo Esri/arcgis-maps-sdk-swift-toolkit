@@ -140,7 +140,7 @@ extension UtilityNetworkAssociationFormElementView {
                         Text(group.associations.count.formatted())
                     }
                 }
-                .disclosureGroupStyle(.automatic)
+                .disclosureGroupStyle(.leadingEdge)
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
