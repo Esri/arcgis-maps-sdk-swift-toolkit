@@ -15,39 +15,32 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED*** TODO: doc
 struct OnDemandConfigurationView: View {
-***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***let map: Map
+***REMOVED***let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
+***REMOVED***
 ***REMOVED***@State private var titleInput = ""
 ***REMOVED***@State private var maxScale: CacheScale = .room
 ***REMOVED***@State private var polygon: Polygon?
 ***REMOVED***@State private var currentVisibleArea: Polygon?
-***REMOVED***@State private var geometryEditor = GeometryEditor()
 ***REMOVED***
-***REMOVED***var onCompleteAction: ((OnDemandMapAreaConfiguration) -> Void)? = nil
+***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED***var cannotAddOnDemandArea: Bool {
-***REMOVED******REMOVED***titleInput.isEmpty || polygon == nil
-***REMOVED***
-***REMOVED***
-***REMOVED***func onComplete(
-***REMOVED******REMOVED***perform action: @escaping (OnDemandMapAreaConfiguration) -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onCompleteAction = action
-***REMOVED******REMOVED***return view
+***REMOVED******REMOVED***titleInput.isEmpty || currentVisibleArea == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Drag the selector to define the area")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: this should extend the top safe area
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Pan and zoom to define the area")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 6)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial, ignoresSafeAreaEdges: .horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***mapSelectorView
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***mapView
 ***REMOVED******REMOVED******REMOVED******REMOVED***bottomPane
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
@@ -83,38 +76,15 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if polygon == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***polygon = currentVisibleArea
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startEditing(polygon: polygon!)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometryEditor.stop()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***polygon = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(polygon == nil ? "Show Selector": "Hide Selector")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.blue)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(.secondary.opacity(0.4))
-***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(10)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(currentVisibleArea == nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometryEditor.stop()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: titleInput,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: CacheScale.worldSmall.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: polygon!
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction?(configuration)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let currentVisibleArea else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: titleInput,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: CacheScale.worldSmall.scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: currentVisibleArea
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction(configuration)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Download")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
@@ -144,42 +114,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
-***REMOVED***private var mapSelectorView: some View {
+***REMOVED***private var mapView: some View {
 ***REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED***.geometryEditor(geometryEditor)
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { area in
-***REMOVED******REMOVED******REMOVED******REMOVED***currentVisibleArea = area
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Location Button tapped")
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "location.slash")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***for await polygon in geometryEditor.$geometry {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update geometry when there is an update.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.polygon = polygon as? Polygon
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func startEditing(polygon: Polygon) {
-***REMOVED******REMOVED***let tool = ShapeTool(kind: .rectangle)
-***REMOVED******REMOVED***tool.configuration.scaleMode = .stretch
-***REMOVED******REMOVED***tool.configuration.allowsRotatingSelectedElement = false
-***REMOVED******REMOVED***tool.style.fillSymbol = SimpleFillSymbol(style: .solid, color: .lightGray.withAlphaComponent(0.3))
-***REMOVED******REMOVED***geometryEditor.tool = tool
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***geometryEditor.start(withInitial: polygon)
-***REMOVED******REMOVED***geometryEditor.selectGeometry()
-***REMOVED******REMOVED***geometryEditor.scaleSelectedElementBy(factorX: 0.8, factorY: 0.8)
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { currentVisibleArea = $0 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
