@@ -15,19 +15,27 @@
 import ArcGIS
 import SwiftUI
 
-// TODO: doc
+/// A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
+    /// The online map.
     let map: Map
+    /// The title of the map area.
     let title: String = "hello"
+    /// The action to call when creating a configuration is complete.
     let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
     
+    /// The max scale of the map to take offline.
     @State private var maxScale: CacheScale = .room
-    @State private var currentVisibleArea: Polygon?
     
+    /// The visible area of the map.
+    @State private var visibleArea: Envelope?
+    
+    // The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
+    /// A Boolean value indicating if the download button is disabled.
     var downloadIsDisabled: Bool {
-        currentVisibleArea == nil
+        visibleArea == nil
     }
     
     var body: some View {
@@ -65,7 +73,7 @@ struct OnDemandConfigurationView: View {
             .magnifierDisabled(true)
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onVisibleAreaChanged { currentVisibleArea = $0 }
+            .onVisibleAreaChanged { visibleArea = $0.extent }
     }
     
     @ViewBuilder
@@ -83,12 +91,12 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let currentVisibleArea else { return }
+                        guard let visibleArea else { return }
                         let configuration = OnDemandMapAreaConfiguration(
                             title: title,
                             minScale: CacheScale.worldSmall.scale,
                             maxScale: maxScale.scale,
-                            areaOfInterest: currentVisibleArea.extent
+                            areaOfInterest: visibleArea
                         )
                         onCompleteAction(configuration)
                         dismiss()
@@ -106,10 +114,15 @@ struct OnDemandConfigurationView: View {
     }
 }
 
+/// A view that displays a card with rounded top edges that will be
+/// anchored to the bottom.
 private struct BottomCard<Content: View, Background: ShapeStyle>: View {
+    /// The content to display in the card.
     let content: () -> Content
+    /// The background of the card.
     let background: Background
     
+    /// Creates a bottom card.
     init(background: Background,@ViewBuilder content: @escaping () -> Content) {
         self.content = content
         self.background = background
