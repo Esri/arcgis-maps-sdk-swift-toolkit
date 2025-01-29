@@ -81,15 +81,20 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@ViewBuilder
 ***REMOVED***private var bottomPane: some View {
 ***REMOVED******REMOVED***BottomCard(background: Color(uiColor: .systemBackground)) {
-***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Max Scale", selection: $maxScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(CacheScale.allCases, id: \.self) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.pickerStyle(.navigationLink)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 6)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
