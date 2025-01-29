@@ -81,15 +81,20 @@ struct OnDemandConfigurationView: View {
     @ViewBuilder
     private var bottomPane: some View {
         BottomCard(background: Color(uiColor: .systemBackground)) {
-            VStack {
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.headline)
+                
                 HStack {
                     Picker("Max Scale", selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
                             Text($0.description)
                         }
                     }
+                    .font(.footnote)
                     .pickerStyle(.navigationLink)
                 }
+                .padding(.vertical, 6)
                 
                 HStack {
                     Button {
