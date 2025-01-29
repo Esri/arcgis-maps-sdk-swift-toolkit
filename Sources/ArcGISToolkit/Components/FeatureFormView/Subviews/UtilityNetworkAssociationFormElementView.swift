@@ -128,27 +128,28 @@ extension UtilityNetworkAssociationFormElementView {
             hasher.combine(id)
         }
     }
-        
+    
     struct AssociationKindGroupView: View {
         let associationKindGroup: AssociationKindGroup
         
-        @State private var isExpanded = false
-        
         var body: some View {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(associationKindGroup.networkSourceGroups) {
-                    NetworkSourceGroupView(networkSourceGroup: $0)
+            List(associationKindGroup.networkSourceGroups) { group in
+                DisclosureGroup {
+                    NetworkSourceGroupView(networkSourceGroup: group)
+                } label: {
+                    HStack {
+                        Text(group.name)
+                        Spacer()
+                        Text(group.associations.count.formatted())
+                    }
                 }
-            } label: {
-                HStack {
-                    Text(associationKindGroup.name)
-                    Spacer()
-                    Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count }).count.formatted())
-                }
+                .disclosureGroupStyle(.automatic)
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
         }
     }
-        
+    
     struct NetworkSourceGroup: Identifiable {
         /// <#Description#>
         let associations: [Association]
@@ -159,7 +160,7 @@ extension UtilityNetworkAssociationFormElementView {
         /// <#Description#>
         let name: String
     }
-        
+    
     struct NetworkSourceGroupView: View {
         let networkSourceGroup:  NetworkSourceGroup
         
