@@ -22,13 +22,6 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding var selectedMap: Map?
 ***REMOVED***
-***REMOVED******REMOVED***/ The download state of the preplanned map model.
-***REMOVED***fileprivate enum DownloadState {
-***REMOVED******REMOVED***case initialized, downloading, downloaded
-***REMOVED***
-***REMOVED***
-***REMOVED***@State private var downloadState: DownloadState = .initialized
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
@@ -67,23 +60,11 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMetadataView(model: model, isSelected: isSelected)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
-***REMOVED***
-***REMOVED******REMOVED***.onReceive(model.$status) { status in
-***REMOVED******REMOVED******REMOVED***let downloadState = DownloadState(status)
-***REMOVED******REMOVED******REMOVED***withAnimation(
-***REMOVED******REMOVED******REMOVED******REMOVED***downloadState == .downloaded ? .easeInOut : nil
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.downloadState = downloadState
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** What should we do with the thumbnail? Save our own or use the default one?
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
-***REMOVED******REMOVED***if downloadState == .downloaded,
-***REMOVED******REMOVED***   let thumbnail = model.thumbnail {
+***REMOVED******REMOVED***if let thumbnail = model.thumbnail {
 ***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
@@ -110,7 +91,12 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
-***REMOVED******REMOVED***switch downloadState {
+***REMOVED******REMOVED***switch model.status {
+***REMOVED******REMOVED***case .downloading:
+***REMOVED******REMOVED******REMOVED***if let job = model.job {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
@@ -127,12 +113,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
 ***REMOVED******REMOVED******REMOVED***.disabled(isSelected)
-***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***if let job = model.job {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .initialized:
+***REMOVED******REMOVED***case .initialized, .downloadFailure, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadOnDemandMapArea()
@@ -171,17 +152,5 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
-***REMOVED***
-***REMOVED***
-
-private extension OnDemandListItemView.DownloadState {
-***REMOVED******REMOVED***/ Creates an instance.
-***REMOVED******REMOVED***/ - Parameter state: The preplanned map model download state.
-***REMOVED***init(_ state: OnDemandMapModel.Status) {
-***REMOVED******REMOVED***self = switch state {
-***REMOVED******REMOVED***case .downloaded: .downloaded
-***REMOVED******REMOVED***case .downloading: .downloading
-***REMOVED******REMOVED***default: .initialized
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
