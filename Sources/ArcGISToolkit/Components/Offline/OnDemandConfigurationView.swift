@@ -130,7 +130,7 @@ private struct BottomCard<Content: View, Background: ShapeStyle>: View {
     let background: Background
     
     /// Creates a bottom card.
-    init(background: Background,@ViewBuilder content: @escaping () -> Content) {
+    init(background: Background, @ViewBuilder content: @escaping () -> Content) {
         self.content = content
         self.background = background
     }
