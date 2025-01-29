@@ -84,7 +84,7 @@ public struct OfflineMapAreasView: View {
                         isAddingOnDemandArea = true
                     }
                     .sheet(isPresented: $isAddingOnDemandArea) {
-                        OnDemandConfigurationView(map: onlineMap.clone()) {
+                        OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle()) {
                             mapViewModel.addOnDemandMapArea(with: $0)
                         }
                         .highPriorityGesture(DragGesture())

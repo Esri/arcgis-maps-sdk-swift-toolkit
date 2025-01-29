@@ -21,7 +21,7 @@ struct OnDemandConfigurationView: View {
     let map: Map
     
     /// The title of the map area.
-    let title: String = "hello"
+    @State private(set) var title: String
     
     /// The action to call when creating a configuration is complete.
     let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void

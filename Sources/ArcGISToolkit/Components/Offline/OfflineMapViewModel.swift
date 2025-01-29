@@ -91,4 +91,18 @@ class OfflineMapViewModel: ObservableObject {
             await model.downloadOnDemandMapArea()
         }
     }
+    
+    /// Returns the next title for the on-demand map area.
+    func nextOnDemandAreaTitle() -> String {
+        func title(forIndex index: Int) -> String {
+            "Area \(index)"
+        }
+        
+        guard let onDemandMapModels else { return title(forIndex: 1) }
+        var index = onDemandMapModels.count + 1
+        while onDemandMapModels.contains(where: { $0.title == title(forIndex: index) }) {
+            index += 1
+        }
+        return title(forIndex: index)
+    }
 }
