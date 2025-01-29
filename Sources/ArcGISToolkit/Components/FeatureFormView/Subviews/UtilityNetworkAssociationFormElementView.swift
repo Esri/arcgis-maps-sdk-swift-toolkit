@@ -135,6 +135,7 @@ extension UtilityNetworkAssociationFormElementView {
                         Spacer()
                         Text(group.associations.count.formatted())
                     }
+                    .bold()
                 }
                 .disclosureGroupStyle(.leadingEdge(arrowColor: .secondary))
             }
