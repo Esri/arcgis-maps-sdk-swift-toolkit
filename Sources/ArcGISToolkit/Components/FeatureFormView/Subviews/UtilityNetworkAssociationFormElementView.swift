@@ -162,18 +162,9 @@ extension UtilityNetworkAssociationFormElementView {
         let networkSourceGroup:  NetworkSourceGroup
         
         var body: some View {
-            DisclosureGroup {
-                ForEach(networkSourceGroup.associations) {
-                    AssociationView(association: $0)
-                }
-            } label: {
-                HStack {
-                    Text(networkSourceGroup.name)
-                    Spacer()
-                    Text(networkSourceGroup.associations.count.formatted())
-                }
+            ForEach(networkSourceGroup.associations) {
+                AssociationView(association: $0)
             }
-            .padding(.leading)
         }
     }
 }
