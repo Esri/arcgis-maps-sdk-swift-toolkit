@@ -18,6 +18,14 @@
 ***REMOVED***/
 ***REMOVED***/ Use ``DisclosureGroupStyle/leadingEdge`` to construct this style.
 struct LeadingEdgeDisclosureGroupStyle: DisclosureGroupStyle {
+***REMOVED***let arrowColor: Color
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a leading edge disclosure group style.
+***REMOVED******REMOVED***/ - Parameter arrowColor: The color of the disclosure group arrow.
+***REMOVED***init(arrowColor: Color = .accentColor) {
+***REMOVED******REMOVED***self.arrowColor = arrowColor
+***REMOVED***
+***REMOVED***
 ***REMOVED***func makeBody(configuration: Configuration) -> some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
@@ -26,7 +34,7 @@ struct LeadingEdgeDisclosureGroupStyle: DisclosureGroupStyle {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(arrowColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.animation(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.easeInOut(duration: 0.3),
@@ -66,6 +74,12 @@ struct LeadingEdgeDisclosureGroupStyle: DisclosureGroupStyle {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeDemoContent()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.disclosureGroupStyle(.leadingEdge)
+***REMOVED***
+***REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED***DisclosureGroup("\(LeadingEdgeDisclosureGroupStyle.self)") {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeDemoContent()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.disclosureGroupStyle(.leadingEdge(arrowColor: .secondary))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
