@@ -130,7 +130,7 @@ private struct BottomCard<Content: View, Background: ShapeStyle>: View {
 ***REMOVED***let background: Background
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a bottom card.
-***REMOVED***init(background: Background,@ViewBuilder content: @escaping () -> Content) {
+***REMOVED***init(background: Background, @ViewBuilder content: @escaping () -> Content) {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED******REMOVED***self.background = background
 ***REMOVED***
