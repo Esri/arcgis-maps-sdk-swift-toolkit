@@ -20,3 +20,12 @@ extension DisclosureGroupStyle where Self == LeadingEdgeDisclosureGroupStyle {
 ***REMOVED******REMOVED***LeadingEdgeDisclosureGroupStyle()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A disclosure group style that places disclosure arrow at the leading edge.
+***REMOVED***static func leadingEdge(arrowColor: Color? = nil) -> LeadingEdgeDisclosureGroupStyle {
+***REMOVED******REMOVED***if let arrowColor {
+***REMOVED******REMOVED******REMOVED***LeadingEdgeDisclosureGroupStyle(arrowColor: arrowColor)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***leadingEdge
+***REMOVED***
+***REMOVED***
+***REMOVED***
