@@ -72,10 +72,10 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The function called when a downloaded on demand map area is removed.
-***REMOVED******REMOVED***/ - Parameter areaID: The ID of the on demand map area.
-***REMOVED***func onRemoveDownloadOfOnDemandArea(with areaID: String) {
+***REMOVED******REMOVED***/ - Parameter model: The on demand map model.
+***REMOVED***func onRemoveDownloadOfOnDemandArea(for model: OnDemandMapModel) {
 ***REMOVED******REMOVED***guard let models = onDemandMapModels else { return ***REMOVED***
-***REMOVED******REMOVED***onDemandMapModels = models.filter { $0.areaID != areaID ***REMOVED***
+***REMOVED******REMOVED***onDemandMapModels?.removeAll(where: { $0.areaID == model.areaID ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Delete the saved map info if there are no more downloads for the
 ***REMOVED******REMOVED******REMOVED*** represented online map.
 ***REMOVED******REMOVED***guard models.filter(\.status.isDownloaded).isEmpty else { return ***REMOVED***
@@ -83,7 +83,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func loadOnDemandMapModels() async {
-***REMOVED******REMOVED***onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID, onRemoveDownload: onRemoveDownloadOfOnDemandArea(with:))
+***REMOVED******REMOVED***onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID, onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
@@ -93,7 +93,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
 ***REMOVED******REMOVED******REMOVED***configuration: configuration,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfOnDemandArea(with:)
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***onDemandMapModels?.append(model)
 ***REMOVED******REMOVED***onDemandMapModels?.sort(by: { $0.title < $1.title ***REMOVED***)

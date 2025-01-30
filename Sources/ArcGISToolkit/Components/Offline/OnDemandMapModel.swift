@@ -39,7 +39,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***let title: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when an on demand map area is deleted.
-***REMOVED***private let onRemoveDownloadAction: (String) -> Void
+***REMOVED***private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
 ***REMOVED***
 ***REMOVED******REMOVED***/ The description of the map area.
 ***REMOVED***@Published private(set) var description: String = ""
@@ -68,7 +68,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***configuration: OnDemandMapAreaConfiguration,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***onRemoveDownload: @escaping (String) -> Void
+***REMOVED******REMOVED***onRemoveDownload: @escaping (OnDemandMapModel) -> Void
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.configuration = configuration
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
@@ -88,7 +88,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***job: GenerateOfflineMapJob,
 ***REMOVED******REMOVED***areaID: String,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***onRemoveDownload: @escaping (String) -> Void
+***REMOVED******REMOVED***onRemoveDownload: @escaping (OnDemandMapModel) -> Void
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.configuration = nil
 ***REMOVED******REMOVED***self.job = job
@@ -113,7 +113,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***init(
 ***REMOVED******REMOVED***mmpkURL: URL,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***onRemoveDownload: @escaping (String) -> Void
+***REMOVED******REMOVED***onRemoveDownload: @escaping (OnDemandMapModel) -> Void
 ***REMOVED***) async throws {
 ***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: mmpkURL)
 ***REMOVED******REMOVED***try await mmpk.load()
@@ -195,7 +195,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***status = .initialized
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Call the closure for the remove download action.
-***REMOVED******REMOVED***onRemoveDownloadAction(areaID)
+***REMOVED******REMOVED***onRemoveDownloadAction(self)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
@@ -231,7 +231,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 extension OnDemandMapModel {
 ***REMOVED***static func loadOnDemandMapModels(
 ***REMOVED******REMOVED***portalItemID: Item.ID,
-***REMOVED******REMOVED***onRemoveDownload: @escaping (String) -> Void
+***REMOVED******REMOVED***onRemoveDownload: @escaping (OnDemandMapModel) -> Void
 ***REMOVED***) async -> [OnDemandMapModel] {
 ***REMOVED******REMOVED***var onDemandMapModels: [OnDemandMapModel] = []
 ***REMOVED******REMOVED***
