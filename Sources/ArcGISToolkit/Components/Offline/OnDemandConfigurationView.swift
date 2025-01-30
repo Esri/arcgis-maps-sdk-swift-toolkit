@@ -86,7 +86,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Max Scale", selection: $maxScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Level of detail", selection: $maxScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(CacheScale.allCases, id: \.self) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
