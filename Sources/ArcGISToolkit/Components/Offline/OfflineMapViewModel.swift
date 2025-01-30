@@ -50,14 +50,26 @@ class OfflineMapViewModel: ObservableObject {
     
     /// The online map.
     private let onlineMap: Map
-
+    
+    /// A Boolean value indicating whether there are downloaded preplanned map areas for the web map.
+    var hasDownloadedPreplannedMapAreas: Bool {
+        if case.success(let preplannedModels) = preplannedMapModels {
+            !preplannedModels.filter(\.status.isDownloaded).isEmpty
+        } else {
+            false
+        }
+    }
+    
+    /// A Boolean value indicating whether there are downloaded on demand map areas for the web map.
+    var hasDownloadedOnDemandMapAreas: Bool {
+        !onDemandMapModels.filter(\.status.isDownloaded).isEmpty
+    }
+    
     /// A Boolean value indicating whether there are downloaded map areas for the web map.
     var hasDownloadedMapAreas: Bool {
-        guard case.success(let preplannedModels) = preplannedMapModels else { return false }
-        
-        return !preplannedModels.filter(\.status.isDownloaded).isEmpty || !onDemandMapModels.filter(\.status.isDownloaded).isEmpty
+        return hasDownloadedPreplannedMapAreas || hasDownloadedOnDemandMapAreas
     }
-
+    
     /// Creates an offline map areas view model for a given web map.
     /// - Parameter onlineMap: The web map.
     /// - Precondition: `onlineMap.item?.id` is not `nil`.
