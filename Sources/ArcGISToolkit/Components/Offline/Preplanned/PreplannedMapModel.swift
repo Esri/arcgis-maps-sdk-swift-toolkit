@@ -251,16 +251,6 @@ extension PreplannedMapModel {
             }
         }
         
-        /// A Boolean value indicating whether the local files can be removed.
-        var allowsRemoval: Bool {
-            switch self {
-            case .downloaded, .mmpkLoadFailure, .downloadFailure, .loadFailure, .packageFailure:
-                true
-            default:
-                false
-            }
-        }
-        
         /// A Boolean value indicating whether the preplanned map area is downloaded.
         var isDownloaded: Bool {
             if case .downloaded = self { true } else { false }
