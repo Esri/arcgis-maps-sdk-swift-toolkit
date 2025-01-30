@@ -68,36 +68,25 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.mapIsOfflineDisabled {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineDisabledView
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.isLoadingModels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("Preplanned") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.mapIsOfflineDisabled {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineDisabledView
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch mapViewModel.mode {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .preplanned:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .onDemand, .undetermined:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapAreasView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section("On Demand") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapAreasView
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle()) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on mapview
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(mapViewModel.onDemandMapModels == nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await loadMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.loadModels()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -107,107 +96,110 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Map Areas")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
-***REMOVED******REMOVED***.refreshable {
-***REMOVED******REMOVED******REMOVED***await loadMapModels()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var preplannedMapAreasView: some View {
-***REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
-***REMOVED******REMOVED***case .success(let models):
-***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
+***REMOVED******REMOVED******REMOVED***case .success(let models):
+***REMOVED******REMOVED******REMOVED******REMOVED***if !models.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(models) { preplannedMapModel in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** footer: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.isShowingOnlyOfflineModels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we are showing some models, but only offline models,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** show that information in a footer.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noInternetFooter
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else if mapViewModel.isShowingOnlyOfflineModels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have no models and no internet, show a content unavailable view.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noInternetNoAreasView
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the request was successful, but there are no preplanned
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** map areas, then show empty preplanned map areas view.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This shouldn't happen unless preplanned areas were deleted after establishing
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** preplanned mode on the model. Because there needs to be preplanned areas
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to even establish the preplanned mode.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedOfflineAreasView
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflineAreasView
+***REMOVED******REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedErrorView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***view(for: error)
-***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
+***REMOVED******REMOVED***.refreshable {
+***REMOVED******REMOVED******REMOVED***Task { await mapViewModel.loadModels() ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var emptyPreplannedMapAreasView: some View {
-***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text("No map areas")
-***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("There are no map areas defined for this web map.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var onDemandMapAreasView: some View {
-***REMOVED******REMOVED***if let models = mapViewModel.onDemandMapModels {
-***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { onDemandMapModel in
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***if !mapViewModel.onDemandMapModels.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***emptyOfflineAreasView
+***REMOVED******REMOVED******REMOVED******REMOVED***emptyOnDemandOfflineAreasView
 ***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle()) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private var emptyOfflineAreasView: some View {
-***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Text("No map areas")
-***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***Text("There are no offline map areas for this web map.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED***@ViewBuilder private var noInternetFooter: some View {
+***REMOVED******REMOVED***Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
+***REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***@ViewBuilder private var noInternetNoAreasView: some View {
+***REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED***"No Internet Connection",
+***REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
+***REMOVED******REMOVED******REMOVED***description: "Could not retrieve map areas for this map. Pull to refresh."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
+***REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED***"No Map Areas",
+***REMOVED******REMOVED******REMOVED***systemImage: "square.and.arrow.down",
+***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map. Pull to refresh."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
+***REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED***"No Map Areas",
+***REMOVED******REMOVED******REMOVED***systemImage: "square.and.arrow.down",
+***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map. Tap the button below to get started."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var offlineDisabledView: some View {
-***REMOVED******REMOVED***let labelText = Text("Offline Disabled")
-***REMOVED******REMOVED***let descriptionText = Text("Please ensure the web map is offline enabled.")
-***REMOVED******REMOVED***if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED***ContentUnavailableView {
-***REMOVED******REMOVED******REMOVED******REMOVED***labelText
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED*** description: {
-***REMOVED******REMOVED******REMOVED******REMOVED***descriptionText
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED***labelText
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
-***REMOVED******REMOVED******REMOVED******REMOVED***descriptionText
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED***"Offline Disabled",
+***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
+***REMOVED******REMOVED******REMOVED***description: "Please ensure the map is offline enabled."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***private func view(for error: Error) -> some View {
-***REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
-***REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
-***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Loads the online and offline map models.
-***REMOVED***private func loadMapModels() async {
-***REMOVED******REMOVED******REMOVED*** Load preplanned map models.
-***REMOVED******REMOVED***await mapViewModel.loadPreplannedMapModels()
-***REMOVED******REMOVED******REMOVED*** Load on-demand map models.
-***REMOVED******REMOVED***await mapViewModel.loadOnDemandMapModels()
+***REMOVED***@ViewBuilder private var preplannedErrorView: some View {
+***REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED***"Error Fetching Map Areas",
+***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
+***REMOVED******REMOVED******REMOVED***description: "An error occurred while fetching map areas. Pull to refresh."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -229,4 +221,43 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***return OfflineMapAreasViewPreview()
+***REMOVED***
+
+enum Backported {
+***REMOVED******REMOVED***/ A content unavailable view that can be used in older operating systems.
+***REMOVED***struct ContentUnavailableView: View {
+***REMOVED******REMOVED***let title: LocalizedStringKey
+***REMOVED******REMOVED***let systemImage: String
+***REMOVED******REMOVED***let description: String?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(_ title: LocalizedStringKey, systemImage name: String, description: String? = nil) {
+***REMOVED******REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED******REMOVED***self.systemImage = name
+***REMOVED******REMOVED******REMOVED***self.description = description
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: systemImage,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description.map { Text($0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemImage)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***

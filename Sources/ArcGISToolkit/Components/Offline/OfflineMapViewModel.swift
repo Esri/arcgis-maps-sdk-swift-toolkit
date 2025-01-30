@@ -18,6 +18,13 @@ import Foundation
 ***REMOVED***/ The model class that represents information for an offline map.
 @MainActor
 class OfflineMapViewModel: ObservableObject {
+***REMOVED******REMOVED***/ The mode that we are displaying models in.
+***REMOVED***enum Mode {
+***REMOVED******REMOVED***case undetermined
+***REMOVED******REMOVED***case preplanned
+***REMOVED******REMOVED***case onDemand
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The portal item ID of the web map.
 ***REMOVED***private let portalItemID: Item.ID
 ***REMOVED***
@@ -25,22 +32,25 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED***
 ***REMOVED******REMOVED***/ The preplanned map information.
-***REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
+***REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error> = .success([])
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if only offline models are being shown.
 ***REMOVED***@Published private(set) var isShowingOnlyOfflineModels = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The on-demand map information.
-***REMOVED***@Published private(set) var onDemandMapModels: [OnDemandMapModel]?
+***REMOVED***@Published private(set) var onDemandMapModels = [OnDemandMapModel]()
+***REMOVED***
+***REMOVED******REMOVED***/ The mode that we are displaying models in.
+***REMOVED***@Published private(set) var mode: Mode = .undetermined
+***REMOVED***
+***REMOVED***@Published private(set) var isLoadingModels: Bool = false
+
+***REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
+***REMOVED***@Published private(set) var mapIsOfflineDisabled: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The online map.
 ***REMOVED***private let onlineMap: Map
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
-***REMOVED***var mapIsOfflineDisabled: Bool {
-***REMOVED******REMOVED***onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
-***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A Boolean value indicating whether there are downloaded map areas for the web map.
 ***REMOVED***var hasDownloadedMapAreas: Bool? {
 ***REMOVED******REMOVED***guard case.success(let preplannedModels) = preplannedMapModels,
@@ -48,7 +58,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return !preplannedModels.filter(\.status.isDownloaded).isEmpty || !onDemandModels.filter(\.status.isDownloaded).isEmpty
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ Creates an offline map areas view model for a given web map.
 ***REMOVED******REMOVED***/ - Parameter onlineMap: The web map.
 ***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
@@ -68,7 +78,50 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***OfflineManager.shared.removeMapInfo(for: portalItemID)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func loadPreplannedMapModels() async {
+***REMOVED***var hasAnyPreplannedMapAreas: Bool {
+***REMOVED******REMOVED***return switch preplannedMapModels {
+***REMOVED******REMOVED***case .success(let success):
+***REMOVED******REMOVED******REMOVED***!success.isEmpty
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the preplanned and on-demand models.
+***REMOVED***func loadModels() async {
+***REMOVED******REMOVED***isLoadingModels = true
+***REMOVED******REMOVED***defer { isLoadingModels = false ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Determine if offline is disabled for the map.
+***REMOVED******REMOVED***try? await onlineMap.retryLoad()
+***REMOVED******REMOVED***mapIsOfflineDisabled = onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+***REMOVED******REMOVED***guard !mapIsOfflineDisabled else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Note: We don't reset the mode once it is determined.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** First load preplanned map models.
+***REMOVED******REMOVED***if mode == .undetermined || mode == .preplanned {
+***REMOVED******REMOVED******REMOVED***await loadPreplannedMapModels()
+***REMOVED******REMOVED******REMOVED***if mode == .undetermined, hasAnyPreplannedMapAreas {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If there are any preplanned map areas at all
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and the mode is undetermined, then set mode to preplanned.
+***REMOVED******REMOVED******REMOVED******REMOVED***mode = .preplanned
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Load on-demand map models if mode is on-demand or still
+***REMOVED******REMOVED******REMOVED*** undetermined.
+***REMOVED******REMOVED***if mode == .undetermined || mode == .onDemand {
+***REMOVED******REMOVED******REMOVED***await loadOnDemandMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED*** If there are any on-demand areas at all, and the mode is
+***REMOVED******REMOVED******REMOVED******REMOVED*** undetermined, then set mode to on-demand.
+***REMOVED******REMOVED******REMOVED***if mode == .undetermined, !onDemandMapModels.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***mode = .onDemand
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func loadPreplannedMapModels() async {
 ***REMOVED******REMOVED***let models = await PreplannedMapModel.loadPreplannedMapModels(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
@@ -94,7 +147,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-***REMOVED******REMOVED***guard onDemandMapModels != nil else { return ***REMOVED***
+***REMOVED******REMOVED***guard mode == .onDemand else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let model = OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
@@ -102,8 +155,8 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***onDemandMapModels?.append(model)
-***REMOVED******REMOVED***onDemandMapModels?.sort(by: { $0.title < $1.title ***REMOVED***)
+***REMOVED******REMOVED***onDemandMapModels.append(model)
+***REMOVED******REMOVED***onDemandMapModels.sort(by: { $0.title < $1.title ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Download map area.
@@ -117,7 +170,6 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***"Area \(index)"
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let onDemandMapModels else { return title(forIndex: 1) ***REMOVED***
 ***REMOVED******REMOVED***var index = onDemandMapModels.count + 1
 ***REMOVED******REMOVED***while onDemandMapModels.contains(where: { $0.title == title(forIndex: index) ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***index += 1
