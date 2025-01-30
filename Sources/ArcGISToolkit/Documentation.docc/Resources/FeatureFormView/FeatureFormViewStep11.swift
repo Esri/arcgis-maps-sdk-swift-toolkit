@@ -46,7 +46,7 @@ extension FeatureFormExampleView {
 }
 
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
     enum State {
         case applyingEdits(FeatureForm)
         case cancellationPending(FeatureForm)
