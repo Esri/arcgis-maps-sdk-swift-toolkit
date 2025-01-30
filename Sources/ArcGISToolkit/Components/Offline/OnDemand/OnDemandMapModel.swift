@@ -123,7 +123,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Tries to load a mobile map package and if successful, then updates state
 ***REMOVED******REMOVED***/ associated with it.
 ***REMOVED***private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
-***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await mmpk.load()
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
@@ -260,17 +259,6 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED***case downloadFailure(Error)
 ***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
-***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
-***REMOVED******REMOVED***var needsToBeLoaded: Bool {
-***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if download is allowed for this status.
 ***REMOVED******REMOVED***var allowsDownload: Bool {

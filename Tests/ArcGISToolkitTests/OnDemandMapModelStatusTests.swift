@@ -19,14 +19,6 @@ import XCTest
 class OnDemandMapModelStatusTests: XCTestCase {
 ***REMOVED***private typealias Status = OnDemandMapModel.Status
 ***REMOVED***
-***REMOVED***func testNeedsToBeLoaded() {
-***REMOVED******REMOVED***XCTAssertTrue(Status.initialized.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertFalse(Status.downloading.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertFalse(Status.downloaded.needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).needsToBeLoaded)
-***REMOVED******REMOVED***XCTAssertTrue(Status.downloadFailure(CancellationError()).needsToBeLoaded)
-***REMOVED***
-***REMOVED***
 ***REMOVED***func testAllowsDownload() {
 ***REMOVED******REMOVED***XCTAssertTrue(Status.initialized.allowsDownload)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.downloading.allowsDownload)
