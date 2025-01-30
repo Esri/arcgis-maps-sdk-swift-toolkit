@@ -51,74 +51,6 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***portalItemID = onlineMap.item!.id!
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and loads the map models.
-***REMOVED***func loadPreplannedMapModels() async {
-***REMOVED******REMOVED***if offlineMapTask.loadStatus != .loaded {
-***REMOVED******REMOVED******REMOVED***try? await offlineMapTask.retryLoad()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Reset flag.
-***REMOVED******REMOVED***isShowingOnlyOfflineModels = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***preplannedMapModels = await Result { @MainActor in
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***return try await offlineMapTask.preplannedMapAreas
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.portalItem.id != nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: $0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: $0.portalItem.id!,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If not connected to the internet, then return only the offline models.
-***REMOVED******REMOVED******REMOVED******REMOVED***if let urlError = error as? URLError,
-***REMOVED******REMOVED******REMOVED******REMOVED***   urlError.code == .notConnectedToInternet {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingOnlyOfflineModels = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return await loadOfflinePreplannedMapModels()
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***throw error
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Loads the offline preplanned map models with information from the downloaded mobile map
-***REMOVED******REMOVED***/ packages for the online map.
-***REMOVED***func loadOfflinePreplannedMapModels() async -> [PreplannedMapModel] {
-***REMOVED******REMOVED***let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return [] ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var preplannedMapModels: [PreplannedMapModel] = []
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***for mapAreaID in mapAreaIDs {
-***REMOVED******REMOVED******REMOVED***guard let preplannedMapAreaID = Item.ID(mapAreaID),
-***REMOVED******REMOVED******REMOVED******REMOVED***  let mapArea = await makeMapArea(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
-***REMOVED******REMOVED******REMOVED******REMOVED***  ) else {
-***REMOVED******REMOVED******REMOVED******REMOVED***continue
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let model = PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapArea.id!,
-***REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***preplannedMapModels.append(model)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return preplannedMapModels
-***REMOVED******REMOVED******REMOVED***.filter(\.status.isDownloaded)
-***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title ***REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The function called when a downloaded preplanned map area is removed.
 ***REMOVED***func onRemoveDownloadOfPreplannedArea(withID preplannedAreaID: Item.ID) {
 ***REMOVED******REMOVED******REMOVED*** Delete the saved map info if there are no more downloads for the
@@ -129,120 +61,30 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***OfflineManager.shared.removeMapInfo(for: portalItemID)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
-***REMOVED******REMOVED***/ downloaded mobile map package. If the mobile map package is not found then `nil` is returned.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - portalItemID: The portal item ID.
-***REMOVED******REMOVED***/   - preplannedMapAreaID: The preplanned map area ID.
-***REMOVED******REMOVED***/ - Returns: The preplanned map area.
-***REMOVED***private func makeMapArea(
-***REMOVED******REMOVED***portalItemID: Item.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
-***REMOVED***) async -> OfflinePreplannedMapArea? {
-***REMOVED******REMOVED***let fileURL = URL.preplannedDirectory(
-***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED***func loadPreplannedMapModels() async {
+***REMOVED******REMOVED***let models = await PreplannedMapModel.loadPreplannedMapModels(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfPreplannedArea(withID:)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil ***REMOVED***
-***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: fileURL)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***try? await mmpk.load()
-***REMOVED******REMOVED***guard let item = mmpk.item else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return .init(
-***REMOVED******REMOVED******REMOVED***title: item.title,
-***REMOVED******REMOVED******REMOVED***description: item.description,
-***REMOVED******REMOVED******REMOVED***id: preplannedMapAreaID,
-***REMOVED******REMOVED******REMOVED***thumbnail: item.thumbnail
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***private func makeOnDemandMapArea(
-***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***onDemandMapAreaID: UUID
-***REMOVED***) async -> OfflineOnDemandMapArea? {
-***REMOVED******REMOVED***let fileURL = URL.onDemandDirectory(
-***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: onDemandMapAreaID
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil ***REMOVED***
-***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: fileURL)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***try? await mmpk.load()
-***REMOVED******REMOVED***guard let item = mmpk.item else { return nil ***REMOVED***
-
-***REMOVED******REMOVED***return .init(
-***REMOVED******REMOVED******REMOVED***id: onDemandMapAreaID,
-***REMOVED******REMOVED******REMOVED***title: item.title,
-***REMOVED******REMOVED******REMOVED***description: item.description,
-***REMOVED******REMOVED******REMOVED***thumbnail: item.thumbnail
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***preplannedMapModels = models.result
+***REMOVED******REMOVED***isShowingOnlyOfflineModels = models.onlyOfflineModelsAreAvailable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func loadOnDemandMapModels() async {
-***REMOVED******REMOVED***let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) else {
-***REMOVED******REMOVED******REMOVED***onDemandMapModels = []
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var onDemandMapModels: [OnDemandMapModel] = []
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Look up the ongoing jobs for on-demand map models.
-***REMOVED******REMOVED***let ongoingJobs = OfflineManager.shared.jobs
-***REMOVED******REMOVED******REMOVED***.lazy
-***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? GenerateOfflineMapJob ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***UUID(uuidString: $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent) != nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***for job in ongoingJobs {
-***REMOVED******REMOVED******REMOVED***let id = UUID(uuidString: job.downloadDirectoryURL.deletingPathExtension().lastPathComponent)!
-***REMOVED******REMOVED******REMOVED***let parameters = job.parameters
-***REMOVED******REMOVED******REMOVED***guard let info = parameters.itemInfo, let minScale = parameters.minScale, let maxScale = parameters.maxScale, let aoi = parameters.areaOfInterest else {
-***REMOVED******REMOVED******REMOVED******REMOVED***continue
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let mapArea = OnDemandMapArea(id: id, title: info.title, minScale: minScale, maxScale: maxScale, areaOfInterest: aoi)
-***REMOVED******REMOVED******REMOVED***let model = OnDemandMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***onDemandMapModels.append(model)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Look up the downloaded on-demand map models.
-***REMOVED******REMOVED***for mapAreaID in mapAreaIDs {
-***REMOVED******REMOVED******REMOVED***guard let onDemandMapAreaID = UUID(uuidString: mapAreaID),
-***REMOVED******REMOVED******REMOVED******REMOVED***  let mapArea = await makeOnDemandMapArea(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapAreaID: onDemandMapAreaID
-***REMOVED******REMOVED******REMOVED******REMOVED***  ) else {
-***REMOVED******REMOVED******REMOVED******REMOVED***continue
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let model = OnDemandMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***onDemandMapModels.append(model)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.onDemandMapModels = onDemandMapModels
-***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title ***REMOVED***)
+***REMOVED******REMOVED***onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func addOnDemandMapArea(_ onDemandMapArea: OnDemandMapArea) {
+***REMOVED***func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
+***REMOVED******REMOVED***guard onDemandMapModels != nil else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let model = OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED***mapArea: onDemandMapArea,
+***REMOVED******REMOVED******REMOVED***configuration: configuration,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***if onDemandMapModels != nil {
-***REMOVED******REMOVED******REMOVED***onDemandMapModels!.append(model)
-***REMOVED******REMOVED******REMOVED***onDemandMapModels!.sort(by: { $0.onDemandMapArea.title < $1.onDemandMapArea.title ***REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***onDemandMapModels?.append(model)
+***REMOVED******REMOVED***onDemandMapModels?.sort(by: { $0.title < $1.title ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Download map area.
@@ -250,25 +92,17 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED***var title: String
-***REMOVED***var description: String
-***REMOVED***var id: Item.ID?
-***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus?
-***REMOVED***var thumbnail: LoadableImage?
+***REMOVED******REMOVED***/ Returns the next title for the on-demand map area.
+***REMOVED***func nextOnDemandAreaTitle() -> String {
+***REMOVED******REMOVED***func title(forIndex index: Int) -> String {
+***REMOVED******REMOVED******REMOVED***"Area \(index)"
 ***REMOVED***
-***REMOVED***func retryLoad() async throws {***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let onDemandMapModels else { return title(forIndex: 1) ***REMOVED***
+***REMOVED******REMOVED***var index = onDemandMapModels.count + 1
+***REMOVED******REMOVED***while onDemandMapModels.contains(where: { $0.title == title(forIndex: index) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***index += 1
 ***REMOVED***
-***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-***REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED***return title(forIndex: index)
 ***REMOVED***
-***REMOVED***
-
-***REMOVED*** This struct represents an on-demand area that is downloaded.
-struct OfflineOnDemandMapArea: OnDemandMapAreaProtocol {
-***REMOVED***var id: UUID
-***REMOVED***var title: String
-***REMOVED***var description: String
-***REMOVED***var thumbnail: LoadableImage?
 ***REMOVED***

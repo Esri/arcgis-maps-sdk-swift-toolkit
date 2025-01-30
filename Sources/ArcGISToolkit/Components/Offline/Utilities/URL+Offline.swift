@@ -48,14 +48,19 @@ extension URL {
 ***REMOVED******REMOVED***return url
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The path to the directory for a specific on-demand map area. Or if `nil` is passed for the
+***REMOVED******REMOVED***/ map area ID, then the on-demand directory.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - onDemandMapAreaID: The unique ID of the on-demand map area.
 ***REMOVED***static func onDemandDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***onDemandMapAreaID: UUID? = nil
+***REMOVED******REMOVED***onDemandMapAreaID: String? = nil
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***var url = portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(component: "OnDemand/")
 ***REMOVED******REMOVED***if let onDemandMapAreaID {
-***REMOVED******REMOVED******REMOVED***url = url.appending(component: onDemandMapAreaID.uuidString)
+***REMOVED******REMOVED******REMOVED***url = url.appending(component: onDemandMapAreaID)
 ***REMOVED***
 ***REMOVED******REMOVED***return url
 ***REMOVED***
