@@ -100,15 +100,18 @@ public struct FeatureFormView: View {
     var evaluatedForm: some View {
         ScrollViewReader { scrollViewProxy in
             Form {
-                FormHeader(title: title)
-                    // Get rid of background color.
-                    .listRowBackground(Color.clear)
-                    // Make header align with the leading edge of the Form.
-                    .listRowInsets(.init())
+                if !title.isEmpty && headerVisibility != .hidden {
+                    FormHeader(title: title)
+                        // Get rid of background color.
+                        .listRowBackground(Color.clear)
+                        // Make header align with the leading edge of the Form.
+                        .listRowInsets(.init())
+                }
                 
                 ForEach(model.visibleElements, id: \.self) { element in
                     makeElement(element)
                 }
+                
                 if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
                     // The Toolkit currently only supports AttachmentsFormElements via the
                     // default attachments element. Once AttachmentsFormElements can be authored
@@ -116,13 +119,13 @@ public struct FeatureFormView: View {
                     // case added for AttachmentsFormElement.
                     AttachmentsFeatureElementView(featureElement: attachmentsElement)
                 }
-            }            .onChange(model.focusedElement) { _ in
+            }
+            .onChange(model.focusedElement) { _ in
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
             .onTitleChange(of: model.featureForm) { newTitle in
-                print(title)
                 title = newTitle
             }
         }
@@ -145,7 +148,6 @@ public struct FeatureFormView: View {
 #endif
         .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
-        
     }
 }
 

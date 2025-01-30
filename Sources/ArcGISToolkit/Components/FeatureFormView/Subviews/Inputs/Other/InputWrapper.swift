@@ -49,7 +49,6 @@ struct InputWrapper: View {
             }
         } header: {
             InputHeader(element: element)
-                .textCase(nil) // Maintain original text casing.
         } footer: {
             InputFooter(element: element)
         }

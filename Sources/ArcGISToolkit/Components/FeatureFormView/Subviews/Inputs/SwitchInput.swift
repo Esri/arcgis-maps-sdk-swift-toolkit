@@ -62,8 +62,6 @@ struct SwitchInput: View {
         } else {
             Toggle(isOn: $isOn) {
                 Text(isOn ? input.onValue.name : input.offValue.name)
-                    .accessibilityIdentifier("\(element.label) Switch Label")
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .accessibilityIdentifier("\(element.label) Switch")
             .onChange(isOn) { _ in

@@ -205,6 +205,7 @@ extension ComboBoxInput {
     private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
         HStack {
             Button(label) { action() }
+                .accessibilityIdentifier("\(label) row")
             Spacer()
             if selected {
                 Image(systemName: "checkmark")
