@@ -18,6 +18,13 @@ import Foundation
 /// The model class that represents information for an offline map.
 @MainActor
 class OfflineMapViewModel: ObservableObject {
+    /// The mode that we are displaying models in.
+    enum Mode {
+        case undetermined
+        case preplanned
+        case onDemand
+    }
+    
     /// The portal item ID of the web map.
     private let portalItemID: Item.ID
     
@@ -25,22 +32,25 @@ class OfflineMapViewModel: ObservableObject {
     private let offlineMapTask: OfflineMapTask
     
     /// The preplanned map information.
-    @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
+    @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error> = .success([])
     
     /// A Boolean value indicating if only offline models are being shown.
     @Published private(set) var isShowingOnlyOfflineModels = false
     
     /// The on-demand map information.
-    @Published private(set) var onDemandMapModels: [OnDemandMapModel]?
+    @Published private(set) var onDemandMapModels = [OnDemandMapModel]()
+    
+    /// The mode that we are displaying models in.
+    @Published private(set) var mode: Mode = .undetermined
+    
+    @Published private(set) var isLoadingModels: Bool = false
+
+    /// A Boolean value indicating whether the web map is offline disabled.
+    @Published private(set) var mapIsOfflineDisabled: Bool = false
     
     /// The online map.
     private let onlineMap: Map
-    
-    /// A Boolean value indicating whether the web map is offline disabled.
-    var mapIsOfflineDisabled: Bool {
-        onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
-    }
-    
+        
     /// Creates an offline map areas view model for a given web map.
     /// - Parameter onlineMap: The web map.
     /// - Precondition: `onlineMap.item?.id` is not `nil`.
@@ -61,7 +71,50 @@ class OfflineMapViewModel: ObservableObject {
         OfflineManager.shared.removeMapInfo(for: portalItemID)
     }
     
-    func loadPreplannedMapModels() async {
+    var hasAnyPreplannedMapAreas: Bool {
+        return switch preplannedMapModels {
+        case .success(let success):
+            !success.isEmpty
+        case .failure:
+            false
+        }
+    }
+    
+    /// Loads the preplanned and on-demand models.
+    func loadModels() async {
+        isLoadingModels = true
+        defer { isLoadingModels = false }
+        
+        // Determine if offline is disabled for the map.
+        try? await onlineMap.retryLoad()
+        mapIsOfflineDisabled = onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
+        guard !mapIsOfflineDisabled else { return }
+        
+        // Note: We don't reset the mode once it is determined.
+        
+        // First load preplanned map models.
+        if mode == .undetermined || mode == .preplanned {
+            await loadPreplannedMapModels()
+            if mode == .undetermined, hasAnyPreplannedMapAreas {
+                // If there are any preplanned map areas at all
+                // and the mode is undetermined, then set mode to preplanned.
+                mode = .preplanned
+            }
+        }
+                
+        // Load on-demand map models if mode is on-demand or still
+        // undetermined.
+        if mode == .undetermined || mode == .onDemand {
+            await loadOnDemandMapModels()
+            // If there are any on-demand areas at all, and the mode is
+            // undetermined, then set mode to on-demand.
+            if mode == .undetermined, !onDemandMapModels.isEmpty {
+                mode = .onDemand
+            }
+        }
+    }
+    
+    private func loadPreplannedMapModels() async {
         let models = await PreplannedMapModel.loadPreplannedMapModels(
             offlineMapTask: offlineMapTask,
             portalItemID: portalItemID,
@@ -71,20 +124,20 @@ class OfflineMapViewModel: ObservableObject {
         isShowingOnlyOfflineModels = models.onlyOfflineModelsAreAvailable
     }
     
-    func loadOnDemandMapModels() async {
+    private func loadOnDemandMapModels() async {
         onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID)
     }
     
     func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-        guard onDemandMapModels != nil else { return }
+        guard mode == .onDemand else { return }
         
         let model = OnDemandMapModel(
             offlineMapTask: offlineMapTask,
             configuration: configuration,
             portalItemID: portalItemID
         )
-        onDemandMapModels?.append(model)
-        onDemandMapModels?.sort(by: { $0.title < $1.title })
+        onDemandMapModels.append(model)
+        onDemandMapModels.sort(by: { $0.title < $1.title })
         
         Task {
             // Download map area.
@@ -98,7 +151,6 @@ class OfflineMapViewModel: ObservableObject {
             "Area \(index)"
         }
         
-        guard let onDemandMapModels else { return title(forIndex: 1) }
         var index = onDemandMapModels.count + 1
         while onDemandMapModels.contains(where: { $0.title == title(forIndex: index) }) {
             index += 1
