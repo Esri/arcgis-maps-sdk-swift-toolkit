@@ -87,7 +87,9 @@ public struct OfflineMapAreasView: View {
                         OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle()) {
                             mapViewModel.addOnDemandMapArea(with: $0)
                         }
+                        // Prevent view from dragging when panning on mapview
                         .highPriorityGesture(DragGesture())
+                        .interactiveDismissDisabled()
                     }
                     .disabled(mapViewModel.onDemandMapModels == nil)
                 }
