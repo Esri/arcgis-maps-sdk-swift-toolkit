@@ -226,7 +226,7 @@ private extension PreplannedListItemView.DownloadState {
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         ),
         selectedMap: .constant(nil)
     )

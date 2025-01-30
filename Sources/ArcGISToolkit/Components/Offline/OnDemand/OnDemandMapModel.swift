@@ -38,6 +38,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// The title of the map area.
     let title: String
     
+    /// The action to perform when an on demand map area is deleted.
+    private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
+    
     /// The description of the map area.
     @Published private(set) var description: String = ""
     
@@ -64,11 +67,13 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     init(
         offlineMapTask: OfflineMapTask,
         configuration: OnDemandMapAreaConfiguration,
-        portalItemID: PortalItem.ID
+        portalItemID: PortalItem.ID,
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) {
         self.configuration = configuration
         self.offlineMapTask = offlineMapTask
         self.portalItemID = portalItemID
+        self.onRemoveDownloadAction = onRemoveDownload
         self.title = configuration.title
         self.areaID = configuration.areaID
         mmpkDirectoryURL = .onDemandDirectory(
@@ -82,13 +87,15 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     init(
         job: GenerateOfflineMapJob,
         areaID: String,
-        portalItemID: PortalItem.ID
+        portalItemID: PortalItem.ID,
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) {
         self.configuration = nil
         self.job = job
         self.areaID = areaID
         self.title = job.parameters.itemInfo?.title ?? "Unknown"
         self.portalItemID = portalItemID
+        self.onRemoveDownloadAction = onRemoveDownload
         self.offlineMapTask = nil
         mmpkDirectoryURL = .onDemandDirectory(
             forPortalItemID: portalItemID,
@@ -105,12 +112,14 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// Creates an on-demand map area model for a map area that has already been downloaded.
     init(
         mmpkURL: URL,
-        portalItemID: PortalItem.ID
+        portalItemID: PortalItem.ID,
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) async throws {
         let mmpk = MobileMapPackage(fileURL: mmpkURL)
         try await mmpk.load()
         guard let item = mmpk.item else { throw NoItemError() }
         self.portalItemID = portalItemID
+        self.onRemoveDownloadAction = onRemoveDownload
         configuration = nil
         title = item.title
         description = item.description
@@ -184,6 +193,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     func removeDownloadedOnDemandMapArea() {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         status = .initialized
+        
+        // Call the closure for the remove download action.
+        onRemoveDownloadAction(self)
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and
@@ -217,7 +229,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 }
 
 extension OnDemandMapModel {
-    static func loadOnDemandMapModels(portalItemID: Item.ID) async -> [OnDemandMapModel] {
+    static func loadOnDemandMapModels(
+        portalItemID: Item.ID,
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
+    ) async -> [OnDemandMapModel] {
         var onDemandMapModels: [OnDemandMapModel] = []
         
         // Look up the ongoing jobs for on-demand map models.
@@ -227,7 +242,12 @@ extension OnDemandMapModel {
             .filter { $0.onlineMap?.item?.id == portalItemID }
             .map {
                 let areaID = $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent
-                return OnDemandMapModel(job: $0, areaID: areaID, portalItemID: portalItemID)
+                return OnDemandMapModel(
+                    job: $0,
+                    areaID: areaID,
+                    portalItemID: portalItemID,
+                    onRemoveDownload: onRemoveDownload
+                )
             }
         
         onDemandMapModels.append(contentsOf: ongoingJobs)
@@ -236,7 +256,13 @@ extension OnDemandMapModel {
         let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
         if let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) {
             for url in mapAreaIDs.map({ onDemandDirectory.appending(component: $0) }) {
-                guard let mapArea = try? await OnDemandMapModel.init(mmpkURL: url, portalItemID: portalItemID) else { continue }
+                guard let mapArea = try? await OnDemandMapModel.init(
+                    mmpkURL: url,
+                    portalItemID: portalItemID,
+                    onRemoveDownload: onRemoveDownload
+                ) else {
+                    continue
+                }
                 onDemandMapModels.append(mapArea)
             }
         }
