@@ -50,14 +50,26 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The online map.
 ***REMOVED***private let onlineMap: Map
-
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether there are downloaded preplanned map areas for the web map.
+***REMOVED***var hasDownloadedPreplannedMapAreas: Bool {
+***REMOVED******REMOVED***if case.success(let preplannedModels) = preplannedMapModels {
+***REMOVED******REMOVED******REMOVED***!preplannedModels.filter(\.status.isDownloaded).isEmpty
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether there are downloaded on demand map areas for the web map.
+***REMOVED***var hasDownloadedOnDemandMapAreas: Bool {
+***REMOVED******REMOVED***!onDemandMapModels.filter(\.status.isDownloaded).isEmpty
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether there are downloaded map areas for the web map.
 ***REMOVED***var hasDownloadedMapAreas: Bool {
-***REMOVED******REMOVED***guard case.success(let preplannedModels) = preplannedMapModels else { return false ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return !preplannedModels.filter(\.status.isDownloaded).isEmpty || !onDemandMapModels.filter(\.status.isDownloaded).isEmpty
+***REMOVED******REMOVED***return hasDownloadedPreplannedMapAreas || hasDownloadedOnDemandMapAreas
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an offline map areas view model for a given web map.
 ***REMOVED******REMOVED***/ - Parameter onlineMap: The web map.
 ***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
