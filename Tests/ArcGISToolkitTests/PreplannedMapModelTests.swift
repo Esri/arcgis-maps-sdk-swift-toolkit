@@ -165,6 +165,7 @@ class PreplannedMapModelTests: XCTestCase {
     @MainActor
     func testStartupDownloadingStatus() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let portalItemID = try XCTUnwrap(portalItem.id)
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
@@ -172,7 +173,7 @@ class PreplannedMapModelTests: XCTestCase {
         let mmpkDirectory = URL.documentsDirectory
             .appending(
                 components: "OfflineMapAreas",
-                "\(portalItem.id!)",
+                "\(portalItemID)",
                 "Preplanned",
                 "\(areaID)",
                 directoryHint: .isDirectory
@@ -194,7 +195,7 @@ class PreplannedMapModelTests: XCTestCase {
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
-            portalItemID: portalItem.id!,
+            portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
             onRemoveDownload: { _ in }
         )
@@ -208,6 +209,7 @@ class PreplannedMapModelTests: XCTestCase {
     @MainActor
     func testDownloadStatuses() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let portalItemID = try XCTUnwrap(portalItem.id)
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
@@ -216,7 +218,7 @@ class PreplannedMapModelTests: XCTestCase {
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
-            portalItemID: portalItem.id!,
+            portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
             onRemoveDownload: { _ in }
         )
@@ -247,10 +249,10 @@ class PreplannedMapModelTests: XCTestCase {
         // Wait for job to finish.
         _ = await model.job?.result
         
-        // Give the final status some time to be updated.
-        try? await Task.sleep(nanoseconds: 1_000_000)
-        
         // Verify statuses.
+        try? await Task.yield(timeout: 1.0) { @MainActor in
+            statuses.count == 5
+        }
         XCTAssertEqual(
             statuses,
             [.notLoaded, .loading, .packaged, .downloading, .downloaded]
@@ -261,17 +263,22 @@ class PreplannedMapModelTests: XCTestCase {
         let model2 = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
-            portalItemID: portalItem.id!,
+            portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
             onRemoveDownload: { _ in }
         )
         
+        // Verify statuses.
+        try? await Task.yield(timeout: 1.0) { @MainActor in
+            model2.status == .downloaded
+        }
         XCTAssertEqual(model2.status, .downloaded)
     }
     
     @MainActor
     func testLoadMobileMapPackage() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let portalItemID = try XCTUnwrap(portalItem.id)
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
@@ -280,7 +287,7 @@ class PreplannedMapModelTests: XCTestCase {
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
-            portalItemID: portalItem.id!,
+            portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
             onRemoveDownload: { _ in }
         )
@@ -309,17 +316,17 @@ class PreplannedMapModelTests: XCTestCase {
         // Wait for job to finish.
         _ = await model.job?.result
         
-        // Give the final status some time to be updated.
-        try? await Task.sleep(nanoseconds: 1_000_000)
-        
-        // Verify that mobile map package can be loaded.
-        XCTAssertNotNil(model.map)
-        
         // Verify statuses.
+        try? await Task.yield(timeout: 1.0) { @MainActor in
+            statuses.count == 5
+        }
         XCTAssertEqual(
             statuses,
             [.notLoaded, .loading, .packaged, .downloading, .downloaded]
         )
+        
+        // Verify that mobile map package can be loaded.
+        XCTAssertNotNil(model.map)
     }
     
     @MainActor
@@ -328,6 +335,7 @@ class PreplannedMapModelTests: XCTestCase {
             portal: .arcGISOnline(connection: .anonymous),
             id: .init("acc027394bc84c2fb04d1ed317aac674")!
         )
+        let portalItemID = try XCTUnwrap(portalItem.id)
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
@@ -336,7 +344,7 @@ class PreplannedMapModelTests: XCTestCase {
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
-            portalItemID: portalItem.id!,
+            portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
             onRemoveDownload: { _ in }
         )
@@ -357,13 +365,22 @@ class PreplannedMapModelTests: XCTestCase {
         // Wait for job to finish.
         _ = await model.job?.result
         
+        // Verify statuses after download.
+        try? await Task.yield(timeout: 1.0) { @MainActor in
+            statuses.count == 5
+        }
+        XCTAssertEqual(
+            statuses,
+            [.notLoaded, .loading, .packaged, .downloading, .downloaded]
+        )
+        
         // Clean up folder.
         model.removeDownloadedPreplannedMapArea()
         
-        // Give the final status some time to be updated.
-        try? await Task.sleep(nanoseconds: 1_000_000)
-        
-        // Verify statuses.
+        // Verify statuses after remove.
+        try? await Task.yield(timeout: 1.0) { @MainActor in
+            statuses.count == 8
+        }
         XCTAssertEqual(
             statuses,
             [.notLoaded, .loading, .packaged, .downloading, .downloaded, .notLoaded, .loading, .packaged]
@@ -376,6 +393,7 @@ class PreplannedMapModelTests: XCTestCase {
             portal: .arcGISOnline(connection: .anonymous),
             id: .init("acc027394bc84c2fb04d1ed317aac674")!
         )
+        let portalItemID = try XCTUnwrap(portalItem.id)
         let task = OfflineMapTask(portalItem: portalItem)
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first { $0.title == "Country Commons Area" })
@@ -384,7 +402,7 @@ class PreplannedMapModelTests: XCTestCase {
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
-            portalItemID: portalItem.id!,
+            portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
             onRemoveDownload: { _ in }
         )
