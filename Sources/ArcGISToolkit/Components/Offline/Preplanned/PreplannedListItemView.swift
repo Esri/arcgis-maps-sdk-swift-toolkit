@@ -1,4 +1,4 @@
-// Copyright 2025 Esri
+// Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,27 +15,38 @@
 import SwiftUI
 import ArcGIS
 
-struct OnDemandListItemView: View {
-    @ObservedObject var model: OnDemandMapModel
+@MainActor
+@preconcurrency
+struct PreplannedListItemView: View {
+    /// The view model for the preplanned map.
+    @ObservedObject var model: PreplannedMapModel
     
     /// The currently selected map.
     @Binding var selectedMap: Map?
     
-    /// The download state of the preplanned map model.
-    fileprivate enum DownloadState {
-        case initialized, downloading, downloaded
-    }
-    
-    @State private var downloadState: DownloadState = .initialized
-    
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
+    
+    /// The download state of the preplanned map model.
+    fileprivate enum DownloadState {
+        case notDownloaded, downloading, downloaded
+    }
+    
+    /// The current download state of the preplanned map model.
+    @State private var downloadState: DownloadState = .notDownloaded
+    
+    /// The previous download state of the preplanned map model.
+    @State private var previousDownloadState: DownloadState = .notDownloaded
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
+    /// A Boolean value indicating whether the selected map area is the same
+    /// as the map area from this model.
+    /// The title of a preplanned map area is guaranteed to be unique when it
+    /// is created.
     var isSelected: Bool {
-        selectedMap?.item?.title == model.onDemandMapArea.title
+        selectedMap?.item?.title == model.preplannedMapArea.title
     }
     
     var body: some View {
@@ -63,11 +74,15 @@ struct OnDemandListItemView: View {
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
-                OnDemandMetadataView(model: model, isSelected: isSelected)
+                PreplannedMetadataView(model: model, isSelected: isSelected)
             }
+        }
+        .task {
+            await model.load()
         }
         .onAppear {
             downloadState = .init(model.status)
+            previousDownloadState = downloadState
         }
         .onReceive(model.$status) { status in
             let downloadState = DownloadState(status)
@@ -79,50 +94,27 @@ struct OnDemandListItemView: View {
         }
     }
     
-    // What should we do with the thumbnail? Save our own or use the default one?
     @ViewBuilder private var thumbnailView: some View {
-        if downloadState == .downloaded,
-           let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-           let thumbnail = area.thumbnail {
+        if let thumbnail = model.preplannedMapArea.thumbnail {
             LoadableImageView(loadableImage: thumbnail)
-                .frame(width: 64, height: 44)
-                .clipShape(.rect(cornerRadius: 2))
-        } else {
-            Image(systemName: "photo.badge.arrow.down")
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
         }
     }
     
     @ViewBuilder private var titleView: some View {
-        Text(model.onDemandMapArea.title)
+        Text(model.preplannedMapArea.title)
             .font(.body)
-            .lineLimit(2)
-    }
-    
-    @ViewBuilder private var descriptionView: some View {
-        if let area = model.onDemandMapArea as? OfflineOnDemandMapArea,
-           !area.description.isEmpty {
-            Text(area.description)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-        } else {
-            Text("This area has no description.")
-                .font(.footnote)
-                .foregroundStyle(.tertiary)
-        }
+            .lineLimit(1)
     }
     
     @ViewBuilder private var downloadButton: some View {
         switch downloadState {
         case .downloaded:
             Button {
-                Task {
-                    if let map = model.map {
-                        selectedMap = map
-                        dismiss()
-                    }
+                if let map = model.map {
+                    selectedMap = map
+                    dismiss()
                 }
             } label: {
                 Text("Open")
@@ -137,11 +129,11 @@ struct OnDemandListItemView: View {
                 ProgressView(job.progress)
                     .progressViewStyle(.gauge)
             }
-        case .initialized:
-            // This state shouldn't be reached.
+        case .notDownloaded:
             Button {
                 Task {
-                    await model.downloadOnDemandMapArea()
+                    // Download preplanned map area.
+                    await model.downloadPreplannedMapArea()
                 }
             } label: {
                 Image(systemName: "arrow.down.circle")
@@ -149,6 +141,19 @@ struct OnDemandListItemView: View {
             .buttonStyle(.plain)
             .disabled(!model.status.allowsDownload)
             .foregroundStyle(Color.accentColor)
+        }
+    }
+    
+    @ViewBuilder private var descriptionView: some View {
+        if !model.preplannedMapArea.description.isEmpty {
+            Text(model.preplannedMapArea.description)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+        } else {
+            Text("This area has no description.")
+                .font(.footnote)
+                .foregroundStyle(.tertiary)
         }
     }
     
@@ -163,11 +168,19 @@ struct OnDemandListItemView: View {
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
             switch model.status {
-            case .initialized:
+            case .notLoaded, .loading:
                 Text("Loading")
-            case .mmpkLoadFailure:
+            case .loadFailure, .mmpkLoadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Loading failed")
+            case .packaging:
+                Image(systemName: "clock.badge.xmark")
+                Text("Packaging")
+            case .packaged:
+                Text("Ready to download")
+            case .packageFailure:
+                Image(systemName: "exclamationmark.circle")
+                Text("Packaging failed")
             case .downloading:
                 Text("Downloading")
             case .downloaded:
@@ -182,14 +195,40 @@ struct OnDemandListItemView: View {
     }
 }
 
-private extension OnDemandListItemView.DownloadState {
+private extension PreplannedListItemView.DownloadState {
     /// Creates an instance.
     /// - Parameter state: The preplanned map model download state.
-    init(_ state: OnDemandMapModel.Status) {
+    init(_ state: PreplannedMapModel.Status) {
         self = switch state {
         case .downloaded: .downloaded
         case .downloading: .downloading
-        default: .initialized
+        default: .notDownloaded
         }
     }
+}
+
+#Preview {
+    struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
+        var packagingStatus: PreplannedMapArea.PackagingStatus? { .complete }
+        var title: String { "Mock Preplanned Map Area" }
+        var description: String { "This is the description text" }
+        var thumbnail: LoadableImage? { nil }
+        
+        func retryLoad() async throws { }
+        func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+            DownloadPreplannedOfflineMapParameters()
+        }
+    }
+    
+    return PreplannedListItemView(
+        model: PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: MockPreplannedMapArea(),
+            portalItemID: .init("preview")!,
+            preplannedMapAreaID: .init("preview")!,
+            onRemoveDownload: { _ in }
+        ),
+        selectedMap: .constant(nil)
+    )
+    .padding()
 }
