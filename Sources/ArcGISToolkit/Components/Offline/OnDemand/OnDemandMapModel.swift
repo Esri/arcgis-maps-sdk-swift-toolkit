@@ -123,7 +123,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// Tries to load a mobile map package and if successful, then updates state
     /// associated with it.
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
-        guard status.needsToBeLoaded else { return }
         do {
             try await mmpk.load()
             status = .downloaded
@@ -260,17 +259,6 @@ extension OnDemandMapModel {
         case downloadFailure(Error)
         /// Downloaded mobile map package failed to load.
         case mmpkLoadFailure(Error)
-        
-        /// A Boolean value indicating whether the model is in a state
-        /// where it needs to be loaded or reloaded.
-        var needsToBeLoaded: Bool {
-            switch self {
-            case .downloading, .downloaded, .mmpkLoadFailure:
-                false
-            default:
-                true
-            }
-        }
         
         /// A Boolean value indicating if download is allowed for this status.
         var allowsDownload: Bool {
