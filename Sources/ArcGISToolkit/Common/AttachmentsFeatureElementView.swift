@@ -99,7 +99,9 @@ struct AttachmentsFeatureElementView: View {
                         attachmentBody(attachmentModels: attachmentModels)
                     } label: {
                         attachmentHeader
+                            .catalystPadding(4)
                     }
+                    .disclosureGroupPadding()
                 }
             }
         } header: {
