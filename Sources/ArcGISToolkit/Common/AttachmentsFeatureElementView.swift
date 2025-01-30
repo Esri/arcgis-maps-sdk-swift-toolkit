@@ -67,38 +67,33 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***@State private var isExpanded = true
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED***switch attachmentModelsState {
 ***REMOVED******REMOVED******REMOVED***case .notInitialized, .initializing:
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard case .notInitialized = attachmentModelsState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment: $0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayScale: displayScale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .initialized(let attachmentModels):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isShowingAttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If showing a form element, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED*** header: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(featureElement.displayTitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isEditable,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentsFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element, onAdd: onAdd)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil) ***REMOVED*** Keep original text casing.
-***REMOVED******REMOVED******REMOVED******REMOVED*** footer: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(featureElement.description)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows us to adopt a flat design which
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** enhances simplicity and helps users to
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** focus on the main content.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Make content align with the leading edge of the section.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else if !attachmentModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
@@ -107,25 +102,33 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED*** header: {
+***REMOVED******REMOVED******REMOVED******REMOVED*** We don't need the header for Popups.
+***REMOVED******REMOVED******REMOVED***if isShowingAttachmentsFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(featureElement.displayTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isEditable,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentsFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element, onAdd: onAdd)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil) ***REMOVED*** Keep original text casing.
+***REMOVED******REMOVED***
+***REMOVED*** footer: {
+***REMOVED******REMOVED******REMOVED******REMOVED*** We don't need the footer for Popups.
+***REMOVED******REMOVED******REMOVED***if isShowingAttachmentsFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(featureElement.description)
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** This allows us to adopt a flat design which
+***REMOVED******REMOVED******REMOVED*** enhances simplicity and helps users to
+***REMOVED******REMOVED******REMOVED*** focus on the main content.
+***REMOVED******REMOVED***.listRowBackground(Color.clear)
+***REMOVED******REMOVED******REMOVED*** Make content align with the leading edge of the section.
+***REMOVED******REMOVED***.listRowInsets(.init())
 ***REMOVED******REMOVED***.onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
 ***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***guard case .notInitialized = attachmentModelsState else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
-***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
-***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
-***REMOVED******REMOVED******REMOVED******REMOVED***.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment: $0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayScale: displayScale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(attachmentModels)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
