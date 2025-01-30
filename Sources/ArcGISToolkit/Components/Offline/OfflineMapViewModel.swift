@@ -158,7 +158,7 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-        guard mode == .onDemand else { return }
+        guard mode == .onDemand || mode == .undetermined else { return }
         
         let model = OnDemandMapModel(
             offlineMapTask: offlineMapTask,
