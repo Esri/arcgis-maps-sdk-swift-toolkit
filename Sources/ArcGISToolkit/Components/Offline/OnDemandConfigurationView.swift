@@ -27,7 +27,7 @@ struct OnDemandConfigurationView: View {
     let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
     
     /// The max scale of the map to take offline.
-    @State private var maxScale: CacheScale = .room
+    @State private var maxScale: CacheScale = .street
     
     /// The visible area of the map.
     @State private var visibleArea: Envelope?
@@ -130,7 +130,7 @@ private struct BottomCard<Content: View, Background: ShapeStyle>: View {
     let background: Background
     
     /// Creates a bottom card.
-    init(background: Background,@ViewBuilder content: @escaping () -> Content) {
+    init(background: Background, @ViewBuilder content: @escaping () -> Content) {
         self.content = content
         self.background = background
     }
