@@ -233,10 +233,8 @@ public class OfflineManager: ObservableObject {
                 preplannedModel.removeDownloadedPreplannedMapArea()
             }
         }
-        if let onDemandMapModels = model.onDemandMapModels {
-            for onDemandModel in onDemandMapModels {
-                onDemandModel.removeDownloadedOnDemandMapArea()
-            }
+        for onDemandModel in model.onDemandMapModels {
+            onDemandModel.removeDownloadedOnDemandMapArea()
         }
         // Now remove any offline map areas whose model isn't in memory by simply deleting the
         // whole portal item directory. This will also delete the map info.
