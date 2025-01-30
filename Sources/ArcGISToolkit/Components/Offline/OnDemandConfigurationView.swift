@@ -86,7 +86,7 @@ struct OnDemandConfigurationView: View {
                     .font(.headline)
                 
                 HStack {
-                    Picker("Max Scale", selection: $maxScale) {
+                    Picker("Level of detail", selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
                             Text($0.description)
                         }
