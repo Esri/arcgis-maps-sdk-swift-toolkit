@@ -52,7 +52,7 @@ class OfflineMapViewModel: ObservableObject {
     private let onlineMap: Map
     
     /// A Boolean value indicating whether there are downloaded preplanned map areas for the web map.
-    var hasDownloadedPreplannedMapAreas: Bool {
+    private var hasDownloadedPreplannedMapAreas: Bool {
         if case.success(let preplannedModels) = preplannedMapModels {
             !preplannedModels.filter(\.status.isDownloaded).isEmpty
         } else {
@@ -61,13 +61,13 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     /// A Boolean value indicating whether there are downloaded on demand map areas for the web map.
-    var hasDownloadedOnDemandMapAreas: Bool {
+    private var hasDownloadedOnDemandMapAreas: Bool {
         !onDemandMapModels.filter(\.status.isDownloaded).isEmpty
     }
     
     /// A Boolean value indicating whether there are downloaded map areas for the web map.
-    var hasDownloadedMapAreas: Bool {
-        return hasDownloadedPreplannedMapAreas || hasDownloadedOnDemandMapAreas
+    private var hasDownloadedMapAreas: Bool {
+        hasDownloadedPreplannedMapAreas || hasDownloadedOnDemandMapAreas
     }
     
     /// Creates an offline map areas view model for a given web map.
