@@ -76,6 +76,9 @@ struct OnDemandConfigurationView: View {
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
             .onVisibleAreaChanged { visibleArea = $0.extent }
+            // Prevent view from dragging when panning on mapview
+            .highPriorityGesture(DragGesture())
+            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
