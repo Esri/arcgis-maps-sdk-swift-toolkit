@@ -197,7 +197,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         )
         
         XCTAssertEqual(model.status, .downloading)
@@ -220,7 +220,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         )
         
         defer {
@@ -265,7 +265,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         )
         
         // Verify statuses.
@@ -289,7 +289,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         )
         
         defer {
@@ -346,7 +346,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         )
         
         var statuses: [PreplannedMapModel.Status] = []
@@ -404,7 +404,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         )
         
         // Verify description does not contain HTML tags.
@@ -442,7 +442,7 @@ private extension PreplannedMapModel {
             mapArea: mapArea,
             portalItemID: .init("test-item-id")!,
             preplannedMapAreaID: .init("test-preplanned-map-area-id")!,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         )
     }
 }
