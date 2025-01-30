@@ -161,7 +161,7 @@ private extension URL {
 
 ***REMOVED***/ The model class for the form example view
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
 ***REMOVED******REMOVED***/ Feature form workflow states.
 ***REMOVED***enum State {
 ***REMOVED******REMOVED******REMOVED***/ Edits are being applied to the remote service.
