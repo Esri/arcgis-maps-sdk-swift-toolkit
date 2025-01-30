@@ -260,17 +260,6 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
-***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
-***REMOVED******REMOVED***var needsToBeLoaded: Bool {
-***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if download is allowed for this status.
 ***REMOVED******REMOVED***var allowsDownload: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
