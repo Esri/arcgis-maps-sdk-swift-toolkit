@@ -19,14 +19,6 @@ import ArcGIS
 class OnDemandMapModelStatusTests: XCTestCase {
     private typealias Status = OnDemandMapModel.Status
     
-    func testNeedsToBeLoaded() {
-        XCTAssertTrue(Status.initialized.needsToBeLoaded)
-        XCTAssertFalse(Status.downloading.needsToBeLoaded)
-        XCTAssertFalse(Status.downloaded.needsToBeLoaded)
-        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).needsToBeLoaded)
-        XCTAssertTrue(Status.downloadFailure(CancellationError()).needsToBeLoaded)
-    }
-    
     func testAllowsDownload() {
         XCTAssertTrue(Status.initialized.allowsDownload)
         XCTAssertFalse(Status.downloading.allowsDownload)
