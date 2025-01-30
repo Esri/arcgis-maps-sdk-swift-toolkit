@@ -158,7 +158,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-***REMOVED******REMOVED***guard mode == .onDemand else { return ***REMOVED***
+***REMOVED******REMOVED***guard mode == .onDemand || mode == .undetermined else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let model = OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
