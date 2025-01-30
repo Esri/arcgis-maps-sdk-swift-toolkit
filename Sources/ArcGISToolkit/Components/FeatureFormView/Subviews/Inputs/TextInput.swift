@@ -74,7 +74,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onTapGesture {***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.fullScreenTextInputIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
