@@ -27,8 +27,7 @@ struct InputWrapper: View {
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED***if isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch element.input {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
@@ -47,6 +46,9 @@ struct InputWrapper: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ReadOnlyInput(element: element)
 ***REMOVED******REMOVED***
+***REMOVED*** header: {
+***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED*** footer: {
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
 ***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in

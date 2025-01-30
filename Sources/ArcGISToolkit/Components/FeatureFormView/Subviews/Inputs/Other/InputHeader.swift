@@ -17,8 +17,6 @@
 
 ***REMOVED***/ A view shown at the top of a field element in a form.
 struct InputHeader: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
 ***REMOVED***
@@ -29,18 +27,13 @@ struct InputHeader: View {
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
-***REMOVED******REMOVED***.padding(.top, elementPadding)
-***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
-***REMOVED***
-***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
-***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED***
+***REMOVED******REMOVED***Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
+***REMOVED******REMOVED******REMOVED***.textCase(nil) ***REMOVED*** Maintain original text casing.
+***REMOVED******REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

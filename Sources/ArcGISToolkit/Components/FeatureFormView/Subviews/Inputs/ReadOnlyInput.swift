@@ -27,7 +27,6 @@ struct ReadOnlyInput: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textReader
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
@@ -46,10 +45,9 @@ struct ReadOnlyInput: View {
 ***REMOVED***var textReader: some View {
 ***REMOVED******REMOVED***Text(formattedValue.isEmpty ? "--" : formattedValue)
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Read Only Input")
-***REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED******REMOVED******REMOVED***.lineLimit(element.isMultiline ? nil : 1)
-***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
-***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
 ***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Use secondary to indicate this field is read only.
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED***

@@ -98,22 +98,25 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***var evaluatedForm: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
-***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty && headerVisibility != .hidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***Form {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty && headerVisibility != .hidden {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get rid of background color.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Make header align with the leading edge of the Form.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init())
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The Toolkit currently only supports AttachmentsFormElements via the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** default attachments element. Once AttachmentsFormElements can be authored
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this can call makeElement(_:) instead and makeElement(_:) should have a
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The Toolkit currently only supports AttachmentsFormElements via the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** default attachments element. Once AttachmentsFormElements can be authored
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this can call makeElement(_:) instead and makeElement(_:) should have a
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
@@ -123,6 +126,20 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** The sheet view modifier needs to be used here or it will
+***REMOVED******REMOVED******REMOVED*** be dismissed on the first open by SwiftUI.
+***REMOVED******REMOVED***.sheet(isPresented: $model.fullScreenTextInputIsPresented) {
+***REMOVED******REMOVED******REMOVED***if let element = model.focusedElement as? FieldFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $model.fullScreenText,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: model
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED***
 #if os(iOS)
@@ -167,7 +184,6 @@ extension FeatureFormView {
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput) {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
-***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -175,7 +191,6 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
 ***REMOVED******REMOVED***TextFormElementView(element: element)
-***REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The progress view to be shown while initial expression evaluation is running.

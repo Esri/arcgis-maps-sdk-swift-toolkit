@@ -83,7 +83,7 @@ extension LevelSelector {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: iconForCollapsedState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.disabled(levels.count == 1)
@@ -101,7 +101,7 @@ extension LevelSelector {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***let roundedRectangle = RoundedRectangle(cornerRadius: 5)
 ***REMOVED******REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(textColor(for: level))
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(textColor(for: level))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background {
@@ -117,18 +117,37 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ A scrollable list of buttons; one for each level to be displayed.
 ***REMOVED******REMOVED***/ - Returns: The scrollable list of level buttons.
 ***REMOVED***@ViewBuilder func makeLevelButtons() -> some View {
-***REMOVED******REMOVED***ScrollViewReader { proxy in
+***REMOVED******REMOVED***let scrollView = ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 4) {
+***REMOVED******REMOVED******REMOVED******REMOVED***let list = VStack(spacing: 4) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(filteredLevels, id: \.id) { level in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeLevelButton(level)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange { contentHeight = $0.height ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if #available (iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onGeometryChange(for: CGFloat.self) { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.frame(in: .global).height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** action: { newHeight in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = newHeight
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear { scrollToSelectedLevel(with: proxy) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***if #available (iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED***scrollView
+***REMOVED******REMOVED******REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry.contentSize.height
+***REMOVED******REMOVED******REMOVED*** action: { _, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = newValue
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***scrollView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

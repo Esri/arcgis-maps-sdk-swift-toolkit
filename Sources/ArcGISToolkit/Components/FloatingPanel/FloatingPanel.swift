@@ -209,7 +209,7 @@ private struct Handle: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***RoundedRectangle(cornerRadius: 4.0)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(color)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(color)
 ***REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 8.0)
 ***REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED***

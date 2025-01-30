@@ -23,9 +23,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the full screen text input is presented.
-***REMOVED***@State private var fullScreenTextInputIsPresented = false
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the code scanner is presented.
 ***REMOVED***@State private var scannerIsPresented = false
 ***REMOVED***
@@ -76,9 +73,9 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED***.onTapGesture {***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fullScreenTextInputIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.fullScreenTextInputIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -87,7 +84,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CodeScanner(code: $text, isPresented: $scannerIsPresented)
 ***REMOVED******REMOVED***
 #endif
-***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !model.fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -104,13 +101,6 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element, model: model)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-#if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
-#endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: 100, alignment: .top)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
@@ -166,7 +156,7 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 #endif
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
@@ -203,39 +193,28 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
-private extension TextInput {
-***REMOVED******REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ By moving outside of the feature form view's scroll view we let the text field naturally manage
-***REMOVED******REMOVED***/ keeping the input caret visible.
-***REMOVED***struct FullScreenTextInput: View {
-***REMOVED******REMOVED******REMOVED***/ The current text value.
-***REMOVED******REMOVED***@Binding var text: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ An action that dismisses the current presentation.
-***REMOVED******REMOVED***@Environment(\.dismiss) private var dismiss
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the text field is focused.
-***REMOVED******REMOVED***@FocusState private var textFieldIsFocused: Bool
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The element the input belongs to.
-***REMOVED******REMOVED***let element: FieldFormElement
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The view model for the form.
-***REMOVED******REMOVED***let model: FormViewModel
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-#if !os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
-#endif
-***REMOVED******REMOVED***
+***REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
+***REMOVED***/
+***REMOVED***/ By moving outside of the feature form view's scroll view we let the text field naturally manage
+***REMOVED***/ keeping the input caret visible.
+struct FullScreenTextInput: View {
+***REMOVED******REMOVED***/ The current text value.
+***REMOVED***@Binding var text: String
+***REMOVED***
+***REMOVED******REMOVED***/ An action that dismisses the current presentation.
+***REMOVED***@Environment(\.dismiss) private var dismiss
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text field is focused.
+***REMOVED***@FocusState private var textFieldIsFocused: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The element the input belongs to.
+***REMOVED***let element: FieldFormElement
+***REMOVED***
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***let model: FormViewModel
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED***RepresentedUITextView(initialText: text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
@@ -246,9 +225,18 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED*** header: {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED*** footer: {
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
+***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 
