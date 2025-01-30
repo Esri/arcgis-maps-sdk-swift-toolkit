@@ -74,7 +74,7 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
-            .onTapGesture {                
+            .onTapGesture {            
                 if element.isMultiline {
                     model.fullScreenTextInputIsPresented = true
                     model.focusedElement = element
