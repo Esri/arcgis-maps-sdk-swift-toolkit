@@ -121,11 +121,6 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The hover effect isn't needed because 'formInputStyle()'
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** will add the hover effect on the entire row.
-#if os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffectDisabled()
-#endif
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
@@ -171,7 +166,7 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 #endif
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle(hoverEffectIsEnabled: true)
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.

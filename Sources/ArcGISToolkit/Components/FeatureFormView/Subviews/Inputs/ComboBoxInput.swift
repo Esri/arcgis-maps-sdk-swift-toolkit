@@ -101,7 +101,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle(hoverEffectIsEnabled: true)
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
 ***REMOVED***

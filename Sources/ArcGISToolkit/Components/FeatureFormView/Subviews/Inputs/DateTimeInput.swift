@@ -114,7 +114,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle(hoverEffectIsEnabled: true)
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
