@@ -197,7 +197,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(model.status, .downloading)
@@ -220,7 +220,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
@@ -265,7 +265,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
@@ -289,7 +289,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
@@ -346,7 +346,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var statuses: [PreplannedMapModel.Status] = []
@@ -404,7 +404,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify description does not contain HTML tags.
@@ -442,7 +442,7 @@ private extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***mapArea: mapArea,
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("test-item-id")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("test-preplanned-map-area-id")!,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
