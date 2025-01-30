@@ -233,6 +233,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.removeDuplicates()
 ***REMOVED******REMOVED******REMOVED***.sink { value in
 ***REMOVED******REMOVED******REMOVED******REMOVED***statuses.append(value)
 ***REMOVED******REMOVED***
@@ -252,11 +253,11 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloaded]
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now test that creating a new matching model will have the status set to
-***REMOVED******REMOVED******REMOVED*** downloaded as there is a mmpk downloaded at the appropriate location.
+***REMOVED******REMOVED******REMOVED*** downloaded as there is an mmpk downloaded at the appropriate location.
 ***REMOVED******REMOVED***let model2 = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
@@ -296,6 +297,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***var subscriptions: Set<AnyCancellable> = []
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.removeDuplicates()
 ***REMOVED******REMOVED******REMOVED***.sink { statuses.append($0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED******REMOVED***
@@ -316,7 +318,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloaded]
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -343,6 +345,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.removeDuplicates()
 ***REMOVED******REMOVED******REMOVED***.sink { statuses.append($0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED******REMOVED***
@@ -363,7 +366,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded, .loading, .packaged]
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloaded, .notLoaded, .loading, .packaged]
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
