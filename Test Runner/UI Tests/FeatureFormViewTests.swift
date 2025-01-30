@@ -67,6 +67,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***formTitle.swipeUp()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
 ***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
@@ -134,14 +136,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***formTitle.swipeUp()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.typeText("Sample text")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
-***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.exists,
@@ -173,6 +172,20 @@ final class FeatureFormViewTests: XCTestCase {
 #else
 ***REMOVED******REMOVED***returnButton.tap()
 #endif
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***textField.isHittable,
+***REMOVED******REMOVED******REMOVED***"The text field isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Swipe down to show field title again.
+***REMOVED******REMOVED******REMOVED*** Field title should be pinned at the top of the form
+***REMOVED******REMOVED******REMOVED*** See Apple bug here: https:***REMOVED***developer.apple.com/forums/thread/773453
+***REMOVED******REMOVED***app.staticTexts["Populated Single Line"].swipeDown()
+
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -189,10 +202,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The text field isn't hittable."
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 1.3: unfocused and focused state, with error value (> 256 chars)
@@ -216,14 +225,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***formTitle.swipeUp()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.typeText(.loremIpsum257)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
-***REMOVED******REMOVED******REMOVED***"The title doesn't exist."
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.exists,
@@ -257,11 +263,6 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
-***REMOVED******REMOVED******REMOVED***"The title doesn't exist."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.exists,
 ***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
 ***REMOVED******REMOVED***)
@@ -277,13 +278,24 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***textField.isHittable,
 ***REMOVED******REMOVED******REMOVED***"The text field isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Swipe down to show field title again.
+***REMOVED******REMOVED******REMOVED*** Field title should be pinned at the top of the form
+***REMOVED******REMOVED******REMOVED*** See Apple bug here: https:***REMOVED***developer.apple.com/forums/thread/773453
+***REMOVED******REMOVED***app.staticTexts["Populated Single Line"].swipeDown()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -350,7 +362,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let calendarImage = app.images["Required Date Calendar Image"]
 ***REMOVED******REMOVED***let clearButton = app.buttons["Required Date Clear Button"]
 ***REMOVED******REMOVED***let datePicker = app.datePickers["Required Date Date Picker"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Date Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Required Date Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Date Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -417,7 +429,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -433,11 +445,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let localDate = Calendar.current.date(
 ***REMOVED******REMOVED******REMOVED***from: DateComponents(
@@ -476,13 +483,23 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
 ***REMOVED******REMOVED******REMOVED***"The date picker was hittable."
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Swipe down to show field title again.
+***REMOVED******REMOVED******REMOVED*** Field title should be pinned at the top of the form
+***REMOVED******REMOVED******REMOVED*** See Apple bug here: https:***REMOVED***developer.apple.com/forums/thread/773453
+***REMOVED******REMOVED***app.staticTexts["Launch Date for Apollo 11"].swipeDown()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 2.3: Date only, no time
 ***REMOVED***func testCase_2_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Launch Date for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -498,8 +515,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
@@ -542,7 +559,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_2_4() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Launch Date Time End Clear Button"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date Time End Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Launch Date Time End Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date Time End Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -608,7 +625,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_2_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["start and end date time Date Picker"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["start and end date time Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["start and end date time Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["start and end date time Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -624,6 +641,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***formTitle.swipeUp()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
@@ -667,7 +686,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Launch Date and Time for Apollo 11 Clear Button"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
@@ -703,16 +722,15 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test case 3.1: Pre-existing value, description, clear button, no value label
 ***REMOVED***func testCase_3_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let clearButton = app.buttons["Combo String Clear Button"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Combo String Footer"]
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value row"]
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -734,12 +752,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"String 3"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***clearButton.tap()
+***REMOVED******REMOVED******REMOVED*** Tap no value to clear out the field.
+***REMOVED******REMOVED***noValueButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -747,8 +763,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -761,7 +777,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_3_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo Integer"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo Integer Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Combo Integer Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo Integer Options Button"]
@@ -801,8 +817,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
-***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Combo String Combo Box Value"]
+***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1 row"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
@@ -857,10 +873,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value row"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -906,14 +922,13 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test case 3.5: Required Value
 ***REMOVED***func testCase_3_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let clearButton = app.buttons["Required Combo Box Clear Button"]
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Combo Box *"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Required Combo Box Combo Box Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Combo Box Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value row"]
 ***REMOVED******REMOVED***let oakButton = app.buttons["Oak"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -933,11 +948,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
 ***REMOVED******REMOVED******REMOVED***"Pine"
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertFalse(
-***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button is hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -977,7 +987,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo No Value False"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo No Value False Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Combo No Value False Combo Box Value"]
 ***REMOVED******REMOVED***let firstOption = app.buttons["First"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1046,10 +1056,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_3_7() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Unsupported Value"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["Unsupported Value Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value row"]
 ***REMOVED******REMOVED***let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
 ***REMOVED******REMOVED***let unsupportedValue = app.buttons["0"]
 ***REMOVED******REMOVED***
@@ -1155,7 +1165,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test case 4.2: Test radio button fallback to combo box
 ***REMOVED***func testCase_4_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
+***REMOVED******REMOVED***let field1 = app.buttons["Fallback 1 Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueDisabledRadioButton = app.buttons["No Value Disabled One Radio Button"]
@@ -1169,6 +1179,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***formTitle.swipeUp()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify the Radio Button fallback to Combo Box was successful.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -1197,7 +1209,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch integer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let switchLabel = app.staticTexts["switch integer Switch Label"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch integer Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -1215,14 +1226,14 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"2"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switchView.tap()
+***REMOVED******REMOVED***switchView.switches.firstMatch.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"1"
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -1233,7 +1244,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch string"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let switchLabel = app.staticTexts["switch string Switch Label"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch string Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -1251,7 +1261,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"1"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -1260,10 +1270,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The switch isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switchView.tap()
+***REMOVED******REMOVED***switchView.switches.firstMatch.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"2"
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -1272,7 +1282,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_5_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch double"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch double Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.buttons["switch double Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
@@ -1381,6 +1391,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***formTitle.swipeUp()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***hiddenElementsGroup.exists,
 ***REMOVED******REMOVED******REMOVED***"The group header doesn't exist."
@@ -1427,13 +1439,13 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
-***REMOVED******REMOVED***let comboBox = app.staticTexts["Combo box Combo Box Value"]
+***REMOVED******REMOVED***let comboBox = app.buttons["Combo box Combo Box Value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
 ***REMOVED******REMOVED***let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-***REMOVED******REMOVED***let dateInput = app.staticTexts["Date Value"]
+***REMOVED******REMOVED***let dateInput = app.buttons["Date Value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
 ***REMOVED******REMOVED***let shortTextTextInput = app.textFields["Short text Text Input"]
@@ -1462,11 +1474,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(longTextReadOnlyInput.exists)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***elementsAreEditableSwitch.tap()
+***REMOVED******REMOVED***elementsAreEditableSwitch.switches.firstMatch.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***elementInTheGroupIsEditableSwitch.tap()
+***REMOVED******REMOVED***elementInTheGroupIsEditableSwitch.switches.firstMatch.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(comboBox.exists)
 ***REMOVED******REMOVED***

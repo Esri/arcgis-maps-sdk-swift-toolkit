@@ -49,7 +49,6 @@ struct InputWrapper: View {
 ***REMOVED******REMOVED***
 ***REMOVED*** header: {
 ***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil) ***REMOVED*** Maintain original text casing.
 ***REMOVED*** footer: {
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***

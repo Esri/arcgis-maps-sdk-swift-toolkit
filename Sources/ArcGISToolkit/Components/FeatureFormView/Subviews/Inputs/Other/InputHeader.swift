@@ -28,11 +28,12 @@ struct InputHeader: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
-***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
-***REMOVED***
-***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
-***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.textCase(nil) ***REMOVED*** Maintain original text casing.
+***REMOVED******REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

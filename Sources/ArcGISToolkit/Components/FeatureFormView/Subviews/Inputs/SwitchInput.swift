@@ -62,8 +62,6 @@ struct SwitchInput: View {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Toggle(isOn: $isOn) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch Label")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
 ***REMOVED******REMOVED******REMOVED***.onChange(isOn) { _ in

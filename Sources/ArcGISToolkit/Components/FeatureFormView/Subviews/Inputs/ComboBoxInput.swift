@@ -205,6 +205,7 @@ extension ComboBoxInput {
 ***REMOVED***private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button(label) { action() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(label) row")
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if selected {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark")
