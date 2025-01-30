@@ -286,17 +286,6 @@ extension OnDemandMapModel {
         /// Downloaded mobile map package failed to load.
         case mmpkLoadFailure(Error)
         
-        /// A Boolean value indicating whether the model is in a state
-        /// where it needs to be loaded or reloaded.
-        var needsToBeLoaded: Bool {
-            switch self {
-            case .downloading, .downloaded, .mmpkLoadFailure:
-                false
-            default:
-                true
-            }
-        }
-        
         /// A Boolean value indicating if download is allowed for this status.
         var allowsDownload: Bool {
             switch self {
