@@ -147,12 +147,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ Saves the map info to the pending folder for a particular portal item.
 ***REMOVED******REMOVED***/ The info will stay in that folder until the job completes.
 ***REMOVED***private func savePendingMapInfo(for portalItem: PortalItem) async {
-***REMOVED******REMOVED***guard let portalItemID = portalItem.id,
-***REMOVED******REMOVED******REMOVED***  !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***)
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("No need to save pending info as we may already have offline map info.")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***guard let portalItemID = portalItem.id else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First create directory for what we need to save to json
 ***REMOVED******REMOVED***let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
