@@ -161,7 +161,7 @@ private extension URL {
 
 /// The model class for the form example view
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
     /// Feature form workflow states.
     enum State {
         /// Edits are being applied to the remote service.
