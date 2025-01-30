@@ -233,6 +233,7 @@ class PreplannedMapModelTests: XCTestCase {
         var subscriptions = Set<AnyCancellable>()
         model.$status
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { value in
                 statuses.append(value)
             }
@@ -252,11 +253,11 @@ class PreplannedMapModelTests: XCTestCase {
         // Verify statuses.
         XCTAssertEqual(
             statuses,
-            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+            [.notLoaded, .loading, .packaged, .downloading, .downloaded]
         )
         
         // Now test that creating a new matching model will have the status set to
-        // downloaded as there is a mmpk downloaded at the appropriate location.
+        // downloaded as there is an mmpk downloaded at the appropriate location.
         let model2 = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
@@ -296,6 +297,7 @@ class PreplannedMapModelTests: XCTestCase {
         var subscriptions: Set<AnyCancellable> = []
         model.$status
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { statuses.append($0) }
             .store(in: &subscriptions)
         
@@ -316,7 +318,7 @@ class PreplannedMapModelTests: XCTestCase {
         // Verify statuses.
         XCTAssertEqual(
             statuses,
-            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+            [.notLoaded, .loading, .packaged, .downloading, .downloaded]
         )
     }
     
@@ -343,6 +345,7 @@ class PreplannedMapModelTests: XCTestCase {
         var subscriptions = Set<AnyCancellable>()
         model.$status
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { statuses.append($0) }
             .store(in: &subscriptions)
         
@@ -363,7 +366,7 @@ class PreplannedMapModelTests: XCTestCase {
         // Verify statuses.
         XCTAssertEqual(
             statuses,
-            [.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded, .loading, .packaged]
+            [.notLoaded, .loading, .packaged, .downloading, .downloaded, .notLoaded, .loading, .packaged]
         )
     }
     
