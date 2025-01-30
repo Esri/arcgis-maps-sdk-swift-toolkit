@@ -20,6 +20,18 @@ final class FeatureFormViewTests: XCTestCase {
         continueAfterFailure = false
     }
     
+    /// Verifies that the form is opened by asserting the existence of the form title.
+    ///
+    /// A timeout is added for resiliency when forms are occasionally slow to load.
+    /// - Parameter titleElement: The query for the form title element.
+    func assertFormOpened(titleElement: XCUIElement) {
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            titleElement.waitForExistence(timeout: 30),
+            "The form failed to open after 30 seconds."
+        )
+    }
+    
     /// Sets the map and feature based on the current test case.
     /// - Parameters:
     ///   - app: The current application.
@@ -53,11 +65,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
+        
+        formTitle.swipeUp()
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -124,20 +134,13 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
+        
+        formTitle.swipeUp()
         
         textField.tap()
         
         app.typeText("Sample text")
-        
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
         
         XCTAssertTrue(
             footer.exists,
@@ -169,6 +172,20 @@ final class FeatureFormViewTests: XCTestCase {
 #else
         returnButton.tap()
 #endif
+        XCTAssertTrue(
+            textField.isHittable,
+            "The text field isn't hittable."
+        )
+        
+        // Swipe down to show field title again.
+        // Field title should be pinned at the top of the form
+        // See Apple bug here: https://developer.apple.com/forums/thread/773453
+        app.staticTexts["Populated Single Line"].swipeDown()
+
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -185,10 +202,6 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button isn't hittable."
         )
         
-        XCTAssertTrue(
-            textField.isHittable,
-            "The text field isn't hittable."
-        )
     }
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
@@ -210,20 +223,13 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
+        
+        formTitle.swipeUp()
         
         textField.tap()
         
         app.typeText(.loremIpsum257)
-        
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The title doesn't exist."
-        )
         
         XCTAssertTrue(
             footer.exists,
@@ -257,11 +263,6 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         
         XCTAssertTrue(
-            fieldTitle.exists,
-            "The title doesn't exist."
-        )
-        
-        XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
         )
@@ -277,13 +278,24 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            clearButton.isHittable,
-            "The clear button isn't hittable."
-        )
-        
-        XCTAssertTrue(
             textField.isHittable,
             "The text field isn't hittable."
+        )
+        
+        // Swipe down to show field title again.
+        // Field title should be pinned at the top of the form
+        // See Apple bug here: https://developer.apple.com/forums/thread/773453
+        app.staticTexts["Populated Single Line"].swipeDown()
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The title doesn't exist."
+        )
+        
+        
+        XCTAssertTrue(
+            clearButton.isHittable,
+            "The clear button isn't hittable."
         )
     }
     
@@ -301,11 +313,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertEqual(
             textField.value as? String,
@@ -354,7 +362,7 @@ final class FeatureFormViewTests: XCTestCase {
         let calendarImage = app.images["Required Date Calendar Image"]
         let clearButton = app.buttons["Required Date Clear Button"]
         let datePicker = app.datePickers["Required Date Date Picker"]
-        let fieldValue = app.staticTexts["Required Date Value"]
+        let fieldValue = app.buttons["Required Date Value"]
         let footer = app.staticTexts["Required Date Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -367,11 +375,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         if fieldValue.label != "No Value" {
             clearButton.tap()
@@ -425,7 +429,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
         let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
-        let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
+        let fieldValue = app.buttons["Launch Date and Time for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -438,18 +442,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         fieldValue.tap()
-        
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
         
         let localDate = Calendar.current.date(
             from: DateComponents(
@@ -488,13 +483,23 @@ final class FeatureFormViewTests: XCTestCase {
             datePicker.isHittable,
             "The date picker was hittable."
         )
+        
+        // Swipe down to show field title again.
+        // Field title should be pinned at the top of the form
+        // See Apple bug here: https://developer.apple.com/forums/thread/773453
+        app.staticTexts["Launch Date for Apollo 11"].swipeDown()
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
     }
     
     /// Test case 2.3: Date only, no time
     func testCase_2_3() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
-        let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
+        let fieldValue = app.buttons["Launch Date for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -507,15 +512,11 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            footer.isHittable,
-            "The footer isn't hittable."
+            footer.exists,
+            "The footer doesn't exist."
         )
         
         fieldValue.tap()
@@ -558,7 +559,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_2_4() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date Time End Clear Button"]
-        let fieldValue = app.staticTexts["Launch Date Time End Value"]
+        let fieldValue = app.buttons["Launch Date Time End Value"]
         let footer = app.staticTexts["Launch Date Time End Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -571,11 +572,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         if fieldValue.label != "No Value" {
             clearButton.tap()
@@ -628,7 +625,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_2_5() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["start and end date time Date Picker"]
-        let fieldValue = app.staticTexts["start and end date time Value"]
+        let fieldValue = app.buttons["start and end date time Value"]
         let footer = app.staticTexts["start and end date time Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -643,11 +640,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
+        
+        formTitle.swipeUp()
         
         fieldValue.tap()
         
@@ -691,7 +686,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date and Time for Apollo 11 Clear Button"]
         let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
-        let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
+        let fieldValue = app.buttons["Launch Date and Time for Apollo 11 Value"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         
@@ -702,11 +697,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -731,25 +722,20 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.1: Pre-existing value, description, clear button, no value label
     func testCase_3_1() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Combo String Clear Button"]
         let fieldTitle = app.staticTexts["Combo String"]
-        let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+        let fieldValue = app.buttons["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         let footer = app.staticTexts["Combo String Footer"]
-        
+        let noValueButton = app.buttons["No value row"]
+                
         app.launch()
         
-        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -766,12 +752,10 @@ final class FeatureFormViewTests: XCTestCase {
             "String 3"
         )
         
-        XCTAssertTrue(
-            clearButton.isHittable,
-            "The clear button isn't hittable."
-        )
+        fieldValue.tap()
         
-        clearButton.tap()
+        // Tap no value to clear out the field.
+        noValueButton.tap()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -779,8 +763,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            footer.isHittable,
-            "The footer isn't hittable."
+            footer.exists,
+            "The footer doesn't exist."
         )
         
         XCTAssertEqual(
@@ -793,7 +777,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_3_2() {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["Combo Integer"]
-        let fieldValue = app.staticTexts["Combo Integer Combo Box Value"]
+        let fieldValue = app.buttons["Combo Integer Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         let optionsButton = app.images["Combo Integer Options Button"]
@@ -805,11 +789,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -837,8 +817,8 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo String"]
-        let fieldValue = app.staticTexts["Combo String Combo Box Value"]
-        let firstOptionButton = app.buttons["String 1"]
+        let fieldValue = app.buttons["Combo String Combo Box Value"]
+        let firstOptionButton = app.buttons["String 1 row"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         
@@ -849,11 +829,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -897,10 +873,10 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo String"]
-        let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+        let fieldValue = app.buttons["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
-        let noValueButton = app.buttons["No value"]
+        let noValueButton = app.buttons["No value row"]
         
         app.launch()
         
@@ -909,11 +885,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -950,14 +922,13 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.5: Required Value
     func testCase_3_5() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Required Combo Box Clear Button"]
         let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Required Combo Box *"]
-        let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
+        let fieldValue = app.buttons["Required Combo Box Combo Box Value"]
         let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
-        let noValueButton = app.buttons["No value"]
+        let noValueButton = app.buttons["No value row"]
         let oakButton = app.buttons["Oak"]
         
         app.launch()
@@ -967,11 +938,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -981,11 +948,6 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "Pine"
-        )
-        
-        XCTAssertFalse(
-            clearButton.isHittable,
-            "The clear button is hittable."
         )
         
         XCTAssertTrue(
@@ -1025,7 +987,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo No Value False"]
-        let fieldValue = app.staticTexts["Combo No Value False Combo Box Value"]
+        let fieldValue = app.buttons["Combo No Value False Combo Box Value"]
         let firstOption = app.buttons["First"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1039,11 +1001,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -1098,10 +1056,10 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_3_7() throws {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["Unsupported Value"]
-        let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+        let fieldValue = app.buttons["Unsupported Value Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
-        let noValueButton = app.buttons["No value"]
+        let noValueButton = app.buttons["No value row"]
         let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
@@ -1112,11 +1070,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -1173,11 +1127,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -1215,7 +1165,7 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 4.2: Test radio button fallback to combo box
     func testCase_4_2() {
         let app = XCUIApplication()
-        let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
+        let field1 = app.buttons["Fallback 1 Combo Box Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         let noValueDisabledRadioButton = app.buttons["No Value Disabled One Radio Button"]
@@ -1228,11 +1178,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
+        
+        formTitle.swipeUp()
         
         // Verify the Radio Button fallback to Combo Box was successful.
         XCTAssertTrue(
@@ -1261,7 +1209,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["switch integer"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
-        let switchLabel = app.staticTexts["switch integer Switch Label"]
         let switchView = app.switches["switch integer Switch"]
         
         app.launch()
@@ -1271,11 +1218,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -1283,14 +1226,14 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            switchLabel.label,
+            switchView.label,
             "2"
         )
         
-        switchView.tap()
+        switchView.switches.firstMatch.tap()
         
         XCTAssertEqual(
-            switchLabel.label,
+            switchView.label,
             "1"
         )
     }
@@ -1301,7 +1244,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["switch string"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
-        let switchLabel = app.staticTexts["switch string Switch Label"]
         let switchView = app.switches["switch string Switch"]
         
         app.launch()
@@ -1311,11 +1253,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -1323,7 +1261,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            switchLabel.label,
+            switchView.label,
             "1"
         )
         
@@ -1332,10 +1270,10 @@ final class FeatureFormViewTests: XCTestCase {
             "The switch isn't hittable."
         )
         
-        switchView.tap()
+        switchView.switches.firstMatch.tap()
         
         XCTAssertEqual(
-            switchLabel.label,
+            switchView.label,
             "2"
         )
     }
@@ -1344,7 +1282,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_5_3() {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["switch double"]
-        let fieldValue = app.staticTexts["switch double Combo Box Value"]
+        let fieldValue = app.buttons["switch double Combo Box Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         
@@ -1355,11 +1293,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -1397,11 +1331,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             expandedGroup.exists,
@@ -1459,11 +1389,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
+        
+        formTitle.swipeUp()
         
         XCTAssertTrue(
             hiddenElementsGroup.exists,
@@ -1511,13 +1439,13 @@ final class FeatureFormViewTests: XCTestCase {
         let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
         
         let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
-        let comboBox = app.staticTexts["Combo box Combo Box Value"]
+        let comboBox = app.buttons["Combo box Combo Box Value"]
         
         let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
         let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
         
         let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-        let dateInput = app.staticTexts["Date Value"]
+        let dateInput = app.buttons["Date Value"]
         
         let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
         let shortTextTextInput = app.textFields["Short text Text Input"]
@@ -1532,11 +1460,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
         
@@ -1550,11 +1474,11 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(longTextReadOnlyInput.exists)
         
-        elementsAreEditableSwitch.tap()
+        elementsAreEditableSwitch.switches.firstMatch.tap()
         
         XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
         
-        elementInTheGroupIsEditableSwitch.tap()
+        elementInTheGroupIsEditableSwitch.switches.firstMatch.tap()
         
         XCTAssertTrue(comboBox.exists)
         
@@ -1585,11 +1509,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
         XCTAssertTrue(placeholderImage.exists)
@@ -1621,11 +1541,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertEqual(singleCharacterString.label, "Value must be 1 character")
         XCTAssertEqual(lengthRangeString.label, "Value must be 2 to 5 characters")
@@ -1650,11 +1566,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
             titleTextField.waitForExistence(timeout: 10),
@@ -1690,11 +1602,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(plainText.exists)
     }
@@ -1716,11 +1624,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         selectTestCase(app)
         
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 10),
-            "The form failed to open after 10 seconds."
-        )
+        assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
         XCTAssertFalse(clearButton.exists, "The clear button exists.")

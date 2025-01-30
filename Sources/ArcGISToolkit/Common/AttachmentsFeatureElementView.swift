@@ -67,18 +67,33 @@ struct AttachmentsFeatureElementView: View {
     @State private var isExpanded = true
     
     var body: some View {
-        Group {
+        Section {
             switch attachmentModelsState {
             case .notInitialized, .initializing:
                 ProgressView()
                     .padding()
+                    .task {
+                        guard case .notInitialized = attachmentModelsState else { return }
+                        attachmentModelsState = .initializing
+                        
+                        let attachments = (try? await featureElement.featureAttachments) ?? []
+                        
+                        let attachmentModels = attachments
+                            .reversed()
+                            .map {
+                                AttachmentModel(
+                                    attachment: $0,
+                                    displayScale: displayScale,
+                                    thumbnailSize: thumbnailSize
+                                )
+                            }
+                        attachmentModelsState = .initialized(attachmentModels)
+                    }
             case .initialized(let attachmentModels):
                 if isShowingAttachmentsFormElement {
                     // If showing a form element, don't show attachments in
                     // a disclosure group, but also ALWAYS show
-                    // the list of attachments, even if there are none.
-                    attachmentHeader
-                    attachmentBody(attachmentModels: attachmentModels)
+                        attachmentBody(attachmentModels: attachmentModels)
                 } else if !attachmentModels.isEmpty {
                     DisclosureGroup(isExpanded: $isExpanded) {
                         attachmentBody(attachmentModels: attachmentModels)
@@ -89,25 +104,33 @@ struct AttachmentsFeatureElementView: View {
                     .disclosureGroupPadding()
                 }
             }
+        } header: {
+            // We don't need the header for Popups.
+            if isShowingAttachmentsFormElement {
+                HStack {
+                    Text(featureElement.displayTitle)
+                    Spacer()
+                    if isEditable,
+                       let element = featureElement as? AttachmentsFormElement {
+                        AttachmentImportMenu(element: element, onAdd: onAdd)
+                    }
+                }
+                .textCase(nil) // Keep original text casing.
+            }
+        } footer: {
+            // We don't need the footer for Popups.
+            if isShowingAttachmentsFormElement {
+                Text(featureElement.description)
+            }
         }
+        // This allows us to adopt a flat design which
+        // enhances simplicity and helps users to
+        // focus on the main content.
+        .listRowBackground(Color.clear)
+        // Make content align with the leading edge of the section.
+        .listRowInsets(.init())
         .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
             isEditable = newIsEditable
-        }
-        .task {
-            guard case .notInitialized = attachmentModelsState else { return }
-            attachmentModelsState = .initializing
-            let attachments = (try? await featureElement.featureAttachments) ?? []
-            
-            let attachmentModels = attachments
-                .reversed()
-                .map {
-                    AttachmentModel(
-                        attachment: $0,
-                        displayScale: displayScale,
-                        thumbnailSize: thumbnailSize
-                    )
-                }
-            attachmentModelsState = .initialized(attachmentModels)
         }
     }
     

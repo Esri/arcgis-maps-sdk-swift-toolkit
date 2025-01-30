@@ -58,32 +58,26 @@ struct RadioButtonsInput: View {
                 noValueOption: input.noValueOption
             )
         } else {
-            VStack(alignment: .leading, spacing: .zero) {
-                if input.noValueOption == .show {
-                    makeRadioButtonRow(
-                        placeholderValue,
-                        selectedValue == nil,
-                        !element.codedValues.isEmpty,
-                        useNoValueStyle: true
-                    ) {
-                        selectedValue = nil
-                    }
-                }
-                ForEach(element.codedValues, id: \.self) { codedValue in
-                    makeRadioButtonRow(
-                        codedValue.name,
-                        codedValue == selectedValue,
-                        codedValue != element.codedValues.last
-                    ) {
-                        selectedValue = codedValue
-                    }
+            if input.noValueOption == .show {
+                makeRadioButtonRow(
+                    placeholderValue,
+                    selectedValue == nil,
+                    !element.codedValues.isEmpty,
+                    useNoValueStyle: true
+                ) {
+                    selectedValue = nil
                 }
             }
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(uiColor: .tertiarySystemFill))
-            )
-            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            List(element.codedValues, id: \.self) { codedValue in
+                makeRadioButtonRow(
+                    codedValue.name,
+                    codedValue == selectedValue,
+                    codedValue != element.codedValues.last
+                ) {
+                    selectedValue = codedValue
+                }
+            }
             .onAppear {
                 if let selectedValue = element.codedValues.first(where: {
                     $0.name == element.formattedValue
@@ -148,20 +142,14 @@ extension RadioButtonsInput {
                     Image(systemName: "checkmark")
                         .accessibilityIdentifier("\(element.label) \(label) Checkmark")
 #if !os(visionOS)
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor)
 #endif
                 }
             }
-            .padding(10)
-            .contentShape(.hoverEffect, .rect(cornerRadius: 10))
-            .hoverEffect()
+            .contentShape(.rect)
         }
         .accessibilityIdentifier("\(element.label) \(label) Radio Button")
         .buttonStyle(.plain)
-        .foregroundColor(.primary)
-        if addDivider {
-            Divider()
-                .padding(.leading, 10)
-        }
+        .foregroundStyle(.primary)
     }
 }

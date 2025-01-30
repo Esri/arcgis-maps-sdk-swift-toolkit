@@ -66,8 +66,6 @@ struct FeatureFormExampleView: View {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm)
                             .validationErrors(validationErrorVisibility)
-                            .padding(.horizontal)
-                            .padding(.top, 16)
                     }
                 }
                 .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
@@ -106,7 +104,7 @@ struct FeatureFormExampleView: View {
                         }
                         .padding()
                         .background(.thinMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(.rect(cornerRadius: 10))
                     default:
                         EmptyView()
                     }

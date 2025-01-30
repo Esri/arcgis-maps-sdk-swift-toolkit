@@ -23,9 +23,6 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
-    /// A Boolean value indicating whether the full screen text input is presented.
-    @State private var fullScreenTextInputIsPresented = false
-    
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
@@ -76,9 +73,9 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
-            .onTapGesture {
+            .onTapGesture {            
                 if element.isMultiline {
-                    fullScreenTextInputIsPresented = true
+                    model.fullScreenTextInputIsPresented = true
                     model.focusedElement = element
                 }
             }
@@ -87,7 +84,7 @@ struct TextInput: View {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
 #endif
-            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+            .onValueChange(of: element, when: !element.isMultiline || !model.fullScreenTextInputIsPresented) { _, newFormattedValue in
                 text = newFormattedValue
             }
     }
@@ -104,13 +101,6 @@ private extension TextInput {
                         .fixedSize(horizontal: false, vertical: true)
                         .lineLimit(5)
                         .truncationMode(.tail)
-                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, model: model)
-                                .padding()
-#if targetEnvironment(macCatalyst)
-                                .environmentObject(model)
-#endif
-                        }
                         .frame(minHeight: 100, alignment: .top)
                 } else {
                     TextField(
@@ -166,7 +156,7 @@ private extension TextInput {
             }
 #endif
         }
-        .formInputStyle()
+        .contentShape(.rect)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
@@ -203,39 +193,28 @@ private extension TextInput {
     }
 }
 
-private extension TextInput {
-    /// A view for displaying a multiline text input outside the body of the feature form view.
-    ///
-    /// By moving outside of the feature form view's scroll view we let the text field naturally manage
-    /// keeping the input caret visible.
-    struct FullScreenTextInput: View {
-        /// The current text value.
-        @Binding var text: String
-        
-        /// An action that dismisses the current presentation.
-        @Environment(\.dismiss) private var dismiss
-        
-        /// A Boolean value indicating whether the text field is focused.
-        @FocusState private var textFieldIsFocused: Bool
-        
-        /// The element the input belongs to.
-        let element: FieldFormElement
-        
-        /// The view model for the form.
-        let model: FormViewModel
-        
-        var body: some View {
-            HStack {
-                InputHeader(element: element)
-                Button("Done") {
-                    dismiss()
-                }
-                
-#if !os(visionOS)
-                .buttonStyle(.plain)
-                .foregroundColor(.accentColor)
-#endif
-            }
+/// A view for displaying a multiline text input outside the body of the feature form view.
+///
+/// By moving outside of the feature form view's scroll view we let the text field naturally manage
+/// keeping the input caret visible.
+struct FullScreenTextInput: View {
+    /// The current text value.
+    @Binding var text: String
+    
+    /// An action that dismisses the current presentation.
+    @Environment(\.dismiss) private var dismiss
+    
+    /// A Boolean value indicating whether the text field is focused.
+    @FocusState private var textFieldIsFocused: Bool
+    
+    /// The element the input belongs to.
+    let element: FieldFormElement
+    
+    /// The view model for the form.
+    let model: FormViewModel
+    
+    var body: some View {
+        Section {
             RepresentedUITextView(initialText: text) { text in
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
@@ -246,9 +225,18 @@ private extension TextInput {
             .onAppear {
                 textFieldIsFocused = true
             }
-            Spacer()
+        } header: {
+            HStack {
+                InputHeader(element: element)
+                Spacer()
+                Button("Done") {
+                    dismiss()
+                }
+            }
+        } footer: {
             InputFooter(element: element)
         }
+        .padding()
     }
 }
 

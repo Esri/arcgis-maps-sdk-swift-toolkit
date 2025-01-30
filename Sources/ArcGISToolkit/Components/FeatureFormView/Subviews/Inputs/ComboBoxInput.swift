@@ -80,28 +80,20 @@ struct ComboBoxInput: View {
     
     var body: some View {
         HStack {
-            Text(displayedValue)
-                .accessibilityIdentifier("\(element.label) Combo Box Value")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundColor(!selectedValue.isNoValue ? .primary : .secondary)
-            if let _ = selectedValue.codedValue, !isRequired {
-                // Only show clear button if we have a value
-                // and we're not required. (i.e., Don't show clear if
-                // the field is required.)
-                XButton(.clear) {
-                    model.focusedElement = element
-                    defer { model.focusedElement = nil }
-                    updateValue(nil)
-                }
-                .accessibilityIdentifier("\(element.label) Clear Button")
-            } else {
-                // Otherwise, always show chevron.
-                Image(systemName: "chevron.right")
-                    .accessibilityIdentifier("\(element.label) Options Button")
-                    .foregroundColor(.secondary)
+            Button {
+                model.focusedElement = element
+                isPresented = true
+            } label: {
+                Text(displayedValue)
+                    .accessibilityIdentifier("\(element.label) Combo Box Value")
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+            // Always show chevron.
+            Image(systemName: "chevron.right")
+                .accessibilityIdentifier("\(element.label) Options Button")
+                .foregroundStyle(.secondary)
         }
-        .formInputStyle()
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
@@ -115,10 +107,6 @@ struct ComboBoxInput: View {
             } else {
                 selectedValue = .noValue
             }
-        }
-        .onTapGesture {
-            model.focusedElement = element
-            isPresented = true
         }
         .sheet(isPresented: $isPresented) {
             makePicker()
@@ -161,7 +149,7 @@ extension ComboBoxInput {
         NavigationStack {
             VStack {
                 Text(element.description)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .font(.subheadline)
                     .padding(.horizontal)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -208,7 +196,7 @@ extension ComboBoxInput {
                             Text.done
                                 .fontWeight(.semibold)
 #if !os(visionOS)
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(Color.accentColor)
 #endif
                         }
 #if !os(visionOS)
@@ -227,11 +215,12 @@ extension ComboBoxInput {
     ) -> some View {
         HStack {
             Button(label) { action() }
+                .accessibilityIdentifier("\(label) row")
             Spacer()
             if selected {
                 Image(systemName: "checkmark")
 #if !os(visionOS)
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(Color.accentColor)
 #endif
             }
         }

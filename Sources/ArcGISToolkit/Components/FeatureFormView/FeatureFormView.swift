@@ -98,22 +98,25 @@ public struct FeatureFormView: View {
     
     var evaluatedForm: some View {
         ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    if !title.isEmpty && headerVisibility != .hidden {
-                        FormHeader(title: title)
-                        Divider()
-                    }
-                    ForEach(model.visibleElements, id: \.self) { element in
-                        makeElement(element)
-                    }
-                    if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
-                        // The Toolkit currently only supports AttachmentsFormElements via the
-                        // default attachments element. Once AttachmentsFormElements can be authored
-                        // this can call makeElement(_:) instead and makeElement(_:) should have a
-                        // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(featureElement: attachmentsElement)
-                    }
+            Form {
+                if !title.isEmpty && headerVisibility != .hidden {
+                    FormHeader(title: title)
+                        // Get rid of background color.
+                        .listRowBackground(Color.clear)
+                        // Make header align with the leading edge of the Form.
+                        .listRowInsets(.init())
+                }
+                
+                ForEach(model.visibleElements, id: \.self) { element in
+                    makeElement(element)
+                }
+                
+                if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+                    // The Toolkit currently only supports AttachmentsFormElements via the
+                    // default attachments element. Once AttachmentsFormElements can be authored
+                    // this can call makeElement(_:) instead and makeElement(_:) should have a
+                    // case added for AttachmentsFormElement.
+                    AttachmentsFeatureElementView(featureElement: attachmentsElement)
                 }
             }
             .onChange(model.focusedElement) { _ in
@@ -123,6 +126,20 @@ public struct FeatureFormView: View {
             }
             .onTitleChange(of: model.featureForm) { newTitle in
                 title = newTitle
+            }
+        }
+        // The sheet view modifier needs to be used here or it will
+        // be dismissed on the first open by SwiftUI.
+        .sheet(isPresented: $model.fullScreenTextInputIsPresented) {
+            if let element = model.focusedElement as? FieldFormElement {
+                FullScreenTextInput(
+                    text: $model.fullScreenText,
+                    element: element,
+                    model: model
+                )
+#if targetEnvironment(macCatalyst)
+                .environmentObject(model)
+#endif
             }
         }
 #if os(iOS)
@@ -167,7 +184,6 @@ extension FeatureFormView {
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         if !(element.input is UnsupportedFormInput) {
             InputWrapper(element: element)
-            Divider()
         }
     }
     
@@ -175,7 +191,6 @@ extension FeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
         TextFormElementView(element: element)
-        Divider()
     }
     
     /// The progress view to be shown while initial expression evaluation is running.

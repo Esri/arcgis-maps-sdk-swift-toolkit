@@ -31,6 +31,12 @@ import SwiftUI
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
+    /// A Boolean value indicating whether the full screen text input is presented.
+    @Published var fullScreenTextInputIsPresented = false
+        
+    /// Text that will be displayed in a view showing multi line text.
+    @Published var fullScreenText = ""
+    
     /// The expression evaluation task.
     private var evaluateTask: Task<Void, Never>?
     
@@ -42,7 +48,7 @@ import SwiftUI
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm) {
+    init(featureForm: FeatureForm) {
         self.featureForm = featureForm
     }
     

@@ -38,22 +38,12 @@ struct GroupView<Content>: View where Content: View {
     }
     
     var body: some View {
-        Group {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(visibleElements, id: \.self) { element in
-                    viewCreator(element)
-                        .padding(.leading, 16)
-                }
-            } label: {
-                VStack {
-                    HStack {
-                        Header(element: element)
-                            .catalystPadding(4)
-                        Spacer()
-                    }
-                    Divider()
-                }
+        DisclosureGroup(isExpanded: $isExpanded) {
+            ForEach(visibleElements, id: \.self) { element in
+                viewCreator(element)
             }
+        } label: {
+            Header(element: element)
         }
         .onAppear {
             isExpanded = element.initialState == .expanded
@@ -89,7 +79,7 @@ extension GroupView {
                         .accessibilityIdentifier("\(element.label)")
                         .multilineTextAlignment(.leading)
                         .font(.title2)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                 }
                 
                 if !element.description.isEmpty {
@@ -97,12 +87,9 @@ extension GroupView {
                         .accessibilityIdentifier("\(element.label) Description")
                         .multilineTextAlignment(.leading)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
-#if targetEnvironment(macCatalyst)
-            .padding(.leading, 4)
-#endif
         }
     }
 }

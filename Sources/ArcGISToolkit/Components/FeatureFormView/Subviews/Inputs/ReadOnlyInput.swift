@@ -27,7 +27,6 @@ struct ReadOnlyInput: View {
         Group {
             if element.isMultiline {
                 textReader
-                    .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 ScrollView(.horizontal) {
                     textReader
@@ -46,10 +45,9 @@ struct ReadOnlyInput: View {
     var textReader: some View {
         Text(formattedValue.isEmpty ? "--" : formattedValue)
             .accessibilityIdentifier("\(element.label) Read Only Input")
-            .fixedSize(horizontal: false, vertical: true)
             .lineLimit(element.isMultiline ? nil : 1)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
             .textSelection(.enabled)
+            // Use secondary to indicate this field is read only.
+            .foregroundStyle(.secondary)
     }
 }

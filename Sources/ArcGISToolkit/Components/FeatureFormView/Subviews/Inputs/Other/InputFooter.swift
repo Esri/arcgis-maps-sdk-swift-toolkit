@@ -61,10 +61,8 @@ struct InputFooter: View {
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
         }
-        .font(.footnote)
-        .foregroundColor(isShowingError ? .red : .secondary)
+        .foregroundStyle(isShowingError ? .red : .secondary)
         .id(id)
-        .padding(.vertical, elementPadding / 2)
         .task {
             for await _ in element.$value {
                 id = UUID()

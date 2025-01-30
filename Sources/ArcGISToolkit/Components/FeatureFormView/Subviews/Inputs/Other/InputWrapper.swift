@@ -27,8 +27,7 @@ struct InputWrapper: View {
     let element: FieldFormElement
     
     var body: some View {
-        VStack(alignment: .leading) {
-            InputHeader(element: element)
+        Section {
             if isEditable {
                 switch element.input {
                 case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
@@ -47,6 +46,9 @@ struct InputWrapper: View {
             } else {
                 ReadOnlyInput(element: element)
             }
+        } header: {
+            InputHeader(element: element)
+        } footer: {
             InputFooter(element: element)
         }
         .onIsEditableChange(of: element) { newIsEditable in

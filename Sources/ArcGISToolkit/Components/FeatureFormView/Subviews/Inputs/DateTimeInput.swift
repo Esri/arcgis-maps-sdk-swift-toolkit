@@ -80,9 +80,12 @@ struct DateTimeInput: View {
     @ViewBuilder var dateEditor: some View {
         dateDisplay
         if isEditing, let date {
-            makeDatePicker(
-                with: Binding(get: { date }, set: { self.date = $0 })
-            )
+            VStack {
+                todayOrNowButton
+                makeDatePicker(
+                    with: Binding(get: { date }, set: { self.date = $0 })
+                )
+            }
         }
     }
     
@@ -90,45 +93,39 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
-                .accessibilityIdentifier("\(element.label) Value")
-                .foregroundColor(displayColor)
+            Button {
+                withAnimation {
+                    if date == nil {
+                        if dateRange.contains(.now) {
+                            date = .now
+                        } else if let min = input.min {
+                            date = min
+                        } else if let max = input.max {
+                            date = max
+                        }
+                    }
+                    isEditing.toggle()
+                    model.focusedElement = isEditing ? element : nil
+                }
+            } label: {
+                Text(!formattedValue.isEmpty ? formattedValue : .noValue)
+                    .accessibilityIdentifier("\(element.label) Value")
+                    .foregroundStyle(displayColor)
+            }
             
             Spacer()
-            
-            if isEditing {
-                todayOrNowButton
-            } else {
-                if date == nil {
-                    Image(systemName: "calendar")
-                        .font(.title2)
-                        .accessibilityIdentifier("\(element.label) Calendar Image")
-                        .foregroundColor(.secondary)
-                } else if !isRequired {
-                    XButton(.clear) {
-                        model.focusedElement = element
-                        defer { model.focusedElement = nil }
-                        date = nil
-                    }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
+            if date == nil {
+                Image(systemName: "calendar")
+                    .font(.title2)
+                    .accessibilityIdentifier("\(element.label) Calendar Image")
+                    .foregroundStyle(.secondary)
+            } else if !isRequired {
+                XButton(.clear) {
+                    model.focusedElement = element
+                    defer { model.focusedElement = nil }
+                    date = nil
                 }
-            }
-        }
-        .formInputStyle()
-        .frame(maxWidth: .infinity)
-        .onTapGesture {
-            withAnimation {
-                if date == nil {
-                    if dateRange.contains(.now) {
-                        date = .now
-                    } else if let min = input.min {
-                        date = min
-                    } else if let max = input.max {
-                        date = max
-                    }
-                }
-                isEditing.toggle()
-                model.focusedElement = isEditing ? element : nil
+                .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
     }
@@ -185,21 +182,19 @@ struct DateTimeInput: View {
                 date = dateRange.lowerBound
             }
         } label: {
-            input.includesTime ? Text.now : .today
+            Label(input.includesTime ? String.now : .today, systemImage: "clock")
         }
+        .buttonStyle(.bordered)
+        .foregroundStyle(.primary)
         .accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
-#if !os(visionOS)
-        .buttonStyle(.plain)
-        .foregroundStyle(.tint)
-#endif
     }
 }
 
-private extension Text {
+private extension String {
     /// A label for a button to choose the current time and date for a field.
     static var now: Self {
         .init(
-            "Now",
+            localized: "Now",
             bundle: .toolkitModule,
             comment: "A label for a button to choose the current time and date for a field."
         )
@@ -208,7 +203,7 @@ private extension Text {
     /// A label for a button to choose the current date for a field.
     static var today: Self {
         .init(
-            "Today",
+            localized: "Today",
             bundle: .toolkitModule,
             comment: "A label for a button to choose the current date for a field."
         )

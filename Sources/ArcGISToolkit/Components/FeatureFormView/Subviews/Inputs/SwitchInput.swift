@@ -60,15 +60,13 @@ struct SwitchInput: View {
                 noValueOption: .show
             )
         } else {
-            HStack {
+            Toggle(isOn: $isOn) {
                 Text(isOn ? input.onValue.name : input.offValue.name)
-                    .accessibilityIdentifier("\(element.label) Switch Label")
-                Spacer()
-                Toggle(isOn: $isOn) {}
-                    .accessibilityIdentifier("\(element.label) Switch")
-                    .toggleStyle(.switch)
             }
-            .formInputStyle()
+            .accessibilityIdentifier("\(element.label) Switch")
+            .onChange(isOn) { _ in
+                model.focusedElement = element
+            }
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
