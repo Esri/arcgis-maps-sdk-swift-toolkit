@@ -406,7 +406,6 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return preplannedMapModels
-***REMOVED******REMOVED******REMOVED***.filter(\.status.isDownloaded)
 ***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
