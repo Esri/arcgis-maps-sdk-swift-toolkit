@@ -406,7 +406,6 @@ extension PreplannedMapModel {
         }
         
         return preplannedMapModels
-            .filter(\.status.isDownloaded)
             .sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title })
     }
     
