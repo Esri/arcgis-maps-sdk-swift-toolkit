@@ -39,7 +39,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     let title: String
     
     /// The action to perform when an on demand map area is deleted.
-    private let onRemoveDownloadAction: (String) -> Void
+    private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
     
     /// The description of the map area.
     @Published private(set) var description: String = ""
@@ -68,7 +68,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         offlineMapTask: OfflineMapTask,
         configuration: OnDemandMapAreaConfiguration,
         portalItemID: PortalItem.ID,
-        onRemoveDownload: @escaping (String) -> Void
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) {
         self.configuration = configuration
         self.offlineMapTask = offlineMapTask
@@ -88,7 +88,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         job: GenerateOfflineMapJob,
         areaID: String,
         portalItemID: PortalItem.ID,
-        onRemoveDownload: @escaping (String) -> Void
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) {
         self.configuration = nil
         self.job = job
@@ -113,7 +113,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     init(
         mmpkURL: URL,
         portalItemID: PortalItem.ID,
-        onRemoveDownload: @escaping (String) -> Void
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) async throws {
         let mmpk = MobileMapPackage(fileURL: mmpkURL)
         try await mmpk.load()
@@ -195,7 +195,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         status = .initialized
         
         // Call the closure for the remove download action.
-        onRemoveDownloadAction(areaID)
+        onRemoveDownloadAction(self)
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and
@@ -231,7 +231,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 extension OnDemandMapModel {
     static func loadOnDemandMapModels(
         portalItemID: Item.ID,
-        onRemoveDownload: @escaping (String) -> Void
+        onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) async -> [OnDemandMapModel] {
         var onDemandMapModels: [OnDemandMapModel] = []
         
