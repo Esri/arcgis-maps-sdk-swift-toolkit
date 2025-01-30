@@ -101,7 +101,7 @@ struct ComboBoxInput: View {
                     .foregroundColor(.secondary)
             }
         }
-        .formInputStyle(hoverEffectIsEnabled: true)
+        .formInputStyle()
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }

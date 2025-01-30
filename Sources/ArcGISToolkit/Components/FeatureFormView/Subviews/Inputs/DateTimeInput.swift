@@ -114,7 +114,7 @@ struct DateTimeInput: View {
                 }
             }
         }
-        .formInputStyle(hoverEffectIsEnabled: true)
+        .formInputStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
