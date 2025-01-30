@@ -318,3 +318,137 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         portalItem.description.replacing(/<[^>]+>/, with: "")
     }
 }
+
+/// A value that contains the result of loading the preplanned map models for
+/// a given online map.
+struct PreplannedModels {
+    /// The result of loading the preplanned models.
+    let result: Result<[PreplannedMapModel], Error>
+    /// A Boolean value indicating if only offline models are available.
+    let onlyOfflineModelsAreAvailable: Bool
+}
+
+extension PreplannedMapModel {
+    /// Gets the preplanned map areas from the offline map task and loads the map models.
+    static func loadPreplannedMapModels(
+        offlineMapTask: OfflineMapTask,
+        portalItemID: Item.ID,
+        onRemoveDownload: @escaping (Item.ID) -> Void
+    ) async -> PreplannedModels {
+        if offlineMapTask.loadStatus != .loaded {
+            try? await offlineMapTask.retryLoad()
+        }
+        
+        var onlyOfflineModelsAreAvailable = false
+        
+        let result = await Result { @MainActor in
+            do {
+                return try await offlineMapTask.preplannedMapAreas
+                    .filter { $0.portalItem.id != nil }
+                    .sorted(using: KeyPathComparator(\.portalItem.title))
+                    .map {
+                        PreplannedMapModel(
+                            offlineMapTask: offlineMapTask,
+                            mapArea: $0,
+                            portalItemID: portalItemID,
+                            preplannedMapAreaID: $0.portalItem.id!,
+                            onRemoveDownload: onRemoveDownload
+                        )
+                    }
+            } catch {
+                // If not connected to the internet, then return only the offline models.
+                if let urlError = error as? URLError,
+                   urlError.code == .notConnectedToInternet {
+                    onlyOfflineModelsAreAvailable = true
+                    return await loadOfflinePreplannedMapModels(
+                        offlineMapTask: offlineMapTask,
+                        portalItemID: portalItemID,
+                        onRemoveDownload: onRemoveDownload
+                    )
+                } else {
+                    throw error
+                }
+            }
+        }
+        
+        return .init(result: result, onlyOfflineModelsAreAvailable: onlyOfflineModelsAreAvailable)
+    }
+    
+    /// Loads the offline preplanned map models with information from the downloaded mobile map
+    /// packages for the online map.
+    private static func loadOfflinePreplannedMapModels(
+        offlineMapTask: OfflineMapTask,
+        portalItemID: Item.ID,
+        onRemoveDownload: @escaping (Item.ID) -> Void
+    ) async -> [PreplannedMapModel] {
+        let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
+        
+        guard let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: preplannedDirectory.path()) else { return [] }
+        
+        var preplannedMapModels: [PreplannedMapModel] = []
+        
+        for mapAreaID in mapAreaIDs {
+            guard let preplannedMapAreaID = Item.ID(mapAreaID),
+                  let mapArea = await makeMapArea(
+                    portalItemID: portalItemID,
+                    preplannedMapAreaID: preplannedMapAreaID
+                  ) else {
+                continue
+            }
+            let model = PreplannedMapModel(
+                offlineMapTask: offlineMapTask,
+                mapArea: mapArea,
+                portalItemID: portalItemID,
+                preplannedMapAreaID: mapArea.id!,
+                onRemoveDownload: onRemoveDownload
+            )
+            preplannedMapModels.append(model)
+        }
+        
+        return preplannedMapModels
+            .filter(\.status.isDownloaded)
+            .sorted(by: { $0.preplannedMapArea.title < $1.preplannedMapArea.title })
+    }
+    
+    /// Creates a preplanned map area using a given portal item and map area ID to search for a corresponding
+    /// downloaded mobile map package. If the mobile map package is not found then `nil` is returned.
+    /// - Parameters:
+    ///   - portalItemID: The portal item ID.
+    ///   - preplannedMapAreaID: The preplanned map area ID.
+    /// - Returns: The preplanned map area.
+    private static func makeMapArea(
+        portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID
+    ) async -> OfflinePreplannedMapArea? {
+        let fileURL = URL.preplannedDirectory(
+            forPortalItemID: portalItemID,
+            preplannedMapAreaID: preplannedMapAreaID
+        )
+        guard FileManager.default.fileExists(atPath: fileURL.path()) else { return nil }
+        let mmpk = MobileMapPackage(fileURL: fileURL)
+        
+        try? await mmpk.load()
+        guard let item = mmpk.item else { return nil }
+        
+        return .init(
+            title: item.title,
+            description: item.description,
+            id: preplannedMapAreaID,
+            thumbnail: item.thumbnail
+        )
+    }
+}
+
+private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
+    var title: String
+    var description: String
+    var id: Item.ID?
+    var packagingStatus: PreplannedMapArea.PackagingStatus?
+    var thumbnail: LoadableImage?
+    
+    func retryLoad() async throws {}
+    
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        fatalError()
+    }
+}
