@@ -147,12 +147,7 @@ public class OfflineManager: ObservableObject {
     /// Saves the map info to the pending folder for a particular portal item.
     /// The info will stay in that folder until the job completes.
     private func savePendingMapInfo(for portalItem: PortalItem) async {
-        guard let portalItemID = portalItem.id,
-              !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID })
-        else {
-            Logger.offlineManager.debug("No need to save pending info as we may already have offline map info.")
-            return
-        }
+        guard let portalItemID = portalItem.id else { return }
         
         // First create directory for what we need to save to json
         let url = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
@@ -232,6 +227,9 @@ public class OfflineManager: ObservableObject {
             for preplannedModel in preplannedModels {
                 preplannedModel.removeDownloadedPreplannedMapArea()
             }
+        }
+        for onDemandModel in model.onDemandMapModels {
+            onDemandModel.removeDownloadedOnDemandMapArea()
         }
         // Now remove any offline map areas whose model isn't in memory by simply deleting the
         // whole portal item directory. This will also delete the map info.
