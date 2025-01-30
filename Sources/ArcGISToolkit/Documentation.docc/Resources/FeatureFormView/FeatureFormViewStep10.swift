@@ -25,7 +25,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
 ***REMOVED***enum State {
 ***REMOVED******REMOVED***case applyingEdits(FeatureForm)
 ***REMOVED******REMOVED***case cancellationPending(FeatureForm)
