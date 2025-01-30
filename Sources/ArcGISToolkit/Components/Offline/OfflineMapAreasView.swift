@@ -69,29 +69,31 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section("Preplanned") {
-                    if !mapViewModel.mapIsOfflineDisabled {
+                if mapViewModel.mapIsOfflineDisabled {
+                    offlineDisabledView
+                } else {
+                    Section("Preplanned") {
                         preplannedMapAreasView
                     }
-                }
-                
-                Section("On Demand") {
-                    onDemandMapAreasView
-                }
-                
-                Section {
-                    Button("Add Offline Area") {
-                        isAddingOnDemandArea = true
+                    
+                    Section("On Demand") {
+                        onDemandMapAreasView
                     }
-                    .sheet(isPresented: $isAddingOnDemandArea) {
-                        OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle()) {
-                            mapViewModel.addOnDemandMapArea(with: $0)
+                    
+                    Section {
+                        Button("Add Offline Area") {
+                            isAddingOnDemandArea = true
                         }
-                        // Prevent view from dragging when panning on mapview
-                        .highPriorityGesture(DragGesture())
-                        .interactiveDismissDisabled()
+                        .sheet(isPresented: $isAddingOnDemandArea) {
+                            OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle()) {
+                                mapViewModel.addOnDemandMapArea(with: $0)
+                            }
+                            // Prevent view from dragging when panning on mapview
+                            .highPriorityGesture(DragGesture())
+                            .interactiveDismissDisabled()
+                        }
+                        .disabled(mapViewModel.onDemandMapModels == nil)
                     }
-                    .disabled(mapViewModel.onDemandMapModels == nil)
                 }
             }
             .task {
@@ -104,11 +106,6 @@ public struct OfflineMapAreasView: View {
             }
             .navigationTitle("Map Areas")
             .navigationBarTitleDisplayMode(.inline)
-            .overlay {
-                if mapViewModel.mapIsOfflineDisabled {
-                    offlineDisabledView
-                }
-            }
         }
         .refreshable {
             await loadMapModels()
@@ -123,22 +120,11 @@ public struct OfflineMapAreasView: View {
                     PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
                 }
             } else {
-                emptyPreplannedMapAreasView
+                emptyOfflineAreasView
             }
         case .failure(let error):
             view(for: error)
         case .none:
-            ProgressView()
-                .frame(maxWidth: .infinity)
-        }
-    }
-    
-    @ViewBuilder private var onDemandMapAreasView: some View {
-        if let models = mapViewModel.onDemandMapModels {
-            List(models) { onDemandMapModel in
-                OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
-            }
-        } else {
             ProgressView()
                 .frame(maxWidth: .infinity)
         }
@@ -149,6 +135,33 @@ public struct OfflineMapAreasView: View {
             Text("No map areas")
                 .bold()
             Text("There are no map areas defined for this web map.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    @ViewBuilder private var onDemandMapAreasView: some View {
+        if let models = mapViewModel.onDemandMapModels {
+            if !models.isEmpty {
+                List(models) { onDemandMapModel in
+                    OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+                }
+            } else {
+                emptyOfflineAreasView
+            }
+        } else {
+            ProgressView()
+                .frame(maxWidth: .infinity)
+        }
+    }
+    
+    @ViewBuilder private var emptyOfflineAreasView: some View {
+        VStack(alignment: .center) {
+            Text("No map areas")
+                .bold()
+            Text("There are no offline map areas for this web map.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
