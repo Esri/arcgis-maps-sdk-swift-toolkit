@@ -58,6 +58,11 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***guard case.success(let models) = preplannedMapModels,
 ***REMOVED******REMOVED******REMOVED***  models.filter(\.status.isDownloaded).isEmpty
 ***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that there are no downloaded on demand map areas.
+***REMOVED******REMOVED***guard let models = onDemandMapModels,
+***REMOVED******REMOVED******REMOVED***  models.filter(\.status.isDownloaded).isEmpty else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***OfflineManager.shared.removeMapInfo(for: portalItemID)
 ***REMOVED***
 ***REMOVED***
@@ -75,10 +80,16 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter model: The on demand map model.
 ***REMOVED***func onRemoveDownloadOfOnDemandArea(for model: OnDemandMapModel) {
 ***REMOVED******REMOVED***guard let models = onDemandMapModels else { return ***REMOVED***
-***REMOVED******REMOVED***onDemandMapModels?.removeAll(where: { $0.areaID == model.areaID ***REMOVED***)
+***REMOVED******REMOVED***onDemandMapModels?.removeAll(where: { $0 === model ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Delete the saved map info if there are no more downloads for the
 ***REMOVED******REMOVED******REMOVED*** represented online map.
 ***REMOVED******REMOVED***guard models.filter(\.status.isDownloaded).isEmpty else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that there are no downloaded preplanned map areas.
+***REMOVED******REMOVED***guard case.success(let models) = preplannedMapModels,
+***REMOVED******REMOVED******REMOVED***  models.filter(\.status.isDownloaded).isEmpty
+***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***OfflineManager.shared.removeMapInfo(for: portalItemID)
 ***REMOVED***
 ***REMOVED***
