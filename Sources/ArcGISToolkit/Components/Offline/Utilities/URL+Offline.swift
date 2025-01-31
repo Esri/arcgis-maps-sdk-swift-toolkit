@@ -27,7 +27,7 @@ extension URL {
     /// `Documents/OfflineMapAreas/<Portal Item ID>/`
     /// - Parameter portalItemID: The ID of the web map portal item.
     static func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
-        return offlineManagerDirectory().appending(path: "\(portalItemID)/")
+        return offlineManagerDirectory().appending(path: portalItemID.rawValue)
     }
     
     /// The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
@@ -43,7 +43,24 @@ extension URL {
         var url = portalItemDirectory(forPortalItemID: portalItemID)
             .appending(component: "Preplanned/")
         if let preplannedMapAreaID {
-            url = url.appending(component: "\(preplannedMapAreaID)/")
+            url = url.appending(component: preplannedMapAreaID.rawValue)
+        }
+        return url
+    }
+    
+    /// The path to the directory for a specific on-demand map area. Or if `nil` is passed for the
+    /// map area ID, then the on-demand directory.
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - onDemandMapAreaID: The unique ID of the on-demand map area.
+    static func onDemandDirectory(
+        forPortalItemID portalItemID: PortalItem.ID,
+        onDemandMapAreaID: OnDemandAreaID? = nil
+    ) -> URL {
+        var url = portalItemDirectory(forPortalItemID: portalItemID)
+            .appending(component: "OnDemand/")
+        if let onDemandMapAreaID {
+            url = url.appending(component: onDemandMapAreaID.rawValue)
         }
         return url
     }
@@ -55,6 +72,6 @@ extension URL {
     static func pendingMapInfoDirectory(
         forPortalItem portalItemID: Item.ID
     ) -> URL {
-        return .cachesDirectory.appending(components: "PendingDownloads", "\(portalItemID)/")
+        return .cachesDirectory.appending(components: "PendingDownloads", portalItemID.rawValue)
     }
 }

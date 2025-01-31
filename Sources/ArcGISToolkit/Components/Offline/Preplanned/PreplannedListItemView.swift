@@ -103,7 +103,7 @@ struct PreplannedListItemView: View {
     @ViewBuilder private var titleView: some View {
         Text(model.preplannedMapArea.title)
             .font(.body)
-            .lineLimit(2)
+            .lineLimit(1)
     }
     
     @ViewBuilder private var downloadButton: some View {
@@ -224,7 +224,7 @@ private extension PreplannedListItemView.DownloadState {
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!,
-            onRemoveDownload: { _ in }
+            onRemoveDownload: {}
         ),
         selectedMap: .constant(nil)
     )

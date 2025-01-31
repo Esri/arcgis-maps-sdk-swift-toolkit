@@ -16,8 +16,6 @@ import SwiftUI
 import ArcGIS
 
 /// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
-@MainActor
-@preconcurrency
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: OfflineMapViewModel
@@ -27,6 +25,8 @@ public struct OfflineMapAreasView: View {
     private let onlineMap: Map
     /// The currently selected map.
     @Binding private var selectedMap: Map?
+    /// A Boolean value indicating whether an on-demand map area is being added.
+    @State private var isAddingOnDemandArea = false
     
     /// The portal item for the web map to be taken offline.
     private var portalItem: PortalItem {
@@ -68,15 +68,25 @@ public struct OfflineMapAreasView: View {
     
     public var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    if !mapViewModel.mapIsOfflineDisabled {
-                        preplannedMapAreasView
+            VStack {
+                if mapViewModel.isLoadingModels {
+                    ProgressView()
+                } else {
+                    if mapViewModel.mapIsOfflineDisabled {
+                        offlineDisabledView
+                    } else {
+                        switch mapViewModel.mode {
+                        case .preplanned:
+                            preplannedMapAreasView
+                        case .onDemand, .undetermined:
+                            onDemandMapAreasView
+                        }
                     }
                 }
             }
+            .interactiveDismissDisabled()
             .task {
-                await mapViewModel.loadPreplannedMapModels()
+                await mapViewModel.loadModels()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -85,78 +95,111 @@ public struct OfflineMapAreasView: View {
             }
             .navigationTitle("Map Areas")
             .navigationBarTitleDisplayMode(.inline)
-            .overlay {
-                if mapViewModel.mapIsOfflineDisabled {
-                    offlineDisabledView
-                }
-            }
-        }
-        .refreshable {
-            await mapViewModel.loadPreplannedMapModels()
         }
     }
     
     @ViewBuilder private var preplannedMapAreasView: some View {
-        switch mapViewModel.preplannedMapModels {
-        case .success(let models):
-            if !models.isEmpty {
-                List(models) { preplannedMapModel in
-                    PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+        List {
+            switch mapViewModel.preplannedMapModels {
+            case .success(let models):
+                if !models.isEmpty {
+                    Section {
+                        ForEach(models) { preplannedMapModel in
+                            PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+                        }
+                    } footer: {
+                        if mapViewModel.isShowingOnlyOfflineModels {
+                            // If we are showing some models, but only offline models,
+                            // show that information in a footer.
+                            noInternetFooter
+                        }
+                    }
+                } else if mapViewModel.isShowingOnlyOfflineModels {
+                    // If we have no models and no internet, show a content unavailable view.
+                    noInternetNoAreasView
+                } else {
+                    // If the request was successful, but there are no preplanned
+                    // map areas, then show empty preplanned map areas view.
+                    // This shouldn't happen unless preplanned areas were deleted after establishing
+                    // preplanned mode on the model. Because there needs to be preplanned areas
+                    // to even establish the preplanned mode.
+                    emptyPreplannedOfflineAreasView
                 }
-            } else {
-                emptyPreplannedMapAreasView
+            case .failure:
+                preplannedErrorView
             }
-        case .failure(let error):
-            view(for: error)
-        case .none:
-            ProgressView()
-                .frame(maxWidth: .infinity)
+        }
+        .refreshable {
+            Task { await mapViewModel.loadModels() }
         }
     }
     
-    @ViewBuilder private var emptyPreplannedMapAreasView: some View {
-        VStack(alignment: .center) {
-            Text("No map areas")
-                .bold()
-            Text("There are no map areas defined for this web map.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+    @ViewBuilder private var onDemandMapAreasView: some View {
+        List {
+            if !mapViewModel.onDemandMapModels.isEmpty {
+                ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
+                    OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+                }
+            } else {
+                emptyOnDemandOfflineAreasView
+            }
+            Section {
+                Button("Add Offline Area") {
+                    isAddingOnDemandArea = true
+                }
+                .sheet(isPresented: $isAddingOnDemandArea) {
+                    OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle(), titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)) {
+                        mapViewModel.addOnDemandMapArea(with: $0)
+                    }
+                }
+            }
         }
-        .frame(maxWidth: .infinity)
+    }
+    
+    @ViewBuilder private var noInternetFooter: some View {
+        Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+    }
+    
+    @ViewBuilder private var noInternetNoAreasView: some View {
+        Backported.ContentUnavailableView(
+            "No Internet Connection",
+            systemImage: "wifi.exclamationmark",
+            description: "Could not retrieve map areas for this map. Pull to refresh."
+        )
+    }
+    
+    @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
+        Backported.ContentUnavailableView(
+            "No Map Areas",
+            systemImage: "square.and.arrow.down",
+            description: "There are no offline map areas for this map. Pull to refresh."
+        )
+    }
+    
+    @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
+        Backported.ContentUnavailableView(
+            "No Map Areas",
+            systemImage: "square.and.arrow.down",
+            description: "There are no offline map areas for this map. Tap the button below to get started."
+        )
     }
     
     @ViewBuilder private var offlineDisabledView: some View {
-        let labelText = Text("Offline Disabled")
-        let descriptionText = Text("Please ensure the web map is offline enabled.")
-        if #available(iOS 17, *) {
-            ContentUnavailableView {
-                labelText
-                    .bold()
-            } description: {
-                descriptionText
-            }
-        } else {
-            VStack(alignment: .center) {
-                labelText
-                    .bold()
-                    .font(.title2)
-                descriptionText
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-        }
+        Backported.ContentUnavailableView(
+            "Offline Disabled",
+            systemImage: "exclamationmark.triangle",
+            description: "Please ensure the map is offline enabled."
+        )
     }
     
-    private func view(for error: Error) -> some View {
-        VStack(alignment: .center) {
-            Image(systemName: "exclamationmark.circle")
-                .imageScale(.large)
-                .foregroundStyle(.red)
-            Text(error.localizedDescription)
-        }
-        .frame(maxWidth: .infinity)
+    @ViewBuilder private var preplannedErrorView: some View {
+        Backported.ContentUnavailableView(
+            "Error Fetching Map Areas",
+            systemImage: "exclamationmark.triangle",
+            description: "An error occurred while fetching map areas. Pull to refresh."
+        )
     }
 }
 
@@ -178,4 +221,43 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
+}
+
+enum Backported {
+    /// A content unavailable view that can be used in older operating systems.
+    struct ContentUnavailableView: View {
+        let title: LocalizedStringKey
+        let systemImage: String
+        let description: String?
+        
+        init(_ title: LocalizedStringKey, systemImage name: String, description: String? = nil) {
+            self.title = title
+            self.systemImage = name
+            self.description = description
+        }
+        
+        var body: some View {
+            if #available(iOS 17, *) {
+                SwiftUI.ContentUnavailableView(
+                    title,
+                    systemImage: systemImage,
+                    description: description.map { Text($0) }
+                )
+            } else {
+                VStack(alignment: .center) {
+                    Image(systemName: systemImage)
+                        .imageScale(.large)
+                        .foregroundStyle(.secondary)
+                    Text(title)
+                        .font(.headline)
+                    if let description {
+                        Text(description)
+                            .font(.subheadline)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+    }
 }

@@ -19,17 +19,17 @@ import ArcGIS
 class PreplannedMapModelStatusTests: XCTestCase {
     private typealias Status = PreplannedMapModel.Status
     
-    func testNeedsToBeLoaded() {
-        XCTAssertFalse(Status.loading.needsToBeLoaded)
-        XCTAssertFalse(Status.packaging.needsToBeLoaded)
-        XCTAssertFalse(Status.packaged.needsToBeLoaded)
-        XCTAssertFalse(Status.downloading.needsToBeLoaded)
-        XCTAssertFalse(Status.downloaded.needsToBeLoaded)
-        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).needsToBeLoaded)
-        XCTAssertTrue(Status.notLoaded.needsToBeLoaded)
-        XCTAssertTrue(Status.downloadFailure(CancellationError()).needsToBeLoaded)
-        XCTAssertTrue(Status.loadFailure(CancellationError()).needsToBeLoaded)
-        XCTAssertTrue(Status.packageFailure.needsToBeLoaded)
+    func testCanLoadPreplannedMapArea() {
+        XCTAssertFalse(Status.loading.canLoadPreplannedMapArea)
+        XCTAssertFalse(Status.packaging.canLoadPreplannedMapArea)
+        XCTAssertFalse(Status.packaged.canLoadPreplannedMapArea)
+        XCTAssertFalse(Status.downloading.canLoadPreplannedMapArea)
+        XCTAssertFalse(Status.downloaded.canLoadPreplannedMapArea)
+        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).canLoadPreplannedMapArea)
+        XCTAssertFalse(Status.downloadFailure(CancellationError()).canLoadPreplannedMapArea)
+        XCTAssertTrue(Status.notLoaded.canLoadPreplannedMapArea)
+        XCTAssertTrue(Status.loadFailure(CancellationError()).canLoadPreplannedMapArea)
+        XCTAssertTrue(Status.packageFailure.canLoadPreplannedMapArea)
     }
     
     func testAllowsDownload() {
@@ -56,18 +56,5 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertTrue(Status.downloaded.isDownloaded)
         XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
-    }
-    
-    func testAllowsRemoval() {
-        XCTAssertFalse(Status.notLoaded.allowsRemoval)
-        XCTAssertFalse(Status.loading.allowsRemoval)
-        XCTAssertTrue(Status.loadFailure(CancellationError()).allowsRemoval)
-        XCTAssertFalse(Status.packaging.allowsRemoval)
-        XCTAssertFalse(Status.packaged.allowsRemoval)
-        XCTAssertTrue(Status.packageFailure.allowsRemoval)
-        XCTAssertFalse(Status.downloading.allowsRemoval)
-        XCTAssertTrue(Status.downloaded.allowsRemoval)
-        XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsRemoval)
-        XCTAssertTrue(Status.mmpkLoadFailure(CancellationError()).allowsRemoval)
     }
 }
