@@ -194,4 +194,10 @@ class OfflineMapViewModel: ObservableObject {
         }
         return title(forIndex: index)
     }
+    
+    /// Returns a Boolean value indicating if a proposed on demand map area title
+    /// is unique.
+    func isProposeOnDemandAreaTitleUnique(_ proposedTitle: String) -> Bool {
+        !onDemandMapModels.contains { $0.title == proposedTitle }
+    }
 }

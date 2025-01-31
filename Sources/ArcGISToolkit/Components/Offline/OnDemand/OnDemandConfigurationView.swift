@@ -23,6 +23,9 @@ struct OnDemandConfigurationView: View {
     /// The title of the map area.
     @State private(set) var title: String
     
+    /// A check to perform to validate a proposed title for uniqueness.
+    let titleIsValidCheck: (String) -> Bool
+    
     /// The action to call when creating a configuration is complete.
     let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
     
@@ -85,8 +88,14 @@ struct OnDemandConfigurationView: View {
     private var bottomPane: some View {
         BottomCard(background: Color(uiColor: .systemBackground)) {
             VStack(alignment: .leading) {
-                Text(title)
-                    .font(.headline)
+                HStack {
+                    Text(title)
+                        .font(.headline)
+                        .lineLimit(1)
+                    NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
+                        title = $0
+                    }
+                }
                 
                 HStack {
                     Picker("Level of detail", selection: $maxScale) {
@@ -121,6 +130,54 @@ struct OnDemandConfigurationView: View {
             }
             .padding()
         }
+    }
+}
+
+/// A View that allows renaming of a map area.
+private struct NewTitleButton: View {
+    /// The current title.
+    let title: String
+    
+    /// An validity check for a proposed title.
+    let isValidCheck: (String) -> Bool
+    
+    /// The completion of the rename.
+    let completion: (String) -> Void
+    
+    /// A Boolean value indicating if we are showing the alert to
+    /// rename the title.
+    @State private var alertIsShowing = false
+    
+    /// Temporary storage for a proposed title for use when the user is renaming an area.
+    @State private var proposedNewTitle: String = ""
+    
+    /// A Boolean value indicating if the proposed title is valid.
+    @State private var proposedTitleIsValid = false
+    
+    var body: some View {
+        Button {
+            // Rename the area.
+            proposedNewTitle = title
+            alertIsShowing = true
+        } label: {
+            Image(systemName: "pencil")
+        }
+        .alert("Enter a name", isPresented: $alertIsShowing) {
+            TextField("Enter area name", text: $proposedNewTitle)
+            Button("OK", action: submitNewTitle)
+                .disabled(!proposedTitleIsValid)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("The name for the map area must be unique.")
+        }
+        .onChange(of: proposedNewTitle) {
+            proposedTitleIsValid = isValidCheck($0)
+        }
+    }
+    
+    /// Completes the rename.
+    private func submitNewTitle() {
+        completion(proposedNewTitle)
     }
 }
 
