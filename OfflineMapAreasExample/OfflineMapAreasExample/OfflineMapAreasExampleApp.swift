@@ -34,10 +34,7 @@ extension OfflineMapAreasExampleApp {
     /// Posts a local notification that the job completed with success or failure.
     static func notifyJobCompleted(job: any JobProtocol) {
         guard
-            job.status == .succeeded || job.status == .failed,
-            let job = job as? DownloadPreplannedOfflineMapJob,
-            let preplannedMapArea = job.parameters.preplannedMapArea,
-            let id = preplannedMapArea.portalItem.id
+            job.status == .succeeded || job.status == .failed
         else { return }
         
         let content = UNMutableNotificationContent()
@@ -46,10 +43,10 @@ extension OfflineMapAreasExampleApp {
         let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
         
         content.title = "Download \(jobStatus)"
-        content.body = "The job for \(preplannedMapArea.portalItem.title) has \(jobStatus.lowercased())."
+        content.body = "An offline job has \(jobStatus.lowercased())."
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let identifier = id.rawValue
+        let identifier = UUID().uuidString
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request)
