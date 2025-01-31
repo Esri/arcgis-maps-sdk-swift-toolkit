@@ -330,16 +330,18 @@ struct OnDemandAreaID: RawRepresentable {
 ***REMOVED***init() { rawValue = UUID().uuidString ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand area ID from a raw value String.
+***REMOVED******REMOVED***/ Returns `nil` if an empty string is passed in.
 ***REMOVED******REMOVED***/ - Parameter rawValue: The raw value.
-***REMOVED******REMOVED***/ - Precondition: `!rawValue.isEmpty`
-***REMOVED***init(rawValue: String) {
-***REMOVED******REMOVED***precondition(!rawValue.isEmpty)
+***REMOVED***init?(rawValue: String) {
+***REMOVED******REMOVED***guard !rawValue.isEmpty else { return nil ***REMOVED***
 ***REMOVED******REMOVED***self.rawValue = rawValue
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an on-demand area from a directory where the last path component
+***REMOVED******REMOVED***/ is the ID.
+***REMOVED******REMOVED***/ - Parameter directory: The directory where the last path component is the ID.
 ***REMOVED***init?(from directory: URL) {
 ***REMOVED******REMOVED***let lastPathComponent = directory.deletingPathExtension().lastPathComponent
-***REMOVED******REMOVED***guard !lastPathComponent.isEmpty else { return nil ***REMOVED***
 ***REMOVED******REMOVED***self.init(rawValue: lastPathComponent)
 ***REMOVED***
 ***REMOVED***
