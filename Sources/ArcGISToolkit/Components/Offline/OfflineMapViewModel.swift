@@ -70,6 +70,16 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***hasDownloadedPreplannedMapAreas || hasDownloadedOnDemandMapAreas
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if there are any preplanned map areas.
+***REMOVED***private var hasAnyPreplannedMapAreas: Bool {
+***REMOVED******REMOVED***return switch preplannedMapModels {
+***REMOVED******REMOVED***case .success(let success):
+***REMOVED******REMOVED******REMOVED***!success.isEmpty
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an offline map areas view model for a given web map.
 ***REMOVED******REMOVED***/ - Parameter onlineMap: The web map.
 ***REMOVED******REMOVED***/ - Precondition: `onlineMap.item?.id` is not `nil`.
@@ -87,15 +97,6 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***guard !hasDownloadedMapAreas else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***OfflineManager.shared.removeMapInfo(for: portalItemID)
-***REMOVED***
-***REMOVED***
-***REMOVED***var hasAnyPreplannedMapAreas: Bool {
-***REMOVED******REMOVED***return switch preplannedMapModels {
-***REMOVED******REMOVED***case .success(let success):
-***REMOVED******REMOVED******REMOVED***!success.isEmpty
-***REMOVED******REMOVED***case .failure:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned and on-demand models.
@@ -153,10 +154,16 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***OfflineManager.shared.removeMapInfo(for: portalItemID)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Loads the on-demand map models.
 ***REMOVED***func loadOnDemandMapModels() async {
-***REMOVED******REMOVED***onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID, onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:))
+***REMOVED******REMOVED***onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Adds an on-demand map area, specifying the configuration for the area to take offline.
+***REMOVED******REMOVED***/ - Parameter configuration: The configuration for the area to take offline.
 ***REMOVED***func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
 ***REMOVED******REMOVED***guard mode == .onDemand || mode == .undetermined else { return ***REMOVED***
 ***REMOVED******REMOVED***
