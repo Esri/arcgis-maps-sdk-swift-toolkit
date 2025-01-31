@@ -225,10 +225,16 @@ struct FeatureFormViewInternal: View {
                             for networkSourceMember in networkSourceMembers {
                                 let associatedElement = networkSourceMember.toElement
                                 if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+                                    let title: String
+                                    if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
+                                        title = formDefinitionTitle
+                                    } else {
+                                        title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+                                    }
                                     let newAssociation = UtilityNetworkAssociationFormElementView.Association(
                                         description: nil,
                                         linkDestination: arcGISFeature,
-                                        name: "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+                                        name: title
                                     )
                                     associations.append(newAssociation)
                                 }
