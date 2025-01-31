@@ -68,9 +68,7 @@ struct PreplannedListItemView: View {
         }
         .contentShape(.rect)
         .onTapGesture {
-            if model.status.isDownloaded {
-                metadataViewIsPresented = true
-            }
+            metadataViewIsPresented = true
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
