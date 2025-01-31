@@ -102,7 +102,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             onDemandMapAreaID: areaID
         )
         
-        Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue, privacy: .public)")
+        Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
         observeJob(job)
     }
     
