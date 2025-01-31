@@ -250,8 +250,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***_ = await model.job?.result
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
-***REMOVED******REMOVED***try? await Task.yield(timeout: 1.0) { @MainActor in
-***REMOVED******REMOVED******REMOVED***statuses.count == 5
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
 ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
@@ -313,8 +314,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***_ = await model.job?.result
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
-***REMOVED******REMOVED***try? await Task.yield(timeout: 1.0) { @MainActor in
-***REMOVED******REMOVED******REMOVED***statuses.count == 5
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
 ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
@@ -362,8 +364,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***_ = await model.job?.result
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses after download.
-***REMOVED******REMOVED***try? await Task.yield(timeout: 1.0) { @MainActor in
-***REMOVED******REMOVED******REMOVED***statuses.count == 5
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
 ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
@@ -374,8 +377,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses after remove.
-***REMOVED******REMOVED***try? await Task.yield(timeout: 1.0) { @MainActor in
-***REMOVED******REMOVED******REMOVED***statuses.count == 8
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .packaged
 ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
