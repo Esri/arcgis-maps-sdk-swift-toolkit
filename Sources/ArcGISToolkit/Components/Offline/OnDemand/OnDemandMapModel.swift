@@ -24,7 +24,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***let configuration: OnDemandMapAreaConfiguration?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package directory URL.
-***REMOVED***let mmpkDirectoryURL: URL
+***REMOVED***private let mmpkDirectoryURL: URL
 ***REMOVED***
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***private let offlineMapTask: OfflineMapTask?
@@ -131,6 +131,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tries to load a mobile map package and if successful, then updates state
 ***REMOVED******REMOVED***/ associated with it.
+***REMOVED******REMOVED***/ - Parameter mmpk: The mobile map package.
 ***REMOVED***private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await mmpk.load()

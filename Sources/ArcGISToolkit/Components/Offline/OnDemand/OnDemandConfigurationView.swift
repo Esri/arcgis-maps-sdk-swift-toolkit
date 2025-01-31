@@ -36,7 +36,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
-***REMOVED***var downloadIsDisabled: Bool {
+***REMOVED***private var downloadIsDisabled: Bool {
 ***REMOVED******REMOVED***visibleArea == nil
 ***REMOVED***
 ***REMOVED***
@@ -76,7 +76,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0.extent ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on mapview
+***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on map view.
 ***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
