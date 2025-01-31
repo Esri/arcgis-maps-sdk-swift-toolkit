@@ -70,6 +70,16 @@ class OfflineMapViewModel: ObservableObject {
         hasDownloadedPreplannedMapAreas || hasDownloadedOnDemandMapAreas
     }
     
+    /// A Boolean value indicating if there are any preplanned map areas.
+    private var hasAnyPreplannedMapAreas: Bool {
+        return switch preplannedMapModels {
+        case .success(let success):
+            !success.isEmpty
+        case .failure:
+            false
+        }
+    }
+    
     /// Creates an offline map areas view model for a given web map.
     /// - Parameter onlineMap: The web map.
     /// - Precondition: `onlineMap.item?.id` is not `nil`.
@@ -87,15 +97,6 @@ class OfflineMapViewModel: ObservableObject {
         guard !hasDownloadedMapAreas else { return }
         
         OfflineManager.shared.removeMapInfo(for: portalItemID)
-    }
-    
-    var hasAnyPreplannedMapAreas: Bool {
-        return switch preplannedMapModels {
-        case .success(let success):
-            !success.isEmpty
-        case .failure:
-            false
-        }
     }
     
     /// Loads the preplanned and on-demand models.
@@ -153,10 +154,16 @@ class OfflineMapViewModel: ObservableObject {
         OfflineManager.shared.removeMapInfo(for: portalItemID)
     }
     
+    /// Loads the on-demand map models.
     func loadOnDemandMapModels() async {
-        onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(portalItemID: portalItemID, onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:))
+        onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(
+            portalItemID: portalItemID,
+            onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:)
+        )
     }
     
+    /// Adds an on-demand map area, specifying the configuration for the area to take offline.
+    /// - Parameter configuration: The configuration for the area to take offline.
     func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
         guard mode == .onDemand || mode == .undetermined else { return }
         
