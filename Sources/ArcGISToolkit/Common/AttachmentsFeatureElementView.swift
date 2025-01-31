@@ -73,7 +73,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard case .notInitialized = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
@@ -93,15 +92,20 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isShowingAttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If showing a form element, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED*** else if !attachmentModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Add some top padding since the attachments are too close
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to the divider line.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: featureElement.displayTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disclosureGroupPadding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** header: {
@@ -161,20 +165,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***private var attachmentHeader: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: featureElement.displayTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if isEditable,
-***REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentsFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element, onAdd: onAdd)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
