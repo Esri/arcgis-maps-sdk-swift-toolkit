@@ -250,8 +250,9 @@ class PreplannedMapModelTests: XCTestCase {
         _ = await model.job?.result
         
         // Verify statuses.
-        try? await Task.yield(timeout: 1.0) { @MainActor in
-            statuses.count == 5
+        // First give time for final status to come in.
+        try? await Task.yield(timeout: 0.1) { @MainActor in
+            statuses.last == .downloaded
         }
         XCTAssertEqual(
             statuses,
@@ -313,8 +314,9 @@ class PreplannedMapModelTests: XCTestCase {
         _ = await model.job?.result
         
         // Verify statuses.
-        try? await Task.yield(timeout: 1.0) { @MainActor in
-            statuses.count == 5
+        // First give time for final status to come in.
+        try? await Task.yield(timeout: 0.1) { @MainActor in
+            statuses.last == .downloaded
         }
         XCTAssertEqual(
             statuses,
@@ -362,8 +364,9 @@ class PreplannedMapModelTests: XCTestCase {
         _ = await model.job?.result
         
         // Verify statuses after download.
-        try? await Task.yield(timeout: 1.0) { @MainActor in
-            statuses.count == 5
+        // First give time for final status to come in.
+        try? await Task.yield(timeout: 0.1) { @MainActor in
+            statuses.last == .downloaded
         }
         XCTAssertEqual(
             statuses,
@@ -374,8 +377,9 @@ class PreplannedMapModelTests: XCTestCase {
         model.removeDownloadedPreplannedMapArea()
         
         // Verify statuses after remove.
-        try? await Task.yield(timeout: 1.0) { @MainActor in
-            statuses.count == 8
+        // First give time for final status to come in.
+        try? await Task.yield(timeout: 0.1) { @MainActor in
+            statuses.last == .packaged
         }
         XCTAssertEqual(
             statuses,
