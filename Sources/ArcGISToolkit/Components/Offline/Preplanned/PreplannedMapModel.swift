@@ -76,13 +76,38 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
+***REMOVED***func load() async {
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for preplanned area \(preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for preplanned area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-***REMOVED******REMOVED******REMOVED***Task { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***await self.loadAndUpdateMobileMapPackage(mmpk: mmpk)
+***REMOVED*** else if status.canLoadPreplannedMapArea {
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Loading preplanned map area for \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***await loadPreplannedMapArea()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func loadPreplannedMapArea() async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
+***REMOVED******REMOVED******REMOVED***status = .loading
+***REMOVED******REMOVED******REMOVED***try await preplannedMapArea.retryLoad()
+***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
+***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the area loads, then you know for certain the status is complete.
+***REMOVED******REMOVED******REMOVED***status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
+***REMOVED*** catch MappingError.packagingNotComplete {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Load will throw an `MappingError.packagingNotComplete` error if not complete,
+***REMOVED******REMOVED******REMOVED******REMOVED*** this case is not a normal load failure.
+***REMOVED******REMOVED******REMOVED***status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Normal load failure.
+***REMOVED******REMOVED******REMOVED***status = .loadFailure(error)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -101,34 +126,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***directorySize = 0
 ***REMOVED******REMOVED******REMOVED***map = nil
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
-***REMOVED***func load() async {
-***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let loadStatus: Status
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
-***REMOVED******REMOVED******REMOVED***status = .loading
-***REMOVED******REMOVED******REMOVED***try await preplannedMapArea.retryLoad()
-***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
-***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
-***REMOVED******REMOVED******REMOVED******REMOVED*** If the area loads, then you know for certain the status is complete.
-***REMOVED******REMOVED******REMOVED***loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
-***REMOVED*** catch MappingError.packagingNotComplete {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Load will throw an `MappingError.packagingNotComplete` error if not complete,
-***REMOVED******REMOVED******REMOVED******REMOVED*** this case is not a normal load failure.
-***REMOVED******REMOVED******REMOVED***loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Normal load failure.
-***REMOVED******REMOVED******REMOVED***loadStatus = .loadFailure(error)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Only update actual status if still can update based on current status.
-***REMOVED******REMOVED******REMOVED*** Because current status may have progressed beyond (ie to downloaded).
-***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
-***REMOVED******REMOVED***status = loadStatus
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Look up the job associated with this preplanned map model.
@@ -242,13 +239,13 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
-***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
-***REMOVED******REMOVED***var needsToBeLoaded: Bool {
+***REMOVED******REMOVED******REMOVED***/ where it can load the preplanned map area.
+***REMOVED******REMOVED***var canLoadPreplannedMapArea: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***case .notLoaded, .loadFailure, .packageFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure, .downloadFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
