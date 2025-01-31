@@ -76,13 +76,38 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
-        
+    }
+    
+    /// Loads the preplanned map area and updates the status.
+    func load() async {
         if let foundJob = lookupDownloadJob() {
-            Logger.offlineManager.debug("Found executing job for preplanned area \(preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Found executing job for preplanned area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
-            Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-            Task { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
+            Logger.offlineManager.debug("Found MMPK for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            await self.loadAndUpdateMobileMapPackage(mmpk: mmpk)
+        } else if status.canLoadPreplannedMapArea {
+            Logger.offlineManager.debug("Loading preplanned map area for \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            await loadPreplannedMapArea()
+        }
+    }
+    
+    private func loadPreplannedMapArea() async {
+        do {
+            // Load preplanned map area to obtain packaging status.
+            status = .loading
+            try await preplannedMapArea.retryLoad()
+            // Note: Packaging status is `nil` for compatibility with
+            // legacy webmaps that have incomplete metadata.
+            // If the area loads, then you know for certain the status is complete.
+            status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
+        } catch MappingError.packagingNotComplete {
+            // Load will throw an `MappingError.packagingNotComplete` error if not complete,
+            // this case is not a normal load failure.
+            status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
+        } catch {
+            // Normal load failure.
+            status = .loadFailure(error)
         }
     }
     
@@ -101,34 +126,6 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             directorySize = 0
             map = nil
         }
-    }
-    
-    /// Loads the preplanned map area and updates the status.
-    func load() async {
-        guard status.needsToBeLoaded else { return }
-        
-        let loadStatus: Status
-        do {
-            // Load preplanned map area to obtain packaging status.
-            status = .loading
-            try await preplannedMapArea.retryLoad()
-            // Note: Packaging status is `nil` for compatibility with
-            // legacy webmaps that have incomplete metadata.
-            // If the area loads, then you know for certain the status is complete.
-            loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
-        } catch MappingError.packagingNotComplete {
-            // Load will throw an `MappingError.packagingNotComplete` error if not complete,
-            // this case is not a normal load failure.
-            loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
-        } catch {
-            // Normal load failure.
-            loadStatus = .loadFailure(error)
-        }
-        
-        // Only update actual status if still can update based on current status.
-        // Because current status may have progressed beyond (ie to downloaded).
-        guard status.needsToBeLoaded else { return }
-        status = loadStatus
     }
     
     /// Look up the job associated with this preplanned map model.
@@ -242,13 +239,13 @@ extension PreplannedMapModel {
         case mmpkLoadFailure(Error)
         
         /// A Boolean value indicating whether the model is in a state
-        /// where it needs to be loaded or reloaded.
-        var needsToBeLoaded: Bool {
+        /// where it can load the preplanned map area.
+        var canLoadPreplannedMapArea: Bool {
             switch self {
-            case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure:
-                false
-            default:
+            case .notLoaded, .loadFailure, .packageFailure:
                 true
+            case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure, .downloadFailure:
+                false
             }
         }
         
