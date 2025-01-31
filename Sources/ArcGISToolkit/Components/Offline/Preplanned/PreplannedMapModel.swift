@@ -49,7 +49,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***@Published private(set) var job: DownloadPreplannedOfflineMapJob?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The combined status of the preplanned map area.
-***REMOVED***@Published private(set) var status: Status = .notLoaded
+***REMOVED***@Published private(set) var status: Status = .notLoaded {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***let statusString = "\(newValue)"
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Setting status to \(statusString) for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The first map from the mobile map package.
 ***REMOVED***@Published private(set) var map: Map?
@@ -77,7 +82,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-***REMOVED******REMOVED******REMOVED***Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Task { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -101,6 +106,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
 ***REMOVED***func load() async {
 ***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let loadStatus: Status
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
 ***REMOVED******REMOVED******REMOVED***status = .loading
@@ -108,15 +115,20 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
 ***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If the area loads, then you know for certain the status is complete.
-***REMOVED******REMOVED******REMOVED***status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
+***REMOVED******REMOVED******REMOVED***loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
 ***REMOVED*** catch MappingError.packagingNotComplete {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load will throw an `MappingError.packagingNotComplete` error if not complete,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** this case is not a normal load failure.
-***REMOVED******REMOVED******REMOVED***status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
+***REMOVED******REMOVED******REMOVED***loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Normal load failure.
-***REMOVED******REMOVED******REMOVED***status = .loadFailure(error)
+***REMOVED******REMOVED******REMOVED***loadStatus = .loadFailure(error)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Only update actual status if still can update based on current status.
+***REMOVED******REMOVED******REMOVED*** Because current status may have progressed beyond (ie to downloaded).
+***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
+***REMOVED******REMOVED***status = loadStatus
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Look up the job associated with this preplanned map model.
