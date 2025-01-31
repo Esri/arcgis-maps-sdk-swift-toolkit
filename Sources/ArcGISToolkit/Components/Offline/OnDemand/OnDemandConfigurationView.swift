@@ -23,6 +23,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The title of the map area.
 ***REMOVED***@State private(set) var title: String
 ***REMOVED***
+***REMOVED******REMOVED***/ A check to perform to validate a proposed title for uniqueness.
+***REMOVED***let titleIsValidCheck: (String) -> Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to call when creating a configuration is complete.
 ***REMOVED***let onCompleteAction: (OnDemandMapAreaConfiguration) -> Void
 ***REMOVED***
@@ -85,8 +88,14 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***private var bottomPane: some View {
 ***REMOVED******REMOVED***BottomCard(background: Color(uiColor: .systemBackground)) {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = $0
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Level of detail", selection: $maxScale) {
@@ -121,6 +130,54 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A View that allows renaming of a map area.
+private struct NewTitleButton: View {
+***REMOVED******REMOVED***/ The current title.
+***REMOVED***let title: String
+***REMOVED***
+***REMOVED******REMOVED***/ An validity check for a proposed title.
+***REMOVED***let isValidCheck: (String) -> Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The completion of the rename.
+***REMOVED***let completion: (String) -> Void
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if we are showing the alert to
+***REMOVED******REMOVED***/ rename the title.
+***REMOVED***@State private var alertIsShowing = false
+***REMOVED***
+***REMOVED******REMOVED***/ Temporary storage for a proposed title for use when the user is renaming an area.
+***REMOVED***@State private var proposedNewTitle: String = ""
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if the proposed title is valid.
+***REMOVED***@State private var proposedTitleIsValid = false
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rename the area.
+***REMOVED******REMOVED******REMOVED***proposedNewTitle = title
+***REMOVED******REMOVED******REMOVED***alertIsShowing = true
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "pencil")
+***REMOVED***
+***REMOVED******REMOVED***.alert("Enter a name", isPresented: $alertIsShowing) {
+***REMOVED******REMOVED******REMOVED***TextField("Enter area name", text: $proposedNewTitle)
+***REMOVED******REMOVED******REMOVED***Button("OK", action: submitNewTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!proposedTitleIsValid)
+***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {***REMOVED***
+***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text("The name for the map area must be unique.")
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: proposedNewTitle) {
+***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck($0)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Completes the rename.
+***REMOVED***private func submitNewTitle() {
+***REMOVED******REMOVED***completion(proposedNewTitle)
 ***REMOVED***
 ***REMOVED***
 

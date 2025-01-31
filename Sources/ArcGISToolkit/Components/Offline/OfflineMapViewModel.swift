@@ -195,3 +195,9 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***return title(forIndex: index)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Returns a Boolean value indicating if a proposed on demand map area title
+***REMOVED******REMOVED***/ is unique.
+***REMOVED***func isProposeOnDemandAreaTitleUnique(_ proposedTitle: String) -> Bool {
+***REMOVED******REMOVED***!onDemandMapModels.contains { $0.title == proposedTitle ***REMOVED***
+***REMOVED***
+***REMOVED***
