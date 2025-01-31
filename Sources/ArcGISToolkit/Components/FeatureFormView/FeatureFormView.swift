@@ -102,10 +102,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty && headerVisibility != .hidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get rid of background color.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Make header align with the leading edge of the Form.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init()) ***REMOVED*** Make header align with the leading edge of the Form.
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
@@ -162,7 +160,7 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***case let element as GroupFormElement:
 ***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { internalMakeElement($0) ***REMOVED***)
 ***REMOVED******REMOVED***case let element as TextFormElement:
-***REMOVED******REMOVED******REMOVED***makeTextElement(element)
+***REMOVED******REMOVED******REMOVED***TextFormElementView(element: element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -175,7 +173,7 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as TextFormElement:
-***REMOVED******REMOVED******REMOVED***makeTextElement(element)
+***REMOVED******REMOVED******REMOVED***TextFormElementView(element: element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -187,12 +185,6 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput) {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Makes UI for a text form element including a divider beneath it.
-***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
-***REMOVED***@ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
-***REMOVED******REMOVED***TextFormElementView(element: element)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The progress view to be shown while initial expression evaluation is running.
