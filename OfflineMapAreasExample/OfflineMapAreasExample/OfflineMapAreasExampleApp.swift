@@ -34,10 +34,7 @@ extension OfflineMapAreasExampleApp {
 ***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
 ***REMOVED***static func notifyJobCompleted(job: any JobProtocol) {
 ***REMOVED******REMOVED***guard
-***REMOVED******REMOVED******REMOVED***job.status == .succeeded || job.status == .failed,
-***REMOVED******REMOVED******REMOVED***let job = job as? DownloadPreplannedOfflineMapJob,
-***REMOVED******REMOVED******REMOVED***let preplannedMapArea = job.parameters.preplannedMapArea,
-***REMOVED******REMOVED******REMOVED***let id = preplannedMapArea.portalItem.id
+***REMOVED******REMOVED******REMOVED***job.status == .succeeded || job.status == .failed
 ***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let content = UNMutableNotificationContent()
@@ -46,10 +43,10 @@ extension OfflineMapAreasExampleApp {
 ***REMOVED******REMOVED***let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***content.title = "Download \(jobStatus)"
-***REMOVED******REMOVED***content.body = "The job for \(preplannedMapArea.portalItem.title) has \(jobStatus.lowercased())."
+***REMOVED******REMOVED***content.body = "An offline job has \(jobStatus.lowercased())."
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-***REMOVED******REMOVED***let identifier = id.rawValue
+***REMOVED******REMOVED***let identifier = UUID().uuidString
 ***REMOVED******REMOVED***let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UNUserNotificationCenter.current().add(request)
