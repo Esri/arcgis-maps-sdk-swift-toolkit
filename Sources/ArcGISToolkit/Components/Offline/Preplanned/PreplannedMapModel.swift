@@ -52,7 +52,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var status: Status = .notLoaded {
         willSet {
             let statusString = "\(newValue)"
-            Logger.offlineManager.debug("Setting status to \(statusString) for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Setting status to \(statusString, privacy: .public) for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
         }
     }
     
