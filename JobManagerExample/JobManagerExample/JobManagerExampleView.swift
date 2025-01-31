@@ -221,7 +221,7 @@ private struct JobView: View {
             }
         }
         .onReceive(job.messages) {
-            Logger.jobManagerExample.debug("Job Message: \($0.text, privacy: .public)")
+            Logger.jobManagerExample.debug("Job Message: \($0.text, privacy: .private)")
             message = $0
         }
     }

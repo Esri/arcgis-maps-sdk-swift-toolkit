@@ -130,6 +130,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         description = item.description
         mmpkDirectoryURL = mmpkURL
         offlineMapTask = nil
+        Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
         await loadAndUpdateMobileMapPackage(mmpk: mmpk)
     }
     
