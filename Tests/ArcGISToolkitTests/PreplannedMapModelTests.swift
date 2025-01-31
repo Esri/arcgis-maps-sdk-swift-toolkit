@@ -199,7 +199,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
 ***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***XCTAssertEqual(model.status, .downloading)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Cancel the job to be a good citizen.
@@ -267,11 +267,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
 ***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Verify statuses.
-***REMOVED******REMOVED***try? await Task.yield(timeout: 1.0) { @MainActor in
-***REMOVED******REMOVED******REMOVED***model2.status == .downloaded
-***REMOVED***
+***REMOVED******REMOVED***await model2.load()
 ***REMOVED******REMOVED***XCTAssertEqual(model2.status, .downloaded)
 ***REMOVED***
 ***REMOVED***
