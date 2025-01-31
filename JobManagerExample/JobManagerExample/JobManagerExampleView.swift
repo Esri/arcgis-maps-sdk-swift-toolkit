@@ -221,7 +221,7 @@ private struct JobView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onReceive(job.messages) {
-***REMOVED******REMOVED******REMOVED***Logger.jobManagerExample.debug("Job Message: \($0.text, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.jobManagerExample.debug("Job Message: \($0.text)")
 ***REMOVED******REMOVED******REMOVED***message = $0
 ***REMOVED***
 ***REMOVED***

@@ -165,6 +165,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testStartupDownloadingStatus() async throws {
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
@@ -172,7 +173,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let mmpkDirectory = URL.documentsDirectory
 ***REMOVED******REMOVED******REMOVED***.appending(
 ***REMOVED******REMOVED******REMOVED******REMOVED***components: "OfflineMapAreas",
-***REMOVED******REMOVED******REMOVED******REMOVED***"\(portalItem.id!)",
+***REMOVED******REMOVED******REMOVED******REMOVED***"\(portalItemID)",
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Preplanned",
 ***REMOVED******REMOVED******REMOVED******REMOVED***"\(areaID)",
 ***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
@@ -194,11 +195,11 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let model = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
-***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***XCTAssertEqual(model.status, .downloading)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Cancel the job to be a good citizen.
@@ -208,6 +209,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testDownloadStatuses() async throws {
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
@@ -216,9 +218,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let model = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
-***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
@@ -233,6 +235,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.removeDuplicates()
 ***REMOVED******REMOVED******REMOVED***.sink { value in
 ***REMOVED******REMOVED******REMOVED******REMOVED***statuses.append(value)
 ***REMOVED******REMOVED***
@@ -246,31 +249,33 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Wait for job to finish.
 ***REMOVED******REMOVED***_ = await model.job?.result
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Give the final status some time to be updated.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 1_000_000)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
+***REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloaded]
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now test that creating a new matching model will have the status set to
-***REMOVED******REMOVED******REMOVED*** downloaded as there is a mmpk downloaded at the appropriate location.
+***REMOVED******REMOVED******REMOVED*** downloaded as there is an mmpk downloaded at the appropriate location.
 ***REMOVED******REMOVED***let model2 = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
-***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***await model2.load()
 ***REMOVED******REMOVED***XCTAssertEqual(model2.status, .downloaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testLoadMobileMapPackage() async throws {
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
@@ -279,9 +284,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let model = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
-***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
@@ -296,6 +301,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***var subscriptions: Set<AnyCancellable> = []
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.removeDuplicates()
 ***REMOVED******REMOVED******REMOVED***.sink { statuses.append($0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED******REMOVED***
@@ -307,17 +313,18 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Wait for job to finish.
 ***REMOVED******REMOVED***_ = await model.job?.result
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Give the final status some time to be updated.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 1_000_000)
+***REMOVED******REMOVED******REMOVED*** Verify statuses.
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
+***REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***statuses,
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloaded]
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that mobile map package can be loaded.
 ***REMOVED******REMOVED***XCTAssertNotNil(model.map)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Verify statuses.
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded]
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -326,6 +333,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED***id: .init("acc027394bc84c2fb04d1ed317aac674")!
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
@@ -334,15 +342,16 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let model = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
-***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var statuses: [PreplannedMapModel.Status] = []
 ***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
 ***REMOVED******REMOVED***model.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.removeDuplicates()
 ***REMOVED******REMOVED******REMOVED***.sink { statuses.append($0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED******REMOVED***
@@ -354,16 +363,27 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Wait for job to finish.
 ***REMOVED******REMOVED***_ = await model.job?.result
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify statuses after download.
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
+***REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***statuses,
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloaded]
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clean up folder.
 ***REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Give the final status some time to be updated.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 1_000_000)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Verify statuses.
+***REMOVED******REMOVED******REMOVED*** Verify statuses after remove.
+***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED******REMOVED***statuses.last == .packaged
+***REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloading, .downloaded, .notLoaded, .loading, .packaged]
+***REMOVED******REMOVED******REMOVED***[.notLoaded, .loading, .packaged, .downloading, .downloaded, .notLoaded, .loading, .packaged]
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -373,6 +393,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED***id: .init("acc027394bc84c2fb04d1ed317aac674")!
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first { $0.title == "Country Commons Area" ***REMOVED***)
@@ -381,9 +402,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let model = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
-***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify description does not contain HTML tags.
@@ -421,7 +442,7 @@ private extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***mapArea: mapArea,
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("test-item-id")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("test-preplanned-map-area-id")!,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -27,7 +27,7 @@ extension URL {
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
 ***REMOVED***static func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
-***REMOVED******REMOVED***return offlineManagerDirectory().appending(path: "\(portalItemID)/")
+***REMOVED******REMOVED***return offlineManagerDirectory().appending(path: portalItemID.rawValue)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
@@ -43,7 +43,24 @@ extension URL {
 ***REMOVED******REMOVED***var url = portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(component: "Preplanned/")
 ***REMOVED******REMOVED***if let preplannedMapAreaID {
-***REMOVED******REMOVED******REMOVED***url = url.appending(component: "\(preplannedMapAreaID)/")
+***REMOVED******REMOVED******REMOVED***url = url.appending(component: preplannedMapAreaID.rawValue)
+***REMOVED***
+***REMOVED******REMOVED***return url
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the directory for a specific on-demand map area. Or if `nil` is passed for the
+***REMOVED******REMOVED***/ map area ID, then the on-demand directory.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - onDemandMapAreaID: The unique ID of the on-demand map area.
+***REMOVED***static func onDemandDirectory(
+***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***onDemandMapAreaID: OnDemandAreaID? = nil
+***REMOVED***) -> URL {
+***REMOVED******REMOVED***var url = portalItemDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED***.appending(component: "OnDemand/")
+***REMOVED******REMOVED***if let onDemandMapAreaID {
+***REMOVED******REMOVED******REMOVED***url = url.appending(component: onDemandMapAreaID.rawValue)
 ***REMOVED***
 ***REMOVED******REMOVED***return url
 ***REMOVED***
@@ -55,6 +72,6 @@ extension URL {
 ***REMOVED***static func pendingMapInfoDirectory(
 ***REMOVED******REMOVED***forPortalItem portalItemID: Item.ID
 ***REMOVED***) -> URL {
-***REMOVED******REMOVED***return .cachesDirectory.appending(components: "PendingDownloads", "\(portalItemID)/")
+***REMOVED******REMOVED***return .cachesDirectory.appending(components: "PendingDownloads", portalItemID.rawValue)
 ***REMOVED***
 ***REMOVED***

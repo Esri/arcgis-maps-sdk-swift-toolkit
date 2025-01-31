@@ -103,7 +103,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var titleView: some View {
 ***REMOVED******REMOVED***Text(model.preplannedMapArea.title)
 ***REMOVED******REMOVED******REMOVED***.font(.body)
-***REMOVED******REMOVED******REMOVED***.lineLimit(2)
+***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
@@ -224,7 +224,7 @@ private extension PreplannedListItemView.DownloadState {
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
 ***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***selectedMap: .constant(nil)
 ***REMOVED***)
