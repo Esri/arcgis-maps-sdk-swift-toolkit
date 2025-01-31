@@ -78,20 +78,26 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         )
     }
     
-    /// Loads the preplanned map area and updates the status.
+    /// Depending on the state, this either:
+    /// - observes an in-flight job
+    /// - looks up the mobile map package if it exists on disk
+    /// - loads the pre-planned map area
     func load() async {
-        if let foundJob = lookupDownloadJob() {
+        if job == nil, let foundJob = lookupDownloadJob() {
             Logger.offlineManager.debug("Found executing job for preplanned area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
             observeJob(foundJob)
-        } else if let mmpk = lookupMobileMapPackage() {
+        } else if mobileMapPackage == nil, let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
             await self.loadAndUpdateMobileMapPackage(mmpk: mmpk)
         } else if status.canLoadPreplannedMapArea {
             Logger.offlineManager.debug("Loading preplanned map area for \(self.preplannedMapAreaID.rawValue, privacy: .public)")
             await loadPreplannedMapArea()
+        } else {
+            Logger.offlineManager.debug("Already loaded for preplanned map area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
         }
     }
     
+    /// Loads the preplanned map area.
     private func loadPreplannedMapArea() async {
         do {
             // Load preplanned map area to obtain packaging status.
