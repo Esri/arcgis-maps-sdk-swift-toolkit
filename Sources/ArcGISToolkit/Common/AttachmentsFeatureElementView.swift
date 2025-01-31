@@ -73,7 +73,6 @@ struct AttachmentsFeatureElementView: View {
                 ProgressView()
                     .padding()
                     .task {
-                        guard case .notInitialized = attachmentModelsState else { return }
                         attachmentModelsState = .initializing
                         
                         let attachments = (try? await featureElement.featureAttachments) ?? []
@@ -93,15 +92,20 @@ struct AttachmentsFeatureElementView: View {
                 if isShowingAttachmentsFormElement {
                     // If showing a form element, don't show attachments in
                     // a disclosure group, but also ALWAYS show
-                        attachmentBody(attachmentModels: attachmentModels)
+                    // the list of attachments, even if there are none.
+                    attachmentBody(attachmentModels: attachmentModels)
                 } else if !attachmentModels.isEmpty {
                     DisclosureGroup(isExpanded: $isExpanded) {
                         attachmentBody(attachmentModels: attachmentModels)
+                            // Add some top padding since the attachments are too close
+                            // to the divider line.
+                            .padding(.top)
                     } label: {
-                        attachmentHeader
-                            .catalystPadding(4)
+                        PopupElementHeader(
+                            title: featureElement.displayTitle,
+                            description: featureElement.description
+                        )
                     }
-                    .disclosureGroupPadding()
                 }
             }
         } header: {
@@ -161,20 +165,6 @@ struct AttachmentsFeatureElementView: View {
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
                 }
-            }
-        }
-    }
-    
-    private var attachmentHeader: some View {
-        HStack {
-            PopupElementHeader(
-                title: featureElement.displayTitle,
-                description: featureElement.description
-            )
-            Spacer()
-            if isEditable,
-               let element = featureElement as? AttachmentsFormElement {
-                AttachmentImportMenu(element: element, onAdd: onAdd)
             }
         }
     }

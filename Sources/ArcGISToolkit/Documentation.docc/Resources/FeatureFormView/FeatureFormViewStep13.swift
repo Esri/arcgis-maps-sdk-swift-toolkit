@@ -46,8 +46,6 @@ struct FeatureFormExampleView: View {
                     ) {
                         if let featureForm = model.featureForm {
                             FeatureFormView(featureForm: featureForm)
-                                .padding(.horizontal)
-                                .padding(.top, 16)
                         }
                     }
             }
