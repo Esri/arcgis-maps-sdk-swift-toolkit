@@ -137,7 +137,6 @@ extension UtilityNetworkAssociationFormElementView {
                     }
                     .bold()
                 }
-                .disclosureGroupStyle(.leadingEdge(arrowColor: .secondary))
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
