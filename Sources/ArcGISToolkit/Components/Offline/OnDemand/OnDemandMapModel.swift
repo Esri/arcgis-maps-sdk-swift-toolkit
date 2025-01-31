@@ -102,7 +102,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
 ***REMOVED******REMOVED***observeJob(job)
 ***REMOVED***
 ***REMOVED***
