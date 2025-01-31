@@ -199,7 +199,7 @@ class PreplannedMapModelTests: XCTestCase {
             preplannedMapAreaID: areaID,
             onRemoveDownload: {}
         )
-        
+        await model.load()
         XCTAssertEqual(model.status, .downloading)
         
         // Cancel the job to be a good citizen.
@@ -267,11 +267,7 @@ class PreplannedMapModelTests: XCTestCase {
             preplannedMapAreaID: areaID,
             onRemoveDownload: {}
         )
-        
-        // Verify statuses.
-        try? await Task.yield(timeout: 1.0) { @MainActor in
-            model2.status == .downloaded
-        }
+        await model2.load()
         XCTAssertEqual(model2.status, .downloaded)
     }
     
