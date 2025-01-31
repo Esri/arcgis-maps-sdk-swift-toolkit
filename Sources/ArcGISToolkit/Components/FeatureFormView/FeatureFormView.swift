@@ -102,10 +102,8 @@ public struct FeatureFormView: View {
             Form {
                 if !title.isEmpty && headerVisibility != .hidden {
                     FormHeader(title: title)
-                        // Get rid of background color.
                         .listRowBackground(Color.clear)
-                        // Make header align with the leading edge of the Form.
-                        .listRowInsets(.init())
+                        .listRowInsets(.init()) // Make header align with the leading edge of the Form.
                 }
                 
                 ForEach(model.visibleElements, id: \.self) { element in
@@ -162,7 +160,7 @@ extension FeatureFormView {
         case let element as GroupFormElement:
             GroupView(element: element, viewCreator: { internalMakeElement($0) })
         case let element as TextFormElement:
-            makeTextElement(element)
+            TextFormElementView(element: element)
         default:
             EmptyView()
         }
@@ -175,7 +173,7 @@ extension FeatureFormView {
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as TextFormElement:
-            makeTextElement(element)
+            TextFormElementView(element: element)
         default:
             EmptyView()
         }
@@ -187,12 +185,6 @@ extension FeatureFormView {
         if !(element.input is UnsupportedFormInput) {
             InputWrapper(element: element)
         }
-    }
-    
-    /// Makes UI for a text form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
-        TextFormElementView(element: element)
     }
     
     /// The progress view to be shown while initial expression evaluation is running.
