@@ -52,7 +52,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***@Published private(set) var status: Status = .notLoaded {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***let statusString = "\(newValue)"
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Setting status to \(statusString) for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Setting status to \(statusString) for area \(self.preplannedMapAreaID.rawValue)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -84,16 +84,16 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ - loads the pre-planned map area
 ***REMOVED***func load() async {
 ***REMOVED******REMOVED***if job == nil, let foundJob = lookupDownloadJob() {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for preplanned area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for preplanned area \(self.preplannedMapAreaID.rawValue)")
 ***REMOVED******REMOVED******REMOVED***observeJob(foundJob)
 ***REMOVED*** else if mobileMapPackage == nil, let mmpk = lookupMobileMapPackage() {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Found MMPK for area \(self.preplannedMapAreaID.rawValue)")
 ***REMOVED******REMOVED******REMOVED***await self.loadAndUpdateMobileMapPackage(mmpk: mmpk)
 ***REMOVED*** else if status.canLoadPreplannedMapArea {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Loading preplanned map area for \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Loading preplanned map area for \(self.preplannedMapAreaID.rawValue)")
 ***REMOVED******REMOVED******REMOVED***await loadPreplannedMapArea()
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Already loaded for preplanned map area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Already loaded for preplanned map area \(self.preplannedMapAreaID.rawValue)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

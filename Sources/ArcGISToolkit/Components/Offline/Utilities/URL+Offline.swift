@@ -55,12 +55,12 @@ extension URL {
 ***REMOVED******REMOVED***/   - onDemandMapAreaID: The unique ID of the on-demand map area.
 ***REMOVED***static func onDemandDirectory(
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***onDemandMapAreaID: String? = nil
+***REMOVED******REMOVED***onDemandMapAreaID: OnDemandAreaID? = nil
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***var url = portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(component: "OnDemand/")
 ***REMOVED******REMOVED***if let onDemandMapAreaID {
-***REMOVED******REMOVED******REMOVED***url = url.appending(component: onDemandMapAreaID)
+***REMOVED******REMOVED******REMOVED***url = url.appending(component: onDemandMapAreaID.rawValue)
 ***REMOVED***
 ***REMOVED******REMOVED***return url
 ***REMOVED***

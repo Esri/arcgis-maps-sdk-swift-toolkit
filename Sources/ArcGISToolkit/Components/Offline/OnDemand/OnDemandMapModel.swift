@@ -33,7 +33,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***private let portalItemID: Item.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The unique ID of the map area.
-***REMOVED***let areaID: String
+***REMOVED***let areaID: OnDemandAreaID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the map area.
 ***REMOVED***let title: String
@@ -86,7 +86,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ is currently running.
 ***REMOVED***init(
 ***REMOVED******REMOVED***job: GenerateOfflineMapJob,
-***REMOVED******REMOVED***areaID: String,
+***REMOVED******REMOVED***areaID: OnDemandAreaID,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED***onRemoveDownload: @escaping (OnDemandMapModel) -> Void
 ***REMOVED***) {
@@ -102,12 +102,15 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(areaID, privacy: .public)")
+***REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
 ***REMOVED******REMOVED***observeJob(job)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error that signifies that the mmpk has no item.
-***REMOVED***private struct NoItemError: Error {***REMOVED***
+***REMOVED******REMOVED***/ An error that signifies an error during initialization.
+***REMOVED***private enum InitializationError: Error {
+***REMOVED******REMOVED***case noItem
+***REMOVED******REMOVED***case noAreaID
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand map area model for a map area that has already been downloaded.
 ***REMOVED***init(
@@ -117,15 +120,17 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***) async throws {
 ***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: mmpkURL)
 ***REMOVED******REMOVED***try await mmpk.load()
-***REMOVED******REMOVED***guard let item = mmpk.item else { throw NoItemError() ***REMOVED***
+***REMOVED******REMOVED***guard let item = mmpk.item else { throw InitializationError.noItem ***REMOVED***
+***REMOVED******REMOVED***guard let areaID = OnDemandAreaID(from: mmpkURL) else { throw InitializationError.noAreaID ***REMOVED***
+***REMOVED******REMOVED***self.areaID = areaID
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.onRemoveDownloadAction = onRemoveDownload
 ***REMOVED******REMOVED***configuration = nil
 ***REMOVED******REMOVED***title = item.title
 ***REMOVED******REMOVED***description = item.description
 ***REMOVED******REMOVED***mmpkDirectoryURL = mmpkURL
-***REMOVED******REMOVED***areaID = mmpkURL.deletingPathExtension().lastPathComponent
 ***REMOVED******REMOVED***offlineMapTask = nil
+***REMOVED******REMOVED***Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
 ***REMOVED******REMOVED***await loadAndUpdateMobileMapPackage(mmpk: mmpk)
 ***REMOVED***
 ***REMOVED***
@@ -241,8 +246,10 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED***.lazy
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? GenerateOfflineMapJob ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.filter { $0.onlineMap?.item?.id == portalItemID ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.map {
-***REMOVED******REMOVED******REMOVED******REMOVED***let areaID = $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent
+***REMOVED******REMOVED******REMOVED***.compactMap {
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let areaID = OnDemandAreaID(from: $0.downloadDirectoryURL) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return Optional<OnDemandMapModel>.none
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***return OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***job: $0,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaID: areaID,
@@ -316,10 +323,34 @@ extension OnDemandMapModel: Hashable {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ Represents the unique ID of an on-demand map area.
+struct OnDemandAreaID: RawRepresentable {
+***REMOVED***var rawValue: String
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a new unique on-demand area ID.
+***REMOVED***init() { rawValue = UUID().uuidString ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates an on-demand area ID from a raw value String.
+***REMOVED******REMOVED***/ Returns `nil` if an empty string is passed in.
+***REMOVED******REMOVED***/ - Parameter rawValue: The raw value.
+***REMOVED***init?(rawValue: String) {
+***REMOVED******REMOVED***guard !rawValue.isEmpty else { return nil ***REMOVED***
+***REMOVED******REMOVED***self.rawValue = rawValue
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates an on-demand area from a directory where the last path component
+***REMOVED******REMOVED***/ is the ID.
+***REMOVED******REMOVED***/ - Parameter directory: The directory where the last path component is the ID.
+***REMOVED***init?(from directory: URL) {
+***REMOVED******REMOVED***let lastPathComponent = directory.deletingPathExtension().lastPathComponent
+***REMOVED******REMOVED***self.init(rawValue: lastPathComponent)
+***REMOVED***
+***REMOVED***
+
 ***REMOVED*** A value that carries configuration for an on-demand map area.
 struct OnDemandMapAreaConfiguration {
 ***REMOVED******REMOVED***/ A unique ID for the on-demand map area.
-***REMOVED***let areaID = UUID().uuidString
+***REMOVED***let areaID = OnDemandAreaID()
 ***REMOVED******REMOVED***/ A title for the offline area.
 ***REMOVED***let title: String
 ***REMOVED******REMOVED***/ The min-scale to take offline.
