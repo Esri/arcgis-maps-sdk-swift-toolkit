@@ -24,7 +24,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     let configuration: OnDemandMapAreaConfiguration?
     
     /// The mobile map package directory URL.
-    let mmpkDirectoryURL: URL
+    private let mmpkDirectoryURL: URL
     
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask?
@@ -131,6 +131,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     
     /// Tries to load a mobile map package and if successful, then updates state
     /// associated with it.
+    /// - Parameter mmpk: The mobile map package.
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()

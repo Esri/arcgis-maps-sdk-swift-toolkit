@@ -62,7 +62,6 @@ struct OnDemandListItemView: View {
         }
     }
     
-    // What should we do with the thumbnail? Save our own or use the default one?
     @ViewBuilder private var thumbnailView: some View {
         if let thumbnail = model.thumbnail {
             LoadableImageView(loadableImage: thumbnail)
@@ -127,7 +126,7 @@ struct OnDemandListItemView: View {
         }
     }
     
-    private var openStatusView: some View {
+    @ViewBuilder private var openStatusView: some View {
         Text("Currently open")
             .font(.caption2)
             .foregroundStyle(.tertiary)
