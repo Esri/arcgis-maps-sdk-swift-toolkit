@@ -49,7 +49,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var job: DownloadPreplannedOfflineMapJob?
     
     /// The combined status of the preplanned map area.
-    @Published private(set) var status: Status = .notLoaded
+    @Published private(set) var status: Status = .notLoaded {
+        willSet {
+            let statusString = "\(newValue)"
+            Logger.offlineManager.debug("Setting status to \(statusString) for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+        }
+    }
     
     /// The first map from the mobile map package.
     @Published private(set) var map: Map?
@@ -77,7 +82,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             observeJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
             Logger.offlineManager.debug("Found MMPK for area \(preplannedMapAreaID.rawValue, privacy: .public)")
-            Task.detached { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
+            Task { await self.loadAndUpdateMobileMapPackage(mmpk: mmpk) }
         }
     }
     
@@ -101,6 +106,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// Loads the preplanned map area and updates the status.
     func load() async {
         guard status.needsToBeLoaded else { return }
+        
+        let loadStatus: Status
         do {
             // Load preplanned map area to obtain packaging status.
             status = .loading
@@ -108,15 +115,20 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             // Note: Packaging status is `nil` for compatibility with
             // legacy webmaps that have incomplete metadata.
             // If the area loads, then you know for certain the status is complete.
-            status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
+            loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
         } catch MappingError.packagingNotComplete {
             // Load will throw an `MappingError.packagingNotComplete` error if not complete,
             // this case is not a normal load failure.
-            status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
+            loadStatus = preplannedMapArea.packagingStatus.map(Status.init) ?? .packageFailure
         } catch {
             // Normal load failure.
-            status = .loadFailure(error)
+            loadStatus = .loadFailure(error)
         }
+        
+        // Only update actual status if still can update based on current status.
+        // Because current status may have progressed beyond (ie to downloaded).
+        guard status.needsToBeLoaded else { return }
+        status = loadStatus
     }
     
     /// Look up the job associated with this preplanned map model.
