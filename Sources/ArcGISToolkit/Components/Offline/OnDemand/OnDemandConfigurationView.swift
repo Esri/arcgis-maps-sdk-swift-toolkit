@@ -18,7 +18,7 @@ import SwiftUI
 /// A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
     /// The online map.
-    let map: Map
+    @State private(set) var map: Map
     
     /// The title of the map area.
     @State private(set) var title: String
