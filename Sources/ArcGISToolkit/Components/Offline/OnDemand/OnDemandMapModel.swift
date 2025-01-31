@@ -33,7 +33,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     private let portalItemID: Item.ID
     
     /// The unique ID of the map area.
-    let areaID: String
+    let areaID: OnDemandAreaID
     
     /// The title of the map area.
     let title: String
@@ -86,7 +86,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// is currently running.
     init(
         job: GenerateOfflineMapJob,
-        areaID: String,
+        areaID: OnDemandAreaID,
         portalItemID: PortalItem.ID,
         onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) {
@@ -102,12 +102,15 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             onDemandMapAreaID: areaID
         )
         
-        Logger.offlineManager.debug("Found executing job for on-demand area \(areaID, privacy: .public)")
+        Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
         observeJob(job)
     }
     
-    /// An error that signifies that the mmpk has no item.
-    private struct NoItemError: Error {}
+    /// An error that signifies an error during initialization.
+    private enum InitializationError: Error {
+        case noItem
+        case noAreaID
+    }
     
     /// Creates an on-demand map area model for a map area that has already been downloaded.
     init(
@@ -117,15 +120,17 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     ) async throws {
         let mmpk = MobileMapPackage(fileURL: mmpkURL)
         try await mmpk.load()
-        guard let item = mmpk.item else { throw NoItemError() }
+        guard let item = mmpk.item else { throw InitializationError.noItem }
+        guard let areaID = OnDemandAreaID(from: mmpkURL) else { throw InitializationError.noAreaID }
+        self.areaID = areaID
         self.portalItemID = portalItemID
         self.onRemoveDownloadAction = onRemoveDownload
         configuration = nil
         title = item.title
         description = item.description
         mmpkDirectoryURL = mmpkURL
-        areaID = mmpkURL.deletingPathExtension().lastPathComponent
         offlineMapTask = nil
+        Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
         await loadAndUpdateMobileMapPackage(mmpk: mmpk)
     }
     
@@ -241,8 +246,10 @@ extension OnDemandMapModel {
             .lazy
             .compactMap { $0 as? GenerateOfflineMapJob }
             .filter { $0.onlineMap?.item?.id == portalItemID }
-            .map {
-                let areaID = $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent
+            .compactMap {
+                guard let areaID = OnDemandAreaID(from: $0.downloadDirectoryURL) else {
+                    return Optional<OnDemandMapModel>.none
+                }
                 return OnDemandMapModel(
                     job: $0,
                     areaID: areaID,
@@ -316,10 +323,34 @@ extension OnDemandMapModel: Hashable {
     }
 }
 
+/// Represents the unique ID of an on-demand map area.
+struct OnDemandAreaID: RawRepresentable {
+    var rawValue: String
+    
+    /// Creates a new unique on-demand area ID.
+    init() { rawValue = UUID().uuidString }
+    
+    /// Creates an on-demand area ID from a raw value String.
+    /// Returns `nil` if an empty string is passed in.
+    /// - Parameter rawValue: The raw value.
+    init?(rawValue: String) {
+        guard !rawValue.isEmpty else { return nil }
+        self.rawValue = rawValue
+    }
+    
+    /// Creates an on-demand area from a directory where the last path component
+    /// is the ID.
+    /// - Parameter directory: The directory where the last path component is the ID.
+    init?(from directory: URL) {
+        let lastPathComponent = directory.deletingPathExtension().lastPathComponent
+        self.init(rawValue: lastPathComponent)
+    }
+}
+
 // A value that carries configuration for an on-demand map area.
 struct OnDemandMapAreaConfiguration {
     /// A unique ID for the on-demand map area.
-    let areaID = UUID().uuidString
+    let areaID = OnDemandAreaID()
     /// A title for the offline area.
     let title: String
     /// The min-scale to take offline.

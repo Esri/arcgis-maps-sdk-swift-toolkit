@@ -52,7 +52,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var status: Status = .notLoaded {
         willSet {
             let statusString = "\(newValue)"
-            Logger.offlineManager.debug("Setting status to \(statusString) for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Setting status to \(statusString) for area \(self.preplannedMapAreaID.rawValue)")
         }
     }
     
@@ -84,16 +84,16 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// - loads the pre-planned map area
     func load() async {
         if job == nil, let foundJob = lookupDownloadJob() {
-            Logger.offlineManager.debug("Found executing job for preplanned area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Found executing job for preplanned area \(self.preplannedMapAreaID.rawValue)")
             observeJob(foundJob)
         } else if mobileMapPackage == nil, let mmpk = lookupMobileMapPackage() {
-            Logger.offlineManager.debug("Found MMPK for area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Found MMPK for area \(self.preplannedMapAreaID.rawValue)")
             await self.loadAndUpdateMobileMapPackage(mmpk: mmpk)
         } else if status.canLoadPreplannedMapArea {
-            Logger.offlineManager.debug("Loading preplanned map area for \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Loading preplanned map area for \(self.preplannedMapAreaID.rawValue)")
             await loadPreplannedMapArea()
         } else {
-            Logger.offlineManager.debug("Already loaded for preplanned map area \(self.preplannedMapAreaID.rawValue, privacy: .public)")
+            Logger.offlineManager.debug("Already loaded for preplanned map area \(self.preplannedMapAreaID.rawValue)")
         }
     }
     
