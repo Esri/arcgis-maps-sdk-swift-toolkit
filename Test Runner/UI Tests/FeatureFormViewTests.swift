@@ -1479,44 +1479,46 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(longTextTextInputPreview.exists)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_8_1() {
-***REMOVED******REMOVED***XCTSkip("""
-***REMOVED******REMOVED******REMOVED***Test currently crashes on Xcode 16.2
-***REMOVED******REMOVED******REMOVED***See Apollo 1058 for more information.
-***REMOVED******REMOVED******REMOVED***"""
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED*** Test is currently disabled as it crashes on Xcode 16.2.
+***REMOVED******REMOVED*** See Apollo 1058 for more information.
+***REMOVED******REMOVED***func testCase_8_1() {
+***REMOVED******REMOVED******REMOVED***XCTSkip("""
+***REMOVED******REMOVED******REMOVED******REMOVED***Test currently crashes on Xcode 16.2
+***REMOVED******REMOVED******REMOVED******REMOVED***See Apollo 1058 for more information.
+***REMOVED******REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED******REMOVED***let attachmentElementTitle = app.staticTexts["Attachments"]
+***REMOVED******REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]
+***REMOVED******REMOVED******REMOVED***let downloadIcon = app.images["Download"]
+***REMOVED******REMOVED******REMOVED***let formTitle = app.staticTexts["Esri Location"]
+***REMOVED******REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED******REMOVED***let placeholderImage = app.images["Photo"]
+***REMOVED******REMOVED******REMOVED***let sizeLabel = app.staticTexts["154 kB"]
+***REMOVED******REMOVED******REMOVED***let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
+***REMOVED******REMOVED******REMOVED***XCTAssertTrue(placeholderImage.exists)
+***REMOVED******REMOVED******REMOVED***XCTAssertTrue(attachmentName.exists)
+***REMOVED******REMOVED******REMOVED***XCTAssertTrue(sizeLabel.exists)
+***REMOVED******REMOVED******REMOVED***XCTAssertTrue(downloadIcon.exists)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***placeholderImage.tap()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
+***REMOVED******REMOVED******REMOVED***XCTAssertFalse(placeholderImage.exists)
+***REMOVED******REMOVED******REMOVED***XCTAssertFalse(downloadIcon.exists)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let attachmentElementTitle = app.staticTexts["Attachments"]
-***REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]
-***REMOVED******REMOVED***let downloadIcon = app.images["Download"]
-***REMOVED******REMOVED***let formTitle = app.staticTexts["Esri Location"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let placeholderImage = app.images["Photo"]
-***REMOVED******REMOVED***let sizeLabel = app.staticTexts["154 kB"]
-***REMOVED******REMOVED***let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
-***REMOVED******REMOVED***XCTAssertTrue(placeholderImage.exists)
-***REMOVED******REMOVED***XCTAssertTrue(attachmentName.exists)
-***REMOVED******REMOVED***XCTAssertTrue(sizeLabel.exists)
-***REMOVED******REMOVED***XCTAssertTrue(downloadIcon.exists)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***placeholderImage.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
-***REMOVED******REMOVED***XCTAssertFalse(placeholderImage.exists)
-***REMOVED******REMOVED***XCTAssertFalse(downloadIcon.exists)
-***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test value backed read only elements
 ***REMOVED***func testCase_9_1() {
