@@ -1482,12 +1482,6 @@ final class FeatureFormViewTests: XCTestCase {
     // Test is currently disabled as it crashes on Xcode 16.2.
     // See Apollo 1058 for more information.
 //    func testCase_8_1() {
-//        XCTSkip("""
-//            Test currently crashes on Xcode 16.2
-//            See Apollo 1058 for more information.
-//            """
-//        )
-//        
 //        let app = XCUIApplication()
 //        let attachmentElementTitle = app.staticTexts["Attachments"]
 //        let attachmentName = app.staticTexts["EsriHQ.jpeg"]
