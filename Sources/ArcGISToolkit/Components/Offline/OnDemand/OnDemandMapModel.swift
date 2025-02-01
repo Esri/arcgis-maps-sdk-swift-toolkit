@@ -129,7 +129,13 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()
-            status = .downloaded
+            // Set status to downloaded if not already set.
+            switch status {
+            case .downloaded, .downloadedWithLayerErrors:
+                break
+            default:
+                status = .downloaded
+            }
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
@@ -213,8 +219,12 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// Updates the status based on the download result of the mobile map package.
     private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
         switch downloadResult {
-        case .success:
-            status = .downloaded
+        case .success(let result):
+            if result.hasErrors {
+                status = .downloadedWithLayerErrors
+            } else {
+                status = .downloaded
+            }
         case .failure(let error):
             if error is CancellationError {
                 status = .downloadCancelled
@@ -283,6 +293,8 @@ extension OnDemandMapModel {
         case downloading
         /// Map area is downloaded.
         case downloaded
+        /// Map area is downloaded but some layers may not have come offline.
+        case downloadedWithLayerErrors
         /// Map area failed to download.
         case downloadFailure(Error)
         /// The job was cancelled.
@@ -293,7 +305,8 @@ extension OnDemandMapModel {
         /// A Boolean value indicating if download is allowed for this status.
         var allowsDownload: Bool {
             switch self {
-            case .downloading, .downloaded, .mmpkLoadFailure, .downloadCancelled, .downloadFailure:
+            case .downloading, .downloaded, .mmpkLoadFailure, .downloadCancelled,
+                    .downloadFailure, .downloadedWithLayerErrors:
                 false
             case .initialized:
                 true

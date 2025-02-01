@@ -35,13 +35,16 @@ struct OnDemandListItemView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
-            VStack(alignment: .leading, spacing: 4) {
-                titleView
-                if isSelected {
-                    openStatusView
-                } else {
-                    statusView
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    titleView
+                    if isSelected {
+                        openStatusView
+                    } else {
+                        statusView
+                    }
                 }
+                Spacer()
             }
             .contentShape(.rect)
             .onTapGesture {
@@ -91,7 +94,7 @@ struct OnDemandListItemView: View {
                     .font(.caption)
                 }
             }
-        case .downloaded:
+        case .downloaded, .downloadedWithLayerErrors:
             Button {
                 Task {
                     if let map = model.map {
@@ -143,6 +146,11 @@ struct OnDemandListItemView: View {
                 Text("Downloading")
             case .downloaded:
                 Text("Downloaded")
+            case .downloadedWithLayerErrors:
+                HStack {
+                    Image(systemName: "exclamationmark.triangle")
+                    Text("Downloaded. Some layers failed to download.")
+                }
             case .downloadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Download failed")
