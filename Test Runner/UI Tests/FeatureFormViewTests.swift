@@ -1482,12 +1482,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED*** Test is currently disabled as it crashes on Xcode 16.2.
 ***REMOVED******REMOVED*** See Apollo 1058 for more information.
 ***REMOVED******REMOVED***func testCase_8_1() {
-***REMOVED******REMOVED******REMOVED***XCTSkip("""
-***REMOVED******REMOVED******REMOVED******REMOVED***Test currently crashes on Xcode 16.2
-***REMOVED******REMOVED******REMOVED******REMOVED***See Apollo 1058 for more information.
-***REMOVED******REMOVED******REMOVED******REMOVED***"""
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED******REMOVED***let attachmentElementTitle = app.staticTexts["Attachments"]
 ***REMOVED******REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]
