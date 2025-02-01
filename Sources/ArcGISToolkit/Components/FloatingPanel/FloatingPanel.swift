@@ -73,17 +73,16 @@ struct FloatingPanel<Content>: View where Content: View {
             // Set frame width to infinity to prevent horizontal shrink on dismissal.
             .frame(maxWidth: .infinity)
 #if os(visionOS)
-            .background(.regularMaterial)
-            .compositingGroup()
+            .glassBackgroundEffect()
 #else
             .background(backgroundColor)
-#endif
             .clipShape(
                 RoundedCorners(
                     corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
                     radius: .cornerRadius
                 )
             )
+#endif
             .shadow(radius: 10)
             .frame(
                 maxWidth: .infinity,
