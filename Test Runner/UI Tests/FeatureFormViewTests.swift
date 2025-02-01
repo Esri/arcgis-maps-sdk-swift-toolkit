@@ -1479,40 +1479,40 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(longTextTextInputPreview.exists)
     }
     
-    // Test is currently disabled as it crashes on Xcode 16.2.
-    // See Apollo 1058 for more information.
-//    func testCase_8_1() {
-//        let app = XCUIApplication()
-//        let attachmentElementTitle = app.staticTexts["Attachments"]
-//        let attachmentName = app.staticTexts["EsriHQ.jpeg"]
-//        let downloadIcon = app.images["Download"]
-//        let formTitle = app.staticTexts["Esri Location"]
-//        let formViewTestsButton = app.buttons["Feature Form Tests"]
-//        let placeholderImage = app.images["Photo"]
-//        let sizeLabel = app.staticTexts["154 kB"]
-//        let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
-//        
-//        app.launch()
-//        
-//        // Open the FeatureFormView component test view.
-//        formViewTestsButton.tap()
-//        
-//        selectTestCase(app)
-//        
-//        assertFormOpened(titleElement: formTitle)
-//        
-//        XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
-//        XCTAssertTrue(placeholderImage.exists)
-//        XCTAssertTrue(attachmentName.exists)
-//        XCTAssertTrue(sizeLabel.exists)
-//        XCTAssertTrue(downloadIcon.exists)
-//        
-//        placeholderImage.tap()
-//        
-//        XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
-//        XCTAssertFalse(placeholderImage.exists)
-//        XCTAssertFalse(downloadIcon.exists)
-//    }
+    func testCase_8_1() throws {
+        try XCTSkipIf(true, "KNOWN ISSUE -- Apollo 1058")
+        
+        let app = XCUIApplication()
+        let attachmentElementTitle = app.staticTexts["Attachments"]
+        let attachmentName = app.staticTexts["EsriHQ.jpeg"]
+        let downloadIcon = app.images["Download"]
+        let formTitle = app.staticTexts["Esri Location"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let placeholderImage = app.images["Photo"]
+        let sizeLabel = app.staticTexts["154 kB"]
+        let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
+        XCTAssertTrue(placeholderImage.exists)
+        XCTAssertTrue(attachmentName.exists)
+        XCTAssertTrue(sizeLabel.exists)
+        XCTAssertTrue(downloadIcon.exists)
+        
+        placeholderImage.tap()
+        
+        XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
+        XCTAssertFalse(placeholderImage.exists)
+        XCTAssertFalse(downloadIcon.exists)
+    }
     
     /// Test value backed read only elements
     func testCase_9_1() {
