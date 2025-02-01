@@ -41,9 +41,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// The action to perform when an on demand map area is deleted.
     private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
     
-    /// The description of the map area.
-    @Published private(set) var description: String = ""
-    
     /// A thumbnail for the map area.
     @Published private(set) var thumbnail: LoadableImage?
     
@@ -106,28 +103,20 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         observeJob(job)
     }
     
-    /// An error that signifies an error during initialization.
-    private enum InitializationError: Error {
-        case noItem
-        case noAreaID
-    }
-    
     /// Creates an on-demand map area model for a map area that has already been downloaded.
     init(
-        mmpkURL: URL,
+        areaID: OnDemandAreaID,
         portalItemID: PortalItem.ID,
         onRemoveDownload: @escaping (OnDemandMapModel) -> Void
-    ) async throws {
+    ) async {
+        let mmpkURL = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
         let mmpk = MobileMapPackage(fileURL: mmpkURL)
-        try await mmpk.load()
-        guard let item = mmpk.item else { throw InitializationError.noItem }
-        guard let areaID = OnDemandAreaID(from: mmpkURL) else { throw InitializationError.noAreaID }
+        try? await mmpk.load()
         self.areaID = areaID
         self.portalItemID = portalItemID
         self.onRemoveDownloadAction = onRemoveDownload
         configuration = nil
-        title = item.title
-        description = item.description
+        title = mmpk.item?.title ?? "Unknown"
         mmpkDirectoryURL = mmpkURL
         offlineMapTask = nil
         Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
@@ -227,7 +216,11 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         case .success:
             status = .downloaded
         case .failure(let error):
-            status = .downloadFailure(error)
+            if error is CancellationError {
+                status = .downloadCancelled
+            } else {
+                status = .downloadFailure(error)
+            }
             // Remove contents of mmpk directory when download fails.
             try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         }
@@ -263,14 +256,15 @@ extension OnDemandMapModel {
         // Look up the already downloaded on-demand map models.
         let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
         if let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) {
-            for url in mapAreaIDs.map({ onDemandDirectory.appending(component: $0) }) {
-                guard let mapArea = try? await OnDemandMapModel.init(
-                    mmpkURL: url,
+            for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(rawValue:)) {
+                // If we already have one (ie. a job is already be running and the
+                // directory is non-empty so we found it here), then we continue.
+                guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID }) else { continue }
+                let mapArea = await OnDemandMapModel.init(
+                    areaID: mapAreaID,
                     portalItemID: portalItemID,
                     onRemoveDownload: onRemoveDownload
-                ) else {
-                    continue
-                }
+                )
                 onDemandMapModels.append(mapArea)
             }
         }
@@ -291,15 +285,17 @@ extension OnDemandMapModel {
         case downloaded
         /// Map area failed to download.
         case downloadFailure(Error)
+        /// The job was cancelled.
+        case downloadCancelled
         /// Downloaded mobile map package failed to load.
         case mmpkLoadFailure(Error)
         
         /// A Boolean value indicating if download is allowed for this status.
         var allowsDownload: Bool {
             switch self {
-            case .downloading, .downloaded, .mmpkLoadFailure:
+            case .downloading, .downloaded, .mmpkLoadFailure, .downloadCancelled, .downloadFailure:
                 false
-            case .initialized, .downloadFailure:
+            case .initialized:
                 true
             }
         }
