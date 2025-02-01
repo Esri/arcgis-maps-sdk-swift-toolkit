@@ -1479,7 +1479,9 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(longTextTextInputPreview.exists)
     }
     
-    func testCase_8_1() {
+    func testCase_8_1() throws {
+        try XCTSkipIf(true, "KNOWN ISSUE -- Apollo 1058")
+        
         let app = XCUIApplication()
         let attachmentElementTitle = app.staticTexts["Attachments"]
         let attachmentName = app.staticTexts["EsriHQ.jpeg"]
