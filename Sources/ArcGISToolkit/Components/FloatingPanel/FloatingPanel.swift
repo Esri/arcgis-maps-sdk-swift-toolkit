@@ -74,16 +74,15 @@ struct FloatingPanel<Content>: View where Content: View {
             .frame(maxWidth: .infinity)
 #if os(visionOS)
             .glassBackgroundEffect()
-            .compositingGroup()
 #else
             .background(backgroundColor)
-#endif
             .clipShape(
                 RoundedCorners(
                     corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
                     radius: .cornerRadius
                 )
             )
+#endif
             .shadow(radius: 10)
             .frame(
                 maxWidth: .infinity,
