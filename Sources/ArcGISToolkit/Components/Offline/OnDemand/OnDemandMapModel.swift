@@ -41,9 +41,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The action to perform when an on demand map area is deleted.
 ***REMOVED***private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
 ***REMOVED***
-***REMOVED******REMOVED***/ The description of the map area.
-***REMOVED***@Published private(set) var description: String = ""
-***REMOVED***
 ***REMOVED******REMOVED***/ A thumbnail for the map area.
 ***REMOVED***@Published private(set) var thumbnail: LoadableImage?
 ***REMOVED***
@@ -106,28 +103,20 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***observeJob(job)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error that signifies an error during initialization.
-***REMOVED***private enum InitializationError: Error {
-***REMOVED******REMOVED***case noItem
-***REMOVED******REMOVED***case noAreaID
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand map area model for a map area that has already been downloaded.
 ***REMOVED***init(
-***REMOVED******REMOVED***mmpkURL: URL,
+***REMOVED******REMOVED***areaID: OnDemandAreaID,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED***onRemoveDownload: @escaping (OnDemandMapModel) -> Void
-***REMOVED***) async throws {
+***REMOVED***) async {
+***REMOVED******REMOVED***let mmpkURL = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
 ***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: mmpkURL)
-***REMOVED******REMOVED***try await mmpk.load()
-***REMOVED******REMOVED***guard let item = mmpk.item else { throw InitializationError.noItem ***REMOVED***
-***REMOVED******REMOVED***guard let areaID = OnDemandAreaID(from: mmpkURL) else { throw InitializationError.noAreaID ***REMOVED***
+***REMOVED******REMOVED***try? await mmpk.load()
 ***REMOVED******REMOVED***self.areaID = areaID
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.onRemoveDownloadAction = onRemoveDownload
 ***REMOVED******REMOVED***configuration = nil
-***REMOVED******REMOVED***title = item.title
-***REMOVED******REMOVED***description = item.description
+***REMOVED******REMOVED***title = mmpk.item?.title ?? "Unknown"
 ***REMOVED******REMOVED***mmpkDirectoryURL = mmpkURL
 ***REMOVED******REMOVED***offlineMapTask = nil
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
@@ -227,7 +216,11 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
+***REMOVED******REMOVED******REMOVED***if error is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadCancelled
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Remove contents of mmpk directory when download fails.
 ***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
 ***REMOVED***
@@ -263,14 +256,15 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED*** Look up the already downloaded on-demand map models.
 ***REMOVED******REMOVED***let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED***if let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) {
-***REMOVED******REMOVED******REMOVED***for url in mapAreaIDs.map({ onDemandDirectory.appending(component: $0) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let mapArea = try? await OnDemandMapModel.init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mmpkURL: url,
+***REMOVED******REMOVED******REMOVED***for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(rawValue:)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we already have one (ie. a job is already be running and the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** directory is non-empty so we found it here), then we continue.
+***REMOVED******REMOVED******REMOVED******REMOVED***guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID ***REMOVED***) else { continue ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let mapArea = await OnDemandMapModel.init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaID: mapAreaID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownload
-***REMOVED******REMOVED******REMOVED******REMOVED***) else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continue
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels.append(mapArea)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -291,15 +285,17 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED***case downloaded
 ***REMOVED******REMOVED******REMOVED***/ Map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
+***REMOVED******REMOVED******REMOVED***/ The job was cancelled.
+***REMOVED******REMOVED***case downloadCancelled
 ***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if download is allowed for this status.
 ***REMOVED******REMOVED***var allowsDownload: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure, .downloadCancelled, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED******REMOVED***case .initialized, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***case .initialized:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
 ***REMOVED******REMOVED***
 ***REMOVED***
