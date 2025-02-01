@@ -74,16 +74,15 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.glassBackgroundEffect()
-***REMOVED******REMOVED******REMOVED***.compositingGroup()
 #else
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
-#endif
 ***REMOVED******REMOVED******REMOVED***.clipShape(
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: .cornerRadius
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
+#endif
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
 ***REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
