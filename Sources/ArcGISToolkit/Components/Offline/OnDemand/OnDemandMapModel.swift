@@ -129,7 +129,13 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await mmpk.load()
-***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set status to downloaded if not already set.
+***REMOVED******REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED******REMOVED***case .downloaded, .downloadedWithLayerErrors:
+***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED******REMOVED***map = mmpk.maps.first
@@ -213,8 +219,12 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
 ***REMOVED***private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
 ***REMOVED******REMOVED***switch downloadResult {
-***REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED***case .success(let result):
+***REMOVED******REMOVED******REMOVED***if result.hasErrors {
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadedWithLayerErrors
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***if error is CancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadCancelled
@@ -283,6 +293,8 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED***case downloading
 ***REMOVED******REMOVED******REMOVED***/ Map area is downloaded.
 ***REMOVED******REMOVED***case downloaded
+***REMOVED******REMOVED******REMOVED***/ Map area is downloaded but some layers may not have come offline.
+***REMOVED******REMOVED***case downloadedWithLayerErrors
 ***REMOVED******REMOVED******REMOVED***/ Map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
 ***REMOVED******REMOVED******REMOVED***/ The job was cancelled.
@@ -293,7 +305,8 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating if download is allowed for this status.
 ***REMOVED******REMOVED***var allowsDownload: Bool {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure, .downloadCancelled, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***case .downloading, .downloaded, .mmpkLoadFailure, .downloadCancelled,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.downloadFailure, .downloadedWithLayerErrors:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED******REMOVED***case .initialized:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true

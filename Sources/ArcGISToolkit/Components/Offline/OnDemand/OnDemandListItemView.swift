@@ -35,13 +35,16 @@ struct OnDemandListItemView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
-***REMOVED******REMOVED******REMOVED******REMOVED***titleView
-***REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
@@ -91,7 +94,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .downloaded:
+***REMOVED******REMOVED***case .downloaded, .downloadedWithLayerErrors:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
@@ -143,6 +146,11 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloading")
 ***REMOVED******REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded")
+***REMOVED******REMOVED******REMOVED***case .downloadedWithLayerErrors:
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.triangle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded. Some layers failed to download.")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Download failed")
