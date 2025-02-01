@@ -35,25 +35,25 @@ struct OnDemandListItemView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
                     titleView
-                    Spacer()
-                    downloadButton
+                    if isSelected {
+                        openStatusView
+                    } else {
+                        statusView
+                    }
                 }
-                descriptionView
-                if isSelected {
-                    openStatusView
-                } else {
-                    statusView
+                Spacer()
+            }
+            .contentShape(.rect)
+            .onTapGesture {
+                if model.status.isDownloaded {
+                    metadataViewIsPresented = true
                 }
             }
-        }
-        .contentShape(.rect)
-        .onTapGesture {
-            if model.status.isDownloaded {
-                metadataViewIsPresented = true
-            }
+            Spacer()
+            trailingButton
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
@@ -68,9 +68,10 @@ struct OnDemandListItemView: View {
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
         } else {
-            Image(systemName: "photo.badge.arrow.down")
+            Image(systemName: "map")
+                .imageScale(.large)
+                .foregroundStyle(.secondary)
                 .frame(width: 64, height: 44)
-                .clipShape(.rect(cornerRadius: 2))
         }
     }
     
@@ -80,23 +81,20 @@ struct OnDemandListItemView: View {
             .lineLimit(1)
     }
     
-    @ViewBuilder private var descriptionView: some View {
-        if !model.description.isEmpty {
-            Text(model.description)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-        }
-    }
-    
-    @ViewBuilder private var downloadButton: some View {
+    @ViewBuilder private var trailingButton: some View {
         switch model.status {
         case .downloading:
             if let job = model.job {
-                ProgressView(job.progress)
-                    .progressViewStyle(.gauge)
+                VStack(alignment: .center) {
+                    ProgressView(job.progress)
+                        .progressViewStyle(.gauge)
+                    Button("Cancel", role: .cancel) {
+                        Task { await job.cancel() }
+                    }
+                    .font(.caption)
+                }
             }
-        case .downloaded:
+        case .downloaded, .downloadedWithLayerErrors:
             Button {
                 Task {
                     if let map = model.map {
@@ -112,7 +110,7 @@ struct OnDemandListItemView: View {
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
             .disabled(isSelected)
-        case .initialized, .downloadFailure, .mmpkLoadFailure:
+        case .initialized:
             Button {
                 Task {
                     await model.downloadOnDemandMapArea()
@@ -120,9 +118,13 @@ struct OnDemandListItemView: View {
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
-            .buttonStyle(.plain)
             .disabled(!model.status.allowsDownload)
-            .foregroundStyle(Color.accentColor)
+        case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
+            Button {
+                model.removeDownloadedOnDemandMapArea()
+            } label: {
+                Image(systemName: "trash")
+            }
         }
     }
     
@@ -144,9 +146,16 @@ struct OnDemandListItemView: View {
                 Text("Downloading")
             case .downloaded:
                 Text("Downloaded")
+            case .downloadedWithLayerErrors:
+                HStack {
+                    Image(systemName: "exclamationmark.triangle")
+                    Text("Downloaded. Some layers failed to download.")
+                }
             case .downloadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Download failed")
+            case .downloadCancelled:
+                Text("Cancelled")
             }
         }
         .font(.caption2)
