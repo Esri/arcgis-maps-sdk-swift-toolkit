@@ -84,27 +84,20 @@ extension Category {
 #endif
 ***REMOVED***
 ***REMOVED***static var geoview: Self {
-***REMOVED******REMOVED***var examples: [Example] = [
-***REMOVED******REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-***REMOVED******REMOVED***]
-#if !os(visionOS)
-***REMOVED******REMOVED***examples.append(
-***REMOVED******REMOVED******REMOVED***contentsOf: [
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView())
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED***)
-#endif
-***REMOVED******REMOVED***return .init(
+***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***name: "GeoView",
-***REMOVED******REMOVED******REMOVED***examples: examples.sorted(by: { $0.name < $1.name ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED******REMOVED******REMOVED***].sorted(by: { $0.name < $1.name ***REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
