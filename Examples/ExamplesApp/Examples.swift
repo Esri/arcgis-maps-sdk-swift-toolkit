@@ -56,22 +56,20 @@ extension ExampleList {
 #endif
     
     static var geoview: Self {
-        var examples: [any Example] = [
-            AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
-            AnyExample("Bookmarks", content: BookmarksExampleView()),
-            AnyExample("Compass", content: CompassExampleView()),
-            AnyExample("Feature Form", content: FeatureFormExampleView()),
-            AnyExample("Floor Filter", content: FloorFilterExampleView()),
-            AnyExample("Overview Map", content: OverviewMapExampleView()),
-            AnyExample("Popup", content: PopupExampleView()),
-            AnyExample("Scalebar", content: ScalebarExampleView()),
-            AnyExample("Search", content: SearchExampleView()),
-            AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-        ]
-#endif
-        return .init(
+        .init(
             name: "GeoView",
-            examples: examples.sorted(by: { $0.name < $1.name })
+            examples: [
+                AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
+                AnyExample("Bookmarks", content: BookmarksExampleView()),
+                AnyExample("Compass", content: CompassExampleView()),
+                AnyExample("Feature Form", content: FeatureFormExampleView()),
+                AnyExample("Floor Filter", content: FloorFilterExampleView()),
+                AnyExample("Overview Map", content: OverviewMapExampleView()),
+                AnyExample("Popup", content: PopupExampleView()),
+                AnyExample("Scalebar", content: ScalebarExampleView()),
+                AnyExample("Search", content: SearchExampleView()),
+                AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+            ]
         )
     }
     

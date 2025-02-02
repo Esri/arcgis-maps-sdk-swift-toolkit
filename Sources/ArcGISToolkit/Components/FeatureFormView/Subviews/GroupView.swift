@@ -42,6 +42,7 @@ struct GroupView<Content>: View where Content: View {
             ForEach(visibleElements, id: \.self) { element in
                 viewCreator(element)
             }
+//            .listRowInsets(.init(top: 0, leading: 10, bottom: 0, trailing: 0))
         } label: {
             Header(element: element)
         }

@@ -149,7 +149,9 @@ extension RadioButtonsInput {
             .contentShape(.rect)
         }
         .accessibilityIdentifier("\(element.label) \(label) Radio Button")
+#if !os(visionOS)
         .buttonStyle(.plain)
+#endif
         .foregroundStyle(.primary)
     }
 }

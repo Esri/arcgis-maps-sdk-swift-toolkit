@@ -41,8 +41,10 @@ struct XButton: View {
             action?() ?? dismiss()
         }
         .labelStyle(.iconOnly)
+#if os(visionOS)
+        .buttonStyle(.bordered)
+#else
         .symbolRenderingMode(.hierarchical)
-#if !os(visionOS)
         .buttonStyle(.plain)
         .foregroundStyle(.secondary)
         .symbolVariant(.circle.fill)

@@ -73,12 +73,6 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
-            .onTapGesture {            
-                if element.isMultiline {
-                    model.fullScreenTextInputIsPresented = true
-                    model.focusedElement = element
-                }
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
@@ -96,12 +90,17 @@ private extension TextInput {
         HStack(alignment: .firstTextBaseline) {
             Group {
                 if element.isMultiline {
-                    Text(text)
-                        .accessibilityIdentifier("\(element.label) Text Input Preview")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineLimit(5)
-                        .truncationMode(.tail)
-                        .frame(minHeight: 100, alignment: .top)
+                    Button {
+                        model.fullScreenTextInputIsPresented = true
+                        model.focusedElement = element
+                    } label: {
+                        Text(text)
+                            .accessibilityIdentifier("\(element.label) Text Input Preview")
+                            .fixedSize(horizontal: false, vertical: true)
+                            .lineLimit(5)
+                            .truncationMode(.tail)
+                            .frame(minHeight: 100, alignment: .top)
+                    }
                 } else {
                     TextField(
                         element.label,
@@ -114,7 +113,6 @@ private extension TextInput {
                 }
             }
             .focused($isFocused)
-            .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -156,7 +154,6 @@ private extension TextInput {
             }
 #endif
         }
-        .contentShape(.rect)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.

@@ -57,6 +57,7 @@ struct FeatureFormExampleView: View {
                     }
                 }
                 .ignoresSafeArea(.keyboard)
+#if os(visionOS)
                 .floatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
@@ -68,7 +69,21 @@ struct FeatureFormExampleView: View {
                             .validationErrors(validationErrorVisibility)
                     }
                 }
-                .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
+#else
+                .floatingPanel(
+                    attributionBarHeight: attributionBarHeight,
+                    backgroundColor: Color(uiColor: .systemGroupedBackground),
+                    selectedDetent: $detent,
+                    horizontalAlignment: .leading,
+                    isPresented: model.formIsPresented
+                ) {
+                    if let featureForm = model.featureForm {
+                        FeatureFormView(featureForm: featureForm)
+                            .validationErrors(validationErrorVisibility)
+                    }
+                }
+#endif
+                .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
                 .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
@@ -354,6 +369,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
-        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }
