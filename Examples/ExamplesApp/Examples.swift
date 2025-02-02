@@ -56,22 +56,20 @@ extension ExampleList {
 #endif
 ***REMOVED***
 ***REMOVED***static var geoview: Self {
-***REMOVED******REMOVED***var examples: [any Example] = [
-***REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Bookmarks", content: BookmarksExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-***REMOVED******REMOVED***]
-#endif
-***REMOVED******REMOVED***return .init(
+***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***name: "GeoView",
-***REMOVED******REMOVED******REMOVED***examples: examples.sorted(by: { $0.name < $1.name ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Bookmarks", content: BookmarksExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

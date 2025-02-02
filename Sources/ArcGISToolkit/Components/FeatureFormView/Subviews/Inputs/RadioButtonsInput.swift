@@ -149,7 +149,9 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label) Radio Button")
+#if !os(visionOS)
 ***REMOVED******REMOVED***.buttonStyle(.plain)
+#endif
 ***REMOVED******REMOVED***.foregroundStyle(.primary)
 ***REMOVED***
 ***REMOVED***

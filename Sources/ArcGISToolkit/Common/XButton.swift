@@ -41,8 +41,10 @@ struct XButton: View {
 ***REMOVED******REMOVED******REMOVED***action?() ?? dismiss()
 ***REMOVED***
 ***REMOVED******REMOVED***.labelStyle(.iconOnly)
+#if os(visionOS)
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+#else
 ***REMOVED******REMOVED***.symbolRenderingMode(.hierarchical)
-#if !os(visionOS)
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***.symbolVariant(.circle.fill)

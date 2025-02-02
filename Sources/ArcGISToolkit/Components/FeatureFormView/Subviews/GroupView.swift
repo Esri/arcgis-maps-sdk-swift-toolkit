@@ -42,6 +42,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init(top: 0, leading: 10, bottom: 0, trailing: 0))
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Header(element: element)
 ***REMOVED***

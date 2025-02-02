@@ -73,7 +73,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set frame width to infinity to prevent horizontal shrink on dismissal.
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 #if os(visionOS)
-***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED***.glassBackgroundEffect()
 ***REMOVED******REMOVED******REMOVED***.compositingGroup()
 #else
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
