@@ -17,20 +17,29 @@ import SwiftUI
 /// Provides a frame minimum height constraint, padding, background color and rounded corners for a
 /// form input.
 struct FormInputStyle: ViewModifier {
+    let isTappable: Bool
+    
     func body(content: Content) -> some View {
-        content
+        let content = content
             .frame(minHeight: 30)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(Color(uiColor: .tertiarySystemFill))
             .cornerRadius(10)
+        if isTappable {
+            content
+                .contentShape(.hoverEffect, .rect(cornerRadius: 10))
+                .hoverEffect()
+        } else {
+            content
+        }
     }
 }
 
 extension View {
     /// Provides a frame minimum height constraint, padding, background color and rounded corners
     /// for a form input.
-    func formInputStyle() -> some View {
-        modifier(FormInputStyle())
+    func formInputStyle(isTappable: Bool) -> some View {
+        modifier(FormInputStyle(isTappable: isTappable))
     }
 }

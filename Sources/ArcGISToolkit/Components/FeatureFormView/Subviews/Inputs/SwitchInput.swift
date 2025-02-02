@@ -60,15 +60,11 @@ struct SwitchInput: View {
                 noValueOption: .show
             )
         } else {
-            HStack {
+            Toggle(isOn: $isOn) {
                 Text(isOn ? input.onValue.name : input.offValue.name)
-                    .accessibilityIdentifier("\(element.label) Switch Label")
-                Spacer()
-                Toggle(isOn: $isOn) {}
-                    .accessibilityIdentifier("\(element.label) Switch")
-                    .toggleStyle(.switch)
             }
-            .formInputStyle()
+            .accessibilityIdentifier("\(element.label) Switch")
+            .formInputStyle(isTappable: false)
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
@@ -77,9 +73,6 @@ struct SwitchInput: View {
             .onChange(isOn) { isOn in
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
-            }
-            .onTapGesture {
-                isOn.toggle()
                 model.focusedElement = element
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
