@@ -84,27 +84,20 @@ extension Category {
 #endif
     
     static var geoview: Self {
-        var examples: [Example] = [
-            Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-            Example("Bookmarks", content: BookmarksExampleView()),
-            Example("Compass", content: CompassExampleView()),
-            Example("Floor Filter", content: FloorFilterExampleView()),
-            Example("Overview Map", content: OverviewMapExampleView()),
-            Example("Popup", content: PopupExampleView()),
-            Example("Scalebar", content: ScalebarExampleView()),
-            Example("Search", content: SearchExampleView()),
-            Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-        ]
-#if !os(visionOS)
-        examples.append(
-            contentsOf: [
-                Example("Feature Form", content: FeatureFormExampleView())
-            ]
-        )
-#endif
-        return .init(
+        .init(
             name: "GeoView",
-            examples: examples.sorted(by: { $0.name < $1.name })
+            examples: [
+                Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+                Example("Bookmarks", content: BookmarksExampleView()),
+                Example("Compass", content: CompassExampleView()),
+                Example("Feature Form", content: FeatureFormExampleView()),
+                Example("Floor Filter", content: FloorFilterExampleView()),
+                Example("Overview Map", content: OverviewMapExampleView()),
+                Example("Popup", content: PopupExampleView()),
+                Example("Scalebar", content: ScalebarExampleView()),
+                Example("Search", content: SearchExampleView()),
+                Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+            ].sorted(by: { $0.name < $1.name })
         )
     }
     

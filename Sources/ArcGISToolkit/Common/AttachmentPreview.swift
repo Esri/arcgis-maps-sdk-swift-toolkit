@@ -235,9 +235,12 @@ struct AttachmentPreview: View {
                     attachmentModel.load()
                 }
             }
+            // On visionOS, quick look preview will close the sheet by accident.
+            // See thread here: https://developer.apple.com/forums/thread/773599
             .quickLookPreview($url)
             .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { }
             .alert(maximumSizeDownloadExceededErrorMessage, isPresented: $maximumSizeDownloadExceededAlertIsPresented) { }
+            .hoverEffect()
         }
     }
 }
