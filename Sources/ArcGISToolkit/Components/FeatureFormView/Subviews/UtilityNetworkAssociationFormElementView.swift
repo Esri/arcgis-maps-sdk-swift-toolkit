@@ -137,6 +137,7 @@ extension UtilityNetworkAssociationFormElementView {
                         Text(group.associations.count.formatted())
                     }
                 }
+                .listRowBackground(Color(uiColor: .tertiarySystemFill))
             }
             .scrollContentBackground(.hidden)
         }
@@ -172,7 +173,9 @@ extension UtilityNetworkAssociationFormElementView {
         var body: some View {
             List(networkSourceGroup.associations) {
                 AssociationView(association: $0)
+                    .listRowBackground(Color(uiColor: .tertiarySystemFill))
             }
+            .scrollContentBackground(.hidden)
         }
     }
 }
