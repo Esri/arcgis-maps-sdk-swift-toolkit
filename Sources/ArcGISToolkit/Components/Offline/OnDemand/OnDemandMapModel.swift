@@ -59,6 +59,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The first map from the mobile map package.
 ***REMOVED***@Published private(set) var map: Map?
 ***REMOVED***
+***REMOVED***private var thumbnailURL: URL {
+***REMOVED******REMOVED***mmpkDirectoryURL.appending(component: "thumbnail.png")
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand map area model with a configuration
 ***REMOVED******REMOVED***/ for taking the area offline.
 ***REMOVED***init(
@@ -78,6 +82,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: configuration.areaID
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** Save thumbnail to file.
+***REMOVED******REMOVED***if let thumbnail = configuration.thumbnail, let pngData = thumbnail.pngData() {
+***REMOVED******REMOVED******REMOVED***try? pngData.write(to: thumbnailURL, options: .atomic)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand map area model for a job that
@@ -99,6 +107,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: areaID
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
 ***REMOVED******REMOVED***observeJob(job)
@@ -120,6 +129,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***title = mmpk.item?.title ?? "Unknown"
 ***REMOVED******REMOVED***mmpkDirectoryURL = mmpkURL
 ***REMOVED******REMOVED***offlineMapTask = nil
+***REMOVED******REMOVED***thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
 ***REMOVED******REMOVED***await loadAndUpdateMobileMapPackage(mmpk: mmpk)
 ***REMOVED***
