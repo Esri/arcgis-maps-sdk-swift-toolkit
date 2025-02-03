@@ -42,7 +42,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
 ***REMOVED***
 ***REMOVED******REMOVED***/ A thumbnail for the map area.
-***REMOVED***@Published private(set) var thumbnail: LoadableImage?
+***REMOVED***@Published private(set) var thumbnail: UIImage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
 ***REMOVED***@Published private(set) var mobileMapPackage: MobileMapPackage?
@@ -73,6 +73,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***self.onRemoveDownloadAction = onRemoveDownload
 ***REMOVED******REMOVED***self.title = configuration.title
 ***REMOVED******REMOVED***self.areaID = configuration.areaID
+***REMOVED******REMOVED***self.thumbnail = configuration.thumbnail
 ***REMOVED******REMOVED***mmpkDirectoryURL = .onDemandDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: configuration.areaID
@@ -139,7 +140,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED******REMOVED***map = mmpk.maps.first
-***REMOVED******REMOVED******REMOVED***thumbnail = mmpk.item?.thumbnail
+***REMOVED******REMOVED******REMOVED***if thumbnail == nil, let loadable = mmpk.item?.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await loadable.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***thumbnail = loadable.image
+***REMOVED******REMOVED***
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = nil
@@ -368,4 +372,6 @@ struct OnDemandMapAreaConfiguration {
 ***REMOVED***let maxScale: Double
 ***REMOVED******REMOVED***/ The area of interest to take offline.
 ***REMOVED***let areaOfInterest: Geometry
+***REMOVED******REMOVED***/ The thumbnail of the area.
+***REMOVED***let thumbnail: UIImage?
 ***REMOVED***
