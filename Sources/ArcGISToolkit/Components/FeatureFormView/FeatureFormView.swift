@@ -106,9 +106,11 @@ public struct FeatureFormView: View {
                     headerVisibility: headerVisibility,
                     utilityNetwork: utilityNetwork
                 )
+                .navigationBarBackButtonHidden()
             }
             .navigationDestination(for: UtilityNetworkAssociationFormElementView.AssociationKindGroup.self) { group in
                 UtilityNetworkAssociationFormElementView.AssociationKindGroupView(associationKindGroup: group)
+                    .navigationBarBackButtonHidden()
                     .toolbar {
                         ToolbarItem(placement: .navigation) {
                             HStack {
