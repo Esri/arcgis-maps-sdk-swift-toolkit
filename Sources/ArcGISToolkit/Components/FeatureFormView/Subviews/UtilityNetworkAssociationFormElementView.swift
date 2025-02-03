@@ -173,7 +173,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let networkSourceGroup:  NetworkSourceGroup
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***ForEach(networkSourceGroup.associations) {
+***REMOVED******REMOVED******REMOVED***List(networkSourceGroup.associations) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
 ***REMOVED******REMOVED***
 ***REMOVED***
