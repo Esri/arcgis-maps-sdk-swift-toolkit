@@ -20,15 +20,16 @@ struct FormInputStyle: ViewModifier {
 ***REMOVED***let isTappable: Bool
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***let cornerRadius: CGFloat = 10
 ***REMOVED******REMOVED***let content = content
 ***REMOVED******REMOVED******REMOVED***.frame(minHeight: 30)
 ***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .tertiarySystemFill))
-***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
+***REMOVED******REMOVED******REMOVED***.cornerRadius(cornerRadius)
 ***REMOVED******REMOVED***if isTappable {
 ***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: cornerRadius))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***content
