@@ -33,6 +33,8 @@ struct OnDemandMetadataView: View {
                         Spacer()
                         Image(uiImage: thumbnail)
                             .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxHeight: 200)
                             .clipShape(.rect(cornerRadius: 10))
                             .padding(.vertical, 10)
                         Spacer()

@@ -32,6 +32,8 @@ struct PreplannedMetadataView: View {
                     HStack {
                         Spacer()
                         LoadableImageView(loadableImage: image)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxHeight: 200)
                             .clipShape(.rect(cornerRadius: 10))
                             .padding(.vertical, 10)
                         Spacer()
