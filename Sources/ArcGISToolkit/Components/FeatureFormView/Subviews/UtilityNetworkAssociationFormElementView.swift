@@ -145,7 +145,7 @@ extension UtilityNetworkAssociationFormElementView {
         }
     }
     
-    struct NetworkSourceGroup: Identifiable {
+    struct NetworkSourceGroup: Equatable, Hashable ,Identifiable {
         /// <#Description#>
         let associations: [Association]
         
@@ -157,6 +157,16 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let presentingForm: String
+        
+        static func == (lhs: UtilityNetworkAssociationFormElementView.NetworkSourceGroup, rhs: UtilityNetworkAssociationFormElementView.NetworkSourceGroup) -> Bool {
+            lhs.name == rhs.name
+            && lhs.id == rhs.id
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(name)
+            hasher.combine(id)
+        }
     }
     
     struct NetworkSourceGroupView: View {
