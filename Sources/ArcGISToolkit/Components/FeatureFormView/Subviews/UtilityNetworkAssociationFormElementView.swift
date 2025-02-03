@@ -130,9 +130,7 @@ extension UtilityNetworkAssociationFormElementView {
         
         var body: some View {
             List(associationKindGroup.networkSourceGroups) { group in
-                DisclosureGroup {
-                    NetworkSourceGroupView(networkSourceGroup: group)
-                } label: {
+                NavigationLink(value: group) {
                     HStack {
                         Text(group.name)
                         Spacer()
