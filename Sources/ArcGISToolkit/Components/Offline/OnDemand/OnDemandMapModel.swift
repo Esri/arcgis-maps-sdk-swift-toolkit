@@ -66,12 +66,11 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     
     /// The URL to the mobile map package for this area.
     private var mmpkDirectoryURL: URL {
-        Self.mmpkDirectory(for: directory)
+        Self.mmpkDirectory(forOnDemandDirectory: directory)
     }
     
     /// Returns a mobile map package directory for an on-demand directory.
-    /// TODO:
-    static func mmpkDirectory(for directory: URL) -> URL {
+    static func mmpkDirectory(forOnDemandDirectory directory: URL) -> URL {
         directory.appending(component: "mmpk")
     }
     
@@ -138,7 +137,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
         configuration = nil
         offlineMapTask = nil
-        let mmpkDirectory = Self.mmpkDirectory(for: directory)
+        let mmpkDirectory = Self.mmpkDirectory(forOnDemandDirectory: directory)
         guard FileManager.default.fileExists(atPath: mmpkDirectory.path()) else { return nil }
         let mmpk = MobileMapPackage(fileURL: mmpkDirectory)
         try? await mmpk.load()
@@ -387,14 +386,12 @@ struct OnDemandAreaID: CustomStringConvertible, Equatable {
     
     /// Creates an on-demand area from the directory of the mmpk for the on-demand area.
     /// - Parameter directory: The directory where the mmpk is.
-    /// TODO:
     init?(mmpkDirectory: URL) {
         // Typically the directory will look something like this:
         // OnDemand/<UUID>/mmpk
         // We need to remove the mmpk component, and grab the UUID.
-        let lastPathComponent = mmpkDirectory.deletingPathExtension().deletingLastPathComponent().lastPathComponent
-        guard let uuid = UUID(uuidString: lastPathComponent) else { print("-- foobar! \(lastPathComponent)"); return nil }
-        self.init(uuid: uuid)
+        let pathComponent = mmpkDirectory.deletingPathExtension().deletingLastPathComponent().lastPathComponent
+        self.init(pathComponent: pathComponent)
     }
 }
 
