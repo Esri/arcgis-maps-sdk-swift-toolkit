@@ -40,6 +40,7 @@ struct FormInputStyle: ViewModifier {
 extension View {
     /// Provides a frame minimum height constraint, padding, background color and rounded corners
     /// for a form input.
+    /// - Parameter isTappable: A Boolean value that indicates if this form input is tappable or not.
     func formInputStyle(isTappable: Bool) -> some View {
         modifier(FormInputStyle(isTappable: isTappable))
     }
