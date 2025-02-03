@@ -130,13 +130,27 @@ extension UtilityNetworkAssociationFormElementView {
         
         var body: some View {
             NavigationLink(value: association.linkDestination!) {
-                VStack(alignment: .leading) {
-                    Text(association.name)
-                        .lineLimit(1)
-                    if let description = association.description {
-                        Text(description)
-                            .font(.caption2)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(association.name)
+                            .lineLimit(1)
+                        if let description = association.description {
+                            Text(description)
+                                .font(.caption2)
+                        }
                     }
+                    Spacer()
+                    Group {
+                        if let percent = association.percentAlongEdge {
+                            Text(percent.formatted(.percent))
+                        } else if let terminal = association.terminal {
+                            Text("Terminal: \(terminal)")
+                        }
+                    }
+                    .padding(2.5)
+                    .background(Color(uiColor: .secondarySystemGroupedBackground))
+                    .cornerRadius(5)
+                    .font(.caption2)
                 }
             }
             .buttonStyle(.plain)
