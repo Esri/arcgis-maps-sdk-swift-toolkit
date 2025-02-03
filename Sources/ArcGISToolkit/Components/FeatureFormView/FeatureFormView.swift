@@ -184,9 +184,6 @@ struct FeatureFormViewInternal: View {
                 evaluatedForm
             }
         }
-        .navigationBarBackButtonHidden(headerVisibility == .hidden)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(headerVisibility != .hidden ? title : "")
     }
     
     var evaluatedForm: some View {
