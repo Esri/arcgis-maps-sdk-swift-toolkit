@@ -64,7 +64,9 @@ struct OnDemandListItemView: View {
     
     @ViewBuilder private var thumbnailView: some View {
         if let thumbnail = model.thumbnail {
-            LoadableImageView(loadableImage: thumbnail)
+            Image(uiImage: thumbnail)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
         } else {

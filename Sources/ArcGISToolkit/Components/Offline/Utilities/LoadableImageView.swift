@@ -32,9 +32,9 @@ struct LoadableImageView: View {
             case .none:
                 ProgressView()
             case .failure:
-                Image(systemName: "exclamationmark.circle")
+                Image(systemName: "exclamationmark.triangle")
                     .aspectRatio(contentMode: .fit)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(.secondary)
             case .success(let image):
                 Image(uiImage: image)
                     .resizable()

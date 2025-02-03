@@ -45,25 +45,27 @@ struct OnDemandConfigurationView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                VStack(spacing: 0) {
-                    Divider()
-                    Text("Pan and zoom to define the area")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .padding(8)
-                        .frame(maxWidth: .infinity)
-                    Divider()
-                    mapView
+            MapViewReader { mapViewProxy in
+                VStack {
+                    VStack(spacing: 0) {
+                        Divider()
+                        Text("Pan and zoom to define the area")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .padding(8)
+                            .frame(maxWidth: .infinity)
+                        Divider()
+                        mapView
+                    }
                 }
-            }
-            .safeAreaInset(edge: .bottom) {
-                bottomPane
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
+                .safeAreaInset(edge: .bottom) {
+                    bottomPane(mapView: mapViewProxy)
+                }
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel") {
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -85,7 +87,7 @@ struct OnDemandConfigurationView: View {
     }
     
     @ViewBuilder
-    private var bottomPane: some View {
+    private func bottomPane(mapView: MapViewProxy) -> some View {
         BottomCard(background: Color(uiColor: .systemBackground)) {
             VStack(alignment: .leading) {
                 HStack {
@@ -111,14 +113,18 @@ struct OnDemandConfigurationView: View {
                 HStack {
                     Button {
                         guard let visibleArea else { return }
-                        let configuration = OnDemandMapAreaConfiguration(
-                            title: title,
-                            minScale: CacheScale.worldSmall.scale,
-                            maxScale: maxScale.scale,
-                            areaOfInterest: visibleArea
-                        )
-                        onCompleteAction(configuration)
-                        dismiss()
+                        Task {
+                            let thumbnail = try? await mapView.exportImage()
+                            let configuration = OnDemandMapAreaConfiguration(
+                                title: title,
+                                minScale: 0,
+                                maxScale: maxScale.scale,
+                                areaOfInterest: visibleArea,
+                                thumbnail: thumbnail
+                            )
+                            onCompleteAction(configuration)
+                            dismiss()
+                        }
                     } label: {
                         Label("Download", systemImage: "square.and.arrow.down")
                             .frame(maxWidth: .infinity)
