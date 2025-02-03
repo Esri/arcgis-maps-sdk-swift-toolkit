@@ -173,7 +173,7 @@ extension UtilityNetworkAssociationFormElementView {
         let networkSourceGroup:  NetworkSourceGroup
         
         var body: some View {
-            ForEach(networkSourceGroup.associations) {
+            List(networkSourceGroup.associations) {
                 AssociationView(association: $0)
             }
         }
