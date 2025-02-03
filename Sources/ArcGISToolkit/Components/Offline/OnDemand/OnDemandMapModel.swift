@@ -59,6 +59,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// The first map from the mobile map package.
     @Published private(set) var map: Map?
     
+    private var thumbnailURL: URL {
+        mmpkDirectoryURL.appending(component: "thumbnail.png")
+    }
+    
     /// Creates an on-demand map area model with a configuration
     /// for taking the area offline.
     init(
@@ -78,6 +82,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             forPortalItemID: portalItemID,
             onDemandMapAreaID: configuration.areaID
         )
+        // Save thumbnail to file.
+        if let thumbnail = configuration.thumbnail, let pngData = thumbnail.pngData() {
+            try? pngData.write(to: thumbnailURL, options: .atomic)
+        }
     }
     
     /// Creates an on-demand map area model for a job that
@@ -99,6 +107,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             forPortalItemID: portalItemID,
             onDemandMapAreaID: areaID
         )
+        thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
         
         Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
         observeJob(job)
@@ -120,6 +129,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         title = mmpk.item?.title ?? "Unknown"
         mmpkDirectoryURL = mmpkURL
         offlineMapTask = nil
+        thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
         Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
         await loadAndUpdateMobileMapPackage(mmpk: mmpk)
     }
