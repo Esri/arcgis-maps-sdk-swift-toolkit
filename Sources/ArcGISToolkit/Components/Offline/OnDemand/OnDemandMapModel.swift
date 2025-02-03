@@ -42,7 +42,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
     
     /// A thumbnail for the map area.
-    @Published private(set) var thumbnail: LoadableImage?
+    @Published private(set) var thumbnail: UIImage?
     
     /// The mobile map package for the preplanned map area.
     @Published private(set) var mobileMapPackage: MobileMapPackage?
@@ -73,6 +73,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         self.onRemoveDownloadAction = onRemoveDownload
         self.title = configuration.title
         self.areaID = configuration.areaID
+        self.thumbnail = configuration.thumbnail
         mmpkDirectoryURL = .onDemandDirectory(
             forPortalItemID: portalItemID,
             onDemandMapAreaID: configuration.areaID
@@ -139,7 +140,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
-            thumbnail = mmpk.item?.thumbnail
+            if thumbnail == nil, let loadable = mmpk.item?.thumbnail {
+                try? await loadable.load()
+                thumbnail = loadable.image
+            }
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
@@ -368,4 +372,6 @@ struct OnDemandMapAreaConfiguration {
     let maxScale: Double
     /// The area of interest to take offline.
     let areaOfInterest: Geometry
+    /// The thumbnail of the area.
+    let thumbnail: UIImage?
 }

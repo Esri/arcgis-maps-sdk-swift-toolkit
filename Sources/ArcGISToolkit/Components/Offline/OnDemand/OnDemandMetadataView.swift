@@ -31,7 +31,8 @@ struct OnDemandMetadataView: View {
                 if let thumbnail = model.thumbnail {
                     HStack {
                         Spacer()
-                        LoadableImageView(loadableImage: thumbnail)
+                        Image(uiImage: thumbnail)
+                            .resizable()
                             .clipShape(.rect(cornerRadius: 10))
                             .padding(.vertical, 10)
                         Spacer()
