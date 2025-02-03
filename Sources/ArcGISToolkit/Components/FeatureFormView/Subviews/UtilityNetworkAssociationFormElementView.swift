@@ -78,6 +78,49 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let name: String
+        
+        /// <#Description#>
+        let percentAlongEdge: Int?
+        
+        /// <#Description#>
+        let terminal: String?
+        
+        /// <#Description#>
+        /// - Parameters:
+        ///   - description: <#description description#>
+        ///   - linkDestination: <#linkDestination description#>
+        ///   - name: <#name description#>
+        init(description: String?, linkDestination: (any Hashable)?, name: String) {
+            self.init(description: description, linkDestination: linkDestination, name: name, percentAlongEdge: nil, terminal: nil)
+        }
+        
+        /// <#Description#>
+        /// - Parameters:
+        ///   - description: <#description description#>
+        ///   - linkDestination: <#linkDestination description#>
+        ///   - name: <#name description#>
+        ///   - percentAlongEdge: <#percentAlongEdge description#>
+        init(description: String?, linkDestination: (any Hashable)?, name: String, percentAlongEdge: Int) {
+            self.init(description: description, linkDestination: linkDestination, name: name, percentAlongEdge: percentAlongEdge, terminal: nil)
+        }
+        
+        /// <#Description#>
+        /// - Parameters:
+        ///   - description: <#description description#>
+        ///   - linkDestination: <#linkDestination description#>
+        ///   - name: <#name description#>
+        ///   - terminal: <#terminal description#>
+        init(description: String?, linkDestination: (any Hashable)?, name: String, terminal: String) {
+            self.init(description: description, linkDestination: linkDestination, name: name, percentAlongEdge: nil, terminal: terminal)
+        }
+        
+        private init(description: String?, linkDestination: (any Hashable)?, name: String, percentAlongEdge: Int?, terminal: String?) {
+            self.description = description
+            self.linkDestination = linkDestination
+            self.name = name
+            self.percentAlongEdge = percentAlongEdge
+            self.terminal = terminal
+        }
     }
     
     struct AssociationView: View {
