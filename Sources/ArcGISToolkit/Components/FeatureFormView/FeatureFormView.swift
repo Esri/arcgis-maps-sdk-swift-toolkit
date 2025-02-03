@@ -133,6 +133,31 @@ public struct FeatureFormView: View {
                         }
                     }
             }
+            .navigationDestination(for: UtilityNetworkAssociationFormElementView.NetworkSourceGroup.self) { group in
+                UtilityNetworkAssociationFormElementView.NetworkSourceGroupView(networkSourceGroup: group)
+                    .navigationBarBackButtonHidden()
+                    .toolbar {
+                        ToolbarItem(placement: .navigation) {
+                            HStack {
+                                Button {
+                                    path.removeLast()
+                                } label: {
+                                    // Label(_:systemImage:) unexpectedly breaks
+                                    // the enclosing HStack.
+                                    Image(systemName: "chevron.left")
+                                }
+                                Divider()
+                                VStack(alignment: .leading) {
+                                    Text(group.name)
+                                        .bold()
+                                    Text(group.presentingForm)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
+            }
         }
         .environment(\.validationErrorVisibility, validationErrorVisibility)
 //        .onChange(of: path) { newValue in
