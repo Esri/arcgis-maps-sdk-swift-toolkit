@@ -138,7 +138,6 @@ extension UtilityNetworkAssociationFormElementView {
                     }
                 }
             }
-            .listStyle(.plain)
             .scrollContentBackground(.hidden)
         }
     }
