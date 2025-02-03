@@ -23,8 +23,8 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The configuration for taking the map area offline.
 ***REMOVED***let configuration: OnDemandMapAreaConfiguration?
 ***REMOVED***
-***REMOVED******REMOVED***/ The mobile map package directory URL.
-***REMOVED***private let mmpkDirectoryURL: URL
+***REMOVED******REMOVED***/ The directory URL for this area.
+***REMOVED***private let directory: URL
 ***REMOVED***
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***private let offlineMapTask: OfflineMapTask?
@@ -59,8 +59,20 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The first map from the mobile map package.
 ***REMOVED***@Published private(set) var map: Map?
 ***REMOVED***
+***REMOVED******REMOVED***/ The URL to the thumbnail for this area.
 ***REMOVED***private var thumbnailURL: URL {
-***REMOVED******REMOVED***mmpkDirectoryURL.appending(component: "thumbnail.png")
+***REMOVED******REMOVED***directory.appending(component: "thumbnail.png")
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The URL to the mobile map package for this area.
+***REMOVED***private var mmpkDirectoryURL: URL {
+***REMOVED******REMOVED***Self.mmpkDirectory(for: directory)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a mobile map package directory for an on-demand directory.
+***REMOVED******REMOVED***/ TODO:
+***REMOVED***static func mmpkDirectory(for directory: URL) -> URL {
+***REMOVED******REMOVED***directory.appending(component: "mmpk")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand map area model with a configuration
@@ -78,12 +90,13 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***self.title = configuration.title
 ***REMOVED******REMOVED***self.areaID = configuration.areaID
 ***REMOVED******REMOVED***self.thumbnail = configuration.thumbnail
-***REMOVED******REMOVED***mmpkDirectoryURL = .onDemandDirectory(
+***REMOVED******REMOVED***directory = .onDemandDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: configuration.areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Save thumbnail to file.
 ***REMOVED******REMOVED***if let thumbnail = configuration.thumbnail, let pngData = thumbnail.pngData() {
+***REMOVED******REMOVED******REMOVED***try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***try? pngData.write(to: thumbnailURL, options: .atomic)
 ***REMOVED***
 ***REMOVED***
@@ -103,34 +116,35 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.onRemoveDownloadAction = onRemoveDownload
 ***REMOVED******REMOVED***self.offlineMapTask = nil
-***REMOVED******REMOVED***mmpkDirectoryURL = .onDemandDirectory(
+***REMOVED******REMOVED***directory = .onDemandDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onDemandMapAreaID: areaID
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
+***REMOVED******REMOVED***Logger.offlineManager.debug("Found executing job for on-demand area \(areaID)")
 ***REMOVED******REMOVED***observeJob(job)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand map area model for a map area that has already been downloaded.
-***REMOVED***init(
+***REMOVED***init?(
 ***REMOVED******REMOVED***areaID: OnDemandAreaID,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED***onRemoveDownload: @escaping (OnDemandMapModel) -> Void
 ***REMOVED***) async {
-***REMOVED******REMOVED***let mmpkURL = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
-***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: mmpkURL)
-***REMOVED******REMOVED***try? await mmpk.load()
 ***REMOVED******REMOVED***self.areaID = areaID
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.onRemoveDownloadAction = onRemoveDownload
+***REMOVED******REMOVED***directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
 ***REMOVED******REMOVED***configuration = nil
-***REMOVED******REMOVED***title = mmpk.item?.title ?? "Unknown"
-***REMOVED******REMOVED***mmpkDirectoryURL = mmpkURL
 ***REMOVED******REMOVED***offlineMapTask = nil
+***REMOVED******REMOVED***let mmpkDirectory = Self.mmpkDirectory(for: directory)
+***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: mmpkDirectory.path()) else { return nil ***REMOVED***
+***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: mmpkDirectory)
+***REMOVED******REMOVED***try? await mmpk.load()
+***REMOVED******REMOVED***title = mmpk.item?.title ?? "Unknown"
 ***REMOVED******REMOVED***thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
-***REMOVED******REMOVED***Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
+***REMOVED******REMOVED***Logger.offlineManager.debug("Found on-demand area at \(self.mmpkDirectoryURL.path(), privacy: .private)")
 ***REMOVED******REMOVED***await loadAndUpdateMobileMapPackage(mmpk: mmpk)
 ***REMOVED***
 ***REMOVED***
@@ -235,14 +249,18 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***switch downloadResult {
 ***REMOVED******REMOVED***case .success(let result):
 ***REMOVED******REMOVED******REMOVED***if result.hasErrors {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.info("GenerateOfflineMap job succeeded with layer errors.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadedWithLayerErrors
 ***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.info("GenerateOfflineMap job succeeded.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***if error is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.info("GenerateOfflineMap job cancelled.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadCancelled
 ***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("GenerateOfflineMap job failed with error: \(error).")
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Remove contents of mmpk directory when download fails.
@@ -264,7 +282,7 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? GenerateOfflineMapJob ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.filter { $0.onlineMap?.item?.id == portalItemID ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.compactMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let areaID = OnDemandAreaID(from: $0.downloadDirectoryURL) else {
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let areaID = OnDemandAreaID(mmpkDirectory: $0.downloadDirectoryURL) else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return Optional<OnDemandMapModel>.none
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***return OnDemandMapModel(
@@ -280,15 +298,15 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED*** Look up the already downloaded on-demand map models.
 ***REMOVED******REMOVED***let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED***if let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) {
-***REMOVED******REMOVED******REMOVED***for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(rawValue:)) {
+***REMOVED******REMOVED******REMOVED***for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(pathComponent:)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we already have one (ie. a job is already be running and the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** directory is non-empty so we found it here), then we continue.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** directory is exists so we found it here), then we continue.
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID ***REMOVED***) else { continue ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let mapArea = await OnDemandMapModel.init(
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let mapArea = await OnDemandMapModel.init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaID: mapAreaID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownload
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) else { continue ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels.append(mapArea)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -347,26 +365,36 @@ extension OnDemandMapModel: Hashable {
 ***REMOVED***
 
 ***REMOVED***/ Represents the unique ID of an on-demand map area.
-struct OnDemandAreaID: RawRepresentable {
-***REMOVED***var rawValue: String
+struct OnDemandAreaID: CustomStringConvertible, Equatable {
+***REMOVED***let uuid: UUID
+***REMOVED***var description: String { uuid.uuidString ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates an new on-demand area ID from a `UUID`.
+***REMOVED***private init(uuid: UUID) {
+***REMOVED******REMOVED***self.uuid = uuid
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new unique on-demand area ID.
-***REMOVED***init() { rawValue = UUID().uuidString ***REMOVED***
+***REMOVED***init() { uuid = UUID() ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates an on-demand area ID from a raw value String.
-***REMOVED******REMOVED***/ Returns `nil` if an empty string is passed in.
-***REMOVED******REMOVED***/ - Parameter rawValue: The raw value.
-***REMOVED***init?(rawValue: String) {
-***REMOVED******REMOVED***guard !rawValue.isEmpty else { return nil ***REMOVED***
-***REMOVED******REMOVED***self.rawValue = rawValue
+***REMOVED******REMOVED***/ Creates an on-demand area ID from a path component string.
+***REMOVED******REMOVED***/ Returns `nil` if an invalid string is passed in.
+***REMOVED******REMOVED***/ - Parameter pathComponent: The path component.
+***REMOVED***init?(pathComponent: String) {
+***REMOVED******REMOVED***guard let uuid = UUID(uuidString: pathComponent) else { return nil ***REMOVED***
+***REMOVED******REMOVED***self.init(uuid: uuid)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates an on-demand area from a directory where the last path component
-***REMOVED******REMOVED***/ is the ID.
-***REMOVED******REMOVED***/ - Parameter directory: The directory where the last path component is the ID.
-***REMOVED***init?(from directory: URL) {
-***REMOVED******REMOVED***let lastPathComponent = directory.deletingPathExtension().lastPathComponent
-***REMOVED******REMOVED***self.init(rawValue: lastPathComponent)
+***REMOVED******REMOVED***/ Creates an on-demand area from the directory of the mmpk for the on-demand area.
+***REMOVED******REMOVED***/ - Parameter directory: The directory where the mmpk is.
+***REMOVED******REMOVED***/ TODO:
+***REMOVED***init?(mmpkDirectory: URL) {
+***REMOVED******REMOVED******REMOVED*** Typically the directory will look something like this:
+***REMOVED******REMOVED******REMOVED*** OnDemand/<UUID>/mmpk
+***REMOVED******REMOVED******REMOVED*** We need to remove the mmpk component, and grab the UUID.
+***REMOVED******REMOVED***let lastPathComponent = mmpkDirectory.deletingPathExtension().deletingLastPathComponent().lastPathComponent
+***REMOVED******REMOVED***guard let uuid = UUID(uuidString: lastPathComponent) else { print("-- foobar! \(lastPathComponent)"); return nil ***REMOVED***
+***REMOVED******REMOVED***self.init(uuid: uuid)
 ***REMOVED***
 ***REMOVED***
 
