@@ -66,12 +66,11 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The URL to the mobile map package for this area.
 ***REMOVED***private var mmpkDirectoryURL: URL {
-***REMOVED******REMOVED***Self.mmpkDirectory(for: directory)
+***REMOVED******REMOVED***Self.mmpkDirectory(forOnDemandDirectory: directory)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a mobile map package directory for an on-demand directory.
-***REMOVED******REMOVED***/ TODO:
-***REMOVED***static func mmpkDirectory(for directory: URL) -> URL {
+***REMOVED***static func mmpkDirectory(forOnDemandDirectory directory: URL) -> URL {
 ***REMOVED******REMOVED***directory.appending(component: "mmpk")
 ***REMOVED***
 ***REMOVED***
@@ -138,7 +137,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
 ***REMOVED******REMOVED***configuration = nil
 ***REMOVED******REMOVED***offlineMapTask = nil
-***REMOVED******REMOVED***let mmpkDirectory = Self.mmpkDirectory(for: directory)
+***REMOVED******REMOVED***let mmpkDirectory = Self.mmpkDirectory(forOnDemandDirectory: directory)
 ***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: mmpkDirectory.path()) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: mmpkDirectory)
 ***REMOVED******REMOVED***try? await mmpk.load()
@@ -387,14 +386,12 @@ struct OnDemandAreaID: CustomStringConvertible, Equatable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an on-demand area from the directory of the mmpk for the on-demand area.
 ***REMOVED******REMOVED***/ - Parameter directory: The directory where the mmpk is.
-***REMOVED******REMOVED***/ TODO:
 ***REMOVED***init?(mmpkDirectory: URL) {
 ***REMOVED******REMOVED******REMOVED*** Typically the directory will look something like this:
 ***REMOVED******REMOVED******REMOVED*** OnDemand/<UUID>/mmpk
 ***REMOVED******REMOVED******REMOVED*** We need to remove the mmpk component, and grab the UUID.
-***REMOVED******REMOVED***let lastPathComponent = mmpkDirectory.deletingPathExtension().deletingLastPathComponent().lastPathComponent
-***REMOVED******REMOVED***guard let uuid = UUID(uuidString: lastPathComponent) else { print("-- foobar! \(lastPathComponent)"); return nil ***REMOVED***
-***REMOVED******REMOVED***self.init(uuid: uuid)
+***REMOVED******REMOVED***let pathComponent = mmpkDirectory.deletingPathExtension().deletingLastPathComponent().lastPathComponent
+***REMOVED******REMOVED***self.init(pathComponent: pathComponent)
 ***REMOVED***
 ***REMOVED***
 
