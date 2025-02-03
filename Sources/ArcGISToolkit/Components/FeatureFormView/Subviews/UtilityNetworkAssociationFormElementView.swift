@@ -111,6 +111,9 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let presentingForm: String
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***static func == (lhs: UtilityNetworkAssociationFormElementView.AssociationKindGroup, rhs: UtilityNetworkAssociationFormElementView.AssociationKindGroup) -> Bool {
 ***REMOVED******REMOVED******REMOVED***lhs.name == rhs.name
 ***REMOVED******REMOVED******REMOVED***&& lhs.id == rhs.id
@@ -151,6 +154,9 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let presentingForm: String
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct NetworkSourceGroupView: View {
