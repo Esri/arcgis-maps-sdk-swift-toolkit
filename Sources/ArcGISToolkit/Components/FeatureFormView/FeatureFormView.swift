@@ -184,9 +184,6 @@ struct FeatureFormViewInternal: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***evaluatedForm
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationBarBackButtonHidden(headerVisibility == .hidden)
-***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED***.navigationTitle(headerVisibility != .hidden ? title : "")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var evaluatedForm: some View {
