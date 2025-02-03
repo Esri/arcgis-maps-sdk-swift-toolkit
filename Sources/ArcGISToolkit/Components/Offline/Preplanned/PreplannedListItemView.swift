@@ -95,6 +95,7 @@ struct PreplannedListItemView: View {
     @ViewBuilder private var thumbnailView: some View {
         if let thumbnail = model.preplannedMapArea.thumbnail {
             LoadableImageView(loadableImage: thumbnail)
+                .aspectRatio(contentMode: .fill)
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
         }
