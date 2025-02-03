@@ -111,6 +111,9 @@ extension UtilityNetworkAssociationFormElementView {
         /// <#Description#>
         let name: String
         
+        /// <#Description#>
+        let presentingForm: String
+        
         static func == (lhs: UtilityNetworkAssociationFormElementView.AssociationKindGroup, rhs: UtilityNetworkAssociationFormElementView.AssociationKindGroup) -> Bool {
             lhs.name == rhs.name
             && lhs.id == rhs.id
@@ -151,6 +154,9 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let name: String
+        
+        /// <#Description#>
+        let presentingForm: String
     }
     
     struct NetworkSourceGroupView: View {

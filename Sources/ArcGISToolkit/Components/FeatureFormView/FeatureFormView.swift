@@ -123,7 +123,7 @@ public struct FeatureFormView: View {
                                 VStack(alignment: .leading) {
                                     Text(group.name)
                                         .bold()
-                                    Text("[PRESENTING FORM]")
+                                    Text(group.presentingForm)
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -262,14 +262,16 @@ struct FeatureFormViewInternal: View {
                             }
                             let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
                                 associations: associations,
-                                name: networkSourceName
+                                name: networkSourceName,
+                                presentingForm: title
                             )
                             networkSourceGroups.append(networkSourceGroup)
                         }
                         groups.append(
                             UtilityNetworkAssociationFormElementView.AssociationKindGroup(
                                 networkSourceGroups: networkSourceGroups,
-                                name: "\(associationKind)".capitalized
+                                name: "\(associationKind)".capitalized,
+                                presentingForm: title
                             )
                         )
                     }
