@@ -145,7 +145,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct NetworkSourceGroup: Identifiable {
+***REMOVED***struct NetworkSourceGroup: Equatable, Hashable ,Identifiable {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let associations: [Association]
 ***REMOVED******REMOVED***
@@ -157,6 +157,16 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let presentingForm: String
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***static func == (lhs: UtilityNetworkAssociationFormElementView.NetworkSourceGroup, rhs: UtilityNetworkAssociationFormElementView.NetworkSourceGroup) -> Bool {
+***REMOVED******REMOVED******REMOVED***lhs.name == rhs.name
+***REMOVED******REMOVED******REMOVED***&& lhs.id == rhs.id
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED******REMOVED***hasher.combine(name)
+***REMOVED******REMOVED******REMOVED***hasher.combine(id)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct NetworkSourceGroupView: View {
