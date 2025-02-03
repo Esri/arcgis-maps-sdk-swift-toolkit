@@ -60,7 +60,7 @@ extension URL {
         var url = portalItemDirectory(forPortalItemID: portalItemID)
             .appending(component: "OnDemand/")
         if let onDemandMapAreaID {
-            url = url.appending(component: onDemandMapAreaID.rawValue)
+            url = url.appending(component: onDemandMapAreaID.description)
         }
         return url
     }
