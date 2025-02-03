@@ -137,6 +137,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.associations.count.formatted())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED***
@@ -172,7 +173,9 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***List(networkSourceGroup.associations) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
