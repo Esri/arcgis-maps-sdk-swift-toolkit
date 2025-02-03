@@ -95,6 +95,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
 ***REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.thumbnail {
 ***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
+***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
 ***REMOVED***
