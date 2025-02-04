@@ -22,7 +22,7 @@ internal import Markdown
 ***REMOVED***/  - Code Block
 ***REMOVED***/  - Emphasis
 ***REMOVED***/  - Heading
-***REMOVED***/***REMOVED***Horizontal Rule
+***REMOVED***/  - Horizontal Rule
 ***REMOVED***/  - Image
 ***REMOVED***/  - Inline Code
 ***REMOVED***/  - Link

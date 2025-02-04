@@ -56,7 +56,7 @@ struct FlashlightButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(torchIsOn ? .white : .black)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentTransition(.interpolate)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.tint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(Circle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.circle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.disabled(!hasTorch)
