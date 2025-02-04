@@ -56,10 +56,16 @@ extension UtilityNetworkAssociationFormElementView {
         let description: String?
         
         /// <#Description#>
+        let fractionAlongEdge: Double?
+        
+        /// <#Description#>
         let id = UUID()
         
         /// <#Description#>
         let name: String
+        
+        /// <#Description#>
+        let terminalName: String?
     }
     
     struct AssociationView: View {
