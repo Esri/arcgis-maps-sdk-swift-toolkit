@@ -84,43 +84,6 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let terminalName: String?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - description: <#description description#>
-***REMOVED******REMOVED******REMOVED***/   - linkDestination: <#linkDestination description#>
-***REMOVED******REMOVED******REMOVED***/   - name: <#name description#>
-***REMOVED******REMOVED***init(description: String?, linkDestination: (any Hashable)?, name: String) {
-***REMOVED******REMOVED******REMOVED***self.init(description: description, linkDestination: linkDestination, name: name, fractionAlongEdge: nil, terminalName: nil)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - description: <#description description#>
-***REMOVED******REMOVED******REMOVED***/   - linkDestination: <#linkDestination description#>
-***REMOVED******REMOVED******REMOVED***/   - name: <#name description#>
-***REMOVED******REMOVED******REMOVED***/   - percentAlongEdge: <#percentAlongEdge description#>
-***REMOVED******REMOVED***init(description: String?, linkDestination: (any Hashable)?, name: String, fractionAlongEdge: Int) {
-***REMOVED******REMOVED******REMOVED***self.init(description: description, linkDestination: linkDestination, name: name, fractionAlongEdge: fractionAlongEdge, terminalName: nil)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - description: <#description description#>
-***REMOVED******REMOVED******REMOVED***/   - linkDestination: <#linkDestination description#>
-***REMOVED******REMOVED******REMOVED***/   - name: <#name description#>
-***REMOVED******REMOVED******REMOVED***/   - terminalName: <#terminal description#>
-***REMOVED******REMOVED***init(description: String?, linkDestination: (any Hashable)?, name: String, terminal: String) {
-***REMOVED******REMOVED******REMOVED***self.init(description: description, linkDestination: linkDestination, name: name, fractionAlongEdge: nil, terminalName: terminal)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***private init(description: String?, linkDestination: (any Hashable)?, name: String, fractionAlongEdge: Int?, terminalName: String?) {
-***REMOVED******REMOVED******REMOVED***self.description = description
-***REMOVED******REMOVED******REMOVED***self.linkDestination = linkDestination
-***REMOVED******REMOVED******REMOVED***self.name = name
-***REMOVED******REMOVED******REMOVED***self.fractionAlongEdge = fractionAlongEdge
-***REMOVED******REMOVED******REMOVED***self.terminalName = terminalName
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationView: View {
