@@ -70,6 +70,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a mobile map package directory for an on-demand directory.
+***REMOVED******REMOVED***/ - Parameter directory: The on-demand directory.
 ***REMOVED***static func mmpkDirectory(forOnDemandDirectory directory: URL) -> URL {
 ***REMOVED******REMOVED***directory.appending(component: "mmpk")
 ***REMOVED***
@@ -298,8 +299,8 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED***let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED***if let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) {
 ***REMOVED******REMOVED******REMOVED***for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(pathComponent:)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we already have one (ie. a job is already be running and the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** directory is exists so we found it here), then we continue.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we already have one (ie. a job is already running and the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** directory exists), then we continue.
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID ***REMOVED***) else { continue ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let mapArea = await OnDemandMapModel.init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaID: mapAreaID,
