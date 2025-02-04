@@ -108,57 +108,14 @@ public struct FeatureFormView: View {
                     path: $path,
                     utilityNetwork: utilityNetwork
                 )
-                .navigationBarBackButtonHidden()
             }
             .navigationDestination(for: UtilityNetworkAssociationFormElementView.AssociationKindGroup.self) { group in
                 UtilityNetworkAssociationFormElementView.AssociationKindGroupView(associationKindGroup: group)
-                    .navigationBarBackButtonHidden()
-                    .toolbar {
-                        ToolbarItem(placement: .navigation) {
-                            HStack {
-                                Button {
-                                    path.removeLast()
-                                } label: {
-                                    // Label(_:systemImage:) unexpectedly breaks
-                                    // the enclosing HStack.
-                                    Image(systemName: "chevron.left")
-                                }
-                                Divider()
-                                VStack(alignment: .leading) {
-                                    Text(group.name)
-                                        .bold()
-                                    Text(group.presentingForm)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                        }
-                    }
+                    .formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
             }
             .navigationDestination(for: UtilityNetworkAssociationFormElementView.NetworkSourceGroup.self) { group in
                 UtilityNetworkAssociationFormElementView.NetworkSourceGroupView(networkSourceGroup: group)
-                    .navigationBarBackButtonHidden()
-                    .toolbar {
-                        ToolbarItem(placement: .navigation) {
-                            HStack {
-                                Button {
-                                    path.removeLast()
-                                } label: {
-                                    // Label(_:systemImage:) unexpectedly breaks
-                                    // the enclosing HStack.
-                                    Image(systemName: "chevron.left")
-                                }
-                                Divider()
-                                VStack(alignment: .leading) {
-                                    Text(group.name)
-                                        .bold()
-                                    Text(group.presentingForm)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                        }
-                    }
+                    .formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
             }
         }
         .environment(\.validationErrorVisibility, validationErrorVisibility)
@@ -216,6 +173,7 @@ struct FeatureFormViewInternal: View {
                 evaluatedForm
             }
         }
+        .formNavigationHeader(path: $path, visibility: headerVisibility, title: title)
     }
     
     var evaluatedForm: some View {
