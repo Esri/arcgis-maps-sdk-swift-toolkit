@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view that loads a `LoadableImage` and displays it.
 /// While the image is loading a progress view is displayed.
@@ -27,7 +27,7 @@ struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
     /// The content to display once the image loads.
     var loadedContent: (Image) -> LoadedContent
     /// The result of loading the image.
-    @State var result: Result<UIImage, Error>? = nil
+    @State var result: Result<UIImage, Error>?
     
     /// Creates a `LoadableImageView`.
     /// - Parameters:
