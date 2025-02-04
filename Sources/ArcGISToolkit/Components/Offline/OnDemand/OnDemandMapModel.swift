@@ -70,6 +70,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     }
     
     /// Returns a mobile map package directory for an on-demand directory.
+    /// - Parameter directory: The on-demand directory.
     static func mmpkDirectory(forOnDemandDirectory directory: URL) -> URL {
         directory.appending(component: "mmpk")
     }
@@ -298,8 +299,8 @@ extension OnDemandMapModel {
         let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
         if let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) {
             for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(pathComponent:)) {
-                // If we already have one (ie. a job is already be running and the
-                // directory is exists so we found it here), then we continue.
+                // If we already have one (ie. a job is already running and the
+                // directory exists), then we continue.
                 guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID }) else { continue }
                 guard let mapArea = await OnDemandMapModel.init(
                     areaID: mapAreaID,
