@@ -95,14 +95,14 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack(path: $path) {
-***REMOVED******REMOVED******REMOVED***FeatureFormViewInternal(
+***REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: $path,
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: ArcGISFeature.self) { feature in
-***REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormViewInternal(
+***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: feature),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path: $path,
@@ -135,7 +135,7 @@ public struct FeatureFormView: View {
 ***REMOVED***
 
 ***REMOVED***/ <#Description#>
-struct FeatureFormViewInternal: View {
+struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@Binding var path: NavigationPath
 ***REMOVED***
@@ -287,7 +287,7 @@ struct FeatureFormViewInternal: View {
 ***REMOVED***
 
 @available(visionOS, unavailable)
-extension FeatureFormViewInternal {
+extension InternalFeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
