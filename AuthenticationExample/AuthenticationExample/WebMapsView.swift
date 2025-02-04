@@ -80,7 +80,7 @@ struct PortalItemView: View {
                     .font(.caption)
                 Text(item.snippet)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
         }

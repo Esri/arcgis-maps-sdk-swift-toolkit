@@ -27,9 +27,9 @@ final class FloorFilterTests: XCTestCase {
         
         let filterButton = app.buttons["Floor Filter button"]
         let researchAnnexButton = app.buttons["Research Annex"]
-        let latticeText = app.staticTexts["Lattice"]
-        let levelEightText = app.scrollViews.otherElements.staticTexts["8"]
-        let levelOneText = app.staticTexts["1"]
+        let latticeText = app.buttons["Lattice"]
+        let levelEightText = app.scrollViews.otherElements.buttons["8"]
+        let levelOneText = app.buttons["1"]
         let collapseButton = app.buttons["Go Down"]
         
         // Open the Floor Filter component test view.

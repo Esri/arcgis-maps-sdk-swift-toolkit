@@ -54,7 +54,7 @@ struct FloorFilterExampleView: View {
                         "Map load error!",
                         systemImage: "exclamationmark.triangle"
                     )
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
                     .frame(
                         maxWidth: .infinity,
                         maxHeight: .infinity,

@@ -22,7 +22,7 @@ struct ScalebarTextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(Scalebar.font.font)
-            .foregroundColor(settings.textColor)
+            .foregroundStyle(settings.textColor)
             .shadow(
                 color: settings.textShadowColor,
                 radius: settings.shadowRadius

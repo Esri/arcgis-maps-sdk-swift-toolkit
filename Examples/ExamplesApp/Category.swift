@@ -12,15 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+/// A category of examples.
+struct Category {
+    /// The name of this category.
+    let name: String
+    /// The examples in this category.
+    let examples: [Example]
+}
 
-struct ExampleView: View {
-    /// The example to display in the view.
-    var example: Example
-    
-    var body: some View {
-        example.makeBody()
-            .navigationTitle(example.name)
-            .navigationBarTitleDisplayMode(.inline)
+extension Category: Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.name == rhs.name
+    }
+}
+
+extension Category: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
     }
 }

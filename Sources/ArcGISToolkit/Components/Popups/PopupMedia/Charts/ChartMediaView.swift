@@ -57,7 +57,7 @@ struct ChartMediaView: View {
                 .frame(width: mediaSize.width, height: mediaSize.height)
         }
         .frame(width: mediaSize.width, height: mediaSize.height)
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .clipShape(.rect(cornerRadius: cornerRadius))
         .onTapGesture {
             isShowingDetailView = true
         }

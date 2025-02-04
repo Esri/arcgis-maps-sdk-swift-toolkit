@@ -103,7 +103,7 @@ struct FeatureFormExampleView: View {
                         }
                         .padding()
                         .background(.thinMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(.rect(cornerRadius: 10))
                     default:
                         EmptyView()
                     }
@@ -199,7 +199,7 @@ private extension ArcGISCredential {
 
 /// The model class for the form example view
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
     /// Feature form workflow states.
     enum State {
         /// Edits are being applied to the remote service.
