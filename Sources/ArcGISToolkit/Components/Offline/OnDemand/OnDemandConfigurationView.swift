@@ -43,6 +43,18 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***visibleArea == nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The scale or the map area selector.
+***REMOVED***private let mapAreaScale = 0.8
+***REMOVED***
+***REMOVED******REMOVED***/ The scaled downn visible area for the map area selector.
+***REMOVED***private var scaledVisibleArea: Envelope? {
+***REMOVED******REMOVED***if let visibleArea {
+***REMOVED******REMOVED******REMOVED***GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***MapViewReader { mapViewProxy in
@@ -55,7 +67,12 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let scaledVisibleArea {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
