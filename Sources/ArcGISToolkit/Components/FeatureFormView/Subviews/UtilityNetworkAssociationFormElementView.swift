@@ -84,43 +84,6 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let terminalName: String?
-        
-        /// <#Description#>
-        /// - Parameters:
-        ///   - description: <#description description#>
-        ///   - linkDestination: <#linkDestination description#>
-        ///   - name: <#name description#>
-        init(description: String?, linkDestination: (any Hashable)?, name: String) {
-            self.init(description: description, linkDestination: linkDestination, name: name, fractionAlongEdge: nil, terminalName: nil)
-        }
-        
-        /// <#Description#>
-        /// - Parameters:
-        ///   - description: <#description description#>
-        ///   - linkDestination: <#linkDestination description#>
-        ///   - name: <#name description#>
-        ///   - percentAlongEdge: <#percentAlongEdge description#>
-        init(description: String?, linkDestination: (any Hashable)?, name: String, fractionAlongEdge: Int) {
-            self.init(description: description, linkDestination: linkDestination, name: name, fractionAlongEdge: fractionAlongEdge, terminalName: nil)
-        }
-        
-        /// <#Description#>
-        /// - Parameters:
-        ///   - description: <#description description#>
-        ///   - linkDestination: <#linkDestination description#>
-        ///   - name: <#name description#>
-        ///   - terminalName: <#terminal description#>
-        init(description: String?, linkDestination: (any Hashable)?, name: String, terminal: String) {
-            self.init(description: description, linkDestination: linkDestination, name: name, fractionAlongEdge: nil, terminalName: terminal)
-        }
-        
-        private init(description: String?, linkDestination: (any Hashable)?, name: String, fractionAlongEdge: Int?, terminalName: String?) {
-            self.description = description
-            self.linkDestination = linkDestination
-            self.name = name
-            self.fractionAlongEdge = fractionAlongEdge
-            self.terminalName = terminalName
-        }
     }
     
     struct AssociationView: View {
