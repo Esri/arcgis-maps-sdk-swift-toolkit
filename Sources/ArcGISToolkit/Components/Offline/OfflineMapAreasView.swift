@@ -148,7 +148,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(map: onlineMap.clone(), title: mapViewModel.nextOnDemandAreaTitle(), titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***

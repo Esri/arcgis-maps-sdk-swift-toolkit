@@ -60,7 +60,7 @@ extension URL {
 ***REMOVED******REMOVED***var url = portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(component: "OnDemand/")
 ***REMOVED******REMOVED***if let onDemandMapAreaID {
-***REMOVED******REMOVED******REMOVED***url = url.appending(component: onDemandMapAreaID.rawValue)
+***REMOVED******REMOVED******REMOVED***url = url.appending(component: onDemandMapAreaID.description)
 ***REMOVED***
 ***REMOVED******REMOVED***return url
 ***REMOVED***

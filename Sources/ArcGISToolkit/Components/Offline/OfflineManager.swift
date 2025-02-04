@@ -50,7 +50,9 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Resume all paused jobs.
-***REMOVED******REMOVED***Logger.offlineManager.debug("Resuming all paused jobs")
+***REMOVED******REMOVED***let count = jobManager.jobs.filter { $0.status == .paused ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.count
+***REMOVED******REMOVED***Logger.offlineManager.debug("Resuming all paused jobs (\(count)).")
 ***REMOVED******REMOVED***jobManager.resumeAllPausedJobs()
 ***REMOVED***
 ***REMOVED***
