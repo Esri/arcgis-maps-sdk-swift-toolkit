@@ -233,8 +233,17 @@ struct FeatureFormViewInternal: View {
                             var associations: [UtilityNetworkAssociationFormElementView.Association] = []
                             // For each association, create a Toolkit representation and add it to the group
                             for networkSourceMember in networkSourceMembers {
-                                let associatedElement = networkSourceMember.toElement
-                                if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+                                if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first,
+                                   let currentFeatureGlobalID = model.featureForm.feature.globalID {
+                                    // Determine whether to show the `fromElement` or `toElement`.
+                                    let associatedElement: UtilityElement
+                                    if currentFeatureGlobalID == networkSourceMember.toElement.globalID {
+                                        associatedElement = networkSourceMember.fromElement
+                                    } else {
+                                        associatedElement = networkSourceMember.toElement
+                                    }
+                                    
+                                    // Determine the association's title.
                                     let title: String
                                     if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
                                         title = formDefinitionTitle
@@ -244,7 +253,9 @@ struct FeatureFormViewInternal: View {
                                     let newAssociation = UtilityNetworkAssociationFormElementView.Association(
                                         description: nil,
                                         linkDestination: arcGISFeature,
-                                        name: title
+                                        fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
+                                        name: title,
+                                        terminalName: associatedElement.terminal?.name
                                     )
                                     associations.append(newAssociation)
                                 }
