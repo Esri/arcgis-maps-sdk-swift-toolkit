@@ -95,14 +95,14 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         NavigationStack(path: $path) {
-            FeatureFormViewInternal(
+            InternalFeatureFormView(
                 featureForm: featureForm,
                 headerVisibility: headerVisibility,
                 path: $path,
                 utilityNetwork: utilityNetwork
             )
             .navigationDestination(for: ArcGISFeature.self) { feature in
-                FeatureFormViewInternal(
+                InternalFeatureFormView(
                     featureForm: FeatureForm(feature: feature),
                     headerVisibility: headerVisibility,
                     path: $path,
@@ -135,7 +135,7 @@ public struct FeatureFormView: View {
 }
 
 /// <#Description#>
-struct FeatureFormViewInternal: View {
+struct InternalFeatureFormView: View {
     /// <#Description#>
     @Binding var path: NavigationPath
     
@@ -287,7 +287,7 @@ struct FeatureFormViewInternal: View {
 }
 
 @available(visionOS, unavailable)
-extension FeatureFormViewInternal {
+extension InternalFeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
