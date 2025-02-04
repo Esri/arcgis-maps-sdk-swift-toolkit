@@ -17,14 +17,50 @@ import ArcGIS
 
 /// A view that loads a `LoadableImage` and displays it.
 /// While the image is loading a progress view is displayed.
-/// If there is an error displaying the image a red exclamation circle is displayed.
-@MainActor
-struct LoadableImageView: View {
+/// If there is an error loading the image then user defined failure content is shown.
+/// Once the image loads, a user-defined closure is used to display the image.
+struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
     /// The loadable image to display.
     let loadableImage: LoadableImage
-    
+    /// The content to display in the case of load failure.
+    var failureContent: (() -> FailureContent)?
+    /// The content to display once the image loads.
+    var loadedContent: (Image) -> LoadedContent
     /// The result of loading the image.
-    @State private var result: Result<UIImage, Error>?
+    @State var result: Result<UIImage, Error>? = nil
+    
+    /// Creates a `LoadableImageView`.
+    /// - Parameters:
+    ///   - loadableImage: The loadable image.
+    ///   - failureContent: The content to display if the loadable image fails to load.
+    ///   - loadedContent: The content to display once the loadable image loads.
+    init(
+        loadableImage: LoadableImage,
+        failureContent: @escaping () -> FailureContent,
+        loadedContent: @escaping (Image) -> LoadedContent
+    ) {
+        self.loadableImage = loadableImage
+        self.failureContent = failureContent
+        self.loadedContent = loadedContent
+    }
+    
+    /// Creates a `LoadableImageView`.
+    /// - Parameters:
+    ///   - loadableImage: The loadable image.
+    ///   - loadedContent: The content to display once the loadable image loads.
+    init(
+        loadableImage: LoadableImage,
+        loadedContent: @escaping (Image) -> LoadedContent
+    ) where FailureContent == EmptyView {
+        self.loadableImage = loadableImage
+        self.failureContent = nil
+        self.loadedContent = loadedContent
+    }
+    
+    /// An error to signify that the loadable image had a null image once it loaded.
+    /// This shouldn't ever happen, but in the case that it does, the failure content
+    /// will be displayed.
+    private struct NoImageError: Error {}
     
     var body: some View {
         Group {
@@ -32,18 +68,17 @@ struct LoadableImageView: View {
             case .none:
                 ProgressView()
             case .failure:
-                Image(systemName: "exclamationmark.triangle")
-                    .aspectRatio(contentMode: .fit)
-                    .foregroundStyle(.secondary)
+                if let failureContent {
+                    failureContent()
+                }
             case .success(let image):
-                Image(uiImage: image)
-                    .resizable()
+                loadedContent(Image(uiImage: image))
             }
-        }
-        .task {
+        }.task {
             result = await Result {
                 try await loadableImage.load()
-                return loadableImage.image ?? UIImage()
+                guard let image = loadableImage.image else { throw NoImageError() }
+                return image
             }
         }
     }
