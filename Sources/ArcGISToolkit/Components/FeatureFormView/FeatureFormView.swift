@@ -98,12 +98,14 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***FeatureFormViewInternal(
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED***path: $path,
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: ArcGISFeature.self) { feature in
 ***REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormViewInternal(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: feature),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path: $path,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden()
@@ -177,6 +179,9 @@ public struct FeatureFormView: View {
 
 ***REMOVED***/ <#Description#>
 struct FeatureFormViewInternal: View {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@Binding var path: NavigationPath
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
@@ -196,8 +201,10 @@ struct FeatureFormViewInternal: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
 ***REMOVED******REMOVED***/   - headerVisibility: The visibility of the form header.
-***REMOVED***init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
+***REMOVED******REMOVED***/   - path: <#navigationPath description#>
+***REMOVED***init(featureForm: FeatureForm, headerVisibility: Visibility, path: Binding<NavigationPath>, utilityNetwork: UtilityNetwork? = nil) {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
+***REMOVED******REMOVED***_path = path
 ***REMOVED******REMOVED***self.headerVisibility = headerVisibility
 ***REMOVED***
 ***REMOVED***
