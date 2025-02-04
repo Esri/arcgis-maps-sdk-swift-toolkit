@@ -43,6 +43,18 @@ struct OnDemandConfigurationView: View {
         visibleArea == nil
     }
     
+    /// The scale or the map area selector.
+    private let mapAreaScale = 0.8
+    
+    /// The scaled downn visible area for the map area selector.
+    private var scaledVisibleArea: Envelope? {
+        if let visibleArea {
+            GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent
+        } else {
+            nil
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             MapViewReader { mapViewProxy in
@@ -55,7 +67,12 @@ struct OnDemandConfigurationView: View {
                             .padding(8)
                             .frame(maxWidth: .infinity)
                         Divider()
-                        mapView
+                        ZStack {
+                            mapView
+                            if let scaledVisibleArea {
+                                OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea)
+                            }
+                        }
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
