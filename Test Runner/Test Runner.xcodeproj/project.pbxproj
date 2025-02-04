@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */; ***REMOVED***;
+		75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */; ***REMOVED***;
 		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; ***REMOVED***;
 		7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */; ***REMOVED***;
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; ***REMOVED***;
@@ -45,7 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTests.swift; sourceTree = "<group>"; ***REMOVED***;
+		75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTests.swift; sourceTree = "<group>"; ***REMOVED***;
 		75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase5View.swift; sourceTree = "<group>"; ***REMOVED***;
 		7552A7502A573CBB0023DA5A /* Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRunnerApp.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -151,7 +151,7 @@
 				8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */,
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
-				75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */,
+				75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */,
 				8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */,
 			);
 			path = "UI Tests";
@@ -330,7 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */,
+				75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */,
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */,
 				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,

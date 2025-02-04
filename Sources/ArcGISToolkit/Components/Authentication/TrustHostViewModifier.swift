@@ -48,7 +48,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
