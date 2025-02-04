@@ -14,11 +14,34 @@
 
 import SwiftUI
 
-protocol Example {
+/// An example demonstrating how a toolkit component may be used.
+struct Example {
     /// The name of the example.
-    var name: String { get }
+    let name: String
+    /// The view for this example.
+    var view: AnyView { content() }
     
-    /// A function which creates the example view.
-    @MainActor
-    func makeBody() -> AnyView
+    /// A closure that builds the view for this example.
+    private let content: () -> AnyView
+    
+    /// Creates an example with the given name and content view.
+    /// - Parameters:
+    ///   - name: The name for the example.
+    ///   - content: The content view for the example.
+    init<Content: View>(_ name: String, content: @autoclosure @escaping () -> Content) {
+        self.name = name
+        self.content = { .init(content()) }
+    }
+}
+
+extension Example: Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.name == rhs.name
+    }
+}
+
+extension Example: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
 }

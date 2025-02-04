@@ -61,7 +61,6 @@ import SwiftUI
 /// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [UtilityNetworkTraceExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
 /// in the project. To learn more about using the `UtilityNetworkTrace` see the <doc:UtilityNetworkTraceTutorial>.
-@available(visionOS, unavailable)
 public struct UtilityNetworkTrace: View {
     /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?
@@ -180,38 +179,38 @@ public struct UtilityNetworkTrace: View {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
             makeDetailSectionHeader(title: assetGroupName)
-            List {
-                ForEach(
-                    assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
-                    id: \.key
-                ) { (name, elements) in
-                    Section(name) {
-                        DisclosureGroup {
-                            ForEach(elements, id: \.globalID) { element in
-                                Button {
-                                    Task {
-                                        if let feature = await viewModel.feature(for: element),
-                                           let geometry = feature.geometry {
-                                            updateViewpoint(to: geometry.extent)
-                                        }
-                                    }
-                                } label: {
-                                    Label {
-                                        Text(
-                                            "Object ID: \(element.objectID, format: .number.grouping(.never))",
-                                            bundle: .toolkitModule,
-                                            comment: "A string identifying a utility network object."
-                                        )
-                                    } icon: {
-                                        Image(systemName: "scope")
+            List(
+                assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
+                id: \.key
+            ) { (name, elements) in
+                Section(name) {
+                    DisclosureGroup {
+                        ForEach(elements, id: \.globalID) { element in
+                            Button {
+                                Task {
+                                    if let feature = await viewModel.feature(for: element),
+                                       let geometry = feature.geometry {
+                                        updateViewpoint(to: geometry.extent)
                                     }
                                 }
+                            } label: {
+                                Label(
+                                    String(
+                                        localized: "Object ID: \(element.objectID, format: .number.grouping(.never))",
+                                        bundle: .toolkitModule,
+                                        comment: "A string identifying a utility network object."
+                                    ),
+                                    systemImage: "scope"
+                                )
                             }
-                        } label: {
-                            Text(elements.count, format: .number)
-                                .catalystPadding(4)
                         }
+                    } label: {
+                        Text(elements.count, format: .number)
+                            .catalystPadding(4)
                     }
+#if os(visionOS)
+                    .listItemTint(.monochrome)
+#endif
                 }
             }
         }
@@ -223,11 +222,9 @@ public struct UtilityNetworkTrace: View {
             Text(String.noConfigurationsAvailable)
         } else {
             ForEach(viewModel.configurations.sorted { $0.name < $1.name }, id: \.name) { configuration in
-                Button {
+                Button(configuration.name) {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
-                } label: {
-                    Text(configuration.name)
                 }
                 .listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
             }
@@ -237,13 +234,14 @@ public struct UtilityNetworkTrace: View {
     /// Displays the list of available networks.
     @ViewBuilder private var networksList: some View {
         ForEach(viewModel.networks, id: \.name) { network in
-            Text(network.name)
-                .lineLimit(1)
-                .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
-                .onTapGesture {
-                    viewModel.setNetwork(network)
-                    currentActivity = .creatingTrace(nil)
-                }
+            Button {
+                viewModel.setNetwork(network)
+                currentActivity = .creatingTrace(nil)
+            } label: {
+                Text(network.name)
+                    .lineLimit(1)
+            }
+            .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
         }
     }
     
@@ -311,20 +309,21 @@ public struct UtilityNetworkTrace: View {
                         Button(String.deleteAllStartingPoints, systemImage: "trash") {
                             deleteAllStartingPointsConfirmationIsPresented = true
                         }
+#if !os(visionOS)
                         .buttonStyle(.plain)
+#endif
                         .labelStyle(.iconOnly)
                         .confirmationDialog(
-                            String.deleteAllStartingPoints,
-                            isPresented: $deleteAllStartingPointsConfirmationIsPresented
+                            String.deleteAllStartingPointsQuestion,
+                            isPresented: $deleteAllStartingPointsConfirmationIsPresented,
+                            titleVisibility: .visible
                         ) {
-                            Button(String.deleteAllStartingPoints, role: .destructive) {
-                                viewModel.pendingTrace.startingPoints.forEach { startingPoint in
+                            Button(String.deleteButtonLabel, role: .destructive) {
+                                for startingPoint in viewModel.pendingTrace.startingPoints {
                                     viewModel.deleteStartingPoint(startingPoint)
                                     externalStartingPoints.removeAll()
                                 }
                             }
-                        } message: {
-                            Text(String.deleteAllStartingPointsMessage)
                         }
                         // Override default uppercase capitalization for list
                         // section headers on iOS and iPadOS.
@@ -348,7 +347,12 @@ public struct UtilityNetworkTrace: View {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(.blue)
+#if os(visionOS)
+                            .contentShape(.hoverEffect, .rect(cornerRadius: 12))
+                            .hoverEffect()
+#else
+                            .foregroundStyle(.blue)
+#endif
                     }
                     ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
                     Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
@@ -436,15 +440,18 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
-                                HStack {
-                                    Text(assetGroupName)
-                                    Spacer()
-                                    Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
-                                }
-                                .foregroundColor(.blue)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
+                                Button {
                                     currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+                                } label: {
+                                    HStack {
+                                        Text(assetGroupName)
+                                        Spacer()
+                                        Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
+                                    }
+#if !os(visionOS)
+                                    .foregroundStyle(.blue)
+                                    .contentShape(.rect)
+#endif
                                 }
                             }
                         }
@@ -469,7 +476,7 @@ public struct UtilityNetworkTrace: View {
                                     VStack(alignment: .trailing) {
                                         Text(item.function.functionType.title)
                                             .font(.caption)
-                                            .foregroundColor(.secondary)
+                                            .foregroundStyle(.secondary)
                                         if let result = item.result as? Double {
                                             Text(result, format: .number)
                                         } else {
@@ -584,18 +591,23 @@ public struct UtilityNetworkTrace: View {
                             viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
                         }
                     ) {
-                        ForEach(viewModel.pendingTrace.startingPoints.first {
-                            $0 == selectedStartingPoint
-                        }?.utilityElement?.assetType.terminalConfiguration?.terminals ?? [], id: \.self) {
+                        ForEach(
+                            viewModel.pendingTrace.startingPoints
+                                .first(where: { $0 == selectedStartingPoint })?
+                                .utilityElement?.assetType.terminalConfiguration?.terminals ?? [],
+                            id: \.self
+                        ) {
                             Text($0.name)
                         }
                     }
-                    .foregroundColor(.blue)
+#if !os(visionOS)
+                    .foregroundStyle(.blue)
+#endif
                 }
             }
             Section(String.attributesSectionTitle) {
                 ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
-                    HStack{
+                    HStack {
                         Text(item.key)
                         Spacer()
                         Text(item.value as? String ?? "")
@@ -802,16 +814,10 @@ public struct UtilityNetworkTrace: View {
     /// - Parameter title: The button's title.
     /// - Parameter action: The action to be performed.
     /// - Returns: The configured button.
-    private func makeBackButton(title: String, _ action: @escaping () -> Void) -> some View {
-        Button { action() } label: {
-            Label {
-                Text(title)
-            } icon: {
-                Image(systemName: "chevron.backward")
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
+    private func makeBackButton(title: String, action: @escaping () -> Void) -> some View {
+        Button(title, systemImage: "chevron.backward", action: action)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     /// Returns a section header.
@@ -890,11 +896,11 @@ private extension String {
         )
     }
     
-    static var deleteAllStartingPointsMessage: Self {
+    static var deleteAllStartingPointsQuestion: Self {
         .init(
-            localized: "All starting points will be deleted.",
+            localized: "Delete all starting points?",
             bundle: .toolkitModule,
-            comment: "A message describing the outcome of clearing all starting points."
+            comment: "The title of the dialogue confirming deletion of all points."
         )
     }
     
@@ -1064,8 +1070,6 @@ private extension String {
     }
 }
 
-
-@available(visionOS, unavailable)
 public extension UtilityNetworkTrace /* Deprecated */ {
     /// A graphical interface to run pre-configured traces on a map's utility networks.
     /// - Parameters:

@@ -87,7 +87,7 @@ struct FeatureFormExampleView: View {
                             }
                             .padding()
                             .background(.thinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .clipShape(.rect(cornerRadius: 10))
                         default:
                             EmptyView()
                         }
@@ -133,7 +133,7 @@ extension FeatureFormExampleView {
 }
 
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
     enum State {
         case applyingEdits(FeatureForm)
         case cancellationPending(FeatureForm)

@@ -48,14 +48,14 @@ struct SignInView: View {
 #else
                     .font(.footnote)
 #endif
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 signInButton
             }
             Spacer()
             if let error = error, !error.isChallengeCancellationError {
                 Text(error.localizedDescription)
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .task {

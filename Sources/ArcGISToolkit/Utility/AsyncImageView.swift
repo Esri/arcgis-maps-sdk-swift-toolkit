@@ -88,7 +88,7 @@ public struct AsyncImageView: View {
                 HStack(alignment: .center) {
                     Image(systemName: "exclamationmark.circle")
                         .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                 }
                 .padding([.top, .bottom])
             }
