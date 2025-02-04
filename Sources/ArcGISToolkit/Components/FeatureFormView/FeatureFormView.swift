@@ -177,27 +177,40 @@ public struct FeatureFormView: View {
                             var associations: [UtilityNetworkAssociationFormElementView.Association] = []
                             // For each association, create a Toolkit representation and add it to the group
                             for networkSourceMember in networkSourceMembers {
-                                let associatedElement = networkSourceMember.toElement
-                                if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+                                if let currentFeatureGlobalID = model.featureForm.feature.globalID {
+                                    // Determine whether to show the `fromElement` or `toElement`.
+                                    let associatedElement: UtilityElement
+                                    if currentFeatureGlobalID == networkSourceMember.toElement.globalID {
+                                        associatedElement = networkSourceMember.fromElement
+                                    } else {
+                                        associatedElement = networkSourceMember.toElement
+                                    }
+                                    
+                                    // Determine the association's title.
                                     let title: String
                                     if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
                                         title = formDefinitionTitle
                                     } else {
                                         title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                                     }
-                                    let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                        description: nil,
-                                        name: title,
-                                        selectionAction: {
-                                            withAnimation {
-                                                model.presentedForm = FeatureFormView(
-                                                    featureForm: FeatureForm(feature: arcGISFeature),
-                                                    utilityNetwork: model.utilityNetwork
-                                                )
-                                            }
-                                        }
-                                    )
-                                    associations.append(newAssociation)
+                                    
+                                    if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+                                        let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                            description: nil,
+                                            name: title,
+                                            selectionAction: {
+                                                withAnimation {
+                                                    model.presentedForm = FeatureFormView(
+                                                        featureForm: FeatureForm(feature: arcGISFeature),
+                                                        utilityNetwork: model.utilityNetwork
+                                                    )
+                                                }
+                                            },
+                                            fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
+                                            terminalName: associatedElement.terminal?.name
+                                        )
+                                        associations.append(newAssociation)
+                                    }
                                 }
                             }
                             let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(

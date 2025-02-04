@@ -56,6 +56,9 @@ extension UtilityNetworkAssociationFormElementView {
         let description: String?
         
         /// <#Description#>
+        let fractionAlongEdge: Double?
+        
+        /// <#Description#>
         let id = UUID()
         
         /// <#Description#>
@@ -63,6 +66,9 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let selectionAction: (() -> Void)
+        
+        /// <#Description#>
+        let terminalName: String?
     }
     
     struct AssociationView: View {
