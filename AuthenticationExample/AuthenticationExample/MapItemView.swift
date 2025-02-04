@@ -34,7 +34,7 @@ struct MapItemView: View {
             case .failure(let error):
                 Text(error.localizedDescription)
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .task {
