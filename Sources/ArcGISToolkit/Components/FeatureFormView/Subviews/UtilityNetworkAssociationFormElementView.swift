@@ -104,9 +104,9 @@ extension UtilityNetworkAssociationFormElementView {
                     }
                     Spacer()
                     Group {
-                        if let percent = association.percentAlongEdge {
+                        if let percent = association.fractionAlongEdge {
                             Text(percent.formatted(.percent))
-                        } else if let terminal = association.terminal {
+                        } else if let terminal = association.terminalName {
                             Text("Terminal: \(terminal)")
                         }
                     }
