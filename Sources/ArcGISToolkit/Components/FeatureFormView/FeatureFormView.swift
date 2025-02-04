@@ -197,6 +197,7 @@ public struct FeatureFormView: View {
                                     if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
                                         let newAssociation = UtilityNetworkAssociationFormElementView.Association(
                                             description: nil,
+                                            fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
                                             name: title,
                                             selectionAction: {
                                                 withAnimation {
@@ -206,7 +207,6 @@ public struct FeatureFormView: View {
                                                     )
                                                 }
                                             },
-                                            fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
                                             terminalName: associatedElement.terminal?.name
                                         )
                                         associations.append(newAssociation)
