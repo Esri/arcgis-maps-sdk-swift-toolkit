@@ -109,7 +109,7 @@ extension WorldScaleSceneView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
-***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 15))
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 15))
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: 430)
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
