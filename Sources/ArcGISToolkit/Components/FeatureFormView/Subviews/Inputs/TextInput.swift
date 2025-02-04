@@ -230,7 +230,7 @@ private extension TextInput {
                     dismiss()
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(.accentColor)
+                .foregroundStyle(Color.accentColor)
             }
             RepresentedUITextView(initialText: text) { text in
                 element.convertAndUpdateValue(text)

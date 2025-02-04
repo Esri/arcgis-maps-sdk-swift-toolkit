@@ -257,7 +257,7 @@ private extension View {
                              """
                 )
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.bottom)
                 HStack {
@@ -348,7 +348,7 @@ private extension View {
                     )
                 )
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.bottom)
                 HStack {

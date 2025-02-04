@@ -60,7 +60,6 @@ import ArcGIS
 /// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 /// in the project. To learn more about using the `SearchView` see the <doc:SearchViewTutorial>.
-@available(visionOS, unavailable)
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
@@ -221,21 +220,23 @@ public struct SearchView: View {
             }
             Spacer()
             if viewModel.isEligibleForRequery {
-                Button {
-                    viewModel.repeatSearch()
-                } label: {
-                    Text(
-                        "Repeat Search Here",
+                Button(
+                    String(
+                        localized: "Repeat Search Here",
                         bundle: .toolkitModule,
                         comment: """
-                                  A label for button to show when the user has panned the map away
-                                  from the original search location. 'Here' is in reference to the
-                                  current visible extent of the map or scene.
-                                  """
+                            A label for button to show when the user has panned the map away
+                            from the original search location. 'Here' is in reference to the
+                            current visible extent of the map or scene.
+                            """
                     )
+                ) {
+                    viewModel.repeatSearch()
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
                 .esriBorder()
+#endif
             }
         }
         .listStyle(.plain)
@@ -270,7 +271,7 @@ public struct SearchView: View {
 }
 
 // MARK: Modifiers
-@available(visionOS, unavailable)
+
 extension SearchView {
     /// Specifies whether a built-in result view will be shown. If `false`, the result display/selection
     /// list is not shown. Set to `false` if you want to define a custom result list. You might use a
@@ -380,7 +381,6 @@ extension SearchView {
 }
 
 /// A View displaying the list of search results.
-@available(visionOS, unavailable)
 struct SearchResultList: View {
     /// The array of search results to display.
     var searchResults: [SearchResult]
@@ -404,7 +404,6 @@ struct SearchResultList: View {
 }
 
 /// A View displaying the list of search suggestion results.
-@available(visionOS, unavailable)
 struct SearchSuggestionList: View {
     /// The array of suggestion results to display.
     var suggestionResults: [SearchSuggestion]
@@ -460,13 +459,12 @@ struct ResultRow: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
+            .contentShape(.rect)
         }
         .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
     }
 }
 
-@available(visionOS, unavailable)
 extension ResultRow {
     /// Creates a `ResultRow` from a search suggestion.
     /// - Parameter searchSuggestion: The search suggestion displayed in the row.
@@ -485,7 +483,7 @@ extension ResultRow {
                         )!
                     )
                 )
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             )
         )
     }

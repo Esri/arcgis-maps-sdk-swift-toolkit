@@ -95,7 +95,7 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                 }
-                .contentShape(Rectangle())
+                .contentShape(.rect)
                 .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : nil)
             }
 #if !os(visionOS)
@@ -129,7 +129,7 @@ struct SiteAndFacilitySelector: View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
                     .disableAutocorrection(true)
                     .focused($textFieldIsFocused)
@@ -165,7 +165,7 @@ struct SiteAndFacilitySelector: View {
             } label: {
                 Image(systemName: "chevron.left")
                     .padding(.toolkitDefault)
-                    .contentShape(Rectangle())
+                    .contentShape(.rect)
             }
             .buttonStyle(.plain)
             .opacity(backButtonIsVisible ? 1 : 0)

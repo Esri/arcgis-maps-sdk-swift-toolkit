@@ -92,7 +92,7 @@ struct DateTimeInput: View {
         HStack {
             Text(!formattedValue.isEmpty ? formattedValue : .noValue)
                 .accessibilityIdentifier("\(element.label) Value")
-                .foregroundColor(displayColor)
+                .foregroundStyle(displayColor)
             
             Spacer()
             
@@ -103,7 +103,7 @@ struct DateTimeInput: View {
                     Image(systemName: "calendar")
                         .font(.title2)
                         .accessibilityIdentifier("\(element.label) Calendar Image")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 } else if !isRequired {
                     XButton(.clear) {
                         model.focusedElement = element
