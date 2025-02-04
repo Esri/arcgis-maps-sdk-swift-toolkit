@@ -23,8 +23,8 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// The configuration for taking the map area offline.
     let configuration: OnDemandMapAreaConfiguration?
     
-    /// The mobile map package directory URL.
-    private let mmpkDirectoryURL: URL
+    /// The directory URL for this area.
+    private let directory: URL
     
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask?
@@ -42,7 +42,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
     
     /// A thumbnail for the map area.
-    @Published private(set) var thumbnail: LoadableImage?
+    @Published private(set) var thumbnail: UIImage?
     
     /// The mobile map package for the preplanned map area.
     @Published private(set) var mobileMapPackage: MobileMapPackage?
@@ -59,6 +59,22 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// The first map from the mobile map package.
     @Published private(set) var map: Map?
     
+    /// The URL to the thumbnail for this area.
+    private var thumbnailURL: URL {
+        directory.appending(component: "thumbnail.png")
+    }
+    
+    /// The URL to the mobile map package for this area.
+    private var mmpkDirectoryURL: URL {
+        Self.mmpkDirectory(forOnDemandDirectory: directory)
+    }
+    
+    /// Returns a mobile map package directory for an on-demand directory.
+    /// - Parameter directory: The on-demand directory.
+    static func mmpkDirectory(forOnDemandDirectory directory: URL) -> URL {
+        directory.appending(component: "mmpk")
+    }
+    
     /// Creates an on-demand map area model with a configuration
     /// for taking the area offline.
     init(
@@ -73,10 +89,16 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         self.onRemoveDownloadAction = onRemoveDownload
         self.title = configuration.title
         self.areaID = configuration.areaID
-        mmpkDirectoryURL = .onDemandDirectory(
+        self.thumbnail = configuration.thumbnail
+        directory = .onDemandDirectory(
             forPortalItemID: portalItemID,
             onDemandMapAreaID: configuration.areaID
         )
+        // Save thumbnail to file.
+        if let thumbnail = configuration.thumbnail, let pngData = thumbnail.pngData() {
+            try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            try? pngData.write(to: thumbnailURL, options: .atomic)
+        }
     }
     
     /// Creates an on-demand map area model for a job that
@@ -94,32 +116,35 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         self.portalItemID = portalItemID
         self.onRemoveDownloadAction = onRemoveDownload
         self.offlineMapTask = nil
-        mmpkDirectoryURL = .onDemandDirectory(
+        directory = .onDemandDirectory(
             forPortalItemID: portalItemID,
             onDemandMapAreaID: areaID
         )
+        thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
         
-        Logger.offlineManager.debug("Found executing job for on-demand area \(areaID.rawValue)")
+        Logger.offlineManager.debug("Found executing job for on-demand area \(areaID)")
         observeJob(job)
     }
     
     /// Creates an on-demand map area model for a map area that has already been downloaded.
-    init(
+    init?(
         areaID: OnDemandAreaID,
         portalItemID: PortalItem.ID,
         onRemoveDownload: @escaping (OnDemandMapModel) -> Void
     ) async {
-        let mmpkURL = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
-        let mmpk = MobileMapPackage(fileURL: mmpkURL)
-        try? await mmpk.load()
         self.areaID = areaID
         self.portalItemID = portalItemID
         self.onRemoveDownloadAction = onRemoveDownload
+        directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
         configuration = nil
-        title = mmpk.item?.title ?? "Unknown"
-        mmpkDirectoryURL = mmpkURL
         offlineMapTask = nil
-        Logger.offlineManager.debug("Found on-demand area at \(mmpkURL.path(), privacy: .private)")
+        let mmpkDirectory = Self.mmpkDirectory(forOnDemandDirectory: directory)
+        guard FileManager.default.fileExists(atPath: mmpkDirectory.path()) else { return nil }
+        let mmpk = MobileMapPackage(fileURL: mmpkDirectory)
+        try? await mmpk.load()
+        title = mmpk.item?.title ?? "Unknown"
+        thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
+        Logger.offlineManager.debug("Found on-demand area at \(self.mmpkDirectoryURL.path(), privacy: .private)")
         await loadAndUpdateMobileMapPackage(mmpk: mmpk)
     }
     
@@ -139,7 +164,10 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             mobileMapPackage = mmpk
             directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
-            thumbnail = mmpk.item?.thumbnail
+            if thumbnail == nil, let loadable = mmpk.item?.thumbnail {
+                try? await loadable.load()
+                thumbnail = loadable.image
+            }
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
@@ -221,14 +249,18 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         switch downloadResult {
         case .success(let result):
             if result.hasErrors {
+                Logger.offlineManager.info("GenerateOfflineMap job succeeded with layer errors.")
                 status = .downloadedWithLayerErrors
             } else {
+                Logger.offlineManager.info("GenerateOfflineMap job succeeded.")
                 status = .downloaded
             }
         case .failure(let error):
             if error is CancellationError {
+                Logger.offlineManager.info("GenerateOfflineMap job cancelled.")
                 status = .downloadCancelled
             } else {
+                Logger.offlineManager.error("GenerateOfflineMap job failed with error: \(error).")
                 status = .downloadFailure(error)
             }
             // Remove contents of mmpk directory when download fails.
@@ -250,7 +282,7 @@ extension OnDemandMapModel {
             .compactMap { $0 as? GenerateOfflineMapJob }
             .filter { $0.onlineMap?.item?.id == portalItemID }
             .compactMap {
-                guard let areaID = OnDemandAreaID(from: $0.downloadDirectoryURL) else {
+                guard let areaID = OnDemandAreaID(mmpkDirectory: $0.downloadDirectoryURL) else {
                     return Optional<OnDemandMapModel>.none
                 }
                 return OnDemandMapModel(
@@ -266,15 +298,15 @@ extension OnDemandMapModel {
         // Look up the already downloaded on-demand map models.
         let onDemandDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID)
         if let mapAreaIDs = try? FileManager.default.contentsOfDirectory(atPath: onDemandDirectory.path()) {
-            for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(rawValue:)) {
-                // If we already have one (ie. a job is already be running and the
-                // directory is non-empty so we found it here), then we continue.
+            for mapAreaID in mapAreaIDs.compactMap(OnDemandAreaID.init(pathComponent:)) {
+                // If we already have one (ie. a job is already running and the
+                // directory exists), then we continue.
                 guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID }) else { continue }
-                let mapArea = await OnDemandMapModel.init(
+                guard let mapArea = await OnDemandMapModel.init(
                     areaID: mapAreaID,
                     portalItemID: portalItemID,
                     onRemoveDownload: onRemoveDownload
-                )
+                ) else { continue }
                 onDemandMapModels.append(mapArea)
             }
         }
@@ -333,26 +365,34 @@ extension OnDemandMapModel: Hashable {
 }
 
 /// Represents the unique ID of an on-demand map area.
-struct OnDemandAreaID: RawRepresentable {
-    var rawValue: String
+struct OnDemandAreaID: CustomStringConvertible, Equatable {
+    let uuid: UUID
+    var description: String { uuid.uuidString }
     
-    /// Creates a new unique on-demand area ID.
-    init() { rawValue = UUID().uuidString }
-    
-    /// Creates an on-demand area ID from a raw value String.
-    /// Returns `nil` if an empty string is passed in.
-    /// - Parameter rawValue: The raw value.
-    init?(rawValue: String) {
-        guard !rawValue.isEmpty else { return nil }
-        self.rawValue = rawValue
+    /// Creates an new on-demand area ID from a `UUID`.
+    private init(uuid: UUID) {
+        self.uuid = uuid
     }
     
-    /// Creates an on-demand area from a directory where the last path component
-    /// is the ID.
-    /// - Parameter directory: The directory where the last path component is the ID.
-    init?(from directory: URL) {
-        let lastPathComponent = directory.deletingPathExtension().lastPathComponent
-        self.init(rawValue: lastPathComponent)
+    /// Creates a new unique on-demand area ID.
+    init() { uuid = UUID() }
+    
+    /// Creates an on-demand area ID from a path component string.
+    /// Returns `nil` if an invalid string is passed in.
+    /// - Parameter pathComponent: The path component.
+    init?(pathComponent: String) {
+        guard let uuid = UUID(uuidString: pathComponent) else { return nil }
+        self.init(uuid: uuid)
+    }
+    
+    /// Creates an on-demand area from the directory of the mmpk for the on-demand area.
+    /// - Parameter directory: The directory where the mmpk is.
+    init?(mmpkDirectory: URL) {
+        // Typically the directory will look something like this:
+        // OnDemand/<UUID>/mmpk
+        // We need to remove the mmpk component, and grab the UUID.
+        let pathComponent = mmpkDirectory.deletingPathExtension().deletingLastPathComponent().lastPathComponent
+        self.init(pathComponent: pathComponent)
     }
 }
 
@@ -368,4 +408,6 @@ struct OnDemandMapAreaConfiguration {
     let maxScale: Double
     /// The area of interest to take offline.
     let areaOfInterest: Geometry
+    /// The thumbnail of the area.
+    let thumbnail: UIImage?
 }
