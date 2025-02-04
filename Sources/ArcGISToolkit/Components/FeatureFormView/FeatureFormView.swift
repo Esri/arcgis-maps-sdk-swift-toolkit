@@ -98,12 +98,14 @@ public struct FeatureFormView: View {
             FeatureFormViewInternal(
                 featureForm: featureForm,
                 headerVisibility: headerVisibility,
+                path: $path,
                 utilityNetwork: utilityNetwork
             )
             .navigationDestination(for: ArcGISFeature.self) { feature in
                 FeatureFormViewInternal(
                     featureForm: FeatureForm(feature: feature),
                     headerVisibility: headerVisibility,
+                    path: $path,
                     utilityNetwork: utilityNetwork
                 )
                 .navigationBarBackButtonHidden()
@@ -177,6 +179,9 @@ public struct FeatureFormView: View {
 
 /// <#Description#>
 struct FeatureFormViewInternal: View {
+    /// <#Description#>
+    @Binding var path: NavigationPath
+    
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
@@ -196,8 +201,10 @@ struct FeatureFormViewInternal: View {
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     ///   - headerVisibility: The visibility of the form header.
-    init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
+    ///   - path: <#navigationPath description#>
+    init(featureForm: FeatureForm, headerVisibility: Visibility, path: Binding<NavigationPath>, utilityNetwork: UtilityNetwork? = nil) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
+        _path = path
         self.headerVisibility = headerVisibility
     }
     
