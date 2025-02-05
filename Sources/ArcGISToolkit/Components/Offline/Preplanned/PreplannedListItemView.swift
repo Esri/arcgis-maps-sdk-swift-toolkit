@@ -72,7 +72,7 @@ struct PreplannedListItemView: View {
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
-                PreplannedMetadataView(model: model, isSelected: isSelected)
+                OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
             }
         }
         .task {

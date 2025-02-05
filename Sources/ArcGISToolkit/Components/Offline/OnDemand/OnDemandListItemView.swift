@@ -57,7 +57,7 @@ struct OnDemandListItemView: View {
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
-                OnDemandMetadataView(model: model, isSelected: isSelected)
+                OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
             }
         }
     }
