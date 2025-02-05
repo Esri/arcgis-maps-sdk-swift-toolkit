@@ -63,10 +63,10 @@ struct OnDemandMapAreaSelectorView: View {
     var body: some View {
         ZStack {
             ZStack {
-                RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+                Rectangle()
                     .fill(.black.opacity(0.10))
                     .reverseMask {
-                        RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+                        Rectangle()
                             .frame(width: boundingRect.width, height: boundingRect.height)
                             .position(boundingRect.center)
                         
