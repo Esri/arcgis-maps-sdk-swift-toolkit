@@ -64,7 +64,7 @@ struct OnDemandMetadataView: View {
                             .font(.title)
                         Button("Remove Download", role: .destructive) {
                             dismiss()
-                            model.removeDownloadedOnDemandMapArea()
+                            model.removeDownloadedArea()
                         }
                     }
                 }
