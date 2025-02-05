@@ -35,12 +35,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The visible area of the map.
 ***REMOVED***@State private var visibleArea: Envelope?
 ***REMOVED***
-***REMOVED******REMOVED*** The action to dismiss the view.
+***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
 ***REMOVED***private var downloadIsDisabled: Bool { visibleArea == nil || isNoInternetConnection ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The result of trying to load the map.
 ***REMOVED***@State private var loadResult: Result<Void, Error>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if there is no internet connection
@@ -80,7 +81,10 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Loads the map and sets the result.
 ***REMOVED***private func loadMap() async {
+***REMOVED******REMOVED******REMOVED*** First set to `nil` so progress indicator can show during load.
+***REMOVED******REMOVED***loadResult = nil
 ***REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
