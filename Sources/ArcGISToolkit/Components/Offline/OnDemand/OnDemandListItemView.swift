@@ -67,13 +67,15 @@ struct OnDemandListItemView: View {
             Image(uiImage: thumbnail)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 64, height: 44)
-                .clipShape(.rect(cornerRadius: 2))
+                .frame(width: 64, height: 64)
+                .clipShape(.rect(cornerRadius: 10))
         } else {
             Image(systemName: "map")
                 .imageScale(.large)
                 .foregroundStyle(.secondary)
-                .frame(width: 64, height: 44)
+                .frame(width: 64, height: 64)
+                .background(Color(uiColor: UIColor.systemGroupedBackground))
+                .clipShape(.rect(cornerRadius: 10))
         }
     }
     
