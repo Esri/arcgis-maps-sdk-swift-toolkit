@@ -35,12 +35,18 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The visible area of the map.
 ***REMOVED***@State private var visibleArea: Envelope?
 ***REMOVED***
+***REMOVED******REMOVED***/ The selected map area.
+***REMOVED***@State private var mapAreaSelection: Envelope?
+***REMOVED***
+***REMOVED******REMOVED***/ The polygon rect of the selected map area.
+***REMOVED***@State private var polygonRect: CGRect?
+***REMOVED***
 ***REMOVED******REMOVED*** The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
 ***REMOVED***private var downloadIsDisabled: Bool {
-***REMOVED******REMOVED***visibleArea == nil
+***REMOVED******REMOVED***mapAreaSelection == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The scale or the map area selector.
@@ -70,7 +76,11 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let scaledVisibleArea {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea, selection: $mapAreaSelection)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: mapAreaSelection) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let evelope = mapAreaSelection?.extent else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***polygonRect = mapViewProxy.viewRect(fromEnvelope: evelope)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -129,14 +139,16 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let visibleArea else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let mapAreaSelection, let polygonRect else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try? await mapView.exportImage()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: polygonRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: 0,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: visibleArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: mapAreaSelection,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction(configuration)
@@ -238,5 +250,28 @@ private struct BottomCard<Content: View, Background: ShapeStyle>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(background)
 ***REMOVED***
 ***REMOVED******REMOVED***.ignoresSafeArea(.container, edges: .horizontal)
+***REMOVED***
+***REMOVED***
+
+private extension UIImage {
+***REMOVED******REMOVED***/ Crops a UIImage to a certain CGRect of the screen's coordinates.
+***REMOVED******REMOVED***/ - Parameter rect: A CGRect in screen coordinates.
+***REMOVED******REMOVED***/ - Returns: The cropped image.
+***REMOVED***@MainActor
+***REMOVED***func crop(to rect: CGRect) -> UIImage? {
+***REMOVED******REMOVED***let scale = UIScreen.main.scale
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let scaledRect = CGRect(
+***REMOVED******REMOVED******REMOVED***x: rect.origin.x * scale,
+***REMOVED******REMOVED******REMOVED***y: rect.origin.y * scale,
+***REMOVED******REMOVED******REMOVED***width: rect.size.width * scale,
+***REMOVED******REMOVED******REMOVED***height: rect.size.height * scale
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let cgImage, let croppedImage = cgImage.cropping(to: scaledRect) else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
 ***REMOVED***
 ***REMOVED***
