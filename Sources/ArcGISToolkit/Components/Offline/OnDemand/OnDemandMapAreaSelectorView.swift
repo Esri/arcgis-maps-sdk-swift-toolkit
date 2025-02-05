@@ -214,7 +214,7 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     /// The handle view for the map area selector.
-    private struct Handle: View {
+    struct Handle: View {
         /// The position of the handle.
         let position: CGPoint
         /// The closure to call when the map area selector should be resized.
