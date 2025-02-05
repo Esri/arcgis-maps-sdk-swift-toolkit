@@ -52,7 +52,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The scale or the map area selector.
 ***REMOVED***private let mapAreaScale = 0.8
 ***REMOVED***
-***REMOVED******REMOVED***/ The scaled downn visible area for the map area selector.
+***REMOVED******REMOVED***/ The scaled down visible area for the map area selector.
 ***REMOVED***private var scaledVisibleArea: Envelope? {
 ***REMOVED******REMOVED***if let visibleArea {
 ***REMOVED******REMOVED******REMOVED***GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent

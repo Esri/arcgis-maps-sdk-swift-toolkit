@@ -71,7 +71,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(boundingRect.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangleWithRoundedCorners(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: insetRect.width, height: insetRect.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(insetRect.center)
@@ -96,19 +96,19 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: topLeft, color: .blue) {
+***REMOVED******REMOVED******REMOVED***Handle(position: topLeft) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: topRight, color: .green) {
+***REMOVED******REMOVED******REMOVED***Handle(position: topRight) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: bottomLeft, color: .yellow) {
+***REMOVED******REMOVED******REMOVED***Handle(position: bottomLeft) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: bottomRight, color: .pink) {
+***REMOVED******REMOVED******REMOVED***Handle(position: bottomRight) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -213,12 +213,16 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***bottomRight = CGPoint(x: boundingRect.maxX, y: boundingRect.maxY)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct Handle: View {
+***REMOVED******REMOVED***/ The handle view for the map area selector.
+***REMOVED***private struct Handle: View {
+***REMOVED******REMOVED******REMOVED***/ The position of the handle.
 ***REMOVED******REMOVED***let position: CGPoint
-***REMOVED******REMOVED***let color: Color
+***REMOVED******REMOVED******REMOVED***/ The closure to call when the map area selector should be resized.
 ***REMOVED******REMOVED***let resize: (CGPoint) -> Void
-***REMOVED******REMOVED***@GestureState var gestureState: Progress = .started
-***REMOVED******REMOVED***enum Progress {
+***REMOVED******REMOVED******REMOVED***/ The gesture state of the drag gesture.
+***REMOVED******REMOVED***@GestureState var gestureState: State = .started
+***REMOVED******REMOVED******REMOVED***/ The types of gesture states.
+***REMOVED******REMOVED***enum State {
 ***REMOVED******REMOVED******REMOVED***case started, changed
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -241,9 +245,11 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct RoundedRectangleWithRoundedCorners: Shape {
+***REMOVED******REMOVED***/ A view that displays rounded corners for a rectangle view.
+***REMOVED***struct RoundedCorners: Shape {
+***REMOVED******REMOVED******REMOVED***/ The corner radius.
 ***REMOVED******REMOVED***let cornerRadius: CGFloat
-***REMOVED******REMOVED***let style: RoundedCornerStyle
+***REMOVED******REMOVED******REMOVED***/ The padding to add to the corner shape.
 ***REMOVED******REMOVED***let padding = CGFloat(4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func path(in rect: CGRect) -> Path {
