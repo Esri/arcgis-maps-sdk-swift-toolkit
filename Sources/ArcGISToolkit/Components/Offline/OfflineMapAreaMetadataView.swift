@@ -25,7 +25,7 @@ import SwiftUI
 
 struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     /// The view model for the preplanned map.
-    @ObservedObject var metadata: Metadata
+    @ObservedObject var model: Metadata
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
@@ -36,7 +36,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     var body: some View {
         Form {
             Section {
-                if let image = metadata.thumbnail {
+                if let image = model.thumbnailImage {
                     HStack {
                         Spacer()
                         Image(uiImage: image)
@@ -52,33 +52,29 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                     Text("Name")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text(metadata.title)
+                    Text(model.title)
                         .font(.subheadline)
                 }
-                VStack(alignment: .leading) {
-                    Text("Description")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    if metadata.description.isEmpty {
-                        Text("This area has no description.")
-                            .font(.subheadline)
-                            .foregroundStyle(.tertiary)
-                    } else {
-                        Text(metadata.description)
+                if !model.description.isEmpty {
+                    VStack(alignment: .leading) {
+                        Text("Description")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(model.description)
                             .font(.subheadline)
                     }
                 }
-                if metadata.isDownloaded {
+                if model.isDownloaded {
                     VStack(alignment: .leading) {
                         Text("Size")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text(Int64(metadata.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
                             .font(.subheadline)
                     }
                 }
             }
-            if !metadata.isDownloaded && !isSelected {
+            if model.isDownloaded && !isSelected {
                 Section {
                     HStack {
                         Image(systemName: "trash.circle.fill")
@@ -87,21 +83,21 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                             .font(.title)
                         Button("Remove Download", role: .destructive) {
                             dismiss()
-                            metadata.removeDownloadedArea()
+                            model.removeDownloadedArea()
                         }
                     }
                 }
             }
-            if !metadata.isDownloaded {
+            if !model.isDownloaded {
                 Button("Download", systemImage: "arrow.down.circle") {
                     dismiss()
-                    metadata.startDownload()
+                    model.startDownload()
                 }
                 .foregroundStyle(Color.accentColor)
-                .disabled(!metadata.allowsDownload)
+                .disabled(!model.allowsDownload)
             }
         }
-        .navigationTitle(metadata.title)
+        .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
@@ -114,7 +110,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 @MainActor
 protocol OfflineMapAreaMetadata: ObservableObject {
     var title: String { get }
-    var thumbnail: UIImage? { get }
+    var thumbnailImage: UIImage? { get }
     var description: String { get }
     var isDownloaded: Bool { get }
     var allowsDownload: Bool { get }
@@ -129,7 +125,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
         preplannedMapArea.title
     }
     
-    var thumbnail: UIImage? {
+    var thumbnailImage: UIImage? {
         nil
     }
     
@@ -155,6 +151,8 @@ extension OnDemandMapModel: OfflineMapAreaMetadata {
     
     var isDownloaded: Bool { status.isDownloaded }
     
+    var thumbnailImage: UIImage? { thumbnail }
+        
     var allowsDownload: Bool { false }
     
     func startDownload() { fatalError() }
