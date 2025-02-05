@@ -57,67 +57,66 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED***MapViewReader { mapViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Pan and zoom to define the area")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch loadResult {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadedView
+***REMOVED******REMOVED******REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***failedToLoadView
+***REMOVED******REMOVED******REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***loadResult = await Result { try await Task.sleep(nanoseconds: 2_000_000_000); throw NSError() ***REMOVED*** ***REMOVED*** try await map.load() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***await loadMap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select Area")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private func loadMap() async {
+***REMOVED******REMOVED***loadResult = await Result { try await Task.sleep(nanoseconds: 2_000_000_000); throw NSError() ***REMOVED*** ***REMOVED*** try await map.reload() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var loadedView: some View {
+***REMOVED******REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Pan and zoom to define the area")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***@ViewBuilder
 ***REMOVED***private var mapView: some View {
-***REMOVED******REMOVED***switch loadResult {
-***REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0.extent ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on map view.
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED***case .failure:
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if isNoInternetConnection {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("No internet connection. Please try again.", systemImage: "wifi.exclamationmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("Map failed to load. Please try again.", systemImage: "exclamationmark.triangle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED***case nil:
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
+***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
+***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0.extent ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on map view.
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -172,6 +171,26 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var failedToLoadView: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if isNoInternetConnection {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("No internet connection.", systemImage: "wifi.exclamationmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Map failed to load.", systemImage: "exclamationmark.triangle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadMap() ***REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Try Again")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 
