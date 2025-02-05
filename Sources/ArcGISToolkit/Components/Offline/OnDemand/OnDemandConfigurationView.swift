@@ -74,9 +74,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await loadMap()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task { await loadMap() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select Area")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
@@ -184,11 +182,17 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@ViewBuilder private var failedToLoadView: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if isNoInternetConnection {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("No internet connection.", systemImage: "wifi.exclamationmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"No Internet Connection",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "Cannot download a map area at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("Map failed to load.", systemImage: "exclamationmark.triangle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Online Map Failed to Load",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "Cannot download a map area at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadMap() ***REMOVED***
