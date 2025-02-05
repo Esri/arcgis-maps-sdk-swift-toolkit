@@ -112,7 +112,9 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***Image(systemName: "map")
 ***REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var titleView: some View {
