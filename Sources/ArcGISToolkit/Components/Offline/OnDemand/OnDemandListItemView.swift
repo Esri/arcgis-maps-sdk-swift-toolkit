@@ -57,7 +57,7 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMetadataView(model: model, isSelected: isSelected)
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

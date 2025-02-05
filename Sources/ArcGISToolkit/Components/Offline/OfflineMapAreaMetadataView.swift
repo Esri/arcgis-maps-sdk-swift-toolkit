@@ -25,7 +25,7 @@
 
 struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
-***REMOVED***@ObservedObject var metadata: Metadata
+***REMOVED***@ObservedObject var model: Metadata
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
@@ -36,7 +36,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let image = metadata.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let image = model.thumbnailImage {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
@@ -52,33 +52,29 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(metadata.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Description")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if metadata.description.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("This area has no description.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(metadata.description)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !model.description.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Description")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if metadata.isDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***if model.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Size")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(metadata.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !metadata.isDownloaded && !isSelected {
+***REMOVED******REMOVED******REMOVED***if model.isDownloaded && !isSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash.circle.fill")
@@ -87,21 +83,21 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Remove Download", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadata.removeDownloadedArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !metadata.isDownloaded {
+***REMOVED******REMOVED******REMOVED***if !model.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Download", systemImage: "arrow.down.circle") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadata.startDownload()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.startDownload()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!metadata.allowsDownload)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!model.allowsDownload)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationTitle(metadata.title)
+***REMOVED******REMOVED***.navigationTitle(model.title)
 ***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -114,7 +110,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 @MainActor
 protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***var title: String { get ***REMOVED***
-***REMOVED***var thumbnail: UIImage? { get ***REMOVED***
+***REMOVED***var thumbnailImage: UIImage? { get ***REMOVED***
 ***REMOVED***var description: String { get ***REMOVED***
 ***REMOVED***var isDownloaded: Bool { get ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { get ***REMOVED***
@@ -129,7 +125,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
 ***REMOVED******REMOVED***preplannedMapArea.title
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var thumbnail: UIImage? {
+***REMOVED***var thumbnailImage: UIImage? {
 ***REMOVED******REMOVED***nil
 ***REMOVED***
 ***REMOVED***
@@ -155,6 +151,8 @@ extension OnDemandMapModel: OfflineMapAreaMetadata {
 ***REMOVED***
 ***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
 ***REMOVED***
+***REMOVED***var thumbnailImage: UIImage? { thumbnail ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***var allowsDownload: Bool { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***func startDownload() { fatalError() ***REMOVED***
