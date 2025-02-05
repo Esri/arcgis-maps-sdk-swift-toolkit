@@ -41,7 +41,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The polygon rect of the selected map area.
 ***REMOVED***@State private var polygonRect: CGRect?
 ***REMOVED***
-***REMOVED******REMOVED*** The action to dismiss the view.
+***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
