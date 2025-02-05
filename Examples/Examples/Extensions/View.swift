@@ -16,20 +16,20 @@
 
 extension View {
 ***REMOVED******REMOVED***/ Performs an action when a specified value changes.
-***REMOVED******REMOVED***/ - Note: This is temporary until our minumum platform versions are increased.
-***REMOVED******REMOVED***/ Without this a warning will show saying we are using a deprecated `onChange(of:perform:)` method.
+***REMOVED******REMOVED***/ - Note: This is temporary until our minimum platform versions are
+***REMOVED******REMOVED***/ increased. Without this, a warning will show saying we are using a
+***REMOVED******REMOVED***/ deprecated `onChange(of:perform:)` method.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - value: The value to check when determining whether to run the
-***REMOVED******REMOVED***/***REMOVED*** closure.
-***REMOVED******REMOVED***/   - action: A closure to run when the value changes. The closure
-***REMOVED******REMOVED***/***REMOVED*** takes a `newValue` parameter that indicates the updated
-***REMOVED******REMOVED***/***REMOVED*** value.
+***REMOVED******REMOVED***/   closure.
+***REMOVED******REMOVED***/   - action: A closure to run when the value changes. The closure takes a
+***REMOVED******REMOVED***/   `newValue` parameter that indicates the updated value.
 ***REMOVED******REMOVED***/ - Returns: A view that runs an action when the specified value changes.
 ***REMOVED***func onChange<V>(
 ***REMOVED******REMOVED***_ value: V,
 ***REMOVED******REMOVED***perform action: @escaping (_ newValue: V) -> Void
 ***REMOVED***) -> some View where V: Equatable {
-***REMOVED******REMOVED***if #available(iOS 17.0, macCatalyst 17.0, visionOS 1.0, *) {
+***REMOVED******REMOVED***if #available(iOS 17.0, visionOS 1.0, *) {
 ***REMOVED******REMOVED******REMOVED***return onChange(of: value) { _, newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***action(newValue)
 ***REMOVED******REMOVED***

@@ -241,10 +241,10 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitText(_ text: Markdown.Text) -> Result {
-***REMOVED******REMOVED***if let link = text.linkAncestor, let destination = link.destination {
-***REMOVED******REMOVED******REMOVED***return .other(AnyView(Link(text.plainText, destination: URL(string: destination)!)))
+***REMOVED******REMOVED***return if let destination = text.linkAncestor?.destination {
+***REMOVED******REMOVED******REMOVED***.other(AnyView(Link(text.plainText, destination: URL(string: destination)!)))
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(text.plainText))
+***REMOVED******REMOVED******REMOVED***.text(SwiftUI.Text(text.plainText))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
