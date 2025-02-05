@@ -103,16 +103,25 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     }
 }
 
+/// The model ofr the metadata view.
 @MainActor
 protocol OfflineMapAreaMetadata: ObservableObject {
+    /// The title of the area.
     var title: String { get }
+    /// The thumbnail for the area.
     var thumbnailImage: UIImage? { get async }
+    /// The description of the area.
     var description: String { get }
+    /// A Boolean value indicating if the area has been downloaded.
     var isDownloaded: Bool { get }
+    /// A Boolean value indicating if the area is in a state that allows download.
     var allowsDownload: Bool { get }
+    /// The size of the area on disk.
     var directorySize: Int { get }
     
+    /// Removes the downloaded area.
     func removeDownloadedArea()
+    /// Starts downloading the area.
     func startDownload()
 }
 
