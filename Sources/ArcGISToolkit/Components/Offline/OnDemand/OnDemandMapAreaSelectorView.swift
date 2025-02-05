@@ -214,7 +214,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The handle view for the map area selector.
-***REMOVED***private struct Handle: View {
+***REMOVED***struct Handle: View {
 ***REMOVED******REMOVED******REMOVED***/ The position of the handle.
 ***REMOVED******REMOVED***let position: CGPoint
 ***REMOVED******REMOVED******REMOVED***/ The closure to call when the map area selector should be resized.
