@@ -33,10 +33,13 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     /// A Boolean value indicating whether the current map area is selected.
     let isSelected: Bool
     
+    /// The thumbnail image of the map area.
+    @State private var thumbnailImage: UIImage?
+    
     var body: some View {
         Form {
             Section {
-                if let image = model.thumbnailImage {
+                if let image = thumbnailImage {
                     HStack {
                         Spacer()
                         Image(uiImage: image)
@@ -97,6 +100,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .disabled(!model.allowsDownload)
             }
         }
+        .task { thumbnailImage = await model.thumbnailImage }
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -110,7 +114,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 @MainActor
 protocol OfflineMapAreaMetadata: ObservableObject {
     var title: String { get }
-    var thumbnailImage: UIImage? { get }
+    var thumbnailImage: UIImage? { get async }
     var description: String { get }
     var isDownloaded: Bool { get }
     var allowsDownload: Bool { get }
@@ -121,12 +125,15 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 }
 
 extension PreplannedMapModel: OfflineMapAreaMetadata {
-    var title: String {
-        preplannedMapArea.title
+    var thumbnailImage: UIImage? {
+        get async {
+            try? await preplannedMapArea.thumbnail?.load()
+            return preplannedMapArea.thumbnail?.image
+        }
     }
     
-    var thumbnailImage: UIImage? {
-        nil
+    var title: String {
+        preplannedMapArea.title
     }
     
     var description: String {
