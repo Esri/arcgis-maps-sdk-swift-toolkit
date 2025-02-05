@@ -31,9 +31,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     var body: some View {
         
         Form {
-            Section {} header: { header }
-                .foregroundStyle(.primary)
-                .textCase(nil)
+            Section { header }
             
             if !model.description.isEmpty {
                 Section("Description") {
@@ -100,6 +98,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
         }
+        .listRowBackground(EmptyView())
         .frame(maxWidth: .infinity)
     }
 }
