@@ -185,13 +185,13 @@ struct OnDemandConfigurationView: View {
                 Backported.ContentUnavailableView(
                     "No Internet Connection",
                     systemImage: "wifi.exclamationmark",
-                    description: "Cannot download a map area at this time."
+                    description: "A map area cannot be downloaded at this time."
                 )
             } else {
                 Backported.ContentUnavailableView(
                     "Online Map Failed to Load",
                     systemImage: "exclamationmark.triangle",
-                    description: "Cannot download a map area at this time."
+                    description: "A map area cannot be downloaded at this time."
                 )
             }
             Button {
