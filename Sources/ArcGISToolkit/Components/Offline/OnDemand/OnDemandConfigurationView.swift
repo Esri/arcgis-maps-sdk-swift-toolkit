@@ -81,16 +81,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func loadMap() async {
-***REMOVED******REMOVED***var reloadSucceed = loadResult != nil
-***REMOVED******REMOVED***loadResult = nil
-***REMOVED******REMOVED***if reloadSucceed {
-***REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 2_000_000_000)
-***REMOVED******REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 2_000_000_000);
-***REMOVED******REMOVED******REMOVED***loadResult = await Result {  throw NSError() ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
+***REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var loadedView: some View {
