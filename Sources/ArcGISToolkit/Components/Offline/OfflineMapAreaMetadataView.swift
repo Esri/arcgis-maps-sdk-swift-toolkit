@@ -31,9 +31,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED***Section {***REMOVED*** header: { header ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.primary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
+***REMOVED******REMOVED******REMOVED***Section { header ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if !model.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Description") {
@@ -100,6 +98,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED***
+***REMOVED******REMOVED***.listRowBackground(EmptyView())
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
