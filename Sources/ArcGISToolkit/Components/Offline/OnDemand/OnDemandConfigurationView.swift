@@ -35,12 +35,13 @@ struct OnDemandConfigurationView: View {
     /// The visible area of the map.
     @State private var visibleArea: Envelope?
     
-    // The action to dismiss the view.
+    /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating if the download button is disabled.
     private var downloadIsDisabled: Bool { visibleArea == nil || isNoInternetConnection }
     
+    /// The result of trying to load the map.
     @State private var loadResult: Result<Void, Error>?
     
     /// A Boolean value indicating if there is no internet connection
@@ -80,7 +81,10 @@ struct OnDemandConfigurationView: View {
         }
     }
     
+    /// Loads the map and sets the result.
     private func loadMap() async {
+        // First set to `nil` so progress indicator can show during load.
+        loadResult = nil
         loadResult = await Result { try await map.retryLoad() }
     }
     
