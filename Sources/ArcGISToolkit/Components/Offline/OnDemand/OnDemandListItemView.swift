@@ -123,7 +123,7 @@ struct OnDemandListItemView: View {
             .disabled(!model.status.allowsDownload)
         case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
             Button {
-                model.removeDownloadedOnDemandMapArea()
+                model.removeDownloadedArea()
             } label: {
                 Image(systemName: "trash")
             }

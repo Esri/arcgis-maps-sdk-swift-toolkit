@@ -1,3 +1,11 @@
+//
+//  PreplannedMetadataView.swift
+//  arcgis-maps-sdk-swift-toolkit
+//
+//  Created by Ryan Olson on 2/5/25.
+//
+
+
 // Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +23,9 @@
 import ArcGIS
 import SwiftUI
 
-struct PreplannedMetadataView: View {
+struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     /// The view model for the preplanned map.
-    @ObservedObject var model: PreplannedMapModel
+    @ObservedObject var metadata: Metadata
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
@@ -28,17 +36,15 @@ struct PreplannedMetadataView: View {
     var body: some View {
         Form {
             Section {
-                if let image = model.preplannedMapArea.thumbnail {
+                if let image = metadata.thumbnail {
                     HStack {
                         Spacer()
-                        LoadableImageView(loadableImage: image) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxHeight: 200)
-                                .clipShape(.rect(cornerRadius: 10))
-                                .padding(.vertical, 10)
-                        }
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxHeight: 200)
+                            .clipShape(.rect(cornerRadius: 10))
+                            .padding(.vertical, 10)
                         Spacer()
                     }
                 }
@@ -46,33 +52,33 @@ struct PreplannedMetadataView: View {
                     Text("Name")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text(model.preplannedMapArea.title)
+                    Text(metadata.title)
                         .font(.subheadline)
                 }
                 VStack(alignment: .leading) {
                     Text("Description")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    if model.preplannedMapArea.description.isEmpty {
+                    if metadata.description.isEmpty {
                         Text("This area has no description.")
                             .font(.subheadline)
                             .foregroundStyle(.tertiary)
                     } else {
-                        Text(model.preplannedMapArea.description)
+                        Text(metadata.description)
                             .font(.subheadline)
                     }
                 }
-                if model.status.isDownloaded {
+                if metadata.isDownloaded {
                     VStack(alignment: .leading) {
                         Text("Size")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+                        Text(Int64(metadata.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
                             .font(.subheadline)
                     }
                 }
             }
-            if model.status.isDownloaded && !isSelected {
+            if !metadata.isDownloaded && !isSelected {
                 Section {
                     HStack {
                         Image(systemName: "trash.circle.fill")
@@ -81,21 +87,21 @@ struct PreplannedMetadataView: View {
                             .font(.title)
                         Button("Remove Download", role: .destructive) {
                             dismiss()
-                            model.removeDownloadedArea()
+                            metadata.removeDownloadedArea()
                         }
                     }
                 }
             }
-            if !model.status.isDownloaded {
+            if !metadata.isDownloaded {
                 Button("Download", systemImage: "arrow.down.circle") {
                     dismiss()
-                    Task { await model.downloadPreplannedMapArea() }
+                    metadata.startDownload()
                 }
                 .foregroundStyle(Color.accentColor)
-                .disabled(!model.status.allowsDownload)
+                .disabled(!metadata.allowsDownload)
             }
         }
-        .navigationTitle(model.preplannedMapArea.title)
+        .navigationTitle(metadata.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
@@ -105,27 +111,51 @@ struct PreplannedMetadataView: View {
     }
 }
 
-#Preview {
-    struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-        var packagingStatus: PreplannedMapArea.PackagingStatus? { .complete }
-        var title: String { "Mock Preplanned Map Area" }
-        var description: String { "This is the description text" }
-        var thumbnail: LoadableImage? { nil }
-        
-        func retryLoad() async throws { }
-        func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-            DownloadPreplannedOfflineMapParameters()
-        }
+@MainActor
+protocol OfflineMapAreaMetadata: ObservableObject {
+    var title: String { get }
+    var thumbnail: UIImage? { get }
+    var description: String { get }
+    var isDownloaded: Bool { get }
+    var allowsDownload: Bool { get }
+    var directorySize: Int { get }
+    
+    func removeDownloadedArea()
+    func startDownload()
+}
+
+extension PreplannedMapModel: OfflineMapAreaMetadata {
+    var title: String {
+        preplannedMapArea.title
     }
     
-    return PreplannedMetadataView(
-        model: PreplannedMapModel(
-            offlineMapTask: OfflineMapTask(onlineMap: Map()),
-            mapArea: MockPreplannedMapArea(),
-            portalItemID: .init("preview")!,
-            preplannedMapAreaID: .init("preview")!,
-            onRemoveDownload: {}
-        ),
-        isSelected: false
-    )
+    var thumbnail: UIImage? {
+        nil
+    }
+    
+    var description: String {
+        preplannedMapArea.description
+    }
+    
+    var isDownloaded: Bool {
+        status.isDownloaded
+    }
+    
+    var allowsDownload: Bool {
+        status.allowsDownload
+    }
+    
+    func startDownload() {
+        Task { await downloadPreplannedMapArea() }
+    }
+}
+
+extension OnDemandMapModel: OfflineMapAreaMetadata {
+    var description: String { "" }
+    
+    var isDownloaded: Bool { status.isDownloaded }
+    
+    var allowsDownload: Bool { false }
+    
+    func startDownload() { fatalError() }
 }
