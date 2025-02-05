@@ -163,7 +163,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct NetworkSourceGroup: Equatable, Hashable ,Identifiable {
+***REMOVED***struct NetworkSourceGroup: Equatable, Hashable, Identifiable {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let associations: [Association]
 ***REMOVED******REMOVED***
