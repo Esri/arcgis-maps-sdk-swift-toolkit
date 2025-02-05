@@ -16,20 +16,20 @@ import SwiftUI
 
 extension View {
     /// Performs an action when a specified value changes.
-    /// - Note: This is temporary until our minumum platform versions are increased.
-    /// Without this a warning will show saying we are using a deprecated `onChange(of:perform:)` method.
+    /// - Note: This is temporary until our minimum platform versions are
+    /// increased. Without this, a warning will show saying we are using a
+    /// deprecated `onChange(of:perform:)` method.
     /// - Parameters:
     ///   - value: The value to check when determining whether to run the
-    ///     closure.
-    ///   - action: A closure to run when the value changes. The closure
-    ///     takes a `newValue` parameter that indicates the updated
-    ///     value.
+    ///   closure.
+    ///   - action: A closure to run when the value changes. The closure takes a
+    ///   `newValue` parameter that indicates the updated value.
     /// - Returns: A view that runs an action when the specified value changes.
     func onChange<V>(
         _ value: V,
         perform action: @escaping (_ newValue: V) -> Void
     ) -> some View where V: Equatable {
-        if #available(iOS 17.0, macCatalyst 17.0, visionOS 1.0, *) {
+        if #available(iOS 17.0, visionOS 1.0, *) {
             return onChange(of: value) { _, newValue in
                 action(newValue)
             }
