@@ -33,10 +33,13 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current map area is selected.
 ***REMOVED***let isSelected: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The thumbnail image of the map area.
+***REMOVED***@State private var thumbnailImage: UIImage?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let image = model.thumbnailImage {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let image = thumbnailImage {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
@@ -97,6 +100,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!model.allowsDownload)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.task { thumbnailImage = await model.thumbnailImage ***REMOVED***
 ***REMOVED******REMOVED***.navigationTitle(model.title)
 ***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED***.toolbar {
@@ -110,7 +114,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 @MainActor
 protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***var title: String { get ***REMOVED***
-***REMOVED***var thumbnailImage: UIImage? { get ***REMOVED***
+***REMOVED***var thumbnailImage: UIImage? { get async ***REMOVED***
 ***REMOVED***var description: String { get ***REMOVED***
 ***REMOVED***var isDownloaded: Bool { get ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { get ***REMOVED***
@@ -121,12 +125,15 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***
 
 extension PreplannedMapModel: OfflineMapAreaMetadata {
+***REMOVED***var thumbnailImage: UIImage? {
+***REMOVED******REMOVED***get async {
+***REMOVED******REMOVED******REMOVED***try? await preplannedMapArea.thumbnail?.load()
+***REMOVED******REMOVED******REMOVED***return preplannedMapArea.thumbnail?.image
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var title: String {
 ***REMOVED******REMOVED***preplannedMapArea.title
-***REMOVED***
-***REMOVED***
-***REMOVED***var thumbnailImage: UIImage? {
-***REMOVED******REMOVED***nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var description: String {
