@@ -71,7 +71,7 @@ struct OnDemandMapAreaSelectorView: View {
                             .position(boundingRect.center)
                         
                     }
-                RoundedRectangleWithRoundedCorners(cornerRadius: cordnerRadius, style: .continuous)
+                RoundedCorners(cornerRadius: cordnerRadius)
                     .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
                     .frame(width: insetRect.width, height: insetRect.height)
                     .position(insetRect.center)
@@ -96,19 +96,19 @@ struct OnDemandMapAreaSelectorView: View {
                 selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
             }
             
-            Handle(position: topLeft, color: .blue) {
+            Handle(position: topLeft) {
                 resize(for: .topLeft, location: $0)
             }
             
-            Handle(position: topRight, color: .green) {
+            Handle(position: topRight) {
                 resize(for: .topRight, location: $0)
             }
             
-            Handle(position: bottomLeft, color: .yellow) {
+            Handle(position: bottomLeft) {
                 resize(for: .bottomLeft, location: $0)
             }
             
-            Handle(position: bottomRight, color: .pink) {
+            Handle(position: bottomRight) {
                 resize(for: .bottomRight, location: $0)
             }
         }
@@ -213,12 +213,16 @@ struct OnDemandMapAreaSelectorView: View {
         bottomRight = CGPoint(x: boundingRect.maxX, y: boundingRect.maxY)
     }
     
-    struct Handle: View {
+    /// The handle view for the map area selector.
+    private struct Handle: View {
+        /// The position of the handle.
         let position: CGPoint
-        let color: Color
+        /// The closure to call when the map area selector should be resized.
         let resize: (CGPoint) -> Void
-        @GestureState var gestureState: Progress = .started
-        enum Progress {
+        /// The gesture state of the drag gesture.
+        @GestureState var gestureState: State = .started
+        /// The types of gesture states.
+        enum State {
             case started, changed
         }
         
@@ -241,9 +245,11 @@ struct OnDemandMapAreaSelectorView: View {
         }
     }
     
-    struct RoundedRectangleWithRoundedCorners: Shape {
+    /// A view that displays rounded corners for a rectangle view.
+    struct RoundedCorners: Shape {
+        /// The corner radius.
         let cornerRadius: CGFloat
-        let style: RoundedCornerStyle
+        /// The padding to add to the corner shape.
         let padding = CGFloat(4)
         
         func path(in rect: CGRect) -> Path {
