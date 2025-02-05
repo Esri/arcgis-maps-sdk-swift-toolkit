@@ -74,9 +74,7 @@ struct OnDemandConfigurationView: View {
                     }
                 }
             }
-            .task {
-                await loadMap()
-            }
+            .task { await loadMap() }
             .navigationBarTitle("Select Area")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -184,11 +182,17 @@ struct OnDemandConfigurationView: View {
     @ViewBuilder private var failedToLoadView: some View {
         VStack {
             if isNoInternetConnection {
-                Label("No internet connection.", systemImage: "wifi.exclamationmark")
-                    .foregroundStyle(.secondary)
+                Backported.ContentUnavailableView(
+                    "No Internet Connection",
+                    systemImage: "wifi.exclamationmark",
+                    description: "Cannot download a map area at this time."
+                )
             } else {
-                Label("Map failed to load.", systemImage: "exclamationmark.triangle")
-                    .foregroundStyle(.secondary)
+                Backported.ContentUnavailableView(
+                    "Online Map Failed to Load",
+                    systemImage: "exclamationmark.triangle",
+                    description: "Cannot download a map area at this time."
+                )
             }
             Button {
                 Task { await loadMap() }
