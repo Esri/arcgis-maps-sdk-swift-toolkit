@@ -83,8 +83,16 @@ struct OnDemandConfigurationView: View {
     }
     
     private func loadMap() async {
-        loadResult = await Result { try await Task.sleep(nanoseconds: 2_000_000_000); throw NSError() } // try await map.reload() }
-//        loadResult = await Result { try await map.retryLoad() }
+        var reloadSucceed = loadResult != nil
+        loadResult = nil
+        if reloadSucceed {
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            loadResult = await Result { try await map.retryLoad() }
+        } else {
+            try? await Task.sleep(nanoseconds: 2_000_000_000);
+            loadResult = await Result {  throw NSError() }
+        }
+        //loadResult = await Result { try await map.retryLoad() }
     }
     
     @ViewBuilder private var loadedView: some View {
