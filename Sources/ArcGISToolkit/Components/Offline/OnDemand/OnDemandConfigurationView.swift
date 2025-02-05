@@ -185,13 +185,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"No Internet Connection",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "Cannot download a map area at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "A map area cannot be downloaded at this time."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Online Map Failed to Load",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "Cannot download a map area at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "A map area cannot be downloaded at this time."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
