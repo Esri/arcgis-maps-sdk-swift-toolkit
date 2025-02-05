@@ -98,7 +98,6 @@
 				E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */,
 				75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */,
 				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
-				79222E132D5006E0005C2ABA /* Extensions */,
 				75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */,
 				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
 				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
@@ -160,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				E40F58042656E509006F5CB9 /* Examples */,
+				79222E132D5006E0005C2ABA /* Extensions */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
