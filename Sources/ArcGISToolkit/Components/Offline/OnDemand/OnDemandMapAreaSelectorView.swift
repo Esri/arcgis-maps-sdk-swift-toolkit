@@ -242,10 +242,8 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     struct RoundedRectangleWithRoundedCorners: Shape {
-        var cornerRadius: CGFloat
-        
-        var style: RoundedCornerStyle
-        
+        let cornerRadius: CGFloat
+        let style: RoundedCornerStyle
         let padding = CGFloat(4)
         
         func path(in rect: CGRect) -> Path {
