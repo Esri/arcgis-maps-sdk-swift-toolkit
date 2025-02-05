@@ -372,8 +372,7 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If not connected to the internet, then return only the offline models.
-***REMOVED******REMOVED******REMOVED******REMOVED***if let urlError = error as? URLError,
-***REMOVED******REMOVED******REMOVED******REMOVED***   urlError.code == .notConnectedToInternet {
+***REMOVED******REMOVED******REMOVED******REMOVED***if error.isNoInternetConnectionError {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onlyOfflineModelsAreAvailable = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return await loadOfflinePreplannedMapModels(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
