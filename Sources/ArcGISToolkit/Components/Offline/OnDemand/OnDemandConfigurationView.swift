@@ -39,8 +39,20 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
-***REMOVED***private var downloadIsDisabled: Bool {
-***REMOVED******REMOVED***visibleArea == nil
+***REMOVED***private var downloadIsDisabled: Bool { visibleArea == nil || isNoInternetConnection ***REMOVED***
+***REMOVED***
+***REMOVED***@State private var loadResult: Result<Void, Error>?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if there is no internet connection
+***REMOVED***private var isNoInternetConnection: Bool {
+***REMOVED******REMOVED***return switch loadResult {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED***case .failure(let failure):
+***REMOVED******REMOVED******REMOVED***failure.isNoInternetConnectionError
+***REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -69,6 +81,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***loadResult = await Result { try await Task.sleep(nanoseconds: 2_000_000_000); throw NSError() ***REMOVED*** ***REMOVED*** try await map.load() ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select Area")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
@@ -76,14 +91,33 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder
 ***REMOVED***private var mapView: some View {
-***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
-***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
-***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0.extent ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on map view.
-***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED***switch loadResult {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
+***REMOVED******REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0.extent ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on map view.
+***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***if isNoInternetConnection {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("No internet connection. Please try again.", systemImage: "wifi.exclamationmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Map failed to load. Please try again.", systemImage: "exclamationmark.triangle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -97,6 +131,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = $0
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -107,6 +142,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.pickerStyle(.navigationLink)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 6)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
