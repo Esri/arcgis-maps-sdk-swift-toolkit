@@ -16,37 +16,48 @@
 ***REMOVED***
 
 struct OnDemandMapAreaSelectorView: View {
+***REMOVED******REMOVED***/ The map view proxy.
+***REMOVED***private let mapViewProxy: MapViewProxy
 ***REMOVED***
-***REMOVED***let mapViewProxy: MapViewProxy
-
-***REMOVED***let envelope: Envelope
+***REMOVED******REMOVED***/ A Binding to the extent of the selected map area.
+***REMOVED***@Binding var selectedMapArea: Envelope?
 ***REMOVED***
-***REMOVED***let cordnerRadius: CGFloat = 16
-
-***REMOVED***@State var boundingRect: CGRect
+***REMOVED******REMOVED***/ The bounding rectangle for the area selector view.
+***REMOVED***@State private var boundingRect: CGRect
 ***REMOVED***
-***REMOVED***@State var insetRect: CGRect = .zero
+***REMOVED******REMOVED***/ The inset rectangle for the area selector view.
+***REMOVED***@State private var insetRect: CGRect = .zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The initial rectangle for the area selector view.
 ***REMOVED***@State private var initialRect: CGRect = .zero
 ***REMOVED***
-***REMOVED***let minimumSize = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ The top left corner point of the area selector view.
 ***REMOVED***@State private var topLeft: CGPoint = .zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The top right corner point of the area selector view.
 ***REMOVED***@State private var topRight: CGPoint = .zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The bottom left corner point of the area selector view.
 ***REMOVED***@State private var bottomLeft: CGPoint = .zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The bottom right corner point of the area selector view.
 ***REMOVED***@State private var bottomRight: CGPoint = .zero
 ***REMOVED***
-***REMOVED***enum DragPoint {
+***REMOVED******REMOVED***/ The corner radius of the area selector view.
+***REMOVED***private let cordnerRadius: CGFloat = 16
+***REMOVED***
+***REMOVED******REMOVED***/ The minimum size of the area selector view.
+***REMOVED***private let minimumRect = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
+***REMOVED***
+***REMOVED******REMOVED***/ The drag point for a drag gesture.
+***REMOVED***private enum DragPoint {
 ***REMOVED******REMOVED***case topLeft, topRight, bottomLeft, bottomRight
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(mapViewProxy: MapViewProxy, envelope: Envelope) {
+***REMOVED***init(mapViewProxy: MapViewProxy, envelope: Envelope, selection: Binding<Envelope?>) {
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
-***REMOVED******REMOVED***self.envelope = envelope
-***REMOVED******REMOVED***self.boundingRect = mapViewProxy.viewRect(fromEnvelope: envelope) ?? minimumSize
+***REMOVED******REMOVED***_selectedMapArea = selection
+***REMOVED******REMOVED***self.boundingRect = mapViewProxy.viewRect(fromEnvelope: envelope) ?? minimumRect
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -76,9 +87,13 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***initialRect = boundingRect
 ***REMOVED******REMOVED******REMOVED******REMOVED***insetRect = boundingRect.insetBy(dx: -2, dy: -2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHandles()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: boundingRect) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Handle(position: topLeft, color: .blue) {
@@ -99,18 +114,11 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func validate(rect: CGRect) -> Bool {
-***REMOVED******REMOVED***if rect.width < 50 || rect.height < 50 {
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if rect.width > initialRect.width || rect.height > initialRect.height {
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED******REMOVED***return true
-***REMOVED***
-***REMOVED***
-***REMOVED***private func resize(for handle: DragPoint, location: CGPoint) -> Void {
+***REMOVED******REMOVED***/ Resizes the area selectpor view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - handle: The drag point handle.
+***REMOVED******REMOVED***/   - location: The location of the drag gesture.
+***REMOVED***private func resize(for handle: DragPoint, location: CGPoint) {
 ***REMOVED******REMOVED******REMOVED*** Resize the rect.
 ***REMOVED******REMOVED***let rectangle: CGRect
 ***REMOVED******REMOVED***
@@ -133,19 +141,23 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED***let minY = boundingRect.minY
 ***REMOVED******REMOVED******REMOVED***let maxY = location.y
 ***REMOVED******REMOVED******REMOVED***rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+***REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***case .bottomRight:
 ***REMOVED******REMOVED******REMOVED***let minX = boundingRect.minX
 ***REMOVED******REMOVED******REMOVED***let maxX = location.x
 ***REMOVED******REMOVED******REMOVED***let minY = boundingRect.minY
 ***REMOVED******REMOVED******REMOVED***let maxY = location.y
 ***REMOVED******REMOVED******REMOVED***rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Validate proposed resized rectangle.
-***REMOVED******REMOVED***guard validate(rect: rectangle) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Keep rectangle within the initial rect.
+***REMOVED******REMOVED***var corrected = CGRectIntersection(initialRect, rectangle)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Update bounding rect for valid proposed resize.
-***REMOVED******REMOVED***boundingRect = rectangle
+***REMOVED******REMOVED******REMOVED*** Keep rectangle outside the minimum rect.
+***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***boundingRect = corrected
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***insetRect = boundingRect.insetBy(dx: -2, dy: -2)
 ***REMOVED******REMOVED***
@@ -153,6 +165,47 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***updateHandles()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Calculates the minimum rect size for a drag point handle using the adjacent handle position.
+***REMOVED******REMOVED***/ - Parameter handle: The drag point handle.
+***REMOVED******REMOVED***/ - Returns: The minimum rect for a handle.
+***REMOVED***private func minimumRect(forHandle handle: DragPoint) -> CGRect {
+***REMOVED******REMOVED***let maxWidth: CGFloat = 50
+***REMOVED******REMOVED***let maxHeight: CGFloat  = 50
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch handle {
+***REMOVED******REMOVED***case .topLeft:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Anchor is opposite corner.
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.maxX - maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.maxY - maxHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .topRight:
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.minX,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.maxY - maxHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .bottomLeft:
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.maxX - maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.minY,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .bottomRight:
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.minX,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.minY,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the handle locations using the boudning rect.
 ***REMOVED***private func updateHandles() {
 ***REMOVED******REMOVED***topRight = CGPoint(x: boundingRect.maxX, y: boundingRect.minY)
 ***REMOVED******REMOVED***topLeft = CGPoint(x: boundingRect.minX, y: boundingRect.minY)
@@ -164,6 +217,10 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***let position: CGPoint
 ***REMOVED******REMOVED***let color: Color
 ***REMOVED******REMOVED***let resize: (CGPoint) -> Void
+***REMOVED******REMOVED***@GestureState var gestureState: Progress = .started
+***REMOVED******REMOVED***enum Progress {
+***REMOVED******REMOVED******REMOVED***case started, changed
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***Color.clear
@@ -171,8 +228,14 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.position(position)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { value in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(value.location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(value.location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
@@ -207,7 +270,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 
 private extension View {
-***REMOVED***public func reverseMask<Mask: View>(
+***REMOVED***func reverseMask<Mask: View>(
 ***REMOVED******REMOVED***alignment: Alignment = .center,
 ***REMOVED******REMOVED***@ViewBuilder _ mask: () -> Mask
 ***REMOVED***) -> some View {
