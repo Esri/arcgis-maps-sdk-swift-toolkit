@@ -35,12 +35,18 @@ struct OnDemandConfigurationView: View {
     /// The visible area of the map.
     @State private var visibleArea: Envelope?
     
+    /// The selected map area.
+    @State private var mapAreaSelection: Envelope?
+    
+    /// The polygon rect of the selected map area.
+    @State private var polygonRect: CGRect?
+    
     // The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating if the download button is disabled.
     private var downloadIsDisabled: Bool {
-        visibleArea == nil
+        mapAreaSelection == nil
     }
     
     /// The scale or the map area selector.
@@ -70,7 +76,11 @@ struct OnDemandConfigurationView: View {
                         ZStack {
                             mapView
                             if let scaledVisibleArea {
-                                OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea)
+                                OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea, selection: $mapAreaSelection)
+                                    .onChange(of: mapAreaSelection) { _ in
+                                        guard let evelope = mapAreaSelection?.extent else { return }
+                                        polygonRect = mapViewProxy.viewRect(fromEnvelope: evelope)
+                                    }
                             }
                         }
                     }
@@ -129,14 +139,16 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let visibleArea else { return }
+                        guard let mapAreaSelection, let polygonRect else { return }
                         Task {
-                            let thumbnail = try? await mapView.exportImage()
+                            let image = try? await mapView.exportImage()
+                            let thumbnail = image?.crop(to: polygonRect)
+                            
                             let configuration = OnDemandMapAreaConfiguration(
                                 title: title,
                                 minScale: 0,
                                 maxScale: maxScale.scale,
-                                areaOfInterest: visibleArea,
+                                areaOfInterest: mapAreaSelection,
                                 thumbnail: thumbnail
                             )
                             onCompleteAction(configuration)
@@ -238,5 +250,28 @@ private struct BottomCard<Content: View, Background: ShapeStyle>: View {
                 .background(background)
         }
         .ignoresSafeArea(.container, edges: .horizontal)
+    }
+}
+
+private extension UIImage {
+    /// Crops a UIImage to a certain CGRect of the screen's coordinates.
+    /// - Parameter rect: A CGRect in screen coordinates.
+    /// - Returns: The cropped image.
+    @MainActor
+    func crop(to rect: CGRect) -> UIImage? {
+        let scale = UIScreen.main.scale
+        
+        let scaledRect = CGRect(
+            x: rect.origin.x * scale,
+            y: rect.origin.y * scale,
+            width: rect.size.width * scale,
+            height: rect.size.height * scale
+        )
+        
+        guard let cgImage, let croppedImage = cgImage.cropping(to: scaledRect) else {
+            return nil
+        }
+        
+        return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
     }
 }
