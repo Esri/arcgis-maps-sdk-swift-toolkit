@@ -39,8 +39,20 @@ struct OnDemandConfigurationView: View {
     @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating if the download button is disabled.
-    private var downloadIsDisabled: Bool {
-        visibleArea == nil
+    private var downloadIsDisabled: Bool { visibleArea == nil || isNoInternetConnection }
+    
+    @State private var loadResult: Result<Void, Error>?
+    
+    /// A Boolean value indicating if there is no internet connection
+    private var isNoInternetConnection: Bool {
+        return switch loadResult {
+        case .success:
+            false
+        case .failure(let failure):
+            failure.isNoInternetConnectionError
+        case nil:
+            false
+        }
     }
     
     var body: some View {
@@ -69,6 +81,9 @@ struct OnDemandConfigurationView: View {
                     }
                 }
             }
+            .task {
+                loadResult = await Result { try await Task.sleep(nanoseconds: 2_000_000_000); throw NSError() } // try await map.load() }
+            }
             .navigationBarTitle("Select Area")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -76,14 +91,33 @@ struct OnDemandConfigurationView: View {
     
     @ViewBuilder
     private var mapView: some View {
-        MapView(map: map)
-            .magnifierDisabled(true)
-            .attributionBarHidden(true)
-            .interactionModes([.pan, .zoom])
-            .onVisibleAreaChanged { visibleArea = $0.extent }
-            // Prevent view from dragging when panning on map view.
-            .highPriorityGesture(DragGesture())
-            .interactiveDismissDisabled()
+        switch loadResult {
+        case .success:
+            MapView(map: map)
+                .magnifierDisabled(true)
+                .attributionBarHidden(true)
+                .interactionModes([.pan, .zoom])
+                .onVisibleAreaChanged { visibleArea = $0.extent }
+                // Prevent view from dragging when panning on map view.
+                .highPriorityGesture(DragGesture())
+                .interactiveDismissDisabled()
+        case .failure:
+            Spacer()
+            if isNoInternetConnection {
+                Label("No internet connection. Please try again.", systemImage: "wifi.exclamationmark")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } else {
+                Label("Map failed to load. Please try again.", systemImage: "exclamationmark.triangle")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+        case nil:
+            Spacer()
+            ProgressView()
+            Spacer()
+        }
     }
     
     @ViewBuilder
@@ -97,6 +131,7 @@ struct OnDemandConfigurationView: View {
                     NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
                         title = $0
                     }
+                    .disabled(downloadIsDisabled)
                 }
                 
                 HStack {
@@ -107,6 +142,7 @@ struct OnDemandConfigurationView: View {
                     }
                     .font(.footnote)
                     .pickerStyle(.navigationLink)
+                    .disabled(downloadIsDisabled)
                 }
                 .padding(.vertical, 6)
                 
