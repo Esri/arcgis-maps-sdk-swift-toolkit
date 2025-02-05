@@ -100,8 +100,8 @@ struct PreplannedListItemView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 64, height: 44)
-                    .clipShape(.rect(cornerRadius: 2))
+                    .frame(width: 64, height: 64)
+                    .clipShape(.rect(cornerRadius: 10))
             }
         } else {
             placeholderImage
