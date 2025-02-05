@@ -94,11 +94,25 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
 ***REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.thumbnail {
-***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
-***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail) {
+***REMOVED******REMOVED******REMOVED******REMOVED***placeholderImage
+***REMOVED******REMOVED*** loadedContent: { image in
+***REMOVED******REMOVED******REMOVED******REMOVED***image
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***placeholderImage
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var placeholderImage: some View {
+***REMOVED******REMOVED***Image(systemName: "map")
+***REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var titleView: some View {
