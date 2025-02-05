@@ -100,8 +100,8 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***image
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***placeholderImage

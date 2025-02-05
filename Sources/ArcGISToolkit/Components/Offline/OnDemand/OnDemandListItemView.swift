@@ -67,13 +67,15 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "map")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
