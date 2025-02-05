@@ -96,7 +96,7 @@ struct OnDemandListItemView: View {
                     .font(.caption)
                 }
             }
-        case .downloaded, .downloadedWithLayerErrors:
+        case .downloaded:
             Button {
                 Task {
                     if let map = model.map {
@@ -148,11 +148,6 @@ struct OnDemandListItemView: View {
                 Text("Downloading")
             case .downloaded:
                 Text("Downloaded")
-            case .downloadedWithLayerErrors:
-                HStack {
-                    Image(systemName: "exclamationmark.triangle")
-                    Text("Downloaded. Some layers failed to download.")
-                }
             case .downloadFailure:
                 Image(systemName: "exclamationmark.circle")
                 Text("Download failed")
