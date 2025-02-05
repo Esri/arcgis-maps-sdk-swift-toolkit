@@ -218,7 +218,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes the downloaded map area from disk and resets the status.
-***REMOVED***func removeDownloadedOnDemandMapArea() {
+***REMOVED***func removeDownloadedArea() {
 ***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
 ***REMOVED******REMOVED***status = .initialized
 ***REMOVED******REMOVED***

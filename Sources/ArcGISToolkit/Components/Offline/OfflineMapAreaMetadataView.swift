@@ -1,3 +1,11 @@
+***REMOVED***
+***REMOVED***  PreplannedMetadataView.swift
+***REMOVED***  arcgis-maps-sdk-swift-toolkit
+***REMOVED***
+***REMOVED***  Created by Ryan Olson on 2/5/25.
+***REMOVED***
+
+
 ***REMOVED*** Copyright 2024 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +23,9 @@
 ***REMOVED***
 ***REMOVED***
 
-struct PreplannedMetadataView: View {
+struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
-***REMOVED***@ObservedObject var model: PreplannedMapModel
+***REMOVED***@ObservedObject var metadata: Metadata
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
@@ -28,17 +36,15 @@ struct PreplannedMetadataView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let image = model.preplannedMapArea.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let image = metadata.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: image) { image in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***image
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 200)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 200)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -46,33 +52,33 @@ struct PreplannedMetadataView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(metadata.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Description")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.preplannedMapArea.description.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if metadata.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("This area has no description.")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(metadata.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if model.status.isDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***if metadata.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Size")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(metadata.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if model.status.isDownloaded && !isSelected {
+***REMOVED******REMOVED******REMOVED***if !metadata.isDownloaded && !isSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash.circle.fill")
@@ -81,21 +87,21 @@ struct PreplannedMetadataView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Remove Download", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadata.removeDownloadedArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !model.status.isDownloaded {
+***REMOVED******REMOVED******REMOVED***if !metadata.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Download", systemImage: "arrow.down.circle") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await model.downloadPreplannedMapArea() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadata.startDownload()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!metadata.allowsDownload)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationTitle(model.preplannedMapArea.title)
+***REMOVED******REMOVED***.navigationTitle(metadata.title)
 ***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -105,27 +111,51 @@ struct PreplannedMetadataView: View {
 ***REMOVED***
 ***REMOVED***
 
-#Preview {
-***REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED******REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { .complete ***REMOVED***
-***REMOVED******REMOVED***var title: String { "Mock Preplanned Map Area" ***REMOVED***
-***REMOVED******REMOVED***var description: String { "This is the description text" ***REMOVED***
-***REMOVED******REMOVED***var thumbnail: LoadableImage? { nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
-***REMOVED******REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
-***REMOVED******REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+@MainActor
+protocol OfflineMapAreaMetadata: ObservableObject {
+***REMOVED***var title: String { get ***REMOVED***
+***REMOVED***var thumbnail: UIImage? { get ***REMOVED***
+***REMOVED***var description: String { get ***REMOVED***
+***REMOVED***var isDownloaded: Bool { get ***REMOVED***
+***REMOVED***var allowsDownload: Bool { get ***REMOVED***
+***REMOVED***var directorySize: Int { get ***REMOVED***
+***REMOVED***
+***REMOVED***func removeDownloadedArea()
+***REMOVED***func startDownload()
+***REMOVED***
+
+extension PreplannedMapModel: OfflineMapAreaMetadata {
+***REMOVED***var title: String {
+***REMOVED******REMOVED***preplannedMapArea.title
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var thumbnail: UIImage? {
+***REMOVED******REMOVED***nil
 ***REMOVED***
-***REMOVED***return PreplannedMetadataView(
-***REMOVED******REMOVED***model: PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
-***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
-***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!,
-***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***isSelected: false
-***REMOVED***)
+***REMOVED***
+***REMOVED***var description: String {
+***REMOVED******REMOVED***preplannedMapArea.description
+***REMOVED***
+***REMOVED***
+***REMOVED***var isDownloaded: Bool {
+***REMOVED******REMOVED***status.isDownloaded
+***REMOVED***
+***REMOVED***
+***REMOVED***var allowsDownload: Bool {
+***REMOVED******REMOVED***status.allowsDownload
+***REMOVED***
+***REMOVED***
+***REMOVED***func startDownload() {
+***REMOVED******REMOVED***Task { await downloadPreplannedMapArea() ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension OnDemandMapModel: OfflineMapAreaMetadata {
+***REMOVED***var description: String { "" ***REMOVED***
+***REMOVED***
+***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
+***REMOVED***
+***REMOVED***var allowsDownload: Bool { false ***REMOVED***
+***REMOVED***
+***REMOVED***func startDownload() { fatalError() ***REMOVED***
 ***REMOVED***
