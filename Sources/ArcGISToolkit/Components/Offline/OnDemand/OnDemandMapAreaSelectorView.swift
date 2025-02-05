@@ -63,10 +63,10 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(.black.opacity(0.10))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reverseMask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: boundingRect.width, height: boundingRect.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(boundingRect.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
