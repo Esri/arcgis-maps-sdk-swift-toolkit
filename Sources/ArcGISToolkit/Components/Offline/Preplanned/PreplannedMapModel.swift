@@ -372,8 +372,7 @@ extension PreplannedMapModel {
                     }
             } catch {
                 // If not connected to the internet, then return only the offline models.
-                if let urlError = error as? URLError,
-                   urlError.code == .notConnectedToInternet {
+                if error.isNoInternetConnectionError {
                     onlyOfflineModelsAreAvailable = true
                     return await loadOfflinePreplannedMapModels(
                         offlineMapTask: offlineMapTask,
