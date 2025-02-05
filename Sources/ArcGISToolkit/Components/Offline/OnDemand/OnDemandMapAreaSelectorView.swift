@@ -16,37 +16,48 @@ import ArcGIS
 import SwiftUI
 
 struct OnDemandMapAreaSelectorView: View {
+    /// The map view proxy.
+    private let mapViewProxy: MapViewProxy
     
-    let mapViewProxy: MapViewProxy
-
-    let envelope: Envelope
+    /// A Binding to the extent of the selected map area.
+    @Binding var selectedMapArea: Envelope?
     
-    let cordnerRadius: CGFloat = 16
-
-    @State var boundingRect: CGRect
+    /// The bounding rectangle for the area selector view.
+    @State private var boundingRect: CGRect
     
-    @State var insetRect: CGRect = .zero
+    /// The inset rectangle for the area selector view.
+    @State private var insetRect: CGRect = .zero
     
+    /// The initial rectangle for the area selector view.
     @State private var initialRect: CGRect = .zero
     
-    let minimumSize = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
-        
+    /// The top left corner point of the area selector view.
     @State private var topLeft: CGPoint = .zero
     
+    /// The top right corner point of the area selector view.
     @State private var topRight: CGPoint = .zero
     
+    /// The bottom left corner point of the area selector view.
     @State private var bottomLeft: CGPoint = .zero
     
+    /// The bottom right corner point of the area selector view.
     @State private var bottomRight: CGPoint = .zero
     
-    enum DragPoint {
+    /// The corner radius of the area selector view.
+    private let cordnerRadius: CGFloat = 16
+    
+    /// The minimum size of the area selector view.
+    private let minimumRect = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
+    
+    /// The drag point for a drag gesture.
+    private enum DragPoint {
         case topLeft, topRight, bottomLeft, bottomRight
     }
     
-    init(mapViewProxy: MapViewProxy, envelope: Envelope) {
+    init(mapViewProxy: MapViewProxy, envelope: Envelope, selection: Binding<Envelope?>) {
         self.mapViewProxy = mapViewProxy
-        self.envelope = envelope
-        self.boundingRect = mapViewProxy.viewRect(fromEnvelope: envelope) ?? minimumSize
+        _selectedMapArea = selection
+        self.boundingRect = mapViewProxy.viewRect(fromEnvelope: envelope) ?? minimumRect
     }
     
     var body: some View {
@@ -76,9 +87,13 @@ struct OnDemandMapAreaSelectorView: View {
             .ignoresSafeArea()
             .allowsHitTesting(false)
             .task {
+                selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
                 initialRect = boundingRect
                 insetRect = boundingRect.insetBy(dx: -2, dy: -2)
                 updateHandles()
+            }
+            .onChange(of: boundingRect) { _ in
+                selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
             }
             
             Handle(position: topLeft, color: .blue) {
@@ -99,18 +114,11 @@ struct OnDemandMapAreaSelectorView: View {
         }
     }
     
-    private func validate(rect: CGRect) -> Bool {
-        if rect.width < 50 || rect.height < 50 {
-            return false
-        }
-        
-        if rect.width > initialRect.width || rect.height > initialRect.height {
-            return false
-        }
-        return true
-    }
-    
-    private func resize(for handle: DragPoint, location: CGPoint) -> Void {
+    /// Resizes the area selectpor view.
+    /// - Parameters:
+    ///   - handle: The drag point handle.
+    ///   - location: The location of the drag gesture.
+    private func resize(for handle: DragPoint, location: CGPoint) {
         // Resize the rect.
         let rectangle: CGRect
         
@@ -133,19 +141,23 @@ struct OnDemandMapAreaSelectorView: View {
             let minY = boundingRect.minY
             let maxY = location.y
             rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+            break
         case .bottomRight:
             let minX = boundingRect.minX
             let maxX = location.x
             let minY = boundingRect.minY
             let maxY = location.y
             rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+            break
         }
         
-        // Validate proposed resized rectangle.
-        guard validate(rect: rectangle) else { return }
+        // Keep rectangle within the initial rect.
+        var corrected = CGRectIntersection(initialRect, rectangle)
         
-        // Update bounding rect for valid proposed resize.
-        boundingRect = rectangle
+        // Keep rectangle outside the minimum rect.
+        corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
+        
+        boundingRect = corrected
         
         insetRect = boundingRect.insetBy(dx: -2, dy: -2)
         
@@ -153,6 +165,47 @@ struct OnDemandMapAreaSelectorView: View {
         updateHandles()
     }
     
+    /// Calculates the minimum rect size for a drag point handle using the adjacent handle position.
+    /// - Parameter handle: The drag point handle.
+    /// - Returns: The minimum rect for a handle.
+    private func minimumRect(forHandle handle: DragPoint) -> CGRect {
+        let maxWidth: CGFloat = 50
+        let maxHeight: CGFloat  = 50
+        
+        switch handle {
+        case .topLeft:
+            // Anchor is opposite corner.
+            return CGRect(
+                x: boundingRect.maxX - maxWidth,
+                y: boundingRect.maxY - maxHeight,
+                width: maxWidth,
+                height: maxHeight
+            )
+        case .topRight:
+            return CGRect(
+                x: boundingRect.minX,
+                y: boundingRect.maxY - maxHeight,
+                width: maxWidth,
+                height: maxHeight
+            )
+        case .bottomLeft:
+            return CGRect(
+                x: boundingRect.maxX - maxWidth,
+                y: boundingRect.minY,
+                width: maxWidth,
+                height: maxHeight
+            )
+        case .bottomRight:
+            return CGRect(
+                x: boundingRect.minX,
+                y: boundingRect.minY,
+                width: maxWidth,
+                height: maxHeight
+            )
+        }
+    }
+    
+    /// Updates the handle locations using the boudning rect.
     private func updateHandles() {
         topRight = CGPoint(x: boundingRect.maxX, y: boundingRect.minY)
         topLeft = CGPoint(x: boundingRect.minX, y: boundingRect.minY)
@@ -164,6 +217,10 @@ struct OnDemandMapAreaSelectorView: View {
         let position: CGPoint
         let color: Color
         let resize: (CGPoint) -> Void
+        @GestureState var gestureState: Progress = .started
+        enum Progress {
+            case started, changed
+        }
         
         var body: some View {
             Color.clear
@@ -171,8 +228,14 @@ struct OnDemandMapAreaSelectorView: View {
                 .frame(width: 44, height: 44)
                 .position(position)
                 .gesture(DragGesture(coordinateSpace: .local)
-                    .onChanged { value in
-                        resize(value.location)
+                    .updating($gestureState) { value, state, _ in
+                        switch state {
+                        case .started:
+                            state = .changed
+                            UISelectionFeedbackGenerator().selectionChanged()
+                        case .changed:
+                            resize(value.location)
+                        }
                     }
                 )
         }
@@ -207,7 +270,7 @@ struct OnDemandMapAreaSelectorView: View {
 }
 
 private extension View {
-    public func reverseMask<Mask: View>(
+    func reverseMask<Mask: View>(
         alignment: Alignment = .center,
         @ViewBuilder _ mask: () -> Mask
     ) -> some View {
