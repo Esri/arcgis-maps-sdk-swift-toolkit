@@ -1,12 +1,4 @@
-***REMOVED***
-***REMOVED***  PreplannedMetadataView.swift
-***REMOVED***  arcgis-maps-sdk-swift-toolkit
-***REMOVED***
-***REMOVED***  Created by Ryan Olson on 2/5/25.
-***REMOVED***
-
-
-***REMOVED*** Copyright 2024 Esri
+***REMOVED*** Copyright 2025 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
