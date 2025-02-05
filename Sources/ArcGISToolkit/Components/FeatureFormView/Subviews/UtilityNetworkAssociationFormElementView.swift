@@ -163,7 +163,7 @@ extension UtilityNetworkAssociationFormElementView {
         }
     }
     
-    struct NetworkSourceGroup: Equatable, Hashable ,Identifiable {
+    struct NetworkSourceGroup: Equatable, Hashable, Identifiable {
         /// <#Description#>
         let associations: [Association]
         
