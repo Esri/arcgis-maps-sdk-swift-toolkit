@@ -202,6 +202,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***itemInfo.description = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Don't allow job to continue if errors.
+***REMOVED******REMOVED******REMOVED***parameters.continuesOnErrors = false
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Make sure the directory exists.
 ***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
@@ -325,6 +328,8 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED***/ Map area is downloaded.
 ***REMOVED******REMOVED***case downloaded
 ***REMOVED******REMOVED******REMOVED***/ Map area is downloaded but some layers may not have come offline.
+***REMOVED******REMOVED******REMOVED***/ This status is only possible if `continuesOnErrors` is set to `true` on the parameters
+***REMOVED******REMOVED******REMOVED***/ for downloading the map area.
 ***REMOVED******REMOVED***case downloadedWithLayerErrors
 ***REMOVED******REMOVED******REMOVED***/ Map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
