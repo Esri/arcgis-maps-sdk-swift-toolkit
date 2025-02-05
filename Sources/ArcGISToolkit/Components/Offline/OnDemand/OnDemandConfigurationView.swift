@@ -57,67 +57,66 @@ struct OnDemandConfigurationView: View {
     
     var body: some View {
         NavigationStack {
-            MapViewReader { mapViewProxy in
-                VStack {
-                    VStack(spacing: 0) {
-                        Divider()
-                        Text("Pan and zoom to define the area")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .padding(8)
-                            .frame(maxWidth: .infinity)
-                        Divider()
-                        mapView
-                    }
+            VStack {
+                switch loadResult {
+                case .success:
+                    loadedView
+                case .failure:
+                    failedToLoadView
+                case nil:
+                    ProgressView()
                 }
-                .safeAreaInset(edge: .bottom) {
-                    bottomPane(mapView: mapViewProxy)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
                     }
                 }
             }
             .task {
-                loadResult = await Result { try await Task.sleep(nanoseconds: 2_000_000_000); throw NSError() } // try await map.load() }
+                await loadMap()
             }
             .navigationBarTitle("Select Area")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
     
+    private func loadMap() async {
+        loadResult = await Result { try await Task.sleep(nanoseconds: 2_000_000_000); throw NSError() } // try await map.reload() }
+//        loadResult = await Result { try await map.retryLoad() }
+    }
+    
+    @ViewBuilder private var loadedView: some View {
+        MapViewReader { mapViewProxy in
+            VStack {
+                VStack(spacing: 0) {
+                    Divider()
+                    Text("Pan and zoom to define the area")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .frame(maxWidth: .infinity)
+                    Divider()
+                    mapView
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                bottomPane(mapView: mapViewProxy)
+            }
+        }
+    }
+    
     @ViewBuilder
     private var mapView: some View {
-        switch loadResult {
-        case .success:
-            MapView(map: map)
-                .magnifierDisabled(true)
-                .attributionBarHidden(true)
-                .interactionModes([.pan, .zoom])
-                .onVisibleAreaChanged { visibleArea = $0.extent }
-                // Prevent view from dragging when panning on map view.
-                .highPriorityGesture(DragGesture())
-                .interactiveDismissDisabled()
-        case .failure:
-            Spacer()
-            if isNoInternetConnection {
-                Label("No internet connection. Please try again.", systemImage: "wifi.exclamationmark")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            } else {
-                Label("Map failed to load. Please try again.", systemImage: "exclamationmark.triangle")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-        case nil:
-            Spacer()
-            ProgressView()
-            Spacer()
-        }
+        MapView(map: map)
+            .magnifierDisabled(true)
+            .attributionBarHidden(true)
+            .interactionModes([.pan, .zoom])
+            .onVisibleAreaChanged { visibleArea = $0.extent }
+            // Prevent view from dragging when panning on map view.
+            .highPriorityGesture(DragGesture())
+            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
@@ -172,6 +171,26 @@ struct OnDemandConfigurationView: View {
             }
             .padding()
         }
+    }
+    
+    @ViewBuilder private var failedToLoadView: some View {
+        VStack {
+            if isNoInternetConnection {
+                Label("No internet connection.", systemImage: "wifi.exclamationmark")
+                    .foregroundStyle(.secondary)
+            } else {
+                Label("Map failed to load.", systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(.secondary)
+            }
+            Button {
+                Task { await loadMap() }
+            } label: {
+                Text("Try Again")
+                    .buttonStyle(.borderless)
+            }
+            .padding()
+        }
+        .padding()
     }
 }
 
