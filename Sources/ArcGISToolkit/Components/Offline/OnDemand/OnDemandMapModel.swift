@@ -202,6 +202,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 itemInfo.description = ""
             }
             
+            // Don't allow job to continue if errors.
+            parameters.continuesOnErrors = false
+            
             // Make sure the directory exists.
             try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
             
@@ -325,6 +328,8 @@ extension OnDemandMapModel {
         /// Map area is downloaded.
         case downloaded
         /// Map area is downloaded but some layers may not have come offline.
+        /// This status is only possible if `continuesOnErrors` is set to `true` on the parameters
+        /// for downloading the map area.
         case downloadedWithLayerErrors
         /// Map area failed to download.
         case downloadFailure(Error)
