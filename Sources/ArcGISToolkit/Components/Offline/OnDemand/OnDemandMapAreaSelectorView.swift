@@ -17,10 +17,10 @@
 
 struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ The maximum size of the area selector view.
-***REMOVED***@State private var maxRect: CGRect
+***REMOVED***@State private var maxRect: CGRect = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Binding to the CGRect of the selected map area.
-***REMOVED***@Binding var selectedMapRect: CGRect?
+***REMOVED***@Binding var selectedMapRect: CGRect
 ***REMOVED***
 ***REMOVED******REMOVED***/ The bounding rectangle for the area selector view.
 ***REMOVED***@State private var boundingRect: CGRect = .zero
@@ -40,6 +40,9 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ The bottom right corner point of the area selector view.
 ***REMOVED***@State private var bottomRight: CGPoint = .zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The safe area insets of the view.
+***REMOVED***@State private var safeAreaInsets = EdgeInsets()
+***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
 ***REMOVED***private let cordnerRadius: CGFloat = 16
 ***REMOVED***
@@ -48,61 +51,81 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***case topLeft, topRight, bottomLeft, bottomRight
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(maxRect: CGRect, selection: Binding<CGRect?>) {
-***REMOVED******REMOVED***_selectedMapRect = selection
-***REMOVED******REMOVED***self.maxRect = maxRect
-***REMOVED***
-***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(.black.opacity(0.10))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reverseMask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: boundingRect.width, height: boundingRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(boundingRect.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(.black.opacity(0.10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reverseMask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: boundingRect.width, height: boundingRect.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(boundingRect.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: insetRect.width, height: insetRect.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(insetRect.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: insetRect.width, height: insetRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(insetRect.center)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: boundingRect.width, height: boundingRect.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(boundingRect.center)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: boundingRect.width, height: boundingRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED***.position(boundingRect.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
+***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***boundingRect = maxRect
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***insetRect = boundingRect.insetBy(dx: -2, dy: -2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHandles()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: boundingRect) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMapRect = $0
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: topLeft) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: topRight) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: bottomLeft) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: bottomRight) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
-***REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
-***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***.onChange(of: safeAreaInsets) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***let frame = CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: safeAreaInsets.leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: safeAreaInsets.top,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***maxRect = frame
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.insetBy(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dx: frame.width * 0.1,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dy: frame.height * 0.1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***boundingRect = maxRect
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***insetRect = boundingRect.insetBy(dx: -2, dy: -2)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHandles()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: boundingRect) {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapRect = $0
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: topLeft) {
-***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: topRight) {
-***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: bottomLeft) {
-***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Handle(position: bottomRight) {
-***REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
-***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
+***REMOVED******REMOVED***.onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
+***REMOVED******REMOVED******REMOVED***self.safeAreaInsets = safeAreaInsets
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
