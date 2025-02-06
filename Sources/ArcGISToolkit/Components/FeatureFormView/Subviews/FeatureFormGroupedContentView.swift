@@ -28,7 +28,7 @@ struct FeatureFormGroupedContentView<Content: View>: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .formInputStyle()
+        .formInputStyle(isTappable: false)
     }
 }
 
