@@ -65,7 +65,6 @@ import SwiftUI
 /// `Info.plist` file.
 ///
 /// - Since: 200.4
-@available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
@@ -239,7 +238,6 @@ private extension UtilityAssociation {
     }
 }
 
-@available(visionOS, unavailable)
 extension FeatureFormView {
     /// <#Description#>
     /// - Parameter ancestor: <#ancestor description#>

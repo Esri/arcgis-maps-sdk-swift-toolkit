@@ -241,11 +241,10 @@ struct Visitor: MarkupVisitor {
     }
     
     mutating func visitText(_ text: Markdown.Text) -> Result {
-        if let link = text.linkAncestor {
-            let wrappedLink = "[\(text.plainText)](\(link.destination ?? ""))"
-            return .text(SwiftUI.Text(.init(wrappedLink)))
+        return if let destination = text.linkAncestor?.destination {
+            .other(AnyView(Link(text.plainText, destination: URL(string: destination)!)))
         } else {
-            return .text(SwiftUI.Text(text.plainText))
+            .text(SwiftUI.Text(text.plainText))
         }
     }
     
