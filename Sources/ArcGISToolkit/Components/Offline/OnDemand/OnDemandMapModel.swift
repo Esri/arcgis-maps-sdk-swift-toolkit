@@ -245,6 +245,16 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         }
     }
     
+    /// Cancels the in-progress job.
+    func cancelJob() {
+        guard let job else { return }
+        Task {
+            await job.cancel()
+            // Cleanup any files that were laid down.
+            try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+        }
+    }
+    
     /// Updates the status based on the download result of the mobile map package.
     private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
         switch downloadResult {
