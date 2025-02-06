@@ -122,7 +122,7 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count ***REMOVED***).count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.networkSourceGroups.flatMap( { $0.associations.compactMap { $0 ***REMOVED*** ***REMOVED*** ).count.formatted())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
