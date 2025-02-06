@@ -53,11 +53,7 @@ struct PreplannedListItemView: View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
             VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    titleView
-                    Spacer()
-                    downloadButton
-                }
+                titleView
                 descriptionView
                 if isSelected {
                     openStatusView
@@ -65,6 +61,8 @@ struct PreplannedListItemView: View {
                     statusView
                 }
             }
+            Spacer()
+            downloadButton
         }
         .contentShape(.rect)
         .onTapGesture {
@@ -75,9 +73,7 @@ struct PreplannedListItemView: View {
                 OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
             }
         }
-        .task {
-            await model.load()
-        }
+        .task { await model.load() }
         .onAppear {
             downloadState = .init(model.status)
             previousDownloadState = downloadState
@@ -119,8 +115,21 @@ struct PreplannedListItemView: View {
     
     @ViewBuilder private var titleView: some View {
         Text(model.preplannedMapArea.title)
-            .font(.body)
+            .font(.subheadline)
             .lineLimit(1)
+    }
+    
+    @ViewBuilder private var descriptionView: some View {
+        if !model.preplannedMapArea.description.isEmpty {
+            Text(model.preplannedMapArea.description)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+        } else {
+            Text("No description available.")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
     }
     
     @ViewBuilder private var downloadButton: some View {
@@ -134,7 +143,6 @@ struct PreplannedListItemView: View {
             } label: {
                 Text("Open")
                     .font(.footnote)
-                    .fontWeight(.bold)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
@@ -156,19 +164,6 @@ struct PreplannedListItemView: View {
             .buttonStyle(.plain)
             .disabled(!model.status.allowsDownload)
             .foregroundStyle(Color.accentColor)
-        }
-    }
-    
-    @ViewBuilder private var descriptionView: some View {
-        if !model.preplannedMapArea.description.isEmpty {
-            Text(model.preplannedMapArea.description)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-        } else {
-            Text("This area has no description.")
-                .font(.footnote)
-                .foregroundStyle(.tertiary)
         }
     }
     

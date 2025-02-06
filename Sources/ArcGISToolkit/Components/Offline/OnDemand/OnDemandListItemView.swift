@@ -109,7 +109,6 @@ struct OnDemandListItemView: View {
             } label: {
                 Text("Open")
                     .font(.footnote)
-                    .fontWeight(.bold)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
