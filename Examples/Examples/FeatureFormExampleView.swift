@@ -57,7 +57,6 @@ struct FeatureFormExampleView: View {
                     }
                 }
                 .ignoresSafeArea(.keyboard)
-#if os(visionOS)
                 .floatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
@@ -71,23 +70,6 @@ struct FeatureFormExampleView: View {
                             .padding(.top, 16)
                     }
                 }
-            
-#else
-                .floatingPanel(
-                    attributionBarHeight: attributionBarHeight,
-                    backgroundColor: Color(uiColor: .systemGroupedBackground),
-                    selectedDetent: $detent,
-                    horizontalAlignment: .leading,
-                    isPresented: model.formIsPresented
-                ) {
-                    if let featureForm = model.featureForm {
-                        FeatureFormView(featureForm: featureForm)
-                            .validationErrors(validationErrorVisibility)
-                            .padding(.horizontal)
-                            .padding(.top, 16)
-                    }
-                }
-#endif
                 .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
