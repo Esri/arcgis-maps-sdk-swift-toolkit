@@ -62,7 +62,7 @@ struct PreplannedListItemView: View {
                 }
             }
             Spacer()
-            downloadButton
+            trailingButton
         }
         .contentShape(.rect)
         .onTapGesture {
@@ -132,7 +132,7 @@ struct PreplannedListItemView: View {
         }
     }
     
-    @ViewBuilder private var downloadButton: some View {
+    @ViewBuilder private var trailingButton: some View {
         switch downloadState {
         case .downloaded:
             Button {
@@ -161,18 +161,17 @@ struct PreplannedListItemView: View {
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
-            .buttonStyle(.plain)
+            // Have to apply a style or it won't be tappable
+            // because of the onTapGesture modifier in the parent view.
+            .buttonStyle(.borderless)
             .disabled(!model.status.allowsDownload)
-            .foregroundStyle(Color.accentColor)
         }
     }
     
     private var openStatusView: some View {
-        HStack(spacing: 4) {
-            Text("Currently open")
-        }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
+        Text("Currently open")
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
     }
     
     @ViewBuilder private var statusView: some View {

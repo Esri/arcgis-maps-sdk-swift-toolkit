@@ -35,25 +35,22 @@ struct OnDemandListItemView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    titleView
-                    if isSelected {
-                        openStatusView
-                    } else {
-                        statusView
-                    }
-                }
-                Spacer()
-            }
-            .contentShape(.rect)
-            .onTapGesture {
-                if model.status.isDownloaded {
-                    metadataViewIsPresented = true
+            VStack(alignment: .leading, spacing: 4) {
+                titleView
+                if isSelected {
+                    openStatusView
+                } else {
+                    statusView
                 }
             }
             Spacer()
             trailingButton
+        }
+        .contentShape(.rect)
+        .onTapGesture {
+            if model.status.isDownloaded {
+                metadataViewIsPresented = true
+            }
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
@@ -81,7 +78,7 @@ struct OnDemandListItemView: View {
     
     @ViewBuilder private var titleView: some View {
         Text(model.title)
-            .font(.body)
+            .font(.subheadline)
             .lineLimit(1)
     }
     
@@ -96,6 +93,9 @@ struct OnDemandListItemView: View {
                         Task { await job.cancel() }
                     }
                     .font(.caption)
+                    // Have to apply a style or it won't be tappable
+                    // because of the onTapGesture modifier in the parent view.
+                    .buttonStyle(.borderless)
                 }
             }
         case .downloaded:
@@ -114,20 +114,16 @@ struct OnDemandListItemView: View {
             .buttonBorderShape(.capsule)
             .disabled(isSelected)
         case .initialized:
-            Button {
-                Task {
-                    await model.downloadOnDemandMapArea()
-                }
-            } label: {
-                Image(systemName: "arrow.down.circle")
-            }
-            .disabled(!model.status.allowsDownload)
+            EmptyView()
         case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
             Button {
                 model.removeDownloadedArea()
             } label: {
                 Image(systemName: "trash")
             }
+            // Have to apply a style or it won't be tappable
+            // because of the onTapGesture modifier in the parent view.
+            .buttonStyle(.borderless)
         }
     }
     
