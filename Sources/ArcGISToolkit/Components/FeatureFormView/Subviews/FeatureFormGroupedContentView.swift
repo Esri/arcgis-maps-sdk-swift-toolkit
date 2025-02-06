@@ -28,7 +28,7 @@ struct FeatureFormGroupedContentView<Content: View>: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED***.formInputStyle(isTappable: false)
 ***REMOVED***
 ***REMOVED***
 
