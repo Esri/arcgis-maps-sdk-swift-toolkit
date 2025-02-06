@@ -36,10 +36,16 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@State private var visibleArea: Envelope?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected map area.
-***REMOVED***@State private var mapAreaSelection: Envelope?
+***REMOVED***@State private var mapAreaSelection: CGRect?
+***REMOVED***
+***REMOVED******REMOVED***/ The extent of the selected map area.
+***REMOVED***@State private var mapAreaEnvelope: Envelope?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The polygon rect of the selected map area.
 ***REMOVED***@State private var polygonRect: CGRect?
+***REMOVED***
+***REMOVED******REMOVED***/ The maximum rect size of the map area selector view.
+***REMOVED***@State private var maxRect: CGRect?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
@@ -51,15 +57,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The scale or the map area selector.
 ***REMOVED***private let mapAreaScale = 0.8
-***REMOVED***
-***REMOVED******REMOVED***/ The scaled down visible area for the map area selector.
-***REMOVED***private var scaledVisibleArea: Envelope? {
-***REMOVED******REMOVED***if let visibleArea {
-***REMOVED******REMOVED******REMOVED***GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***nil
-***REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
@@ -75,15 +72,24 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let scaledVisibleArea {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea, selection: $mapAreaSelection)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let maxRect {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(maxRect: maxRect, selection: $mapAreaSelection)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: mapAreaSelection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let evelope = mapAreaSelection?.extent else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***polygonRect = mapViewProxy.viewRect(fromEnvelope: evelope)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let mapAreaSelection,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let selectedMapArea = mapViewProxy.envelope(fromViewRect: mapAreaSelection) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapAreaEnvelope = selectedMapArea.extent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***polygonRect = mapViewProxy.viewRect(fromEnvelope: selectedMapArea.extent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let visibleArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  maxRect == nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let scaledExtent = GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let rect = mapViewProxy.viewRect(fromEnvelope: scaledExtent) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxRect = rect
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
@@ -139,7 +145,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let mapAreaSelection, let polygonRect else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let mapAreaEnvelope, let polygonRect else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: polygonRect)
@@ -148,7 +154,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: 0,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: mapAreaSelection,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: mapAreaEnvelope,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction(configuration)

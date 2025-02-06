@@ -16,20 +16,17 @@
 ***REMOVED***
 
 struct OnDemandMapAreaSelectorView: View {
-***REMOVED******REMOVED***/ The map view proxy.
-***REMOVED***private let mapViewProxy: MapViewProxy
+***REMOVED******REMOVED***/ The maximum size of the area selector view.
+***REMOVED***@State private var maxRect: CGRect
 ***REMOVED***
-***REMOVED******REMOVED***/ A Binding to the extent of the selected map area.
-***REMOVED***@Binding var selectedMapArea: Envelope?
+***REMOVED******REMOVED***/ A Binding to the CGRect of the selected map area.
+***REMOVED***@Binding var selectedMapRect: CGRect?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The bounding rectangle for the area selector view.
-***REMOVED***@State private var boundingRect: CGRect
+***REMOVED***@State private var boundingRect: CGRect = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The inset rectangle for the area selector view.
 ***REMOVED***@State private var insetRect: CGRect = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The initial rectangle for the area selector view.
-***REMOVED***@State private var initialRect: CGRect = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The top left corner point of the area selector view.
 ***REMOVED***@State private var topLeft: CGPoint = .zero
@@ -46,18 +43,14 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
 ***REMOVED***private let cordnerRadius: CGFloat = 16
 ***REMOVED***
-***REMOVED******REMOVED***/ The minimum size of the area selector view.
-***REMOVED***private let minimumRect = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
-***REMOVED***
 ***REMOVED******REMOVED***/ The drag point for a drag gesture.
 ***REMOVED***private enum DragPoint {
 ***REMOVED******REMOVED***case topLeft, topRight, bottomLeft, bottomRight
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(mapViewProxy: MapViewProxy, envelope: Envelope, selection: Binding<Envelope?>) {
-***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
-***REMOVED******REMOVED***_selectedMapArea = selection
-***REMOVED******REMOVED***self.boundingRect = mapViewProxy.viewRect(fromEnvelope: envelope) ?? minimumRect
+***REMOVED***init(maxRect: CGRect, selection: Binding<CGRect?>) {
+***REMOVED******REMOVED***_selectedMapRect = selection
+***REMOVED******REMOVED***self.maxRect = maxRect
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -86,14 +79,13 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
-***REMOVED******REMOVED******REMOVED******REMOVED***initialRect = boundingRect
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***boundingRect = maxRect
 ***REMOVED******REMOVED******REMOVED******REMOVED***insetRect = boundingRect.insetBy(dx: -2, dy: -2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHandles()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: boundingRect) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
+***REMOVED******REMOVED******REMOVED***.onChange(of: boundingRect) {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapRect = $0
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Handle(position: topLeft) {
@@ -151,8 +143,8 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Keep rectangle within the initial rect.
-***REMOVED******REMOVED***var corrected = CGRectIntersection(initialRect, rectangle)
+***REMOVED******REMOVED******REMOVED*** Keep rectangle within the maximum rect.
+***REMOVED******REMOVED***var corrected = CGRectIntersection(maxRect, rectangle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Keep rectangle outside the minimum rect.
 ***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
