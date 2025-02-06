@@ -80,6 +80,7 @@ struct OnDemandListItemView: View {
         Text(model.title)
             .font(.subheadline)
             .lineLimit(1)
+            .foregroundStyle(model.isDownloaded ? .primary : .secondary)
     }
     
     @ViewBuilder private var trailingButton: some View {
