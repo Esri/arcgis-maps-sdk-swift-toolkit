@@ -150,7 +150,8 @@ public struct FeatureFormView: View {
             try? await utilityNetwork?.load()
             if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
                 // Grab Utility Network Associations for the element being edited
-                if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
+                if let associations = try? await utilityNetwork?.associations(for: utilityElement),
+                   let currentFeatureGlobalID = model.featureForm.feature.globalID {
                     var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
                     // Create a set of the unique association kinds present
                     let associationKinds = Array(Set(associations.map { $0.kind }))
@@ -158,39 +159,33 @@ public struct FeatureFormView: View {
                         // Filter the associations by kind
                         let associationKindMembers = associations.filter { $0.kind == associationKind }
                         // Create a set of the unique network sources within the association kind group.
-                        let networkSourceNames = Array(Set(associationKindMembers.map { $0.toElement.networkSource.name }))
+                        let networkSourceNames = Array(Set(
+                            associationKindMembers.map { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name }
+                        ))
                         var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
                         for networkSourceName in networkSourceNames {
                             // Filter the associations by network source
-                            let networkSourceMembers = associationKindMembers.filter { $0.toElement.networkSource.name == networkSourceName }
+                            let networkSourceMembers = associationKindMembers.filter { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name == networkSourceName }
                             var associations: [UtilityNetworkAssociationFormElementView.Association] = []
                             // For each association, create a Toolkit representation and add it to the group
                             for networkSourceMember in networkSourceMembers {
-                                if let currentFeatureGlobalID = model.featureForm.feature.globalID {
-                                    // Determine whether to show the `fromElement` or `toElement`.
-                                    let associatedElement: UtilityElement
-                                    if currentFeatureGlobalID == networkSourceMember.toElement.globalID {
-                                        associatedElement = networkSourceMember.fromElement
-                                    } else {
-                                        associatedElement = networkSourceMember.toElement
-                                    }
-                                    
-                                    // Determine the association's title.
-                                    let title: String
-                                    if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
-                                        title = formDefinitionTitle
-                                    } else {
-                                        title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
-                                    }
-                                    
-                                    let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                        description: nil,
-                                        fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
-                                        name: title,
-                                        terminalName: associatedElement.terminal?.name
-                                    )
-                                    associations.append(newAssociation)
+                                
+                                // Determine the association's title.
+                                let associatedElement = networkSourceMember.displayedElement(for: currentFeatureGlobalID)
+                                let title: String
+                                if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
+                                    title = formDefinitionTitle
+                                } else {
+                                    title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                                 }
+                                
+                                let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                    description: nil,
+                                    fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
+                                    name: title,
+                                    terminalName: associatedElement.terminal?.name
+                                )
+                                associations.append(newAssociation)
                             }
                             let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
                                 associations: associations,
@@ -210,6 +205,17 @@ public struct FeatureFormView: View {
             } else {
                 print("Not a Utility Element")
             }
+        }
+    }
+}
+
+private extension UtilityAssociation {
+    /// Determines whether to show the `fromElement` or `toElement`.
+    func displayedElement(for id: UUID) -> UtilityElement {
+        if id == toElement.globalID {
+            fromElement
+        } else {
+            toElement
         }
     }
 }
