@@ -29,7 +29,6 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     @State private var thumbnailImage: UIImage?
     
     var body: some View {
-        
         Form {
             Section { header }
             
@@ -148,4 +147,20 @@ extension OnDemandMapModel: OfflineMapAreaMetadata {
     var thumbnailImage: UIImage? { thumbnail }
     var allowsDownload: Bool { false }
     func startDownload() { fatalError() }
+}
+
+#Preview {
+    OfflineMapAreaMetadataView(model: MockMetadata(), isSelected: false)
+}
+
+private class MockMetadata: OfflineMapAreaMetadata {
+    var title: String { "Redlands" }
+    var thumbnailImage: UIImage? { nil }
+    var description: String { "" }
+    var isDownloaded: Bool { true }
+    var allowsDownload: Bool { true }
+    var directorySize: Int { 1_000_000_000 }
+    
+    func removeDownloadedArea() {}
+    func startDownload() {}
 }
