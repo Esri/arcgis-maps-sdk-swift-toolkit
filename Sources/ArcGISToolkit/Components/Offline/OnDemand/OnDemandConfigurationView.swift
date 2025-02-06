@@ -83,9 +83,17 @@ struct OnDemandConfigurationView: View {
     
     /// Loads the map and sets the result.
     private func loadMap() async {
-        // First set to `nil` so progress indicator can show during load.
-        loadResult = nil
-        loadResult = await Result { try await map.retryLoad() }
+        switch loadResult {
+        case .success:
+            return
+        case .failure:
+            // First set to `nil` so progress indicator can show during load.
+            loadResult = nil
+            fallthrough
+        case nil:
+            loadResult = nil
+            loadResult = await Result { try await map.retryLoad() }
+        }
     }
     
     @ViewBuilder private var loadedView: some View {
