@@ -80,6 +80,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED***Text(model.title)
 ***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(model.isDownloaded ? .primary : .secondary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var trailingButton: some View {

@@ -83,9 +83,17 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the map and sets the result.
 ***REMOVED***private func loadMap() async {
-***REMOVED******REMOVED******REMOVED*** First set to `nil` so progress indicator can show during load.
-***REMOVED******REMOVED***loadResult = nil
-***REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
+***REMOVED******REMOVED***switch loadResult {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED*** First set to `nil` so progress indicator can show during load.
+***REMOVED******REMOVED******REMOVED***loadResult = nil
+***REMOVED******REMOVED******REMOVED***fallthrough
+***REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED***loadResult = nil
+***REMOVED******REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var loadedView: some View {
