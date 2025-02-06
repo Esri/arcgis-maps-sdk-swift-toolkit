@@ -32,34 +32,17 @@ struct OnDemandConfigurationView: View {
     /// The max scale of the map to take offline.
     @State private var maxScale: CacheScale = .street
     
-    /// The visible area of the map.
-    @State private var visibleArea: Envelope?
-    
     /// The selected map area.
-    @State private var mapAreaSelection: CGRect?
+    @State private var selectedRect: CGRect = .zero
     
     /// The extent of the selected map area.
-    @State private var mapAreaEnvelope: Envelope?
-    
-    /// The polygon rect of the selected map area.
-    @State private var polygonRect: CGRect?
-    
-    /// The maximum rect size of the map area selector view.
-    @State private var maxRect: CGRect?
-    
-    /// The hight of the bottom pane.
-    @State private var bottomPaneHeight: CGFloat = 0
+    @State private var selectedExtent: Envelope?
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
-    /// A Boolean value indicating if the download button is disabled.
-    private var downloadIsDisabled: Bool {
-        mapAreaSelection == nil
-    }
-    
-    /// The scale or the map area selector.
-    private let mapAreaScale = 0.8
+    /// A Boolean value indicating that the map is ready.
+    @State private var mapIsReady = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -74,42 +57,20 @@ struct OnDemandConfigurationView: View {
                                 .padding(8)
                                 .frame(maxWidth: .infinity)
                             Divider()
-                            ZStack {
-                                mapView
-                                if let maxRect {
-                                    OnDemandMapAreaSelectorView(maxRect: maxRect, selection: $mapAreaSelection)
-                                        .onChange(of: mapAreaSelection) { _ in
-                                            guard let mapAreaSelection,
-                                                  let selectedMapArea = mapViewProxy.envelope(fromViewRect: mapAreaSelection) else { return }
-                                            mapAreaEnvelope = selectedMapArea.extent
-                                            polygonRect = mapViewProxy.viewRect(fromEnvelope: selectedMapArea.extent)
-                                        }
+                            mapView
+                                .overlay {
+                                    if mapIsReady {
+                                        // Don't add the selector view until the map is ready.
+                                        SelectorView(boundingRect: $selectedRect)
+                                    }
                                 }
-                            }
+                                .onChange(of: selectedRect) { _ in
+                                    selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                                }
                         }
                     }
                     .safeAreaInset(edge: .bottom) {
                         bottomPane(mapView: mapViewProxy)
-                            .onGeometryChange(for: CGSize.self) { geometry in
-                                geometry.size
-                            } action: { size in
-                                bottomPaneHeight = size.height
-                                print("bottomPaneHeight: \(bottomPaneHeight)")
-                            }
-                    }
-                    .onAppear {
-                        let yOffset = bottomPaneHeight + geometry.safeAreaInsets.bottom
-                        let frame = CGRect(
-                            x: geometry.safeAreaInsets.leading,
-                            y: geometry.safeAreaInsets.top,
-                            width: geometry.size.width - geometry.safeAreaInsets.trailing,
-                            height: geometry.size.height - yOffset
-                        )
-                        maxRect = frame
-                            .insetBy(
-                                dx: geometry.size.width * 0.1,
-                                dy: geometry.size.height * 0.1
-                            )
                     }
                     .toolbar {
                         ToolbarItem(placement: .topBarLeading) {
@@ -128,10 +89,10 @@ struct OnDemandConfigurationView: View {
     @ViewBuilder
     private var mapView: some View {
         MapView(map: map)
+            .onVisibleAreaChanged { _ in mapIsReady = true }
             .magnifierDisabled(true)
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onVisibleAreaChanged { visibleArea = $0.extent }
             // Prevent view from dragging when panning on map view.
             .highPriorityGesture(DragGesture())
             .interactiveDismissDisabled()
@@ -163,16 +124,16 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let mapAreaEnvelope, let polygonRect else { return }
+                        guard let selectedExtent else { return }
                         Task {
                             let image = try? await mapView.exportImage()
-                            let thumbnail = image?.crop(to: polygonRect)
+                            let thumbnail = image?.crop(to: selectedRect)
                             
                             let configuration = OnDemandMapAreaConfiguration(
                                 title: title,
                                 minScale: 0,
                                 maxScale: maxScale.scale,
-                                areaOfInterest: mapAreaEnvelope,
+                                areaOfInterest: selectedExtent,
                                 thumbnail: thumbnail
                             )
                             onCompleteAction(configuration)
@@ -184,7 +145,7 @@ struct OnDemandConfigurationView: View {
                     }
                     .controlSize(.large)
                     .buttonStyle(.borderedProminent)
-                    .disabled(downloadIsDisabled)
+                    .disabled(selectedExtent == nil)
                 }
             }
             .padding()
@@ -297,5 +258,184 @@ private extension UIImage {
         }
         
         return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
+    }
+}
+
+
+
+
+
+struct SelectorView: View {
+    @Binding var boundingRect: CGRect
+    @State var maxRect: CGRect = .zero
+    
+    @State private var topLeft: CGPoint = .zero
+    @State private var topRight: CGPoint = .zero
+    @State private var bottomLeft: CGPoint = .zero
+    @State private var bottomRight: CGPoint = .zero
+    
+    /// The safe area insets we need to add to the contentInsets before passing to core.
+    @State private var safeAreaInsets: EdgeInsets = EdgeInsets()
+    
+    enum DragPoint {
+        case topLeft, topRight, bottomLeft, bottomRight
+    }
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color.black.opacity(0.2))
+                    .allowsHitTesting(false)
+                    .frame(width: boundingRect.width, height: boundingRect.height)
+                    .position(CGPoint(x: boundingRect.midX, y: boundingRect.midY))
+                
+                Handle(position: topLeft, color: .blue) {
+                    resize(for: .topLeft, location: $0)
+                }
+                
+                Handle(position: topRight, color: .green) {
+                    resize(for: .topRight, location: $0)
+                }
+                
+                Handle(position: bottomLeft, color: .yellow) {
+                    resize(for: .bottomLeft, location: $0)
+                }
+                
+                Handle(position: bottomRight, color: .pink) {
+                    resize(for: .bottomRight, location: $0)
+                }
+            }
+            .onChange(of: safeAreaInsets) { _ in
+                let frame = CGRect(
+                    x: safeAreaInsets.leading,
+                    y: safeAreaInsets.top,
+                    width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
+                    height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
+                )
+                
+                maxRect = frame
+                    .insetBy(
+                        dx: 50,
+                        dy: 50
+                    )
+                boundingRect = maxRect
+                
+                updateHandles()
+            }
+        }
+        .edgesIgnoringSafeArea(.all)
+        .onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
+            self.safeAreaInsets = safeAreaInsets
+        }
+        //.background(Color.black.opacity(0.1).ignoresSafeArea().allowsHitTesting(false))
+    }
+    
+    private func resize(for handle: DragPoint, location: CGPoint) -> Void {
+        // Resize the rect.
+        let rectangle: CGRect
+        
+        switch handle {
+        case .topLeft:
+            let minX = location.x
+            let maxX = boundingRect.maxX
+            let minY = location.y
+            let maxY = boundingRect.maxY
+            rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+        case .topRight:
+            let minX = boundingRect.minX
+            let maxX = location.x
+            let minY = location.y
+            let maxY = boundingRect.maxY
+            rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+        case .bottomLeft:
+            let minX = location.x
+            let maxX = boundingRect.maxX
+            let minY = boundingRect.minY
+            let maxY = location.y
+            rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+            break
+        case .bottomRight:
+            let minX = boundingRect.minX
+            let maxX = location.x
+            let minY = boundingRect.minY
+            let maxY = location.y
+            rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+            break
+        }
+        
+        // First keep rectangle within initial rect.
+        var corrected = CGRectIntersection(maxRect, rectangle)
+        
+        // Now keep rectangle outside minimum rect.
+        corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
+        
+        boundingRect = corrected
+        
+        // Now update handles for new bounding rect.
+        updateHandles()
+    }
+    
+    private func minimumRect(forHandle handle: DragPoint) -> CGRect {
+        let maxWidth: CGFloat = 50
+        let maxHeight: CGFloat  = 50
+        
+        switch handle {
+        case .topLeft:
+            // Anchor is opposite corner.
+            return CGRect(
+                x: boundingRect.maxX - maxWidth,
+                y: boundingRect.maxY - maxHeight,
+                width: maxWidth,
+                height: maxHeight
+            )
+        case .topRight:
+            return CGRect(
+                x: boundingRect.minX,
+                y: boundingRect.maxY - maxHeight,
+                width: maxWidth,
+                height: maxHeight
+            )
+        case .bottomLeft:
+            return CGRect(
+                x: boundingRect.maxX - maxWidth,
+                y: boundingRect.minY,
+                width: maxWidth,
+                height: maxHeight
+            )
+        case .bottomRight:
+            return CGRect(
+                x: boundingRect.minX,
+                y: boundingRect.minY,
+                width: maxWidth,
+                height: maxHeight
+            )
+        }
+    }
+    
+    private func updateHandles() {
+        topRight = CGPoint(x: boundingRect.maxX, y: boundingRect.minY)
+        topLeft = CGPoint(x: boundingRect.minX, y: boundingRect.minY)
+        bottomLeft = CGPoint(x: boundingRect.minX, y: boundingRect.maxY)
+        bottomRight = CGPoint(x: boundingRect.maxX, y: boundingRect.maxY)
+    }
+    
+    struct Handle: View {
+        let position: CGPoint
+        let color: Color
+        let resize: (CGPoint) -> Void
+        
+        var body: some View {
+            color
+                .contentShape(Rectangle())
+                .frame(width: 44, height: 44)
+                .position(position)
+                .gesture(DragGesture(coordinateSpace: .local)
+                    .onChanged { value in
+                        resize(value.location)
+                    }
+                )
+            
+        }
     }
 }
