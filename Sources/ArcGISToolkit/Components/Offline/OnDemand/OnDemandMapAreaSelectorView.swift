@@ -16,20 +16,17 @@ import ArcGIS
 import SwiftUI
 
 struct OnDemandMapAreaSelectorView: View {
-    /// The map view proxy.
-    private let mapViewProxy: MapViewProxy
+    /// The maximum size of the area selector view.
+    @State private var maxRect: CGRect
     
-    /// A Binding to the extent of the selected map area.
-    @Binding var selectedMapArea: Envelope?
+    /// A Binding to the CGRect of the selected map area.
+    @Binding var selectedMapRect: CGRect?
     
     /// The bounding rectangle for the area selector view.
-    @State private var boundingRect: CGRect
+    @State private var boundingRect: CGRect = .zero
     
     /// The inset rectangle for the area selector view.
     @State private var insetRect: CGRect = .zero
-    
-    /// The initial rectangle for the area selector view.
-    @State private var initialRect: CGRect = .zero
     
     /// The top left corner point of the area selector view.
     @State private var topLeft: CGPoint = .zero
@@ -46,18 +43,14 @@ struct OnDemandMapAreaSelectorView: View {
     /// The corner radius of the area selector view.
     private let cordnerRadius: CGFloat = 16
     
-    /// The minimum size of the area selector view.
-    private let minimumRect = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
-    
     /// The drag point for a drag gesture.
     private enum DragPoint {
         case topLeft, topRight, bottomLeft, bottomRight
     }
     
-    init(mapViewProxy: MapViewProxy, envelope: Envelope, selection: Binding<Envelope?>) {
-        self.mapViewProxy = mapViewProxy
-        _selectedMapArea = selection
-        self.boundingRect = mapViewProxy.viewRect(fromEnvelope: envelope) ?? minimumRect
+    init(maxRect: CGRect, selection: Binding<CGRect?>) {
+        _selectedMapRect = selection
+        self.maxRect = maxRect
     }
     
     var body: some View {
@@ -86,14 +79,13 @@ struct OnDemandMapAreaSelectorView: View {
             }
             .ignoresSafeArea()
             .allowsHitTesting(false)
-            .task {
-                selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
-                initialRect = boundingRect
+            .onAppear {
+                boundingRect = maxRect
                 insetRect = boundingRect.insetBy(dx: -2, dy: -2)
                 updateHandles()
             }
-            .onChange(of: boundingRect) { _ in
-                selectedMapArea = mapViewProxy.envelope(fromViewRect: boundingRect)
+            .onChange(of: boundingRect) {
+                selectedMapRect = $0
             }
             
             Handle(position: topLeft) {
@@ -151,8 +143,8 @@ struct OnDemandMapAreaSelectorView: View {
             break
         }
         
-        // Keep rectangle within the initial rect.
-        var corrected = CGRectIntersection(initialRect, rectangle)
+        // Keep rectangle within the maximum rect.
+        var corrected = CGRectIntersection(maxRect, rectangle)
         
         // Keep rectangle outside the minimum rect.
         corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))

@@ -36,10 +36,16 @@ struct OnDemandConfigurationView: View {
     @State private var visibleArea: Envelope?
     
     /// The selected map area.
-    @State private var mapAreaSelection: Envelope?
+    @State private var mapAreaSelection: CGRect?
+    
+    /// The extent of the selected map area.
+    @State private var mapAreaEnvelope: Envelope?
     
     /// The polygon rect of the selected map area.
     @State private var polygonRect: CGRect?
+    
+    /// The maximum rect size of the map area selector view.
+    @State private var maxRect: CGRect?
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
@@ -51,15 +57,6 @@ struct OnDemandConfigurationView: View {
     
     /// The scale or the map area selector.
     private let mapAreaScale = 0.8
-    
-    /// The scaled down visible area for the map area selector.
-    private var scaledVisibleArea: Envelope? {
-        if let visibleArea {
-            GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent
-        } else {
-            nil
-        }
-    }
     
     var body: some View {
         NavigationStack {
@@ -75,15 +72,24 @@ struct OnDemandConfigurationView: View {
                         Divider()
                         ZStack {
                             mapView
-                            if let scaledVisibleArea {
-                                OnDemandMapAreaSelectorView(mapViewProxy: mapViewProxy, envelope: scaledVisibleArea, selection: $mapAreaSelection)
+                            if let maxRect {
+                                OnDemandMapAreaSelectorView(maxRect: maxRect, selection: $mapAreaSelection)
                                     .onChange(of: mapAreaSelection) { _ in
-                                        guard let evelope = mapAreaSelection?.extent else { return }
-                                        polygonRect = mapViewProxy.viewRect(fromEnvelope: evelope)
+                                        guard let mapAreaSelection,
+                                              let selectedMapArea = mapViewProxy.envelope(fromViewRect: mapAreaSelection) else { return }
+                                        mapAreaEnvelope = selectedMapArea.extent
+                                        polygonRect = mapViewProxy.viewRect(fromEnvelope: selectedMapArea.extent)
                                     }
                             }
                         }
                     }
+                }
+                .onChange(of: visibleArea) { _ in
+                    guard let visibleArea,
+                          maxRect == nil,
+                          let scaledExtent = GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent,
+                          let rect = mapViewProxy.viewRect(fromEnvelope: scaledExtent) else { return }
+                    maxRect = rect
                 }
                 .safeAreaInset(edge: .bottom) {
                     bottomPane(mapView: mapViewProxy)
@@ -139,7 +145,7 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let mapAreaSelection, let polygonRect else { return }
+                        guard let mapAreaEnvelope, let polygonRect else { return }
                         Task {
                             let image = try? await mapView.exportImage()
                             let thumbnail = image?.crop(to: polygonRect)
@@ -148,7 +154,7 @@ struct OnDemandConfigurationView: View {
                                 title: title,
                                 minScale: 0,
                                 maxScale: maxScale.scale,
-                                areaOfInterest: mapAreaSelection,
+                                areaOfInterest: mapAreaEnvelope,
                                 thumbnail: thumbnail
                             )
                             onCompleteAction(configuration)
