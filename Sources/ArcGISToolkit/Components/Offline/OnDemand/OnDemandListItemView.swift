@@ -65,6 +65,7 @@ struct OnDemandListItemView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 64, height: 64)
+                .opacity(model.isDownloaded ? 1 : 0.5)
                 .clipShape(.rect(cornerRadius: 10))
         } else {
             Image(systemName: "map")
@@ -120,7 +121,8 @@ struct OnDemandListItemView: View {
             Button {
                 model.removeDownloadedArea()
             } label: {
-                Image(systemName: "trash")
+                Image(systemName: "xmark.circle")
+                    .imageScale(.large)
             }
             // Have to apply a style or it won't be tappable
             // because of the onTapGesture modifier in the parent view.
