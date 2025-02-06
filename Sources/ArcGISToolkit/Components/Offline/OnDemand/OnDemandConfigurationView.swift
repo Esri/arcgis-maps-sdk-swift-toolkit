@@ -32,34 +32,17 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The max scale of the map to take offline.
 ***REMOVED***@State private var maxScale: CacheScale = .street
 ***REMOVED***
-***REMOVED******REMOVED***/ The visible area of the map.
-***REMOVED***@State private var visibleArea: Envelope?
-***REMOVED***
 ***REMOVED******REMOVED***/ The selected map area.
-***REMOVED***@State private var mapAreaSelection: CGRect?
+***REMOVED***@State private var selectedRect: CGRect = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The extent of the selected map area.
-***REMOVED***@State private var mapAreaEnvelope: Envelope?
-***REMOVED***
-***REMOVED******REMOVED***/ The polygon rect of the selected map area.
-***REMOVED***@State private var polygonRect: CGRect?
-***REMOVED***
-***REMOVED******REMOVED***/ The maximum rect size of the map area selector view.
-***REMOVED***@State private var maxRect: CGRect?
-***REMOVED***
-***REMOVED******REMOVED***/ The hight of the bottom pane.
-***REMOVED***@State private var bottomPaneHeight: CGFloat = 0
+***REMOVED***@State private var selectedExtent: Envelope?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
-***REMOVED***private var downloadIsDisabled: Bool {
-***REMOVED******REMOVED***mapAreaSelection == nil
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The scale or the map area selector.
-***REMOVED***private let mapAreaScale = 0.8
+***REMOVED******REMOVED***/ A Boolean value indicating that the map is ready.
+***REMOVED***@State private var mapIsReady = false
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
@@ -74,42 +57,20 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let maxRect {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(maxRect: maxRect, selection: $mapAreaSelection)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: mapAreaSelection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let mapAreaSelection,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let selectedMapArea = mapViewProxy.envelope(fromViewRect: mapAreaSelection) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapAreaEnvelope = selectedMapArea.extent
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***polygonRect = mapViewProxy.viewRect(fromEnvelope: selectedMapArea.extent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SelectorView(boundingRect: $selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onGeometryChange(for: CGSize.self) { geometry in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry.size
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** action: { size in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottomPaneHeight = size.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("bottomPaneHeight: \(bottomPaneHeight)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let yOffset = bottomPaneHeight + geometry.safeAreaInsets.bottom
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let frame = CGRect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: geometry.safeAreaInsets.leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: geometry.safeAreaInsets.top,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometry.size.width - geometry.safeAreaInsets.trailing,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: geometry.size.height - yOffset
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxRect = frame
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.insetBy(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dx: geometry.size.width * 0.1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dy: geometry.size.height * 0.1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarLeading) {
@@ -128,10 +89,10 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@ViewBuilder
 ***REMOVED***private var mapView: some View {
 ***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { _ in mapIsReady = true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
 ***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0.extent ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent view from dragging when panning on map view.
 ***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
@@ -163,16 +124,16 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let mapAreaEnvelope, let polygonRect else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: polygonRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: 0,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: mapAreaEnvelope,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: selectedExtent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction(configuration)
@@ -184,7 +145,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.large)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedExtent == nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
@@ -297,5 +258,184 @@ private extension UIImage {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
+***REMOVED***
+***REMOVED***
+
+
+
+
+
+struct SelectorView: View {
+***REMOVED***@Binding var boundingRect: CGRect
+***REMOVED***@State var maxRect: CGRect = .zero
+***REMOVED***
+***REMOVED***@State private var topLeft: CGPoint = .zero
+***REMOVED***@State private var topRight: CGPoint = .zero
+***REMOVED***@State private var bottomLeft: CGPoint = .zero
+***REMOVED***@State private var bottomRight: CGPoint = .zero
+***REMOVED***
+***REMOVED******REMOVED***/ The safe area insets we need to add to the contentInsets before passing to core.
+***REMOVED***@State private var safeAreaInsets: EdgeInsets = EdgeInsets()
+***REMOVED***
+***REMOVED***enum DragPoint {
+***REMOVED******REMOVED***case topLeft, topRight, bottomLeft, bottomRight
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 16, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color.black.opacity(0.2))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: boundingRect.width, height: boundingRect.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(CGPoint(x: boundingRect.midX, y: boundingRect.midY))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: topLeft, color: .blue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: topRight, color: .green) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: bottomLeft, color: .yellow) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: bottomRight, color: .pink) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: safeAreaInsets) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***let frame = CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: safeAreaInsets.leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: safeAreaInsets.top,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***maxRect = frame
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.insetBy(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dx: 50,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dy: 50
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***boundingRect = maxRect
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHandles()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
+***REMOVED******REMOVED***.onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
+***REMOVED******REMOVED******REMOVED***self.safeAreaInsets = safeAreaInsets
+***REMOVED***
+***REMOVED******REMOVED******REMOVED***.background(Color.black.opacity(0.1).ignoresSafeArea().allowsHitTesting(false))
+***REMOVED***
+***REMOVED***
+***REMOVED***private func resize(for handle: DragPoint, location: CGPoint) -> Void {
+***REMOVED******REMOVED******REMOVED*** Resize the rect.
+***REMOVED******REMOVED***let rectangle: CGRect
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch handle {
+***REMOVED******REMOVED***case .topLeft:
+***REMOVED******REMOVED******REMOVED***let minX = location.x
+***REMOVED******REMOVED******REMOVED***let maxX = boundingRect.maxX
+***REMOVED******REMOVED******REMOVED***let minY = location.y
+***REMOVED******REMOVED******REMOVED***let maxY = boundingRect.maxY
+***REMOVED******REMOVED******REMOVED***rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+***REMOVED******REMOVED***case .topRight:
+***REMOVED******REMOVED******REMOVED***let minX = boundingRect.minX
+***REMOVED******REMOVED******REMOVED***let maxX = location.x
+***REMOVED******REMOVED******REMOVED***let minY = location.y
+***REMOVED******REMOVED******REMOVED***let maxY = boundingRect.maxY
+***REMOVED******REMOVED******REMOVED***rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+***REMOVED******REMOVED***case .bottomLeft:
+***REMOVED******REMOVED******REMOVED***let minX = location.x
+***REMOVED******REMOVED******REMOVED***let maxX = boundingRect.maxX
+***REMOVED******REMOVED******REMOVED***let minY = boundingRect.minY
+***REMOVED******REMOVED******REMOVED***let maxY = location.y
+***REMOVED******REMOVED******REMOVED***rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***case .bottomRight:
+***REMOVED******REMOVED******REMOVED***let minX = boundingRect.minX
+***REMOVED******REMOVED******REMOVED***let maxX = location.x
+***REMOVED******REMOVED******REMOVED***let minY = boundingRect.minY
+***REMOVED******REMOVED******REMOVED***let maxY = location.y
+***REMOVED******REMOVED******REMOVED***rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** First keep rectangle within initial rect.
+***REMOVED******REMOVED***var corrected = CGRectIntersection(maxRect, rectangle)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Now keep rectangle outside minimum rect.
+***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***boundingRect = corrected
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Now update handles for new bounding rect.
+***REMOVED******REMOVED***updateHandles()
+***REMOVED***
+***REMOVED***
+***REMOVED***private func minimumRect(forHandle handle: DragPoint) -> CGRect {
+***REMOVED******REMOVED***let maxWidth: CGFloat = 50
+***REMOVED******REMOVED***let maxHeight: CGFloat  = 50
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch handle {
+***REMOVED******REMOVED***case .topLeft:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Anchor is opposite corner.
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.maxX - maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.maxY - maxHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .topRight:
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.minX,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.maxY - maxHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .bottomLeft:
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.maxX - maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.minY,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .bottomRight:
+***REMOVED******REMOVED******REMOVED***return CGRect(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: boundingRect.minX,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: boundingRect.minY,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func updateHandles() {
+***REMOVED******REMOVED***topRight = CGPoint(x: boundingRect.maxX, y: boundingRect.minY)
+***REMOVED******REMOVED***topLeft = CGPoint(x: boundingRect.minX, y: boundingRect.minY)
+***REMOVED******REMOVED***bottomLeft = CGPoint(x: boundingRect.minX, y: boundingRect.maxY)
+***REMOVED******REMOVED***bottomRight = CGPoint(x: boundingRect.maxX, y: boundingRect.maxY)
+***REMOVED***
+***REMOVED***
+***REMOVED***struct Handle: View {
+***REMOVED******REMOVED***let position: CGPoint
+***REMOVED******REMOVED***let color: Color
+***REMOVED******REMOVED***let resize: (CGPoint) -> Void
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***color
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED***.position(position)
+***REMOVED******REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { value in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(value.location)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
