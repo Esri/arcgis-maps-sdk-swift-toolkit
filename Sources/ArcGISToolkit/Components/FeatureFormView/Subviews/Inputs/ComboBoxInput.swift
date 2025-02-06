@@ -101,7 +101,7 @@ struct ComboBoxInput: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .formInputStyle()
+        .formInputStyle(isTappable: true)
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
@@ -194,7 +194,9 @@ extension ComboBoxInput {
                         .accessibilityIdentifier("\(element.label) Unsupported Value Section")
                     }
                 }
+#if !os(visionOS)
                 .listStyle(.plain)
+#endif
                 .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
                 .navigationTitle(element.label)
                 .navigationBarTitleDisplayMode(.inline)
@@ -205,9 +207,13 @@ extension ComboBoxInput {
                         } label: {
                             Text.done
                                 .fontWeight(.semibold)
+#if !os(visionOS)
                                 .foregroundStyle(Color.accentColor)
+#endif
                         }
+#if !os(visionOS)
                         .buttonStyle(.plain)
+#endif
                     }
                 }
             }
@@ -220,7 +226,9 @@ extension ComboBoxInput {
             Spacer()
             if selected {
                 Image(systemName: "checkmark")
+#if !os(visionOS)
                     .foregroundStyle(Color.accentColor)
+#endif
             }
         }
     }

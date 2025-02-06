@@ -89,7 +89,7 @@ struct FeatureFormExampleView: View {
                             }
                     }
                 }
-                .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
+                .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
                 .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
@@ -394,6 +394,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
-        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }

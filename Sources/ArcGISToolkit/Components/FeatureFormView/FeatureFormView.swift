@@ -65,7 +65,6 @@ import SwiftUI
 /// `Info.plist` file.
 ///
 /// - Since: 200.4
-@available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// <#Description#>
     @State private var path = NavigationPath()
@@ -244,7 +243,6 @@ struct InternalFeatureFormView: View {
                                 } else {
                                     title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                                 }
-                                
                                 if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
                                     let newAssociation = UtilityNetworkAssociationFormElementView.Association(
                                         description: nil,
@@ -291,7 +289,6 @@ private extension UtilityAssociation {
     }
 }
 
-@available(visionOS, unavailable)
 extension InternalFeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
