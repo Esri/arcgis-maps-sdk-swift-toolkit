@@ -114,7 +114,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED***.formInputStyle(isTappable: true)
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
@@ -163,7 +163,11 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED***return .secondary
 ***REMOVED*** else if isEditing {
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***return .primary
+#else
 ***REMOVED******REMOVED******REMOVED***return .accentColor
+#endif
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .primary
 ***REMOVED***
@@ -184,8 +188,10 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***input.includesTime ? Text.now : .today
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
+#if !os(visionOS)
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundStyle(.tint)
+#endif
 ***REMOVED***
 ***REMOVED***
 

@@ -60,15 +60,11 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: .show
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***Toggle(isOn: $isOn) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch Label")
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $isOn) {***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
+***REMOVED******REMOVED******REMOVED***.formInputStyle(isTappable: false)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
@@ -77,9 +73,6 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***.onChange(isOn) { isOn in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(isOn ? input.onValue.code : input.offValue.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***isOn.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
