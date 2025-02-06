@@ -65,6 +65,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(model.isDownloaded ? 1 : 0.5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "map")
@@ -120,7 +121,8 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash")
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
 ***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
