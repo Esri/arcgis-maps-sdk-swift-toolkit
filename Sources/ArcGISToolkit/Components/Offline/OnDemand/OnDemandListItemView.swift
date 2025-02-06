@@ -98,17 +98,15 @@ struct OnDemandListItemView: View {
         switch model.status {
         case .downloading:
             if let job = model.job {
-                VStack(alignment: .center) {
+                Button {
+                    Task { await job.cancel() }
+                } label: {
                     ProgressView(job.progress)
-                        .progressViewStyle(.gauge)
-                    Button("Cancel", role: .cancel) {
-                        Task { await job.cancel() }
-                    }
-                    .font(.caption)
-                    // Have to apply a style or it won't be tappable
-                    // because of the onTapGesture modifier in the parent view.
-                    .buttonStyle(.borderless)
+                        .progressViewStyle(CancelGaugeProgressStyle())
                 }
+                // Have to apply a style or it won't be tappable
+                // because of the onTapGesture modifier in the parent view.
+                .buttonStyle(.plain)
             }
         case .downloaded:
             Button {
@@ -167,5 +165,28 @@ struct OnDemandListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
+    }
+}
+
+/// A progress view style that shows a cancel square.
+struct CancelGaugeProgressStyle: ProgressViewStyle {
+    var strokeColor = Color.accentColor
+    var strokeWidth = 2.0
+
+    func makeBody(configuration: Configuration) -> some View {
+        let fractionCompleted = configuration.fractionCompleted ?? 0
+
+        return ZStack {
+            Circle()
+                .stroke(.tertiary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+            Circle()
+                .trim(from: 0, to: fractionCompleted)
+                .stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+            Rectangle()
+                .fill(Color.accentColor)
+                .frame(width: 6, height: 6)
+        }
+        .frame(width: 20, height: 20)
     }
 }
