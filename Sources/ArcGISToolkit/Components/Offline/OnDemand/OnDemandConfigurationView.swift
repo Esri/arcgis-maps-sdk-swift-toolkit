@@ -45,7 +45,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@State private var loadResult: Result<Void, Error>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if there is no internet connection
-***REMOVED***private var isNoInternetConnection: Bool {
+***REMOVED***private var hasNoInternetConnection: Bool {
 ***REMOVED******REMOVED***return switch loadResult {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***false

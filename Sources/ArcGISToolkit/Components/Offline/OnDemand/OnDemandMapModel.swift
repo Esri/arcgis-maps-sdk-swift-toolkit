@@ -202,7 +202,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***itemInfo.description = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Don't allow job to continue if errors.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Don't allow job to continue on errors.
 ***REMOVED******REMOVED******REMOVED***parameters.continuesOnErrors = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Make sure the directory exists.
