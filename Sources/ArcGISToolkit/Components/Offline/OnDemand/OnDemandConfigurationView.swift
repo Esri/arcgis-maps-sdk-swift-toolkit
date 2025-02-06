@@ -238,7 +238,7 @@ private struct RenameButton: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text("Rename")
 ***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.buttonBorderShape(.capsule)
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.alert("Enter a name", isPresented: $alertIsShowing) {

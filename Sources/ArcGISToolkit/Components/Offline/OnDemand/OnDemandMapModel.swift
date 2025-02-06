@@ -221,7 +221,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes the downloaded map area from disk and resets the status.
 ***REMOVED***func removeDownloadedArea() {
-***REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+***REMOVED******REMOVED***try? FileManager.default.removeItem(at: directory)
 ***REMOVED******REMOVED***status = .initialized
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Call the closure for the remove download action.
@@ -298,12 +298,21 @@ extension OnDemandMapModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we already have one (ie. a job is already be running and the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** directory is exists so we found it here), then we continue.
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID ***REMOVED***) else { continue ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let mapArea = await OnDemandMapModel.init(
+***REMOVED******REMOVED******REMOVED******REMOVED***if let mapArea = await OnDemandMapModel.init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaID: mapAreaID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownload
-***REMOVED******REMOVED******REMOVED******REMOVED***) else { continue ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels.append(mapArea)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we could create the model, then add it.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandMapModels.append(mapArea)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we couldn't create the model, it was a case where the job was
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** cancelled and the user didn't remove the job from the list, in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** that case we cleanup the directory.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: mapAreaID)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
