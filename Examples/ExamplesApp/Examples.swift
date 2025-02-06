@@ -97,7 +97,7 @@ extension Category {
                 Example("Scalebar", content: ScalebarExampleView()),
                 Example("Search", content: SearchExampleView()),
                 Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-            ].sorted(by: { $0.name < $1.name })
+            ]
         )
     }
     
