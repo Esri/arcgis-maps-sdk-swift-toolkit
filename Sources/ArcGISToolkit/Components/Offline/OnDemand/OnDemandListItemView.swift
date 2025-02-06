@@ -37,6 +37,7 @@ struct OnDemandListItemView: View {
             thumbnailView
             VStack(alignment: .leading, spacing: 4) {
                 titleView
+                descriptionView
                 if isSelected {
                     openStatusView
                 } else {
@@ -82,6 +83,15 @@ struct OnDemandListItemView: View {
             .font(.subheadline)
             .lineLimit(1)
             .foregroundStyle(model.isDownloaded ? .primary : .secondary)
+    }
+    
+    @ViewBuilder private var descriptionView: some View {
+        if model.isDownloaded {
+            Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
     }
     
     @ViewBuilder private var trailingButton: some View {
