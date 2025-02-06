@@ -18,7 +18,9 @@ struct Tests: View {
     var body: some View {
         NavigationStack {
             List {
+#if !os(visionOS)
                 NavigationLink("AttachmentCameraController Tests", destination: AttachmentCameraControllerTestView())
+#endif
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
                 NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
