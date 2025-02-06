@@ -89,7 +89,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.formIsPresented.wrappedValue) { formIsPresented in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !formIsPresented { validationErrorVisibility = .automatic ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
@@ -394,6 +394,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
 ***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
 ***REMOVED***var errors: [Error] {
-***REMOVED******REMOVED***compactMap { $0.error ***REMOVED*** + flatMap { $0.attachmentResults.compactMap { $0.error ***REMOVED*** ***REMOVED***
+***REMOVED******REMOVED***compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
