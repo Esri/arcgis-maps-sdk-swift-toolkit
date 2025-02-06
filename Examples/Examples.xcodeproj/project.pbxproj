@@ -11,11 +11,12 @@
 		1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */; platformFilter = ios; ***REMOVED***;
 		4CD62FAA2D49773000338749 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD62FA92D49773000338749 /* Category.swift */; ***REMOVED***;
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; ***REMOVED***;
-		4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */; platformFilters = (ios, maccatalyst, ); ***REMOVED***;
+		4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */; ***REMOVED***;
 		75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */; ***REMOVED***;
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; ***REMOVED***;
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; ***REMOVED***;
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; ***REMOVED***;
+		79222E152D5008BB005C2ABA /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79222E142D5006EF005C2ABA /* View.swift */; ***REMOVED***;
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; platformFilter = ios; ***REMOVED***;
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; ***REMOVED***;
 		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; ***REMOVED***;
@@ -53,6 +54,7 @@
 		75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
+		79222E142D5006EF005C2ABA /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; ***REMOVED***;
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -82,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		79222E132D5006E0005C2ABA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				79222E142D5006EF005C2ABA /* View.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		***REMOVED***;
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				E40F58042656E509006F5CB9 /* Examples */,
+				79222E132D5006E0005C2ABA /* Extensions */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -263,6 +274,7 @@
 				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
+				79222E152D5008BB005C2ABA /* View.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
