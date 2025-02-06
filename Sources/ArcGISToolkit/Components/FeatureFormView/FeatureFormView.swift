@@ -161,7 +161,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceNames = Array(Set(associationKindMembers.map { $0.toElement.networkSource.name ***REMOVED***))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for networkSourceName in networkSourceNames {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by kind
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by network source
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceMembers = associationKindMembers.filter { $0.toElement.networkSource.name == networkSourceName ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
