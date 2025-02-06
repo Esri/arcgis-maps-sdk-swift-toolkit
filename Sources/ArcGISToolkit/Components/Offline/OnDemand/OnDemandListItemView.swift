@@ -99,7 +99,7 @@ struct OnDemandListItemView: View {
         case .downloading:
             if let job = model.job {
                 Button {
-                    Task { await job.cancel() }
+                    model.cancelJob()
                 } label: {
                     ProgressView(job.progress)
                         .progressViewStyle(CancelGaugeProgressStyle())
