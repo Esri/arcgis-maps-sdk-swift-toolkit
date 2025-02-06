@@ -245,6 +245,16 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Cancels the in-progress job.
+***REMOVED***func cancelJob() {
+***REMOVED******REMOVED***guard let job else { return ***REMOVED***
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***await job.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED*** Cleanup any files that were laid down.
+***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
 ***REMOVED***private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
 ***REMOVED******REMOVED***switch downloadResult {
