@@ -37,6 +37,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***titleView
+***REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
 ***REMOVED******REMOVED******REMOVED*** else {
@@ -82,6 +83,15 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(model.isDownloaded ? .primary : .secondary)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var descriptionView: some View {
+***REMOVED******REMOVED***if model.isDownloaded {
+***REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var trailingButton: some View {
