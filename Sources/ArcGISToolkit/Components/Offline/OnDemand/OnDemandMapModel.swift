@@ -171,7 +171,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***status = .mmpkLoadFailure(error)
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = nil
 ***REMOVED******REMOVED******REMOVED***directorySize = 0
-***REMOVED******REMOVED******REMOVED***thumbnail = nil
 ***REMOVED******REMOVED******REMOVED***map = nil
 ***REMOVED***
 ***REMOVED***
