@@ -70,7 +70,7 @@ struct FeatureFormExampleView: View {
                             .padding(.top, 16)
                     }
                 }
-                .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
+                .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
                 .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
@@ -356,6 +356,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
-        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }
