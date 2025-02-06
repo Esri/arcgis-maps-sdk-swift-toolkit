@@ -172,7 +172,7 @@ public struct FeatureFormView: View {
                         let networkSourceNames = Array(Set(associationKindMembers.map { $0.toElement.networkSource.name }))
                         var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
                         for networkSourceName in networkSourceNames {
-                            // Filter the associations by kind
+                            // Filter the associations by network source
                             let networkSourceMembers = associationKindMembers.filter { $0.toElement.networkSource.name == networkSourceName }
                             var associations: [UtilityNetworkAssociationFormElementView.Association] = []
                             // For each association, create a Toolkit representation and add it to the group
