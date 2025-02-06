@@ -84,13 +84,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let visibleArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  maxRect == nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let scaledExtent = GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let rect = mapViewProxy.viewRect(fromEnvelope: scaledExtent) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxRect = rect
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
 ***REMOVED******REMOVED******REMOVED***
