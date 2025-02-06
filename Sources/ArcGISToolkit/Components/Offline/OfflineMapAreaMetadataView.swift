@@ -103,7 +103,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     }
 }
 
-/// The model ofr the metadata view.
+/// The model for the metadata view.
 @MainActor
 protocol OfflineMapAreaMetadata: ObservableObject {
     /// The title of the area.
