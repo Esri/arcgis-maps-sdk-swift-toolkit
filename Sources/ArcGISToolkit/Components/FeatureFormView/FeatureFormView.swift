@@ -65,7 +65,6 @@
 ***REMOVED***/ `Info.plist` file.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
-@available(visionOS, unavailable)
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
@@ -239,7 +238,6 @@ private extension UtilityAssociation {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension FeatureFormView {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***/ - Parameter ancestor: <#ancestor description#>

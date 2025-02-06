@@ -16,7 +16,6 @@
 @testable ***REMOVED***Toolkit
 import XCTest
 
-#if !os(visionOS)
 final class AttachmentsFeatureElementDisplayTypeTests: XCTestCase {
 ***REMOVED***func testInitWithAttachmentsPopupElementDisplayType() {
 ***REMOVED******REMOVED***XCTAssertEqual(AttachmentsFeatureElementDisplayType(kind: .list), .list)
@@ -24,4 +23,3 @@ final class AttachmentsFeatureElementDisplayTypeTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(AttachmentsFeatureElementDisplayType(kind: .auto), .auto)
 ***REMOVED***
 ***REMOVED***
-#endif
