@@ -36,27 +36,16 @@ struct OnDemandConfigurationView: View {
     @State private var visibleArea: Envelope?
     
     /// The selected map area.
-    @State private var mapAreaSelection: CGRect?
+    @State private var selectedRect: CGRect = .zero
     
     /// The extent of the selected map area.
-    @State private var mapAreaEnvelope: Envelope?
+    @State private var selectedExtent: Envelope?
     
-    /// The polygon rect of the selected map area.
-    @State private var polygonRect: CGRect?
-    
-    /// The maximum rect size of the map area selector view.
-    @State private var maxRect: CGRect?
+    /// A Boolean value indicating that the map is ready.
+    @State private var mapIsReady = false
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
-    
-    /// A Boolean value indicating if the download button is disabled.
-    private var downloadIsDisabled: Bool {
-        mapAreaSelection == nil
-    }
-    
-    /// The scale or the map area selector.
-    private let mapAreaScale = 0.8
     
     var body: some View {
         NavigationStack {
@@ -70,18 +59,16 @@ struct OnDemandConfigurationView: View {
                             .padding(8)
                             .frame(maxWidth: .infinity)
                         Divider()
-                        ZStack {
-                            mapView
-                            if let maxRect {
-                                OnDemandMapAreaSelectorView(maxRect: maxRect, selection: $mapAreaSelection)
-                                    .onChange(of: mapAreaSelection) { _ in
-                                        guard let mapAreaSelection,
-                                              let selectedMapArea = mapViewProxy.envelope(fromViewRect: mapAreaSelection) else { return }
-                                        mapAreaEnvelope = selectedMapArea.extent
-                                        polygonRect = mapViewProxy.viewRect(fromEnvelope: selectedMapArea.extent)
-                                    }
+                        mapView
+                            .overlay {
+                                if mapIsReady {
+                                    // Don't add the selector view until the map is ready.
+                                    OnDemandMapAreaSelectorView(selectedMapRect: $selectedRect)
+                                }
                             }
-                        }
+                            .onChange(of: selectedRect) { _ in
+                                selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                            }
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
@@ -106,7 +93,7 @@ struct OnDemandConfigurationView: View {
             .magnifierDisabled(true)
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onVisibleAreaChanged { visibleArea = $0.extent }
+            .onVisibleAreaChanged { _ in mapIsReady = true }
             // Prevent view from dragging when panning on map view.
             .highPriorityGesture(DragGesture())
             .interactiveDismissDisabled()
@@ -138,16 +125,16 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let mapAreaEnvelope, let polygonRect else { return }
+                        guard let selectedExtent else { return }
                         Task {
                             let image = try? await mapView.exportImage()
-                            let thumbnail = image?.crop(to: polygonRect)
+                            let thumbnail = image?.crop(to: selectedRect)
                             
                             let configuration = OnDemandMapAreaConfiguration(
                                 title: title,
                                 minScale: 0,
                                 maxScale: maxScale.scale,
-                                areaOfInterest: mapAreaEnvelope,
+                                areaOfInterest: selectedExtent,
                                 thumbnail: thumbnail
                             )
                             onCompleteAction(configuration)
@@ -159,7 +146,7 @@ struct OnDemandConfigurationView: View {
                     }
                     .controlSize(.large)
                     .buttonStyle(.borderedProminent)
-                    .disabled(downloadIsDisabled)
+                    .disabled(selectedExtent == nil)
                 }
             }
             .padding()

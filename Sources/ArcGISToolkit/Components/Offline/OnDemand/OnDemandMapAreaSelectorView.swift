@@ -17,10 +17,10 @@ import SwiftUI
 
 struct OnDemandMapAreaSelectorView: View {
     /// The maximum size of the area selector view.
-    @State private var maxRect: CGRect
+    @State private var maxRect: CGRect = .zero
     
     /// A Binding to the CGRect of the selected map area.
-    @Binding var selectedMapRect: CGRect?
+    @Binding var selectedMapRect: CGRect
     
     /// The bounding rectangle for the area selector view.
     @State private var boundingRect: CGRect = .zero
@@ -40,6 +40,9 @@ struct OnDemandMapAreaSelectorView: View {
     /// The bottom right corner point of the area selector view.
     @State private var bottomRight: CGPoint = .zero
     
+    /// The safe area insets of the view.
+    @State private var safeAreaInsets = EdgeInsets()
+    
     /// The corner radius of the area selector view.
     private let cordnerRadius: CGFloat = 16
     
@@ -48,61 +51,81 @@ struct OnDemandMapAreaSelectorView: View {
         case topLeft, topRight, bottomLeft, bottomRight
     }
     
-    init(maxRect: CGRect, selection: Binding<CGRect?>) {
-        _selectedMapRect = selection
-        self.maxRect = maxRect
-    }
-    
     var body: some View {
-        ZStack {
+        GeometryReader { geometry in
             ZStack {
-                Rectangle()
-                    .fill(.black.opacity(0.10))
-                    .reverseMask {
-                        Rectangle()
-                            .frame(width: boundingRect.width, height: boundingRect.height)
-                            .position(boundingRect.center)
+                ZStack {
+                    Rectangle()
+                        .fill(.black.opacity(0.10))
+                        .reverseMask {
+                            Rectangle()
+                                .frame(width: boundingRect.width, height: boundingRect.height)
+                                .position(boundingRect.center)
+                            
+                        }
+                    RoundedCorners(cornerRadius: cordnerRadius)
+                        .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
+                        .frame(width: insetRect.width, height: insetRect.height)
+                        .position(insetRect.center)
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+                            .stroke(.white, lineWidth: 4)
                         
                     }
-                RoundedCorners(cornerRadius: cordnerRadius)
-                    .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
-                    .frame(width: insetRect.width, height: insetRect.height)
-                    .position(insetRect.center)
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
-                        .stroke(.white, lineWidth: 4)
-                    
+                    .frame(width: boundingRect.width, height: boundingRect.height)
+                    .position(boundingRect.center)
                 }
-                .frame(width: boundingRect.width, height: boundingRect.height)
-                .position(boundingRect.center)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                .onAppear {
+                    boundingRect = maxRect
+                    insetRect = boundingRect.insetBy(dx: -2, dy: -2)
+                    updateHandles()
+                }
+                .onChange(of: boundingRect) {
+                    selectedMapRect = $0
+                }
+                
+                Handle(position: topLeft) {
+                    resize(for: .topLeft, location: $0)
+                }
+                
+                Handle(position: topRight) {
+                    resize(for: .topRight, location: $0)
+                }
+                
+                Handle(position: bottomLeft) {
+                    resize(for: .bottomLeft, location: $0)
+                }
+                
+                Handle(position: bottomRight) {
+                    resize(for: .bottomRight, location: $0)
+                }
             }
-            .ignoresSafeArea()
-            .allowsHitTesting(false)
-            .onAppear {
+            .onChange(of: safeAreaInsets) { _ in
+                let frame = CGRect(
+                    x: safeAreaInsets.leading,
+                    y: safeAreaInsets.top,
+                    width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
+                    height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
+                )
+                
+                maxRect = frame
+                    .insetBy(
+                        dx: frame.width * 0.1,
+                        dy: frame.height * 0.1
+                    )
                 boundingRect = maxRect
+                
                 insetRect = boundingRect.insetBy(dx: -2, dy: -2)
+                
                 updateHandles()
             }
-            .onChange(of: boundingRect) {
-                selectedMapRect = $0
-            }
-            
-            Handle(position: topLeft) {
-                resize(for: .topLeft, location: $0)
-            }
-            
-            Handle(position: topRight) {
-                resize(for: .topRight, location: $0)
-            }
-            
-            Handle(position: bottomLeft) {
-                resize(for: .bottomLeft, location: $0)
-            }
-            
-            Handle(position: bottomRight) {
-                resize(for: .bottomRight, location: $0)
-            }
+        }
+        .edgesIgnoringSafeArea(.all)
+        .onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
+            self.safeAreaInsets = safeAreaInsets
         }
     }
     
