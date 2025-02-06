@@ -147,11 +147,14 @@ extension RadioButtonsInput {
                 if selected {
                     Image(systemName: "checkmark")
                         .accessibilityIdentifier("\(element.label) \(label) Checkmark")
+#if !os(visionOS)
                         .foregroundStyle(Color.accentColor)
+#endif
                 }
             }
             .padding(10)
-            .contentShape(.rect)
+            .contentShape(.rect(cornerRadius: 10))
+            .hoverEffect()
         }
         .accessibilityIdentifier("\(element.label) \(label) Radio Button")
         .buttonStyle(.plain)
