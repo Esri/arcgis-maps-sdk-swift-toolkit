@@ -221,7 +221,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     
     /// Removes the downloaded map area from disk and resets the status.
     func removeDownloadedArea() {
-        try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+        try? FileManager.default.removeItem(at: directory)
         status = .initialized
         
         // Call the closure for the remove download action.
@@ -298,12 +298,21 @@ extension OnDemandMapModel {
                 // If we already have one (ie. a job is already be running and the
                 // directory is exists so we found it here), then we continue.
                 guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID }) else { continue }
-                guard let mapArea = await OnDemandMapModel.init(
+                if let mapArea = await OnDemandMapModel.init(
                     areaID: mapAreaID,
                     portalItemID: portalItemID,
                     onRemoveDownload: onRemoveDownload
-                ) else { continue }
-                onDemandMapModels.append(mapArea)
+                ) {
+                    // If we could create the model, then add it.
+                    onDemandMapModels.append(mapArea)
+                } else {
+                    // If we couldn't create the model, it was a case where the job was
+                    // cancelled and the user didn't remove the job from the list, in
+                    // that case we cleanup the directory.
+                    try? FileManager.default.removeItem(
+                        at: URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: mapAreaID)
+                    )
+                }
             }
         }
         
