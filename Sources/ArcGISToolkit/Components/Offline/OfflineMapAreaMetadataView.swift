@@ -29,7 +29,6 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED***@State private var thumbnailImage: UIImage?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED***Section { header ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -148,4 +147,20 @@ extension OnDemandMapModel: OfflineMapAreaMetadata {
 ***REMOVED***var thumbnailImage: UIImage? { thumbnail ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { false ***REMOVED***
 ***REMOVED***func startDownload() { fatalError() ***REMOVED***
+***REMOVED***
+
+#Preview {
+***REMOVED***OfflineMapAreaMetadataView(model: MockMetadata(), isSelected: false)
+***REMOVED***
+
+private class MockMetadata: OfflineMapAreaMetadata {
+***REMOVED***var title: String { "Redlands" ***REMOVED***
+***REMOVED***var thumbnailImage: UIImage? { nil ***REMOVED***
+***REMOVED***var description: String { "" ***REMOVED***
+***REMOVED***var isDownloaded: Bool { true ***REMOVED***
+***REMOVED***var allowsDownload: Bool { true ***REMOVED***
+***REMOVED***var directorySize: Int { 1_000_000_000 ***REMOVED***
+***REMOVED***
+***REMOVED***func removeDownloadedArea() {***REMOVED***
+***REMOVED***func startDownload() {***REMOVED***
 ***REMOVED***
