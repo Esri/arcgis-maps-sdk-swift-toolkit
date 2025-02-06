@@ -267,7 +267,7 @@ private extension UIImage {
 
 struct SelectorView: View {
     @Binding var boundingRect: CGRect
-    @State var maxRect: CGRect = .zero
+    @State private var maxRect: CGRect = .zero
     
     @State private var topLeft: CGPoint = .zero
     @State private var topRight: CGPoint = .zero
