@@ -202,7 +202,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 itemInfo.description = ""
             }
             
-            // Don't allow job to continue if errors.
+            // Don't allow job to continue on errors.
             parameters.continuesOnErrors = false
             
             // Make sure the directory exists.

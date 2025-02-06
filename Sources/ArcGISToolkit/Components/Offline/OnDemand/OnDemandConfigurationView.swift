@@ -45,7 +45,7 @@ struct OnDemandConfigurationView: View {
     @State private var loadResult: Result<Void, Error>?
     
     /// A Boolean value indicating if there is no internet connection
-    private var isNoInternetConnection: Bool {
+    private var hasNoInternetConnection: Bool {
         return switch loadResult {
         case .success:
             false
