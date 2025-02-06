@@ -47,6 +47,9 @@ struct OnDemandConfigurationView: View {
     /// The maximum rect size of the map area selector view.
     @State private var maxRect: CGRect?
     
+    /// The hight of the bottom pane.
+    @State private var bottomPaneHeight: CGFloat = 0
+    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
@@ -59,51 +62,66 @@ struct OnDemandConfigurationView: View {
     private let mapAreaScale = 0.8
     
     var body: some View {
-        NavigationStack {
-            MapViewReader { mapViewProxy in
-                VStack {
-                    VStack(spacing: 0) {
-                        Divider()
-                        Text("Pan and zoom to define the area")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .padding(8)
-                            .frame(maxWidth: .infinity)
-                        Divider()
-                        ZStack {
-                            mapView
-                            if let maxRect {
-                                OnDemandMapAreaSelectorView(maxRect: maxRect, selection: $mapAreaSelection)
-                                    .onChange(of: mapAreaSelection) { _ in
-                                        guard let mapAreaSelection,
-                                              let selectedMapArea = mapViewProxy.envelope(fromViewRect: mapAreaSelection) else { return }
-                                        mapAreaEnvelope = selectedMapArea.extent
-                                        polygonRect = mapViewProxy.viewRect(fromEnvelope: selectedMapArea.extent)
-                                    }
+        GeometryReader { geometry in
+            NavigationStack {
+                MapViewReader { mapViewProxy in
+                    VStack {
+                        VStack(spacing: 0) {
+                            Divider()
+                            Text("Pan and zoom to define the area")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                                .padding(8)
+                                .frame(maxWidth: .infinity)
+                            Divider()
+                            ZStack {
+                                mapView
+                                if let maxRect {
+                                    OnDemandMapAreaSelectorView(maxRect: maxRect, selection: $mapAreaSelection)
+                                        .onChange(of: mapAreaSelection) { _ in
+                                            guard let mapAreaSelection,
+                                                  let selectedMapArea = mapViewProxy.envelope(fromViewRect: mapAreaSelection) else { return }
+                                            mapAreaEnvelope = selectedMapArea.extent
+                                            polygonRect = mapViewProxy.viewRect(fromEnvelope: selectedMapArea.extent)
+                                        }
+                                }
+                            }
+                        }
+                    }
+                    .safeAreaInset(edge: .bottom) {
+                        bottomPane(mapView: mapViewProxy)
+                            .onGeometryChange(for: CGSize.self) { geometry in
+                                geometry.size
+                            } action: { size in
+                                bottomPaneHeight = size.height
+                                print("bottomPaneHeight: \(bottomPaneHeight)")
+                            }
+                    }
+                    .onAppear {
+                        let yOffset = bottomPaneHeight + geometry.safeAreaInsets.bottom
+                        let frame = CGRect(
+                            x: geometry.safeAreaInsets.leading,
+                            y: geometry.safeAreaInsets.top,
+                            width: geometry.size.width - geometry.safeAreaInsets.trailing,
+                            height: geometry.size.height - yOffset
+                        )
+                        maxRect = frame
+                            .insetBy(
+                                dx: geometry.size.width * 0.1,
+                                dy: geometry.size.height * 0.1
+                            )
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Cancel") {
+                                dismiss()
                             }
                         }
                     }
                 }
-                .onChange(of: visibleArea) { _ in
-                    guard let visibleArea,
-                          maxRect == nil,
-                          let scaledExtent = GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent,
-                          let rect = mapViewProxy.viewRect(fromEnvelope: scaledExtent) else { return }
-                    maxRect = rect
-                }
-                .safeAreaInset(edge: .bottom) {
-                    bottomPane(mapView: mapViewProxy)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
-                    }
-                }
+                .navigationBarTitle("Select Area")
+                .navigationBarTitleDisplayMode(.inline)
             }
-            .navigationBarTitle("Select Area")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
