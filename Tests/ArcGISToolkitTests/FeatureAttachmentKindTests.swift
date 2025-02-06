@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !os(visionOS)
 import ArcGIS
 @testable import ArcGISToolkit
 import XCTest
@@ -33,4 +32,3 @@ final class FeatureAttachmentKindTests: XCTestCase {
         XCTAssertEqual(FeatureAttachmentKind(kind: PopupAttachment.Kind.other), .other)
     }
 }
-#endif
