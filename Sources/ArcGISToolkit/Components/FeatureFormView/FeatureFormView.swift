@@ -205,21 +205,21 @@ public struct FeatureFormView: View {
                                     )
                                     associations.append(newAssociation)
                                 }
-                                let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
-                                    associations: associations,
-                                    name: networkSourceName
-                                )
-                                networkSourceGroups.append(networkSourceGroup)
                             }
-                            groups.append(
-                                UtilityNetworkAssociationFormElementView.AssociationKindGroup(
-                                    networkSourceGroups: networkSourceGroups,
-                                    name: "\(associationKind)".capitalized
-                                )
+                            let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
+                                associations: associations,
+                                name: networkSourceName
                             )
+                            networkSourceGroups.append(networkSourceGroup)
                         }
-                        self.groups = groups
+                        groups.append(
+                            UtilityNetworkAssociationFormElementView.AssociationKindGroup(
+                                networkSourceGroups: networkSourceGroups,
+                                name: "\(associationKind)".capitalized
+                            )
+                        )
                     }
+                    self.groups = groups
                 } else {
                     print("Not a Utility Element")
                 }
