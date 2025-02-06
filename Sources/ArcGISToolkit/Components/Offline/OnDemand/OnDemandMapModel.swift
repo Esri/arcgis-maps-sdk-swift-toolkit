@@ -156,7 +156,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             try await mmpk.load()
             // Set status to downloaded if not already set.
             switch status {
-            case .downloaded, .downloadedWithLayerErrors:
+            case .downloaded:
                 break
             default:
                 status = .downloaded
@@ -203,6 +203,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 itemInfo.description = ""
             }
             
+            // Don't allow job to continue on errors.
+            parameters.continuesOnErrors = false
+            
             // Make sure the directory exists.
             try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
             
@@ -219,7 +222,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     }
     
     /// Removes the downloaded map area from disk and resets the status.
-    func removeDownloadedOnDemandMapArea() {
+    func removeDownloadedArea() {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         status = .initialized
         
@@ -247,14 +250,9 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// Updates the status based on the download result of the mobile map package.
     private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
         switch downloadResult {
-        case .success(let result):
-            if result.hasErrors {
-                Logger.offlineManager.info("GenerateOfflineMap job succeeded with layer errors.")
-                status = .downloadedWithLayerErrors
-            } else {
-                Logger.offlineManager.info("GenerateOfflineMap job succeeded.")
-                status = .downloaded
-            }
+        case .success:
+            Logger.offlineManager.info("GenerateOfflineMap job succeeded.")
+            status = .downloaded
         case .failure(let error):
             if error is CancellationError {
                 Logger.offlineManager.info("GenerateOfflineMap job cancelled.")
@@ -325,8 +323,6 @@ extension OnDemandMapModel {
         case downloading
         /// Map area is downloaded.
         case downloaded
-        /// Map area is downloaded but some layers may not have come offline.
-        case downloadedWithLayerErrors
         /// Map area failed to download.
         case downloadFailure(Error)
         /// The job was cancelled.
@@ -338,7 +334,7 @@ extension OnDemandMapModel {
         var allowsDownload: Bool {
             switch self {
             case .downloading, .downloaded, .mmpkLoadFailure, .downloadCancelled,
-                    .downloadFailure, .downloadedWithLayerErrors:
+                    .downloadFailure:
                 false
             case .initialized:
                 true

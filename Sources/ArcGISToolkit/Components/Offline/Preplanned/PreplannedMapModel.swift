@@ -178,7 +178,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Removes the downloaded preplanned map area from disk and resets the status.
-    func removeDownloadedPreplannedMapArea() {
+    func removeDownloadedArea() {
         try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         
         // Reload the model after local files removal.
@@ -372,8 +372,7 @@ extension PreplannedMapModel {
                     }
             } catch {
                 // If not connected to the internet, then return only the offline models.
-                if let urlError = error as? URLError,
-                   urlError.code == .notConnectedToInternet {
+                if error.isNoInternetConnectionError {
                     onlyOfflineModelsAreAvailable = true
                     return await loadOfflinePreplannedMapModels(
                         offlineMapTask: offlineMapTask,
