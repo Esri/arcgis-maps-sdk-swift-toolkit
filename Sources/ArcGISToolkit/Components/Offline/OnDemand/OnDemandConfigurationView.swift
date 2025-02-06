@@ -39,7 +39,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
-***REMOVED***private var downloadIsDisabled: Bool { visibleArea == nil || isNoInternetConnection ***REMOVED***
+***REMOVED***private var downloadIsDisabled: Bool { visibleArea == nil || hasNoInternetConnection ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of trying to load the map.
 ***REMOVED***@State private var loadResult: Result<Void, Error>?
@@ -176,7 +176,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var failedToLoadView: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if isNoInternetConnection {
+***REMOVED******REMOVED******REMOVED***if hasNoInternetConnection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"No Internet Connection",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
