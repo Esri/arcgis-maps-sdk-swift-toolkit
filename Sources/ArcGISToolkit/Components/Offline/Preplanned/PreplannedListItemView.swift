@@ -160,6 +160,7 @@ struct PreplannedListItemView: View {
                 }
             } label: {
                 Image(systemName: "arrow.down.circle")
+                    .imageScale(.large)
             }
             // Have to apply a style or it won't be tappable
             // because of the onTapGesture modifier in the parent view.
