@@ -17,20 +17,31 @@
 ***REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners for a
 ***REMOVED***/ form input.
 struct FormInputStyle: ViewModifier {
+***REMOVED***let isTappable: Bool
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***content
+***REMOVED******REMOVED***let cornerRadius: CGFloat = 10
+***REMOVED******REMOVED***let content = content
 ***REMOVED******REMOVED******REMOVED***.frame(minHeight: 30)
 ***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .tertiarySystemFill))
-***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
+***REMOVED******REMOVED******REMOVED***.cornerRadius(cornerRadius)
+***REMOVED******REMOVED***if isTappable {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: cornerRadius))
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension View {
 ***REMOVED******REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners
 ***REMOVED******REMOVED***/ for a form input.
-***REMOVED***func formInputStyle() -> some View {
-***REMOVED******REMOVED***modifier(FormInputStyle())
+***REMOVED******REMOVED***/ - Parameter isTappable: A Boolean value that indicates if this form input is tappable or not.
+***REMOVED***func formInputStyle(isTappable: Bool) -> some View {
+***REMOVED******REMOVED***modifier(FormInputStyle(isTappable: isTappable))
 ***REMOVED***
 ***REMOVED***
