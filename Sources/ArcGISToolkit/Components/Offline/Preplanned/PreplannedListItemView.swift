@@ -62,7 +62,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***downloadButton
+***REMOVED******REMOVED******REMOVED***trailingButton
 ***REMOVED***
 ***REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED***.onTapGesture {
@@ -132,7 +132,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private var downloadButton: some View {
+***REMOVED***@ViewBuilder private var trailingButton: some View {
 ***REMOVED******REMOVED***switch downloadState {
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
@@ -161,18 +161,17 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private var openStatusView: some View {
-***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***Text("Currently open")
-***REMOVED***
-***REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED******REMOVED***Text("Currently open")
+***REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var statusView: some View {
