@@ -171,7 +171,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
             directorySize = 0
-            thumbnail = nil
             map = nil
         }
     }

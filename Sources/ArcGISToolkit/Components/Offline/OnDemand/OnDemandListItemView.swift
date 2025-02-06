@@ -171,14 +171,14 @@ struct OnDemandListItemView: View {
 /// A progress view style that shows a cancel square.
 struct CancelGaugeProgressStyle: ProgressViewStyle {
     var strokeColor = Color.accentColor
-    var strokeWidth = 2.0
+    var strokeWidth = 3.0
 
     func makeBody(configuration: Configuration) -> some View {
         let fractionCompleted = configuration.fractionCompleted ?? 0
 
         return ZStack {
             Circle()
-                .stroke(.tertiary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .stroke(.quinary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
             Circle()
                 .trim(from: 0, to: fractionCompleted)
                 .stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
