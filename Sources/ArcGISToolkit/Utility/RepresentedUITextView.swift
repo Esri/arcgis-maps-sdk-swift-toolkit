@@ -34,6 +34,10 @@ struct RepresentedUITextView: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextView {
         let uiTextView = UITextView()
         uiTextView.delegate = context.coordinator
+#if os(visionOS)
+        // The cursor should be white in visionOS not the accent color.
+        uiTextView.tintColor = .white
+#endif
         return uiTextView
     }
     
