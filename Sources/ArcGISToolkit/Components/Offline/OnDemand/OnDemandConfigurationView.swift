@@ -84,13 +84,6 @@ struct OnDemandConfigurationView: View {
                         }
                     }
                 }
-                .onChange(of: visibleArea) { _ in
-                    guard let visibleArea,
-                          maxRect == nil,
-                          let scaledExtent = GeometryEngine.scale(visibleArea, factorX: mapAreaScale, factorY: mapAreaScale)?.extent,
-                          let rect = mapViewProxy.viewRect(fromEnvelope: scaledExtent) else { return }
-                    maxRect = rect
-                }
                 .safeAreaInset(edge: .bottom) {
                     bottomPane(mapView: mapViewProxy)
                 }
