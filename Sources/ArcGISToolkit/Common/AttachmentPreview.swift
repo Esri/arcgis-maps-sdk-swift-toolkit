@@ -235,7 +235,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** On visionOS, quick look preview will close the sheet by accident.
+***REMOVED******REMOVED******REMOVED******REMOVED*** On visionOS, quick look preview will close (sometimes it comes back) a sheet presenting
+***REMOVED******REMOVED******REMOVED******REMOVED*** the feature form.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** See thread here: https:***REMOVED***developer.apple.com/forums/thread/773599
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
 ***REMOVED******REMOVED******REMOVED***.alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { ***REMOVED***

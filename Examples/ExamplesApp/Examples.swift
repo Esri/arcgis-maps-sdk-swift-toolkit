@@ -97,7 +97,7 @@ extension Category {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-***REMOVED******REMOVED******REMOVED***].sorted(by: { $0.name < $1.name ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
