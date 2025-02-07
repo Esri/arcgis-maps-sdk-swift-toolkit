@@ -112,7 +112,7 @@ struct OnDemandConfigurationView: View {
                         .overlay {
                             if mapIsReady {
                                 // Don't add the selector view until the map is ready.
-                                OnDemandMapAreaSelectorView(selectedMapRect: $selectedRect)
+                                OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
                             }
                         }
                         .onChange(of: selectedRect) { _ in
