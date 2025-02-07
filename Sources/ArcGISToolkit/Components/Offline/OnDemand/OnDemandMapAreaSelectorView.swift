@@ -52,67 +52,81 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(.black.opacity(0.2))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reverseMask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: handlesRect.width, height: handlesRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(handlesRect.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
+***REMOVED******REMOVED******REMOVED***dimmedMaskedView
+***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: topLeft) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay { handles ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: safeAreaInsets) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateMaxRect(geometry: geometry)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: topRight) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: bottomLeft) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Handle(position: bottomRight) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: safeAreaInsets) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***let frame = CGRect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: safeAreaInsets.leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: safeAreaInsets.top,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***maxRect = frame
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.insetBy(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dx: 50,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dy: 50
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedRect = maxRect
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***updateHandles()
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
 ***REMOVED******REMOVED***.onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
 ***REMOVED******REMOVED******REMOVED***self.safeAreaInsets = safeAreaInsets
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The darker dimmed background view that shows the selected area masked.
+***REMOVED***@ViewBuilder private var dimmedMaskedView: some View {
+***REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED***.fill(.black.opacity(0.2))
+***REMOVED******REMOVED******REMOVED***.reverseMask {
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
+***REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+***REMOVED******REMOVED******REMOVED***.frame(width: handlesRect.width, height: handlesRect.height)
+***REMOVED******REMOVED******REMOVED***.position(handlesRect.center)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
+***REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
+***REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The view for the handles that allow resizing the selected area.
+***REMOVED***@ViewBuilder private var handles: some View {
+***REMOVED******REMOVED***Handle(position: topLeft) {
+***REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Handle(position: topRight) {
+***REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Handle(position: bottomLeft) {
+***REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Handle(position: bottomRight) {
+***REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the maximum rectangle for a change to the safe area insets.
+***REMOVED***private func updateMaxRect(geometry: GeometryProxy) {
+***REMOVED******REMOVED***let frame = CGRect(
+***REMOVED******REMOVED******REMOVED***x: safeAreaInsets.leading,
+***REMOVED******REMOVED******REMOVED***y: safeAreaInsets.top,
+***REMOVED******REMOVED******REMOVED***width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
+***REMOVED******REMOVED******REMOVED***height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Use default insets of 50 unless we cannot because of the size
+***REMOVED******REMOVED******REMOVED*** of the frame being too small.
+***REMOVED******REMOVED***var defaultInsets: CGFloat = 50
+***REMOVED******REMOVED***if frame.width < defaultInsets || frame.height < defaultInsets {
+***REMOVED******REMOVED******REMOVED***defaultInsets = min(frame.width * 0.1, frame.height * 0.1)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***maxRect = frame.insetBy(dx: defaultInsets, dy: defaultInsets)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** NOTE: This causes everything to get reset when insets change.
+***REMOVED******REMOVED***selectedRect = maxRect
+***REMOVED******REMOVED***updateHandles()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resizes the area selectpor view.
@@ -273,6 +287,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 
 private extension View {
+***REMOVED******REMOVED***/ A reverse mask overlay.
 ***REMOVED***func reverseMask<Mask: View>(
 ***REMOVED******REMOVED***alignment: Alignment = .center,
 ***REMOVED******REMOVED***@ViewBuilder _ mask: () -> Mask
@@ -288,6 +303,7 @@ private extension View {
 ***REMOVED***
 
 private extension CGRect {
+***REMOVED******REMOVED***/ The center point of the rectangle.
 ***REMOVED***var center: CGPoint {
 ***REMOVED******REMOVED***CGPoint(x: midX, y: midY)
 ***REMOVED***
