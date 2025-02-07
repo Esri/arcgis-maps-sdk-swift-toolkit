@@ -72,6 +72,22 @@ struct AttachmentsFeatureElementView: View {
             case .notInitialized, .initializing:
                 ProgressView()
                     .padding()
+                    .task {
+                        guard case .notInitialized = attachmentModelsState else { return }
+                        attachmentModelsState = .initializing
+                        let attachments = (try? await featureElement.featureAttachments) ?? []
+                        
+                        let attachmentModels = attachments
+                            .reversed()
+                            .map {
+                                AttachmentModel(
+                                    attachment: $0,
+                                    displayScale: displayScale,
+                                    thumbnailSize: thumbnailSize
+                                )
+                            }
+                        attachmentModelsState = .initialized(attachmentModels)
+                    }
             case .initialized(let attachmentModels):
                 if isShowingAttachmentsFormElement {
                     // If showing a form element, don't show attachments in
@@ -92,22 +108,6 @@ struct AttachmentsFeatureElementView: View {
         }
         .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
             isEditable = newIsEditable
-        }
-        .task {
-            guard case .notInitialized = attachmentModelsState else { return }
-            attachmentModelsState = .initializing
-            let attachments = (try? await featureElement.featureAttachments) ?? []
-            
-            let attachmentModels = attachments
-                .reversed()
-                .map {
-                    AttachmentModel(
-                        attachment: $0,
-                        displayScale: displayScale,
-                        thumbnailSize: thumbnailSize
-                    )
-                }
-            attachmentModelsState = .initialized(attachmentModels)
         }
     }
     
