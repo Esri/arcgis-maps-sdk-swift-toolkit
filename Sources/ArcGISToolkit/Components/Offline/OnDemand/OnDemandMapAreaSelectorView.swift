@@ -52,67 +52,81 @@ struct OnDemandMapAreaSelectorView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack {
-                ZStack {
-                    Rectangle()
-                        .fill(.black.opacity(0.2))
-                        .reverseMask {
-                            Rectangle()
-                                .frame(width: selectedRect.width, height: selectedRect.height)
-                                .position(selectedRect.center)
-                        }
-                    
-                    RoundedCorners(cornerRadius: cordnerRadius)
-                        .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                        .frame(width: handlesRect.width, height: handlesRect.height)
-                        .position(handlesRect.center)
-                    
-                    RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
-                        .stroke(.white, lineWidth: 4)
-                        .frame(width: selectedRect.width, height: selectedRect.height)
-                        .position(selectedRect.center)
-                }
-                .ignoresSafeArea()
+            dimmedMaskedView
+                .edgesIgnoringSafeArea(.all)
                 .allowsHitTesting(false)
-                
-                Handle(position: topLeft) {
-                    resize(for: .topLeft, location: $0)
+                .overlay { handles }
+                .onChange(of: safeAreaInsets) { _ in
+                    updateMaxRect(geometry: geometry)
                 }
-                
-                Handle(position: topRight) {
-                    resize(for: .topRight, location: $0)
-                }
-                
-                Handle(position: bottomLeft) {
-                    resize(for: .bottomLeft, location: $0)
-                }
-                
-                Handle(position: bottomRight) {
-                    resize(for: .bottomRight, location: $0)
-                }
-            }
-            .onChange(of: safeAreaInsets) { _ in
-                let frame = CGRect(
-                    x: safeAreaInsets.leading,
-                    y: safeAreaInsets.top,
-                    width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
-                    height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
-                )
-                
-                maxRect = frame
-                    .insetBy(
-                        dx: 50,
-                        dy: 50
-                    )
-                selectedRect = maxRect
-                
-                updateHandles()
-            }
         }
         .edgesIgnoringSafeArea(.all)
         .onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
             self.safeAreaInsets = safeAreaInsets
         }
+    }
+    
+    /// The darker dimmed background view that shows the selected area masked.
+    @ViewBuilder private var dimmedMaskedView: some View {
+        Rectangle()
+            .fill(.black.opacity(0.2))
+            .reverseMask {
+                RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+                    .frame(width: selectedRect.width, height: selectedRect.height)
+                    .position(selectedRect.center)
+            }
+        
+        RoundedCorners(cornerRadius: cordnerRadius)
+            .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+            .frame(width: handlesRect.width, height: handlesRect.height)
+            .position(handlesRect.center)
+        
+        RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+            .stroke(.white, lineWidth: 4)
+            .frame(width: selectedRect.width, height: selectedRect.height)
+            .position(selectedRect.center)
+    }
+    
+    /// The view for the handles that allow resizing the selected area.
+    @ViewBuilder private var handles: some View {
+        Handle(position: topLeft) {
+            resize(for: .topLeft, location: $0)
+        }
+        
+        Handle(position: topRight) {
+            resize(for: .topRight, location: $0)
+        }
+        
+        Handle(position: bottomLeft) {
+            resize(for: .bottomLeft, location: $0)
+        }
+        
+        Handle(position: bottomRight) {
+            resize(for: .bottomRight, location: $0)
+        }
+    }
+    
+    /// Updates the maximum rectangle for a change to the safe area insets.
+    private func updateMaxRect(geometry: GeometryProxy) {
+        let frame = CGRect(
+            x: safeAreaInsets.leading,
+            y: safeAreaInsets.top,
+            width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
+            height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
+        )
+        
+        // Use default insets of 50 unless we cannot because of the size
+        // of the frame being too small.
+        var defaultInsets: CGFloat = 50
+        if frame.width < defaultInsets || frame.height < defaultInsets {
+            defaultInsets = min(frame.width * 0.1, frame.height * 0.1)
+        }
+        
+        maxRect = frame.insetBy(dx: defaultInsets, dy: defaultInsets)
+        
+        // NOTE: This causes everything to get reset when insets change.
+        selectedRect = maxRect
+        updateHandles()
     }
     
     /// Resizes the area selectpor view.
@@ -273,6 +287,7 @@ struct OnDemandMapAreaSelectorView: View {
 }
 
 private extension View {
+    /// A reverse mask overlay.
     func reverseMask<Mask: View>(
         alignment: Alignment = .center,
         @ViewBuilder _ mask: () -> Mask
@@ -288,6 +303,7 @@ private extension View {
 }
 
 private extension CGRect {
+    /// The center point of the rectangle.
     var center: CGPoint {
         CGPoint(x: midX, y: midY)
     }
