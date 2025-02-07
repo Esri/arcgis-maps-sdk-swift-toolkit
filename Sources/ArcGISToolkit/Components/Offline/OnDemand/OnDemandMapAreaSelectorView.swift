@@ -22,9 +22,6 @@ struct OnDemandMapAreaSelectorView: View {
     /// A Binding to the CGRect of the selected area.
     @Binding var selectedRect: CGRect
     
-    /// The inset rectangle for the area selector view.
-    @State private var insetRect: CGRect = .zero
-    
     /// The top left corner point of the area selector view.
     @State private var topLeft: CGPoint = .zero
     
@@ -39,6 +36,11 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The safe area insets of the view.
     @State private var safeAreaInsets = EdgeInsets()
+    
+    /// The rectangle for the area selector view handles.
+    private var handlesRect: CGRect {
+        selectedRect.insetBy(dx: -2, dy: -2)
+    }
     
     /// The corner radius of the area selector view.
     private let cordnerRadius: CGFloat = 16
@@ -62,8 +64,8 @@ struct OnDemandMapAreaSelectorView: View {
                         }
                     RoundedCorners(cornerRadius: cordnerRadius)
                         .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
-                        .frame(width: insetRect.width, height: insetRect.height)
-                        .position(insetRect.center)
+                        .frame(width: handlesRect.width, height: handlesRect.height)
+                        .position(handlesRect.center)
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
@@ -106,8 +108,6 @@ struct OnDemandMapAreaSelectorView: View {
                         dy: 50
                     )
                 selectedRect = maxRect
-                
-                insetRect = selectedRect.insetBy(dx: -2, dy: -2)
                 
                 updateHandles()
             }
@@ -162,8 +162,6 @@ struct OnDemandMapAreaSelectorView: View {
         corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
         
         selectedRect = corrected
-        
-        insetRect = selectedRect.insetBy(dx: -2, dy: -2)
         
         // Now update handles for new bounding rect.
         updateHandles()
