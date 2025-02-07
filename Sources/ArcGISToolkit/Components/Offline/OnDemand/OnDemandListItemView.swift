@@ -102,7 +102,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.cancelJob()
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CancelGaugeProgressStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.cancelGauge)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
@@ -165,28 +165,5 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A progress view style that shows a cancel square.
-struct CancelGaugeProgressStyle: ProgressViewStyle {
-***REMOVED***var strokeColor = Color.accentColor
-***REMOVED***var strokeWidth = 3.0
-
-***REMOVED***func makeBody(configuration: Configuration) -> some View {
-***REMOVED******REMOVED***let fractionCompleted = configuration.fractionCompleted ?? 0
-
-***REMOVED******REMOVED***return ZStack {
-***REMOVED******REMOVED******REMOVED***Circle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.quinary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
-***REMOVED******REMOVED******REMOVED***Circle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.trim(from: 0, to: fractionCompleted)
-***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
-***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(-90))
-***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 6, height: 6)
-***REMOVED***
-***REMOVED******REMOVED***.frame(width: 20, height: 20)
 ***REMOVED***
 ***REMOVED***
