@@ -15,17 +15,34 @@
 import SwiftUI
 
 @MainActor
-struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
+private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingContent: View>: View {
+    /// Creates an `OfflineMapAreaItemView`.
+    init(
+        model: Model,
+        isSelected: Bool,
+        @ViewBuilder trailingContent: @escaping () -> TrailingContent)
+    {
+        self.model = model
+        self.isSelected = isSelected
+        self.trailingContent = trailingContent
+    }
+        
     /// The view model for the item view.
     @ObservedObject var model: Model
     
+    /// A Boolean value indicating if the map is currently selected.
     let isSelected: Bool
     
+    /// The content to display in the card.
+    let trailingContent: () -> TrailingContent
+    
+    /// A Boolean value indicating if the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
     /// The thumbnail image of the map area.
     @State private var thumbnailImage: UIImage?
     
+    /// The size of the thumbnail.
     private let thumbnailSize: CGFloat = 64
     
     var body: some View {
@@ -37,7 +54,7 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
                 statusView
             }
             Spacer()
-            trailingButton
+            trailingContent()
         }
         .contentShape(.rect)
         .onTapGesture {
@@ -49,7 +66,6 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
             }
         }
         .task { thumbnailImage = await model.thumbnailImage }
-        //.task { await model.load() }
     }
     
     @ViewBuilder private var thumbnailView: some View {
@@ -71,97 +87,26 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
     
     @ViewBuilder private var titleView: some View {
         Text(model.title)
-            .font(.subheadline)
+            .font(.callout)
+            .fontWeight(.semibold)
             .lineLimit(1)
     }
     
     @ViewBuilder private var descriptionView: some View {
-        if !model.description.isEmpty {
+        if !model.listItemDescription.isEmpty {
             Text(model.description)
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
-        } else {
-            Text("No description available.")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
         }
-    }
-    
-    @ViewBuilder private var trailingButton: some View {
-        Button {
-            // Download map area.
-            model.startDownload()
-        } label: {
-            Image(systemName: "arrow.down.circle")
-                .imageScale(.large)
-        }
-        // Have to apply a style or it won't be tappable
-        // because of the onTapGesture modifier in the parent view.
-        .buttonStyle(.borderless)
-        .disabled(!model.allowsDownload)
-        
-//        switch downloadState {
-//        case .downloaded:
-//            Button {
-//                if let map = model.map {
-//                    selectedMap = map
-//                    dismiss()
-//                }
-//            } label: {
-//                Text("Open")
-//                    .font(.footnote)
-//            }
-//            .buttonStyle(.bordered)
-//            .buttonBorderShape(.capsule)
-//            .disabled(isSelected)
-//        case .downloading:
-//            if let job = model.job {
-//                ProgressView(job.progress)
-//                    .progressViewStyle(.gauge)
-//            }
-//        case .notDownloaded:
-//            Button {
-//                Task {
-//                    // Download preplanned map area.
-//                    await model.downloadPreplannedMapArea()
-//                }
-//            } label: {
-//                Image(systemName: "arrow.down.circle")
-//                    .imageScale(.large)
-//            }
-//            // Have to apply a style or it won't be tappable
-//            // because of the onTapGesture modifier in the parent view.
-//            .buttonStyle(.borderless)
-//            .disabled(!model.status.allowsDownload)
-//        }
     }
     
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
-            Text("Placeholder")
-//            switch model.status {
-//            case .notLoaded, .loading:
-//                Text("Loading")
-//            case .loadFailure, .mmpkLoadFailure:
-//                Image(systemName: "exclamationmark.circle")
-//                Text("Loading failed")
-//            case .packaging:
-//                Image(systemName: "clock.badge.xmark")
-//                Text("Packaging")
-//            case .packaged:
-//                Text("Ready to download")
-//            case .packageFailure:
-//                Image(systemName: "exclamationmark.circle")
-//                Text("Packaging failed")
-//            case .downloading:
-//                Text("Downloading")
-//            case .downloaded:
-//                Text("Downloaded")
-//            case .downloadFailure:
-//                Image(systemName: "exclamationmark.circle")
-//                Text("Download failed")
-//            }
+            if !model.statusSystemImage.isEmpty {
+                Image(systemName: model.statusSystemImage)
+            }
+            Text(model.statusText)
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
@@ -169,22 +114,34 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
 }
 
 @MainActor
-protocol OfflineMapAreaItem: ObservableObject, OfflineMapAreaMetadata {
-//    var statusText: String { get }
-//    var statusSystemImage: String { get }
+protocol OfflineMapAreaListItem: ObservableObject, OfflineMapAreaMetadata {
+    var listItemDescription: String { get }
+    var statusText: String { get }
+    var statusSystemImage: String { get }
 }
 
 #Preview {
-    OfflineMapAreaItemView(model: MockMetadata(), isSelected: false)
+    OfflineMapAreaItemView(model: MockMetadata(), isSelected: false) {
+        Button {} label: {
+            Image(systemName: "arrow.down.circle")
+                .imageScale(.large)
+        }
+        // Have to apply a style or it won't be tappable
+        // because of the onTapGesture modifier in the parent view.
+        .buttonStyle(.borderless)
+    }
 }
 
-private class MockMetadata: OfflineMapAreaItem {
+private class MockMetadata: OfflineMapAreaListItem {
     var title: String { "Redlands" }
     var thumbnailImage: UIImage? { nil }
+    var listItemDescription: String { "123 MB" }
     var description: String { "" }
     var isDownloaded: Bool { true }
     var allowsDownload: Bool { true }
     var directorySize: Int { 1_000_000_000 }
+    var statusText: String { "Downloaded" }
+    var statusSystemImage: String { "exclamationmark.circle" }
     
     func removeDownloadedArea() {}
     func startDownload() {}
