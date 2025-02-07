@@ -18,22 +18,33 @@ extension ProgressViewStyle where Self == GaugeProgressViewStyle {
 ***REMOVED******REMOVED***/ A progress view that visually indicates its progress with a gauge.
 ***REMOVED***static var gauge: Self { .init() ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A progress view that visually indicates its progress with a gauge,
+***REMOVED******REMOVED***/ and also visually indicates cancel iconography.
+***REMOVED***static var cancelGauge: Self { .init(showsCancelIcon: true) ***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ A circular gauge progress view style.
 struct GaugeProgressViewStyle: ProgressViewStyle {
-***REMOVED***private var strokeStyle: StrokeStyle { .init(lineWidth: 3, lineCap: .round) ***REMOVED***
-***REMOVED***
+***REMOVED***var strokeColor = Color.accentColor
+***REMOVED***var strokeWidth = 3.0
+***REMOVED***var showsCancelIcon = false
+
+***REMOVED***@ViewBuilder
 ***REMOVED***func makeBody(configuration: Configuration) -> some View {
-***REMOVED******REMOVED***if let fractionCompleted = configuration.fractionCompleted {
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Circle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(Color(.systemGray5), style: strokeStyle)
-***REMOVED******REMOVED******REMOVED******REMOVED***Circle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.trim(from: 0, to: fractionCompleted)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.gray, style: strokeStyle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(-90))
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.quinary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+***REMOVED******REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.trim(from: 0, to: configuration.fractionCompleted ?? 0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(-90))
+***REMOVED******REMOVED******REMOVED***if showsCancelIcon {
+***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 6, height: 6)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.fixedSize()
 ***REMOVED***
+***REMOVED******REMOVED***.frame(width: 20, height: 20)
+***REMOVED******REMOVED***.padding(2)
 ***REMOVED***
 ***REMOVED***
