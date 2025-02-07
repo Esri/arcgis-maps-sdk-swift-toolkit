@@ -39,14 +39,6 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if model.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LabeledContent("Size") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if model.isDownloaded && !isSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Remove Download", role: .destructive) {
@@ -58,7 +50,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if !model.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Download", systemImage: "arrow.down.circle") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Download Map") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.startDownload()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -77,25 +69,40 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var header: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if let image = thumbnailImage {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 100)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "map")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 100)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let image = thumbnailImage {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 200)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "map")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10, style: .continuous))
+***REMOVED******REMOVED******REMOVED***.shadow(radius: 5)
+***REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(Color(uiColor: UIColor.systemBackground), lineWidth: 2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Text(model.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if model.isDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LabeledContent("Size") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listRowBackground(EmptyView())
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
