@@ -83,9 +83,17 @@ struct OnDemandConfigurationView: View {
     
     /// Loads the map and sets the result.
     private func loadMap() async {
-        // First set to `nil` so progress indicator can show during load.
-        loadResult = nil
-        loadResult = await Result { try await map.retryLoad() }
+        switch loadResult {
+        case .success:
+            return
+        case .failure:
+            // First set to `nil` so progress indicator can show during load.
+            loadResult = nil
+            fallthrough
+        case nil:
+            loadResult = nil
+            loadResult = await Result { try await map.retryLoad() }
+        }
     }
     
     @ViewBuilder private var loadedView: some View {
@@ -128,7 +136,8 @@ struct OnDemandConfigurationView: View {
                     Text(title)
                         .font(.headline)
                         .lineLimit(1)
-                    NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
+                    Spacer()
+                    RenameButton(title: title, isValidCheck: titleIsValidCheck) {
                         title = $0
                     }
                     .disabled(downloadIsDisabled)
@@ -140,11 +149,9 @@ struct OnDemandConfigurationView: View {
                             Text($0.description)
                         }
                     }
-                    .font(.footnote)
                     .pickerStyle(.navigationLink)
                     .disabled(downloadIsDisabled)
                 }
-                .padding(.vertical, 6)
                 
                 HStack {
                     Button {
@@ -162,12 +169,13 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Label("Download", systemImage: "square.and.arrow.down")
+                        Label("Download", systemImage: "arrow.down.circle")
                             .frame(maxWidth: .infinity)
                     }
                     .controlSize(.large)
                     .buttonStyle(.borderedProminent)
                     .disabled(downloadIsDisabled)
+                    .padding(.top)
                 }
             }
             .padding()
@@ -202,7 +210,7 @@ struct OnDemandConfigurationView: View {
 }
 
 /// A View that allows renaming of a map area.
-private struct NewTitleButton: View {
+private struct RenameButton: View {
     /// The current title.
     let title: String
     
@@ -228,8 +236,11 @@ private struct NewTitleButton: View {
             proposedNewTitle = title
             alertIsShowing = true
         } label: {
-            Image(systemName: "pencil")
+            Text("Rename")
         }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.capsule)
+        .font(.footnote)
         .alert("Enter a name", isPresented: $alertIsShowing) {
             TextField("Enter area name", text: $proposedNewTitle)
             Button("OK", action: submitNewTitle)

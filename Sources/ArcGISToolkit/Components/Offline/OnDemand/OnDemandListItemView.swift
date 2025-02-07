@@ -35,25 +35,23 @@ struct OnDemandListItemView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    titleView
-                    if isSelected {
-                        openStatusView
-                    } else {
-                        statusView
-                    }
-                }
-                Spacer()
-            }
-            .contentShape(.rect)
-            .onTapGesture {
-                if model.status.isDownloaded {
-                    metadataViewIsPresented = true
+            VStack(alignment: .leading, spacing: 4) {
+                titleView
+                descriptionView
+                if isSelected {
+                    openStatusView
+                } else {
+                    statusView
                 }
             }
             Spacer()
             trailingButton
+        }
+        .contentShape(.rect)
+        .onTapGesture {
+            if model.status.isDownloaded {
+                metadataViewIsPresented = true
+            }
         }
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
@@ -67,34 +65,48 @@ struct OnDemandListItemView: View {
             Image(uiImage: thumbnail)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 64, height: 44)
-                .clipShape(.rect(cornerRadius: 2))
+                .frame(width: 64, height: 64)
+                .opacity(model.isDownloaded ? 1 : 0.5)
+                .clipShape(.rect(cornerRadius: 10))
         } else {
             Image(systemName: "map")
                 .imageScale(.large)
                 .foregroundStyle(.secondary)
-                .frame(width: 64, height: 44)
+                .frame(width: 64, height: 64)
+                .background(Color(uiColor: UIColor.systemGroupedBackground))
+                .clipShape(.rect(cornerRadius: 10))
         }
     }
     
     @ViewBuilder private var titleView: some View {
         Text(model.title)
-            .font(.body)
+            .font(.subheadline)
             .lineLimit(1)
+            .foregroundStyle(model.isDownloaded ? .primary : .secondary)
+    }
+    
+    @ViewBuilder private var descriptionView: some View {
+        if model.isDownloaded {
+            Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
     }
     
     @ViewBuilder private var trailingButton: some View {
         switch model.status {
         case .downloading:
             if let job = model.job {
-                VStack(alignment: .center) {
+                Button {
+                    model.cancelJob()
+                } label: {
                     ProgressView(job.progress)
-                        .progressViewStyle(.gauge)
-                    Button("Cancel", role: .cancel) {
-                        Task { await job.cancel() }
-                    }
-                    .font(.caption)
+                        .progressViewStyle(CancelGaugeProgressStyle())
                 }
+                // Have to apply a style or it won't be tappable
+                // because of the onTapGesture modifier in the parent view.
+                .buttonStyle(.plain)
             }
         case .downloaded:
             Button {
@@ -107,26 +119,22 @@ struct OnDemandListItemView: View {
             } label: {
                 Text("Open")
                     .font(.footnote)
-                    .fontWeight(.bold)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
             .disabled(isSelected)
         case .initialized:
-            Button {
-                Task {
-                    await model.downloadOnDemandMapArea()
-                }
-            } label: {
-                Image(systemName: "arrow.down.circle")
-            }
-            .disabled(!model.status.allowsDownload)
+            EmptyView()
         case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
             Button {
                 model.removeDownloadedArea()
             } label: {
-                Image(systemName: "trash")
+                Image(systemName: "xmark.circle")
+                    .imageScale(.large)
             }
+            // Have to apply a style or it won't be tappable
+            // because of the onTapGesture modifier in the parent view.
+            .buttonStyle(.borderless)
         }
     }
     
@@ -157,5 +165,28 @@ struct OnDemandListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
+    }
+}
+
+/// A progress view style that shows a cancel square.
+struct CancelGaugeProgressStyle: ProgressViewStyle {
+    var strokeColor = Color.accentColor
+    var strokeWidth = 3.0
+
+    func makeBody(configuration: Configuration) -> some View {
+        let fractionCompleted = configuration.fractionCompleted ?? 0
+
+        return ZStack {
+            Circle()
+                .stroke(.quinary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+            Circle()
+                .trim(from: 0, to: fractionCompleted)
+                .stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+            Rectangle()
+                .fill(Color.accentColor)
+                .frame(width: 6, height: 6)
+        }
+        .frame(width: 20, height: 20)
     }
 }

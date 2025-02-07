@@ -177,7 +177,7 @@ public struct OfflineMapAreasView: View {
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
         Backported.ContentUnavailableView(
             "No Map Areas",
-            systemImage: "square.and.arrow.down",
+            systemImage: "arrow.down.circle",
             description: "There are no offline map areas for this map. Pull to refresh."
         )
     }
@@ -185,7 +185,7 @@ public struct OfflineMapAreasView: View {
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
         Backported.ContentUnavailableView(
             "No Map Areas",
-            systemImage: "square.and.arrow.down",
+            systemImage: "arrow.down.circle",
             description: "There are no offline map areas for this map. Tap the button below to get started."
         )
     }

@@ -53,11 +53,7 @@ struct PreplannedListItemView: View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
             VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    titleView
-                    Spacer()
-                    downloadButton
-                }
+                titleView
                 descriptionView
                 if isSelected {
                     openStatusView
@@ -65,6 +61,8 @@ struct PreplannedListItemView: View {
                     statusView
                 }
             }
+            Spacer()
+            trailingButton
         }
         .contentShape(.rect)
         .onTapGesture {
@@ -75,9 +73,7 @@ struct PreplannedListItemView: View {
                 OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
             }
         }
-        .task {
-            await model.load()
-        }
+        .task { await model.load() }
         .onAppear {
             downloadState = .init(model.status)
             previousDownloadState = downloadState
@@ -100,8 +96,8 @@ struct PreplannedListItemView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 64, height: 44)
-                    .clipShape(.rect(cornerRadius: 2))
+                    .frame(width: 64, height: 64)
+                    .clipShape(.rect(cornerRadius: 10))
             }
         } else {
             placeholderImage
@@ -112,16 +108,31 @@ struct PreplannedListItemView: View {
         Image(systemName: "map")
             .imageScale(.large)
             .foregroundStyle(.secondary)
-            .frame(width: 64, height: 44)
+            .frame(width: 64, height: 64)
+            .background(Color(uiColor: UIColor.systemGroupedBackground))
+            .clipShape(.rect(cornerRadius: 10))
     }
     
     @ViewBuilder private var titleView: some View {
         Text(model.preplannedMapArea.title)
-            .font(.body)
+            .font(.subheadline)
             .lineLimit(1)
     }
     
-    @ViewBuilder private var downloadButton: some View {
+    @ViewBuilder private var descriptionView: some View {
+        if !model.preplannedMapArea.description.isEmpty {
+            Text(model.preplannedMapArea.description)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+        } else {
+            Text("No description available.")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
+    }
+    
+    @ViewBuilder private var trailingButton: some View {
         switch downloadState {
         case .downloaded:
             Button {
@@ -132,7 +143,6 @@ struct PreplannedListItemView: View {
             } label: {
                 Text("Open")
                     .font(.footnote)
-                    .fontWeight(.bold)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
@@ -150,32 +160,19 @@ struct PreplannedListItemView: View {
                 }
             } label: {
                 Image(systemName: "arrow.down.circle")
+                    .imageScale(.large)
             }
-            .buttonStyle(.plain)
+            // Have to apply a style or it won't be tappable
+            // because of the onTapGesture modifier in the parent view.
+            .buttonStyle(.borderless)
             .disabled(!model.status.allowsDownload)
-            .foregroundStyle(Color.accentColor)
-        }
-    }
-    
-    @ViewBuilder private var descriptionView: some View {
-        if !model.preplannedMapArea.description.isEmpty {
-            Text(model.preplannedMapArea.description)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-        } else {
-            Text("This area has no description.")
-                .font(.footnote)
-                .foregroundStyle(.tertiary)
         }
     }
     
     private var openStatusView: some View {
-        HStack(spacing: 4) {
-            Text("Currently open")
-        }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
+        Text("Currently open")
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
     }
     
     @ViewBuilder private var statusView: some View {
