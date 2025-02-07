@@ -22,6 +22,9 @@ struct SwitchInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
+    /// A Boolean value indicating whether the initial element value was received.
+    @State private var didReceiveInitialValue = false
+    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
@@ -74,12 +77,13 @@ struct SwitchInput: View {
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
             }
-            .onTapGesture {
-                isOn.toggle()
-                model.focusedElement = element
-            }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
+                if didReceiveInitialValue {
+                    model.focusedElement = element
+                } else {
+                    didReceiveInitialValue = true
+                }
             }
         }
     }
