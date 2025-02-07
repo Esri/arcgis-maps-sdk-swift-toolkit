@@ -114,10 +114,17 @@ struct OnDemandMapAreaSelectorView: View {
             width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
             height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
         )
-        maxRect = frame.insetBy(dx: 50, dy: 50)
-        // TODO: this causes everything to get reset when insets change,
-        // which is probably not what we want to do. We probably want to
-        // do an intersection.
+        
+        // Use default insets of 50 unless we cannot because of the size
+        // of the frame being too small.
+        var defaultInsets: CGFloat = 50
+        if frame.width < defaultInsets || frame.height < defaultInsets {
+            defaultInsets = min(frame.width * 0.1, frame.height * 0.1)
+        }
+        
+        maxRect = frame.insetBy(dx: defaultInsets, dy: defaultInsets)
+        
+        // NOTE: This causes everything to get reset when insets change.
         selectedRect = maxRect
         updateHandles()
     }
@@ -280,6 +287,7 @@ struct OnDemandMapAreaSelectorView: View {
 }
 
 private extension View {
+    /// A reverse mask overlay.
     func reverseMask<Mask: View>(
         alignment: Alignment = .center,
         @ViewBuilder _ mask: () -> Mask
@@ -295,6 +303,7 @@ private extension View {
 }
 
 private extension CGRect {
+    /// The center point of the rectangle.
     var center: CGPoint {
         CGPoint(x: midX, y: midY)
     }
