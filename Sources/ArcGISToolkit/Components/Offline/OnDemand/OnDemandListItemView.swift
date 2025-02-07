@@ -57,7 +57,7 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMetadataView(model: model, isSelected: isSelected)
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -96,7 +96,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .downloaded, .downloadedWithLayerErrors:
+***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
@@ -123,7 +123,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
 ***REMOVED******REMOVED***case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedOnDemandMapArea()
+***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash")
 ***REMOVED******REMOVED***
@@ -148,11 +148,6 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloading")
 ***REMOVED******REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded")
-***REMOVED******REMOVED******REMOVED***case .downloadedWithLayerErrors:
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.triangle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded. Some layers failed to download.")
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .downloadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Download failed")

@@ -47,43 +47,82 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
+***REMOVED***private var downloadIsDisabled: Bool { visibleArea == nil || hasNoInternetConnection ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The result of trying to load the map.
+***REMOVED***@State private var loadResult: Result<Void, Error>?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if there is no internet connection
+***REMOVED***private var hasNoInternetConnection: Bool {
+***REMOVED******REMOVED***return switch loadResult {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED***case .failure(let failure):
+***REMOVED******REMOVED******REMOVED***failure.isNoInternetConnectionError
+***REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED***MapViewReader { mapViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Pan and zoom to define the area")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedMapRect: $selectedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch loadResult {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadedView
+***REMOVED******REMOVED******REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***failedToLoadView
+***REMOVED******REMOVED******REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task { await loadMap() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select Area")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the map and sets the result.
+***REMOVED***private func loadMap() async {
+***REMOVED******REMOVED******REMOVED*** First set to `nil` so progress indicator can show during load.
+***REMOVED******REMOVED***loadResult = nil
+***REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var loadedView: some View {
+***REMOVED******REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Pan and zoom to define the area")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedMapRect: $selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -110,6 +149,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = $0
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -120,6 +160,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.pickerStyle(.navigationLink)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 6)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -151,6 +192,32 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var failedToLoadView: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if hasNoInternetConnection {
+***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"No Internet Connection",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "A map area cannot be downloaded at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Online Map Failed to Load",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "A map area cannot be downloaded at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadMap() ***REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Try Again")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 
