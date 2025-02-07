@@ -60,20 +60,17 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: handlesRect.width, height: handlesRect.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(handlesRect.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
