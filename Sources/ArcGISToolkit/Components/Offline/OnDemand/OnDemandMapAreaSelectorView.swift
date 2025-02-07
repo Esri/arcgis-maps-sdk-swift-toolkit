@@ -60,20 +60,17 @@ struct OnDemandMapAreaSelectorView: View {
                             Rectangle()
                                 .frame(width: selectedRect.width, height: selectedRect.height)
                                 .position(selectedRect.center)
-                            
                         }
+                    
                     RoundedCorners(cornerRadius: cordnerRadius)
                         .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
                         .frame(width: handlesRect.width, height: handlesRect.height)
                         .position(handlesRect.center)
                     
-                    ZStack {
-                        RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
-                            .stroke(.white, lineWidth: 4)
-                        
-                    }
-                    .frame(width: selectedRect.width, height: selectedRect.height)
-                    .position(selectedRect.center)
+                    RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+                        .stroke(.white, lineWidth: 4)
+                        .frame(width: selectedRect.width, height: selectedRect.height)
+                        .position(selectedRect.center)
                 }
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
