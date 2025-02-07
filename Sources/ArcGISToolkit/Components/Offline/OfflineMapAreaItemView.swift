@@ -15,17 +15,34 @@
 ***REMOVED***
 
 @MainActor
-struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
+private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingContent: View>: View {
+***REMOVED******REMOVED***/ Creates an `OfflineMapAreaItemView`.
+***REMOVED***init(
+***REMOVED******REMOVED***model: Model,
+***REMOVED******REMOVED***isSelected: Bool,
+***REMOVED******REMOVED***@ViewBuilder trailingContent: @escaping () -> TrailingContent)
+***REMOVED***{
+***REMOVED******REMOVED***self.model = model
+***REMOVED******REMOVED***self.isSelected = isSelected
+***REMOVED******REMOVED***self.trailingContent = trailingContent
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if the map is currently selected.
 ***REMOVED***let isSelected: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The content to display in the card.
+***REMOVED***let trailingContent: () -> TrailingContent
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail image of the map area.
 ***REMOVED***@State private var thumbnailImage: UIImage?
 ***REMOVED***
+***REMOVED******REMOVED***/ The size of the thumbnail.
 ***REMOVED***private let thumbnailSize: CGFloat = 64
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -37,7 +54,7 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***trailingButton
+***REMOVED******REMOVED******REMOVED***trailingContent()
 ***REMOVED***
 ***REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED***.onTapGesture {
@@ -49,7 +66,6 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task { thumbnailImage = await model.thumbnailImage ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.task { await model.load() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
@@ -71,97 +87,26 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var titleView: some View {
 ***REMOVED******REMOVED***Text(model.title)
-***REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED***.font(.callout)
+***REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var descriptionView: some View {
-***REMOVED******REMOVED***if !model.description.isEmpty {
+***REMOVED******REMOVED***if !model.listItemDescription.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(model.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Text("No description available.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var trailingButton: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Download map area.
-***REMOVED******REMOVED******REMOVED***model.startDownload()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
-***REMOVED******REMOVED***.buttonStyle(.borderless)
-***REMOVED******REMOVED***.disabled(!model.allowsDownload)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch downloadState {
-***REMOVED******REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(isSelected)
-***REMOVED******REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED******REMOVED***if let job = model.job {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .notDownloaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var statusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***Text("Placeholder")
-***REMOVED******REMOVED******REMOVED******REMOVED***switch model.status {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .packaging:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Ready to download")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .packageFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging failed")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloading")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Download failed")
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if !model.statusSystemImage.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: model.statusSystemImage)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text(model.statusText)
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
@@ -169,22 +114,34 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
 ***REMOVED***
 
 @MainActor
-protocol OfflineMapAreaItem: ObservableObject, OfflineMapAreaMetadata {
-***REMOVED******REMOVED***var statusText: String { get ***REMOVED***
-***REMOVED******REMOVED***var statusSystemImage: String { get ***REMOVED***
+protocol OfflineMapAreaListItem: ObservableObject, OfflineMapAreaMetadata {
+***REMOVED***var listItemDescription: String { get ***REMOVED***
+***REMOVED***var statusText: String { get ***REMOVED***
+***REMOVED***var statusSystemImage: String { get ***REMOVED***
 ***REMOVED***
 
 #Preview {
-***REMOVED***OfflineMapAreaItemView(model: MockMetadata(), isSelected: false)
+***REMOVED***OfflineMapAreaItemView(model: MockMetadata(), isSelected: false) {
+***REMOVED******REMOVED***Button {***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED***.buttonStyle(.borderless)
+***REMOVED***
 ***REMOVED***
 
-private class MockMetadata: OfflineMapAreaItem {
+private class MockMetadata: OfflineMapAreaListItem {
 ***REMOVED***var title: String { "Redlands" ***REMOVED***
 ***REMOVED***var thumbnailImage: UIImage? { nil ***REMOVED***
+***REMOVED***var listItemDescription: String { "123 MB" ***REMOVED***
 ***REMOVED***var description: String { "" ***REMOVED***
 ***REMOVED***var isDownloaded: Bool { true ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { true ***REMOVED***
 ***REMOVED***var directorySize: Int { 1_000_000_000 ***REMOVED***
+***REMOVED***var statusText: String { "Downloaded" ***REMOVED***
+***REMOVED***var statusSystemImage: String { "exclamationmark.circle" ***REMOVED***
 ***REMOVED***
 ***REMOVED***func removeDownloadedArea() {***REMOVED***
 ***REMOVED***func startDownload() {***REMOVED***
