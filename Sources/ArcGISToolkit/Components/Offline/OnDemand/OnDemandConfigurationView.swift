@@ -35,11 +35,20 @@ struct OnDemandConfigurationView: View {
     /// The visible area of the map.
     @State private var visibleArea: Envelope?
     
+    /// The selected map area.
+    @State private var selectedRect: CGRect = .zero
+    
+    /// The extent of the selected map area.
+    @State private var selectedExtent: Envelope?
+    
+    /// A Boolean value indicating that the map is ready.
+    @State private var mapIsReady = false
+    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating if the download button is disabled.
-    private var downloadIsDisabled: Bool { visibleArea == nil || hasNoInternetConnection }
+    private var downloadIsDisabled: Bool { selectedExtent == nil || hasNoInternetConnection }
     
     /// The result of trying to load the map.
     @State private var loadResult: Result<Void, Error>?
@@ -108,6 +117,15 @@ struct OnDemandConfigurationView: View {
                         .frame(maxWidth: .infinity)
                     Divider()
                     mapView
+                        .overlay {
+                            if mapIsReady {
+                                // Don't add the selector view until the map is ready.
+                                OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
+                            }
+                        }
+                        .onChange(of: selectedRect) { _ in
+                            selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                        }
                 }
             }
             .safeAreaInset(edge: .bottom) {
@@ -122,7 +140,7 @@ struct OnDemandConfigurationView: View {
             .magnifierDisabled(true)
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onVisibleAreaChanged { visibleArea = $0.extent }
+            .onVisibleAreaChanged { _ in mapIsReady = true }
             // Prevent view from dragging when panning on map view.
             .highPriorityGesture(DragGesture())
             .interactiveDismissDisabled()
@@ -155,14 +173,16 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let visibleArea else { return }
+                        guard let selectedExtent else { return }
                         Task {
-                            let thumbnail = try? await mapView.exportImage()
+                            let image = try? await mapView.exportImage()
+                            let thumbnail = image?.crop(to: selectedRect)
+                            
                             let configuration = OnDemandMapAreaConfiguration(
                                 title: title,
                                 minScale: 0,
                                 maxScale: maxScale.scale,
-                                areaOfInterest: visibleArea,
+                                areaOfInterest: selectedExtent,
                                 thumbnail: thumbnail
                             )
                             onCompleteAction(configuration)
@@ -294,5 +314,28 @@ private struct BottomCard<Content: View, Background: ShapeStyle>: View {
                 .background(background)
         }
         .ignoresSafeArea(.container, edges: .horizontal)
+    }
+}
+
+private extension UIImage {
+    /// Crops a UIImage to a certain CGRect of the screen's coordinates.
+    /// - Parameter rect: A CGRect in screen coordinates.
+    /// - Returns: The cropped image.
+    @MainActor
+    func crop(to rect: CGRect) -> UIImage? {
+        let scale = UIScreen.main.scale
+        
+        let scaledRect = CGRect(
+            x: rect.origin.x * scale,
+            y: rect.origin.y * scale,
+            width: rect.size.width * scale,
+            height: rect.size.height * scale
+        )
+        
+        guard let cgImage, let croppedImage = cgImage.cropping(to: scaledRect) else {
+            return nil
+        }
+        
+        return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
     }
 }
