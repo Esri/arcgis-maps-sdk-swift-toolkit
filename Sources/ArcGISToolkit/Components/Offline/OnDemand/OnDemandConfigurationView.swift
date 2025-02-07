@@ -187,7 +187,7 @@ struct OnDemandConfigurationView: View {
                     }
                     .controlSize(.large)
                     .buttonStyle(.borderedProminent)
-                    .disabled(selectedExtent == nil)
+                    .disabled(downloadIsDisabled)
                 }
             }
             .padding()
