@@ -114,10 +114,17 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED***width: geometry.size.width - safeAreaInsets.trailing - safeAreaInsets.leading,
 ***REMOVED******REMOVED******REMOVED***height: geometry.size.height - safeAreaInsets.bottom - safeAreaInsets.top
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***maxRect = frame.insetBy(dx: 50, dy: 50)
-***REMOVED******REMOVED******REMOVED*** TODO: this causes everything to get reset when insets change,
-***REMOVED******REMOVED******REMOVED*** which is probably not what we want to do. We probably want to
-***REMOVED******REMOVED******REMOVED*** do an intersection.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Use default insets of 50 unless we cannot because of the size
+***REMOVED******REMOVED******REMOVED*** of the frame being too small.
+***REMOVED******REMOVED***var defaultInsets: CGFloat = 50
+***REMOVED******REMOVED***if frame.width < defaultInsets || frame.height < defaultInsets {
+***REMOVED******REMOVED******REMOVED***defaultInsets = min(frame.width * 0.1, frame.height * 0.1)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***maxRect = frame.insetBy(dx: defaultInsets, dy: defaultInsets)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** NOTE: This causes everything to get reset when insets change.
 ***REMOVED******REMOVED***selectedRect = maxRect
 ***REMOVED******REMOVED***updateHandles()
 ***REMOVED***
@@ -280,6 +287,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 
 private extension View {
+***REMOVED******REMOVED***/ A reverse mask overlay.
 ***REMOVED***func reverseMask<Mask: View>(
 ***REMOVED******REMOVED***alignment: Alignment = .center,
 ***REMOVED******REMOVED***@ViewBuilder _ mask: () -> Mask
@@ -295,6 +303,7 @@ private extension View {
 ***REMOVED***
 
 private extension CGRect {
+***REMOVED******REMOVED***/ The center point of the rectangle.
 ***REMOVED***var center: CGPoint {
 ***REMOVED******REMOVED***CGPoint(x: midX, y: midY)
 ***REMOVED***
