@@ -22,9 +22,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ A Binding to the CGRect of the selected area.
 ***REMOVED***@Binding var selectedRect: CGRect
 ***REMOVED***
-***REMOVED******REMOVED***/ The inset rectangle for the area selector view.
-***REMOVED***@State private var insetRect: CGRect = .zero
-***REMOVED***
 ***REMOVED******REMOVED***/ The top left corner point of the area selector view.
 ***REMOVED***@State private var topLeft: CGPoint = .zero
 ***REMOVED***
@@ -39,6 +36,11 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The safe area insets of the view.
 ***REMOVED***@State private var safeAreaInsets = EdgeInsets()
+***REMOVED***
+***REMOVED******REMOVED***/ The rectangle for the area selector view handles.
+***REMOVED***private var handlesRect: CGRect {
+***REMOVED******REMOVED***selectedRect.insetBy(dx: -2, dy: -2)
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
 ***REMOVED***private let cordnerRadius: CGFloat = 16
@@ -62,8 +64,8 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: insetRect.width, height: insetRect.height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(insetRect.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: handlesRect.width, height: handlesRect.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(handlesRect.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
@@ -106,8 +108,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dy: 50
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedRect = maxRect
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***insetRect = selectedRect.insetBy(dx: -2, dy: -2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHandles()
 ***REMOVED******REMOVED***
@@ -162,8 +162,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectedRect = corrected
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***insetRect = selectedRect.insetBy(dx: -2, dy: -2)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now update handles for new bounding rect.
 ***REMOVED******REMOVED***updateHandles()
