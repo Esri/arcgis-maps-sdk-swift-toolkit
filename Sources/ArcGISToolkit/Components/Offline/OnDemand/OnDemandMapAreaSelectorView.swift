@@ -19,11 +19,8 @@ struct OnDemandMapAreaSelectorView: View {
     /// The maximum size of the area selector view.
     @State private var maxRect: CGRect = .zero
     
-    /// A Binding to the CGRect of the selected map area.
-    @Binding var selectedMapRect: CGRect
-    
-    /// The bounding rectangle for the area selector view.
-    @State private var boundingRect: CGRect = .zero
+    /// A Binding to the CGRect of the selected area.
+    @Binding var selectedRect: CGRect
     
     /// The inset rectangle for the area selector view.
     @State private var insetRect: CGRect = .zero
@@ -46,8 +43,8 @@ struct OnDemandMapAreaSelectorView: View {
     /// The corner radius of the area selector view.
     private let cordnerRadius: CGFloat = 16
     
-    /// The drag point for a drag gesture.
-    private enum DragPoint {
+    /// The location for a handle that resizes the selector view.
+    private enum HandleLocation {
         case topLeft, topRight, bottomLeft, bottomRight
     }
     
@@ -59,8 +56,8 @@ struct OnDemandMapAreaSelectorView: View {
                         .fill(.black.opacity(0.10))
                         .reverseMask {
                             Rectangle()
-                                .frame(width: boundingRect.width, height: boundingRect.height)
-                                .position(boundingRect.center)
+                                .frame(width: selectedRect.width, height: selectedRect.height)
+                                .position(selectedRect.center)
                             
                         }
                     RoundedCorners(cornerRadius: cordnerRadius)
@@ -73,19 +70,11 @@ struct OnDemandMapAreaSelectorView: View {
                             .stroke(.white, lineWidth: 4)
                         
                     }
-                    .frame(width: boundingRect.width, height: boundingRect.height)
-                    .position(boundingRect.center)
+                    .frame(width: selectedRect.width, height: selectedRect.height)
+                    .position(selectedRect.center)
                 }
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
-                .onAppear {
-                    boundingRect = maxRect
-                    insetRect = boundingRect.insetBy(dx: -2, dy: -2)
-                    updateHandles()
-                }
-                .onChange(of: boundingRect) {
-                    selectedMapRect = $0
-                }
                 
                 Handle(position: topLeft) {
                     resize(for: .topLeft, location: $0)
@@ -113,12 +102,12 @@ struct OnDemandMapAreaSelectorView: View {
                 
                 maxRect = frame
                     .insetBy(
-                        dx: frame.width * 0.1,
-                        dy: frame.height * 0.1
+                        dx: 50,
+                        dy: 50
                     )
-                boundingRect = maxRect
+                selectedRect = maxRect
                 
-                insetRect = boundingRect.insetBy(dx: -2, dy: -2)
+                insetRect = selectedRect.insetBy(dx: -2, dy: -2)
                 
                 updateHandles()
             }
@@ -131,36 +120,36 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// Resizes the area selectpor view.
     /// - Parameters:
-    ///   - handle: The drag point handle.
+    ///   - handle: The handle location.
     ///   - location: The location of the drag gesture.
-    private func resize(for handle: DragPoint, location: CGPoint) {
+    private func resize(for handle: HandleLocation, location: CGPoint) {
         // Resize the rect.
         let rectangle: CGRect
         
         switch handle {
         case .topLeft:
             let minX = location.x
-            let maxX = boundingRect.maxX
+            let maxX = selectedRect.maxX
             let minY = location.y
-            let maxY = boundingRect.maxY
+            let maxY = selectedRect.maxY
             rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
         case .topRight:
-            let minX = boundingRect.minX
+            let minX = selectedRect.minX
             let maxX = location.x
             let minY = location.y
-            let maxY = boundingRect.maxY
+            let maxY = selectedRect.maxY
             rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
         case .bottomLeft:
             let minX = location.x
-            let maxX = boundingRect.maxX
-            let minY = boundingRect.minY
+            let maxX = selectedRect.maxX
+            let minY = selectedRect.minY
             let maxY = location.y
             rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
             break
         case .bottomRight:
-            let minX = boundingRect.minX
+            let minX = selectedRect.minX
             let maxX = location.x
-            let minY = boundingRect.minY
+            let minY = selectedRect.minY
             let maxY = location.y
             rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
             break
@@ -172,18 +161,18 @@ struct OnDemandMapAreaSelectorView: View {
         // Keep rectangle outside the minimum rect.
         corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
         
-        boundingRect = corrected
+        selectedRect = corrected
         
-        insetRect = boundingRect.insetBy(dx: -2, dy: -2)
+        insetRect = selectedRect.insetBy(dx: -2, dy: -2)
         
         // Now update handles for new bounding rect.
         updateHandles()
     }
     
     /// Calculates the minimum rect size for a drag point handle using the adjacent handle position.
-    /// - Parameter handle: The drag point handle.
+    /// - Parameter handle: The handle location.
     /// - Returns: The minimum rect for a handle.
-    private func minimumRect(forHandle handle: DragPoint) -> CGRect {
+    private func minimumRect(forHandle handle: HandleLocation) -> CGRect {
         let maxWidth: CGFloat = 50
         let maxHeight: CGFloat  = 50
         
@@ -191,29 +180,29 @@ struct OnDemandMapAreaSelectorView: View {
         case .topLeft:
             // Anchor is opposite corner.
             return CGRect(
-                x: boundingRect.maxX - maxWidth,
-                y: boundingRect.maxY - maxHeight,
+                x: selectedRect.maxX - maxWidth,
+                y: selectedRect.maxY - maxHeight,
                 width: maxWidth,
                 height: maxHeight
             )
         case .topRight:
             return CGRect(
-                x: boundingRect.minX,
-                y: boundingRect.maxY - maxHeight,
+                x: selectedRect.minX,
+                y: selectedRect.maxY - maxHeight,
                 width: maxWidth,
                 height: maxHeight
             )
         case .bottomLeft:
             return CGRect(
-                x: boundingRect.maxX - maxWidth,
-                y: boundingRect.minY,
+                x: selectedRect.maxX - maxWidth,
+                y: selectedRect.minY,
                 width: maxWidth,
                 height: maxHeight
             )
         case .bottomRight:
             return CGRect(
-                x: boundingRect.minX,
-                y: boundingRect.minY,
+                x: selectedRect.minX,
+                y: selectedRect.minY,
                 width: maxWidth,
                 height: maxHeight
             )
@@ -222,10 +211,10 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// Updates the handle locations using the boudning rect.
     private func updateHandles() {
-        topRight = CGPoint(x: boundingRect.maxX, y: boundingRect.minY)
-        topLeft = CGPoint(x: boundingRect.minX, y: boundingRect.minY)
-        bottomLeft = CGPoint(x: boundingRect.minX, y: boundingRect.maxY)
-        bottomRight = CGPoint(x: boundingRect.maxX, y: boundingRect.maxY)
+        topRight = CGPoint(x: selectedRect.maxX, y: selectedRect.minY)
+        topLeft = CGPoint(x: selectedRect.minX, y: selectedRect.minY)
+        bottomLeft = CGPoint(x: selectedRect.minX, y: selectedRect.maxY)
+        bottomRight = CGPoint(x: selectedRect.maxX, y: selectedRect.maxY)
     }
     
     /// The handle view for the map area selector.
