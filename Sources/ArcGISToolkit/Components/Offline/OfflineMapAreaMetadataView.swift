@@ -30,76 +30,75 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     
     var body: some View {
         Form {
-            Section {
-                if let image = thumbnailImage {
-                    HStack {
-                        Spacer()
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxHeight: 200)
-                            .clipShape(.rect(cornerRadius: 10))
-                            .padding(.vertical, 10)
-                        Spacer()
-                    }
-                }
-                VStack(alignment: .leading) {
-                    Text("Name")
-                        .font(.caption)
+            Section { header }
+            
+            if !model.description.isEmpty {
+                Section("Description") {
+                    Text(model.description)
                         .foregroundStyle(.secondary)
-                    Text(model.title)
-                        .font(.subheadline)
                 }
-                if !model.description.isEmpty {
-                    VStack(alignment: .leading) {
-                        Text("Description")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(model.description)
-                            .font(.subheadline)
-                    }
-                }
-                if model.isDownloaded {
-                    VStack(alignment: .leading) {
-                        Text("Size")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+            }
+            
+            if model.isDownloaded {
+                Section {
+                    LabeledContent("Size") {
                         Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-                            .font(.subheadline)
                     }
                 }
             }
+            
             if model.isDownloaded && !isSelected {
                 Section {
-                    HStack {
-                        Image(systemName: "trash.circle.fill")
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.red, .gray.opacity(0.1))
-                            .font(.title)
-                        Button("Remove Download", role: .destructive) {
-                            dismiss()
-                            model.removeDownloadedArea()
-                        }
+                    Button("Remove Download", role: .destructive) {
+                        dismiss()
+                        model.removeDownloadedArea()
                     }
                 }
             }
+            
             if !model.isDownloaded {
-                Button("Download", systemImage: "arrow.down.circle") {
-                    dismiss()
-                    model.startDownload()
+                Section {
+                    Button("Download", systemImage: "arrow.down.circle") {
+                        dismiss()
+                        model.startDownload()
+                    }
+                    .disabled(!model.allowsDownload)
                 }
-                .foregroundStyle(Color.accentColor)
-                .disabled(!model.allowsDownload)
             }
         }
         .task { thumbnailImage = await model.thumbnailImage }
-        .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") { dismiss() }
             }
         }
+    }
+    
+    @ViewBuilder private var header: some View {
+        VStack {
+            if let image = thumbnailImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 100)
+                    .clipShape(.rect(cornerRadius: 10))
+            } else {
+                Image(systemName: "map")
+                    .imageScale(.large)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 100, height: 100)
+                    .background(Color(uiColor: UIColor.systemGroupedBackground))
+                    .clipShape(.rect(cornerRadius: 10))
+            }
+            
+            Text(model.title)
+                .lineLimit(1)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+        }
+        .listRowBackground(EmptyView())
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -132,22 +131,10 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
             return preplannedMapArea.thumbnail?.image
         }
     }
-    
-    var title: String {
-        preplannedMapArea.title
-    }
-    
-    var description: String {
-        preplannedMapArea.description
-    }
-    
-    var isDownloaded: Bool {
-        status.isDownloaded
-    }
-    
-    var allowsDownload: Bool {
-        status.allowsDownload
-    }
+    var title: String { preplannedMapArea.title }
+    var description: String { preplannedMapArea.description }
+    var isDownloaded: Bool { status.isDownloaded }
+    var allowsDownload: Bool { status.allowsDownload }
     
     func startDownload() {
         Task { await downloadPreplannedMapArea() }
@@ -156,12 +143,24 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
 
 extension OnDemandMapModel: OfflineMapAreaMetadata {
     var description: String { "" }
-    
     var isDownloaded: Bool { status.isDownloaded }
-    
     var thumbnailImage: UIImage? { thumbnail }
-        
     var allowsDownload: Bool { false }
-    
     func startDownload() { fatalError() }
+}
+
+#Preview {
+    OfflineMapAreaMetadataView(model: MockMetadata(), isSelected: false)
+}
+
+private class MockMetadata: OfflineMapAreaMetadata {
+    var title: String { "Redlands" }
+    var thumbnailImage: UIImage? { nil }
+    var description: String { "" }
+    var isDownloaded: Bool { true }
+    var allowsDownload: Bool { true }
+    var directorySize: Int { 1_000_000_000 }
+    
+    func removeDownloadedArea() {}
+    func startDownload() {}
 }

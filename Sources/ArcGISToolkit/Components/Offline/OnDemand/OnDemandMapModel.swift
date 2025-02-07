@@ -172,7 +172,6 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
             directorySize = 0
-            thumbnail = nil
             map = nil
         }
     }
@@ -223,7 +222,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     
     /// Removes the downloaded map area from disk and resets the status.
     func removeDownloadedArea() {
-        try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+        try? FileManager.default.removeItem(at: directory)
         status = .initialized
         
         // Call the closure for the remove download action.
@@ -244,6 +243,16 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 await loadAndUpdateMobileMapPackage(mmpk: mmpk)
             }
             self.job = nil
+        }
+    }
+    
+    /// Cancels the in-progress job.
+    func cancelJob() {
+        guard let job else { return }
+        Task {
+            await job.cancel()
+            // Cleanup any files that were laid down.
+            try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         }
     }
     
@@ -300,12 +309,21 @@ extension OnDemandMapModel {
                 // If we already have one (ie. a job is already running and the
                 // directory exists), then we continue.
                 guard !onDemandMapModels.contains(where: { $0.areaID == mapAreaID }) else { continue }
-                guard let mapArea = await OnDemandMapModel.init(
+                if let mapArea = await OnDemandMapModel.init(
                     areaID: mapAreaID,
                     portalItemID: portalItemID,
                     onRemoveDownload: onRemoveDownload
-                ) else { continue }
-                onDemandMapModels.append(mapArea)
+                ) {
+                    // If we could create the model, then add it.
+                    onDemandMapModels.append(mapArea)
+                } else {
+                    // If we couldn't create the model, it was a case where the job was
+                    // cancelled and the user didn't remove the job from the list, in
+                    // that case we cleanup the directory.
+                    try? FileManager.default.removeItem(
+                        at: URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: mapAreaID)
+                    )
+                }
             }
         }
         
