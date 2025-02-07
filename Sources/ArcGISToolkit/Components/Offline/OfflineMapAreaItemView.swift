@@ -170,6 +170,8 @@ struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
 
 @MainActor
 protocol OfflineMapAreaItem: ObservableObject, OfflineMapAreaMetadata {
+//    var statusText: String { get }
+//    var statusSystemImage: String { get }
 }
 
 #Preview {
