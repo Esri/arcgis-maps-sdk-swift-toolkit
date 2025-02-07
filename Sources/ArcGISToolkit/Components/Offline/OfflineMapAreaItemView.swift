@@ -13,10 +13,8 @@
 // limitations under the License.
 
 import SwiftUI
-import ArcGIS
 
 @MainActor
-@preconcurrency
 struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
     /// The view model for the item view.
     @ObservedObject var model: Model
