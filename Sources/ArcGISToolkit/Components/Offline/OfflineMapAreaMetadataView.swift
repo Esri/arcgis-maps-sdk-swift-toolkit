@@ -39,14 +39,6 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 }
             }
             
-            if model.isDownloaded {
-                Section {
-                    LabeledContent("Size") {
-                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-                    }
-                }
-            }
-            
             if model.isDownloaded && !isSelected {
                 Section {
                     Button("Remove Download", role: .destructive) {
@@ -58,7 +50,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             
             if !model.isDownloaded {
                 Section {
-                    Button("Download", systemImage: "arrow.down.circle") {
+                    Button("Download Map") {
                         dismiss()
                         model.startDownload()
                     }
@@ -77,25 +69,40 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     
     @ViewBuilder private var header: some View {
         VStack {
-            if let image = thumbnailImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 100)
-                    .clipShape(.rect(cornerRadius: 10))
-            } else {
-                Image(systemName: "map")
-                    .imageScale(.large)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 100, height: 100)
-                    .background(Color(uiColor: UIColor.systemGroupedBackground))
-                    .clipShape(.rect(cornerRadius: 10))
+            Group {
+                if let image = thumbnailImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 200, height: 200)
+                } else {
+                    Image(systemName: "map")
+                        .imageScale(.large)
+                        .foregroundStyle(.secondary)
+                        .padding()
+                        .background(Color(uiColor: UIColor.systemGroupedBackground))
+                }
             }
+            .clipShape(.rect(cornerRadius: 10, style: .continuous))
+            .shadow(radius: 5)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(Color(uiColor: UIColor.systemBackground), lineWidth: 2)
+            }
+            .padding()
             
             Text(model.title)
                 .lineLimit(1)
-                .font(.largeTitle)
+                .font(.title2)
                 .fontWeight(.bold)
+            
+//            if model.isDownloaded {
+//                Section {
+//                    LabeledContent("Size") {
+//                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+//                    }
+//                }
+//            }
         }
         .listRowBackground(EmptyView())
         .frame(maxWidth: .infinity)
