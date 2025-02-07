@@ -75,7 +75,6 @@ struct AttachmentsFeatureElementView: View {
                     .task {
                         attachmentModelsState = .initializing
                         let attachments = (try? await featureElement.featureAttachments) ?? []
-                        
                         let attachmentModels = attachments
                             .reversed()
                             .map {
