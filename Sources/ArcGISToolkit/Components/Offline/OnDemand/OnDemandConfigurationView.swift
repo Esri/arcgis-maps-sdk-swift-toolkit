@@ -47,43 +47,82 @@ struct OnDemandConfigurationView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss
     
+    /// A Boolean value indicating if the download button is disabled.
+    private var downloadIsDisabled: Bool { visibleArea == nil || hasNoInternetConnection }
+    
+    /// The result of trying to load the map.
+    @State private var loadResult: Result<Void, Error>?
+    
+    /// A Boolean value indicating if there is no internet connection
+    private var hasNoInternetConnection: Bool {
+        return switch loadResult {
+        case .success:
+            false
+        case .failure(let failure):
+            failure.isNoInternetConnectionError
+        case nil:
+            false
+        }
+    }
+    
     var body: some View {
         NavigationStack {
-            MapViewReader { mapViewProxy in
-                VStack {
-                    VStack(spacing: 0) {
-                        Divider()
-                        Text("Pan and zoom to define the area")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .padding(8)
-                            .frame(maxWidth: .infinity)
-                        Divider()
-                        mapView
-                            .overlay {
-                                if mapIsReady {
-                                    // Don't add the selector view until the map is ready.
-                                    OnDemandMapAreaSelectorView(selectedMapRect: $selectedRect)
-                                }
-                            }
-                            .onChange(of: selectedRect) { _ in
-                                selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-                            }
-                    }
+            VStack {
+                switch loadResult {
+                case .success:
+                    loadedView
+                case .failure:
+                    failedToLoadView
+                case nil:
+                    ProgressView()
                 }
-                .safeAreaInset(edge: .bottom) {
-                    bottomPane(mapView: mapViewProxy)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
                     }
                 }
             }
+            .task { await loadMap() }
             .navigationBarTitle("Select Area")
             .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
+    /// Loads the map and sets the result.
+    private func loadMap() async {
+        // First set to `nil` so progress indicator can show during load.
+        loadResult = nil
+        loadResult = await Result { try await map.retryLoad() }
+    }
+    
+    @ViewBuilder private var loadedView: some View {
+        MapViewReader { mapViewProxy in
+            VStack {
+                VStack(spacing: 0) {
+                    Divider()
+                    Text("Pan and zoom to define the area")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .frame(maxWidth: .infinity)
+                    Divider()
+                    mapView
+                        .overlay {
+                            if mapIsReady {
+                                // Don't add the selector view until the map is ready.
+                                OnDemandMapAreaSelectorView(selectedMapRect: $selectedRect)
+                            }
+                        }
+                        .onChange(of: selectedRect) { _ in
+                            selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                        }
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                bottomPane(mapView: mapViewProxy)
+            }
         }
     }
     
@@ -110,6 +149,7 @@ struct OnDemandConfigurationView: View {
                     NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
                         title = $0
                     }
+                    .disabled(downloadIsDisabled)
                 }
                 
                 HStack {
@@ -120,6 +160,7 @@ struct OnDemandConfigurationView: View {
                     }
                     .font(.footnote)
                     .pickerStyle(.navigationLink)
+                    .disabled(downloadIsDisabled)
                 }
                 .padding(.vertical, 6)
                 
@@ -151,6 +192,32 @@ struct OnDemandConfigurationView: View {
             }
             .padding()
         }
+    }
+    
+    @ViewBuilder private var failedToLoadView: some View {
+        VStack {
+            if hasNoInternetConnection {
+                Backported.ContentUnavailableView(
+                    "No Internet Connection",
+                    systemImage: "wifi.exclamationmark",
+                    description: "A map area cannot be downloaded at this time."
+                )
+            } else {
+                Backported.ContentUnavailableView(
+                    "Online Map Failed to Load",
+                    systemImage: "exclamationmark.triangle",
+                    description: "A map area cannot be downloaded at this time."
+                )
+            }
+            Button {
+                Task { await loadMap() }
+            } label: {
+                Text("Try Again")
+                    .buttonStyle(.borderless)
+            }
+            .padding()
+        }
+        .padding()
     }
 }
 
