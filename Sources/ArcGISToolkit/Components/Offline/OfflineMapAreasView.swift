@@ -177,7 +177,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***@ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
 ***REMOVED******REMOVED******REMOVED***"No Map Areas",
-***REMOVED******REMOVED******REMOVED***systemImage: "square.and.arrow.down",
+***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
 ***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map. Pull to refresh."
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -185,7 +185,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***@ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
 ***REMOVED******REMOVED******REMOVED***"No Map Areas",
-***REMOVED******REMOVED******REMOVED***systemImage: "square.and.arrow.down",
+***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
 ***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map. Tap the button below to get started."
 ***REMOVED******REMOVED***)
 ***REMOVED***

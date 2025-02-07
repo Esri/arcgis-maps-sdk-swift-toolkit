@@ -35,25 +35,23 @@ struct OnDemandListItemView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***if model.status.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
+***REMOVED******REMOVED******REMOVED******REMOVED***titleView
+***REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
+***REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***trailingButton
+***REMOVED***
+***REMOVED******REMOVED***.contentShape(.rect)
+***REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED***if model.status.isDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
@@ -67,34 +65,48 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(model.isDownloaded ? 1 : 0.5)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "map")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var titleView: some View {
 ***REMOVED******REMOVED***Text(model.title)
-***REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(model.isDownloaded ? .primary : .secondary)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var descriptionView: some View {
+***REMOVED******REMOVED***if model.isDownloaded {
+***REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var trailingButton: some View {
 ***REMOVED******REMOVED***switch model.status {
 ***REMOVED******REMOVED***case .downloading:
 ***REMOVED******REMOVED******REMOVED***if let job = model.job {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.cancelJob()
+***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await job.cancel() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CancelGaugeProgressStyle())
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
@@ -107,26 +119,22 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
 ***REMOVED******REMOVED******REMOVED***.disabled(isSelected)
 ***REMOVED******REMOVED***case .initialized:
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadOnDemandMapArea()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
+***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash")
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -157,5 +165,28 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A progress view style that shows a cancel square.
+struct CancelGaugeProgressStyle: ProgressViewStyle {
+***REMOVED***var strokeColor = Color.accentColor
+***REMOVED***var strokeWidth = 3.0
+
+***REMOVED***func makeBody(configuration: Configuration) -> some View {
+***REMOVED******REMOVED***let fractionCompleted = configuration.fractionCompleted ?? 0
+
+***REMOVED******REMOVED***return ZStack {
+***REMOVED******REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.quinary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+***REMOVED******REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.trim(from: 0, to: fractionCompleted)
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(-90))
+***REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 6, height: 6)
+***REMOVED***
+***REMOVED******REMOVED***.frame(width: 20, height: 20)
 ***REMOVED***
 ***REMOVED***

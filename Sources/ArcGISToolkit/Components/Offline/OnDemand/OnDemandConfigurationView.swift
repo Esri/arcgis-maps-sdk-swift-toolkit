@@ -83,9 +83,17 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the map and sets the result.
 ***REMOVED***private func loadMap() async {
-***REMOVED******REMOVED******REMOVED*** First set to `nil` so progress indicator can show during load.
-***REMOVED******REMOVED***loadResult = nil
-***REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
+***REMOVED******REMOVED***switch loadResult {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED*** First set to `nil` so progress indicator can show during load.
+***REMOVED******REMOVED******REMOVED***loadResult = nil
+***REMOVED******REMOVED******REMOVED***fallthrough
+***REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED***loadResult = nil
+***REMOVED******REMOVED******REMOVED***loadResult = await Result { try await map.retryLoad() ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var loadedView: some View {
@@ -128,7 +136,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NewTitleButton(title: title, isValidCheck: titleIsValidCheck) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RenameButton(title: title, isValidCheck: titleIsValidCheck) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = $0
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
@@ -140,11 +149,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.pickerStyle(.navigationLink)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 6)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -162,12 +169,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Download", systemImage: "square.and.arrow.down")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Download", systemImage: "arrow.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.large)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
@@ -202,7 +210,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 
 ***REMOVED***/ A View that allows renaming of a map area.
-private struct NewTitleButton: View {
+private struct RenameButton: View {
 ***REMOVED******REMOVED***/ The current title.
 ***REMOVED***let title: String
 ***REMOVED***
@@ -228,8 +236,11 @@ private struct NewTitleButton: View {
 ***REMOVED******REMOVED******REMOVED***proposedNewTitle = title
 ***REMOVED******REMOVED******REMOVED***alertIsShowing = true
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "pencil")
+***REMOVED******REMOVED******REMOVED***Text("Rename")
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED***.buttonBorderShape(.capsule)
+***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.alert("Enter a name", isPresented: $alertIsShowing) {
 ***REMOVED******REMOVED******REMOVED***TextField("Enter area name", text: $proposedNewTitle)
 ***REMOVED******REMOVED******REMOVED***Button("OK", action: submitNewTitle)

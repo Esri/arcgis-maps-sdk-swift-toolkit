@@ -53,11 +53,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***downloadButton
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***titleView
 ***REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
@@ -65,6 +61,8 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***trailingButton
 ***REMOVED***
 ***REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED***.onTapGesture {
@@ -75,9 +73,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***await model.load()
-***REMOVED***
+***REMOVED******REMOVED***.task { await model.load() ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
 ***REMOVED******REMOVED******REMOVED***previousDownloadState = downloadState
@@ -100,8 +96,8 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***image
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***placeholderImage
@@ -112,16 +108,31 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***Image(systemName: "map")
 ***REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
+***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var titleView: some View {
 ***REMOVED******REMOVED***Text(model.preplannedMapArea.title)
-***REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private var downloadButton: some View {
+***REMOVED***@ViewBuilder private var descriptionView: some View {
+***REMOVED******REMOVED***if !model.preplannedMapArea.description.isEmpty {
+***REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.description)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text("No description available.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var trailingButton: some View {
 ***REMOVED******REMOVED***switch downloadState {
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
@@ -132,7 +143,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
@@ -150,32 +160,19 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var descriptionView: some View {
-***REMOVED******REMOVED***if !model.preplannedMapArea.description.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.description)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Text("This area has no description.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private var openStatusView: some View {
-***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***Text("Currently open")
-***REMOVED***
-***REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED******REMOVED***Text("Currently open")
+***REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var statusView: some View {
