@@ -55,7 +55,7 @@ struct OnDemandMapAreaSelectorView: View {
             ZStack {
                 ZStack {
                     Rectangle()
-                        .fill(.black.opacity(0.10))
+                        .fill(.black.opacity(0.2))
                         .reverseMask {
                             Rectangle()
                                 .frame(width: selectedRect.width, height: selectedRect.height)
@@ -63,7 +63,7 @@ struct OnDemandMapAreaSelectorView: View {
                         }
                     
                     RoundedCorners(cornerRadius: cordnerRadius)
-                        .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 6, lineCap: .butt))
+                        .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                         .frame(width: handlesRect.width, height: handlesRect.height)
                         .position(handlesRect.center)
                     
