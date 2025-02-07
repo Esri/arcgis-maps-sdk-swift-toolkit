@@ -22,6 +22,9 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the initial element value was received.
+***REMOVED***@State private var didReceiveInitialValue = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
@@ -74,12 +77,13 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(isOn ? input.onValue.code : input.offValue.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***isOn.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isOn = newFormattedValue == input.onValue.name
+***REMOVED******REMOVED******REMOVED******REMOVED***if didReceiveInitialValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***didReceiveInitialValue = true
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
