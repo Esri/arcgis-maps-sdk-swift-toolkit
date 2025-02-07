@@ -17,23 +17,34 @@ import SwiftUI
 extension ProgressViewStyle where Self == GaugeProgressViewStyle {
     /// A progress view that visually indicates its progress with a gauge.
     static var gauge: Self { .init() }
+    
+    /// A progress view that visually indicates its progress with a gauge,
+    /// and also visually indicates cancel iconography.
+    static var cancelGauge: Self { .init(showsCancelIcon: true) }
 }
 
 /// A circular gauge progress view style.
 struct GaugeProgressViewStyle: ProgressViewStyle {
-    private var strokeStyle: StrokeStyle { .init(lineWidth: 3, lineCap: .round) }
-    
+    var strokeColor = Color.accentColor
+    var strokeWidth = 3.0
+    var showsCancelIcon = false
+
+    @ViewBuilder
     func makeBody(configuration: Configuration) -> some View {
-        if let fractionCompleted = configuration.fractionCompleted {
-            ZStack {
-                Circle()
-                    .stroke(Color(.systemGray5), style: strokeStyle)
-                Circle()
-                    .trim(from: 0, to: fractionCompleted)
-                    .stroke(.gray, style: strokeStyle)
-                    .rotationEffect(.degrees(-90))
+        ZStack {
+            Circle()
+                .stroke(.quinary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+            Circle()
+                .trim(from: 0, to: configuration.fractionCompleted ?? 0)
+                .stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+            if showsCancelIcon {
+                Rectangle()
+                    .fill(Color.accentColor)
+                    .frame(width: 6, height: 6)
             }
-            .fixedSize()
         }
+        .frame(width: 20, height: 20)
+        .padding(2)
     }
 }
