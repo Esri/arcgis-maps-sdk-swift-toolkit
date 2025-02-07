@@ -13,10 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 
 @MainActor
-@preconcurrency
 struct OfflineMapAreaItemView<Model: OfflineMapAreaItem>: View {
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model
