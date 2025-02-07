@@ -73,7 +73,6 @@ struct AttachmentsFeatureElementView: View {
                 ProgressView()
                     .padding()
                     .task {
-                        guard case .notInitialized = attachmentModelsState else { return }
                         attachmentModelsState = .initializing
                         let attachments = (try? await featureElement.featureAttachments) ?? []
                         
