@@ -48,7 +48,7 @@ struct OnDemandConfigurationView: View {
     @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating if the download button is disabled.
-    private var downloadIsDisabled: Bool { visibleArea == nil || hasNoInternetConnection }
+    private var downloadIsDisabled: Bool { selectedExtent == nil || hasNoInternetConnection }
     
     /// The result of trying to load the map.
     @State private var loadResult: Result<Void, Error>?
