@@ -41,46 +41,31 @@ struct OnDemandListItemView: View {
     @ViewBuilder private var trailingButton: some View {
         switch model.status {
         case .downloading:
-            if let job = model.job {
-                Button {
-                    model.cancelJob()
-                } label: {
-                    ProgressView(job.progress)
-                        .progressViewStyle(.cancelGauge)
-                }
-                // Have to apply a style or it won't be tappable
-                // because of the onTapGesture modifier in the parent view.
-                .buttonStyle(.plain)
-            }
+            OfflineJobProgressView(model: model)
         case .downloaded:
-            Button {
-                Task {
-                    if let map = model.map {
-                        selectedMap = map
-                        dismiss()
-                    }
-                }
-            } label: {
-                Text("Open")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.capsule)
-            .disabled(isSelected)
+            OpenOfflineMapAreaButton(
+                selectedMap: $selectedMap,
+                map: model.map,
+                isSelected: isSelected,
+                dismiss: dismiss
+            )
         case .initialized:
             EmptyView()
         case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
-            Button {
-                model.removeDownloadedArea()
-            } label: {
-                Image(systemName: "xmark.circle")
-                    .imageScale(.large)
-            }
-            // Have to apply a style or it won't be tappable
-            // because of the onTapGesture modifier in the parent view.
-            .buttonStyle(.borderless)
+            removeDownloadButton
         }
+    }
+    
+    @ViewBuilder private var removeDownloadButton: some View {
+        Button {
+            model.removeDownloadedArea()
+        } label: {
+            Image(systemName: "xmark.circle")
+                .imageScale(.large)
+        }
+        // Have to apply a style or it won't be tappable
+        // because of the onTapGesture modifier in the parent view.
+        .buttonStyle(.borderless)
     }
 }
 
@@ -89,6 +74,7 @@ extension OnDemandMapModel: OfflineMapAreaMetadata {
     var isDownloaded: Bool { status.isDownloaded }
     var thumbnailImage: UIImage? { thumbnail }
     var allowsDownload: Bool { false }
+    var dismissMetadataViewOnDelete: Bool { true }
     func startDownload() { fatalError() }
 }
 
@@ -127,4 +113,6 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
             "exclamationmark.circle"
         }
     }
+    
+    var jobProgress: Progress? { job?.progress }
 }

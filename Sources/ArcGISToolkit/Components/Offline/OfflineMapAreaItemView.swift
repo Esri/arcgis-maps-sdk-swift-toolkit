@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import SwiftUI
+import ArcGIS
 
 /// A view that shows information for an offline area for use in a List.
 @MainActor
@@ -125,6 +126,9 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
     var listItemDescription: String { get }
     var statusText: String { get }
     var statusSystemImage: String { get }
+    var jobProgress: Progress? { get }
+    
+    func cancelJob()
 }
 
 #Preview {
@@ -149,7 +153,77 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
     var directorySize: Int { 1_000_000_000 }
     var statusText: String { "Downloaded" }
     var statusSystemImage: String { "exclamationmark.circle" }
+    var jobProgress: Progress? { nil }
+    var dismissMetadataViewOnDelete: Bool { false }
     
     func removeDownloadedArea() {}
     func startDownload() {}
+    func cancelJob() {}
+}
+
+struct OpenOfflineMapAreaButton: View {
+    /// The currently selected map.
+    @Binding var selectedMap: Map?
+
+    /// The map to open.
+    let map: Map?
+    
+    /// Whether or not the map is open.
+    let isSelected: Bool
+    
+    /// The action to dismiss the view.
+    let dismiss: DismissAction
+    
+    var body: some View {
+        Button {
+            if let map {
+                selectedMap = map
+                dismiss()
+            }
+        } label: {
+            Text("Open")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.capsule)
+        .disabled(isSelected)
+    }
+}
+
+struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
+    /// The view model for the item view.
+    @ObservedObject var model: Model
+    
+    var body: some View {
+        Button {
+            model.startDownload()
+        } label: {
+            Image(systemName: "arrow.down.circle")
+                .imageScale(.large)
+        }
+        // Have to apply a style or it won't be tappable
+        // because of the onTapGesture modifier in the parent view.
+        .buttonStyle(.borderless)
+        .disabled(!model.allowsDownload)
+    }
+}
+
+struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
+    /// The view model for the item view.
+    @ObservedObject var model: Model
+    
+    var body: some View {
+        if let progress = model.jobProgress {
+            Button {
+                model.cancelJob()
+            } label: {
+                ProgressView(progress)
+                    .progressViewStyle(.cancelGauge)
+            }
+            // Have to apply a style or it won't be tappable
+            // because of the onTapGesture modifier in the parent view.
+            .buttonStyle(.plain)
+        }
+    }
 }
