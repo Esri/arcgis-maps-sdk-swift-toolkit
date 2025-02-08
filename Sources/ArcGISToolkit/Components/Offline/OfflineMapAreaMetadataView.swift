@@ -41,7 +41,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             
             if model.isDownloaded && !isSelected {
                 Section {
-                    Button("Remove Download", role: .destructive) {
+                    Button("Delete Map", role: .destructive) {
                         dismiss()
                         model.removeDownloadedArea()
                     }
