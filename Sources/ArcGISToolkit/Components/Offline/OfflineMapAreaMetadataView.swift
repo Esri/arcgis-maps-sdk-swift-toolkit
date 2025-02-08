@@ -42,7 +42,9 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED***if model.isDownloaded && !isSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete Map", role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.dismissMetadataViewOnDelete {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -120,6 +122,8 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***var allowsDownload: Bool { get ***REMOVED***
 ***REMOVED******REMOVED***/ The size of the area on disk.
 ***REMOVED***var directorySize: Int { get ***REMOVED***
+***REMOVED******REMOVED***/ Whether the metadata view should be dismissed when the map area is deleted.
+***REMOVED***var dismissMetadataViewOnDelete: Bool { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes the downloaded area.
 ***REMOVED***func removeDownloadedArea()
@@ -145,6 +149,7 @@ private class MockMetadata: OfflineMapAreaMetadata {
 ***REMOVED***var isDownloaded: Bool { true ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { true ***REMOVED***
 ***REMOVED***var directorySize: Int { 1_000_000_000 ***REMOVED***
+***REMOVED***var dismissMetadataViewOnDelete: Bool { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***func removeDownloadedArea() {***REMOVED***
 ***REMOVED***func startDownload() {***REMOVED***

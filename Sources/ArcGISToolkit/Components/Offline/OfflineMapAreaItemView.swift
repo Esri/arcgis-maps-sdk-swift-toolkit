@@ -13,6 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ A view that shows information for an offline area for use in a List.
 @MainActor
@@ -125,6 +126,9 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED***var listItemDescription: String { get ***REMOVED***
 ***REMOVED***var statusText: String { get ***REMOVED***
 ***REMOVED***var statusSystemImage: String { get ***REMOVED***
+***REMOVED***var jobProgress: Progress? { get ***REMOVED***
+***REMOVED***
+***REMOVED***func cancelJob()
 ***REMOVED***
 
 #Preview {
@@ -149,7 +153,77 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
 ***REMOVED***var directorySize: Int { 1_000_000_000 ***REMOVED***
 ***REMOVED***var statusText: String { "Downloaded" ***REMOVED***
 ***REMOVED***var statusSystemImage: String { "exclamationmark.circle" ***REMOVED***
+***REMOVED***var jobProgress: Progress? { nil ***REMOVED***
+***REMOVED***var dismissMetadataViewOnDelete: Bool { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***func removeDownloadedArea() {***REMOVED***
 ***REMOVED***func startDownload() {***REMOVED***
+***REMOVED***func cancelJob() {***REMOVED***
+***REMOVED***
+
+struct OpenOfflineMapAreaButton: View {
+***REMOVED******REMOVED***/ The currently selected map.
+***REMOVED***@Binding var selectedMap: Map?
+
+***REMOVED******REMOVED***/ The map to open.
+***REMOVED***let map: Map?
+***REMOVED***
+***REMOVED******REMOVED***/ Whether or not the map is open.
+***REMOVED***let isSelected: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The action to dismiss the view.
+***REMOVED***let dismiss: DismissAction
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***if let map {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text("Open")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED***.buttonBorderShape(.capsule)
+***REMOVED******REMOVED***.disabled(isSelected)
+***REMOVED***
+***REMOVED***
+
+struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
+***REMOVED******REMOVED***/ The view model for the item view.
+***REMOVED***@ObservedObject var model: Model
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***model.startDownload()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED***.buttonStyle(.borderless)
+***REMOVED******REMOVED***.disabled(!model.allowsDownload)
+***REMOVED***
+***REMOVED***
+
+struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
+***REMOVED******REMOVED***/ The view model for the item view.
+***REMOVED***@ObservedObject var model: Model
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***if let progress = model.jobProgress {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.cancelJob()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(progress)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.cancelGauge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED***
+***REMOVED***
 ***REMOVED***

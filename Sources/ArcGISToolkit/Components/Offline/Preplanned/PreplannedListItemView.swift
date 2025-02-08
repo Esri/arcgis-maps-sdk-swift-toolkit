@@ -47,44 +47,21 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var trailingButton: some View {
 ***REMOVED******REMOVED***switch model.status {
-***REMOVED******REMOVED***case .notLoaded, .loadFailure, .packaging, .packageFailure,
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloadFailure, .mmpkLoadFailure:
+***REMOVED******REMOVED***case .notLoaded, .loadFailure, .packaging, .packageFailure, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***case .loading:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
-***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
+***REMOVED******REMOVED***case .packaged, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***DownloadOfflineMapAreaButton(model: model)
 ***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***if let job = model.job {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***OfflineJobProgressView(model: model)
 ***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
-***REMOVED******REMOVED******REMOVED***.disabled(isSelected)
+***REMOVED******REMOVED******REMOVED***OpenOfflineMapAreaButton(
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED***map: model.map,
+***REMOVED******REMOVED******REMOVED******REMOVED***isSelected: isSelected,
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: dismiss
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -126,6 +103,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
 ***REMOVED***var description: String { preplannedMapArea.description ***REMOVED***
 ***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { status.allowsDownload ***REMOVED***
+***REMOVED***var dismissMetadataViewOnDelete: Bool { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***func startDownload() {
 ***REMOVED******REMOVED***Task { await downloadPreplannedMapArea() ***REMOVED***
@@ -168,4 +146,6 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED******REMOVED******REMOVED***"exclamationmark.circle"
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***var jobProgress: Progress? { job?.progress ***REMOVED***
 ***REMOVED***
