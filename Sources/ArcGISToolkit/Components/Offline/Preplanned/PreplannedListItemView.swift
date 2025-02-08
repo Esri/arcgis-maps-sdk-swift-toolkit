@@ -27,14 +27,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The download state of the preplanned map model.
-***REMOVED***fileprivate enum DownloadState {
-***REMOVED******REMOVED***case notDownloaded, downloading, downloaded
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The current download state of the preplanned map model.
-***REMOVED***@State private var downloadState: DownloadState = .notDownloaded
-***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED***
@@ -51,21 +43,34 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***trailingButton
 ***REMOVED***
 ***REMOVED******REMOVED***.task { await model.load() ***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***downloadState = .init(model.status)
-***REMOVED***
-***REMOVED******REMOVED***.onReceive(model.$status) { status in
-***REMOVED******REMOVED******REMOVED***let downloadState = DownloadState(status)
-***REMOVED******REMOVED******REMOVED***withAnimation(
-***REMOVED******REMOVED******REMOVED******REMOVED***downloadState == .downloaded ? .easeInOut : nil
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.downloadState = downloadState
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var trailingButton: some View {
-***REMOVED******REMOVED***switch downloadState {
+***REMOVED******REMOVED***switch model.status {
+***REMOVED******REMOVED***case .notLoaded, .loadFailure, .packaging, .packageFailure,
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloadFailure, .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***case .loading:
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED***case .packaged:
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
+***REMOVED******REMOVED***case .downloading:
+***REMOVED******REMOVED******REMOVED***if let job = model.job {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .downloaded:
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
@@ -80,37 +85,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
 ***REMOVED******REMOVED******REMOVED***.disabled(isSelected)
-***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***if let job = model.job {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .notDownloaded:
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
-***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension PreplannedListItemView.DownloadState {
-***REMOVED******REMOVED***/ Creates an instance.
-***REMOVED******REMOVED***/ - Parameter state: The preplanned map model download state.
-***REMOVED***init(_ state: PreplannedMapModel.Status) {
-***REMOVED******REMOVED***self = switch state {
-***REMOVED******REMOVED***case .downloaded: .downloaded
-***REMOVED******REMOVED***case .downloading: .downloading
-***REMOVED******REMOVED***default: .notDownloaded
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
