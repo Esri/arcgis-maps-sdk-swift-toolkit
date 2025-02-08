@@ -161,6 +161,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
     func cancelJob() {}
 }
 
+/// A Button for opening a map area.
 struct OpenOfflineMapAreaButton: View {
     /// The currently selected map.
     @Binding var selectedMap: Map?
@@ -172,6 +173,8 @@ struct OpenOfflineMapAreaButton: View {
     let isSelected: Bool
     
     /// The action to dismiss the view.
+    /// Note: if this is not passed in to this view, and we use
+    /// the environment here, it doesn't work.
     let dismiss: DismissAction
     
     var body: some View {
@@ -191,6 +194,8 @@ struct OpenOfflineMapAreaButton: View {
     }
 }
 
+/// A button for downloading a map area.
+/// This button is meant to be used in the `OfflineMapAreaItemView`.
 struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
     /// The view model for the item view.
     @ObservedObject var model: Model
@@ -209,6 +214,8 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
     }
 }
 
+/// A view for displaying the progress of an offline job.
+/// This button is meant to be used in the `OfflineMapAreaItemView`.
 struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
     /// The view model for the item view.
     @ObservedObject var model: Model
