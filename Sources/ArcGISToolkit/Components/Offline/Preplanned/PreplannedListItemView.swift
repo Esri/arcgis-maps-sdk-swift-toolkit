@@ -27,14 +27,6 @@ struct PreplannedListItemView: View {
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
-    /// The download state of the preplanned map model.
-    fileprivate enum DownloadState {
-        case notDownloaded, downloading, downloaded
-    }
-    
-    /// The current download state of the preplanned map model.
-    @State private var downloadState: DownloadState = .notDownloaded
-    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
@@ -51,21 +43,34 @@ struct PreplannedListItemView: View {
             trailingButton
         }
         .task { await model.load() }
-        .onAppear {
-            downloadState = .init(model.status)
-        }
-        .onReceive(model.$status) { status in
-            let downloadState = DownloadState(status)
-            withAnimation(
-                downloadState == .downloaded ? .easeInOut : nil
-            ) {
-                self.downloadState = downloadState
-            }
-        }
     }
     
     @ViewBuilder private var trailingButton: some View {
-        switch downloadState {
+        switch model.status {
+        case .notLoaded, .loadFailure, .packaging, .packageFailure,
+                .downloadFailure, .mmpkLoadFailure:
+            EmptyView()
+        case .loading:
+            ProgressView()
+        case .packaged:
+            Button {
+                Task {
+                    // Download preplanned map area.
+                    await model.downloadPreplannedMapArea()
+                }
+            } label: {
+                Image(systemName: "arrow.down.circle")
+                    .imageScale(.large)
+            }
+            // Have to apply a style or it won't be tappable
+            // because of the onTapGesture modifier in the parent view.
+            .buttonStyle(.borderless)
+            .disabled(!model.status.allowsDownload)
+        case .downloading:
+            if let job = model.job {
+                ProgressView(job.progress)
+                    .progressViewStyle(.gauge)
+            }
         case .downloaded:
             Button {
                 if let map = model.map {
@@ -80,37 +85,6 @@ struct PreplannedListItemView: View {
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
             .disabled(isSelected)
-        case .downloading:
-            if let job = model.job {
-                ProgressView(job.progress)
-                    .progressViewStyle(.gauge)
-            }
-        case .notDownloaded:
-            Button {
-                Task {
-                    // Download preplanned map area.
-                    await model.downloadPreplannedMapArea()
-                }
-            } label: {
-                Image(systemName: "arrow.down.circle")
-                    .imageScale(.large)
-            }
-            // Have to apply a style or it won't be tappable
-            // because of the onTapGesture modifier in the parent view.
-            .buttonStyle(.borderless)
-            .disabled(!model.status.allowsDownload)
-        }
-    }
-}
-
-private extension PreplannedListItemView.DownloadState {
-    /// Creates an instance.
-    /// - Parameter state: The preplanned map model download state.
-    init(_ state: PreplannedMapModel.Status) {
-        self = switch state {
-        case .downloaded: .downloaded
-        case .downloading: .downloading
-        default: .notDownloaded
         }
     }
 }
