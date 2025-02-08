@@ -15,7 +15,6 @@
 ***REMOVED***
 import Combine
 import Foundation
-import UIKit
 
 internal import os
 
