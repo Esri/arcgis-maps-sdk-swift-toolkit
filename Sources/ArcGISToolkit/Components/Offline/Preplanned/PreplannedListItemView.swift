@@ -47,44 +47,21 @@ struct PreplannedListItemView: View {
     
     @ViewBuilder private var trailingButton: some View {
         switch model.status {
-        case .notLoaded, .loadFailure, .packaging, .packageFailure,
-                .downloadFailure, .mmpkLoadFailure:
+        case .notLoaded, .loadFailure, .packaging, .packageFailure, .mmpkLoadFailure:
             EmptyView()
         case .loading:
             ProgressView()
-        case .packaged:
-            Button {
-                Task {
-                    // Download preplanned map area.
-                    await model.downloadPreplannedMapArea()
-                }
-            } label: {
-                Image(systemName: "arrow.down.circle")
-                    .imageScale(.large)
-            }
-            // Have to apply a style or it won't be tappable
-            // because of the onTapGesture modifier in the parent view.
-            .buttonStyle(.borderless)
-            .disabled(!model.status.allowsDownload)
+        case .packaged, .downloadFailure:
+            DownloadOfflineMapAreaButton(model: model)
         case .downloading:
-            if let job = model.job {
-                ProgressView(job.progress)
-                    .progressViewStyle(.gauge)
-            }
+            OfflineJobProgressView(model: model)
         case .downloaded:
-            Button {
-                if let map = model.map {
-                    selectedMap = map
-                    dismiss()
-                }
-            } label: {
-                Text("Open")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.capsule)
-            .disabled(isSelected)
+            OpenOfflineMapAreaButton(
+                selectedMap: $selectedMap,
+                map: model.map,
+                isSelected: isSelected,
+                dismiss: dismiss
+            )
         }
     }
 }
@@ -126,6 +103,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
     var description: String { preplannedMapArea.description }
     var isDownloaded: Bool { status.isDownloaded }
     var allowsDownload: Bool { status.allowsDownload }
+    var dismissMetadataViewOnDelete: Bool { false }
     
     func startDownload() {
         Task { await downloadPreplannedMapArea() }
@@ -168,4 +146,6 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
             "exclamationmark.circle"
         }
     }
+    
+    var jobProgress: Progress? { job?.progress }
 }

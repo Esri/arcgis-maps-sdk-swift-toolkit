@@ -42,7 +42,9 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             if model.isDownloaded && !isSelected {
                 Section {
                     Button("Delete Map", role: .destructive) {
-                        dismiss()
+                        if model.dismissMetadataViewOnDelete {
+                            dismiss()
+                        }
                         model.removeDownloadedArea()
                     }
                 }
@@ -120,6 +122,8 @@ protocol OfflineMapAreaMetadata: ObservableObject {
     var allowsDownload: Bool { get }
     /// The size of the area on disk.
     var directorySize: Int { get }
+    /// Whether the metadata view should be dismissed when the map area is deleted.
+    var dismissMetadataViewOnDelete: Bool { get }
     
     /// Removes the downloaded area.
     func removeDownloadedArea()
@@ -145,6 +149,7 @@ private class MockMetadata: OfflineMapAreaMetadata {
     var isDownloaded: Bool { true }
     var allowsDownload: Bool { true }
     var directorySize: Int { 1_000_000_000 }
+    var dismissMetadataViewOnDelete: Bool { false }
     
     func removeDownloadedArea() {}
     func startDownload() {}
