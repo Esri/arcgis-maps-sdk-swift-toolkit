@@ -14,8 +14,9 @@
 
 import SwiftUI
 
+/// A view that shows information for an offline area for use in a List.
 @MainActor
-private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingContent: View>: View {
+struct OfflineMapAreaItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
     /// Creates an `OfflineMapAreaItemView`.
     init(
         model: Model,
@@ -94,7 +95,7 @@ private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingCon
     
     @ViewBuilder private var descriptionView: some View {
         if !model.listItemDescription.isEmpty {
-            Text(model.description)
+            Text(model.listItemDescription)
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
@@ -103,10 +104,16 @@ private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingCon
     
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
-            if !model.statusSystemImage.isEmpty {
-                Image(systemName: model.statusSystemImage)
+            if isSelected {
+                Text("Currently open")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            } else {
+                if !model.statusSystemImage.isEmpty {
+                    Image(systemName: model.statusSystemImage)
+                }
+                Text(model.statusText)
             }
-            Text(model.statusText)
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
@@ -114,7 +121,7 @@ private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingCon
 }
 
 @MainActor
-protocol OfflineMapAreaListItem: ObservableObject, OfflineMapAreaMetadata {
+protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
     var listItemDescription: String { get }
     var statusText: String { get }
     var statusSystemImage: String { get }
@@ -132,7 +139,7 @@ protocol OfflineMapAreaListItem: ObservableObject, OfflineMapAreaMetadata {
     }
 }
 
-private class MockMetadata: OfflineMapAreaListItem {
+private class MockMetadata: OfflineMapAreaListItemInfo {
     var title: String { "Redlands" }
     var thumbnailImage: UIImage? { nil }
     var listItemDescription: String { "123 MB" }

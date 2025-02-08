@@ -96,13 +96,9 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .font(.title2)
                 .fontWeight(.bold)
             
-//            if model.isDownloaded {
-//                Section {
-//                    LabeledContent("Size") {
-//                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-//                    }
-//                }
-//            }
+            Text("Size: \(model.directorySizeText)")
+                .lineLimit(1)
+                .foregroundStyle(.secondary)
         }
         .listRowBackground(EmptyView())
         .frame(maxWidth: .infinity)
@@ -131,29 +127,11 @@ protocol OfflineMapAreaMetadata: ObservableObject {
     func startDownload()
 }
 
-extension PreplannedMapModel: OfflineMapAreaMetadata {
-    var thumbnailImage: UIImage? {
-        get async {
-            try? await preplannedMapArea.thumbnail?.load()
-            return preplannedMapArea.thumbnail?.image
-        }
+extension OfflineMapAreaMetadata {
+    var directorySizeText: String {
+        let measurement = Measurement(value: Double(directorySize), unit: UnitInformationStorage.bytes)
+        return measurement.formatted(.byteCount(style: .file))
     }
-    var title: String { preplannedMapArea.title }
-    var description: String { preplannedMapArea.description }
-    var isDownloaded: Bool { status.isDownloaded }
-    var allowsDownload: Bool { status.allowsDownload }
-    
-    func startDownload() {
-        Task { await downloadPreplannedMapArea() }
-    }
-}
-
-extension OnDemandMapModel: OfflineMapAreaMetadata {
-    var description: String { "" }
-    var isDownloaded: Bool { status.isDownloaded }
-    var thumbnailImage: UIImage? { thumbnail }
-    var allowsDownload: Bool { false }
-    func startDownload() { fatalError() }
 }
 
 #Preview {
