@@ -161,6 +161,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
 ***REMOVED***func cancelJob() {***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A Button for opening a map area.
 struct OpenOfflineMapAreaButton: View {
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding var selectedMap: Map?
@@ -172,6 +173,8 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED***let isSelected: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
+***REMOVED******REMOVED***/ Note: if this is not passed in to this view, and we use
+***REMOVED******REMOVED***/ the environment here, it doesn't work.
 ***REMOVED***let dismiss: DismissAction
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -191,6 +194,8 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A button for downloading a map area.
+***REMOVED***/ This button is meant to be used in the `OfflineMapAreaItemView`.
 struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model
@@ -209,6 +214,8 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view for displaying the progress of an offline job.
+***REMOVED***/ This button is meant to be used in the `OfflineMapAreaItemView`.
 struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model
