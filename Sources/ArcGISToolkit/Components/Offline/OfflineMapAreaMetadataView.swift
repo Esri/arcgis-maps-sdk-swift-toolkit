@@ -96,13 +96,9 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if model.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LabeledContent("Size") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text("Size: \(model.directorySizeText)")
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED******REMOVED***.listRowBackground(EmptyView())
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
@@ -131,29 +127,11 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***func startDownload()
 ***REMOVED***
 
-extension PreplannedMapModel: OfflineMapAreaMetadata {
-***REMOVED***var thumbnailImage: UIImage? {
-***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***try? await preplannedMapArea.thumbnail?.load()
-***REMOVED******REMOVED******REMOVED***return preplannedMapArea.thumbnail?.image
+extension OfflineMapAreaMetadata {
+***REMOVED***var directorySizeText: String {
+***REMOVED******REMOVED***let measurement = Measurement(value: Double(directorySize), unit: UnitInformationStorage.bytes)
+***REMOVED******REMOVED***return measurement.formatted(.byteCount(style: .file))
 ***REMOVED***
-***REMOVED***
-***REMOVED***var title: String { preplannedMapArea.title ***REMOVED***
-***REMOVED***var description: String { preplannedMapArea.description ***REMOVED***
-***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
-***REMOVED***var allowsDownload: Bool { status.allowsDownload ***REMOVED***
-***REMOVED***
-***REMOVED***func startDownload() {
-***REMOVED******REMOVED***Task { await downloadPreplannedMapArea() ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension OnDemandMapModel: OfflineMapAreaMetadata {
-***REMOVED***var description: String { "" ***REMOVED***
-***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
-***REMOVED***var thumbnailImage: UIImage? { thumbnail ***REMOVED***
-***REMOVED***var allowsDownload: Bool { false ***REMOVED***
-***REMOVED***func startDownload() { fatalError() ***REMOVED***
 ***REMOVED***
 
 #Preview {

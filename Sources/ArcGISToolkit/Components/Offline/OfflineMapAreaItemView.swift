@@ -14,8 +14,9 @@
 
 ***REMOVED***
 
+***REMOVED***/ A view that shows information for an offline area for use in a List.
 @MainActor
-private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingContent: View>: View {
+struct OfflineMapAreaItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
 ***REMOVED******REMOVED***/ Creates an `OfflineMapAreaItemView`.
 ***REMOVED***init(
 ***REMOVED******REMOVED***model: Model,
@@ -94,7 +95,7 @@ private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingCon
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var descriptionView: some View {
 ***REMOVED******REMOVED***if !model.listItemDescription.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(model.description)
+***REMOVED******REMOVED******REMOVED***Text(model.listItemDescription)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
@@ -103,10 +104,16 @@ private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingCon
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var statusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***if !model.statusSystemImage.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: model.statusSystemImage)
+***REMOVED******REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Currently open")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !model.statusSystemImage.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: model.statusSystemImage)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(model.statusText)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text(model.statusText)
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
@@ -114,7 +121,7 @@ private struct OfflineMapAreaItemView<Model: OfflineMapAreaListItem, TrailingCon
 ***REMOVED***
 
 @MainActor
-protocol OfflineMapAreaListItem: ObservableObject, OfflineMapAreaMetadata {
+protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED***var listItemDescription: String { get ***REMOVED***
 ***REMOVED***var statusText: String { get ***REMOVED***
 ***REMOVED***var statusSystemImage: String { get ***REMOVED***
@@ -132,7 +139,7 @@ protocol OfflineMapAreaListItem: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED***
 ***REMOVED***
 
-private class MockMetadata: OfflineMapAreaListItem {
+private class MockMetadata: OfflineMapAreaListItemInfo {
 ***REMOVED***var title: String { "Redlands" ***REMOVED***
 ***REMOVED***var thumbnailImage: UIImage? { nil ***REMOVED***
 ***REMOVED***var listItemDescription: String { "123 MB" ***REMOVED***
