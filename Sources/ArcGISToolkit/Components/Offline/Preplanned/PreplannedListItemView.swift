@@ -35,9 +35,6 @@ struct PreplannedListItemView: View {
     /// The current download state of the preplanned map model.
     @State private var downloadState: DownloadState = .notDownloaded
     
-    /// The previous download state of the preplanned map model.
-    @State private var previousDownloadState: DownloadState = .notDownloaded
-    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
@@ -50,33 +47,12 @@ struct PreplannedListItemView: View {
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            thumbnailView
-            VStack(alignment: .leading, spacing: 4) {
-                titleView
-                descriptionView
-                if isSelected {
-                    openStatusView
-                } else {
-                    statusView
-                }
-            }
-            Spacer()
+        OfflineMapAreaItemView(model: model, isSelected: isSelected) {
             trailingButton
-        }
-        .contentShape(.rect)
-        .onTapGesture {
-            metadataViewIsPresented = true
-        }
-        .sheet(isPresented: $metadataViewIsPresented) {
-            NavigationStack {
-                OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
-            }
         }
         .task { await model.load() }
         .onAppear {
             downloadState = .init(model.status)
-            previousDownloadState = downloadState
         }
         .onReceive(model.$status) { status in
             let downloadState = DownloadState(status)
@@ -85,50 +61,6 @@ struct PreplannedListItemView: View {
             ) {
                 self.downloadState = downloadState
             }
-        }
-    }
-    
-    @ViewBuilder private var thumbnailView: some View {
-        if let thumbnail = model.preplannedMapArea.thumbnail {
-            LoadableImageView(loadableImage: thumbnail) {
-                placeholderImage
-            } loadedContent: { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 64, height: 64)
-                    .clipShape(.rect(cornerRadius: 10))
-            }
-        } else {
-            placeholderImage
-        }
-    }
-    
-    @ViewBuilder private var placeholderImage: some View {
-        Image(systemName: "map")
-            .imageScale(.large)
-            .foregroundStyle(.secondary)
-            .frame(width: 64, height: 64)
-            .background(Color(uiColor: UIColor.systemGroupedBackground))
-            .clipShape(.rect(cornerRadius: 10))
-    }
-    
-    @ViewBuilder private var titleView: some View {
-        Text(model.preplannedMapArea.title)
-            .font(.subheadline)
-            .lineLimit(1)
-    }
-    
-    @ViewBuilder private var descriptionView: some View {
-        if !model.preplannedMapArea.description.isEmpty {
-            Text(model.preplannedMapArea.description)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-        } else {
-            Text("No description available.")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
         }
     }
     
@@ -142,7 +74,8 @@ struct PreplannedListItemView: View {
                 }
             } label: {
                 Text("Open")
-                    .font(.footnote)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.capsule)
@@ -167,41 +100,6 @@ struct PreplannedListItemView: View {
             .buttonStyle(.borderless)
             .disabled(!model.status.allowsDownload)
         }
-    }
-    
-    private var openStatusView: some View {
-        Text("Currently open")
-            .font(.caption2)
-            .foregroundStyle(.tertiary)
-    }
-    
-    @ViewBuilder private var statusView: some View {
-        HStack(spacing: 4) {
-            switch model.status {
-            case .notLoaded, .loading:
-                Text("Loading")
-            case .loadFailure, .mmpkLoadFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Loading failed")
-            case .packaging:
-                Image(systemName: "clock.badge.xmark")
-                Text("Packaging")
-            case .packaged:
-                Text("Ready to download")
-            case .packageFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Packaging failed")
-            case .downloading:
-                Text("Downloading")
-            case .downloaded:
-                Text("Downloaded")
-            case .downloadFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Download failed")
-            }
-        }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
     }
 }
 
@@ -241,4 +139,59 @@ private extension PreplannedListItemView.DownloadState {
         selectedMap: .constant(nil)
     )
     .padding()
+}
+
+extension PreplannedMapModel: OfflineMapAreaMetadata {
+    var thumbnailImage: UIImage? {
+        get async {
+            try? await preplannedMapArea.thumbnail?.load()
+            return preplannedMapArea.thumbnail?.image
+        }
+    }
+    var title: String { preplannedMapArea.title }
+    var description: String { preplannedMapArea.description }
+    var isDownloaded: Bool { status.isDownloaded }
+    var allowsDownload: Bool { status.allowsDownload }
+    
+    func startDownload() {
+        Task { await downloadPreplannedMapArea() }
+    }
+}
+
+extension PreplannedMapModel: OfflineMapAreaListItemInfo {
+    var listItemDescription: String { description }
+    
+    var statusText: String {
+        switch status {
+        case .notLoaded, .loading:
+            "Loading"
+        case .loadFailure, .mmpkLoadFailure:
+            "Loading failed"
+        case .packaging:
+            "Packaging"
+        case .packaged:
+            "Ready to download"
+        case .packageFailure:
+            "Packaging failed"
+        case .downloading:
+            "Downloading"
+        case .downloaded:
+            "Downloaded"
+        case .downloadFailure:
+            "Download failed"
+        }
+    }
+    
+    var statusSystemImage: String {
+        switch status {
+        case .notLoaded, .loading, .packaged, .downloaded, .downloading:
+            ""
+        case .loadFailure, .mmpkLoadFailure, .downloadFailure:
+            "exclamationmark.circle"
+        case .packaging:
+            "clock.badge.xmark"
+        case .packageFailure:
+            "exclamationmark.circle"
+        }
+    }
 }
