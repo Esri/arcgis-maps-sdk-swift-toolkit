@@ -122,7 +122,7 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***var allowsDownload: Bool { get ***REMOVED***
 ***REMOVED******REMOVED***/ The size of the area on disk.
 ***REMOVED***var directorySize: Int { get ***REMOVED***
-***REMOVED******REMOVED***/ Whether the metadata view should be dismissed when the map area is deleted.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view should be dismissed when the map area is deleted.
 ***REMOVED***var dismissMetadataViewOnDelete: Bool { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes the downloaded area.
