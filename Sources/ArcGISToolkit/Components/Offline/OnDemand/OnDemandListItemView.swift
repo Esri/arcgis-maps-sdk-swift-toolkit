@@ -33,137 +33,86 @@ struct OnDemandListItemView: View {
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            thumbnailView
-            VStack(alignment: .leading, spacing: 4) {
-                titleView
-                descriptionView
-                if isSelected {
-                    openStatusView
-                } else {
-                    statusView
-                }
-            }
-            Spacer()
+        OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
             trailingButton
-        }
-        .contentShape(.rect)
-        .onTapGesture {
-            if model.status.isDownloaded {
-                metadataViewIsPresented = true
-            }
-        }
-        .sheet(isPresented: $metadataViewIsPresented) {
-            NavigationStack {
-                OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
-            }
-        }
-    }
-    
-    @ViewBuilder private var thumbnailView: some View {
-        if let thumbnail = model.thumbnail {
-            Image(uiImage: thumbnail)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 64, height: 64)
-                .opacity(model.isDownloaded ? 1 : 0.5)
-                .clipShape(.rect(cornerRadius: 10))
-        } else {
-            Image(systemName: "map")
-                .imageScale(.large)
-                .foregroundStyle(.secondary)
-                .frame(width: 64, height: 64)
-                .background(Color(uiColor: UIColor.systemGroupedBackground))
-                .clipShape(.rect(cornerRadius: 10))
-        }
-    }
-    
-    @ViewBuilder private var titleView: some View {
-        Text(model.title)
-            .font(.subheadline)
-            .lineLimit(1)
-            .foregroundStyle(model.isDownloaded ? .primary : .secondary)
-    }
-    
-    @ViewBuilder private var descriptionView: some View {
-        if model.isDownloaded {
-            Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
         }
     }
     
     @ViewBuilder private var trailingButton: some View {
         switch model.status {
         case .downloading:
-            if let job = model.job {
-                Button {
-                    model.cancelJob()
-                } label: {
-                    ProgressView(job.progress)
-                        .progressViewStyle(.cancelGauge)
-                }
-                // Have to apply a style or it won't be tappable
-                // because of the onTapGesture modifier in the parent view.
-                .buttonStyle(.plain)
-            }
+            OfflineJobProgressView(model: model)
         case .downloaded:
-            Button {
-                Task {
-                    if let map = model.map {
-                        selectedMap = map
-                        dismiss()
-                    }
-                }
-            } label: {
-                Text("Open")
-                    .font(.footnote)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.capsule)
-            .disabled(isSelected)
+            OpenOfflineMapAreaButton(
+                selectedMap: $selectedMap,
+                map: model.map,
+                isSelected: isSelected,
+                dismiss: dismiss
+            )
         case .initialized:
             EmptyView()
         case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
-            Button {
-                model.removeDownloadedArea()
-            } label: {
-                Image(systemName: "xmark.circle")
-                    .imageScale(.large)
-            }
-            // Have to apply a style or it won't be tappable
-            // because of the onTapGesture modifier in the parent view.
-            .buttonStyle(.borderless)
+            removeDownloadButton
         }
     }
     
-    @ViewBuilder private var openStatusView: some View {
-        Text("Currently open")
-            .font(.caption2)
-            .foregroundStyle(.tertiary)
+    @ViewBuilder private var removeDownloadButton: some View {
+        Button {
+            model.removeDownloadedArea()
+        } label: {
+            Image(systemName: "xmark.circle")
+                .imageScale(.large)
+        }
+        // Have to apply a style or it won't be tappable
+        // because of the onTapGesture modifier in the parent view.
+        .buttonStyle(.borderless)
+    }
+}
+
+extension OnDemandMapModel: OfflineMapAreaMetadata {
+    var description: String { "" }
+    var isDownloaded: Bool { status.isDownloaded }
+    var thumbnailImage: UIImage? { thumbnail }
+    var allowsDownload: Bool { false }
+    var dismissMetadataViewOnDelete: Bool { true }
+    func startDownload() { fatalError() }
+}
+
+extension OnDemandMapModel: OfflineMapAreaListItemInfo {
+    var listItemDescription: String {
+        switch status {
+        case .downloaded:
+            directorySizeText
+        default:
+            ""
+        }
     }
     
-    @ViewBuilder private var statusView: some View {
-        HStack(spacing: 4) {
-            switch model.status {
-            case .initialized:
-                Text("Loading")
-            case .mmpkLoadFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Loading failed")
-            case .downloading:
-                Text("Downloading")
-            case .downloaded:
-                Text("Downloaded")
-            case .downloadFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Download failed")
-            case .downloadCancelled:
-                Text("Cancelled")
-            }
+    var statusText: String {
+        switch status {
+        case .initialized:
+            "Loading"
+        case .mmpkLoadFailure:
+            "Loading failed"
+        case .downloading:
+            "Downloading"
+        case .downloaded:
+            "Downloaded"
+        case .downloadFailure:
+            "Download failed"
+        case .downloadCancelled:
+            "Cancelled"
         }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
     }
+    
+    var statusSystemImage: String {
+        switch status {
+        case .initialized, .downloading, .downloaded, .downloadCancelled:
+            ""
+        case .mmpkLoadFailure, .downloadFailure:
+            "exclamationmark.circle"
+        }
+    }
+    
+    var jobProgress: Progress? { job?.progress }
 }
