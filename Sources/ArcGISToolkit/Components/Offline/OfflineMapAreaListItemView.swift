@@ -17,7 +17,7 @@ import ArcGIS
 
 /// A view that shows information for an offline area for use in a List.
 @MainActor
-struct OfflineMapAreaItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
+struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
     /// Creates an `OfflineMapAreaItemView`.
     init(
         model: Model,
@@ -132,7 +132,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 }
 
 #Preview {
-    OfflineMapAreaItemView(model: MockMetadata(), isSelected: false) {
+    OfflineMapAreaListItemView(model: MockMetadata(), isSelected: false) {
         Button {} label: {
             Image(systemName: "arrow.down.circle")
                 .imageScale(.large)

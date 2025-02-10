@@ -98,9 +98,11 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .font(.title2)
                 .fontWeight(.bold)
             
-            Text("Size: \(model.directorySizeText)")
-                .lineLimit(1)
-                .foregroundStyle(.secondary)
+            if model.isDownloaded {
+                Text("Size: \(model.directorySizeText)")
+                    .lineLimit(1)
+                    .foregroundStyle(.secondary)
+            }
         }
         .listRowBackground(EmptyView())
         .frame(maxWidth: .infinity)
