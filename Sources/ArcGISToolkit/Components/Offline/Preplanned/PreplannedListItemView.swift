@@ -39,7 +39,7 @@ struct PreplannedListItemView: View {
     }
     
     var body: some View {
-        OfflineMapAreaItemView(model: model, isSelected: isSelected) {
+        OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
             trailingButton
         }
         .task { await model.load() }
