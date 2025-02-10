@@ -39,7 +39,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***OfflineMapAreaItemView(model: model, isSelected: isSelected) {
+***REMOVED******REMOVED***OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
 ***REMOVED******REMOVED******REMOVED***trailingButton
 ***REMOVED***
 ***REMOVED******REMOVED***.task { await model.load() ***REMOVED***

@@ -17,7 +17,7 @@
 
 ***REMOVED***/ A view that shows information for an offline area for use in a List.
 @MainActor
-struct OfflineMapAreaItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
+struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
 ***REMOVED******REMOVED***/ Creates an `OfflineMapAreaItemView`.
 ***REMOVED***init(
 ***REMOVED******REMOVED***model: Model,
@@ -132,7 +132,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED***
 
 #Preview {
-***REMOVED***OfflineMapAreaItemView(model: MockMetadata(), isSelected: false) {
+***REMOVED***OfflineMapAreaListItemView(model: MockMetadata(), isSelected: false) {
 ***REMOVED******REMOVED***Button {***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
