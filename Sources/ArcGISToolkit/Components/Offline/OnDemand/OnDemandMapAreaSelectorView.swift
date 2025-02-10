@@ -43,10 +43,10 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
-***REMOVED***private let cordnerRadius: CGFloat = 16
+***REMOVED***private let cornerRadius: CGFloat = 16
 ***REMOVED***
 ***REMOVED******REMOVED***/ The location for a handle that resizes the selector view.
-***REMOVED***private enum HandleLocation {
+***REMOVED***enum HandleLocation {
 ***REMOVED******REMOVED***case topLeft, topRight, bottomLeft, bottomRight
 ***REMOVED***
 ***REMOVED***
@@ -71,17 +71,12 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED***.fill(.black.opacity(0.2))
 ***REMOVED******REMOVED******REMOVED***.reverseMask {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***RoundedCorners(cornerRadius: cordnerRadius)
-***REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-***REMOVED******REMOVED******REMOVED***.frame(width: handlesRect.width, height: handlesRect.height)
-***REMOVED******REMOVED******REMOVED***.position(handlesRect.center)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+***REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
 ***REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
 ***REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
 ***REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
@@ -89,19 +84,19 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view for the handles that allow resizing the selected area.
 ***REMOVED***@ViewBuilder private var handles: some View {
-***REMOVED******REMOVED***Handle(position: topLeft) {
+***REMOVED******REMOVED***Handle(location: .topLeft, position: topLeft, cornerRadius: cornerRadius) {
 ***REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(position: topRight) {
+***REMOVED******REMOVED***Handle(location: .topRight, position: topRight, cornerRadius: cornerRadius) {
 ***REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(position: bottomLeft) {
+***REMOVED******REMOVED***Handle(location: .bottomLeft, position: bottomLeft, cornerRadius: cornerRadius) {
 ***REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(position: bottomRight) {
+***REMOVED******REMOVED***Handle(location: .bottomRight, position: bottomRight, cornerRadius: cornerRadius) {
 ***REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
 ***REMOVED***
 ***REMOVED***
@@ -228,8 +223,11 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The handle view for the map area selector.
 ***REMOVED***struct Handle: View {
+***REMOVED******REMOVED***let location: HandleLocation
 ***REMOVED******REMOVED******REMOVED***/ The position of the handle.
 ***REMOVED******REMOVED***let position: CGPoint
+***REMOVED******REMOVED******REMOVED***/ The corner radius of the handle.
+***REMOVED******REMOVED***let cornerRadius: CGFloat
 ***REMOVED******REMOVED******REMOVED***/ The closure to call when the map area selector should be resized.
 ***REMOVED******REMOVED***let resize: (CGPoint) -> Void
 ***REMOVED******REMOVED******REMOVED***/ The gesture state of the drag gesture.
@@ -240,46 +238,62 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED***.position(position)
-***REMOVED******REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(value.location)
+***REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorner(handle: location, position: position, cornerRadius: cornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(position)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(value.location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view that displays rounded corners for a rectangle view.
-***REMOVED***struct RoundedCorners: Shape {
+***REMOVED******REMOVED***/ The view for a rounded corner shape.
+***REMOVED***struct RoundedCorner: Shape {
+***REMOVED******REMOVED******REMOVED***/ The handle location.
+***REMOVED******REMOVED***let handle: HandleLocation
+***REMOVED******REMOVED******REMOVED***/ The handle position.
+***REMOVED******REMOVED***let position: CGPoint
 ***REMOVED******REMOVED******REMOVED***/ The corner radius.
 ***REMOVED******REMOVED***let cornerRadius: CGFloat
-***REMOVED******REMOVED******REMOVED***/ The padding to add to the corner shape.
-***REMOVED******REMOVED***let padding = CGFloat(4)
+***REMOVED******REMOVED******REMOVED***/ The offset padding.
+***REMOVED******REMOVED***let offset: CGFloat = 2
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Add a rounded corner for the handle.
 ***REMOVED******REMOVED***func path(in rect: CGRect) -> Path {
 ***REMOVED******REMOVED******REMOVED***var path = Path()
+***REMOVED******REMOVED******REMOVED***var clippingPath = Path()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Add the rounded corners
-***REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: rect.minX, y: rect.minY + cornerRadius))
-***REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: rect.minX + cornerRadius, y: rect.minY), control: CGPoint(x: rect.minX, y: rect.minY))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: rect.maxX - cornerRadius, y: rect.minY))
-***REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.minY + cornerRadius + padding), control: CGPoint(x: rect.maxX, y: rect.minY))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: rect.maxX, y: rect.maxY - cornerRadius))
-***REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: rect.maxX - cornerRadius - padding, y: rect.maxY), control: CGPoint(x: rect.maxX, y: rect.maxY))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: rect.minX + cornerRadius, y: rect.maxY))
-***REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: rect.minX, y: rect.maxY - cornerRadius), control: CGPoint(x: rect.minX, y: rect.maxY))
+***REMOVED******REMOVED******REMOVED***switch handle {
+***REMOVED******REMOVED******REMOVED***case .topLeft:
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: -offset, dy: -offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED***case .topRight:
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: offset, dy: -offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED***case .bottomLeft:
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: -offset, dy: offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED***case .bottomRight:
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: offset, dy: offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return path
 ***REMOVED***
@@ -299,6 +313,16 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.blendMode(.destinationOut)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension CGPoint {
+***REMOVED******REMOVED***/ Offests a point by a given x and y amount.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - dx: The x offset.
+***REMOVED******REMOVED***/   - dy: The y offset.
+***REMOVED***func offsetBy(dx: CGFloat, dy: CGFloat) -> CGPoint {
+***REMOVED******REMOVED***return CGPoint(x: x + dx, y: y + dy)
 ***REMOVED***
 ***REMOVED***
 
