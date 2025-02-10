@@ -37,20 +37,15 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(model.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if model.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LabeledContent("Size") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if model.isDownloaded && !isSelected {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Remove Download", role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete Map", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.dismissMetadataViewOnDelete {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -58,7 +53,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if !model.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Download", systemImage: "arrow.down.circle") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Download Map") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.startDownload()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -77,25 +72,38 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var header: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if let image = thumbnailImage {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 100)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "map")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 100)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let image = thumbnailImage {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 200)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "map")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10, style: .continuous))
+***REMOVED******REMOVED******REMOVED***.shadow(radius: 5)
+***REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(Color(uiColor: UIColor.systemBackground), lineWidth: 2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Text(model.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if model.isDownloaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Size: \(model.directorySizeText)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listRowBackground(EmptyView())
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
@@ -117,6 +125,8 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***var allowsDownload: Bool { get ***REMOVED***
 ***REMOVED******REMOVED***/ The size of the area on disk.
 ***REMOVED***var directorySize: Int { get ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view should be dismissed when the map area is deleted.
+***REMOVED***var dismissMetadataViewOnDelete: Bool { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes the downloaded area.
 ***REMOVED***func removeDownloadedArea()
@@ -124,29 +134,11 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***func startDownload()
 ***REMOVED***
 
-extension PreplannedMapModel: OfflineMapAreaMetadata {
-***REMOVED***var thumbnailImage: UIImage? {
-***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***try? await preplannedMapArea.thumbnail?.load()
-***REMOVED******REMOVED******REMOVED***return preplannedMapArea.thumbnail?.image
+extension OfflineMapAreaMetadata {
+***REMOVED***var directorySizeText: String {
+***REMOVED******REMOVED***let measurement = Measurement(value: Double(directorySize), unit: UnitInformationStorage.bytes)
+***REMOVED******REMOVED***return measurement.formatted(.byteCount(style: .file))
 ***REMOVED***
-***REMOVED***
-***REMOVED***var title: String { preplannedMapArea.title ***REMOVED***
-***REMOVED***var description: String { preplannedMapArea.description ***REMOVED***
-***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
-***REMOVED***var allowsDownload: Bool { status.allowsDownload ***REMOVED***
-***REMOVED***
-***REMOVED***func startDownload() {
-***REMOVED******REMOVED***Task { await downloadPreplannedMapArea() ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension OnDemandMapModel: OfflineMapAreaMetadata {
-***REMOVED***var description: String { "" ***REMOVED***
-***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
-***REMOVED***var thumbnailImage: UIImage? { thumbnail ***REMOVED***
-***REMOVED***var allowsDownload: Bool { false ***REMOVED***
-***REMOVED***func startDownload() { fatalError() ***REMOVED***
 ***REMOVED***
 
 #Preview {
@@ -160,6 +152,7 @@ private class MockMetadata: OfflineMapAreaMetadata {
 ***REMOVED***var isDownloaded: Bool { true ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { true ***REMOVED***
 ***REMOVED***var directorySize: Int { 1_000_000_000 ***REMOVED***
+***REMOVED***var dismissMetadataViewOnDelete: Bool { false ***REMOVED***
 ***REMOVED***
 ***REMOVED***func removeDownloadedArea() {***REMOVED***
 ***REMOVED***func startDownload() {***REMOVED***
