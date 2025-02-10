@@ -218,6 +218,13 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
+    /// Cancels the in-progress job.
+    func cancelJob() {
+        guard let job else { return }
+        Task {
+            await job.cancel()
+        }
+    }
 }
 
 extension PreplannedMapModel {

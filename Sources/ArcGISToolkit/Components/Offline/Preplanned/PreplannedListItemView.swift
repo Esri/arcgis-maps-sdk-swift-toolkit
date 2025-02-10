@@ -27,17 +27,6 @@ struct PreplannedListItemView: View {
     /// A Boolean value indicating whether the metadata view is presented.
     @State private var metadataViewIsPresented = false
     
-    /// The download state of the preplanned map model.
-    fileprivate enum DownloadState {
-        case notDownloaded, downloading, downloaded
-    }
-    
-    /// The current download state of the preplanned map model.
-    @State private var downloadState: DownloadState = .notDownloaded
-    
-    /// The previous download state of the preplanned map model.
-    @State private var previousDownloadState: DownloadState = .notDownloaded
-    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
@@ -50,169 +39,29 @@ struct PreplannedListItemView: View {
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            thumbnailView
-            VStack(alignment: .leading, spacing: 4) {
-                titleView
-                descriptionView
-                if isSelected {
-                    openStatusView
-                } else {
-                    statusView
-                }
-            }
-            Spacer()
+        OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
             trailingButton
         }
-        .contentShape(.rect)
-        .onTapGesture {
-            metadataViewIsPresented = true
-        }
-        .sheet(isPresented: $metadataViewIsPresented) {
-            NavigationStack {
-                OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
-            }
-        }
         .task { await model.load() }
-        .onAppear {
-            downloadState = .init(model.status)
-            previousDownloadState = downloadState
-        }
-        .onReceive(model.$status) { status in
-            let downloadState = DownloadState(status)
-            withAnimation(
-                downloadState == .downloaded ? .easeInOut : nil
-            ) {
-                self.downloadState = downloadState
-            }
-        }
-    }
-    
-    @ViewBuilder private var thumbnailView: some View {
-        if let thumbnail = model.preplannedMapArea.thumbnail {
-            LoadableImageView(loadableImage: thumbnail) {
-                placeholderImage
-            } loadedContent: { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 64, height: 64)
-                    .clipShape(.rect(cornerRadius: 10))
-            }
-        } else {
-            placeholderImage
-        }
-    }
-    
-    @ViewBuilder private var placeholderImage: some View {
-        Image(systemName: "map")
-            .imageScale(.large)
-            .foregroundStyle(.secondary)
-            .frame(width: 64, height: 64)
-            .background(Color(uiColor: UIColor.systemGroupedBackground))
-            .clipShape(.rect(cornerRadius: 10))
-    }
-    
-    @ViewBuilder private var titleView: some View {
-        Text(model.preplannedMapArea.title)
-            .font(.subheadline)
-            .lineLimit(1)
-    }
-    
-    @ViewBuilder private var descriptionView: some View {
-        if !model.preplannedMapArea.description.isEmpty {
-            Text(model.preplannedMapArea.description)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-        } else {
-            Text("No description available.")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-        }
     }
     
     @ViewBuilder private var trailingButton: some View {
-        switch downloadState {
-        case .downloaded:
-            Button {
-                if let map = model.map {
-                    selectedMap = map
-                    dismiss()
-                }
-            } label: {
-                Text("Open")
-                    .font(.footnote)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.capsule)
-            .disabled(isSelected)
+        switch model.status {
+        case .notLoaded, .loadFailure, .packaging, .packageFailure, .mmpkLoadFailure:
+            EmptyView()
+        case .loading:
+            ProgressView()
+        case .packaged, .downloadFailure:
+            DownloadOfflineMapAreaButton(model: model)
         case .downloading:
-            if let job = model.job {
-                ProgressView(job.progress)
-                    .progressViewStyle(.gauge)
-            }
-        case .notDownloaded:
-            Button {
-                Task {
-                    // Download preplanned map area.
-                    await model.downloadPreplannedMapArea()
-                }
-            } label: {
-                Image(systemName: "arrow.down.circle")
-                    .imageScale(.large)
-            }
-            // Have to apply a style or it won't be tappable
-            // because of the onTapGesture modifier in the parent view.
-            .buttonStyle(.borderless)
-            .disabled(!model.status.allowsDownload)
-        }
-    }
-    
-    private var openStatusView: some View {
-        Text("Currently open")
-            .font(.caption2)
-            .foregroundStyle(.tertiary)
-    }
-    
-    @ViewBuilder private var statusView: some View {
-        HStack(spacing: 4) {
-            switch model.status {
-            case .notLoaded, .loading:
-                Text("Loading")
-            case .loadFailure, .mmpkLoadFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Loading failed")
-            case .packaging:
-                Image(systemName: "clock.badge.xmark")
-                Text("Packaging")
-            case .packaged:
-                Text("Ready to download")
-            case .packageFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Packaging failed")
-            case .downloading:
-                Text("Downloading")
-            case .downloaded:
-                Text("Downloaded")
-            case .downloadFailure:
-                Image(systemName: "exclamationmark.circle")
-                Text("Download failed")
-            }
-        }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
-    }
-}
-
-private extension PreplannedListItemView.DownloadState {
-    /// Creates an instance.
-    /// - Parameter state: The preplanned map model download state.
-    init(_ state: PreplannedMapModel.Status) {
-        self = switch state {
-        case .downloaded: .downloaded
-        case .downloading: .downloading
-        default: .notDownloaded
+            OfflineJobProgressView(model: model)
+        case .downloaded:
+            OpenOfflineMapAreaButton(
+                selectedMap: $selectedMap,
+                map: model.map,
+                isSelected: isSelected,
+                dismiss: dismiss
+            )
         }
     }
 }
@@ -241,4 +90,62 @@ private extension PreplannedListItemView.DownloadState {
         selectedMap: .constant(nil)
     )
     .padding()
+}
+
+extension PreplannedMapModel: OfflineMapAreaMetadata {
+    var thumbnailImage: UIImage? {
+        get async {
+            try? await preplannedMapArea.thumbnail?.load()
+            return preplannedMapArea.thumbnail?.image
+        }
+    }
+    var title: String { preplannedMapArea.title }
+    var description: String { preplannedMapArea.description }
+    var isDownloaded: Bool { status.isDownloaded }
+    var allowsDownload: Bool { status.allowsDownload }
+    var dismissMetadataViewOnDelete: Bool { false }
+    
+    func startDownload() {
+        Task { await downloadPreplannedMapArea() }
+    }
+}
+
+extension PreplannedMapModel: OfflineMapAreaListItemInfo {
+    var listItemDescription: String { description }
+    
+    var statusText: String {
+        switch status {
+        case .notLoaded, .loading:
+            "Loading"
+        case .loadFailure, .mmpkLoadFailure:
+            "Loading failed"
+        case .packaging:
+            "Packaging"
+        case .packaged:
+            "Ready to download"
+        case .packageFailure:
+            "Packaging failed"
+        case .downloading:
+            "Downloading"
+        case .downloaded:
+            "Downloaded"
+        case .downloadFailure:
+            "Download failed"
+        }
+    }
+    
+    var statusSystemImage: String {
+        switch status {
+        case .notLoaded, .loading, .packaged, .downloaded, .downloading:
+            ""
+        case .loadFailure, .mmpkLoadFailure, .downloadFailure:
+            "exclamationmark.circle"
+        case .packaging:
+            "clock.badge.xmark"
+        case .packageFailure:
+            "exclamationmark.circle"
+        }
+    }
+    
+    var jobProgress: Progress? { job?.progress }
 }
