@@ -37,6 +37,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                     Text(model.description)
                         .foregroundStyle(.secondary)
                 }
+                .textCase(nil)
             }
             
             if model.isDownloaded && !isSelected {
