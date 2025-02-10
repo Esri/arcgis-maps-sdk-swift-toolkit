@@ -189,7 +189,7 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Label("Download", systemImage: "arrow.down.circle")
+                        Text("Download")
                             .frame(maxWidth: .infinity)
                     }
                     .controlSize(.large)
