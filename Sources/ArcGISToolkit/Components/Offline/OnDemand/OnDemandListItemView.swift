@@ -33,137 +33,86 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
-***REMOVED******REMOVED******REMOVED***thumbnailView
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
-***REMOVED******REMOVED******REMOVED******REMOVED***titleView
-***REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
-***REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***openStatusView
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
 ***REMOVED******REMOVED******REMOVED***trailingButton
-***REMOVED***
-***REMOVED******REMOVED***.contentShape(.rect)
-***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***if model.status.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
-***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var thumbnailView: some View {
-***REMOVED******REMOVED***if let thumbnail = model.thumbnail {
-***REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnail)
-***REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(model.isDownloaded ? 1 : 0.5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "map")
-***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 64)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: UIColor.systemGroupedBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var titleView: some View {
-***REMOVED******REMOVED***Text(model.title)
-***REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(model.isDownloaded ? .primary : .secondary)
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var descriptionView: some View {
-***REMOVED******REMOVED***if model.isDownloaded {
-***REMOVED******REMOVED******REMOVED***Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var trailingButton: some View {
 ***REMOVED******REMOVED***switch model.status {
 ***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***if let job = model.job {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.cancelJob()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.cancelGauge)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***OfflineJobProgressView(model: model)
 ***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let map = model.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Open")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
-***REMOVED******REMOVED******REMOVED***.disabled(isSelected)
+***REMOVED******REMOVED******REMOVED***OpenOfflineMapAreaButton(
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED***map: model.map,
+***REMOVED******REMOVED******REMOVED******REMOVED***isSelected: isSelected,
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: dismiss
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .initialized:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***case .downloadCancelled, .downloadFailure, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+***REMOVED******REMOVED******REMOVED***removeDownloadButton
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private var openStatusView: some View {
-***REMOVED******REMOVED***Text("Currently open")
-***REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***@ViewBuilder private var removeDownloadButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
+***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private var statusView: some View {
-***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***switch model.status {
-***REMOVED******REMOVED******REMOVED***case .initialized:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
-***REMOVED******REMOVED******REMOVED***case .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
-***REMOVED******REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloading")
-***REMOVED******REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded")
-***REMOVED******REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Download failed")
-***REMOVED******REMOVED******REMOVED***case .downloadCancelled:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancelled")
-***REMOVED******REMOVED***
+
+extension OnDemandMapModel: OfflineMapAreaMetadata {
+***REMOVED***var description: String { "" ***REMOVED***
+***REMOVED***var isDownloaded: Bool { status.isDownloaded ***REMOVED***
+***REMOVED***var thumbnailImage: UIImage? { thumbnail ***REMOVED***
+***REMOVED***var allowsDownload: Bool { false ***REMOVED***
+***REMOVED***var dismissMetadataViewOnDelete: Bool { true ***REMOVED***
+***REMOVED***func startDownload() { fatalError() ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+
+extension OnDemandMapModel: OfflineMapAreaListItemInfo {
+***REMOVED***var listItemDescription: String {
+***REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED***case .downloaded:
+***REMOVED******REMOVED******REMOVED***directorySizeText
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***""
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var statusText: String {
+***REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED***case .initialized:
+***REMOVED******REMOVED******REMOVED***"Loading"
+***REMOVED******REMOVED***case .mmpkLoadFailure:
+***REMOVED******REMOVED******REMOVED***"Loading failed"
+***REMOVED******REMOVED***case .downloading:
+***REMOVED******REMOVED******REMOVED***"Downloading"
+***REMOVED******REMOVED***case .downloaded:
+***REMOVED******REMOVED******REMOVED***"Downloaded"
+***REMOVED******REMOVED***case .downloadFailure:
+***REMOVED******REMOVED******REMOVED***"Download failed"
+***REMOVED******REMOVED***case .downloadCancelled:
+***REMOVED******REMOVED******REMOVED***"Cancelled"
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var statusSystemImage: String {
+***REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED***case .initialized, .downloading, .downloaded, .downloadCancelled:
+***REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED***case .mmpkLoadFailure, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***"exclamationmark.circle"
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var jobProgress: Progress? { job?.progress ***REMOVED***
 ***REMOVED***

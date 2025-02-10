@@ -218,6 +218,13 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Cancels the in-progress job.
+***REMOVED***func cancelJob() {
+***REMOVED******REMOVED***guard let job else { return ***REMOVED***
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***await job.cancel()
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 
 extension PreplannedMapModel {
