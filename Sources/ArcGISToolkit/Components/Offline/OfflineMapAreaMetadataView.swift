@@ -37,20 +37,15 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                     Text(model.description)
                         .foregroundStyle(.secondary)
                 }
-            }
-            
-            if model.isDownloaded {
-                Section {
-                    LabeledContent("Size") {
-                        Text(Int64(model.directorySize), format: .byteCount(style: .file, allowedUnits: [.kb, .mb]))
-                    }
-                }
+                .textCase(nil)
             }
             
             if model.isDownloaded && !isSelected {
                 Section {
-                    Button("Remove Download", role: .destructive) {
-                        dismiss()
+                    Button("Delete Map", role: .destructive) {
+                        if model.dismissMetadataViewOnDelete {
+                            dismiss()
+                        }
                         model.removeDownloadedArea()
                     }
                 }
@@ -58,7 +53,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             
             if !model.isDownloaded {
                 Section {
-                    Button("Download", systemImage: "arrow.down.circle") {
+                    Button("Download Map") {
                         dismiss()
                         model.startDownload()
                     }
@@ -77,25 +72,38 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
     
     @ViewBuilder private var header: some View {
         VStack {
-            if let image = thumbnailImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 100)
-                    .clipShape(.rect(cornerRadius: 10))
-            } else {
-                Image(systemName: "map")
-                    .imageScale(.large)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 100, height: 100)
-                    .background(Color(uiColor: UIColor.systemGroupedBackground))
-                    .clipShape(.rect(cornerRadius: 10))
+            Group {
+                if let image = thumbnailImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 200, height: 200)
+                } else {
+                    Image(systemName: "map")
+                        .imageScale(.large)
+                        .foregroundStyle(.secondary)
+                        .padding()
+                        .background(Color(uiColor: UIColor.systemGroupedBackground))
+                }
             }
+            .clipShape(.rect(cornerRadius: 10, style: .continuous))
+            .shadow(radius: 5)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(Color(uiColor: UIColor.systemBackground), lineWidth: 2)
+            }
+            .padding()
             
             Text(model.title)
                 .lineLimit(1)
-                .font(.largeTitle)
+                .font(.title2)
                 .fontWeight(.bold)
+            
+            if model.isDownloaded {
+                Text("Size: \(model.directorySizeText)")
+                    .lineLimit(1)
+                    .foregroundStyle(.secondary)
+            }
         }
         .listRowBackground(EmptyView())
         .frame(maxWidth: .infinity)
@@ -117,6 +125,8 @@ protocol OfflineMapAreaMetadata: ObservableObject {
     var allowsDownload: Bool { get }
     /// The size of the area on disk.
     var directorySize: Int { get }
+    /// A Boolean value indicating whether the metadata view should be dismissed when the map area is deleted.
+    var dismissMetadataViewOnDelete: Bool { get }
     
     /// Removes the downloaded area.
     func removeDownloadedArea()
@@ -124,29 +134,11 @@ protocol OfflineMapAreaMetadata: ObservableObject {
     func startDownload()
 }
 
-extension PreplannedMapModel: OfflineMapAreaMetadata {
-    var thumbnailImage: UIImage? {
-        get async {
-            try? await preplannedMapArea.thumbnail?.load()
-            return preplannedMapArea.thumbnail?.image
-        }
+extension OfflineMapAreaMetadata {
+    var directorySizeText: String {
+        let measurement = Measurement(value: Double(directorySize), unit: UnitInformationStorage.bytes)
+        return measurement.formatted(.byteCount(style: .file))
     }
-    var title: String { preplannedMapArea.title }
-    var description: String { preplannedMapArea.description }
-    var isDownloaded: Bool { status.isDownloaded }
-    var allowsDownload: Bool { status.allowsDownload }
-    
-    func startDownload() {
-        Task { await downloadPreplannedMapArea() }
-    }
-}
-
-extension OnDemandMapModel: OfflineMapAreaMetadata {
-    var description: String { "" }
-    var isDownloaded: Bool { status.isDownloaded }
-    var thumbnailImage: UIImage? { thumbnail }
-    var allowsDownload: Bool { false }
-    func startDownload() { fatalError() }
 }
 
 #Preview {
@@ -160,6 +152,7 @@ private class MockMetadata: OfflineMapAreaMetadata {
     var isDownloaded: Bool { true }
     var allowsDownload: Bool { true }
     var directorySize: Int { 1_000_000_000 }
+    var dismissMetadataViewOnDelete: Bool { false }
     
     func removeDownloadedArea() {}
     func startDownload() {}
