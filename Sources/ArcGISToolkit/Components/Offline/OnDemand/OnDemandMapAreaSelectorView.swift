@@ -43,10 +43,10 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     /// The corner radius of the area selector view.
-    private let cordnerRadius: CGFloat = 16
+    private let cornerRadius: CGFloat = 16
     
     /// The location for a handle that resizes the selector view.
-    private enum HandleLocation {
+    enum HandleLocation {
         case topLeft, topRight, bottomLeft, bottomRight
     }
     
@@ -71,17 +71,12 @@ struct OnDemandMapAreaSelectorView: View {
         Rectangle()
             .fill(.black.opacity(0.2))
             .reverseMask {
-                RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .frame(width: selectedRect.width, height: selectedRect.height)
                     .position(selectedRect.center)
             }
         
-        RoundedCorners(cornerRadius: cordnerRadius)
-            .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-            .frame(width: handlesRect.width, height: handlesRect.height)
-            .position(handlesRect.center)
-        
-        RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
             .stroke(.white, lineWidth: 4)
             .frame(width: selectedRect.width, height: selectedRect.height)
             .position(selectedRect.center)
@@ -89,19 +84,19 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The view for the handles that allow resizing the selected area.
     @ViewBuilder private var handles: some View {
-        Handle(position: topLeft) {
+        Handle(location: .topLeft, position: topLeft, cornerRadius: cornerRadius) {
             resize(for: .topLeft, location: $0)
         }
         
-        Handle(position: topRight) {
+        Handle(location: .topRight, position: topRight, cornerRadius: cornerRadius) {
             resize(for: .topRight, location: $0)
         }
         
-        Handle(position: bottomLeft) {
+        Handle(location: .bottomLeft, position: bottomLeft, cornerRadius: cornerRadius) {
             resize(for: .bottomLeft, location: $0)
         }
         
-        Handle(position: bottomRight) {
+        Handle(location: .bottomRight, position: bottomRight, cornerRadius: cornerRadius) {
             resize(for: .bottomRight, location: $0)
         }
     }
@@ -228,8 +223,11 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The handle view for the map area selector.
     struct Handle: View {
+        let location: HandleLocation
         /// The position of the handle.
         let position: CGPoint
+        /// The corner radius of the handle.
+        let cornerRadius: CGFloat
         /// The closure to call when the map area selector should be resized.
         let resize: (CGPoint) -> Void
         /// The gesture state of the drag gesture.
@@ -240,46 +238,62 @@ struct OnDemandMapAreaSelectorView: View {
         }
         
         var body: some View {
-            Color.clear
-                .contentShape(Rectangle())
-                .frame(width: 44, height: 44)
-                .position(position)
-                .gesture(DragGesture(coordinateSpace: .local)
-                    .updating($gestureState) { value, state, _ in
-                        switch state {
-                        case .started:
-                            state = .changed
-                            UISelectionFeedbackGenerator().selectionChanged()
-                        case .changed:
-                            resize(value.location)
+            ZStack {
+                RoundedCorner(handle: location, position: position, cornerRadius: cornerRadius)
+                    .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                Color.clear
+                    .contentShape(Rectangle())
+                    .frame(width: 44, height: 44)
+                    .position(position)
+                    .gesture(DragGesture(coordinateSpace: .local)
+                        .updating($gestureState) { value, state, _ in
+                            switch state {
+                            case .started:
+                                state = .changed
+                                UISelectionFeedbackGenerator().selectionChanged()
+                            case .changed:
+                                resize(value.location)
+                            }
                         }
-                    }
-                )
+                    )
+            }
         }
     }
     
-    /// A view that displays rounded corners for a rectangle view.
-    struct RoundedCorners: Shape {
+    /// The view for a rounded corner shape.
+    struct RoundedCorner: Shape {
+        /// The handle location.
+        let handle: HandleLocation
+        /// The handle position.
+        let position: CGPoint
         /// The corner radius.
         let cornerRadius: CGFloat
-        /// The padding to add to the corner shape.
-        let padding = CGFloat(4)
+        /// The offset padding.
+        let offset: CGFloat = 2
         
+        // Add a rounded corner for the handle.
         func path(in rect: CGRect) -> Path {
             var path = Path()
+            var clippingPath = Path()
             
-            // Add the rounded corners
-            path.move(to: CGPoint(x: rect.minX, y: rect.minY + cornerRadius))
-            path.addQuadCurve(to: CGPoint(x: rect.minX + cornerRadius, y: rect.minY), control: CGPoint(x: rect.minX, y: rect.minY))
-            
-            path.move(to: CGPoint(x: rect.maxX - cornerRadius, y: rect.minY))
-            path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.minY + cornerRadius + padding), control: CGPoint(x: rect.maxX, y: rect.minY))
-            
-            path.move(to: CGPoint(x: rect.maxX, y: rect.maxY - cornerRadius))
-            path.addQuadCurve(to: CGPoint(x: rect.maxX - cornerRadius - padding, y: rect.maxY), control: CGPoint(x: rect.maxX, y: rect.maxY))
-            
-            path.move(to: CGPoint(x: rect.minX + cornerRadius, y: rect.maxY))
-            path.addQuadCurve(to: CGPoint(x: rect.minX, y: rect.maxY - cornerRadius), control: CGPoint(x: rect.minX, y: rect.maxY))
+            switch handle {
+            case .topLeft:
+                let offsetPosition = position.offsetBy(dx: -offset, dy: -offset)
+                path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius))
+                path.addQuadCurve(to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+            case .topRight:
+                let offsetPosition = position.offsetBy(dx: offset, dy: -offset)
+                path.move(to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y))
+                path.addQuadCurve(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+            case .bottomLeft:
+                let offsetPosition = position.offsetBy(dx: -offset, dy: offset)
+                path.move(to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y))
+                path.addQuadCurve(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+            case .bottomRight:
+                let offsetPosition = position.offsetBy(dx: offset, dy: offset)
+                path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius))
+                path.addQuadCurve(to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+            }
             
             return path
         }
@@ -299,6 +313,16 @@ private extension View {
                         .blendMode(.destinationOut)
                 }
         }
+    }
+}
+
+private extension CGPoint {
+    /// Offests a point by a given x and y amount.
+    /// - Parameters:
+    ///   - dx: The x offset.
+    ///   - dy: The y offset.
+    func offsetBy(dx: CGFloat, dy: CGFloat) -> CGPoint {
+        return CGPoint(x: x + dx, y: y + dy)
     }
 }
 
