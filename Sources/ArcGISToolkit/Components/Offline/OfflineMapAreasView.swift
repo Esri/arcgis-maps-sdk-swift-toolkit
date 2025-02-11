@@ -295,12 +295,6 @@ enum Backported {
         
         var body: some View {
             if #available(iOS 17, *) {
-//                SwiftUI.ContentUnavailableView(
-//                    title,
-//                    systemImage: systemImage,
-//                    description: description.map { Text($0) }
-//                )
-                
                 SwiftUI.ContentUnavailableView {
                     Label(title, systemImage: systemImage)
                 } description: {
