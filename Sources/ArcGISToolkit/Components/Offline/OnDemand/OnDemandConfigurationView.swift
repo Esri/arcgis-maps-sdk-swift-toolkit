@@ -165,12 +165,16 @@ struct OnDemandConfigurationView: View {
                 Divider()
                 
                 HStack {
-                    Picker("Level of Detail", selection: $maxScale) {
+                    Text("Level of Detail")
+                    Spacer()
+                    Picker(selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
                             Text($0.description)
+                                .foregroundStyle(.secondary)
                         }
+                    } label: {
+                        EmptyView()
                     }
-                    .pickerStyle(.navigationLink)
                     .disabled(downloadIsDisabled)
                 }
                 
@@ -192,7 +196,8 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Label("Download", systemImage: "arrow.down.circle")
+                        Text("Download")
+                            .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                     }
                     .controlSize(.large)
