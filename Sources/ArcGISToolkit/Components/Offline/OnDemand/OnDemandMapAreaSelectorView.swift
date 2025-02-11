@@ -238,7 +238,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***HandleShape(handle: orientation, position: position, cornerRadius: OnDemandMapAreaSelectorView.cornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED***HandleShape(orientation: orientation, position: position, cornerRadius: OnDemandMapAreaSelectorView.cornerRadius)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
 ***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
@@ -259,10 +259,10 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The view for a rounded corner shaped handle.
+***REMOVED******REMOVED***/ The rounded corner shape for drawing a handle.
 ***REMOVED***struct HandleShape: Shape {
 ***REMOVED******REMOVED******REMOVED***/ The handle orientation.
-***REMOVED******REMOVED***let handle: HandleOrientation
+***REMOVED******REMOVED***let orientation: HandleOrientation
 ***REMOVED******REMOVED******REMOVED***/ The handle position.
 ***REMOVED******REMOVED***let position: CGPoint
 ***REMOVED******REMOVED******REMOVED***/ The corner radius.
@@ -275,7 +275,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED***var path = Path()
 ***REMOVED******REMOVED******REMOVED***var clippingPath = Path()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch handle {
+***REMOVED******REMOVED******REMOVED***switch orientation {
 ***REMOVED******REMOVED******REMOVED***case .topLeft:
 ***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: -offset, dy: -offset)
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius))
