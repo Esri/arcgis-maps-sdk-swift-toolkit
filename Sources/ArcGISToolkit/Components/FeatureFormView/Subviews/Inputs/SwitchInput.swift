@@ -73,10 +73,21 @@ struct SwitchInput: View {
                     fallbackToComboBox = true
                 }
             }
+            // This element should only be set as the focused element when a
+            // user physically interacts with the toggle.
+            //
+            // onChange(_:perform:) is not a good signal for detecting user
+            // interaction because it may or may not run when the view first
+            // loads, depending if the initial value matches the default value
+            // defined for `isOn`.
             .onChange(isOn) { isOn in
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
             }
+            // onValueChange(of:action:) is a good signal for user interaction
+            // because it will reliably run when the view first loads and each
+            // subsequent time a user changes the value. The only requirement is
+            // that we must track the initial run.
             .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
                 if didReceiveInitialValue {
