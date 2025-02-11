@@ -105,6 +105,7 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The system image for the current status.
 ***REMOVED***var statusSystemImage: String {
 ***REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED***case .initialized, .downloading, .downloaded, .downloadCancelled:
