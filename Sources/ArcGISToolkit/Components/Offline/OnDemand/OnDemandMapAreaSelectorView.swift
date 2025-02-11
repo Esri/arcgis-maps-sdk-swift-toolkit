@@ -84,20 +84,20 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The view for the handles that allow resizing the selected area.
     @ViewBuilder private var handles: some View {
-        Handle(orientation: .topLeft, position: topLeft) { handle, location in
-            resize(for: handle, location: location)
+        Handle(orientation: .topLeft, position: topLeft) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
         
-        Handle(orientation: .topRight, position: topRight) { handle, location in
-            resize(for: handle, location: location)
+        Handle(orientation: .topRight, position: topRight) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
         
-        Handle(orientation: .bottomLeft, position: bottomLeft) { handle, location in
-            resize(for: handle, location: location)
+        Handle(orientation: .bottomLeft, position: bottomLeft) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
         
-        Handle(orientation: .bottomRight, position: bottomRight) { handle, location in
-            resize(for: handle, location: location)
+        Handle(orientation: .bottomRight, position: bottomRight) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
     }
     
@@ -126,13 +126,13 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// Resizes the area selectpor view.
     /// - Parameters:
-    ///   - handle: The handle orientation.
+    ///   - handleOrientation: The handle orientation.
     ///   - location: The location of the drag gesture.
-    private func resize(for handle: HandleOrientation, location: CGPoint) {
+    private func resize(for handleOrientation: HandleOrientation, location: CGPoint) {
         // Resize the rect.
         let rectangle: CGRect
         
-        switch handle {
+        switch handleOrientation {
         case .topLeft:
             let minX = location.x
             let maxX = selectedRect.maxX
@@ -165,7 +165,7 @@ struct OnDemandMapAreaSelectorView: View {
         var corrected = CGRectIntersection(maxRect, rectangle)
         
         // Keep rectangle outside the minimum rect.
-        corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
+        corrected = CGRectUnion(corrected, minimumRect(for: handleOrientation))
         
         selectedRect = corrected
         
@@ -174,13 +174,13 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     /// Calculates the minimum rect size for a drag point handle using the adjacent handle position.
-    /// - Parameter handle: The handle orientation.
+    /// - Parameter handleOrientation: The handle orientation.
     /// - Returns: The minimum rect for a handle.
-    private func minimumRect(forHandle handle: HandleOrientation) -> CGRect {
+    private func minimumRect(for handleOrientation: HandleOrientation) -> CGRect {
         let maxWidth: CGFloat = 50
         let maxHeight: CGFloat  = 50
         
-        switch handle {
+        switch handleOrientation {
         case .topLeft:
             // Anchor is opposite corner.
             return CGRect(
