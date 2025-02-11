@@ -238,7 +238,7 @@ struct OnDemandMapAreaSelectorView: View {
         
         var body: some View {
             ZStack {
-                HandleShape(handle: orientation, position: position, cornerRadius: OnDemandMapAreaSelectorView.cornerRadius)
+                HandleShape(orientation: orientation, position: position, cornerRadius: OnDemandMapAreaSelectorView.cornerRadius)
                     .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 Color.clear
                     .contentShape(Rectangle())
@@ -259,10 +259,10 @@ struct OnDemandMapAreaSelectorView: View {
         }
     }
     
-    /// The view for a rounded corner shaped handle.
+    /// The rounded corner shape for drawing a handle.
     struct HandleShape: Shape {
         /// The handle orientation.
-        let handle: HandleOrientation
+        let orientation: HandleOrientation
         /// The handle position.
         let position: CGPoint
         /// The corner radius.
@@ -275,7 +275,7 @@ struct OnDemandMapAreaSelectorView: View {
             var path = Path()
             var clippingPath = Path()
             
-            switch handle {
+            switch orientation {
             case .topLeft:
                 let offsetPosition = position.offsetBy(dx: -offset, dy: -offset)
                 path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius))
