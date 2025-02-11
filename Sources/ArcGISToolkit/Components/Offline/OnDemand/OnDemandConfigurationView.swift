@@ -152,7 +152,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RenameButton(title: title, isValidCheck: titleIsValidCheck) {
@@ -161,8 +162,10 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Level of detail", selection: $maxScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Level of Detail", selection: $maxScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(CacheScale.allCases, id: \.self) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -260,7 +263,8 @@ private struct RenameButton: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.buttonBorderShape(.capsule)
-***REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED***.alert("Enter a name", isPresented: $alertIsShowing) {
 ***REMOVED******REMOVED******REMOVED***TextField("Enter area name", text: $proposedNewTitle)
 ***REMOVED******REMOVED******REMOVED***Button("OK", action: submitNewTitle)
