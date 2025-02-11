@@ -43,10 +43,10 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
-***REMOVED***private let cornerRadius: CGFloat = 16
+***REMOVED***static let cornerRadius: CGFloat = 16
 ***REMOVED***
-***REMOVED******REMOVED***/ The location for a handle that resizes the selector view.
-***REMOVED***enum HandleLocation {
+***REMOVED******REMOVED***/ The orientation for a handle that resizes the selector view.
+***REMOVED***enum HandleOrientation {
 ***REMOVED******REMOVED***case topLeft, topRight, bottomLeft, bottomRight
 ***REMOVED***
 ***REMOVED***
@@ -71,12 +71,12 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED***.fill(.black.opacity(0.2))
 ***REMOVED******REMOVED******REMOVED***.reverseMask {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: OnDemandMapAreaSelectorView.cornerRadius, style: .continuous)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+***REMOVED******REMOVED***RoundedRectangle(cornerRadius: OnDemandMapAreaSelectorView.cornerRadius, style: .continuous)
 ***REMOVED******REMOVED******REMOVED***.stroke(.white, lineWidth: 4)
 ***REMOVED******REMOVED******REMOVED***.frame(width: selectedRect.width, height: selectedRect.height)
 ***REMOVED******REMOVED******REMOVED***.position(selectedRect.center)
@@ -84,20 +84,20 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view for the handles that allow resizing the selected area.
 ***REMOVED***@ViewBuilder private var handles: some View {
-***REMOVED******REMOVED***Handle(location: .topLeft, position: topLeft, cornerRadius: cornerRadius) {
-***REMOVED******REMOVED******REMOVED***resize(for: .topLeft, location: $0)
+***REMOVED******REMOVED***Handle(orientation: .topLeft, position: topLeft) { handle, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(location: .topRight, position: topRight, cornerRadius: cornerRadius) {
-***REMOVED******REMOVED******REMOVED***resize(for: .topRight, location: $0)
+***REMOVED******REMOVED***Handle(orientation: .topRight, position: topRight) { handle, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(location: .bottomLeft, position: bottomLeft, cornerRadius: cornerRadius) {
-***REMOVED******REMOVED******REMOVED***resize(for: .bottomLeft, location: $0)
+***REMOVED******REMOVED***Handle(orientation: .bottomLeft, position: bottomLeft) { handle, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(location: .bottomRight, position: bottomRight, cornerRadius: cornerRadius) {
-***REMOVED******REMOVED******REMOVED***resize(for: .bottomRight, location: $0)
+***REMOVED******REMOVED***Handle(orientation: .bottomRight, position: bottomRight) { handle, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -126,9 +126,9 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resizes the area selectpor view.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - handle: The handle location.
+***REMOVED******REMOVED***/   - handle: The handle orientation.
 ***REMOVED******REMOVED***/   - location: The location of the drag gesture.
-***REMOVED***private func resize(for handle: HandleLocation, location: CGPoint) {
+***REMOVED***private func resize(for handle: HandleOrientation, location: CGPoint) {
 ***REMOVED******REMOVED******REMOVED*** Resize the rect.
 ***REMOVED******REMOVED***let rectangle: CGRect
 ***REMOVED******REMOVED***
@@ -174,9 +174,9 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the minimum rect size for a drag point handle using the adjacent handle position.
-***REMOVED******REMOVED***/ - Parameter handle: The handle location.
+***REMOVED******REMOVED***/ - Parameter handle: The handle orientation.
 ***REMOVED******REMOVED***/ - Returns: The minimum rect for a handle.
-***REMOVED***private func minimumRect(forHandle handle: HandleLocation) -> CGRect {
+***REMOVED***private func minimumRect(forHandle handle: HandleOrientation) -> CGRect {
 ***REMOVED******REMOVED***let maxWidth: CGFloat = 50
 ***REMOVED******REMOVED***let maxHeight: CGFloat  = 50
 ***REMOVED******REMOVED***
@@ -223,13 +223,12 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The handle view for the map area selector.
 ***REMOVED***struct Handle: View {
-***REMOVED******REMOVED***let location: HandleLocation
+***REMOVED******REMOVED******REMOVED***/ The handle orientation.
+***REMOVED******REMOVED***let orientation: HandleOrientation
 ***REMOVED******REMOVED******REMOVED***/ The position of the handle.
 ***REMOVED******REMOVED***let position: CGPoint
-***REMOVED******REMOVED******REMOVED***/ The corner radius of the handle.
-***REMOVED******REMOVED***let cornerRadius: CGFloat
 ***REMOVED******REMOVED******REMOVED***/ The closure to call when the map area selector should be resized.
-***REMOVED******REMOVED***let resize: (CGPoint) -> Void
+***REMOVED******REMOVED***let resize: (HandleOrientation, CGPoint) -> Void
 ***REMOVED******REMOVED******REMOVED***/ The gesture state of the drag gesture.
 ***REMOVED******REMOVED***@GestureState var gestureState: State = .started
 ***REMOVED******REMOVED******REMOVED***/ The types of gesture states.
@@ -239,7 +238,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorner(handle: location, position: position, cornerRadius: cornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED***HandleShape(handle: orientation, position: position, cornerRadius: OnDemandMapAreaSelectorView.cornerRadius)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
 ***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
@@ -252,7 +251,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(value.location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(orientation, value.location)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -260,10 +259,10 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The view for a rounded corner shape.
-***REMOVED***struct RoundedCorner: Shape {
-***REMOVED******REMOVED******REMOVED***/ The handle location.
-***REMOVED******REMOVED***let handle: HandleLocation
+***REMOVED******REMOVED***/ The view for a rounded corner shaped handle.
+***REMOVED***struct HandleShape: Shape {
+***REMOVED******REMOVED******REMOVED***/ The handle orientation.
+***REMOVED******REMOVED***let handle: HandleOrientation
 ***REMOVED******REMOVED******REMOVED***/ The handle position.
 ***REMOVED******REMOVED***let position: CGPoint
 ***REMOVED******REMOVED******REMOVED***/ The corner radius.
