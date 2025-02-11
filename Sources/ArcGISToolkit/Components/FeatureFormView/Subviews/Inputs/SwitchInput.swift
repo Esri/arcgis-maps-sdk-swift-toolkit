@@ -73,10 +73,21 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** This element should only be set as the focused element when a
+***REMOVED******REMOVED******REMOVED******REMOVED*** user physically interacts with the toggle.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** onChange(_:perform:) is not a good signal for detecting user
+***REMOVED******REMOVED******REMOVED******REMOVED*** interaction because it may or may not run when the view first
+***REMOVED******REMOVED******REMOVED******REMOVED*** loads, depending if the initial value matches the default value
+***REMOVED******REMOVED******REMOVED******REMOVED*** defined for `isOn`.
 ***REMOVED******REMOVED******REMOVED***.onChange(isOn) { isOn in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(isOn ? input.onValue.code : input.offValue.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** onValueChange(of:action:) is a good signal for user interaction
+***REMOVED******REMOVED******REMOVED******REMOVED*** because it will reliably run when the view first loads and each
+***REMOVED******REMOVED******REMOVED******REMOVED*** subsequent time a user changes the value. The only requirement is
+***REMOVED******REMOVED******REMOVED******REMOVED*** that we must track the initial run.
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isOn = newFormattedValue == input.onValue.name
 ***REMOVED******REMOVED******REMOVED******REMOVED***if didReceiveInitialValue {
