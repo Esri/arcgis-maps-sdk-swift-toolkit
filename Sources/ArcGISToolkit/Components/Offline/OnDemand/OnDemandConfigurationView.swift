@@ -152,7 +152,8 @@ struct OnDemandConfigurationView: View {
             VStack(alignment: .leading) {
                 HStack {
                     Text(title)
-                        .font(.headline)
+                        .font(.title2)
+                        .fontWeight(.bold)
                         .lineLimit(1)
                     Spacer()
                     RenameButton(title: title, isValidCheck: titleIsValidCheck) {
@@ -161,8 +162,10 @@ struct OnDemandConfigurationView: View {
                     .disabled(downloadIsDisabled)
                 }
                 
+                Divider()
+                
                 HStack {
-                    Picker("Level of detail", selection: $maxScale) {
+                    Picker("Level of Detail", selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
                             Text($0.description)
                         }
@@ -260,7 +263,8 @@ private struct RenameButton: View {
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
-        .font(.footnote)
+        .font(.subheadline)
+        .fontWeight(.semibold)
         .alert("Enter a name", isPresented: $alertIsShowing) {
             TextField("Enter area name", text: $proposedNewTitle)
             Button("OK", action: submitNewTitle)
