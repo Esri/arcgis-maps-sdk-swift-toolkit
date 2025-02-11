@@ -105,6 +105,7 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
         }
     }
     
+    /// The system image for the current status.
     var statusSystemImage: String {
         switch status {
         case .initialized, .downloading, .downloaded, .downloadCancelled:
