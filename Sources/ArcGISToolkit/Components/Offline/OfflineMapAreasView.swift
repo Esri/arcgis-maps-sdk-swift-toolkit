@@ -135,31 +135,33 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var onDemandMapAreasView: some View {
-***REMOVED******REMOVED***List {
+***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !mapViewModel.onDemandMapModels.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyOnDemandOfflineAreasView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
+***REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
+***REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
+***REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
+***REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED***@ViewBuilder private var noInternetFooter: some View {
 ***REMOVED******REMOVED***Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
 ***REMOVED******REMOVED******REMOVED***.font(.caption)
@@ -187,7 +189,17 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***"No Map Areas",
 ***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
 ***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map. Tap the button below to get started."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Add Offline Area", systemImage: "plus")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED******REMOVED***.buttonBorderShape(.capsule)
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var offlineDisabledView: some View {
@@ -229,24 +241,52 @@ public struct OfflineMapAreasView: View {
 
 enum Backported {
 ***REMOVED******REMOVED***/ A content unavailable view that can be used in older operating systems.
-***REMOVED***struct ContentUnavailableView: View {
+***REMOVED***struct ContentUnavailableView<Actions: View>: View {
 ***REMOVED******REMOVED***let title: LocalizedStringKey
 ***REMOVED******REMOVED***let systemImage: String
 ***REMOVED******REMOVED***let description: String?
+***REMOVED******REMOVED***let actions: () -> Actions
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(_ title: LocalizedStringKey, systemImage name: String, description: String? = nil) {
+***REMOVED******REMOVED***init(
+***REMOVED******REMOVED******REMOVED***_ title: LocalizedStringKey,
+***REMOVED******REMOVED******REMOVED***systemImage name: String,
+***REMOVED******REMOVED******REMOVED***description: String? = nil,
+***REMOVED******REMOVED******REMOVED***@ViewBuilder actions: @escaping () -> Actions
+***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***self.title = title
 ***REMOVED******REMOVED******REMOVED***self.systemImage = name
 ***REMOVED******REMOVED******REMOVED***self.description = description
+***REMOVED******REMOVED******REMOVED***self.actions = actions
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(
+***REMOVED******REMOVED******REMOVED***_ title: LocalizedStringKey,
+***REMOVED******REMOVED******REMOVED***systemImage name: String,
+***REMOVED******REMOVED******REMOVED***description: String? = nil
+***REMOVED******REMOVED***) where Actions == EmptyView {
+***REMOVED******REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED******REMOVED***self.systemImage = name
+***REMOVED******REMOVED******REMOVED***self.description = description
+***REMOVED******REMOVED******REMOVED***self.actions = { EmptyView() ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: systemImage,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description.map { Text($0) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: systemImage,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description.map { Text($0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(title, systemImage: systemImage)
+***REMOVED******REMOVED******REMOVED*** description: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** actions: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemImage)
@@ -260,6 +300,7 @@ enum Backported {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
