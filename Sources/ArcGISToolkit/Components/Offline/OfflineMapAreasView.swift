@@ -135,31 +135,33 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var onDemandMapAreasView: some View {
-        List {
+        VStack {
             if !mapViewModel.onDemandMapModels.isEmpty {
-                ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
-                    OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+                List {
+                    ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
+                        OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+                    }
+                    Section {
+                        Button("Add Offline Area") {
+                            isAddingOnDemandArea = true
+                        }
+                    }
                 }
             } else {
                 emptyOnDemandOfflineAreasView
             }
-            Section {
-                Button("Add Offline Area") {
-                    isAddingOnDemandArea = true
-                }
-                .sheet(isPresented: $isAddingOnDemandArea) {
-                    OnDemandConfigurationView(
-                        map: onlineMap.clone(),
-                        title: mapViewModel.nextOnDemandAreaTitle(),
-                        titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
-                    ) {
-                        mapViewModel.addOnDemandMapArea(with: $0)
-                    }
-                }
+        }
+        .sheet(isPresented: $isAddingOnDemandArea) {
+            OnDemandConfigurationView(
+                map: onlineMap.clone(),
+                title: mapViewModel.nextOnDemandAreaTitle(),
+                titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+            ) {
+                mapViewModel.addOnDemandMapArea(with: $0)
             }
         }
     }
-    
+
     @ViewBuilder private var noInternetFooter: some View {
         Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
             .font(.caption)
@@ -187,7 +189,17 @@ public struct OfflineMapAreasView: View {
             "No Map Areas",
             systemImage: "arrow.down.circle",
             description: "There are no offline map areas for this map. Tap the button below to get started."
-        )
+        ) {
+            Button {
+                isAddingOnDemandArea = true
+            } label: {
+                Label("Add Offline Area", systemImage: "plus")
+            }
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .buttonBorderShape(.capsule)
+            .buttonStyle(.bordered)
+        }
     }
     
     @ViewBuilder private var offlineDisabledView: some View {
@@ -229,24 +241,52 @@ public struct OfflineMapAreasView: View {
 
 enum Backported {
     /// A content unavailable view that can be used in older operating systems.
-    struct ContentUnavailableView: View {
+    struct ContentUnavailableView<Actions: View>: View {
         let title: LocalizedStringKey
         let systemImage: String
         let description: String?
+        let actions: () -> Actions
         
-        init(_ title: LocalizedStringKey, systemImage name: String, description: String? = nil) {
+        init(
+            _ title: LocalizedStringKey,
+            systemImage name: String,
+            description: String? = nil,
+            @ViewBuilder actions: @escaping () -> Actions
+        ) {
             self.title = title
             self.systemImage = name
             self.description = description
+            self.actions = actions
+        }
+        
+        init(
+            _ title: LocalizedStringKey,
+            systemImage name: String,
+            description: String? = nil
+        ) where Actions == EmptyView {
+            self.title = title
+            self.systemImage = name
+            self.description = description
+            self.actions = { EmptyView() }
         }
         
         var body: some View {
             if #available(iOS 17, *) {
-                SwiftUI.ContentUnavailableView(
-                    title,
-                    systemImage: systemImage,
-                    description: description.map { Text($0) }
-                )
+//                SwiftUI.ContentUnavailableView(
+//                    title,
+//                    systemImage: systemImage,
+//                    description: description.map { Text($0) }
+//                )
+                
+                SwiftUI.ContentUnavailableView {
+                    Label(title, systemImage: systemImage)
+                } description: {
+                    if let description {
+                        Text(description)
+                    }
+                } actions: {
+                    actions()
+                }
             } else {
                 VStack(alignment: .center) {
                     Image(systemName: systemImage)
@@ -260,6 +300,7 @@ enum Backported {
                             .multilineTextAlignment(.center)
                             .foregroundStyle(.secondary)
                     }
+                    actions()
                 }
             }
         }
