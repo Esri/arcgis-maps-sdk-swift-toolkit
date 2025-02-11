@@ -23,7 +23,7 @@ class OnDemandMapModelStatusTests: XCTestCase {
         XCTAssertTrue(Status.initialized.allowsDownload)
         XCTAssertFalse(Status.downloading.allowsDownload)
         XCTAssertFalse(Status.downloaded.allowsDownload)
-        XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsDownload)
+        XCTAssertFalse(Status.downloadFailure(CancellationError()).allowsDownload)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
     }
     
