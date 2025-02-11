@@ -140,7 +140,14 @@ struct OnDemandConfigurationView: View {
             .magnifierDisabled(true)
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onVisibleAreaChanged { _ in mapIsReady = true }
+            .onSpatialReferenceChanged { _ in
+                Task { @MainActor in
+                    // Must wait here in order for the selected extent to be calculated
+                    // the first time.
+                    try? await Task.sleep(for: .milliseconds(250))
+                    mapIsReady = true
+                }
+            }
             // Prevent view from dragging when panning on map view.
             .highPriorityGesture(DragGesture())
             .interactiveDismissDisabled()
@@ -152,7 +159,8 @@ struct OnDemandConfigurationView: View {
             VStack(alignment: .leading) {
                 HStack {
                     Text(title)
-                        .font(.headline)
+                        .font(.title2)
+                        .fontWeight(.bold)
                         .lineLimit(1)
                     Spacer()
                     RenameButton(title: title, isValidCheck: titleIsValidCheck) {
@@ -161,13 +169,19 @@ struct OnDemandConfigurationView: View {
                     .disabled(downloadIsDisabled)
                 }
                 
+                Divider()
+                
                 HStack {
-                    Picker("Level of detail", selection: $maxScale) {
+                    Text("Level of Detail")
+                    Spacer()
+                    Picker(selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
                             Text($0.description)
+                                .foregroundStyle(.secondary)
                         }
+                    } label: {
+                        EmptyView()
                     }
-                    .pickerStyle(.navigationLink)
                     .disabled(downloadIsDisabled)
                 }
                 
@@ -189,7 +203,8 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Label("Download", systemImage: "arrow.down.circle")
+                        Text("Download")
+                            .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                     }
                     .controlSize(.large)
@@ -260,7 +275,8 @@ private struct RenameButton: View {
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
-        .font(.footnote)
+        .font(.subheadline)
+        .fontWeight(.semibold)
         .alert("Enter a name", isPresented: $alertIsShowing) {
             TextField("Enter area name", text: $proposedNewTitle)
             Button("OK", action: submitNewTitle)
