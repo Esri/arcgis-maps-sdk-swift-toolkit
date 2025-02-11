@@ -57,7 +57,7 @@ extension FeatureFormExampleView {
 }
 
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
     enum State {
         case applyingEdits(FeatureForm)
         case cancellationPending(FeatureForm)
@@ -225,6 +225,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
-        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }

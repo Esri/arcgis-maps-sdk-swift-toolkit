@@ -16,7 +16,6 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-@available(macCatalyst, unavailable)
 struct FlyoverExampleView: View {
     @State private var scene = Scene(
         item: PortalItem(

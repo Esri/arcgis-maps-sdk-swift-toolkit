@@ -38,47 +38,11 @@ struct KeyboardStateChangedModifier: ViewModifier {
     }
 }
 
-/// A modifier which displays a background and shadow for a view. Used to represent a selected view.
-struct SelectedModifier: ViewModifier {
-    /// A Boolean value that indicates whether view should display as selected.
-    var isSelected: Bool
-    
-    func body(content: Content) -> some View {
-        if isSelected {
-            content
-                .background(Color.secondary.opacity(0.8))
-                .clipShape(RoundedRectangle(cornerRadius: 4))
-                .shadow(
-                    color: .secondary.opacity(0.8),
-                    radius: 2
-                )
-        } else {
-            content
-        }
-    }
-}
-
 extension View {
     /// Sets a closure to perform when the keyboard state has changed.
     /// - Parameter action: The closure to perform when the keyboard state has changed.
     @ViewBuilder func onKeyboardStateChanged(_ action: @escaping (KeyboardState, CGFloat) -> Void) -> some View {
         modifier(KeyboardStateChangedModifier(action: action))
-    }
-    
-    /// Returns a new `View` that allows a parent `View` to be informed of a child view's size.
-    /// - Parameter perform: The closure to be executed when the content size of the receiver
-    /// changes.
-    /// - Returns: A new `View`.
-    func onSizeChange(perform: @escaping (CGSize) -> Void) -> some View {
-        background(
-            GeometryReader { geometry in
-                Color.clear
-                    .preference(
-                        key: SizePreferenceKey.self, value: geometry.size
-                    )
-            }
-        )
-        .onPreferenceChange(SizePreferenceKey.self, perform: perform)
     }
     
     /// Adds an equal padding amount to the horizontal edges of this view if the target environment
@@ -90,15 +54,6 @@ extension View {
     func catalystPadding(_ length: CGFloat? = nil) -> some View {
         return self
             .padding(isMacCatalyst ? [.horizontal] : [], length)
-    }
-    
-    /// View modifier used to denote the view is selected.
-    /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
-    /// - Returns: The modified view.
-    func selected(
-        _ isSelected: Bool = false
-    ) -> some View {
-        modifier(SelectedModifier(isSelected: isSelected))
     }
     
     /// Performs the provided action when the view appears after a slight delay.

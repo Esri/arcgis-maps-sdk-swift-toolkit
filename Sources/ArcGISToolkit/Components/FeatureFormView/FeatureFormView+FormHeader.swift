@@ -14,7 +14,6 @@
 
 import SwiftUI
 
-@available(visionOS, unavailable)
 public extension FeatureFormView {
     /// Specifies the visibility of the form header.
     /// - Parameter visibility: The preferred visibility of the form header.
