@@ -16,7 +16,6 @@ import SwiftUI
 import ArcGIS
 
 @MainActor
-@preconcurrency
 struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
