@@ -319,6 +319,7 @@ enum Backported {
                     }
                     actions()
                 }
+                .padding()
             }
         }
     }
