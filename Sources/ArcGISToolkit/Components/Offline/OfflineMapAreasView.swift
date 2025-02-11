@@ -84,6 +84,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** This frame is required to set the background to cover the whole view.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise when the progress view is showing, the background will
+***REMOVED******REMOVED******REMOVED******REMOVED*** only cover the progress view.
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: .infinity)
+***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.loadModels()
