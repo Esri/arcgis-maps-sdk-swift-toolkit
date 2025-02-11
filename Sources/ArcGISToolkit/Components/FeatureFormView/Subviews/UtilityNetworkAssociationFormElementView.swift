@@ -15,6 +15,8 @@
 ***REMOVED***
 
 struct UtilityNetworkAssociationFormElementView: View {
+***REMOVED***@EnvironmentObject private var model: NavigationLayerModel
+***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let description: String
 ***REMOVED***
@@ -43,9 +45,30 @@ struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: End InputFooter replacement section -----------------------
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***ForEach(associationKindGroups) { group in
-***REMOVED******REMOVED******REMOVED******REMOVED***AssociationKindGroupView(associationKindGroup: group)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***FeatureFormGroupedContentView(
+***REMOVED******REMOVED******REMOVED******REMOVED***content: associationKindGroups.map { group in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: group.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: group.presentingForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AssociationKindGroupView(associationKindGroup: group)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.primary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.networkSourceGroups.flatMap( { $0.associations.compactMap { $0 ***REMOVED*** ***REMOVED*** ).count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -88,12 +111,20 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let percent = association.fractionAlongEdge {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(percent.formatted(.percent))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let terminal = association.terminalName {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Terminal: \(terminal)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(2.5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .secondarySystemGroupedBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -106,25 +137,37 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let presentingForm: String
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationKindGroupView: View {
+***REMOVED******REMOVED***@EnvironmentObject private var model: NavigationLayerModel
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let associationKindGroup: AssociationKindGroup
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var isExpanded = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(associationKindGroup.networkSourceGroups) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NetworkSourceGroupView(networkSourceGroup: $0)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(associationKindGroup.networkSourceGroups.flatMap( { $0.associations.compactMap { $0 ***REMOVED*** ***REMOVED*** ).count.formatted())
+***REMOVED******REMOVED******REMOVED***List(associationKindGroup.networkSourceGroups) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: group.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: group.presentingForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NetworkSourceGroupView(networkSourceGroup: group)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.associations.count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -137,24 +180,20 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let presentingForm: String
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct NetworkSourceGroupView: View {
 ***REMOVED******REMOVED***let networkSourceGroup:  NetworkSourceGroup
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***DisclosureGroup {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(networkSourceGroup.associations) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(networkSourceGroup.associations.count.formatted())
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***List(networkSourceGroup.associations) {
+***REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(.leading)
+***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
