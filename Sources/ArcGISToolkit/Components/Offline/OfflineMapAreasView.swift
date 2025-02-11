@@ -295,12 +295,6 @@ enum Backported {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: systemImage,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description.map { Text($0) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(title, systemImage: systemImage)
 ***REMOVED******REMOVED******REMOVED*** description: {
