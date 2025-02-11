@@ -374,7 +374,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clean up folder.
-***REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
+***REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses after remove.
 ***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
