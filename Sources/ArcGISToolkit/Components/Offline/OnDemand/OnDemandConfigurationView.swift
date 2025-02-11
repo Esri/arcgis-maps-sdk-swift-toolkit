@@ -140,7 +140,14 @@ struct OnDemandConfigurationView: View {
             .magnifierDisabled(true)
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onVisibleAreaChanged { _ in mapIsReady = true }
+            .onSpatialReferenceChanged { _ in
+                Task { @MainActor in
+                    // Must wait here in order for the selected extent to be calculated
+                    // the first time.
+                    try? await Task.sleep(for: .milliseconds(250))
+                    mapIsReady = true
+                }
+            }
             // Prevent view from dragging when panning on map view.
             .highPriorityGesture(DragGesture())
             .interactiveDismissDisabled()
