@@ -228,7 +228,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***OfflineManager.shared.jobManager.jobs.removeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
-***REMOVED******REMOVED******REMOVED***model.removeDownloadedPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED***model.removeDownloadedArea()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var statuses = [PreplannedMapModel.Status]()
