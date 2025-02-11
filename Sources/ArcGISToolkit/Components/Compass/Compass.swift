@@ -30,12 +30,14 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [CompassExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `Compass` see the <doc:CompassTutorial>.
-@available(visionOS, unavailable)
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
+***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
+***REMOVED***private var action: (() -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should automatically
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
 ***REMOVED***private var autoHide: Bool = true
 ***REMOVED***
@@ -48,8 +50,9 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The width and height of the compass.
 ***REMOVED***private var size: CGFloat = 44
 ***REMOVED***
-***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
-***REMOVED***private var action: (() -> Void)?
+***REMOVED******REMOVED***/ A Boolean value indicating whether sensory feedback is enabled
+***REMOVED******REMOVED***/ when the heading snaps to zero.
+***REMOVED***private var snapToZeroSensoryFeedbackEnabled: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
 ***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
@@ -110,11 +113,44 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect { effect, isActive, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effect.scaleEffect(isActive ? 1.05 : 1.0)
+***REMOVED******REMOVED******REMOVED***
+#else
+***REMOVED******REMOVED******REMOVED******REMOVED***.snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
+private extension View {
+***REMOVED******REMOVED***/ Enables the snap to zero sensory feedback
+***REMOVED******REMOVED***/ when it is available.
+***REMOVED***@available(visionOS, unavailable)
+***REMOVED***@ViewBuilder
+***REMOVED***func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
+***REMOVED******REMOVED***if #available(iOS 17.0, *) {
+***REMOVED******REMOVED******REMOVED***if enabled {
+***REMOVED******REMOVED******REMOVED******REMOVED***sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (!oldValue.isZero && newValue.isZero) ||
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(oldValue.isZero && !newValue.isZero) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***self
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Fallback on earlier versions
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 extension Compass {
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/ provided heading and whether the compass has been configured to automatically hide.
@@ -125,7 +161,6 @@ extension Compass {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 public extension Compass {
 ***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
 ***REMOVED******REMOVED***/ a direction toward true West, etc.).
@@ -168,8 +203,15 @@ public extension Compass {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Enables sensory feedback when the heading snaps to `zero`.
+***REMOVED***@available(iOS 17, *)
+***REMOVED***func snapToZeroSensoryFeedback() -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.snapToZeroSensoryFeedbackEnabled = true
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
 
-#if !os(visionOS)
 #Preview("Compass") {
 ***REMOVED***Compass(rotation: .zero) { ***REMOVED***
 ***REMOVED******REMOVED***.autoHideDisabled()
@@ -182,4 +224,3 @@ public extension Compass {
 ***REMOVED******REMOVED***.compassSize(size: 100)
 ***REMOVED******REMOVED***.environment(\.layoutDirection, .rightToLeft)
 ***REMOVED***
-#endif

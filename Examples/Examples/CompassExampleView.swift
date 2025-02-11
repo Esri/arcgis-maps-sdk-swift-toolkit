@@ -30,8 +30,23 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.snapToZeroSensoryFeedbackIfAvailable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension Compass {
+***REMOVED******REMOVED***/ Enables the sensory feedback when the compass snaps to `zero`
+***REMOVED******REMOVED***/ when sensory feedback is available.
+***REMOVED***@ViewBuilder
+***REMOVED***func snapToZeroSensoryFeedbackIfAvailable() -> some View {
+***REMOVED******REMOVED***if #available(iOS 17, *) {
+***REMOVED******REMOVED******REMOVED***snapToZeroSensoryFeedback()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Fallback on earlier versions
+***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

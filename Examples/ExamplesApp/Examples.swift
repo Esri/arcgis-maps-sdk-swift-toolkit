@@ -15,25 +15,52 @@
 ***REMOVED***
 
 struct Examples: View {
-***REMOVED******REMOVED***/ The list of example lists.  Allows for a hierarchical navigation model for examples.
-***REMOVED***let lists = makeExamples()
+***REMOVED******REMOVED***/ The categories to display.
+***REMOVED***let categories = makeCategories()
+***REMOVED***
+***REMOVED******REMOVED***/ The category selected by the user.
+***REMOVED***@State private var selectedCategory: Category?
+***REMOVED******REMOVED***/ The example selected by the user.
+***REMOVED***@State private var selectedExample: Example?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED***List(lists) { (list) in
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(list.name, destination: list)
+***REMOVED******REMOVED***NavigationSplitView {
+***REMOVED******REMOVED******REMOVED***NavigationStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***List(categories, id: \.name, selection: $selectedCategory) { category in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(category.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, id: \.name, selection: $selectedExample) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.sidebar)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(category.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isDetailLink(false)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED*** detail: {
+***REMOVED******REMOVED******REMOVED***NavigationStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let example = selectedExample {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***example.view
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED******REMOVED*** else if selectedCategory != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select an example")
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a category")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func makeExamples() -> [ExampleList] {
-***REMOVED******REMOVED***let common: [ExampleList] = [
+***REMOVED***static func makeCategories() -> [Category] {
+***REMOVED******REMOVED***let common: [Category] = [
 ***REMOVED******REMOVED******REMOVED***.geoview,
 ***REMOVED******REMOVED******REMOVED***.views
 ***REMOVED******REMOVED***]
-#if !targetEnvironment(macCatalyst)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***return [.augmentedReality] + common
 #else
 ***REMOVED******REMOVED***return common
@@ -41,37 +68,45 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***
 
-extension ExampleList {
-***REMOVED***@available(macCatalyst, unavailable)
-***REMOVED***static let augmentedReality = Self(
-***REMOVED******REMOVED***name: "Augmented Reality",
-***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Flyover", content: FlyoverExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Tabletop", content: TableTopExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("World Scale", content: WorldScaleExampleView())
-***REMOVED******REMOVED***]
-***REMOVED***)
+@MainActor
+extension Category {
+#if os(iOS) && !targetEnvironment(macCatalyst)
+***REMOVED***static var augmentedReality: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***name: "Augmented Reality",
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Flyover", content: FlyoverExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Tabletop", content: TableTopExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("World Scale", content: WorldScaleExampleView())
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let geoview = Self(
-***REMOVED******REMOVED***name: "GeoView",
-***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Bookmarks", content: BookmarksExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Feature Form", content: FeatureFormExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-***REMOVED******REMOVED***]
-***REMOVED***)
+#endif
 ***REMOVED***
-***REMOVED***static let views = Self(
-***REMOVED******REMOVED***name: "Views",
-***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Floating Panel", content: FloatingPanelExampleView())
-***REMOVED******REMOVED***]
-***REMOVED***)
+***REMOVED***static var geoview: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***name: "GeoView",
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var views: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***name: "Views",
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Floating Panel", content: FloatingPanelExampleView())
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***

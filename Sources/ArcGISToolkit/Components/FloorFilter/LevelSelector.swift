@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view which allows selection of levels represented in `FloorFacility`.
-@available(visionOS, unavailable)
 struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
@@ -50,7 +49,6 @@ struct LevelSelector: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension LevelSelector {
 ***REMOVED******REMOVED***/ A list of all the levels to be displayed.
 ***REMOVED******REMOVED***/
@@ -85,7 +83,7 @@ extension LevelSelector {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: iconForCollapsedState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.disabled(levels.count == 1)
@@ -95,49 +93,92 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The button representing the provided level.
 ***REMOVED***@ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-***REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED***.background {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColorFor(level))
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***let roundedRectangle = RoundedRectangle(cornerRadius: 5)
+***REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(textColor(for: level))
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roundedRectangle
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColor(for: level))
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, roundedRectangle)
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
+***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scrollable list of buttons; one for each level to be displayed.
 ***REMOVED******REMOVED***/ - Returns: The scrollable list of level buttons.
 ***REMOVED***@ViewBuilder func makeLevelButtons() -> some View {
-***REMOVED******REMOVED***ScrollViewReader { proxy in
+***REMOVED******REMOVED***let scrollView = ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 4) {
+***REMOVED******REMOVED******REMOVED******REMOVED***let list = VStack(spacing: 4) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(filteredLevels, id: \.id) { level in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeLevelButton(level)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange { contentHeight = $0.height ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if #available (iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onGeometryChange(for: CGFloat.self) { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.frame(in: .global).height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** action: { newHeight in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = newHeight
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear { scrollToSelectedLevel(with: proxy) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***if #available (iOS 18.0, *) {
+***REMOVED******REMOVED******REMOVED***scrollView
+***REMOVED******REMOVED******REMOVED******REMOVED***.onScrollGeometryChange(for: CGFloat.self) { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry.contentSize.height
+***REMOVED******REMOVED******REMOVED*** action: { _, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = newValue
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***scrollView
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines a appropriate color for a button in the floor level list.
-***REMOVED******REMOVED***/ - Parameter level: THe level represented by the button.
+***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The color for the button representing the provided level.
-***REMOVED***func buttonColorFor(_ level: FloorLevel) -> Color {
-***REMOVED******REMOVED***if viewModel.selection?.level == level {
-***REMOVED******REMOVED******REMOVED***return Color.accentColor
+***REMOVED***func buttonColor(for level: FloorLevel) -> Color {
+***REMOVED******REMOVED***return if viewModel.selection?.level == level {
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***.white
+#else
+***REMOVED******REMOVED******REMOVED***.accentColor
+#endif
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return Color.secondary.opacity(0.5)
+***REMOVED******REMOVED******REMOVED***.secondary.opacity(0.1)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Determines a appropriate text color for a button in the floor level list.
+***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
+***REMOVED******REMOVED***/ - Returns: The color for the text on the button that is representing the provided level.
+***REMOVED***func textColor(for level: FloorLevel) -> Color {
+#if os(visionOS)
+***REMOVED******REMOVED***if viewModel.selection?.level == level {
+***REMOVED******REMOVED******REMOVED******REMOVED*** We need to change the text color on visionOS when a level is selected
+***REMOVED******REMOVED******REMOVED******REMOVED*** because the background is now white so the text needs to be black
+***REMOVED******REMOVED******REMOVED******REMOVED*** so the text is visible.
+***REMOVED******REMOVED******REMOVED***return .black
+***REMOVED***
+#endif
+***REMOVED******REMOVED***return .primary
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Scrolls the list within the provided proxy to the button representing the selected level.

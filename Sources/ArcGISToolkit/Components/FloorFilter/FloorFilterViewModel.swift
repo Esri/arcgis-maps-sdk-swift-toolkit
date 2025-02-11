@@ -18,7 +18,6 @@ import Combine
 
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
-@available(visionOS, unavailable)
 final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:

@@ -87,7 +87,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.thinMaterial)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 10))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -133,7 +133,7 @@ extension FeatureFormExampleView {
 ***REMOVED***
 
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
 ***REMOVED***enum State {
 ***REMOVED******REMOVED***case applyingEdits(FeatureForm)
 ***REMOVED******REMOVED***case cancellationPending(FeatureForm)
@@ -301,6 +301,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
 ***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
 ***REMOVED***var errors: [Error] {
-***REMOVED******REMOVED***compactMap { $0.error ***REMOVED*** + flatMap { $0.attachmentResults.compactMap { $0.error ***REMOVED*** ***REMOVED***
+***REMOVED******REMOVED***compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
