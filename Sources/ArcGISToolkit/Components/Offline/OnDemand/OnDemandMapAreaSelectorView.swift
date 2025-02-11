@@ -84,20 +84,20 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view for the handles that allow resizing the selected area.
 ***REMOVED***@ViewBuilder private var handles: some View {
-***REMOVED******REMOVED***Handle(orientation: .topLeft, position: topLeft) { handle, location in
-***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
+***REMOVED******REMOVED***Handle(orientation: .topLeft, position: topLeft) { handleOrientation, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handleOrientation, location: location)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(orientation: .topRight, position: topRight) { handle, location in
-***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
+***REMOVED******REMOVED***Handle(orientation: .topRight, position: topRight) { handleOrientation, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handleOrientation, location: location)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(orientation: .bottomLeft, position: bottomLeft) { handle, location in
-***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
+***REMOVED******REMOVED***Handle(orientation: .bottomLeft, position: bottomLeft) { handleOrientation, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handleOrientation, location: location)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Handle(orientation: .bottomRight, position: bottomRight) { handle, location in
-***REMOVED******REMOVED******REMOVED***resize(for: handle, location: location)
+***REMOVED******REMOVED***Handle(orientation: .bottomRight, position: bottomRight) { handleOrientation, location in
+***REMOVED******REMOVED******REMOVED***resize(for: handleOrientation, location: location)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -126,13 +126,13 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resizes the area selectpor view.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - handle: The handle orientation.
+***REMOVED******REMOVED***/   - handleOrientation: The handle orientation.
 ***REMOVED******REMOVED***/   - location: The location of the drag gesture.
-***REMOVED***private func resize(for handle: HandleOrientation, location: CGPoint) {
+***REMOVED***private func resize(for handleOrientation: HandleOrientation, location: CGPoint) {
 ***REMOVED******REMOVED******REMOVED*** Resize the rect.
 ***REMOVED******REMOVED***let rectangle: CGRect
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch handle {
+***REMOVED******REMOVED***switch handleOrientation {
 ***REMOVED******REMOVED***case .topLeft:
 ***REMOVED******REMOVED******REMOVED***let minX = location.x
 ***REMOVED******REMOVED******REMOVED***let maxX = selectedRect.maxX
@@ -165,7 +165,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***var corrected = CGRectIntersection(maxRect, rectangle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Keep rectangle outside the minimum rect.
-***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
+***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(for: handleOrientation))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectedRect = corrected
 ***REMOVED******REMOVED***
@@ -174,13 +174,13 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the minimum rect size for a drag point handle using the adjacent handle position.
-***REMOVED******REMOVED***/ - Parameter handle: The handle orientation.
+***REMOVED******REMOVED***/ - Parameter handleOrientation: The handle orientation.
 ***REMOVED******REMOVED***/ - Returns: The minimum rect for a handle.
-***REMOVED***private func minimumRect(forHandle handle: HandleOrientation) -> CGRect {
+***REMOVED***private func minimumRect(for handleOrientation: HandleOrientation) -> CGRect {
 ***REMOVED******REMOVED***let maxWidth: CGFloat = 50
 ***REMOVED******REMOVED***let maxHeight: CGFloat  = 50
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch handle {
+***REMOVED******REMOVED***switch handleOrientation {
 ***REMOVED******REMOVED***case .topLeft:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Anchor is opposite corner.
 ***REMOVED******REMOVED******REMOVED***return CGRect(
