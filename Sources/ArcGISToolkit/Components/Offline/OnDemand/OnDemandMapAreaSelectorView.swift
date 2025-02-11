@@ -43,10 +43,10 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     /// The corner radius of the area selector view.
-    private let cornerRadius: CGFloat = 16
+    static let cornerRadius: CGFloat = 16
     
-    /// The location for a handle that resizes the selector view.
-    enum HandleLocation {
+    /// The orientation for a handle that resizes the selector view.
+    enum HandleOrientation {
         case topLeft, topRight, bottomLeft, bottomRight
     }
     
@@ -71,12 +71,12 @@ struct OnDemandMapAreaSelectorView: View {
         Rectangle()
             .fill(.black.opacity(0.2))
             .reverseMask {
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                RoundedRectangle(cornerRadius: OnDemandMapAreaSelectorView.cornerRadius, style: .continuous)
                     .frame(width: selectedRect.width, height: selectedRect.height)
                     .position(selectedRect.center)
             }
         
-        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: OnDemandMapAreaSelectorView.cornerRadius, style: .continuous)
             .stroke(.white, lineWidth: 4)
             .frame(width: selectedRect.width, height: selectedRect.height)
             .position(selectedRect.center)
@@ -84,20 +84,20 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The view for the handles that allow resizing the selected area.
     @ViewBuilder private var handles: some View {
-        Handle(location: .topLeft, position: topLeft, cornerRadius: cornerRadius) {
-            resize(for: .topLeft, location: $0)
+        Handle(orientation: .topLeft, position: topLeft) { handle, location in
+            resize(for: handle, location: location)
         }
         
-        Handle(location: .topRight, position: topRight, cornerRadius: cornerRadius) {
-            resize(for: .topRight, location: $0)
+        Handle(orientation: .topRight, position: topRight) { handle, location in
+            resize(for: handle, location: location)
         }
         
-        Handle(location: .bottomLeft, position: bottomLeft, cornerRadius: cornerRadius) {
-            resize(for: .bottomLeft, location: $0)
+        Handle(orientation: .bottomLeft, position: bottomLeft) { handle, location in
+            resize(for: handle, location: location)
         }
         
-        Handle(location: .bottomRight, position: bottomRight, cornerRadius: cornerRadius) {
-            resize(for: .bottomRight, location: $0)
+        Handle(orientation: .bottomRight, position: bottomRight) { handle, location in
+            resize(for: handle, location: location)
         }
     }
     
@@ -126,9 +126,9 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// Resizes the area selectpor view.
     /// - Parameters:
-    ///   - handle: The handle location.
+    ///   - handle: The handle orientation.
     ///   - location: The location of the drag gesture.
-    private func resize(for handle: HandleLocation, location: CGPoint) {
+    private func resize(for handle: HandleOrientation, location: CGPoint) {
         // Resize the rect.
         let rectangle: CGRect
         
@@ -174,9 +174,9 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     /// Calculates the minimum rect size for a drag point handle using the adjacent handle position.
-    /// - Parameter handle: The handle location.
+    /// - Parameter handle: The handle orientation.
     /// - Returns: The minimum rect for a handle.
-    private func minimumRect(forHandle handle: HandleLocation) -> CGRect {
+    private func minimumRect(forHandle handle: HandleOrientation) -> CGRect {
         let maxWidth: CGFloat = 50
         let maxHeight: CGFloat  = 50
         
@@ -223,13 +223,12 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The handle view for the map area selector.
     struct Handle: View {
-        let location: HandleLocation
+        /// The handle orientation.
+        let orientation: HandleOrientation
         /// The position of the handle.
         let position: CGPoint
-        /// The corner radius of the handle.
-        let cornerRadius: CGFloat
         /// The closure to call when the map area selector should be resized.
-        let resize: (CGPoint) -> Void
+        let resize: (HandleOrientation, CGPoint) -> Void
         /// The gesture state of the drag gesture.
         @GestureState var gestureState: State = .started
         /// The types of gesture states.
@@ -239,7 +238,7 @@ struct OnDemandMapAreaSelectorView: View {
         
         var body: some View {
             ZStack {
-                RoundedCorner(handle: location, position: position, cornerRadius: cornerRadius)
+                HandleShape(handle: orientation, position: position, cornerRadius: OnDemandMapAreaSelectorView.cornerRadius)
                     .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 Color.clear
                     .contentShape(Rectangle())
@@ -252,7 +251,7 @@ struct OnDemandMapAreaSelectorView: View {
                                 state = .changed
                                 UISelectionFeedbackGenerator().selectionChanged()
                             case .changed:
-                                resize(value.location)
+                                resize(orientation, value.location)
                             }
                         }
                     )
@@ -260,10 +259,10 @@ struct OnDemandMapAreaSelectorView: View {
         }
     }
     
-    /// The view for a rounded corner shape.
-    struct RoundedCorner: Shape {
-        /// The handle location.
-        let handle: HandleLocation
+    /// The view for a rounded corner shaped handle.
+    struct HandleShape: Shape {
+        /// The handle orientation.
+        let handle: HandleOrientation
         /// The handle position.
         let position: CGPoint
         /// The corner radius.
