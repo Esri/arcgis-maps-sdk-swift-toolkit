@@ -66,6 +66,57 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// <#Description#>
+    let featureForm: FeatureForm
+    
+    /// <#Description#>
+    let utilityNetwork: UtilityNetwork?
+    
+    /// The visibility of the form header.
+    var headerVisibility: Visibility = .automatic
+    
+    /// <#Description#>
+    var onPresentedFeatureChangedAction: ((ArcGISFeature?) -> Void)?
+    
+    /// The validation error visibility configuration of the form.
+    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+    
+    /// Initializes a form view.
+    /// - Parameters:
+    ///   - featureForm: The feature form defining the editing experience.
+    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+        self.featureForm = featureForm
+        self.utilityNetwork = utilityNetwork
+    }
+    
+    public var body: some View {
+        NavigationLayer {
+            InternalFeatureFormView(
+                featureForm: featureForm,
+                headerVisibility: headerVisibility,
+                utilityNetwork: utilityNetwork
+            )
+        }
+        .environment(\.validationErrorVisibility, validationErrorVisibility)
+//        .onChange(of: path) { newValue in
+//            onPresentedFeatureChangedAction?(newValue.last)
+//        }
+    }
+    
+    /// <#Description#>
+    /// - Parameter action: <#action description#>
+    /// - Returns: <#description#>
+    public func onPresentedFeatureChanged(action: @escaping (ArcGISFeature?) -> Void) -> Self {
+        var copy = self
+        copy.onPresentedFeatureChangedAction = action
+        return copy
+    }
+}
+
+/// <#Description#>
+struct InternalFeatureFormView: View {
+    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
@@ -78,31 +129,25 @@ public struct FeatureFormView: View {
     /// The title of the feature form view.
     @State private var title = ""
     
-    /// <#Description#>
-    var ancestor: Any?
-    
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
-    
-    /// The validation error visibility configuration of the form.
-    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+    ///   - headerVisibility: The visibility of the form header.
+    init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
+        self.headerVisibility = headerVisibility
     }
     
     public var body: some View {
-        if initialExpressionsAreEvaluating {
-            initialBody
-        } else if let presentedForm = model.presentedForm {
-            presentedForm
-                .ancestorForm(self)
-        } else {
-            evaluatedForm
-                .transition(.move(edge: model.presentedForm == nil ? .leading : .trailing))
+        Group {
+            if initialExpressionsAreEvaluating {
+                initialBody
+            } else {
+                evaluatedForm
+            }
         }
     }
     
@@ -111,15 +156,7 @@ public struct FeatureFormView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     if !title.isEmpty && headerVisibility != .hidden {
-                        if let ancestor = ancestor as? FeatureFormView {
-                            FormHeader(title: title) {
-                                withAnimation {
-                                    ancestor.model.presentedForm = nil
-                                }
-                            }
-                        } else {
-                            FormHeader(title: title)
-                        }
+                        FormHeader(title: title)
                         Divider()
                     }
                     ForEach(model.visibleElements, id: \.self) { element in
@@ -154,7 +191,6 @@ public struct FeatureFormView: View {
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
         .task {
             try? await model.utilityNetwork?.load()
@@ -193,8 +229,8 @@ public struct FeatureFormView: View {
                                         fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
                                         name: title,
                                         selectionAction: {
-                                            withAnimation {
-                                                model.presentedForm = FeatureFormView(
+                                            navigationLayerModel.push {
+                                                FeatureFormView(
                                                     featureForm: FeatureForm(feature: arcGISFeature),
                                                     utilityNetwork: model.utilityNetwork
                                                 )
@@ -207,14 +243,16 @@ public struct FeatureFormView: View {
                             }
                             let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
                                 associations: associations,
-                                name: networkSourceName
+                                name: networkSourceName,
+                                presentingForm: title
                             )
                             networkSourceGroups.append(networkSourceGroup)
                         }
                         groups.append(
                             UtilityNetworkAssociationFormElementView.AssociationKindGroup(
                                 networkSourceGroups: networkSourceGroups,
-                                name: "\(associationKind)".capitalized
+                                name: "\(associationKind)".capitalized,
+                                presentingForm: title
                             )
                         )
                     }
@@ -238,16 +276,7 @@ private extension UtilityAssociation {
     }
 }
 
-extension FeatureFormView {
-    /// <#Description#>
-    /// - Parameter ancestor: <#ancestor description#>
-    /// - Returns: <#description#>
-    func ancestorForm(_ ancestor: FeatureFormView) -> Self {
-        var copy = self
-        copy.ancestor = ancestor
-        return copy
-    }
-    
+extension InternalFeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
