@@ -99,10 +99,10 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var preplannedMapAreasView: some View {
-        List {
-            switch mapViewModel.preplannedMapModels {
-            case .success(let models):
-                if !models.isEmpty {
+        switch mapViewModel.preplannedMapModels {
+        case .success(let models):
+            if !models.isEmpty {
+                List {
                     Section {
                         ForEach(models) { preplannedMapModel in
                             PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
@@ -114,23 +114,23 @@ public struct OfflineMapAreasView: View {
                             noInternetFooter
                         }
                     }
-                } else if mapViewModel.isShowingOnlyOfflineModels {
-                    // If we have no models and no internet, show a content unavailable view.
-                    noInternetNoAreasView
-                } else {
-                    // If the request was successful, but there are no preplanned
-                    // map areas, then show empty preplanned map areas view.
-                    // This shouldn't happen unless preplanned areas were deleted after establishing
-                    // preplanned mode on the model. Because there needs to be preplanned areas
-                    // to even establish the preplanned mode.
-                    emptyPreplannedOfflineAreasView
                 }
-            case .failure:
-                preplannedErrorView
+                .refreshable {
+                    Task { await mapViewModel.loadModels() }
+                }
+            } else if mapViewModel.isShowingOnlyOfflineModels {
+                // If we have no models and no internet, show a content unavailable view.
+                noInternetNoAreasView
+            } else {
+                // If the request was successful, but there are no preplanned
+                // map areas, then show empty preplanned map areas view.
+                // This shouldn't happen unless preplanned areas were deleted after establishing
+                // preplanned mode on the model. Because there needs to be preplanned areas
+                // to even establish the preplanned mode.
+                emptyPreplannedOfflineAreasView
             }
-        }
-        .refreshable {
-            Task { await mapViewModel.loadModels() }
+        case .failure:
+            preplannedErrorView
         }
     }
     
@@ -162,6 +162,18 @@ public struct OfflineMapAreasView: View {
         }
     }
 
+    @ViewBuilder private var refreshPreplannedButton: some View {
+        Button {
+            Task { await mapViewModel.loadModels() }
+        } label: {
+            Label("Refresh", systemImage: "arrow.clockwise")
+        }
+        .font(.subheadline)
+        .fontWeight(.semibold)
+        .buttonBorderShape(.capsule)
+        .buttonStyle(.bordered)
+    }
+    
     @ViewBuilder private var noInternetFooter: some View {
         Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
             .font(.caption)
@@ -172,16 +184,30 @@ public struct OfflineMapAreasView: View {
         Backported.ContentUnavailableView(
             "No Internet Connection",
             systemImage: "wifi.exclamationmark",
-            description: "Could not retrieve map areas for this map. Pull to refresh."
-        )
+            description: "Could not retrieve map areas for this map."
+        ) {
+            refreshPreplannedButton
+        }
     }
     
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
         Backported.ContentUnavailableView(
             "No Map Areas",
             systemImage: "arrow.down.circle",
-            description: "There are no offline map areas for this map. Pull to refresh."
-        )
+            description: "There are no offline map areas for this map."
+        ) {
+            refreshPreplannedButton
+        }
+    }
+    
+    @ViewBuilder private var preplannedErrorView: some View {
+        Backported.ContentUnavailableView(
+            "Error Fetching Map Areas",
+            systemImage: "exclamationmark.triangle",
+            description: "An error occurred while fetching map areas."
+        ) {
+            refreshPreplannedButton
+        }
     }
     
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
@@ -207,14 +233,6 @@ public struct OfflineMapAreasView: View {
             "Offline Disabled",
             systemImage: "exclamationmark.triangle",
             description: "Please ensure the map is offline enabled."
-        )
-    }
-    
-    @ViewBuilder private var preplannedErrorView: some View {
-        Backported.ContentUnavailableView(
-            "Error Fetching Map Areas",
-            systemImage: "exclamationmark.triangle",
-            description: "An error occurred while fetching map areas. Pull to refresh."
         )
     }
 }
