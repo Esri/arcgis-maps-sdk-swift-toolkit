@@ -40,7 +40,7 @@ struct UtilityNetworkTraceExampleView: View {
     var body: some View {
         GeometryReader { geometryProxy in
             MapViewReader { mapViewProxy in
-                MapView(
+                let mapView = MapView(
                     map: map,
                     graphicsOverlays: [resultGraphicsOverlay]
                 )
@@ -54,24 +54,47 @@ struct UtilityNetworkTraceExampleView: View {
                     let publicSample = try? await ArcGISCredential.publicSample
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
-                .floatingPanel(
-                    attributionBarHeight: attributionBarHeight,
-                    backgroundColor: Color(uiColor: .systemGroupedBackground),
-                    selectedDetent: $activeDetent,
-                    horizontalAlignment: .trailing,
-                    isPresented: .constant(true)
-                ) {
-                    UtilityNetworkTrace(
-                        graphicsOverlay: $resultGraphicsOverlay,
-                        map: map,
-                        mapPoint: $mapPoint,
-                        mapViewProxy: mapViewProxy
-                    )
-                    .floatingPanelDetent($activeDetent)
-                    // Manually account for a device's bottom safe area when using a Floating Panel.
-                    // See also #518.
-                    .padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
-                }
+#if os(visionOS)
+                mapView
+                    .floatingPanel(
+                        attributionBarHeight: attributionBarHeight,
+                        selectedDetent: $activeDetent,
+                        horizontalAlignment: .trailing,
+                        isPresented: .constant(true)
+                    ) {
+                        UtilityNetworkTrace(
+                            graphicsOverlay: $resultGraphicsOverlay,
+                            map: map,
+                            mapPoint: $mapPoint,
+                            mapViewProxy: mapViewProxy
+                        )
+                        .floatingPanelDetent($activeDetent)
+                        // Manually account for a device's bottom safe area when using a Floating Panel.
+                        // See also #518.
+                        .padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
+                        .padding(.top)
+                    }
+#else
+                mapView
+                    .floatingPanel(
+                        attributionBarHeight: attributionBarHeight,
+                        backgroundColor: Color(uiColor: .systemGroupedBackground),
+                        selectedDetent: $activeDetent,
+                        horizontalAlignment: .trailing,
+                        isPresented: .constant(true)
+                    ) {
+                        UtilityNetworkTrace(
+                            graphicsOverlay: $resultGraphicsOverlay,
+                            map: map,
+                            mapPoint: $mapPoint,
+                            mapViewProxy: mapViewProxy
+                        )
+                        .floatingPanelDetent($activeDetent)
+                        // Manually account for a device's bottom safe area when using a Floating Panel.
+                        // See also #518.
+                        .padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
+                    }
+#endif
             }
         }
     }

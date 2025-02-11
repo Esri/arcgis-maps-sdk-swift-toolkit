@@ -100,7 +100,7 @@ struct UserAttributeView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .lineLimit(1)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .font(.footnote)
             Text(detail)
                 .font(.caption)
@@ -121,7 +121,7 @@ struct UserAttributeListView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .lineLimit(1)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .font(.footnote)
             Text(details.map(\.description).joined(separator: "\r"))
                 .font(.caption)

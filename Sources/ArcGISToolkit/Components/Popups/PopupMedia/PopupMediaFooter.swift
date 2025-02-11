@@ -26,22 +26,20 @@ struct PopupMediaFooter: View {
         ZStack {
             let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
             Rectangle()
-                .fill(
-                    LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
-                )
+                .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
                 .frame(height: mediaSize.height * 0.25)
             HStack {
                 VStack(alignment: .leading) {
                     if !popupMedia.title.isEmpty {
                         Text(popupMedia.title)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(.body)
                     }
                     
                     if !popupMedia.caption.isEmpty {
                         Text(popupMedia.caption)
                             .font(.subheadline)
-                            .foregroundColor(.init(white: 0.75))
+                            .foregroundStyle(Color(white: 0.75))
                     }
                 }
                 .lineLimit(1)
