@@ -69,8 +69,11 @@ struct PortalItemView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***if let thumbnail = item.thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail) { image in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***image
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 2) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.title)
