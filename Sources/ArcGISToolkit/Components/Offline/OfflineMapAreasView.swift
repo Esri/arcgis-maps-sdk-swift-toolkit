@@ -99,10 +99,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var preplannedMapAreasView: some View {
-***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
-***REMOVED******REMOVED******REMOVED***case .success(let models):
-***REMOVED******REMOVED******REMOVED******REMOVED***if !models.isEmpty {
+***REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
+***REMOVED******REMOVED***case .success(let models):
+***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
@@ -114,23 +114,23 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noInternetFooter
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else if mapViewModel.isShowingOnlyOfflineModels {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have no models and no internet, show a content unavailable view.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noInternetNoAreasView
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the request was successful, but there are no preplanned
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** map areas, then show empty preplanned map areas view.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This shouldn't happen unless preplanned areas were deleted after establishing
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** preplanned mode on the model. Because there needs to be preplanned areas
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to even establish the preplanned mode.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedOfflineAreasView
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure:
-***REMOVED******REMOVED******REMOVED******REMOVED***preplannedErrorView
+***REMOVED******REMOVED******REMOVED******REMOVED***.refreshable {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewModel.loadModels() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else if mapViewModel.isShowingOnlyOfflineModels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have no models and no internet, show a content unavailable view.
+***REMOVED******REMOVED******REMOVED******REMOVED***noInternetNoAreasView
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the request was successful, but there are no preplanned
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** map areas, then show empty preplanned map areas view.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This shouldn't happen unless preplanned areas were deleted after establishing
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** preplanned mode on the model. Because there needs to be preplanned areas
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to even establish the preplanned mode.
+***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedOfflineAreasView
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.refreshable {
-***REMOVED******REMOVED******REMOVED***Task { await mapViewModel.loadModels() ***REMOVED***
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED***preplannedErrorView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -162,6 +162,18 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***@ViewBuilder private var refreshPreplannedButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***Task { await mapViewModel.loadModels() ***REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Label("Refresh", systemImage: "arrow.clockwise")
+***REMOVED***
+***REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED***.buttonBorderShape(.capsule)
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED***
+***REMOVED***
 ***REMOVED***@ViewBuilder private var noInternetFooter: some View {
 ***REMOVED******REMOVED***Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
 ***REMOVED******REMOVED******REMOVED***.font(.caption)
@@ -172,16 +184,30 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
 ***REMOVED******REMOVED******REMOVED***"No Internet Connection",
 ***REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
-***REMOVED******REMOVED******REMOVED***description: "Could not retrieve map areas for this map. Pull to refresh."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***description: "Could not retrieve map areas for this map."
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***refreshPreplannedButton
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
 ***REMOVED******REMOVED******REMOVED***"No Map Areas",
 ***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
-***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map. Pull to refresh."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map."
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***refreshPreplannedButton
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var preplannedErrorView: some View {
+***REMOVED******REMOVED***Backported.ContentUnavailableView(
+***REMOVED******REMOVED******REMOVED***"Error Fetching Map Areas",
+***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
+***REMOVED******REMOVED******REMOVED***description: "An error occurred while fetching map areas."
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***refreshPreplannedButton
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
@@ -207,14 +233,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***"Offline Disabled",
 ***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
 ***REMOVED******REMOVED******REMOVED***description: "Please ensure the map is offline enabled."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder private var preplannedErrorView: some View {
-***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***"Error Fetching Map Areas",
-***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
-***REMOVED******REMOVED******REMOVED***description: "An error occurred while fetching map areas. Pull to refresh."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
