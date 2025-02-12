@@ -65,7 +65,6 @@ struct UtilityNetworkAssociationFormElementView: View {
                             }
                             .foregroundStyle(.secondary)
                         }
-                        .contentShape(.rect)
                     }
                 }
             )
