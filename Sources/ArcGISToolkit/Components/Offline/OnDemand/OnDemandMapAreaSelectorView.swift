@@ -246,18 +246,19 @@ struct OnDemandMapAreaSelectorView: View {
             .frame(width: 36, height: 36)
             .hoverEffect()
             .position(position)
-            .gesture(DragGesture(coordinateSpace: .local)
-                .updating($gestureState) { value, state, _ in
-                    switch state {
-                    case .started:
-                        state = .changed
+            .gesture(
+                DragGesture()
+                    .updating($gestureState) { value, state, _ in
+                        switch state {
+                        case .started:
+                            state = .changed
 #if !os(visionOS)
-                        UISelectionFeedbackGenerator().selectionChanged()
+                            UISelectionFeedbackGenerator().selectionChanged()
 #endif
-                    case .changed:
-                        resize(orientation, value.location)
+                        case .changed:
+                            resize(orientation, value.location)
+                        }
                     }
-                }
             )
         }
     }
