@@ -242,9 +242,9 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***cornerRadius: OnDemandMapAreaSelectorView.cornerRadius
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
+***REMOVED******REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 8))
+***REMOVED******REMOVED******REMOVED***.frame(width: 36, height: 36)
 ***REMOVED******REMOVED******REMOVED***.hoverEffect()
-***REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
 ***REMOVED******REMOVED******REMOVED***.position(position)
 ***REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
