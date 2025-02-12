@@ -69,6 +69,9 @@ struct FeatureFormExampleView: View {
                 ) {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+                            .onFormChanged { presentedForm in
+                                print("Presented feature: \( presentedForm.feature.attributes["globalid"] ?? "?")")
+                            }
                             .validationErrors(validationErrorVisibility)
                             .padding(.horizontal)
                             .padding(.top, 16)
