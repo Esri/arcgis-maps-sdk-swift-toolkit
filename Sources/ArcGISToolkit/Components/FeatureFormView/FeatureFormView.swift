@@ -98,9 +98,6 @@ public struct FeatureFormView: View {
             )
         }
         .environment(\.validationErrorVisibility, validationErrorVisibility)
-//        .onChange(of: path) { newValue in
-//            onPresentedFeatureChangedAction?(newValue.last)
-//        }
     }
     
     /// <#Description#>
