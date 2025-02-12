@@ -22,18 +22,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ A Binding to the CGRect of the selected area.
 ***REMOVED***@Binding var selectedRect: CGRect
 ***REMOVED***
-***REMOVED******REMOVED***/ The top left corner point of the area selector view.
-***REMOVED***@State private var topLeft: CGPoint = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The top right corner point of the area selector view.
-***REMOVED***@State private var topRight: CGPoint = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The bottom left corner point of the area selector view.
-***REMOVED***@State private var bottomLeft: CGPoint = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The bottom right corner point of the area selector view.
-***REMOVED***@State private var bottomRight: CGPoint = .zero
-***REMOVED***
 ***REMOVED******REMOVED***/ The safe area insets of the view.
 ***REMOVED***@State private var safeAreaInsets = EdgeInsets()
 ***REMOVED***
@@ -44,6 +32,18 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
 ***REMOVED***static let cornerRadius: CGFloat = 16
+***REMOVED***
+***REMOVED******REMOVED***/ Top right handle position.
+***REMOVED***private var topRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.minY) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Top left handle position.
+***REMOVED***private var topLeft: CGPoint { CGPoint(x: selectedRect.minX, y: selectedRect.minY) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Bottom left handle position.
+***REMOVED***private var bottomLeft: CGPoint { CGPoint(x: selectedRect.minX, y: selectedRect.maxY) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Bottom right handle position.
+***REMOVED***private var bottomRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.maxY) ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The orientation for a handle that resizes the selector view.
 ***REMOVED***enum HandleOrientation {
@@ -121,7 +121,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** NOTE: This causes everything to get reset when insets change.
 ***REMOVED******REMOVED***selectedRect = maxRect
-***REMOVED******REMOVED***updateHandles()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resizes the area selectpor view.
@@ -167,10 +166,8 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED*** Keep rectangle outside the minimum rect.
 ***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(for: handleOrientation))
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Update selection.
 ***REMOVED******REMOVED***selectedRect = corrected
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Now update handles for new bounding rect.
-***REMOVED******REMOVED***updateHandles()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the minimum rect size for a drag point handle using the adjacent handle position.
@@ -211,14 +208,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the handle locations using the boudning rect.
-***REMOVED***private func updateHandles() {
-***REMOVED******REMOVED***topRight = CGPoint(x: selectedRect.maxX, y: selectedRect.minY)
-***REMOVED******REMOVED***topLeft = CGPoint(x: selectedRect.minX, y: selectedRect.minY)
-***REMOVED******REMOVED***bottomLeft = CGPoint(x: selectedRect.minX, y: selectedRect.maxY)
-***REMOVED******REMOVED***bottomRight = CGPoint(x: selectedRect.maxX, y: selectedRect.maxY)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The handle view for the map area selector.
