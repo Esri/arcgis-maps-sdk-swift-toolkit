@@ -164,8 +164,8 @@ extension UtilityNetworkAssociationFormElementView {
                         Spacer()
                         Text(group.associations.count.formatted())
                     }
-                    .listRowBackground(Color(uiColor: .tertiarySystemFill))
                 }
+                .listRowBackground(Color(uiColor: .tertiarySystemFill))
             }
             .scrollContentBackground(.hidden)
         }
