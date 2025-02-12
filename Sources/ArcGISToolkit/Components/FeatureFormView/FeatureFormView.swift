@@ -69,7 +69,7 @@ public struct FeatureFormView: View {
     /// <#Description#>
     @State private var path = NavigationPath()
     
-    /// <#Description#>
+    /// The root feature form.
     let featureForm: FeatureForm
     
     /// <#Description#>
@@ -78,8 +78,8 @@ public struct FeatureFormView: View {
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
     
-    /// <#Description#>
-    var onPresentedFeatureChangedAction: ((ArcGISFeature?) -> Void)?
+    /// The closure to perform when the form has changed.
+    var onFormChangedAction: ((FeatureForm) -> Void)?
     
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -100,13 +100,20 @@ public struct FeatureFormView: View {
                 path: $path,
                 utilityNetwork: utilityNetwork
             )
+            .onAppear {
+                onFormChangedAction?(featureForm)
+            }
             .navigationDestination(for: ArcGISFeature.self) { feature in
+                let featureForm = FeatureForm(feature: feature)
                 InternalFeatureFormView(
                     featureForm: FeatureForm(feature: feature),
                     headerVisibility: headerVisibility,
                     path: $path,
                     utilityNetwork: utilityNetwork
                 )
+                .onAppear {
+                    onFormChangedAction?(featureForm)
+                }
             }
             .navigationDestination(for: UtilityNetworkAssociationFormElementView.AssociationKindGroup.self) { group in
                 UtilityNetworkAssociationFormElementView.AssociationKindGroupView(associationKindGroup: group)
@@ -118,17 +125,13 @@ public struct FeatureFormView: View {
             }
         }
         .environment(\.validationErrorVisibility, validationErrorVisibility)
-//        .onChange(of: path) { newValue in
-//            onPresentedFeatureChangedAction?(newValue.last)
-//        }
     }
     
-    /// <#Description#>
-    /// - Parameter action: <#action description#>
-    /// - Returns: <#description#>
-    public func onPresentedFeatureChanged(action: @escaping (ArcGISFeature?) -> Void) -> Self {
+    /// Sets a closure to perform when the view’s form changes.
+    /// - Parameter action: The closure to perform when the form has changed.
+    public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
         var copy = self
-        copy.onPresentedFeatureChangedAction = action
+        copy.onFormChangedAction = action
         return copy
     }
 }
