@@ -73,7 +73,8 @@ private extension PortalItem {
     static func naperville() -> PortalItem {
         PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
-            id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+            //id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+            id: PortalItem.ID("3da658f2492f4cfd8494970ef489d2c5")!
         )
     }
 }

@@ -123,7 +123,7 @@ struct OnDemandConfigurationView: View {
                                 OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
                             }
                         }
-                        .onChange(of: selectedRect) { _ in
+                        .onChange(selectedRect) { _ in
                             selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
                         }
                 }
@@ -137,7 +137,9 @@ struct OnDemandConfigurationView: View {
     @ViewBuilder
     private var mapView: some View {
         MapView(map: map)
+        #if !os(visionOS)
             .magnifierDisabled(true)
+        #endif
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
             .onLayerViewStateChanged { _, _ in
@@ -150,7 +152,12 @@ struct OnDemandConfigurationView: View {
     
     @ViewBuilder
     private func bottomPane(mapView: MapViewProxy) -> some View {
-        BottomCard(background: Color(uiColor: .systemBackground)) {
+#if os(visionOS)
+        let background = Material.regularMaterial
+#else
+        let background = Color(uiColor: .systemBackground)
+#endif
+        BottomCard(background: background) {
             VStack(alignment: .leading) {
                 HStack {
                     Text(title)
@@ -280,7 +287,7 @@ private struct RenameButton: View {
         } message: {
             Text("The name for the map area must be unique.")
         }
-        .onChange(of: proposedNewTitle) {
+        .onChange(proposedNewTitle) {
             proposedTitleIsValid = isValidCheck($0)
         }
     }
@@ -334,7 +341,11 @@ private extension UIImage {
     /// - Returns: The cropped image.
     @MainActor
     func crop(to rect: CGRect) -> UIImage? {
+        #if os(visionOS)
+        let scale: CGFloat = 1
+        #else
         let scale = UIScreen.main.scale
+        #endif
         
         let scaledRect = CGRect(
             x: rect.origin.x * scale,
