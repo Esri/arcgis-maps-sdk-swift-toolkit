@@ -48,21 +48,21 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 ***REMOVED***private let thumbnailSize: CGFloat = 64
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
-***REMOVED******REMOVED******REMOVED***thumbnailView
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
-***REMOVED******REMOVED******REMOVED******REMOVED***titleView
-***REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
-***REMOVED******REMOVED******REMOVED******REMOVED***statusView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***trailingContent()
-***REMOVED***
-***REMOVED******REMOVED***.contentShape(.rect)
-***REMOVED******REMOVED***.hoverEffect()
-***REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailView
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***trailingContent()
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
@@ -139,7 +139,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***
@@ -209,7 +209,7 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED***.disabled(!model.allowsDownload)
 ***REMOVED***
@@ -230,7 +230,7 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.cancelGauge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED*** because of the button the parent view.
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***

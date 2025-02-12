@@ -64,7 +64,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***
