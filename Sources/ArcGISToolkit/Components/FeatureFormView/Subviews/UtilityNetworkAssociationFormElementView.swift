@@ -123,7 +123,6 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
