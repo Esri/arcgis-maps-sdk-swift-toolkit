@@ -246,18 +246,19 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED***.frame(width: 36, height: 36)
 ***REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED******REMOVED***.position(position)
-***REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
-***REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
+***REMOVED******REMOVED******REMOVED***.gesture(
+***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
 #if !os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
 #endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(orientation, value.location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(orientation, value.location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
