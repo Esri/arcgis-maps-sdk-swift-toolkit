@@ -119,7 +119,7 @@ extension UtilityNetworkAssociationFormElementView {
                         }
                     }
                     .padding(2.5)
-                    .background(Color(uiColor: .secondarySystemGroupedBackground))
+                    .background(Color(uiColor: .systemBackground))
                     .cornerRadius(5)
                     .font(.caption2)
                 }
