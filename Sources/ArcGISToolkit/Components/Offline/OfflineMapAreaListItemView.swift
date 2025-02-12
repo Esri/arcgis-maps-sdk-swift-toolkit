@@ -48,21 +48,24 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     private let thumbnailSize: CGFloat = 64
     
     var body: some View {
-        Button {
-            metadataViewIsPresented = true
-        } label: {
-            HStack(alignment: .center, spacing: 10) {
-                thumbnailView
-                VStack(alignment: .leading, spacing: 4) {
-                    titleView
-                    descriptionView
-                    statusView
+        HStack(alignment: .center) {
+            Button {
+                metadataViewIsPresented = true
+            } label: {
+                HStack(alignment: .center, spacing: 12) {
+                    thumbnailView
+                    VStack(alignment: .leading, spacing: 4) {
+                        titleView
+                        descriptionView
+                        statusView
+                    }
+                    Spacer()
                 }
-                Spacer()
-                trailingContent()
+                .contentShape(.rect)
             }
+            .buttonStyle(.plain)
+            trailingContent()
         }
-        .buttonStyle(.plain)
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
                 OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
