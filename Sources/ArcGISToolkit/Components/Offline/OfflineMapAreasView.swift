@@ -84,11 +84,13 @@ public struct OfflineMapAreasView: View {
                     }
                 }
             }
+            #if !os(visionOS)
             // This frame is required to set the background to cover the whole view.
             // Otherwise when the progress view is showing, the background will
             // only cover the progress view.
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(uiColor: .systemGroupedBackground))
+            #endif
             .interactiveDismissDisabled()
             .task {
                 await mapViewModel.loadModels()
