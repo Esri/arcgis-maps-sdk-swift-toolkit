@@ -83,7 +83,7 @@ struct PortalItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.snippet)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
 ***REMOVED******REMOVED***
 ***REMOVED***

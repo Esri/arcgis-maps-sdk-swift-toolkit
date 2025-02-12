@@ -179,10 +179,18 @@ private struct FloatingPanelTextFieldDemoContent: View {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***#if os(visionOS)
+***REMOVED******REMOVED***.onChange(of: selectedDetent) { _, newDetent in
+***REMOVED******REMOVED******REMOVED***if newDetent != .full {
+***REMOVED******REMOVED******REMOVED******REMOVED***isFocused = false
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***#else
 ***REMOVED******REMOVED***.onChange(of: selectedDetent) { newDetent in
 ***REMOVED******REMOVED******REMOVED***if newDetent != .full {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isFocused = false
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***#endif
 ***REMOVED***
 ***REMOVED***

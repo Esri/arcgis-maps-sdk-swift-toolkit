@@ -188,7 +188,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Make the entire row tappable.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED******REMOVED***
 #if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
@@ -228,7 +228,7 @@ extension Bookmarks {
 ***REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark.slash")
 ***REMOVED***
-***REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED***.foregroundStyle(.primary)
 ***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

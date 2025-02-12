@@ -41,9 +41,9 @@ struct ThumbnailView: View  {
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
 ***REMOVED******REMOVED***.frame(width: size.width, height: size.height, alignment: .center)
-***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
-***REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 4))
-***REMOVED******REMOVED***.foregroundColor(foregroundColor(for: attachmentModel))
+***REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 4))
+***REMOVED******REMOVED***.contentShape(.rect(cornerRadius: 4))
+***REMOVED******REMOVED***.foregroundStyle(foregroundColor(for: attachmentModel))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The foreground color of the thumbnail image.

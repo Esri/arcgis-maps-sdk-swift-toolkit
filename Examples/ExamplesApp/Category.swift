@@ -12,24 +12,22 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
-
-struct ExampleList: View {
-***REMOVED******REMOVED***/ The name of the list of examples.
+***REMOVED***/ A category of examples.
+struct Category {
+***REMOVED******REMOVED***/ The name of this category.
 ***REMOVED***let name: String
+***REMOVED******REMOVED***/ The examples in this category.
+***REMOVED***let examples: [Example]
 ***REMOVED***
-***REMOVED******REMOVED***/ The list of examples to display.
-***REMOVED***var examples: [Example]
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***List(examples, id: \.name) { (example) in
-***REMOVED******REMOVED******REMOVED***NavigationLink(example.name, destination: ExampleView(example: example))
-***REMOVED***
-***REMOVED******REMOVED***.navigationTitle(name)
-***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+
+extension Category: Equatable {
+***REMOVED***static func == (lhs: Self, rhs: Self) -> Bool {
+***REMOVED******REMOVED***return lhs.name == rhs.name
 ***REMOVED***
 ***REMOVED***
 
-extension ExampleList: Identifiable {
-***REMOVED***nonisolated var id: String { name ***REMOVED***
+extension Category: Hashable {
+***REMOVED***func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(name)
+***REMOVED***
 ***REMOVED***

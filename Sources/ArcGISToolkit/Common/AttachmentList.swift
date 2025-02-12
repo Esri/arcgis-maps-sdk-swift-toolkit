@@ -45,7 +45,7 @@ struct AttachmentRow: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED***
@@ -85,7 +85,7 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
 #if !os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 #endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
@@ -95,7 +95,7 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.clear)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

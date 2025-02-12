@@ -50,7 +50,7 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
-***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: cornerRadius))
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView = true
 ***REMOVED******REMOVED***

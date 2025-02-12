@@ -17,7 +17,6 @@ import Combine
 import Foundation
 ***REMOVED***
 
-@available(visionOS, unavailable)
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
 ***REMOVED******REMOVED*** MARK: Published Properties
 ***REMOVED***
@@ -68,15 +67,13 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map's utility networks.
-***REMOVED***var networks: [UtilityNetwork] {
-***REMOVED******REMOVED***return map.utilityNetworks
-***REMOVED***
+***REMOVED***var networks: [UtilityNetwork] { map.utilityNetworks ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The overlay on which trace graphics will be drawn.
-***REMOVED***private var graphicsOverlay: GraphicsOverlay
+***REMOVED***private let graphicsOverlay: GraphicsOverlay
 ***REMOVED***
 ***REMOVED******REMOVED***/ A map containing one or more utility networks.
-***REMOVED***private var map: Map
+***REMOVED***private let map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starting points programmatically provided to the trace tool.
 ***REMOVED***var externalStartingPoints = [UtilityNetworkTraceStartingPoint]() {
@@ -507,7 +504,6 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***/ Finds the location on a polyline nearest the point.
 ***REMOVED******REMOVED***/ - Parameters:

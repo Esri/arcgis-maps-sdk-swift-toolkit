@@ -41,7 +41,7 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label prompting the user to make a selection from the available bookmarks."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,

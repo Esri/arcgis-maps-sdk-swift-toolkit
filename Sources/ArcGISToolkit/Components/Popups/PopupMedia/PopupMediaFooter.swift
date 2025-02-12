@@ -26,22 +26,20 @@ struct PopupMediaFooter: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
 ***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: mediaSize.height * 0.25)
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !popupMedia.title.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(popupMedia.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.white)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !popupMedia.caption.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(popupMedia.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.init(white: 0.75))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color(white: 0.75))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)

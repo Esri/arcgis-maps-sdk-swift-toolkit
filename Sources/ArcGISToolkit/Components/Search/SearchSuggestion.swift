@@ -16,7 +16,6 @@ import Foundation
 ***REMOVED***
 
 ***REMOVED***/ Wraps a suggestion for display.
-@available(visionOS, unavailable)
 public struct SearchSuggestion: @unchecked Sendable {
 ***REMOVED******REMOVED***/ Creates a `SearchSuggestion`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -63,17 +62,14 @@ public struct SearchSuggestion: @unchecked Sendable {
 ***REMOVED***public let id = UUID()
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension SearchSuggestion: Identifiable {***REMOVED***
 
-@available(visionOS, unavailable)
 extension SearchSuggestion: Equatable {
 ***REMOVED***public static func == (lhs: SearchSuggestion, rhs: SearchSuggestion) -> Bool {
 ***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension SearchSuggestion: Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED******REMOVED*** Note: We're not hashing `suggestResult` as `SearchSuggestion` is
@@ -84,7 +80,6 @@ extension SearchSuggestion: Hashable {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension SearchSuggestion {
 ***REMOVED***init(suggestResult: SuggestResult, searchSource: SearchSource) {
 ***REMOVED******REMOVED***self.init(

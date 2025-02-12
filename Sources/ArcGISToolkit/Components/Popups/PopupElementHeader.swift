@@ -28,14 +28,14 @@ struct PopupElementHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.primary)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if !description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
 #if targetEnvironment(macCatalyst) || os(visionOS)
