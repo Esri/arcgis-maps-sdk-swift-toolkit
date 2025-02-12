@@ -23,43 +23,34 @@ struct OfflineMapAreasExampleView: View {
     @State private var onlineMap = Map(item: PortalItem.naperville())
     
     /// The selected map.
-    @State private var selectedMap: Map?
+    @State private var selectedOfflineMap: Map?
     
     /// A Boolean value indicating whether the offline map ares view should be presented.
     @State private var isShowingOfflineMapAreasView = false
     
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight = 0.0
-    
     var body: some View {
-        MapView(map: selectedMap ?? onlineMap)
-            .onAttributionBarHeightChanged { newHeight in
-                withAnimation { attributionBarHeight = newHeight }
-            }
-            .overlay(alignment: .bottom) {
-                if selectedMap != nil {
-                    Button("Go Online") {
-                        selectedMap = nil
-                    }
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding(.vertical, 10 + attributionBarHeight)
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    Button("Offline Maps") {
-                        isShowingOfflineMapAreasView = true
+        NavigationStack {
+            MapView(map: selectedOfflineMap ?? onlineMap)
+                .navigationTitle("Offline Example")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu("Menu") {
+                            Button("Go Online") {
+                                selectedOfflineMap = nil
+                            }
+                            .disabled(selectedOfflineMap == nil)
+                            Button("Offline Maps") {
+                                isShowingOfflineMapAreasView = true
+                            }
+                        }
                     }
                 }
-            }
-            .sheet(isPresented: $isShowingOfflineMapAreasView) {
-                OfflineMapAreasView(onlineMap: onlineMap, selection: $selectedMap)
-                    .task {
-                        await requestUserNotificationAuthorization()
-                    }
-            }
+                .sheet(isPresented: $isShowingOfflineMapAreasView) {
+                    OfflineMapAreasView(onlineMap: onlineMap, selection: $selectedOfflineMap)
+                        .task { await requestUserNotificationAuthorization() }
+                }
+        }
     }
     
     /// Requests authorization to show notifications.
