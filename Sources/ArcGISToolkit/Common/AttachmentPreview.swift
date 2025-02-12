@@ -215,13 +215,13 @@ struct AttachmentPreview: View {
                         Image(systemName: "square.and.arrow.down")
                         Spacer()
                     }
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 }
             }
             .font(.caption)
             .frame(width: cellSize.width, height: cellSize.height)
             .background(Color.gray.opacity(0.2))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(.rect(cornerRadius: 8))
             .onTapGesture {
                 if attachmentModel.attachment.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
@@ -235,9 +235,13 @@ struct AttachmentPreview: View {
                     attachmentModel.load()
                 }
             }
+            // On visionOS, quick look preview will close (sometimes it comes back) a sheet presenting
+            // the feature form.
+            // See thread here: https://developer.apple.com/forums/thread/773599
             .quickLookPreview($url)
             .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { }
             .alert(maximumSizeDownloadExceededErrorMessage, isPresented: $maximumSizeDownloadExceededAlertIsPresented) { }
+            .hoverEffect()
         }
     }
 }
@@ -254,14 +258,12 @@ struct ThumbnailViewFooter: View {
         ZStack {
             let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
             Rectangle()
-                .fill(
-                    LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
-                )
+                .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
                 .frame(height: size.height * 0.25)
             HStack {
                 if !attachmentModel.name.isEmpty {
                     Text(attachmentModel.name)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .font(.caption)
                         .lineLimit(1)
                 }

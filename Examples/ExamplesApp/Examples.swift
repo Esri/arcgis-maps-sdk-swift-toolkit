@@ -15,25 +15,52 @@
 import SwiftUI
 
 struct Examples: View {
-    /// The list of example lists.  Allows for a hierarchical navigation model for examples.
-    let lists = makeExamples()
+    /// The categories to display.
+    let categories = makeCategories()
+    
+    /// The category selected by the user.
+    @State private var selectedCategory: Category?
+    /// The example selected by the user.
+    @State private var selectedExample: Example?
     
     var body: some View {
-        NavigationStack {
-            List(lists) { (list) in
-                NavigationLink(list.name, destination: list)
+        NavigationSplitView {
+            NavigationStack {
+                List(categories, id: \.name, selection: $selectedCategory) { category in
+                    NavigationLink(category.name) {
+                        List(category.examples, id: \.name, selection: $selectedExample) { example in
+                            Text(example.name)
+                                .tag(example)
+                        }
+                        .listStyle(.sidebar)
+                        .navigationTitle(category.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                    }
+                    .isDetailLink(false)
+                }
+                .navigationTitle("Toolkit Examples")
             }
-            .navigationTitle("Toolkit Examples")
-            .navigationBarTitleDisplayMode(.inline)
+        } detail: {
+            NavigationStack {
+                if let example = selectedExample {
+                    example.view
+                        .navigationTitle(example.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                } else if selectedCategory != nil {
+                    Text("Select an example")
+                } else {
+                    Text("Select a category")
+                }
+            }
         }
     }
     
-    static func makeExamples() -> [ExampleList] {
-        let common: [ExampleList] = [
+    static func makeCategories() -> [Category] {
+        let common: [Category] = [
             .geoview,
             .views
         ]
-#if !targetEnvironment(macCatalyst)
+#if os(iOS) && !targetEnvironment(macCatalyst)
         return [.augmentedReality] + common
 #else
         return common
@@ -41,37 +68,45 @@ struct Examples: View {
     }
 }
 
-extension ExampleList {
-    @available(macCatalyst, unavailable)
-    static let augmentedReality = Self(
-        name: "Augmented Reality",
-        examples: [
-            AnyExample("Flyover", content: FlyoverExampleView()),
-            AnyExample("Tabletop", content: TableTopExampleView()),
-            AnyExample("World Scale", content: WorldScaleExampleView())
-        ]
-    )
+@MainActor
+extension Category {
+#if os(iOS) && !targetEnvironment(macCatalyst)
+    static var augmentedReality: Self {
+        .init(
+            name: "Augmented Reality",
+            examples: [
+                Example("Flyover", content: FlyoverExampleView()),
+                Example("Tabletop", content: TableTopExampleView()),
+                Example("World Scale", content: WorldScaleExampleView())
+            ]
+        )
+    }
+#endif
     
-    static let geoview = Self(
-        name: "GeoView",
-        examples: [
-            AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
-            AnyExample("Bookmarks", content: BookmarksExampleView()),
-            AnyExample("Compass", content: CompassExampleView()),
-            AnyExample("Feature Form", content: FeatureFormExampleView()),
-            AnyExample("Floor Filter", content: FloorFilterExampleView()),
-            AnyExample("Overview Map", content: OverviewMapExampleView()),
-            AnyExample("Popup", content: PopupExampleView()),
-            AnyExample("Scalebar", content: ScalebarExampleView()),
-            AnyExample("Search", content: SearchExampleView()),
-            AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-        ]
-    )
+    static var geoview: Self {
+        .init(
+            name: "GeoView",
+            examples: [
+                Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+                Example("Bookmarks", content: BookmarksExampleView()),
+                Example("Compass", content: CompassExampleView()),
+                Example("Feature Form", content: FeatureFormExampleView()),
+                Example("Floor Filter", content: FloorFilterExampleView()),
+                Example("Overview Map", content: OverviewMapExampleView()),
+                Example("Popup", content: PopupExampleView()),
+                Example("Scalebar", content: ScalebarExampleView()),
+                Example("Search", content: SearchExampleView()),
+                Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+            ]
+        )
+    }
     
-    static let views = Self(
-        name: "Views",
-        examples: [
-            AnyExample("Floating Panel", content: FloatingPanelExampleView())
-        ]
-    )
+    static var views: Self {
+        .init(
+            name: "Views",
+            examples: [
+                Example("Floating Panel", content: FloatingPanelExampleView())
+            ]
+        )
+    }
 }

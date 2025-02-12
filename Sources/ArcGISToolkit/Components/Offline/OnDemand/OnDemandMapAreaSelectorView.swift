@@ -43,10 +43,10 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     /// The corner radius of the area selector view.
-    private let cordnerRadius: CGFloat = 16
+    static let cornerRadius: CGFloat = 16
     
-    /// The location for a handle that resizes the selector view.
-    private enum HandleLocation {
+    /// The orientation for a handle that resizes the selector view.
+    enum HandleOrientation {
         case topLeft, topRight, bottomLeft, bottomRight
     }
     
@@ -71,17 +71,12 @@ struct OnDemandMapAreaSelectorView: View {
         Rectangle()
             .fill(.black.opacity(0.2))
             .reverseMask {
-                RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+                RoundedRectangle(cornerRadius: OnDemandMapAreaSelectorView.cornerRadius, style: .continuous)
                     .frame(width: selectedRect.width, height: selectedRect.height)
                     .position(selectedRect.center)
             }
         
-        RoundedCorners(cornerRadius: cordnerRadius)
-            .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-            .frame(width: handlesRect.width, height: handlesRect.height)
-            .position(handlesRect.center)
-        
-        RoundedRectangle(cornerRadius: cordnerRadius, style: .continuous)
+        RoundedRectangle(cornerRadius: OnDemandMapAreaSelectorView.cornerRadius, style: .continuous)
             .stroke(.white, lineWidth: 4)
             .frame(width: selectedRect.width, height: selectedRect.height)
             .position(selectedRect.center)
@@ -89,20 +84,20 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The view for the handles that allow resizing the selected area.
     @ViewBuilder private var handles: some View {
-        Handle(position: topLeft) {
-            resize(for: .topLeft, location: $0)
+        Handle(orientation: .topLeft, position: topLeft) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
         
-        Handle(position: topRight) {
-            resize(for: .topRight, location: $0)
+        Handle(orientation: .topRight, position: topRight) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
         
-        Handle(position: bottomLeft) {
-            resize(for: .bottomLeft, location: $0)
+        Handle(orientation: .bottomLeft, position: bottomLeft) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
         
-        Handle(position: bottomRight) {
-            resize(for: .bottomRight, location: $0)
+        Handle(orientation: .bottomRight, position: bottomRight) { handleOrientation, location in
+            resize(for: handleOrientation, location: location)
         }
     }
     
@@ -131,13 +126,13 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// Resizes the area selectpor view.
     /// - Parameters:
-    ///   - handle: The handle location.
+    ///   - handleOrientation: The handle orientation.
     ///   - location: The location of the drag gesture.
-    private func resize(for handle: HandleLocation, location: CGPoint) {
+    private func resize(for handleOrientation: HandleOrientation, location: CGPoint) {
         // Resize the rect.
         let rectangle: CGRect
         
-        switch handle {
+        switch handleOrientation {
         case .topLeft:
             let minX = location.x
             let maxX = selectedRect.maxX
@@ -170,7 +165,7 @@ struct OnDemandMapAreaSelectorView: View {
         var corrected = CGRectIntersection(maxRect, rectangle)
         
         // Keep rectangle outside the minimum rect.
-        corrected = CGRectUnion(corrected, minimumRect(forHandle: handle))
+        corrected = CGRectUnion(corrected, minimumRect(for: handleOrientation))
         
         selectedRect = corrected
         
@@ -179,13 +174,13 @@ struct OnDemandMapAreaSelectorView: View {
     }
     
     /// Calculates the minimum rect size for a drag point handle using the adjacent handle position.
-    /// - Parameter handle: The handle location.
+    /// - Parameter handleOrientation: The handle orientation.
     /// - Returns: The minimum rect for a handle.
-    private func minimumRect(forHandle handle: HandleLocation) -> CGRect {
+    private func minimumRect(for handleOrientation: HandleOrientation) -> CGRect {
         let maxWidth: CGFloat = 50
         let maxHeight: CGFloat  = 50
         
-        switch handle {
+        switch handleOrientation {
         case .topLeft:
             // Anchor is opposite corner.
             return CGRect(
@@ -228,10 +223,12 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The handle view for the map area selector.
     struct Handle: View {
+        /// The handle orientation.
+        let orientation: HandleOrientation
         /// The position of the handle.
         let position: CGPoint
         /// The closure to call when the map area selector should be resized.
-        let resize: (CGPoint) -> Void
+        let resize: (HandleOrientation, CGPoint) -> Void
         /// The gesture state of the drag gesture.
         @GestureState var gestureState: State = .started
         /// The types of gesture states.
@@ -240,48 +237,74 @@ struct OnDemandMapAreaSelectorView: View {
         }
         
         var body: some View {
-            Color.clear
-                .contentShape(.rect)
-                .frame(width: 44, height: 44)
-                .position(position)
-                .gesture(DragGesture(coordinateSpace: .local)
-                    .updating($gestureState) { value, state, _ in
-                        switch state {
-                        case .started:
-                            state = .changed
-                            #if !os(visionOS)
-                            UISelectionFeedbackGenerator().selectionChanged()
-                            #endif
-                        case .changed:
-                            resize(value.location)
-                        }
+            HandleShape(
+                orientation: orientation,
+                cornerRadius: OnDemandMapAreaSelectorView.cornerRadius
+            )
+            .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+            .contentShape(.rect)
+            .hoverEffect()
+            .frame(width: 44, height: 44)
+            .position(position)
+            .gesture(DragGesture(coordinateSpace: .local)
+                .updating($gestureState) { value, state, _ in
+                    switch state {
+                    case .started:
+                        state = .changed
+#if !os(visionOS)
+                        UISelectionFeedbackGenerator().selectionChanged()
+#endif
+                    case .changed:
+                        resize(orientation, value.location)
                     }
-                )
+                }
+            )
         }
     }
     
-    /// A view that displays rounded corners for a rectangle view.
-    struct RoundedCorners: Shape {
+    /// The rounded corner shape for drawing a handle.
+    struct HandleShape: Shape {
+        /// The handle orientation.
+        let orientation: HandleOrientation
         /// The corner radius.
         let cornerRadius: CGFloat
-        /// The padding to add to the corner shape.
-        let padding = CGFloat(4)
+        /// The offset padding.
+        let offset: CGFloat = 2
         
+        // Add a rounded corner for the handle.
         func path(in rect: CGRect) -> Path {
             var path = Path()
             
-            // Add the rounded corners
-            path.move(to: CGPoint(x: rect.minX, y: rect.minY + cornerRadius))
-            path.addQuadCurve(to: CGPoint(x: rect.minX + cornerRadius, y: rect.minY), control: CGPoint(x: rect.minX, y: rect.minY))
-            
-            path.move(to: CGPoint(x: rect.maxX - cornerRadius, y: rect.minY))
-            path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.minY + cornerRadius + padding), control: CGPoint(x: rect.maxX, y: rect.minY))
-            
-            path.move(to: CGPoint(x: rect.maxX, y: rect.maxY - cornerRadius))
-            path.addQuadCurve(to: CGPoint(x: rect.maxX - cornerRadius - padding, y: rect.maxY), control: CGPoint(x: rect.maxX, y: rect.maxY))
-            
-            path.move(to: CGPoint(x: rect.minX + cornerRadius, y: rect.maxY))
-            path.addQuadCurve(to: CGPoint(x: rect.minX, y: rect.maxY - cornerRadius), control: CGPoint(x: rect.minX, y: rect.maxY))
+            switch orientation {
+            case .topLeft:
+                let offsetPosition = rect.center.offsetBy(dx: -offset, dy: -offset)
+                path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius))
+                path.addQuadCurve(
+                    to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y),
+                    control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+                )
+            case .topRight:
+                let offsetPosition = rect.center.offsetBy(dx: offset, dy: -offset)
+                path.move(to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y))
+                path.addQuadCurve(
+                    to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius),
+                    control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+                )
+            case .bottomLeft:
+                let offsetPosition = rect.center.offsetBy(dx: -offset, dy: offset)
+                path.move(to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y))
+                path.addQuadCurve(
+                    to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius),
+                    control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+                )
+            case .bottomRight:
+                let offsetPosition = rect.center.offsetBy(dx: offset, dy: offset)
+                path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius))
+                path.addQuadCurve(
+                    to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y),
+                    control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+                )
+            }
             
             return path
         }
@@ -301,6 +324,16 @@ private extension View {
                         .blendMode(.destinationOut)
                 }
         }
+    }
+}
+
+private extension CGPoint {
+    /// Offests a point by a given x and y amount.
+    /// - Parameters:
+    ///   - dx: The x offset.
+    ///   - dy: The y offset.
+    func offsetBy(dx: CGFloat, dy: CGFloat) -> CGPoint {
+        return CGPoint(x: x + dx, y: y + dy)
     }
 }
 

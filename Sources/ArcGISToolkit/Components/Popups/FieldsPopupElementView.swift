@@ -57,7 +57,7 @@ struct FieldsPopupElementView: View {
             VStack(alignment: .leading) {
                 Text(field.label)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 FormattedValueText(formattedValue: field.formattedValue)
                     .padding([.bottom], -1)
             }

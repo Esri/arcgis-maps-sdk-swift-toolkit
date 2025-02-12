@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */; };
+		75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */; };
 		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; };
 		7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */; };
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; };
@@ -28,7 +28,7 @@
 		8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F42B86896300000DD6 /* UI Tests.xctestplan */; };
 		8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */; };
 		8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */; };
-		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; };
+		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; platformFilters = (ios, maccatalyst, ); };
 		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
 		8AEE70482BEEC0B400C9949C /* RepresentedUITextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */; };
 		8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */; };
@@ -45,7 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTests.swift; sourceTree = "<group>"; };
+		75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTests.swift; sourceTree = "<group>"; };
 		75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase5View.swift; sourceTree = "<group>"; };
 		7552A7502A573CBB0023DA5A /* Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRunnerApp.swift; sourceTree = "<group>"; };
@@ -151,7 +151,7 @@
 				8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */,
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
-				75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */,
+				75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */,
 				8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */,
 			);
 			path = "UI Tests";
@@ -330,7 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */,
+				75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */,
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */,
 				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,
@@ -407,9 +407,13 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos xros xrsimulator";
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -463,10 +467,14 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos xros xrsimulator";
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
 				VALIDATE_PRODUCT = YES;
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -496,13 +504,11 @@
 				MARKETING_VERSION = 200.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -532,13 +538,11 @@
 				MARKETING_VERSION = 200.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
@@ -551,12 +555,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Test Runner";
 			};
 			name = Debug;
@@ -570,12 +572,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Test Runner";
 			};
 			name = Release;
