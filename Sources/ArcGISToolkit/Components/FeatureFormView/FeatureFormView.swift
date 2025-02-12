@@ -98,9 +98,6 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
-***REMOVED******REMOVED******REMOVED***.onChange(of: path) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***onPresentedFeatureChangedAction?(newValue.last)
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
