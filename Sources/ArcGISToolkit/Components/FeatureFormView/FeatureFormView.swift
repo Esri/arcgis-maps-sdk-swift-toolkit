@@ -96,6 +96,9 @@ public struct FeatureFormView: View {
                 headerVisibility: headerVisibility,
                 utilityNetwork: utilityNetwork
             )
+            .onAppear {
+                onFormChangedAction?(featureForm)
+            }
         }
         .environment(\.validationErrorVisibility, validationErrorVisibility)
     }
