@@ -33,6 +33,12 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
 ***REMOVED***static let cornerRadius: CGFloat = 16
 ***REMOVED***
+***REMOVED******REMOVED***/ The minimum width of the selected area.
+***REMOVED***static let minimumWidth: CGFloat = 50
+***REMOVED***
+***REMOVED******REMOVED***/ The minimum height of the selected area.
+***REMOVED***static let minimumHeight: CGFloat  = 50
+***REMOVED***
 ***REMOVED******REMOVED***/ Top right handle position.
 ***REMOVED***private var topRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.minY) ***REMOVED***
 ***REMOVED***
@@ -119,8 +125,17 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***maxRect = frame.insetBy(dx: defaultInsets, dy: defaultInsets)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** NOTE: This causes everything to get reset when insets change.
-***REMOVED******REMOVED***selectedRect = maxRect
+***REMOVED******REMOVED******REMOVED***/ Set the selected rectangle to the intersection of the max rect and the
+***REMOVED******REMOVED******REMOVED***/ current selected rect.
+***REMOVED******REMOVED***selectedRect = CGRectIntersection(maxRect, selectedRect)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ If that resulting rect is empty or less than the minimum dimensions,
+***REMOVED******REMOVED******REMOVED***/ then set the selected rect to the max rectangle.
+***REMOVED******REMOVED***if selectedRect.isEmpty
+***REMOVED******REMOVED******REMOVED***|| selectedRect.width < Self.minimumWidth
+***REMOVED******REMOVED******REMOVED***|| selectedRect.height < Self.minimumHeight {
+***REMOVED******REMOVED******REMOVED***selectedRect = maxRect
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resizes the area selectpor view.
@@ -174,38 +189,35 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ - Parameter handleOrientation: The handle orientation.
 ***REMOVED******REMOVED***/ - Returns: The minimum rect for a handle.
 ***REMOVED***private func minimumRect(for handleOrientation: HandleOrientation) -> CGRect {
-***REMOVED******REMOVED***let maxWidth: CGFloat = 50
-***REMOVED******REMOVED***let maxHeight: CGFloat  = 50
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch handleOrientation {
 ***REMOVED******REMOVED***case .topLeft:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Anchor is opposite corner.
 ***REMOVED******REMOVED******REMOVED***return CGRect(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: selectedRect.maxX - maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: selectedRect.maxY - maxHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED******REMOVED***x: selectedRect.maxX - Self.minimumWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: selectedRect.maxY - Self.minimumHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: Self.minimumWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: Self.minimumHeight
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .topRight:
 ***REMOVED******REMOVED******REMOVED***return CGRect(
 ***REMOVED******REMOVED******REMOVED******REMOVED***x: selectedRect.minX,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: selectedRect.maxY - maxHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED******REMOVED***y: selectedRect.maxY - Self.minimumHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: Self.minimumWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: Self.minimumHeight
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .bottomLeft:
 ***REMOVED******REMOVED******REMOVED***return CGRect(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: selectedRect.maxX - maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***x: selectedRect.maxX - Self.minimumWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***y: selectedRect.minY,
-***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED******REMOVED***width: Self.minimumWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: Self.minimumHeight
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .bottomRight:
 ***REMOVED******REMOVED******REMOVED***return CGRect(
 ***REMOVED******REMOVED******REMOVED******REMOVED***x: selectedRect.minX,
 ***REMOVED******REMOVED******REMOVED******REMOVED***y: selectedRect.minY,
-***REMOVED******REMOVED******REMOVED******REMOVED***width: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***height: maxHeight
+***REMOVED******REMOVED******REMOVED******REMOVED***width: Self.minimumWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: Self.minimumHeight
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
