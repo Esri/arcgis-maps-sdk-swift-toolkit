@@ -56,7 +56,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay { handles ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: safeAreaInsets) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(safeAreaInsets) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateMaxRect(geometry: geometry)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
@@ -241,15 +241,18 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.position(position)
+***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(value.location)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***

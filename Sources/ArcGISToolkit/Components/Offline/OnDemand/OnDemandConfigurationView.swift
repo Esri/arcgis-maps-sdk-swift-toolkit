@@ -123,7 +123,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(selectedRect) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -137,7 +137,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@ViewBuilder
 ***REMOVED***private var mapView: some View {
 ***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED***#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
+***REMOVED******REMOVED***#endif
 ***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
 ***REMOVED******REMOVED******REMOVED***.onLayerViewStateChanged { _, _ in
@@ -150,7 +152,12 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder
 ***REMOVED***private func bottomPane(mapView: MapViewProxy) -> some View {
-***REMOVED******REMOVED***BottomCard(background: Color(uiColor: .systemBackground)) {
+#if os(visionOS)
+***REMOVED******REMOVED***let background = Material.regularMaterial
+#else
+***REMOVED******REMOVED***let background = Color(uiColor: .systemBackground)
+#endif
+***REMOVED******REMOVED***BottomCard(background: background) {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
@@ -280,7 +287,7 @@ private struct RenameButton: View {
 ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text("The name for the map area must be unique.")
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: proposedNewTitle) {
+***REMOVED******REMOVED***.onChange(proposedNewTitle) {
 ***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck($0)
 ***REMOVED***
 ***REMOVED***
@@ -334,7 +341,11 @@ private extension UIImage {
 ***REMOVED******REMOVED***/ - Returns: The cropped image.
 ***REMOVED***@MainActor
 ***REMOVED***func crop(to rect: CGRect) -> UIImage? {
+***REMOVED******REMOVED***#if os(visionOS)
+***REMOVED******REMOVED***let scale: CGFloat = 1
+***REMOVED******REMOVED***#else
 ***REMOVED******REMOVED***let scale = UIScreen.main.scale
+***REMOVED******REMOVED***#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let scaledRect = CGRect(
 ***REMOVED******REMOVED******REMOVED***x: rect.origin.x * scale,

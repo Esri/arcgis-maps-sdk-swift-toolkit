@@ -73,7 +73,8 @@ private extension PortalItem {
 ***REMOVED***static func naperville() -> PortalItem {
 ***REMOVED******REMOVED***PortalItem(
 ***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED******REMOVED***id: PortalItem.ID("3da658f2492f4cfd8494970ef489d2c5")!
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

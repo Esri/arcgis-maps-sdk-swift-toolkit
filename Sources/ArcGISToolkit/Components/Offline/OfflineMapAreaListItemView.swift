@@ -59,6 +59,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 ***REMOVED******REMOVED******REMOVED***trailingContent()
 ***REMOVED***
 ***REMOVED******REMOVED***.contentShape(.rect)
+***REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
 ***REMOVED***
