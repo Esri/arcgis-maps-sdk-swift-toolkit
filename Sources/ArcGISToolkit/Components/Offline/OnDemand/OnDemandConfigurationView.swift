@@ -143,7 +143,12 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
 ***REMOVED******REMOVED******REMOVED***.onLayerViewStateChanged { _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Sleep for a moment to give the map a chance to become fully ready
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to convert coordinates from screen to location.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(for: .milliseconds(250))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.preventMapInteractionFromMovingSheet()
 ***REMOVED***
