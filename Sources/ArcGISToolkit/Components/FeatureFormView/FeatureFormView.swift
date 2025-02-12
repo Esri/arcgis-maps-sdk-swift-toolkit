@@ -106,7 +106,7 @@ public struct FeatureFormView: View {
             .navigationDestination(for: ArcGISFeature.self) { feature in
                 let featureForm = FeatureForm(feature: feature)
                 InternalFeatureFormView(
-                    featureForm: FeatureForm(feature: feature),
+                    featureForm: featureForm,
                     headerVisibility: headerVisibility,
                     path: $path,
                     utilityNetwork: utilityNetwork
