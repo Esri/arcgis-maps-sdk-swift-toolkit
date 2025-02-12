@@ -64,7 +64,7 @@ struct OnDemandListItemView: View {
                 .imageScale(.large)
         }
         // Have to apply a style or it won't be tappable
-        // because of the onTapGesture modifier in the parent view.
+        // because of the button the parent view.
         .buttonStyle(.borderless)
     }
 }
