@@ -67,26 +67,7 @@ struct FeatureFormExampleView: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                 }
                 .ignoresSafeArea(.keyboard)
-            // NavigationStack doesn't work properly inside of a FloatingPanel
-            // so we need to use a sheet instead for now.
-            // Similar to https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/706
-//                .floatingPanel(
-//                    attributionBarHeight: attributionBarHeight,
-//                    selectedDetent: $detent,
-//                    horizontalAlignment: .leading,
-//                    isPresented: model.formIsPresented
-//                ) {
                 .sheet(isPresented: model.formIsPresented) {
-                    let makeFeatureFormView: (_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View = { featureForm, headerVisibility in
-                        FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
-                            .formHeader(headerVisibility)
-                            .onUtilityAssociationSelected { feature in
-                                forms.append(FeatureForm(feature: feature))
-                            }
-                            .validationErrors(validationErrorVisibility)
-                            .padding(.horizontal)
-                            .padding(.top, 16)
-                    }
                     NavigationStack(path: $forms) {
                         if let featureForm = model.featureForm {
                             makeFeatureFormView(featureForm, .visible)
@@ -162,6 +143,17 @@ struct FeatureFormExampleView: View {
                     }
                 }
         }
+    }
+    
+    func makeFeatureFormView(_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View {
+        FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+            .formHeader(headerVisibility)
+            .onUtilityAssociationSelected { feature in
+                forms.append(FeatureForm(feature: feature))
+            }
+            .validationErrors(validationErrorVisibility)
+            .padding(.horizontal)
+            .padding(.top, 16)
     }
     
     /// Makes a map from a portal item.
