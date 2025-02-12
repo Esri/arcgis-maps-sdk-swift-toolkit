@@ -69,7 +69,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@State private var path = NavigationPath()
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The root feature form.
 ***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
@@ -78,8 +78,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***var onPresentedFeatureChangedAction: ((ArcGISFeature?) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when the form has changed.
+***REMOVED***var onFormChangedAction: ((FeatureForm) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -100,13 +100,20 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: $path,
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***onFormChangedAction?(featureForm)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: ArcGISFeature.self) { feature in
+***REMOVED******REMOVED******REMOVED******REMOVED***let featureForm = FeatureForm(feature: feature)
 ***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: feature),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path: $path,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormChangedAction?(featureForm)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: UtilityNetworkAssociationFormElementView.AssociationKindGroup.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView.AssociationKindGroupView(associationKindGroup: group)
@@ -118,17 +125,13 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
-***REMOVED******REMOVED******REMOVED***.onChange(of: path) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***onPresentedFeatureChangedAction?(newValue.last)
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***/ - Parameter action: <#action description#>
-***REMOVED******REMOVED***/ - Returns: <#description#>
-***REMOVED***public func onPresentedFeatureChanged(action: @escaping (ArcGISFeature?) -> Void) -> Self {
+***REMOVED******REMOVED***/ Sets a closure to perform when the view’s form changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form has changed.
+***REMOVED***public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onPresentedFeatureChangedAction = action
+***REMOVED******REMOVED***copy.onFormChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
