@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
-@available(visionOS, unavailable)
 struct InputFooter: View {
     @Environment(\.formElementPadding) var elementPadding
     
@@ -63,7 +62,7 @@ struct InputFooter: View {
             }
         }
         .font(.footnote)
-        .foregroundColor(isShowingError ? .red : .secondary)
+        .foregroundStyle(isShowingError ? .red : .secondary)
         .id(id)
         .padding(.vertical, elementPadding / 2)
         .task {
@@ -74,7 +73,6 @@ struct InputFooter: View {
     }
 }
 
-@available(visionOS, unavailable)
 extension InputFooter {
     /// Localized error text to be shown to a user depending on the type of error information available.
     var errorMessage: Text? {

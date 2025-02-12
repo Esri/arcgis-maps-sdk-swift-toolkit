@@ -228,7 +228,7 @@ class PreplannedMapModelTests: XCTestCase {
             OfflineManager.shared.jobManager.jobs.removeAll()
             
             // Clean up folder.
-            model.removeDownloadedPreplannedMapArea()
+            model.removeDownloadedArea()
         }
         
         var statuses = [PreplannedMapModel.Status]()
@@ -294,7 +294,7 @@ class PreplannedMapModelTests: XCTestCase {
             OfflineManager.shared.jobManager.jobs.removeAll()
             
             // Clean up folder.
-            model.removeDownloadedPreplannedMapArea()
+            model.removeDownloadedArea()
         }
         
         var statuses: [PreplannedMapModel.Status] = []
@@ -374,7 +374,7 @@ class PreplannedMapModelTests: XCTestCase {
         )
         
         // Clean up folder.
-        model.removeDownloadedPreplannedMapArea()
+        model.removeDownloadedArea()
         
         // Verify statuses after remove.
         // First give time for final status to come in.

@@ -26,10 +26,9 @@ struct BasemapGalleryCell: View {
     let onSelection: () -> Void
     
     var body: some View {
-        let roundedRect = RoundedRectangle(cornerRadius: 8)
-        Button(action: {
+        Button {
             onSelection()
-        }, label: {
+        } label: {
             VStack {
                 ZStack(alignment: .center) {
                     // Display the thumbnail, if available.
@@ -38,7 +37,7 @@ struct BasemapGalleryCell: View {
                             Image(uiImage: thumbnailImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .clipShape(roundedRect)
+                                .clipShape(.rect(cornerRadius: 8))
                                 .overlay(
                                     makeOverlay()
                                 )
@@ -56,13 +55,13 @@ struct BasemapGalleryCell: View {
                 Text(item.name ?? "")
                     .font(Font.custom("AvenirNext-Regular", fixedSize: 12))
                     .multilineTextAlignment(.center)
-                    .foregroundColor(item.hasError ? .secondary : .primary)
+                    .foregroundStyle(item.hasError ? .secondary : .primary)
             }
 #if os(visionOS)
             .contentShape(.hoverEffect, .rect(cornerRadius: 12))
             .hoverEffect()
 #endif
-        })
+        }
         .buttonStyle(.plain)
         .disabled(item.isBasemapLoading)
     }
@@ -78,10 +77,10 @@ struct BasemapGalleryCell: View {
                         ZStack {
                             // For a white background behind the exclamation mark.
                             Circle()
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                                 .frame(width: 16, height: 16)
                             Image(systemName: "exclamationmark.circle.fill")
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .frame(width: 32, height: 32)
                         }
                         Spacer()
@@ -91,7 +90,7 @@ struct BasemapGalleryCell: View {
             } else {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(lineWidth: isSelected ? 2 : 0)
-                    .foregroundColor(Color.accentColor)
+                    .foregroundStyle(Color.accentColor)
             }
         }
     }
@@ -108,7 +107,7 @@ struct BasemapGalleryCell: View {
                 trailing: 12)
             )
             .background(Color(uiColor: .systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(.rect(cornerRadius: 8))
     }
 }
 

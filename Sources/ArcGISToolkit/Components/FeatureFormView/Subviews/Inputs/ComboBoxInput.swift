@@ -83,7 +83,7 @@ struct ComboBoxInput: View {
             Text(displayedValue)
                 .accessibilityIdentifier("\(element.label) Combo Box Value")
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundColor(!selectedValue.isNoValue ? .primary : .secondary)
+                .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
             if let _ = selectedValue.codedValue, !isRequired {
                 // Only show clear button if we have a value
                 // and we're not required. (i.e., Don't show clear if
@@ -98,10 +98,10 @@ struct ComboBoxInput: View {
                 // Otherwise, always show chevron.
                 Image(systemName: "chevron.right")
                     .accessibilityIdentifier("\(element.label) Options Button")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
-        .formInputStyle()
+        .formInputStyle(isTappable: true)
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
@@ -161,7 +161,7 @@ extension ComboBoxInput {
         NavigationStack {
             VStack {
                 Text(element.description)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .font(.subheadline)
                     .padding(.horizontal)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -194,7 +194,9 @@ extension ComboBoxInput {
                         .accessibilityIdentifier("\(element.label) Unsupported Value Section")
                     }
                 }
+#if !os(visionOS)
                 .listStyle(.plain)
+#endif
                 .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
                 .navigationTitle(element.label)
                 .navigationBarTitleDisplayMode(.inline)
@@ -205,9 +207,13 @@ extension ComboBoxInput {
                         } label: {
                             Text.done
                                 .fontWeight(.semibold)
-                                .foregroundColor(.accentColor)
+#if !os(visionOS)
+                                .foregroundStyle(Color.accentColor)
+#endif
                         }
+#if !os(visionOS)
                         .buttonStyle(.plain)
+#endif
                     }
                 }
             }
@@ -220,7 +226,9 @@ extension ComboBoxInput {
             Spacer()
             if selected {
                 Image(systemName: "checkmark")
-                    .foregroundColor(.accentColor)
+#if !os(visionOS)
+                    .foregroundStyle(Color.accentColor)
+#endif
             }
         }
     }
