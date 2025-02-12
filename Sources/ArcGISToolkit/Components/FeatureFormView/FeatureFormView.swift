@@ -100,17 +100,15 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***/ - Parameter action: <#action description#>
-***REMOVED******REMOVED***/ - Returns: <#description#>
-***REMOVED***public func onPresentedFeatureChanged(action: @escaping (ArcGISFeature?) -> Void) -> Self {
+***REMOVED******REMOVED***/ Sets a closure to perform when the view’s form changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form has changed.
+***REMOVED***public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onPresentedFeatureChangedAction = action
+***REMOVED******REMOVED***copy.onFormChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
 struct InternalFeatureFormView: View {
 ***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
 ***REMOVED***
