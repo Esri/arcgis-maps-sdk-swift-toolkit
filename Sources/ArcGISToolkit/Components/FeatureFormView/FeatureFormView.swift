@@ -75,8 +75,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***var onPresentedFeatureChangedAction: ((ArcGISFeature?) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when the form has changed.
+***REMOVED***var onFormChangedAction: ((FeatureForm) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
