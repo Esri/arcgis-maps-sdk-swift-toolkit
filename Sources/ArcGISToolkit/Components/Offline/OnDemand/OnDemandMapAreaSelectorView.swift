@@ -244,7 +244,6 @@ struct OnDemandMapAreaSelectorView: View {
                 .contentShape(.rect)
                 .frame(width: 44, height: 44)
                 .position(position)
-                .hoverEffect()
                 .gesture(DragGesture(coordinateSpace: .local)
                     .updating($gestureState) { value, state, _ in
                         switch state {
