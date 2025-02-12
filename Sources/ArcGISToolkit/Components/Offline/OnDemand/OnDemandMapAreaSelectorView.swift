@@ -22,18 +22,6 @@ struct OnDemandMapAreaSelectorView: View {
     /// A Binding to the CGRect of the selected area.
     @Binding var selectedRect: CGRect
     
-    /// The top left corner point of the area selector view.
-    @State private var topLeft: CGPoint = .zero
-    
-    /// The top right corner point of the area selector view.
-    @State private var topRight: CGPoint = .zero
-    
-    /// The bottom left corner point of the area selector view.
-    @State private var bottomLeft: CGPoint = .zero
-    
-    /// The bottom right corner point of the area selector view.
-    @State private var bottomRight: CGPoint = .zero
-    
     /// The safe area insets of the view.
     @State private var safeAreaInsets = EdgeInsets()
     
@@ -44,6 +32,18 @@ struct OnDemandMapAreaSelectorView: View {
     
     /// The corner radius of the area selector view.
     static let cornerRadius: CGFloat = 16
+    
+    /// Top right handle position.
+    private var topRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.minY) }
+    
+    /// Top left handle position.
+    private var topLeft: CGPoint { CGPoint(x: selectedRect.minX, y: selectedRect.minY) }
+    
+    /// Bottom left handle position.
+    private var bottomLeft: CGPoint { CGPoint(x: selectedRect.minX, y: selectedRect.maxY) }
+    
+    /// Bottom right handle position.
+    private var bottomRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.maxY) }
     
     /// The orientation for a handle that resizes the selector view.
     enum HandleOrientation {
@@ -121,7 +121,6 @@ struct OnDemandMapAreaSelectorView: View {
         
         // NOTE: This causes everything to get reset when insets change.
         selectedRect = maxRect
-        updateHandles()
     }
     
     /// Resizes the area selectpor view.
@@ -167,10 +166,8 @@ struct OnDemandMapAreaSelectorView: View {
         // Keep rectangle outside the minimum rect.
         corrected = CGRectUnion(corrected, minimumRect(for: handleOrientation))
         
+        // Update selection.
         selectedRect = corrected
-        
-        // Now update handles for new bounding rect.
-        updateHandles()
     }
     
     /// Calculates the minimum rect size for a drag point handle using the adjacent handle position.
@@ -211,14 +208,6 @@ struct OnDemandMapAreaSelectorView: View {
                 height: maxHeight
             )
         }
-    }
-    
-    /// Updates the handle locations using the boudning rect.
-    private func updateHandles() {
-        topRight = CGPoint(x: selectedRect.maxX, y: selectedRect.minY)
-        topLeft = CGPoint(x: selectedRect.minX, y: selectedRect.minY)
-        bottomLeft = CGPoint(x: selectedRect.minX, y: selectedRect.maxY)
-        bottomRight = CGPoint(x: selectedRect.maxX, y: selectedRect.maxY)
     }
     
     /// The handle view for the map area selector.
