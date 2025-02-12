@@ -123,7 +123,6 @@ extension UtilityNetworkAssociationFormElementView {
                     .cornerRadius(5)
                     .font(.caption2)
                 }
-                .padding(.leading)
             }
         }
     }
