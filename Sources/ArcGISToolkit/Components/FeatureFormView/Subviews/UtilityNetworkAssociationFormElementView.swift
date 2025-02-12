@@ -56,6 +56,9 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let description: String?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let fractionAlongEdge: Double?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let id = UUID()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
@@ -63,6 +66,9 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let selectionAction: (() -> Void)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let terminalName: String?
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AssociationView: View {

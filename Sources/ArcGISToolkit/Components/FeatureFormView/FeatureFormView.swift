@@ -65,7 +65,6 @@
 ***REMOVED***/ `Info.plist` file.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
-@available(visionOS, unavailable)
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
@@ -158,7 +157,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***try? await utilityNetwork?.load()
 ***REMOVED******REMOVED******REMOVED***if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Grab Utility Network Associations for the element being edited
-***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await utilityNetwork?.associations(for: utilityElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await utilityNetwork?.associations(for: utilityElement),
+***REMOVED******REMOVED******REMOVED******REMOVED***   let currentFeatureGlobalID = model.featureForm.feature.globalID {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique association kinds present
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associationKinds = Array(Set(associations.map { $0.kind ***REMOVED***))
@@ -166,15 +166,18 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by kind
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associationKindMembers = associations.filter { $0.kind == associationKind ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique network sources within the association kind group.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceNames = Array(Set(associationKindMembers.map { $0.toElement.networkSource.name ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceNames = Array(Set(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationKindMembers.map { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for networkSourceName in networkSourceNames {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by kind
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceMembers = associationKindMembers.filter { $0.toElement.networkSource.name == networkSourceName ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Filter the associations by network source
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceMembers = associationKindMembers.filter { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name == networkSourceName ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for networkSourceMember in networkSourceMembers {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = networkSourceMember.toElement
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Determine the association's title.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = networkSourceMember.displayedElement(for: currentFeatureGlobalID)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let arcGISFeature = try? await utilityNetwork?.features(for: [associatedElement]).first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let title: String
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
@@ -184,10 +187,12 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.selectedAssociation = arcGISFeature
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: associatedElement.terminal?.name
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -214,7 +219,17 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
+private extension UtilityAssociation {
+***REMOVED******REMOVED***/ Determines whether to show the `fromElement` or `toElement`.
+***REMOVED***func displayedElement(for id: UUID) -> UtilityElement {
+***REMOVED******REMOVED***if id == toElement.globalID {
+***REMOVED******REMOVED******REMOVED***fromElement
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***toElement
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 extension FeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.

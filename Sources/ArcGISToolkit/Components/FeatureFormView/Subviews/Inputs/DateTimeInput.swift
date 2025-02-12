@@ -92,7 +92,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Text(!formattedValue.isEmpty ? formattedValue : .noValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(displayColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(displayColor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
@@ -103,7 +103,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED*** else if !isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
@@ -114,7 +114,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED***.formInputStyle(isTappable: true)
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
@@ -163,7 +163,11 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED***return .secondary
 ***REMOVED*** else if isEditing {
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***return .primary
+#else
 ***REMOVED******REMOVED******REMOVED***return .accentColor
+#endif
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .primary
 ***REMOVED***
@@ -184,8 +188,10 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***input.includesTime ? Text.now : .today
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
+#if !os(visionOS)
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundStyle(.tint)
+#endif
 ***REMOVED***
 ***REMOVED***
 
