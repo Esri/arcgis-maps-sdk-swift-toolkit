@@ -41,7 +41,8 @@
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility tasks group.
 ***REMOVED***private var isVisibleTask: Task<Void, Never>?
-***REMOVED***
+
+#warning("TODO: This property to be removed.")
 ***REMOVED***let utilityNetwork: UtilityNetwork?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
