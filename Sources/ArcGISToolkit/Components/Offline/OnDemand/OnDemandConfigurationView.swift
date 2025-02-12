@@ -145,9 +145,7 @@ struct OnDemandConfigurationView: View {
             .onLayerViewStateChanged { _, _ in
                 mapIsReady = true
             }
-            // Prevent view from dragging when panning on map view.
-            .highPriorityGesture(DragGesture())
-            .interactiveDismissDisabled()
+            .preventMapInteractionFromMovingSheet()
     }
     
     @ViewBuilder
@@ -243,6 +241,23 @@ struct OnDemandConfigurationView: View {
             .padding()
         }
         .padding()
+    }
+}
+
+private extension View {
+    /// Prevent sheet from moving when interacting with map view.
+    @ViewBuilder
+    func preventMapInteractionFromMovingSheet() -> some View {
+        if #available(iOS 17.0, *) {
+            self
+                .highPriorityGesture(DragGesture())
+                .highPriorityGesture(RotateGesture())
+                .interactiveDismissDisabled()
+        } else {
+            self
+                .highPriorityGesture(DragGesture())
+                .interactiveDismissDisabled()
+        }
     }
 }
 
