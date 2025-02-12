@@ -96,10 +96,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***onFormChangedAction?(featureForm)
-***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED***
 ***REMOVED***
@@ -113,6 +111,8 @@ public struct FeatureFormView: View {
 ***REMOVED***
 
 struct InternalFeatureFormView: View {
+***REMOVED***@Environment(\.formChangedAction) var onFormChangedAction
+***REMOVED***
 ***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
@@ -146,6 +146,9 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***evaluatedForm
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***onFormChangedAction?(model.featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -228,8 +231,9 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: arcGISFeature),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: model.utilityNetwork
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -272,6 +276,10 @@ private extension UtilityAssociation {
 ***REMOVED******REMOVED******REMOVED***toElement
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+private extension EnvironmentValues {
+***REMOVED***@Entry var formChangedAction: ((FeatureForm) -> Void)?
 ***REMOVED***
 
 extension InternalFeatureFormView {
