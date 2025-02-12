@@ -144,7 +144,12 @@ struct OnDemandConfigurationView: View {
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
             .onLayerViewStateChanged { _, _ in
-                mapIsReady = true
+                Task { @MainActor in
+                    // Sleep for a moment to give the map a chance to become fully ready
+                    // to convert coordinates from screen to location.
+                    try? await Task.sleep(for: .milliseconds(250))
+                    mapIsReady = true
+                }
             }
             .preventMapInteractionFromMovingSheet()
     }
