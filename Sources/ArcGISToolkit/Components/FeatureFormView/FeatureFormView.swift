@@ -96,10 +96,8 @@ public struct FeatureFormView: View {
                 headerVisibility: headerVisibility,
                 utilityNetwork: utilityNetwork
             )
-            .onAppear {
-                onFormChangedAction?(featureForm)
-            }
         }
+        .environment(\.formChangedAction, onFormChangedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
     }
     
@@ -113,6 +111,8 @@ public struct FeatureFormView: View {
 }
 
 struct InternalFeatureFormView: View {
+    @Environment(\.formChangedAction) var onFormChangedAction
+    
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
     
     /// The view model for the form.
@@ -146,6 +146,9 @@ struct InternalFeatureFormView: View {
             } else {
                 evaluatedForm
             }
+        }
+        .onAppear {
+            onFormChangedAction?(model.featureForm)
         }
     }
     
@@ -228,8 +231,9 @@ struct InternalFeatureFormView: View {
                                         name: title,
                                         selectionAction: {
                                             navigationLayerModel.push {
-                                                FeatureFormView(
+                                                InternalFeatureFormView(
                                                     featureForm: FeatureForm(feature: arcGISFeature),
+                                                    headerVisibility: headerVisibility,
                                                     utilityNetwork: model.utilityNetwork
                                                 )
                                             }
@@ -272,6 +276,10 @@ private extension UtilityAssociation {
             toElement
         }
     }
+}
+
+private extension EnvironmentValues {
+    @Entry var formChangedAction: ((FeatureForm) -> Void)?
 }
 
 extension InternalFeatureFormView {
