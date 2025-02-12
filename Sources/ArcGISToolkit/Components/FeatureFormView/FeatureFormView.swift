@@ -78,7 +78,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+#warning("TODO: This property to be removed.")
 ***REMOVED***let utilityNetwork: UtilityNetwork?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the form header.
