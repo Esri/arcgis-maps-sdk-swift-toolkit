@@ -69,7 +69,7 @@ public struct FeatureFormView: View {
     /// The root feature form.
     let featureForm: FeatureForm
     
-    /// <#Description#>
+#warning("TODO: This property to be removed.")
     let utilityNetwork: UtilityNetwork?
     
     /// The visibility of the form header.
