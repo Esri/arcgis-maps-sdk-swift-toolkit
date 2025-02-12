@@ -33,6 +33,12 @@ struct OnDemandMapAreaSelectorView: View {
     /// The corner radius of the area selector view.
     static let cornerRadius: CGFloat = 16
     
+    /// The minimum width of the selected area.
+    static let minimumWidth: CGFloat = 50
+    
+    /// The minimum height of the selected area.
+    static let minimumHeight: CGFloat  = 50
+    
     /// Top right handle position.
     private var topRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.minY) }
     
@@ -119,8 +125,17 @@ struct OnDemandMapAreaSelectorView: View {
         
         maxRect = frame.insetBy(dx: defaultInsets, dy: defaultInsets)
         
-        // NOTE: This causes everything to get reset when insets change.
-        selectedRect = maxRect
+        /// Set the selected rectangle to the intersection of the max rect and the
+        /// current selected rect.
+        selectedRect = CGRectIntersection(maxRect, selectedRect)
+        
+        /// If that resulting rect is empty or less than the minimum dimensions,
+        /// then set the selected rect to the max rectangle.
+        if selectedRect.isEmpty
+            || selectedRect.width < Self.minimumWidth
+            || selectedRect.height < Self.minimumHeight {
+            selectedRect = maxRect
+        }
     }
     
     /// Resizes the area selectpor view.
@@ -174,38 +189,35 @@ struct OnDemandMapAreaSelectorView: View {
     /// - Parameter handleOrientation: The handle orientation.
     /// - Returns: The minimum rect for a handle.
     private func minimumRect(for handleOrientation: HandleOrientation) -> CGRect {
-        let maxWidth: CGFloat = 50
-        let maxHeight: CGFloat  = 50
-        
         switch handleOrientation {
         case .topLeft:
             // Anchor is opposite corner.
             return CGRect(
-                x: selectedRect.maxX - maxWidth,
-                y: selectedRect.maxY - maxHeight,
-                width: maxWidth,
-                height: maxHeight
+                x: selectedRect.maxX - Self.minimumWidth,
+                y: selectedRect.maxY - Self.minimumHeight,
+                width: Self.minimumWidth,
+                height: Self.minimumHeight
             )
         case .topRight:
             return CGRect(
                 x: selectedRect.minX,
-                y: selectedRect.maxY - maxHeight,
-                width: maxWidth,
-                height: maxHeight
+                y: selectedRect.maxY - Self.minimumHeight,
+                width: Self.minimumWidth,
+                height: Self.minimumHeight
             )
         case .bottomLeft:
             return CGRect(
-                x: selectedRect.maxX - maxWidth,
+                x: selectedRect.maxX - Self.minimumWidth,
                 y: selectedRect.minY,
-                width: maxWidth,
-                height: maxHeight
+                width: Self.minimumWidth,
+                height: Self.minimumHeight
             )
         case .bottomRight:
             return CGRect(
                 x: selectedRect.minX,
                 y: selectedRect.minY,
-                width: maxWidth,
-                height: maxHeight
+                width: Self.minimumWidth,
+                height: Self.minimumHeight
             )
         }
     }
