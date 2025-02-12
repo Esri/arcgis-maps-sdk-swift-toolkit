@@ -48,21 +48,21 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     private let thumbnailSize: CGFloat = 64
     
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            thumbnailView
-            VStack(alignment: .leading, spacing: 4) {
-                titleView
-                descriptionView
-                statusView
-            }
-            Spacer()
-            trailingContent()
-        }
-        .contentShape(.rect)
-        .hoverEffect()
-        .onTapGesture {
+        Button {
             metadataViewIsPresented = true
+        } label: {
+            HStack(alignment: .center, spacing: 10) {
+                thumbnailView
+                VStack(alignment: .leading, spacing: 4) {
+                    titleView
+                    descriptionView
+                    statusView
+                }
+                Spacer()
+                trailingContent()
+            }
         }
+        .buttonStyle(.plain)
         .sheet(isPresented: $metadataViewIsPresented) {
             NavigationStack {
                 OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
@@ -139,7 +139,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
                 .imageScale(.large)
         }
         // Have to apply a style or it won't be tappable
-        // because of the onTapGesture modifier in the parent view.
+        // because of the button the parent view.
         .buttonStyle(.borderless)
     }
 }
@@ -209,7 +209,7 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
                 .imageScale(.large)
         }
         // Have to apply a style or it won't be tappable
-        // because of the onTapGesture modifier in the parent view.
+        // because of the button the parent view.
         .buttonStyle(.borderless)
         .disabled(!model.allowsDownload)
     }
@@ -230,7 +230,7 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
                     .progressViewStyle(.cancelGauge)
             }
             // Have to apply a style or it won't be tappable
-            // because of the onTapGesture modifier in the parent view.
+            // because of the button the parent view.
             .buttonStyle(.plain)
         }
     }
