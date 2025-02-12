@@ -66,7 +66,7 @@
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The root feature form.
 ***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
