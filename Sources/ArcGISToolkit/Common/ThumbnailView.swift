@@ -41,9 +41,9 @@ struct ThumbnailView: View  {
         }
         .accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
         .frame(width: size.width, height: size.height, alignment: .center)
-        .clipShape(RoundedRectangle(cornerRadius: 4))
-        .contentShape(RoundedRectangle(cornerRadius: 4))
-        .foregroundColor(foregroundColor(for: attachmentModel))
+        .clipShape(.rect(cornerRadius: 4))
+        .contentShape(.rect(cornerRadius: 4))
+        .foregroundStyle(foregroundColor(for: attachmentModel))
     }
     
     /// The foreground color of the thumbnail image.

@@ -48,7 +48,7 @@ struct TrustHostViewModifier: ViewModifier {
         )
         .multilineTextAlignment(.center)
         .font(.subheadline)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
     }
     
     func body(content: Content) -> some View {

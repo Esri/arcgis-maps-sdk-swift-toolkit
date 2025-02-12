@@ -81,7 +81,7 @@ struct FeatureFormExampleView: View {
                     .interactiveDismissDisabled()
                     .presentationDetents([.medium, .large], selection: $selectedDetent)
                 }
-                .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
+                .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
                 .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
@@ -117,7 +117,7 @@ struct FeatureFormExampleView: View {
                         }
                         .padding()
                         .background(.thinMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(.rect(cornerRadius: 10))
                     default:
                         EmptyView()
                     }
@@ -204,7 +204,7 @@ private extension ArcGISCredential {
 
 /// The model class for the form example view
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
     /// Feature form workflow states.
     enum State {
         /// Edits are being applied to the remote service.
@@ -399,7 +399,7 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
-        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }
 
