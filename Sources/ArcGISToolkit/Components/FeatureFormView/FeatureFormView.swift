@@ -106,7 +106,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: ArcGISFeature.self) { feature in
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureForm = FeatureForm(feature: feature)
 ***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: feature),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path: $path,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
