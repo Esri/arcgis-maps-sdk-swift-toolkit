@@ -75,8 +75,8 @@ public struct FeatureFormView: View {
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
     
-    /// <#Description#>
-    var onPresentedFeatureChangedAction: ((ArcGISFeature?) -> Void)?
+    /// The closure to perform when the form has changed.
+    var onFormChangedAction: ((FeatureForm) -> Void)?
     
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
