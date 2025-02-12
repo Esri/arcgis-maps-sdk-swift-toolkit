@@ -22,18 +22,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***/ A Binding to the CGRect of the selected area.
 ***REMOVED***@Binding var selectedRect: CGRect
 ***REMOVED***
-***REMOVED******REMOVED***/ The top left corner point of the area selector view.
-***REMOVED***@State private var topLeft: CGPoint = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The top right corner point of the area selector view.
-***REMOVED***@State private var topRight: CGPoint = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The bottom left corner point of the area selector view.
-***REMOVED***@State private var bottomLeft: CGPoint = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The bottom right corner point of the area selector view.
-***REMOVED***@State private var bottomRight: CGPoint = .zero
-***REMOVED***
 ***REMOVED******REMOVED***/ The safe area insets of the view.
 ***REMOVED***@State private var safeAreaInsets = EdgeInsets()
 ***REMOVED***
@@ -44,6 +32,18 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius of the area selector view.
 ***REMOVED***static let cornerRadius: CGFloat = 16
+***REMOVED***
+***REMOVED******REMOVED***/ Top right handle position.
+***REMOVED***private var topRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.minY) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Top left handle position.
+***REMOVED***private var topLeft: CGPoint { CGPoint(x: selectedRect.minX, y: selectedRect.minY) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Bottom left handle position.
+***REMOVED***private var bottomLeft: CGPoint { CGPoint(x: selectedRect.minX, y: selectedRect.maxY) ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Bottom right handle position.
+***REMOVED***private var bottomRight: CGPoint { CGPoint(x: selectedRect.maxX, y: selectedRect.maxY) ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The orientation for a handle that resizes the selector view.
 ***REMOVED***enum HandleOrientation {
@@ -56,7 +56,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay { handles ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: safeAreaInsets) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(safeAreaInsets) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateMaxRect(geometry: geometry)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
@@ -121,7 +121,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** NOTE: This causes everything to get reset when insets change.
 ***REMOVED******REMOVED***selectedRect = maxRect
-***REMOVED******REMOVED***updateHandles()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resizes the area selectpor view.
@@ -167,10 +166,8 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED*** Keep rectangle outside the minimum rect.
 ***REMOVED******REMOVED***corrected = CGRectUnion(corrected, minimumRect(for: handleOrientation))
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Update selection.
 ***REMOVED******REMOVED***selectedRect = corrected
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Now update handles for new bounding rect.
-***REMOVED******REMOVED***updateHandles()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the minimum rect size for a drag point handle using the adjacent handle position.
@@ -213,14 +210,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the handle locations using the boudning rect.
-***REMOVED***private func updateHandles() {
-***REMOVED******REMOVED***topRight = CGPoint(x: selectedRect.maxX, y: selectedRect.minY)
-***REMOVED******REMOVED***topLeft = CGPoint(x: selectedRect.minX, y: selectedRect.minY)
-***REMOVED******REMOVED***bottomLeft = CGPoint(x: selectedRect.minX, y: selectedRect.maxY)
-***REMOVED******REMOVED***bottomRight = CGPoint(x: selectedRect.maxX, y: selectedRect.maxY)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The handle view for the map area selector.
 ***REMOVED***struct Handle: View {
 ***REMOVED******REMOVED******REMOVED***/ The handle orientation.
@@ -237,25 +226,34 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***HandleShape(orientation: orientation, position: position, cornerRadius: OnDemandMapAreaSelectorView.cornerRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(position)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(orientation, value.location)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***HandleShape(
+***REMOVED******REMOVED******REMOVED******REMOVED***orientation: orientation,
+***REMOVED******REMOVED******REMOVED******REMOVED***cornerRadius: OnDemandMapAreaSelectorView.cornerRadius
+***REMOVED******REMOVED******REMOVED***)
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***.stroke(.ultraThinMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+#else
+***REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+***REMOVED******REMOVED******REMOVED***.environment(\.colorScheme, .light)
+#endif
+***REMOVED******REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 8))
+***REMOVED******REMOVED******REMOVED***.frame(width: 36, height: 36)
+***REMOVED******REMOVED******REMOVED***.hoverEffect()
+***REMOVED******REMOVED******REMOVED***.position(position)
+***REMOVED******REMOVED******REMOVED***.gesture(
+***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .started:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***state = .changed
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UISelectionFeedbackGenerator().selectionChanged()
+#endif
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .changed:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resize(orientation, value.location)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -263,8 +261,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***struct HandleShape: Shape {
 ***REMOVED******REMOVED******REMOVED***/ The handle orientation.
 ***REMOVED******REMOVED***let orientation: HandleOrientation
-***REMOVED******REMOVED******REMOVED***/ The handle position.
-***REMOVED******REMOVED***let position: CGPoint
 ***REMOVED******REMOVED******REMOVED***/ The corner radius.
 ***REMOVED******REMOVED***let cornerRadius: CGFloat
 ***REMOVED******REMOVED******REMOVED***/ The offset padding.
@@ -273,25 +269,36 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED*** Add a rounded corner for the handle.
 ***REMOVED******REMOVED***func path(in rect: CGRect) -> Path {
 ***REMOVED******REMOVED******REMOVED***var path = Path()
-***REMOVED******REMOVED******REMOVED***var clippingPath = Path()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch orientation {
 ***REMOVED******REMOVED******REMOVED***case .topLeft:
-***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: -offset, dy: -offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = rect.center.offsetBy(dx: -offset, dy: -offset)
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius))
-***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***case .topRight:
-***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: offset, dy: -offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = rect.center.offsetBy(dx: offset, dy: -offset)
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y))
-***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: CGPoint(x: offsetPosition.x, y: offsetPosition.y + cornerRadius),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***case .bottomLeft:
-***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: -offset, dy: offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = rect.center.offsetBy(dx: -offset, dy: offset)
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x + cornerRadius, y: offsetPosition.y))
-***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***case .bottomRight:
-***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = position.offsetBy(dx: offset, dy: offset)
+***REMOVED******REMOVED******REMOVED******REMOVED***let offsetPosition = rect.center.offsetBy(dx: offset, dy: offset)
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: offsetPosition.x, y: offsetPosition.y - cornerRadius))
-***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y), control: CGPoint(x: offsetPosition.x, y: offsetPosition.y))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addQuadCurve(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: CGPoint(x: offsetPosition.x - cornerRadius, y: offsetPosition.y),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***control: CGPoint(x: offsetPosition.x, y: offsetPosition.y)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return path

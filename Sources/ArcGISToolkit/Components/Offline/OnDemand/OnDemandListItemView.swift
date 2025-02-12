@@ -64,7 +64,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the onTapGesture modifier in the parent view.
+***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***
@@ -105,6 +105,7 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The system image for the current status.
 ***REMOVED***var statusSystemImage: String {
 ***REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED***case .initialized, .downloading, .downloaded, .downloadCancelled:
