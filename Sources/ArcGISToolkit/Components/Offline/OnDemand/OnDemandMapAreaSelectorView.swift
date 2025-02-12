@@ -230,7 +230,12 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***orientation: orientation,
 ***REMOVED******REMOVED******REMOVED******REMOVED***cornerRadius: OnDemandMapAreaSelectorView.cornerRadius
 ***REMOVED******REMOVED******REMOVED***)
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED***.stroke(.ultraThinMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+#else
 ***REMOVED******REMOVED******REMOVED***.stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+***REMOVED******REMOVED******REMOVED***.environment(\.colorScheme, .light)
+#endif
 ***REMOVED******REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED***.frame(width: 36, height: 36)
 ***REMOVED******REMOVED******REMOVED***.hoverEffect()
