@@ -244,7 +244,6 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.position(position)
-***REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.gesture(DragGesture(coordinateSpace: .local)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.updating($gestureState) { value, state, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch state {
