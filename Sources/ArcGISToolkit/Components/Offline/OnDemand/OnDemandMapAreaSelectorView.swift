@@ -242,9 +242,9 @@ struct OnDemandMapAreaSelectorView: View {
                 cornerRadius: OnDemandMapAreaSelectorView.cornerRadius
             )
             .stroke(.ultraThickMaterial, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-            .contentShape(.rect)
+            .contentShape(RoundedRectangle(cornerRadius: 8))
+            .frame(width: 36, height: 36)
             .hoverEffect()
-            .frame(width: 44, height: 44)
             .position(position)
             .gesture(DragGesture(coordinateSpace: .local)
                 .updating($gestureState) { value, state, _ in
