@@ -48,21 +48,24 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 ***REMOVED***private let thumbnailSize: CGFloat = 64
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
-***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailView
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
+***REMOVED******REMOVED***HStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***metadataViewIsPresented = true
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center, spacing: 12) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***trailingContent()
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***trailingContent()
 ***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.sheet(isPresented: $metadataViewIsPresented) {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreaMetadataView(model: model, isSelected: isSelected)
