@@ -59,6 +59,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
             trailingContent()
         }
         .contentShape(.rect)
+        .hoverEffect()
         .onTapGesture {
             metadataViewIsPresented = true
         }

@@ -56,7 +56,7 @@ struct OnDemandMapAreaSelectorView: View {
                 .edgesIgnoringSafeArea(.all)
                 .allowsHitTesting(false)
                 .overlay { handles }
-                .onChange(of: safeAreaInsets) { _ in
+                .onChange(safeAreaInsets) { _ in
                     updateMaxRect(geometry: geometry)
                 }
         }
@@ -241,15 +241,18 @@ struct OnDemandMapAreaSelectorView: View {
         
         var body: some View {
             Color.clear
-                .contentShape(Rectangle())
+                .contentShape(.rect)
                 .frame(width: 44, height: 44)
                 .position(position)
+                .hoverEffect()
                 .gesture(DragGesture(coordinateSpace: .local)
                     .updating($gestureState) { value, state, _ in
                         switch state {
                         case .started:
                             state = .changed
+                            #if !os(visionOS)
                             UISelectionFeedbackGenerator().selectionChanged()
+                            #endif
                         case .changed:
                             resize(value.location)
                         }
