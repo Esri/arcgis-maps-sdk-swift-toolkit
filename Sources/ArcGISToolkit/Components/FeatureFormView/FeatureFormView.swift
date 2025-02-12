@@ -72,7 +72,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The root feature form.
 ***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+#warning("TODO: This property to be removed.")
 ***REMOVED***let utilityNetwork: UtilityNetwork?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the form header.
@@ -136,7 +136,6 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
 struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@Binding var path: NavigationPath
