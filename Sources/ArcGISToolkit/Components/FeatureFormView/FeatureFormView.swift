@@ -96,6 +96,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***onFormChangedAction?(featureForm)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED***
