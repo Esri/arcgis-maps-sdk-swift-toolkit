@@ -66,7 +66,7 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    /// <#Description#>
+    /// The root feature form.
     let featureForm: FeatureForm
     
     /// <#Description#>
