@@ -235,9 +235,13 @@ struct AttachmentPreview: View {
                     attachmentModel.load()
                 }
             }
+            // On visionOS, quick look preview will close (sometimes it comes back) a sheet presenting
+            // the feature form.
+            // See thread here: https://developer.apple.com/forums/thread/773599
             .quickLookPreview($url)
             .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { }
             .alert(maximumSizeDownloadExceededErrorMessage, isPresented: $maximumSizeDownloadExceededAlertIsPresented) { }
+            .hoverEffect()
         }
     }
 }
