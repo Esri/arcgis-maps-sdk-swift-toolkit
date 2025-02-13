@@ -249,7 +249,11 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED***.environment(\.colorScheme, .light)
 #endif
 ***REMOVED******REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 8))
+#if os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.frame(width: 36, height: 36)
+#else
+***REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
+#endif
 ***REMOVED******REMOVED******REMOVED***.hoverEffect()
 ***REMOVED******REMOVED******REMOVED***.position(position)
 ***REMOVED******REMOVED******REMOVED***.gesture(
