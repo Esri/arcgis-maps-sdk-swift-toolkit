@@ -249,7 +249,11 @@ struct OnDemandMapAreaSelectorView: View {
             .environment(\.colorScheme, .light)
 #endif
             .contentShape(RoundedRectangle(cornerRadius: 8))
+#if os(visionOS)
             .frame(width: 36, height: 36)
+#else
+            .frame(width: 44, height: 44)
+#endif
             .hoverEffect()
             .position(position)
             .gesture(
