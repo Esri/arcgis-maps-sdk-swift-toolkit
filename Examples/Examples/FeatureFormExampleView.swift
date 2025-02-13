@@ -164,7 +164,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***func makeFeatureFormView(_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View {
 ***REMOVED******REMOVED***FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
 ***REMOVED******REMOVED******REMOVED***.formHeader(headerVisibility)
-***REMOVED******REMOVED******REMOVED***.onUtilityAssociationSelected { associationKindGroup in
+***REMOVED******REMOVED******REMOVED***.onUtilityAssociationFilterSelectionChanged { associationKindGroup in
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.append(associationKindGroup)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
