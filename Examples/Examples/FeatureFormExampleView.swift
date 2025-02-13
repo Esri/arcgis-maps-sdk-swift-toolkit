@@ -24,7 +24,7 @@ struct FeatureFormExampleView: View {
     @State private var detent: FloatingPanelDetent = .full
     
     /// <#Description#>
-    @State private var forms = [FeatureForm]()
+    @State private var path = NavigationPath()
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
@@ -68,12 +68,28 @@ struct FeatureFormExampleView: View {
                 }
                 .ignoresSafeArea(.keyboard)
                 .sheet(isPresented: model.formIsPresented) {
-                    NavigationStack(path: $forms) {
+                    NavigationStack(path: $path) {
                         if let featureForm = model.featureForm {
                             makeFeatureFormView(featureForm, .visible)
                                 .navigationDestination(for: FeatureForm.self) { featureForm in
                                     makeFeatureFormView(featureForm, .hidden)
                                         .navigationTitle(featureForm.title)
+                                }
+                                .navigationDestination(for: FeatureFormView.AssociationKindGroup.self) { associationKindGroup in
+                                    FeatureFormView.AssociationKindGroupView(
+                                        associationKindGroup: associationKindGroup,
+                                        selectionAction: { networkSourceGroup in
+                                            path.append(networkSourceGroup)
+                                        }
+                                    )
+                                }
+                                .navigationDestination(for: FeatureFormView.NetworkSourceGroup.self) { networkSourceGroup in
+                                    FeatureFormView.NetworkSourceGroupView(
+                                        networkSourceGroup: networkSourceGroup,
+                                        selectionAction: { feature in
+                                            path.append(FeatureForm(feature: feature))
+                                        }
+                                    )
                                 }
                         }
                     }
@@ -148,8 +164,8 @@ struct FeatureFormExampleView: View {
     func makeFeatureFormView(_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View {
         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
             .formHeader(headerVisibility)
-            .onUtilityAssociationSelected { feature in
-                forms.append(FeatureForm(feature: feature))
+            .onUtilityAssociationSelected { associationKindGroup in
+                path.append(associationKindGroup)
             }
             .validationErrors(validationErrorVisibility)
             .padding(.horizontal)
