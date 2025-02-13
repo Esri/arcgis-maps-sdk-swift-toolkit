@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view for text input.
-@available(visionOS, unavailable)
 struct TextInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -83,16 +82,17 @@ struct TextInput: View {
                     model.focusedElement = element
                 }
             }
+#if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
+#endif
             .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
                 text = newFormattedValue
             }
     }
 }
 
-@available(visionOS, unavailable)
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
@@ -121,6 +121,11 @@ private extension TextInput {
                     )
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .keyboardType(keyboardType)
+#if os(visionOS)
+                    // No need for hover effect since it will be applied
+                    // properly at 'formInputStyle'.
+                    .hoverEffectDisabled()
+#endif
                 }
             }
             .focused($isFocused)
@@ -150,6 +155,7 @@ private extension TextInput {
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             }
+#if !os(visionOS)
             if isBarcodeScanner {
                 Button {
                     model.focusedElement = element
@@ -163,8 +169,9 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("\(element.label) Scan Button")
             }
+#endif
         }
-        .formInputStyle()
+        .formInputStyle(isTappable: true)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
@@ -201,7 +208,6 @@ private extension TextInput {
     }
 }
 
-@available(visionOS, unavailable)
 private extension TextInput {
     /// A view for displaying a multiline text input outside the body of the feature form view.
     ///
@@ -229,8 +235,10 @@ private extension TextInput {
                 Button("Done") {
                     dismiss()
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
                 .foregroundStyle(Color.accentColor)
+#endif
             }
             RepresentedUITextView(initialText: text) { text in
                 element.convertAndUpdateValue(text)
@@ -248,7 +256,6 @@ private extension TextInput {
     }
 }
 
-@available(visionOS, unavailable)
 private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput
