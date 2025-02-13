@@ -204,7 +204,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus != .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
@@ -223,14 +223,14 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***.background(Color.gray.opacity(0.2))
 ***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.measuredSize.value.isZero {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyDownloadAlertIsPresented = true
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.measuredSize > attachmentDownloadSizeLimit {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumSizeDownloadExceededAlertIsPresented = true
-***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
+***REMOVED******REMOVED******REMOVED*** else if attachmentModel.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
 ***REMOVED******REMOVED******REMOVED***
