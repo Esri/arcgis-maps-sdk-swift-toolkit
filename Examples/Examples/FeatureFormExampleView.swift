@@ -164,7 +164,7 @@ struct FeatureFormExampleView: View {
     func makeFeatureFormView(_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View {
         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
             .formHeader(headerVisibility)
-            .onUtilityAssociationSelected { associationKindGroup in
+            .onUtilityAssociationFilterSelectionChanged { associationKindGroup in
                 path.append(associationKindGroup)
             }
             .validationErrors(validationErrorVisibility)
