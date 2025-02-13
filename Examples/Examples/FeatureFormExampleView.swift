@@ -24,7 +24,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var forms = [FeatureForm]()
+***REMOVED***@State private var path = NavigationPath()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
@@ -68,12 +68,28 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: model.formIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationStack(path: $forms) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationStack(path: $path) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm, .visible)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureForm.self) { featureForm in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm, .hidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(featureForm.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureFormView.AssociationKindGroup.self) { associationKindGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView.AssociationKindGroupView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationKindGroup: associationKindGroup,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: { networkSourceGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.append(networkSourceGroup)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureFormView.NetworkSourceGroup.self) { networkSourceGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView.NetworkSourceGroupView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networkSourceGroup: networkSourceGroup,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: { feature in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.append(FeatureForm(feature: feature))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -148,8 +164,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED***func makeFeatureFormView(_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View {
 ***REMOVED******REMOVED***FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
 ***REMOVED******REMOVED******REMOVED***.formHeader(headerVisibility)
-***REMOVED******REMOVED******REMOVED***.onUtilityAssociationSelected { feature in
-***REMOVED******REMOVED******REMOVED******REMOVED***forms.append(FeatureForm(feature: feature))
+***REMOVED******REMOVED******REMOVED***.onUtilityAssociationSelected { associationKindGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED***path.append(associationKindGroup)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED***.padding(.horizontal)
