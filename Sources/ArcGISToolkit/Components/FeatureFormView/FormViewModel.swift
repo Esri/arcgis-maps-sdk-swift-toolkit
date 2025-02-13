@@ -29,7 +29,7 @@
 ***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@Published var selectedAssociation: ArcGISFeature?
+***REMOVED***@Published var utilityAssociationFilterSelection: FeatureFormView.AssociationKindGroup?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
