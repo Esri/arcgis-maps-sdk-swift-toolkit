@@ -204,7 +204,7 @@ struct AttachmentPreview: View {
                             .padding(8)
                     }
                 }
-                if attachmentModel.attachment.loadStatus != .loaded {
+                if attachmentModel.loadStatus != .loaded {
                     Text(attachmentModel.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -223,14 +223,14 @@ struct AttachmentPreview: View {
             .background(Color.gray.opacity(0.2))
             .clipShape(.rect(cornerRadius: 8))
             .onTapGesture {
-                if attachmentModel.attachment.loadStatus == .loaded {
+                if attachmentModel.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
                 } else if attachmentModel.attachment.measuredSize.value.isZero {
                     emptyDownloadAlertIsPresented = true
                 } else if attachmentModel.attachment.measuredSize > attachmentDownloadSizeLimit {
                     maximumSizeDownloadExceededAlertIsPresented = true
-                } else if attachmentModel.attachment.loadStatus == .notLoaded {
+                } else if attachmentModel.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
                     attachmentModel.load()
                 }
