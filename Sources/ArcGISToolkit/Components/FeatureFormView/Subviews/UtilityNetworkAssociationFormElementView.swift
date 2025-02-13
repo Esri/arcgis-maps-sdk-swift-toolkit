@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import SwiftUI
 
 struct UtilityNetworkAssociationFormElementView: View {
@@ -19,7 +20,10 @@ struct UtilityNetworkAssociationFormElementView: View {
     let description: String
     
     /// <#Description#>
-    let associationKindGroups: [AssociationKindGroup]
+    let associationKindGroups: [FeatureFormView.AssociationKindGroup]
+    
+    /// <#Description#>
+    let selectionAction: ((FeatureFormView.AssociationKindGroup) -> Void)
     
     /// <#Description#>
     let title: String
@@ -43,15 +47,34 @@ struct UtilityNetworkAssociationFormElementView: View {
             //
             // TODO: End InputFooter replacement section -----------------------
             
-            ForEach(associationKindGroups) { group in
-                AssociationKindGroupView(associationKindGroup: group)
-            }
+            FeatureFormGroupedContentView(
+                content: associationKindGroups.map { group in
+                    Button {
+                        selectionAction(group)
+                    } label: {
+                        HStack {
+                            Text(group.name)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Group {
+                                Text(group.networkSourceGroups.flatMap( { $0.associations.compactMap { $0 } } ).count.formatted())
+                                Image(systemName: "chevron.right")
+                            }
+                            .foregroundStyle(.secondary)
+                        }
+                        .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                }
+            )
         }
     }
 }
 
-extension UtilityNetworkAssociationFormElementView {
+extension FeatureFormView {
     struct Association: Identifiable {
+        let feature: ArcGISFeature
+        
         /// <#Description#>
         let description: String?
         
@@ -59,27 +82,27 @@ extension UtilityNetworkAssociationFormElementView {
         let fractionAlongEdge: Double?
         
         /// <#Description#>
-        let id = UUID()
+        public let id = UUID()
         
         /// <#Description#>
         let name: String
         
         /// <#Description#>
-        let selectionAction: (() -> Void)
-        
-        /// <#Description#>
         let terminalName: String?
     }
     
-    struct AssociationView: View {
+    public struct AssociationView: View {
         /// The view model for the form.
         @EnvironmentObject var model: FormViewModel
         
         var association: Association
         
-        var body: some View {
+        /// <#Description#>
+        let selectionAction: ((ArcGISFeature) -> Void)
+        
+        public var body: some View {
             Button {
-                association.selectionAction()
+                selectionAction(association.feature)
             } label: {
                 HStack {
                     VStack(alignment: .leading) {
@@ -91,7 +114,17 @@ extension UtilityNetworkAssociationFormElementView {
                         }
                     }
                     Spacer()
-                    Image(systemName: "chevron.right")
+                    Group {
+                        if let percent = association.fractionAlongEdge {
+                            Text(percent.formatted(.percent))
+                        } else if let terminal = association.terminalName {
+                            Text("Terminal: \(terminal)")
+                        }
+                    }
+                    .padding(2.5)
+                    .background(Color(uiColor: .secondarySystemGroupedBackground))
+                    .cornerRadius(5)
+                    .font(.caption2)
                 }
             }
             .buttonStyle(.plain)
@@ -99,64 +132,91 @@ extension UtilityNetworkAssociationFormElementView {
         }
     }
     
-    struct AssociationKindGroup: Identifiable {
+    public struct AssociationKindGroup: Equatable, Hashable, Identifiable {
         /// <#Description#>
         let networkSourceGroups: [NetworkSourceGroup]
         
         /// <#Description#>
-        let id = UUID()
+        public let id = UUID()
         
         /// <#Description#>
         let name: String
-    }
-    
-    struct AssociationKindGroupView: View {
-        let associationKindGroup: AssociationKindGroup
         
-        @State private var isExpanded = false
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.name == rhs.name
+            && lhs.id == rhs.id
+        }
         
-        var body: some View {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(associationKindGroup.networkSourceGroups) {
-                    NetworkSourceGroupView(networkSourceGroup: $0)
-                }
-            } label: {
-                HStack {
-                    Text(associationKindGroup.name)
-                    Spacer()
-                    Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count }).count.formatted())
-                }
-            }
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(name)
+            hasher.combine(id)
         }
     }
     
-    struct NetworkSourceGroup: Identifiable {
+    public struct AssociationKindGroupView: View {
+        let associationKindGroup: AssociationKindGroup
+        
+        let selectionAction: ((NetworkSourceGroup) -> Void)
+        
+        public init(associationKindGroup: AssociationKindGroup, selectionAction: @escaping (NetworkSourceGroup) -> Void) {
+            self.associationKindGroup = associationKindGroup
+            self.selectionAction = selectionAction
+        }
+        
+        public var body: some View {
+            List(associationKindGroup.networkSourceGroups) { group in
+                Button {
+                    selectionAction(group)
+                } label: {
+                    HStack {
+                        Text(group.name)
+                        Spacer()
+                        Text(group.associations.count.formatted())
+                    }
+                }
+                .listRowBackground(Color(uiColor: .tertiarySystemFill))
+            }
+            .scrollContentBackground(.hidden)
+        }
+    }
+    
+    public struct NetworkSourceGroup: Equatable, Hashable, Identifiable {
         /// <#Description#>
         let associations: [Association]
         
         /// <#Description#>
-        let id = UUID()
+        public let id = UUID()
         
         /// <#Description#>
         let name: String
+        
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.name == rhs.name
+            && lhs.id == rhs.id
+        }
+        
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(name)
+            hasher.combine(id)
+        }
     }
     
-    struct NetworkSourceGroupView: View {
+    public struct NetworkSourceGroupView: View {
         let networkSourceGroup:  NetworkSourceGroup
         
-        var body: some View {
-            DisclosureGroup {
-                ForEach(networkSourceGroup.associations) {
-                    AssociationView(association: $0)
-                }
-            } label: {
-                HStack {
-                    Text(networkSourceGroup.name)
-                    Spacer()
-                    Text(networkSourceGroup.associations.count.formatted())
-                }
+        let selectionAction: (ArcGISFeature) -> Void
+        
+        public init(networkSourceGroup: NetworkSourceGroup, selectionAction: @escaping (ArcGISFeature) -> Void) {
+            self.networkSourceGroup = networkSourceGroup
+            self.selectionAction = selectionAction
+        }
+        
+        public var body: some View {
+            List(networkSourceGroup.associations) {
+                AssociationView(association: $0, selectionAction: selectionAction)
+                    .listRowBackground(Color(uiColor: .tertiarySystemFill))
             }
-            .padding(.leading)
+            .scrollContentBackground(.hidden)
         }
     }
 }

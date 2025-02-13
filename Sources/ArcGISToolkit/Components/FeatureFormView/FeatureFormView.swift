@@ -69,8 +69,8 @@ public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
-    /// <#Description#>
-    @State private var groups: [UtilityNetworkAssociationFormElementView.AssociationKindGroup]?
+#warning("TODO: This property to be removed.")
+    @State private var groups: [AssociationKindGroup]?
     
     /// A Boolean value indicating whether initial expression evaluation is running.
     @State private var initialExpressionsAreEvaluating = true
@@ -85,7 +85,7 @@ public struct FeatureFormView: View {
     var headerVisibility: Visibility = .automatic
     
     /// <#Description#>
-    var utilityAssociationChangedAction: ((ArcGISFeature) -> Void)?
+    var utilityAssociationFilterSelectionChangedAction: ((AssociationKindGroup) -> Void)?
     
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -128,6 +128,7 @@ public struct FeatureFormView: View {
                         UtilityNetworkAssociationFormElementView(
                             description: "[UtilityNetworkAssociationsFormElement.description]",
                             associationKindGroups: groups,
+                            selectionAction: { model.utilityAssociationFilterSelection = $0 },
                             title: "[UtilityNetworkAssociationsFormElement.label]"
                         )
                         .padding(.bottom)
@@ -139,10 +140,10 @@ public struct FeatureFormView: View {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
-            .onChange(model.selectedAssociation?.globalID) { _ in
-                guard let association = model.selectedAssociation else { return }
-                guard let utilityAssociationChangedAction else { return }
-                utilityAssociationChangedAction(association)
+            .onChange(model.utilityAssociationFilterSelection?.id) { _ in
+                guard let association = model.utilityAssociationFilterSelection else { return }
+                guard let utilityAssociationFilterSelectionChangedAction else { return }
+                utilityAssociationFilterSelectionChangedAction(association)
             }
             .onTitleChange(of: model.featureForm) { newTitle in
                 title = newTitle
@@ -159,7 +160,7 @@ public struct FeatureFormView: View {
                 // Grab Utility Network Associations for the element being edited
                 if let associations = try? await utilityNetwork?.associations(for: utilityElement),
                    let currentFeatureGlobalID = model.featureForm.feature.globalID {
-                    var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
+                    var groups = [AssociationKindGroup]()
                     // Create a set of the unique association kinds present
                     let associationKinds = Array(Set(associations.map { $0.kind }))
                     for associationKind in associationKinds {
@@ -169,11 +170,11 @@ public struct FeatureFormView: View {
                         let networkSourceNames = Array(Set(
                             associationKindMembers.map { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name }
                         ))
-                        var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
+                        var networkSourceGroups: [NetworkSourceGroup] = []
                         for networkSourceName in networkSourceNames {
                             // Filter the associations by network source
                             let networkSourceMembers = associationKindMembers.filter { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name == networkSourceName }
-                            var associations: [UtilityNetworkAssociationFormElementView.Association] = []
+                            var associations: [Association] = []
                             // For each association, create a Toolkit representation and add it to the group
                             for networkSourceMember in networkSourceMembers {
                                 // Determine the association's title.
@@ -185,26 +186,24 @@ public struct FeatureFormView: View {
                                     } else {
                                         title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                                     }
-                                    let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                    let newAssociation = Association(
+                                        feature: arcGISFeature,
                                         description: nil,
                                         fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
                                         name: title,
-                                        selectionAction: {
-                                            model.selectedAssociation = arcGISFeature
-                                        },
                                         terminalName: associatedElement.terminal?.name
                                     )
                                     associations.append(newAssociation)
                                 }
                             }
-                            let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
+                            let networkSourceGroup = NetworkSourceGroup(
                                 associations: associations,
                                 name: networkSourceName
                             )
                             networkSourceGroups.append(networkSourceGroup)
                         }
                         groups.append(
-                            UtilityNetworkAssociationFormElementView.AssociationKindGroup(
+                            AssociationKindGroup(
                                 networkSourceGroups: networkSourceGroups,
                                 name: "\(associationKind)".capitalized
                             )
@@ -309,9 +308,9 @@ public extension FeatureFormView {
     /// <#Description#>
     /// - Parameter action: <#action description#>
     /// - Returns: <#description#>
-    func onUtilityAssociationSelected(_ action: @escaping (ArcGISFeature) -> Void) -> Self {
+    func onUtilityAssociationFilterSelectionChanged(_ action: @escaping (AssociationKindGroup) -> Void) -> Self {
         var copy = self
-        copy.utilityAssociationChangedAction = action
+        copy.utilityAssociationFilterSelectionChangedAction = action
         return copy
     }
 }

@@ -29,7 +29,7 @@ import SwiftUI
     @Published var previouslyFocusedElements = [FormElement]()
     
     /// <#Description#>
-    @Published var selectedAssociation: ArcGISFeature?
+    @Published var utilityAssociationFilterSelection: FeatureFormView.AssociationKindGroup?
     
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
