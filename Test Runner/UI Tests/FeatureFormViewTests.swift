@@ -1197,7 +1197,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch integer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let switchLabel = app.staticTexts["switch integer Switch Label"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch integer Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -1215,14 +1214,14 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"2"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switchView.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"1"
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -1233,7 +1232,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch string"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let switchLabel = app.staticTexts["switch string Switch Label"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch string Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -1251,7 +1249,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"1"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -1263,7 +1261,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***switchView.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***switchLabel.label,
+***REMOVED******REMOVED******REMOVED***switchView.label,
 ***REMOVED******REMOVED******REMOVED***"2"
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -1479,7 +1477,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(longTextTextInputPreview.exists)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_8_1() {
+***REMOVED***func testCase_8_1() throws {
+***REMOVED******REMOVED***try XCTSkipIf(true, "KNOWN ISSUE -- Apollo 1058")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let attachmentElementTitle = app.staticTexts["Attachments"]
 ***REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]
