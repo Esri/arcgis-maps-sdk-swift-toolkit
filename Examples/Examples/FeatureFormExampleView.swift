@@ -23,6 +23,9 @@ struct FeatureFormExampleView: View {
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
+#warning("This property to be replaced by FeatureForm.hasEdits")
+    @State private var editModeIsActive = true
+    
     /// <#Description#>
     @State private var path = NavigationPath()
     
@@ -33,7 +36,7 @@ struct FeatureFormExampleView: View {
     @State private var map = makeMap()
     
     /// <#Description#>
-    @State private var selectedDetent = PresentationDetent.large
+    @State private var selectedDetent = PresentationDetent.medium
     
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
@@ -69,58 +72,63 @@ struct FeatureFormExampleView: View {
                 .ignoresSafeArea(.keyboard)
                 .sheet(isPresented: model.formIsPresented) {
                     NavigationStack(path: $path) {
-                        if let featureForm = model.featureForm {
-                            makeFeatureFormView(featureForm, .visible)
-                                .navigationDestination(for: FeatureForm.self) { featureForm in
-                                    makeFeatureFormView(featureForm, .hidden)
-                                        .navigationTitle(featureForm.title)
-                                }
-                                .navigationDestination(for: FeatureFormView.AssociationKindGroup.self) { associationKindGroup in
-                                    FeatureFormView.AssociationKindGroupView(
-                                        associationKindGroup: associationKindGroup,
-                                        selectionAction: { networkSourceGroup in
-                                            path.append(networkSourceGroup)
-                                        }
-                                    )
-                                }
-                                .navigationDestination(for: FeatureFormView.NetworkSourceGroup.self) { networkSourceGroup in
-                                    FeatureFormView.NetworkSourceGroupView(
-                                        networkSourceGroup: networkSourceGroup,
-                                        selectionAction: { feature in
-                                            path.append(FeatureForm(feature: feature))
-                                        }
-                                    )
-                                }
+                        VStack {
+                            if let featureForm = model.featureForm {
+                                makeFeatureFormView(featureForm)
+                                    .navigationDestination(for: FeatureForm.self) { featureForm in
+                                        makeFeatureFormView(featureForm)
+                                            .navigationTitle(featureForm.title)
+                                    }
+                                    .navigationDestination(for: FeatureFormView.AssociationKindGroup.self) { associationKindGroup in
+                                        FeatureFormView.AssociationKindGroupView(
+                                            associationKindGroup: associationKindGroup,
+                                            selectionAction: { networkSourceGroup in
+                                                path.append(networkSourceGroup)
+                                            }
+                                        )
+                                    }
+                                    .navigationDestination(for: FeatureFormView.NetworkSourceGroup.self) { networkSourceGroup in
+                                        FeatureFormView.NetworkSourceGroupView(
+                                            networkSourceGroup: networkSourceGroup,
+                                            selectionAction: { feature in
+                                                path.append(FeatureForm(feature: feature))
+                                            }
+                                        )
+                                    }
+                            }
                         }
                     }
                     .backgroundInteractionEnabled()
                     .interactiveDismissDisabled()
                     .presentationDetents([.medium, .large], selection: $selectedDetent)
+                    .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
+                        Button("Discard edits", role: .destructive) {
+                            model.discardEdits()
+                        }
+                        if case let .cancellationPending(featureForm) = model.state {
+                            Button("Continue editing", role: .cancel) {
+                                model.state = .editing(featureForm)
+                            }
+                        }
+                    } message: {
+                        Text("Updates to this feature will be lost.")
+                    }
+                    .alert(
+                        "The form wasn't submitted",
+                        isPresented: model.alertIsPresented
+                    ) {
+                        // No actions.
+                    } message: {
+                        if case let .generalError(_, errorMessage) = model.state {
+                            errorMessage
+                        }
+                    }
+                }
+                .onChange(path) { _ in
+                    editModeIsActive = false
                 }
                 .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
-                }
-                .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
-                    Button("Discard edits", role: .destructive) {
-                        model.discardEdits()
-                    }
-                    if case let .cancellationPending(featureForm) = model.state {
-                        Button("Continue editing", role: .cancel) {
-                            model.state = .editing(featureForm)
-                        }
-                    }
-                } message: {
-                    Text("Updates to this feature will be lost.")
-                }
-                .alert(
-                    "The form wasn't submitted",
-                    isPresented: model.alertIsPresented
-                ) {
-                    // No actions.
-                } message: {
-                    if case let .generalError(_, errorMessage) = model.state {
-                        errorMessage
-                    }
                 }
                 .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
                 .overlay {
@@ -138,14 +146,31 @@ struct FeatureFormExampleView: View {
                         EmptyView()
                     }
                 }
-                .toolbar {
-                    if model.formIsPresented.wrappedValue {
+        }
+    }
+    
+    func makeFeatureFormView(_ featureForm: FeatureForm) -> some View {
+        FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+            .formHeader(.hidden)
+            .onUtilityAssociationFilterSelectionChanged { associationKindGroup in
+                path.append(associationKindGroup)
+            }
+            .validationErrors(validationErrorVisibility)
+            .disabled(!editModeIsActive)
+            .opacity(editModeIsActive ? 1 : 0.25)
+            .padding(.horizontal)
+            .padding(.top, 16)
+            .navigationTitle(featureForm.title)
+            .navigationBarBackButtonHidden(editModeIsActive)
+            .toolbar {
+                if model.formIsPresented.wrappedValue {
+                    if editModeIsActive {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button("Cancel", role: .cancel) {
-                                guard case let .editing(featureForm) = model.state else { return }
-                                model.state = .cancellationPending(featureForm)
+                                withAnimation {
+                                    editModeIsActive = false
+                                }
                             }
-                            .disabled(model.formControlsAreDisabled)
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button("Submit") {
@@ -154,22 +179,20 @@ struct FeatureFormExampleView: View {
                                     await model.submitEdits()
                                 }
                             }
-                            .disabled(model.formControlsAreDisabled)
+                            .buttonStyle(.borderedProminent)
+                        }
+                    } else {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Edit") {
+                                withAnimation {
+                                    editModeIsActive = true
+                                }
+                            }
+                            .buttonStyle(.borderedProminent)
                         }
                     }
                 }
-        }
-    }
-    
-    func makeFeatureFormView(_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View {
-        FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
-            .formHeader(headerVisibility)
-            .onUtilityAssociationFilterSelectionChanged { associationKindGroup in
-                path.append(associationKindGroup)
             }
-            .validationErrors(validationErrorVisibility)
-            .padding(.horizontal)
-            .padding(.top, 16)
     }
     
     /// Makes a map from a portal item.
@@ -311,12 +334,6 @@ private class Model: ObservableObject {
         }
     }
     
-    /// A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
-    var formControlsAreDisabled: Bool {
-        guard case .editing = state else { return true }
-        return false
-    }
-    
     /// A Boolean value indicating whether or not the form is displayed.
     var formIsPresented: Binding<Bool> {
         Binding {
@@ -430,7 +447,7 @@ extension View {
     }
 }
 
-// TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+#warning("TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.")
 
 extension FeatureForm: @retroactive Equatable {
     public static func == (lhs: FeatureForm, rhs: FeatureForm) -> Bool {
