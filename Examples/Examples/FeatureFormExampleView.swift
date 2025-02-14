@@ -58,8 +58,21 @@ struct FeatureFormExampleView: View {
                 .sheet(isPresented: model.formIsPresented) {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
-                            .onFormChanged { presentedForm in
-                                print("Presented feature: \( presentedForm.feature.attributes["globalid"] ?? "?")")
+                            .onNavigationChanged { navigationItem in
+#warning("TODO: Missing full implementation.")
+                                // The user has navigated to a new page. Check
+                                // the type of page and update a custom header
+                                // appropriately. Grab a reference to newly
+                                // presented forms.
+                                print("onNavigationChanged")
+                                switch navigationItem {
+                                case .featureForm(let featureForm):
+                                    print("Presented feature: \( featureForm.feature.attributes["globalid"] ?? "?")")
+                                case .utilityAssociationKindNetworkSources(let title, let subtitle):
+                                    print("Choosing network source \(title) \(subtitle)")
+                                case .utilityAssociationKindNetworkSource(let title, let subtitle):
+                                    print("Choosing association \(title) \(subtitle)")
+                                }
                             }
                             .onNavigationChangeRequested { onContinue in
 #warning("TODO: Missing full implementation.")

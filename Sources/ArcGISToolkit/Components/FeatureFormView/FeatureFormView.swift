@@ -78,8 +78,8 @@ public struct FeatureFormView: View {
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
     
-    /// The closure to perform when the form has changed.
-    var onFormChangedAction: ((FeatureForm) -> Void)?
+    /// The closure to perform when navigation has changed.
+    var navigationChangedAction: ((NavigationItem) -> Void)?
     
     /// <#Description#>
     var navigationChangeRequestedAction: ((() -> Void) -> Void)?
@@ -104,7 +104,7 @@ public struct FeatureFormView: View {
                 utilityNetwork: utilityNetwork
             )
             .onAppear {
-                onFormChangedAction?(featureForm)
+                navigationChangedAction?(.featureForm(featureForm))
             }
             .navigationDestination(for: ArcGISFeature.self) { feature in
                 let featureForm = FeatureForm(feature: feature)
@@ -115,27 +115,33 @@ public struct FeatureFormView: View {
                     utilityNetwork: utilityNetwork
                 )
                 .onAppear {
-                    onFormChangedAction?(featureForm)
+                    navigationChangedAction?(.featureForm(featureForm))
                 }
             }
             .navigationDestination(for: UtilityNetworkAssociationFormElementView.AssociationKindGroup.self) { group in
                 UtilityNetworkAssociationFormElementView.AssociationKindGroupView(associationKindGroup: group)
                     .formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
+                    .onAppear {
+                        navigationChangedAction?(.utilityAssociationKindNetworkSources(title: group.name, subtitle: group.presentingForm))
+                    }
             }
             .navigationDestination(for: UtilityNetworkAssociationFormElementView.NetworkSourceGroup.self) { group in
                 UtilityNetworkAssociationFormElementView.NetworkSourceGroupView(networkSourceGroup: group)
                     .formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
+                    .onAppear {
+                        navigationChangedAction?(.utilityAssociationKindNetworkSource(title: group.name, subtitle: group.presentingForm))
+                    }
             }
         }
         .environment(\.navigationChangeRequestedAction, navigationChangeRequestedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
     }
     
-    /// Sets a closure to perform when the view’s form changes.
-    /// - Parameter action: The closure to perform when the form has changed.
-    public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
+    /// Sets a closure to perform when navigation changes.
+    /// - Parameter action: The closure to perform when navigation has changed.
+    public func onNavigationChanged(perform action: @escaping (NavigationItem) -> Void) -> Self {
         var copy = self
-        copy.onFormChangedAction = action
+        copy.navigationChangedAction = action
         return copy
     }
     
@@ -143,6 +149,14 @@ public struct FeatureFormView: View {
         var copy = self
         copy.navigationChangeRequestedAction = action
         return copy
+    }
+}
+
+extension FeatureFormView {
+    public enum NavigationItem {
+        case featureForm(FeatureForm)
+        case utilityAssociationKindNetworkSources(title: String, subtitle: String)
+        case utilityAssociationKindNetworkSource(title: String, subtitle: String)
     }
 }
 
