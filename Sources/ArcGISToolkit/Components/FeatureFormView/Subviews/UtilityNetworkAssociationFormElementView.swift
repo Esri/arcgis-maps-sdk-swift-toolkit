@@ -24,7 +24,7 @@ struct UtilityNetworkAssociationFormElementView: View {
     /// <#Description#>
     let title: String
     
-    @Environment(\.associationChangeRequestedAction) var associationChangeRequestedAction: ((() -> Void) -> Void)?
+    @Environment(\.navigationChangeRequestedAction) var navigationChangeRequestedAction: ((() -> Void) -> Void)?
     
     @Binding var navigationPath: NavigationPath
     
@@ -50,7 +50,7 @@ struct UtilityNetworkAssociationFormElementView: View {
             FeatureFormGroupedContentView(
                 content: associationKindGroups.map { group in
                     Button {
-                        associationChangeRequestedAction?({
+                        navigationChangeRequestedAction?({
                             navigationPath.append(group)
                         })
                     } label: {

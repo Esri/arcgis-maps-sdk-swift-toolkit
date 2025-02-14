@@ -82,7 +82,7 @@ public struct FeatureFormView: View {
     var onFormChangedAction: ((FeatureForm) -> Void)?
     
     /// <#Description#>
-    var associationChangeRequestedAction: ((() -> Void) -> Void)?
+    var navigationChangeRequestedAction: ((() -> Void) -> Void)?
     
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -127,7 +127,7 @@ public struct FeatureFormView: View {
                     .formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
             }
         }
-        .environment(\.associationChangeRequestedAction, associationChangeRequestedAction)
+        .environment(\.navigationChangeRequestedAction, navigationChangeRequestedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
     }
     
@@ -139,15 +139,15 @@ public struct FeatureFormView: View {
         return copy
     }
     
-    public func onAssociationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
+    public func onNavigationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
         var copy = self
-        copy.associationChangeRequestedAction = action
+        copy.navigationChangeRequestedAction = action
         return copy
     }
 }
 
 extension EnvironmentValues {
-    @Entry var associationChangeRequestedAction: ((() -> Void) -> Void)?
+    @Entry var navigationChangeRequestedAction: ((() -> Void) -> Void)?
 }
 
 struct InternalFeatureFormView: View {

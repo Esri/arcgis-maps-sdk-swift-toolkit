@@ -19,7 +19,7 @@ struct FormNavigationHeader: ViewModifier {
     /// <#Description#>
     @Binding var path: NavigationPath
     
-    @Environment(\.associationChangeRequestedAction) var associationChangeRequestedAction: ((() -> Void) -> Void)?
+    @Environment(\.navigationChangeRequestedAction) var navigationChangeRequestedAction: ((() -> Void) -> Void)?
     
     /// <#Description#>
     let subtitle: String?
@@ -39,7 +39,7 @@ struct FormNavigationHeader: ViewModifier {
                         HStack {
                             if !path.isEmpty {
                                 Button {
-                                    associationChangeRequestedAction?({
+                                    navigationChangeRequestedAction?({
                                         path.removeLast()
                                     })
                                 } label: {
