@@ -23,6 +23,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
+#warning("This property to be replaced by FeatureForm.hasEdits")
+***REMOVED***@State private var editModeIsActive = true
+***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@State private var path = NavigationPath()
 ***REMOVED***
@@ -33,7 +36,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var selectedDetent = PresentationDetent.large
+***REMOVED***@State private var selectedDetent = PresentationDetent.medium
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***@State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
@@ -69,58 +72,63 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: model.formIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationStack(path: $path) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm, .visible)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureForm.self) { featureForm in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm, .hidden)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(featureForm.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureFormView.AssociationKindGroup.self) { associationKindGroup in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView.AssociationKindGroupView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationKindGroup: associationKindGroup,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: { networkSourceGroup in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.append(networkSourceGroup)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureFormView.NetworkSourceGroup.self) { networkSourceGroup in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView.NetworkSourceGroupView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networkSourceGroup: networkSourceGroup,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: { feature in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.append(FeatureForm(feature: feature))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureForm.self) { featureForm in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFeatureFormView(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(featureForm.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureFormView.AssociationKindGroup.self) { associationKindGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView.AssociationKindGroupView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationKindGroup: associationKindGroup,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: { networkSourceGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.append(networkSourceGroup)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(for: FeatureFormView.NetworkSourceGroup.self) { networkSourceGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView.NetworkSourceGroupView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networkSourceGroup: networkSourceGroup,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: { feature in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.append(FeatureForm(feature: feature))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.backgroundInteractionEnabled()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium, .large], selection: $selectedDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.discardEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case let .cancellationPending(featureForm) = model.state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to this feature will be lost.")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"The form wasn't submitted",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: model.alertIsPresented
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** No actions.
+***REMOVED******REMOVED******REMOVED******REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case let .generalError(_, errorMessage) = model.state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errorMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(path) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editModeIsActive = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.formIsPresented.wrappedValue) { formIsPresented in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !formIsPresented { validationErrorVisibility = .automatic ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.discardEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case let .cancellationPending(featureForm) = model.state {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(featureForm)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to this feature will be lost.")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"The form wasn't submitted",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: model.alertIsPresented
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** No actions.
-***REMOVED******REMOVED******REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case let .generalError(_, errorMessage) = model.state {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errorMessage
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
@@ -138,14 +146,31 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.formIsPresented.wrappedValue {
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeFeatureFormView(_ featureForm: FeatureForm) -> some View {
+***REMOVED******REMOVED***FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+***REMOVED******REMOVED******REMOVED***.formHeader(.hidden)
+***REMOVED******REMOVED******REMOVED***.onUtilityAssociationFilterSelectionChanged { associationKindGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED***path.append(associationKindGroup)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
+***REMOVED******REMOVED******REMOVED***.disabled(!editModeIsActive)
+***REMOVED******REMOVED******REMOVED***.opacity(editModeIsActive ? 1 : 0.25)
+***REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED***.padding(.top, 16)
+***REMOVED******REMOVED******REMOVED***.navigationTitle(featureForm.title)
+***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(editModeIsActive)
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***if model.formIsPresented.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if editModeIsActive {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard case let .editing(featureForm) = model.state else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .cancellationPending(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editModeIsActive = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(model.formControlsAreDisabled)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
@@ -154,22 +179,20 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.submitEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(model.formControlsAreDisabled)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Edit") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editModeIsActive = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func makeFeatureFormView(_ featureForm: FeatureForm, _ headerVisibility: Visibility) -> some View {
-***REMOVED******REMOVED***FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
-***REMOVED******REMOVED******REMOVED***.formHeader(headerVisibility)
-***REMOVED******REMOVED******REMOVED***.onUtilityAssociationFilterSelectionChanged { associationKindGroup in
-***REMOVED******REMOVED******REMOVED******REMOVED***path.append(associationKindGroup)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
-***REMOVED******REMOVED******REMOVED***.padding(.horizontal)
-***REMOVED******REMOVED******REMOVED***.padding(.top, 16)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes a map from a portal item.
@@ -311,12 +334,6 @@ private class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
-***REMOVED***var formControlsAreDisabled: Bool {
-***REMOVED******REMOVED***guard case .editing = state else { return true ***REMOVED***
-***REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
 ***REMOVED***var formIsPresented: Binding<Bool> {
 ***REMOVED******REMOVED***Binding {
@@ -430,7 +447,7 @@ extension View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
+#warning("TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.")
 
 extension FeatureForm: @retroactive Equatable {
 ***REMOVED***public static func == (lhs: FeatureForm, rhs: FeatureForm) -> Bool {
