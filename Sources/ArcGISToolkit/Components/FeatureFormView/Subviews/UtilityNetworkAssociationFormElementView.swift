@@ -24,7 +24,7 @@ struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let title: String
 ***REMOVED***
-***REMOVED***@Environment(\.associationChangeRequestedAction) var associationChangeRequestedAction: ((() -> Void) -> Void)?
+***REMOVED***@Environment(\.navigationChangeRequestedAction) var navigationChangeRequestedAction: ((() -> Void) -> Void)?
 ***REMOVED***
 ***REMOVED***@Binding var navigationPath: NavigationPath
 ***REMOVED***
@@ -50,7 +50,7 @@ struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED******REMOVED***FeatureFormGroupedContentView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***content: associationKindGroups.map { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationChangeRequestedAction?({
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationChangeRequestedAction?({
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationPath.append(group)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {

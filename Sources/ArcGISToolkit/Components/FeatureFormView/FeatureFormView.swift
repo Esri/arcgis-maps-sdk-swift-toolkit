@@ -82,7 +82,7 @@ public struct FeatureFormView: View {
 ***REMOVED***var onFormChangedAction: ((FeatureForm) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***var associationChangeRequestedAction: ((() -> Void) -> Void)?
+***REMOVED***var navigationChangeRequestedAction: ((() -> Void) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -127,7 +127,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.environment(\.associationChangeRequestedAction, associationChangeRequestedAction)
+***REMOVED******REMOVED***.environment(\.navigationChangeRequestedAction, navigationChangeRequestedAction)
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED***
 ***REMOVED***
@@ -139,15 +139,15 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func onAssociationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
+***REMOVED***public func onNavigationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.associationChangeRequestedAction = action
+***REMOVED******REMOVED***copy.navigationChangeRequestedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
 extension EnvironmentValues {
-***REMOVED***@Entry var associationChangeRequestedAction: ((() -> Void) -> Void)?
+***REMOVED***@Entry var navigationChangeRequestedAction: ((() -> Void) -> Void)?
 ***REMOVED***
 
 struct InternalFeatureFormView: View {
