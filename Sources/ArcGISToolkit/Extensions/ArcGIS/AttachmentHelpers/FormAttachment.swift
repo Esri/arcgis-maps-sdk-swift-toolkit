@@ -25,4 +25,12 @@ extension FormAttachment: FeatureAttachment {
     public var measuredSize: Measurement<UnitInformationStorage> {
         size
     }
+    
+    public func _load() async throws {
+        try await load()
+    }
+    
+    public var _loadStatus: LoadStatus {
+        loadStatus
+    }
 }
