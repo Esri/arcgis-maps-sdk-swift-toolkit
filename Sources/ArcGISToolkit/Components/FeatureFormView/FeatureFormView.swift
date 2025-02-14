@@ -78,8 +78,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
 ***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when the form has changed.
-***REMOVED***var onFormChangedAction: ((FeatureForm) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when navigation has changed.
+***REMOVED***var navigationChangedAction: ((NavigationItem) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***var navigationChangeRequestedAction: ((() -> Void) -> Void)?
@@ -104,7 +104,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***onFormChangedAction?(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED***navigationChangedAction?(.featureForm(featureForm))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: ArcGISFeature.self) { feature in
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureForm = FeatureForm(feature: feature)
@@ -115,27 +115,33 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormChangedAction?(featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationChangedAction?(.featureForm(featureForm))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: UtilityNetworkAssociationFormElementView.AssociationKindGroup.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView.AssociationKindGroupView(associationKindGroup: group)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationChangedAction?(.utilityAssociationKindNetworkSources(title: group.name, subtitle: group.presentingForm))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationDestination(for: UtilityNetworkAssociationFormElementView.NetworkSourceGroup.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView.NetworkSourceGroupView(networkSourceGroup: group)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationChangedAction?(.utilityAssociationKindNetworkSource(title: group.name, subtitle: group.presentingForm))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.navigationChangeRequestedAction, navigationChangeRequestedAction)
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when the view’s form changes.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form has changed.
-***REMOVED***public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
+***REMOVED******REMOVED***/ Sets a closure to perform when navigation changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when navigation has changed.
+***REMOVED***public func onNavigationChanged(perform action: @escaping (NavigationItem) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onFormChangedAction = action
+***REMOVED******REMOVED***copy.navigationChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
@@ -143,6 +149,14 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.navigationChangeRequestedAction = action
 ***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
+extension FeatureFormView {
+***REMOVED***public enum NavigationItem {
+***REMOVED******REMOVED***case featureForm(FeatureForm)
+***REMOVED******REMOVED***case utilityAssociationKindNetworkSources(title: String, subtitle: String)
+***REMOVED******REMOVED***case utilityAssociationKindNetworkSource(title: String, subtitle: String)
 ***REMOVED***
 ***REMOVED***
 
