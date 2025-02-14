@@ -135,6 +135,16 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.navigationChangeRequestedAction, navigationChangeRequestedAction)
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED******REMOVED***.preference(
+***REMOVED******REMOVED******REMOVED***key: PreferredFeatureFormViewKey.self,
+***REMOVED******REMOVED******REMOVED***value: self
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Navigates the view backwards.
+***REMOVED***func navigateBack() {
+***REMOVED******REMOVED***guard !path.isEmpty else { return ***REMOVED***
+***REMOVED******REMOVED***path.removeLast()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets a closure to perform when navigation changes.
@@ -145,6 +155,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ - Parameter action: <#action description#>
+***REMOVED******REMOVED***/ - Returns: <#description#>
 ***REMOVED***public func onNavigationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.navigationChangeRequestedAction = action
