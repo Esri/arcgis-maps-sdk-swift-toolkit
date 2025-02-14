@@ -135,6 +135,16 @@ public struct FeatureFormView: View {
         }
         .environment(\.navigationChangeRequestedAction, navigationChangeRequestedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
+        .preference(
+            key: PreferredFeatureFormViewKey.self,
+            value: self
+        )
+    }
+    
+    /// Navigates the view backwards.
+    func navigateBack() {
+        guard !path.isEmpty else { return }
+        path.removeLast()
     }
     
     /// Sets a closure to perform when navigation changes.
@@ -145,6 +155,9 @@ public struct FeatureFormView: View {
         return copy
     }
     
+    /// <#Description#>
+    /// - Parameter action: <#action description#>
+    /// - Returns: <#description#>
     public func onNavigationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
         var copy = self
         copy.navigationChangeRequestedAction = action

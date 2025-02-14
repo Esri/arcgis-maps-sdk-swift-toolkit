@@ -32,6 +32,9 @@ struct FeatureFormExampleView: View {
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var model = Model()
     
+    /// <#Description#>
+    @State private var featureFormView: FeatureFormViewProxy?
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
@@ -43,6 +46,11 @@ struct FeatureFormExampleView: View {
                         model.state = .cancellationPending(featureForm)
                     default:
                         return
+                    }
+                }
+                .overlay(alignment: .topLeading) {
+                    Button("Back") {
+                        featureFormView?.navigateBack()
                     }
                 }
                 .task(id: identifyScreenPoint) {
@@ -57,60 +65,66 @@ struct FeatureFormExampleView: View {
                 .ignoresSafeArea(.keyboard)
                 .sheet(isPresented: model.formIsPresented) {
                     if let featureForm = model.featureForm {
-                        FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
-                            .onNavigationChanged { navigationItem in
-#warning("TODO: Missing full implementation.")
-                                // The user has navigated to a new page. Check
-                                // the type of page and update a custom header
-                                // appropriately. Grab a reference to newly
-                                // presented forms.
-                                print("onNavigationChanged")
-                                switch navigationItem {
-                                case .featureForm(let featureForm):
-                                    print("Presented feature: \( featureForm.feature.attributes["globalid"] ?? "?")")
-                                case .utilityAssociationKindNetworkSources(let title, let subtitle):
-                                    print("Choosing network source \(title) \(subtitle)")
-                                case .utilityAssociationKindNetworkSource(let title, let subtitle):
-                                    print("Choosing association \(title) \(subtitle)")
-                                }
-                            }
-                            .onNavigationChangeRequested { onContinue in
-#warning("TODO: Missing full implementation.")
-                                // The user has tried to navigate either forward
-                                // to a new association or backward. Decide
-                                // whether to save or discard edits. Finally,
-                                // either call the continuation handler to allow
-                                // the navigation action to proceed or otherwise
-                                // simply discard it.
-                                print("onNavigationChangeRequested")
-                                onContinue()
-                            }
-                            .validationErrors(validationErrorVisibility)
-                            .interactiveDismissDisabled()
-                            .padding(.horizontal)
-                            .padding(.top, 16)
-                            .presentationBackgroundInteractionEnabled()
-                            .presentationContentInteractionScrolls()
-                            .presentationDetents([.medium, .large], selection: $selectedDetent)
-                            .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
-                                Button("Discard edits", role: .destructive) {
-                                    model.discardEdits()
-                                }
-                                if case let .cancellationPending(featureForm) = model.state {
-                                    Button("Continue editing", role: .cancel) {
-                                        model.state = .editing(featureForm)
+                        FeatureFormViewReader { featureFormViewProxy in
+                            FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+                                .onNavigationChanged { navigationItem in
+    #warning("TODO: Missing full implementation.")
+                                    // The user has navigated to a new page. Check
+                                    // the type of page and update a custom header
+                                    // appropriately. Grab a reference to newly
+                                    // presented forms.
+                                    print("onNavigationChanged")
+                                    switch navigationItem {
+                                    case .featureForm(let featureForm):
+                                        print("Presented feature: \( featureForm.feature.attributes["globalid"] ?? "?")")
+                                    case .utilityAssociationKindNetworkSources(let title, let subtitle):
+                                        print("Choosing network source \(title) \(subtitle)")
+                                    case .utilityAssociationKindNetworkSource(let title, let subtitle):
+                                        print("Choosing association \(title) \(subtitle)")
                                     }
                                 }
-                            } message: {
-                                Text("Updates to this feature will be lost.")
-                            }
-                            .alert("The form wasn't submitted", isPresented: model.alertIsPresented) {
-                                // No actions.
-                            } message: {
-                                if case let .generalError(_, errorMessage) = model.state {
-                                    errorMessage
+                                .onNavigationChangeRequested { onContinue in
+    #warning("TODO: Missing full implementation.")
+                                    // The user has tried to navigate either forward
+                                    // to a new association or backward. Decide
+                                    // whether to save or discard edits. Finally,
+                                    // either call the continuation handler to allow
+                                    // the navigation action to proceed or otherwise
+                                    // simply discard it.
+                                    print("onNavigationChangeRequested")
+                                    onContinue()
                                 }
-                            }
+                                .validationErrors(validationErrorVisibility)
+                                .interactiveDismissDisabled()
+                                .padding(.horizontal)
+                                .padding(.top, 16)
+                                .presentationBackgroundInteractionEnabled()
+                                .presentationContentInteractionScrolls()
+                                .presentationDetents([.medium, .large], selection: $selectedDetent)
+                                .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
+                                    Button("Discard edits", role: .destructive) {
+                                        model.discardEdits()
+                                    }
+                                    if case let .cancellationPending(featureForm) = model.state {
+                                        Button("Continue editing", role: .cancel) {
+                                            model.state = .editing(featureForm)
+                                        }
+                                    }
+                                } message: {
+                                    Text("Updates to this feature will be lost.")
+                                }
+                                .alert("The form wasn't submitted", isPresented: model.alertIsPresented) {
+                                    // No actions.
+                                } message: {
+                                    if case let .generalError(_, errorMessage) = model.state {
+                                        errorMessage
+                                    }
+                                }
+                                .onChange(featureFormViewProxy) { proxy in
+                                    print("onChange(featureFormViewProxy)", proxy)
+                                    featureFormView = proxy
+                                }
+                        }
                     }
                 }
                 .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
