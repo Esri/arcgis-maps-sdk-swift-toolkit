@@ -61,6 +61,17 @@ struct FeatureFormExampleView: View {
                             .onFormChanged { presentedForm in
                                 print("Presented feature: \( presentedForm.feature.attributes["globalid"] ?? "?")")
                             }
+                            .onAssociationChangeRequested { onContinue in
+#warning("TODO: Missing full implementation.")
+                                // The user has tried to navigate either forward
+                                // to a new association or backward. Decide
+                                // whether to save or discard edits. Finally,
+                                // either call the continuation handler to allow
+                                // the navigation action to proceed or otherwise
+                                // simply discard it.
+                                print("onAssociationChangeRequested")
+                                onContinue()
+                            }
                             .validationErrors(validationErrorVisibility)
                             .interactiveDismissDisabled()
                             .padding(.horizontal)

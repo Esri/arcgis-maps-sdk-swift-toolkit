@@ -81,6 +81,9 @@ public struct FeatureFormView: View {
     /// The closure to perform when the form has changed.
     var onFormChangedAction: ((FeatureForm) -> Void)?
     
+    /// <#Description#>
+    var associationChangeRequestedAction: ((() -> Void) -> Void)?
+    
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
@@ -124,6 +127,7 @@ public struct FeatureFormView: View {
                     .formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
             }
         }
+        .environment(\.associationChangeRequestedAction, associationChangeRequestedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
     }
     
@@ -134,6 +138,16 @@ public struct FeatureFormView: View {
         copy.onFormChangedAction = action
         return copy
     }
+    
+    public func onAssociationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
+        var copy = self
+        copy.associationChangeRequestedAction = action
+        return copy
+    }
+}
+
+extension EnvironmentValues {
+    @Entry var associationChangeRequestedAction: ((() -> Void) -> Void)?
 }
 
 struct InternalFeatureFormView: View {
@@ -195,7 +209,8 @@ struct InternalFeatureFormView: View {
                         UtilityNetworkAssociationFormElementView(
                             description: "[UtilityNetworkAssociationsFormElement.description]",
                             associationKindGroups: groups,
-                            title: "[UtilityNetworkAssociationsFormElement.label]"
+                            title: "[UtilityNetworkAssociationsFormElement.label]",
+                            navigationPath: $path
                         )
                         .padding(.bottom)
                     }

@@ -24,6 +24,10 @@ struct UtilityNetworkAssociationFormElementView: View {
     /// <#Description#>
     let title: String
     
+    @Environment(\.associationChangeRequestedAction) var associationChangeRequestedAction: ((() -> Void) -> Void)?
+    
+    @Binding var navigationPath: NavigationPath
+    
     var body: some View {
         VStack(alignment: .leading) {
             // TODO: InputHeader to replace following in final implementation --
@@ -45,7 +49,11 @@ struct UtilityNetworkAssociationFormElementView: View {
             
             FeatureFormGroupedContentView(
                 content: associationKindGroups.map { group in
-                    NavigationLink(value: group) {
+                    Button {
+                        associationChangeRequestedAction?({
+                            navigationPath.append(group)
+                        })
+                    } label: {
                         HStack {
                             Text(group.name)
                                 .foregroundStyle(.primary)
@@ -58,7 +66,6 @@ struct UtilityNetworkAssociationFormElementView: View {
                         }
                         .contentShape(.rect)
                     }
-                    .buttonStyle(.plain)
                 }
             )
         }

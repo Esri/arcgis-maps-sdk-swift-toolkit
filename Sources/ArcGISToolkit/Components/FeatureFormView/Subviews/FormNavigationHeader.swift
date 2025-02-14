@@ -19,6 +19,8 @@ struct FormNavigationHeader: ViewModifier {
     /// <#Description#>
     @Binding var path: NavigationPath
     
+    @Environment(\.associationChangeRequestedAction) var associationChangeRequestedAction: ((() -> Void) -> Void)?
+    
     /// <#Description#>
     let subtitle: String?
     
@@ -37,7 +39,9 @@ struct FormNavigationHeader: ViewModifier {
                         HStack {
                             if !path.isEmpty {
                                 Button {
-                                    path.removeLast()
+                                    associationChangeRequestedAction?({
+                                        path.removeLast()
+                                    })
                                 } label: {
                                     // Label(:systemImage:) does not work properly
                                     // here so we use an Image only.
