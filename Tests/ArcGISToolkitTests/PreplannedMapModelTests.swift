@@ -32,6 +32,14 @@ private extension PreplannedMapAreaProtocol {
 }
 
 class PreplannedMapModelTests: XCTestCase {
+    override func setUp() async throws {
+        ArcGISEnvironment.apiKey = .default
+    }
+    
+    override func tearDown() {
+        ArcGISEnvironment.apiKey = nil
+    }
+    
     @MainActor
     func testInit() {
         struct MockPreplannedMapArea: PreplannedMapAreaProtocol {}
@@ -208,6 +216,8 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testDownloadStatuses() async throws {
+        ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default })
+        
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
         let portalItemID = try XCTUnwrap(portalItem.id)
         let task = OfflineMapTask(portalItem: portalItem)
@@ -274,6 +284,8 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testLoadMobileMapPackage() async throws {
+        ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default })
+        
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
         let portalItemID = try XCTUnwrap(portalItem.id)
         let task = OfflineMapTask(portalItem: portalItem)
@@ -329,6 +341,8 @@ class PreplannedMapModelTests: XCTestCase {
     
     @MainActor
     func testRemoveDownloadedPreplannedMapArea() async throws {
+        ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default })
+        
         let portalItem = PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
             id: .init("acc027394bc84c2fb04d1ed317aac674")!
