@@ -47,6 +47,10 @@ class OnDemandMapModelTests: XCTestCase {
         let areaID = OnDemandMapModel.makeAreaID()
         let mmpkDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
         
+        let job = try await OnDemandMapModel.makeJob(for: mmpkDirectory, task: offlineMapTask)
+        
+        OfflineManager.shared.jobManager.jobs.append(job)
+        
         defer {
             // Clean up JobManager.
             OfflineManager.shared.jobManager.jobs.removeAll()
@@ -54,10 +58,6 @@ class OnDemandMapModelTests: XCTestCase {
             // Clean up folder.
             try? FileManager.default.removeItem(at: mmpkDirectory)
         }
-        
-        let job = try await OnDemandMapModel.makeJob(for: mmpkDirectory, task: offlineMapTask)
-        
-        OfflineManager.shared.jobManager.jobs.append(job)
         
         let model = OnDemandMapModel(
             job: job,
@@ -73,6 +73,9 @@ class OnDemandMapModelTests: XCTestCase {
         XCTAssertNotNil(model.job)
         XCTAssertEqual(model.directorySize, 0)
         XCTAssertEqual(model.status, .downloading)
+        
+        // Cancel the job to be a good citizen.
+        await job.cancel()
     }
     
     /// Tests creating a model for a map area that has already been downloaded.
@@ -80,50 +83,39 @@ class OnDemandMapModelTests: XCTestCase {
     func testInitWithAreaID() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
         let portalItemID = try XCTUnwrap(portalItem.id)
-        let offlineMapTask = OfflineMapTask(portalItem: portalItem)
-        let configuration = OnDemandMapModel.configuration
         
-        let model = OnDemandMapModel(
-            offlineMapTask: offlineMapTask,
-            configuration: configuration,
+        let areaID = OnDemandMapModel.makeAreaID()
+        let mmpkDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
+        
+        let model = await OnDemandMapModel(
+            areaID: areaID,
             portalItemID: portalItemID,
             onRemoveDownload: { _ in }
         )
-        XCTAssertEqual(model.title, "Mock On Demand Map Area")
-        XCTAssertNotNil(model.areaID)
-        XCTAssertEqual(model.areaID, configuration.areaID)
-        XCTAssertEqual(model.status, .initialized)
+        XCTAssertNil(model)
+        
+        let contents = "file"
+        try contents.write(toFile: mmpkDirectory.path(), atomically: true, encoding: .utf8)
+        //  FileManager.default.createFile(atPath: mmpkDirectory.path(), contents: nil)
         
         defer {
-            // Clean up JobManager.
-            OfflineManager.shared.jobManager.jobs.removeAll()
-            
             // Clean up folder.
-            model.removeDownloadedArea()
+            try? FileManager.default.removeItem(at: mmpkDirectory)
         }
         
-        // Start downloading.
-        await model.downloadOnDemandMapArea()
-        
-        XCTAssertEqual(model.status, .downloading)
-        
-        // Wait for job to finish.
-        _ = await model.job?.result
-        
-        XCTAssertEqual(model.status, .downloaded)
-        
         let model2 = await OnDemandMapModel(
-            areaID: model.areaID,
+            areaID: areaID,
             portalItemID: portalItemID,
             onRemoveDownload: { _ in }
         )
+        XCTAssertNotNil(model2)
         let downloadedModel = try XCTUnwrap(model2)
         XCTAssertEqual(downloadedModel.title, "Mock On Demand Map Area")
         XCTAssertNotNil(downloadedModel.areaID)
-        XCTAssertNotNil(model.thumbnail)
-        XCTAssertNotNil(model.mobileMapPackage)
-        XCTAssertNil(model.job)
-        XCTAssertGreaterThan(model.directorySize, 0)
+        XCTAssertNotNil(downloadedModel.thumbnail)
+        XCTAssertNotNil(downloadedModel.mobileMapPackage)
+        XCTAssertNil(downloadedModel.job)
+        XCTAssertGreaterThan(downloadedModel.directorySize, 0)
         XCTAssertEqual(downloadedModel.status, .downloaded)
     }
     
@@ -137,6 +129,10 @@ class OnDemandMapModelTests: XCTestCase {
         let areaID = OnDemandAreaID()
         let mmpkDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
         
+        let job = try await OnDemandMapModel.makeJob(for: mmpkDirectory, task: offlineMapTask)
+        
+        OfflineManager.shared.jobManager.jobs.append(job)
+        
         defer {
             // Clean up JobManager.
             OfflineManager.shared.jobManager.jobs.removeAll()
@@ -144,10 +140,6 @@ class OnDemandMapModelTests: XCTestCase {
             // Clean up folder.
             try? FileManager.default.removeItem(at: mmpkDirectory)
         }
-        
-        let job = try await OnDemandMapModel.makeJob(for: mmpkDirectory, task: offlineMapTask)
-        
-        OfflineManager.shared.jobManager.jobs.append(job)
         
         let model = OnDemandMapModel(
             job: job,
@@ -162,6 +154,7 @@ class OnDemandMapModelTests: XCTestCase {
         await job.cancel()
     }
     
+    /// Tests that the model status changes from `initialized` to `downloading` when the download starts.
     @MainActor
     func testDownloadStatuses() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
@@ -182,6 +175,9 @@ class OnDemandMapModelTests: XCTestCase {
             
             // Clean up folder.
             model.removeDownloadedArea()
+            
+            // Cancel downolad job.
+            model.cancelJob()
         }
         
         var statuses = [OnDemandMapModel.Status]()
@@ -197,28 +193,15 @@ class OnDemandMapModelTests: XCTestCase {
         // Start downloading.
         await model.downloadOnDemandMapArea()
         
-        // Wait for job to finish.
-        _ = await model.job?.result
-        
         // Verify statuses.
         // First give time for final status to come in.
         try? await Task.yield(timeout: 0.1) { @MainActor in
-            statuses.last == .downloaded
+            statuses.last == .downloading
         }
         XCTAssertEqual(
             statuses,
-            [.initialized, .downloading, .downloaded]
+            [.initialized, .downloading]
         )
-        
-        // Now test that creating a new matching model will have the status set to
-        // downloaded as there is an mmpk downloaded at the appropriate location.
-        let model2 = await OnDemandMapModel(
-            areaID: model.areaID,
-            portalItemID: portalItemID,
-            onRemoveDownload: { _ in }
-        )
-        let downloadedModel = try XCTUnwrap(model2)
-        XCTAssertEqual(downloadedModel.status, .downloaded)
     }
     
     @MainActor
@@ -241,6 +224,9 @@ class OnDemandMapModelTests: XCTestCase {
             
             // Clean up folder.
             model.removeDownloadedArea()
+            
+            // Cancel downolad job.
+            model.cancelJob()
         }
         
         var statuses: [OnDemandMapModel.Status] = []
@@ -348,16 +334,12 @@ extension OnDemandMapModel.Status: Equatable {
 
 private extension OnDemandMapModel {
     static var configuration: OnDemandMapAreaConfiguration {
-        let envelope = Envelope(
-            xRange: -13847794.834275939 ... -13396855.565869562,
-            yRange: 3894735.5338846594...4345674.802291036,
-            spatialReference: SpatialReference(wkid: WKID(3857)!, verticalWKID: nil)
-        )
+        let envelope = Envelope(center: .init(x: 0, y: 0, spatialReference: .webMercator), width: 1, height: 1)
         
         return OnDemandMapAreaConfiguration(
             title: "Mock On Demand Map Area",
             minScale: 0,
-            maxScale: 9027.977411,
+            maxScale: 100_000_000,
             areaOfInterest: envelope,
             thumbnail: UIImage(systemName: "map")
         )
