@@ -24,6 +24,10 @@ struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let title: String
 ***REMOVED***
+***REMOVED***@Environment(\.associationChangeRequestedAction) var associationChangeRequestedAction: ((() -> Void) -> Void)?
+***REMOVED***
+***REMOVED***@Binding var navigationPath: NavigationPath
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: InputHeader to replace following in final implementation --
@@ -45,7 +49,11 @@ struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***FeatureFormGroupedContentView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***content: associationKindGroups.map { group in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(value: group) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationChangeRequestedAction?({
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationPath.append(group)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.primary)
@@ -58,7 +66,6 @@ struct UtilityNetworkAssociationFormElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***

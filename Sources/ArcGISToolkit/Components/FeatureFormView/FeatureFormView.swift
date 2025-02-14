@@ -81,6 +81,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The closure to perform when the form has changed.
 ***REMOVED***var onFormChangedAction: ((FeatureForm) -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***var associationChangeRequestedAction: ((() -> Void) -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
 ***REMOVED***
@@ -124,6 +127,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formNavigationHeader(path: $path, visibility: headerVisibility, title: group.name, subtitle: group.presentingForm)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.environment(\.associationChangeRequestedAction, associationChangeRequestedAction)
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED***
 ***REMOVED***
@@ -134,6 +138,16 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***copy.onFormChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
+***REMOVED***
+***REMOVED***public func onAssociationChangeRequested(perform action: @escaping (() -> Void) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.associationChangeRequestedAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
+extension EnvironmentValues {
+***REMOVED***@Entry var associationChangeRequestedAction: ((() -> Void) -> Void)?
 ***REMOVED***
 
 struct InternalFeatureFormView: View {
@@ -195,7 +209,8 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[UtilityNetworkAssociationsFormElement.description]",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationKindGroups: groups,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "[UtilityNetworkAssociationsFormElement.label]"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "[UtilityNetworkAssociationsFormElement.label]",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationPath: $path
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
