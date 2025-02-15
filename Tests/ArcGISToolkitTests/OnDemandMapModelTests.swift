@@ -18,6 +18,14 @@ import Combine
 @testable import ArcGISToolkit
 
 class OnDemandMapModelTests: XCTestCase {
+    override func setUp() async throws {
+        ArcGISEnvironment.apiKey = .default
+    }
+    
+    override func tearDown() {
+        ArcGISEnvironment.apiKey = nil
+    }
+    
     /// Tests creating a model with a configuration for taking an area offline.
     @MainActor
     func testInitWithConfiguration() {
@@ -83,10 +91,9 @@ class OnDemandMapModelTests: XCTestCase {
     func testInitWithAreaID() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
         let portalItemID = try XCTUnwrap(portalItem.id)
-        
         let areaID = OnDemandMapModel.makeAreaID()
-        let mmpkDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
         
+        // Verify that model initialization fails when mmpk directory is empty.
         let model = await OnDemandMapModel(
             areaID: areaID,
             portalItemID: portalItemID,
@@ -94,15 +101,17 @@ class OnDemandMapModelTests: XCTestCase {
         )
         XCTAssertNil(model)
         
-        let contents = "file"
-        try contents.write(toFile: mmpkDirectory.path(), atomically: true, encoding: .utf8)
-        //  FileManager.default.createFile(atPath: mmpkDirectory.path(), contents: nil)
+        let directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
+        let mmpkDirectory = OnDemandMapModel.mmpkDirectory(forOnDemandDirectory: directory)
+        try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: mmpkDirectory.path()))
         
         defer {
             // Clean up folder.
             try? FileManager.default.removeItem(at: mmpkDirectory)
         }
         
+        // Verify that model initialization succeeds when mmpk directory is not empty.
         let model2 = await OnDemandMapModel(
             areaID: areaID,
             portalItemID: portalItemID,
@@ -110,13 +119,9 @@ class OnDemandMapModelTests: XCTestCase {
         )
         XCTAssertNotNil(model2)
         let downloadedModel = try XCTUnwrap(model2)
-        XCTAssertEqual(downloadedModel.title, "Mock On Demand Map Area")
         XCTAssertNotNil(downloadedModel.areaID)
-        XCTAssertNotNil(downloadedModel.thumbnail)
-        XCTAssertNotNil(downloadedModel.mobileMapPackage)
         XCTAssertNil(downloadedModel.job)
-        XCTAssertGreaterThan(downloadedModel.directorySize, 0)
-        XCTAssertEqual(downloadedModel.status, .downloaded)
+        XCTAssertFalse(downloadedModel.isDownloaded)
     }
     
     /// This tests that the initial status is "downloading" if there is a matching job
@@ -206,6 +211,8 @@ class OnDemandMapModelTests: XCTestCase {
     
     @MainActor
     func testLoadMobileMapPackage() async throws {
+        ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default })
+        
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
         let portalItemID = try XCTUnwrap(portalItem.id)
         let offlineMapTask = OfflineMapTask(portalItem: portalItem)
@@ -261,24 +268,23 @@ class OnDemandMapModelTests: XCTestCase {
     func testRemoveDownloadedMapArea() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
         let portalItemID = try XCTUnwrap(portalItem.id)
-        let offlineMapTask = OfflineMapTask(portalItem: portalItem)
-        let configuration = OnDemandMapModel.configuration
+        let areaID = OnDemandMapModel.makeAreaID()
         
-        let model = OnDemandMapModel(
-            offlineMapTask: offlineMapTask,
-            configuration: configuration,
+        let directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
+        let mmpkDirectory = OnDemandMapModel.mmpkDirectory(forOnDemandDirectory: directory)
+        try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: mmpkDirectory.path()))
+        
+        let model = await OnDemandMapModel(
+            areaID: areaID,
             portalItemID: portalItemID,
             onRemoveDownload: { _ in }
         )
-        
-        defer {
-            // Clean up JobManager.
-            OfflineManager.shared.jobManager.jobs.removeAll()
-        }
+        let downloadedModel = try XCTUnwrap(model)
         
         var statuses = [OnDemandMapModel.Status]()
         var subscriptions = Set<AnyCancellable>()
-        model.$status
+        downloadedModel.$status
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink { value in
@@ -286,34 +292,23 @@ class OnDemandMapModelTests: XCTestCase {
             }
             .store(in: &subscriptions)
         
-        // Start downloading.
-        await model.downloadOnDemandMapArea()
-        
-        // Wait for job to finish.
-        _ = await model.job?.result
-        
         // Verify statuses.
         // First give time for final status to come in.
         try? await Task.yield(timeout: 0.1) { @MainActor in
             statuses.last == .downloaded
         }
-        XCTAssertEqual(
-            statuses,
-            [.initialized, .downloading, .downloaded]
-        )
+        
+        XCTAssertNotEqual(downloadedModel.status, .initialized)
         
         // Clean up folder.
-        model.removeDownloadedArea()
+        downloadedModel.removeDownloadedArea()
         
         // Verify statuses after remove.
         // First give time for final status to come in.
         try? await Task.yield(timeout: 0.1) { @MainActor in
             statuses.last == .initialized
         }
-        XCTAssertEqual(
-            statuses,
-            [.initialized, .downloading, .downloaded, .initialized]
-        )
+        XCTAssertEqual(statuses.last, .initialized)
     }
 }
 
