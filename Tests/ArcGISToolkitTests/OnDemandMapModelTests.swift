@@ -292,12 +292,6 @@ class OnDemandMapModelTests: XCTestCase {
             }
             .store(in: &subscriptions)
         
-        // Verify statuses.
-        // First give time for final status to come in.
-        try? await Task.yield(timeout: 0.1) { @MainActor in
-            statuses.last == .downloaded
-        }
-        
         XCTAssertNotEqual(downloadedModel.status, .initialized)
         
         // Clean up folder.
