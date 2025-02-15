@@ -292,12 +292,6 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Verify statuses.
-***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
-***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
-***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNotEqual(downloadedModel.status, .initialized)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clean up folder.
