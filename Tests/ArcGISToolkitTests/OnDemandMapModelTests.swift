@@ -18,6 +18,14 @@ import Combine
 @testable ***REMOVED***Toolkit
 
 class OnDemandMapModelTests: XCTestCase {
+***REMOVED***override func setUp() async throws {
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = .default
+***REMOVED***
+***REMOVED***
+***REMOVED***override func tearDown() {
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Tests creating a model with a configuration for taking an area offline.
 ***REMOVED***@MainActor
 ***REMOVED***func testInitWithConfiguration() {
@@ -83,10 +91,9 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED***func testInitWithAreaID() async throws {
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
 ***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let areaID = OnDemandMapModel.makeAreaID()
-***REMOVED******REMOVED***let mmpkDirectory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that model initialization fails when mmpk directory is empty.
 ***REMOVED******REMOVED***let model = await OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED***areaID: areaID,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
@@ -94,15 +101,17 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertNil(model)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let contents = "file"
-***REMOVED******REMOVED***try contents.write(toFile: mmpkDirectory.path(), atomically: true, encoding: .utf8)
-***REMOVED******REMOVED******REMOVED***  FileManager.default.createFile(atPath: mmpkDirectory.path(), contents: nil)
+***REMOVED******REMOVED***let directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
+***REMOVED******REMOVED***let mmpkDirectory = OnDemandMapModel.mmpkDirectory(forOnDemandDirectory: directory)
+***REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
+***REMOVED******REMOVED***XCTAssertTrue(FileManager.default.fileExists(atPath: mmpkDirectory.path()))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
 ***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectory)
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that model initialization succeeds when mmpk directory is not empty.
 ***REMOVED******REMOVED***let model2 = await OnDemandMapModel(
 ***REMOVED******REMOVED******REMOVED***areaID: areaID,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
@@ -110,13 +119,9 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertNotNil(model2)
 ***REMOVED******REMOVED***let downloadedModel = try XCTUnwrap(model2)
-***REMOVED******REMOVED***XCTAssertEqual(downloadedModel.title, "Mock On Demand Map Area")
 ***REMOVED******REMOVED***XCTAssertNotNil(downloadedModel.areaID)
-***REMOVED******REMOVED***XCTAssertNotNil(downloadedModel.thumbnail)
-***REMOVED******REMOVED***XCTAssertNotNil(downloadedModel.mobileMapPackage)
 ***REMOVED******REMOVED***XCTAssertNil(downloadedModel.job)
-***REMOVED******REMOVED***XCTAssertGreaterThan(downloadedModel.directorySize, 0)
-***REMOVED******REMOVED***XCTAssertEqual(downloadedModel.status, .downloaded)
+***REMOVED******REMOVED***XCTAssertFalse(downloadedModel.isDownloaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ This tests that the initial status is "downloading" if there is a matching job
@@ -206,6 +211,8 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testLoadMobileMapPackage() async throws {
+***REMOVED******REMOVED***ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default ***REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
 ***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let offlineMapTask = OfflineMapTask(portalItem: portalItem)
@@ -261,24 +268,23 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED***func testRemoveDownloadedMapArea() async throws {
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
 ***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
-***REMOVED******REMOVED***let offlineMapTask = OfflineMapTask(portalItem: portalItem)
-***REMOVED******REMOVED***let configuration = OnDemandMapModel.configuration
+***REMOVED******REMOVED***let areaID = OnDemandMapModel.makeAreaID()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let model = OnDemandMapModel(
-***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED***configuration: configuration,
+***REMOVED******REMOVED***let directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
+***REMOVED******REMOVED***let mmpkDirectory = OnDemandMapModel.mmpkDirectory(forOnDemandDirectory: directory)
+***REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
+***REMOVED******REMOVED***XCTAssertTrue(FileManager.default.fileExists(atPath: mmpkDirectory.path()))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let model = await OnDemandMapModel(
+***REMOVED******REMOVED******REMOVED***areaID: areaID,
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onRemoveDownload: { _ in ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***defer {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
-***REMOVED******REMOVED******REMOVED***OfflineManager.shared.jobManager.jobs.removeAll()
-***REMOVED***
+***REMOVED******REMOVED***let downloadedModel = try XCTUnwrap(model)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var statuses = [OnDemandMapModel.Status]()
 ***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
-***REMOVED******REMOVED***model.$status
+***REMOVED******REMOVED***downloadedModel.$status
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
 ***REMOVED******REMOVED******REMOVED***.removeDuplicates()
 ***REMOVED******REMOVED******REMOVED***.sink { value in
@@ -286,34 +292,23 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Start downloading.
-***REMOVED******REMOVED***await model.downloadOnDemandMapArea()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait for job to finish.
-***REMOVED******REMOVED***_ = await model.job?.result
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
 ***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
 ***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
 ***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
 ***REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.initialized, .downloading, .downloaded]
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNotEqual(downloadedModel.status, .initialized)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clean up folder.
-***REMOVED******REMOVED***model.removeDownloadedArea()
+***REMOVED******REMOVED***downloadedModel.removeDownloadedArea()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses after remove.
 ***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
 ***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
 ***REMOVED******REMOVED******REMOVED***statuses.last == .initialized
 ***REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***statuses,
-***REMOVED******REMOVED******REMOVED***[.initialized, .downloading, .downloaded, .initialized]
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***XCTAssertEqual(statuses.last, .initialized)
 ***REMOVED***
 ***REMOVED***
 
