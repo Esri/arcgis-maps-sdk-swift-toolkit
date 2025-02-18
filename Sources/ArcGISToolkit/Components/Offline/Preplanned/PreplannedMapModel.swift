@@ -162,6 +162,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         status = .downloading
         do {
             let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
+            
+            parameters.continuesOnErrors = false
+            
             try FileManager.default.createDirectory(at: mmpkDirectoryURL, withIntermediateDirectories: true)
             
             // Create the download preplanned offline map job.
