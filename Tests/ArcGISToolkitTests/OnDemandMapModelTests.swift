@@ -101,6 +101,7 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertNil(model)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create mmpk directory and verify it exists before creating model.
 ***REMOVED******REMOVED***let directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
 ***REMOVED******REMOVED***let mmpkDirectory = OnDemandMapModel.mmpkDirectory(forOnDemandDirectory: directory)
 ***REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
@@ -270,6 +271,7 @@ class OnDemandMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let areaID = OnDemandMapModel.makeAreaID()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create mmpk directory and verify it exists before creating model.
 ***REMOVED******REMOVED***let directory = URL.onDemandDirectory(forPortalItemID: portalItemID, onDemandMapAreaID: areaID)
 ***REMOVED******REMOVED***let mmpkDirectory = OnDemandMapModel.mmpkDirectory(forOnDemandDirectory: directory)
 ***REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
