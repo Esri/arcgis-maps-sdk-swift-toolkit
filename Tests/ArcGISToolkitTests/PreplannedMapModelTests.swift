@@ -32,6 +32,14 @@ private extension PreplannedMapAreaProtocol {
 ***REMOVED***
 
 class PreplannedMapModelTests: XCTestCase {
+***REMOVED***override func setUp() async throws {
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = .default
+***REMOVED***
+***REMOVED***
+***REMOVED***override func tearDown() {
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
+***REMOVED***
+***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***struct MockPreplannedMapArea: PreplannedMapAreaProtocol {***REMOVED***
@@ -208,6 +216,8 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testDownloadStatuses() async throws {
+***REMOVED******REMOVED***ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default ***REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
 ***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
@@ -274,6 +284,8 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testLoadMobileMapPackage() async throws {
+***REMOVED******REMOVED***ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default ***REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
 ***REMOVED******REMOVED***let portalItemID = try XCTUnwrap(portalItem.id)
 ***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
@@ -329,6 +341,8 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testRemoveDownloadedPreplannedMapArea() async throws {
+***REMOVED******REMOVED***ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default ***REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let portalItem = PortalItem(
 ***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED***id: .init("acc027394bc84c2fb04d1ed317aac674")!
