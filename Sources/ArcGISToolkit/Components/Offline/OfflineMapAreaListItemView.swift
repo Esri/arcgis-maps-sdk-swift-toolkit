@@ -110,7 +110,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 ***REMOVED***@ViewBuilder private var statusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
 ***REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Currently open")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(currentlyOpen)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED******REMOVED*** else {
@@ -188,7 +188,7 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Open")
+***REMOVED******REMOVED******REMOVED***Text(openLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED***
@@ -236,5 +236,27 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** because of the button the parent view.
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension OfflineMapAreaListItemView {
+***REMOVED******REMOVED***/ A localized string for "Currently open".
+***REMOVED***var currentlyOpen: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Currently open",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text for an opened map area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private extension OpenOfflineMapAreaButton {
+***REMOVED******REMOVED***/ A localized string for the word "Open".
+***REMOVED***var openLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Open",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The label for a button to open a map area."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

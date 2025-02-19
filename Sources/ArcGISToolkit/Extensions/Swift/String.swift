@@ -42,12 +42,30 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "OK".
+***REMOVED***static var ok: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "OK",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
 ***REMOVED***static var emptyAttachmentDownloadErrorMessage: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Empty attachments cannot be downloaded.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message explaining attachments with empty files (0 bytes) cannot be downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An error message explaining that there is no internet connection.
+***REMOVED***static var noInternetConnectionErrorMessage: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "No Internet Connection",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that there is no internet connection."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -84,6 +102,51 @@ extension String {
 ***REMOVED******REMOVED******REMOVED***localized: "Value",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A value in a set of data contained in a popup."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Loading".
+***REMOVED***static var loading: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Loading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is loading."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for "Loading failed".
+***REMOVED***static var loadingFailed: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Loading failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area failed to load."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Downloading".
+***REMOVED***static var downloading: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Downloading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloading."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Downloaded".
+***REMOVED***static var downloaded: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Downloaded",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for "Download failed".
+***REMOVED***static var downloadFailed: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Download failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area failed to download."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
