@@ -207,11 +207,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                     }
                 ),
                 continueAction: .init(
-                    title: String(
-                        localized: "OK",
-                        bundle: .toolkitModule,
-                        comment: "A label for button to proceed with an operation."
-                    ),
+                    title: String.ok,
                     handler: { _, password in
                         viewModel.proceedToUseCertificate(withPassword: password)
                     }
