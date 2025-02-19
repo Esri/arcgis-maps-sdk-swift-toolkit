@@ -33,7 +33,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             Section { header }
             
             if !model.description.isEmpty {
-                Section("Description") {
+                Section(description) {
                     Text(model.description)
                         .foregroundStyle(.secondary)
                 }
@@ -42,7 +42,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             
             if model.isDownloaded && !isSelected {
                 Section {
-                    Button("Delete Map", role: .destructive) {
+                    Button(deleteMapArea, role: .destructive) {
                         if model.dismissMetadataViewOnDelete {
                             dismiss()
                         }
@@ -53,7 +53,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             
             if !model.isDownloaded {
                 Section {
-                    Button("Download Map") {
+                    Button(downloadMapArea) {
                         dismiss()
                         model.startDownload()
                     }
@@ -65,7 +65,11 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") { dismiss() }
+                Button {
+                    dismiss()
+                } label: {
+                    Text.done
+                }
             }
         }
     }
@@ -100,7 +104,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .fontWeight(.bold)
             
             if model.isDownloaded {
-                Text("Size: \(model.directorySizeText)")
+                Text(sizeLabel)
                     .lineLimit(1)
                     .foregroundStyle(.secondary)
             }
@@ -156,4 +160,42 @@ private class MockMetadata: OfflineMapAreaMetadata {
     
     func removeDownloadedArea() {}
     func startDownload() {}
+}
+
+private extension OfflineMapAreaMetadataView {
+    /// A localized string for the word "Description".
+    var description: String {
+        .init(
+            localized: "Description",
+            bundle: .toolkitModule,
+            comment: "A label for the description of the map area"
+        )
+    }
+    
+    /// A label for a button to delete a map area.
+    var deleteMapArea: String {
+        .init(
+            localized: "Delete Map Area",
+            bundle: .toolkitModule,
+            comment: "A label for a button to delete a map area."
+        )
+    }
+    
+    /// A label for a button to download a map area.
+    var downloadMapArea: String {
+        .init(
+            localized: "Download Map Area",
+            bundle: .toolkitModule,
+            comment: "A label for a button to download a map area."
+        )
+    }
+    
+    /// A label for the file size of the map area.
+    var sizeLabel: String {
+        .init(
+            localized: "Size: \(model.directorySizeText)",
+            bundle: .toolkitModule,
+            comment: "A label for the file size of the map area."
+        )
+    }
 }

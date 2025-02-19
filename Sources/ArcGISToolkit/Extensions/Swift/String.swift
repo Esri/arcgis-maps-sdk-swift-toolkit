@@ -42,12 +42,30 @@ extension String {
         )
     }
     
+    /// A localized string for the word "OK".
+    static var ok: Self {
+        .init(
+            localized: "OK",
+            bundle: .toolkitModule,
+            comment: "A label for button to proceed with an operation."
+        )
+    }
+    
     /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
     static var emptyAttachmentDownloadErrorMessage: Self {
         .init(
             localized: "Empty attachments cannot be downloaded.",
             bundle: .toolkitModule,
             comment: "An error message explaining attachments with empty files (0 bytes) cannot be downloaded."
+        )
+    }
+    
+    /// An error message explaining that there is no internet connection.
+    static var noInternetConnectionErrorMessage: Self {
+        .init(
+            localized: "No Internet Connection",
+            bundle: .toolkitModule,
+            comment: "An error message explaining that there is no internet connection."
         )
     }
     
@@ -84,6 +102,51 @@ extension String {
             localized: "Value",
             bundle: .toolkitModule,
             comment: "A value in a set of data contained in a popup."
+        )
+    }
+    
+    /// A localized string for the word "Loading".
+    static var loading: Self {
+        .init(
+            localized: "Loading",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area is loading."
+        )
+    }
+    
+    /// A localized string for "Loading failed".
+    static var loadingFailed: Self {
+        .init(
+            localized: "Loading failed",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area failed to load."
+        )
+    }
+    
+    /// A localized string for the word "Downloading".
+    static var downloading: Self {
+        .init(
+            localized: "Downloading",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area is downloading."
+        )
+    }
+    
+    /// A localized string for the word "Downloaded".
+    static var downloaded: Self {
+        .init(
+            localized: "Downloaded",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area is downloaded."
+        )
+    }
+    
+    /// A localized string for "Download failed".
+    static var downloadFailed: Self {
+        .init(
+            localized: "Download failed",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area failed to download."
         )
     }
 }
