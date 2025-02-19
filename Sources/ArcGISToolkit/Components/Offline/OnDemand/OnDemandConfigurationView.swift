@@ -79,13 +79,15 @@ struct OnDemandConfigurationView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Text(String.cancel)
                     }
                 }
             }
             .task { await loadMap() }
-            .navigationBarTitle("Select Area")
+            .navigationBarTitle(selectArea)
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -110,7 +112,7 @@ struct OnDemandConfigurationView: View {
             VStack {
                 VStack(spacing: 0) {
                     Divider()
-                    Text("Pan and zoom to define the area")
+                    Text(panZoomToDefineArea)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .padding(8)
@@ -178,7 +180,7 @@ struct OnDemandConfigurationView: View {
                 Divider()
                 
                 HStack {
-                    Text("Level of Detail")
+                    Text(levelOfDetail)
                     Spacer()
                     Picker(selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
@@ -209,7 +211,7 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Text("Download")
+                        Text(download)
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                     }
@@ -227,21 +229,21 @@ struct OnDemandConfigurationView: View {
         VStack {
             if hasNoInternetConnection {
                 Backported.ContentUnavailableView(
-                    "No Internet Connection",
+                    LocalizedStringKey.init(.noInternetConnectionErrorMessage),
                     systemImage: "wifi.exclamationmark",
-                    description: "A map area cannot be downloaded at this time."
+                    description: cannotDownloadMessage
                 )
             } else {
                 Backported.ContentUnavailableView(
-                    "Online Map Failed to Load",
+                    LocalizedStringKey.init(failedToLoadMessage),
                     systemImage: "exclamationmark.triangle",
-                    description: "A map area cannot be downloaded at this time."
+                    description: cannotDownloadMessage
                 )
             }
             Button {
                 Task { await loadMap() }
             } label: {
-                Text("Try Again")
+                Text(tryAgain)
                     .buttonStyle(.borderless)
             }
             .padding()
@@ -294,19 +296,19 @@ private struct RenameButton: View {
             proposedNewTitle = title
             alertIsShowing = true
         } label: {
-            Text("Rename")
+            Text(rename)
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
         .font(.subheadline)
         .fontWeight(.semibold)
-        .alert("Enter a name", isPresented: $alertIsShowing) {
-            TextField("Enter area name", text: $proposedNewTitle)
-            Button("OK", action: submitNewTitle)
+        .alert(enterName, isPresented: $alertIsShowing) {
+            TextField(enterAreaName, text: $proposedNewTitle)
+            Button(String.ok, action: submitNewTitle)
                 .disabled(!proposedTitleIsValid)
-            Button("Cancel", role: .cancel) {}
+            Button(String.cancel, role: .cancel) {}
         } message: {
-            Text("The name for the map area must be unique.")
+            Text(uniqueNameMessage)
         }
         .onChange(proposedNewTitle) {
             proposedTitleIsValid = isValidCheck($0)
@@ -380,5 +382,108 @@ private extension UIImage {
         }
         
         return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
+    }
+}
+
+private extension OnDemandConfigurationView {
+    /// A title for the on demand configuration view.
+    var selectArea: String {
+        .init(
+            localized: "Select Area",
+            bundle: .toolkitModule,
+            comment: "A title for the on demand configuration view."
+        )
+    }
+    
+    /// A label instructing to pan and zoom the map to define an area.
+    var panZoomToDefineArea: String {
+        .init(
+            localized: "Pan and zoom to define the area",
+            bundle: .toolkitModule,
+            comment: "A label instructing to pan and zoom the map to define an area."
+        )
+    }
+    
+    /// A label for the level of detail picker view.
+    var levelOfDetail: String {
+        .init(
+            localized: "Level of Detail",
+            bundle: .toolkitModule,
+            comment: "A label for the level of detail picker view."
+        )
+    }
+    
+    /// A localized string for the word "Download".
+    var download: String {
+        .init(
+            localized: "Download",
+            bundle: .toolkitModule,
+            comment: "A label for a button to download a map area."
+        )
+    }
+    
+    /// A message explaining that the online map failed to load.
+    var failedToLoadMessage: String {
+        .init(
+            localized: "Online Map Failed to Load",
+            bundle: .toolkitModule,
+            comment: "A message explaining that the online map failed to load."
+        )
+    }
+    
+    /// A message explaining that a map area cannot be downloaded at this time.
+    var cannotDownloadMessage: String {
+        .init(
+            localized: "A map area cannot be downloaded at this time.",
+            bundle: .toolkitModule,
+            comment: "A message explaining that a map area cannot be downloaded at this time."
+        )
+    }
+    
+    /// A localized string for the phrase "Try Again".
+    var tryAgain: String {
+        .init(
+            localized: "Try Again",
+            bundle: .toolkitModule,
+            comment: "A label for a button to try loading a map again."
+        )
+    }
+}
+
+private extension RenameButton {
+    /// A localized string for the word "Rename".
+    var rename: String {
+        .init(
+            localized: "Rename",
+            bundle: .toolkitModule,
+            comment: "A label for a button to rename a map area."
+        )
+    }
+    
+    /// An instruction to enter a name.
+    var enterName: String {
+        .init(
+            localized: "Enter a name",
+            bundle: .toolkitModule,
+            comment: "An instruction to enter a name."
+        )
+    }
+    
+    /// An instruction to enter an area name.
+    var enterAreaName: String {
+        .init(
+            localized: "Enter area name",
+            bundle: .toolkitModule,
+            comment: "An instruction to enter an area name."
+        )
+    }
+    
+    /// A message explaining that the map area name must be unique.
+    var uniqueNameMessage: String {
+        .init(
+            localized: "The name for the map area must be unique.",
+            bundle: .toolkitModule,
+            comment: "A message explaining that the map area name must be unique."
+        )
     }
 }
