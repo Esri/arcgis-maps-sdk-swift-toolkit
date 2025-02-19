@@ -207,11 +207,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "OK",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String.ok,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToUseCertificate(withPassword: password)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
