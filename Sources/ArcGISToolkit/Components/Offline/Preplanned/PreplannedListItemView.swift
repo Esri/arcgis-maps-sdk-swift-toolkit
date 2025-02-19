@@ -115,21 +115,21 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***var statusText: String {
 ***REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED***case .notLoaded, .loading:
-***REMOVED******REMOVED******REMOVED***"Loading"
+***REMOVED******REMOVED******REMOVED******REMOVED***.loading
 ***REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED***"Loading failed"
+***REMOVED******REMOVED******REMOVED******REMOVED***.loadingFailed
 ***REMOVED******REMOVED***case .packaging:
-***REMOVED******REMOVED******REMOVED***"Packaging"
+***REMOVED******REMOVED******REMOVED******REMOVED***.packaging
 ***REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED***"Ready to download"
+***REMOVED******REMOVED******REMOVED******REMOVED***.readyToDownload
 ***REMOVED******REMOVED***case .packageFailure:
-***REMOVED******REMOVED******REMOVED***"Packaging failed"
+***REMOVED******REMOVED******REMOVED******REMOVED***.packagingFailed
 ***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***"Downloading"
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloading
 ***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***"Downloaded"
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloaded
 ***REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED***"Download failed"
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloadFailed
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -147,4 +147,32 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var jobProgress: Progress? { job?.progress ***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED******REMOVED***/ A localized string for the word "Packaging".
+***REMOVED***static var packaging: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Packaging",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is packaging."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for "Ready to download".
+***REMOVED***static var readyToDownload: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Ready to download",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is ready to download."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for "Packaging failed".
+***REMOVED***static var packagingFailed: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Packaging failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area packaging failed."
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
