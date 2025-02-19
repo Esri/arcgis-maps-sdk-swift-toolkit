@@ -115,21 +115,21 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
     var statusText: String {
         switch status {
         case .notLoaded, .loading:
-            "Loading"
+                .loading
         case .loadFailure, .mmpkLoadFailure:
-            "Loading failed"
+                .loadingFailed
         case .packaging:
-            "Packaging"
+                .packaging
         case .packaged:
-            "Ready to download"
+                .readyToDownload
         case .packageFailure:
-            "Packaging failed"
+                .packagingFailed
         case .downloading:
-            "Downloading"
+                .downloading
         case .downloaded:
-            "Downloaded"
+                .downloaded
         case .downloadFailure:
-            "Download failed"
+                .downloadFailed
         }
     }
     
@@ -147,4 +147,32 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
     }
     
     var jobProgress: Progress? { job?.progress }
+}
+
+private extension String {
+    /// A localized string for the word "Packaging".
+    static var packaging: Self {
+        .init(
+            localized: "Packaging",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area is packaging."
+        )
+    }
+    
+    /// A localized string for "Ready to download".
+    static var readyToDownload: Self {
+        .init(
+            localized: "Ready to download",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area is ready to download."
+        )
+    }
+    /// A localized string for "Packaging failed".
+    static var packagingFailed: Self {
+        .init(
+            localized: "Packaging failed",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area packaging failed."
+        )
+    }
 }
