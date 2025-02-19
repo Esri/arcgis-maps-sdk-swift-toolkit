@@ -91,17 +91,17 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
     var statusText: String {
         switch status {
         case .initialized:
-            "Loading"
+                .loading
         case .mmpkLoadFailure:
-            "Loading failed"
+                .loadingFailed
         case .downloading:
-            "Downloading"
+                .downloading
         case .downloaded:
-            "Downloaded"
+                .downloaded
         case .downloadFailure:
-            "Download failed"
+                .downloadFailed
         case .downloadCancelled:
-            "Cancelled"
+                .cancelled
         }
     }
     
@@ -116,4 +116,15 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
     }
     
     var jobProgress: Progress? { job?.progress }
+}
+
+private extension String {
+    /// A localized string for the word "Cancelled".
+    static var cancelled: Self {
+        .init(
+            localized: "Cancelled",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area download is cancelled."
+        )
+    }
 }
