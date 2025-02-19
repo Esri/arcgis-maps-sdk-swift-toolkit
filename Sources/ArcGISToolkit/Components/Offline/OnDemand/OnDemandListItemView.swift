@@ -91,17 +91,17 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***var statusText: String {
 ***REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED***case .initialized:
-***REMOVED******REMOVED******REMOVED***"Loading"
+***REMOVED******REMOVED******REMOVED******REMOVED***.loading
 ***REMOVED******REMOVED***case .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED***"Loading failed"
+***REMOVED******REMOVED******REMOVED******REMOVED***.loadingFailed
 ***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***"Downloading"
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloading
 ***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***"Downloaded"
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloaded
 ***REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED***"Download failed"
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloadFailed
 ***REMOVED******REMOVED***case .downloadCancelled:
-***REMOVED******REMOVED******REMOVED***"Cancelled"
+***REMOVED******REMOVED******REMOVED******REMOVED***.cancelled
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -116,4 +116,15 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var jobProgress: Progress? { job?.progress ***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED******REMOVED***/ A localized string for the word "Cancelled".
+***REMOVED***static var cancelled: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Cancelled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area download is cancelled."
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***

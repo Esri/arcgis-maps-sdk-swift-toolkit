@@ -79,13 +79,15 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.cancel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task { await loadMap() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select Area")
+***REMOVED******REMOVED******REMOVED***.navigationBarTitle(selectArea)
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
@@ -110,7 +112,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Pan and zoom to define the area")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(panZoomToDefineArea)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
@@ -178,7 +180,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Level of Detail")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(levelOfDetail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker(selection: $maxScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(CacheScale.allCases, id: \.self) {
@@ -209,7 +211,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Download")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(download)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -227,21 +229,21 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if hasNoInternetConnection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"No Internet Connection",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(.noInternetConnectionErrorMessage),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "A map area cannot be downloaded at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: cannotDownloadMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Online Map Failed to Load",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(failedToLoadMessage),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "A map area cannot be downloaded at this time."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: cannotDownloadMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadMap() ***REMOVED***
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Try Again")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(tryAgain)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
@@ -294,19 +296,19 @@ private struct RenameButton: View {
 ***REMOVED******REMOVED******REMOVED***proposedNewTitle = title
 ***REMOVED******REMOVED******REMOVED***alertIsShowing = true
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Rename")
+***REMOVED******REMOVED******REMOVED***Text(rename)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.buttonBorderShape(.capsule)
 ***REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED***.fontWeight(.semibold)
-***REMOVED******REMOVED***.alert("Enter a name", isPresented: $alertIsShowing) {
-***REMOVED******REMOVED******REMOVED***TextField("Enter area name", text: $proposedNewTitle)
-***REMOVED******REMOVED******REMOVED***Button("OK", action: submitNewTitle)
+***REMOVED******REMOVED***.alert(enterName, isPresented: $alertIsShowing) {
+***REMOVED******REMOVED******REMOVED***TextField(enterAreaName, text: $proposedNewTitle)
+***REMOVED******REMOVED******REMOVED***Button(String.ok, action: submitNewTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!proposedTitleIsValid)
-***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {***REMOVED***
+***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {***REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text("The name for the map area must be unique.")
+***REMOVED******REMOVED******REMOVED***Text(uniqueNameMessage)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(proposedNewTitle) {
 ***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck($0)
@@ -380,5 +382,108 @@ private extension UIImage {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
+***REMOVED***
+***REMOVED***
+
+private extension OnDemandConfigurationView {
+***REMOVED******REMOVED***/ A title for the on demand configuration view.
+***REMOVED***var selectArea: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Select Area",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A title for the on demand configuration view."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label instructing to pan and zoom the map to define an area.
+***REMOVED***var panZoomToDefineArea: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Pan and zoom to define the area",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label instructing to pan and zoom the map to define an area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for the level of detail picker view.
+***REMOVED***var levelOfDetail: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Level of Detail",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for the level of detail picker view."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Download".
+***REMOVED***var download: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Download",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to download a map area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message explaining that the online map failed to load.
+***REMOVED***var failedToLoadMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Online Map Failed to Load",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message explaining that the online map failed to load."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message explaining that a map area cannot be downloaded at this time.
+***REMOVED***var cannotDownloadMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "A map area cannot be downloaded at this time.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message explaining that a map area cannot be downloaded at this time."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the phrase "Try Again".
+***REMOVED***var tryAgain: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Try Again",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to try loading a map again."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private extension RenameButton {
+***REMOVED******REMOVED***/ A localized string for the word "Rename".
+***REMOVED***var rename: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Rename",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename a map area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An instruction to enter a name.
+***REMOVED***var enterName: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Enter a name",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An instruction to enter a name."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An instruction to enter an area name.
+***REMOVED***var enterAreaName: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Enter area name",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An instruction to enter an area name."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message explaining that the map area name must be unique.
+***REMOVED***var uniqueNameMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "The name for the map area must be unique.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message explaining that the map area name must be unique."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
