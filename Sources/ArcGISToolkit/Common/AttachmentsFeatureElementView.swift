@@ -72,6 +72,20 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***case .notInitialized, .initializing:
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment: $0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayScale: displayScale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .initialized(let attachmentModels):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isShowingAttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If showing a form element, don't show attachments in
@@ -92,22 +106,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
 ***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***guard case .notInitialized = attachmentModelsState else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
-***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
-***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
-***REMOVED******REMOVED******REMOVED******REMOVED***.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment: $0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayScale: displayScale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(attachmentModels)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
