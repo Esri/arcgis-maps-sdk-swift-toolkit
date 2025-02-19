@@ -110,7 +110,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
             if isSelected {
-                Text("Currently open")
+                Text(currentlyOpen)
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             } else {
@@ -188,7 +188,7 @@ struct OpenOfflineMapAreaButton: View {
                 dismiss()
             }
         } label: {
-            Text("Open")
+            Text(openLabel)
                 .font(.subheadline)
                 .fontWeight(.semibold)
         }
@@ -236,5 +236,27 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
             // because of the button the parent view.
             .buttonStyle(.plain)
         }
+    }
+}
+
+private extension OfflineMapAreaListItemView {
+    /// A localized string for "Currently open".
+    var currentlyOpen: String {
+        .init(
+            localized: "Currently open",
+            bundle: .toolkitModule,
+            comment: "The status text for an opened map area."
+        )
+    }
+}
+
+private extension OpenOfflineMapAreaButton {
+    /// A localized string for the word "Open".
+    var openLabel: String {
+        .init(
+            localized: "Open",
+            bundle: .toolkitModule,
+            comment: "The label for a button to open a map area."
+        )
     }
 }
