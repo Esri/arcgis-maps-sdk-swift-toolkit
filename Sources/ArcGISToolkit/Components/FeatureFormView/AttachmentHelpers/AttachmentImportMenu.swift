@@ -73,9 +73,11 @@ struct AttachmentImportMenu: View {
     @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
-            cameraRequester.request {
-                cameraIsShowing = true
-            } onAccessDenied: { }
+            Task {
+                await cameraRequester.request {
+                    cameraIsShowing = true
+                } onAccessDenied: { }
+            }
         } label: {
             Text(cameraButtonLabel)
             Image(systemName: "camera")

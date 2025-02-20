@@ -45,8 +45,8 @@ struct CodeScanner: View {
                 }
         } else {
             Color.clear
-                .onAppear {
-                    cameraRequester.request {
+                .task {
+                    await cameraRequester.request {
                         cameraAccessIsAuthorized = true
                     } onAccessDenied: {
                         isPresented = false
