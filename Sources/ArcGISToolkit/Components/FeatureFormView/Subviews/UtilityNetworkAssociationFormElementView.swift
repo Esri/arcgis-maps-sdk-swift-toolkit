@@ -53,6 +53,16 @@ struct UtilityNetworkAssociationFormElementView: View {
 extension UtilityNetworkAssociationFormElementView {
 ***REMOVED***struct Association: Identifiable {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***enum Connection {
+***REMOVED******REMOVED******REMOVED***case left
+***REMOVED******REMOVED******REMOVED***case middle
+***REMOVED******REMOVED******REMOVED***case right
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let connectionPoint: Connection?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let description: String?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
@@ -73,6 +83,18 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let connection = association.connectionPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image: String = switch connection {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .left:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-left"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .middle:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-middle"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .right:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-right"
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(image, bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
