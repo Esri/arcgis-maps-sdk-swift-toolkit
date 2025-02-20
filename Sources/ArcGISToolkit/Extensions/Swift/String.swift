@@ -42,12 +42,30 @@ extension String {
         )
     }
     
-    /// A localized string for the word "OK".
-    static var ok: Self {
+    /// A localized string for the word "Downloaded".
+    static var downloaded: Self {
         .init(
-            localized: "OK",
+            localized: "Downloaded",
             bundle: .toolkitModule,
-            comment: "A label for button to proceed with an operation."
+            comment: "The status text when a map area is downloaded."
+        )
+    }
+    
+    /// A localized string for "Download failed".
+    static var downloadFailed: Self {
+        .init(
+            localized: "Download failed",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area failed to download."
+        )
+    }
+    
+    /// A localized string for the word "Downloading".
+    static var downloading: Self {
+        .init(
+            localized: "Downloading",
+            bundle: .toolkitModule,
+            comment: "The status text when a map area is downloading."
         )
     }
     
@@ -60,48 +78,12 @@ extension String {
         )
     }
     
-    /// An error message explaining that there is no internet connection.
-    static var noInternetConnectionErrorMessage: Self {
-        .init(
-            localized: "No Internet Connection",
-            bundle: .toolkitModule,
-            comment: "An error message explaining that there is no internet connection."
-        )
-    }
-    
     /// A localized string for the word "Field".
     static var field: Self {
         .init(
             localized: "Field",
             bundle: .toolkitModule,
             comment: "A field in a set of data contained in a popup."
-        )
-    }
-    
-    /// A localized string for the phrase "No Value".
-    static var noValue: Self {
-        .init(
-            localized: "No Value",
-            bundle: .toolkitModule,
-            comment: "A string indicating that no value has been set for a form field."
-        )
-    }
-    
-    /// A label for a button to take the user to a contextually inferred settings page.
-    static var settings: String {
-        .init(
-            localized: "Settings",
-            bundle: .toolkitModule,
-            comment: "A label for a button to take the user to a contextually inferred settings page."
-        )
-    }
-    
-    /// A localized string for the word "Value".
-    static var value: Self {
-        .init(
-            localized: "Value",
-            bundle: .toolkitModule,
-            comment: "A value in a set of data contained in a popup."
         )
     }
     
@@ -123,30 +105,48 @@ extension String {
         )
     }
     
-    /// A localized string for the word "Downloading".
-    static var downloading: Self {
+    /// An error message explaining that there is no internet connection.
+    static var noInternetConnectionErrorMessage: Self {
         .init(
-            localized: "Downloading",
+            localized: "No Internet Connection",
             bundle: .toolkitModule,
-            comment: "The status text when a map area is downloading."
+            comment: "An error message explaining that there is no internet connection."
         )
     }
     
-    /// A localized string for the word "Downloaded".
-    static var downloaded: Self {
+    /// A localized string for the phrase "No Value".
+    static var noValue: Self {
         .init(
-            localized: "Downloaded",
+            localized: "No Value",
             bundle: .toolkitModule,
-            comment: "The status text when a map area is downloaded."
+            comment: "A string indicating that no value has been set for a form field."
         )
     }
     
-    /// A localized string for "Download failed".
-    static var downloadFailed: Self {
+    /// A localized string for the word "OK".
+    static var ok: Self {
         .init(
-            localized: "Download failed",
+            localized: "OK",
             bundle: .toolkitModule,
-            comment: "The status text when a map area failed to download."
+            comment: "A label for button to proceed with an operation."
+        )
+    }
+    
+    /// A label for a button to take the user to a contextually inferred settings page.
+    static var settings: String {
+        .init(
+            localized: "Settings",
+            bundle: .toolkitModule,
+            comment: "A label for a button to take the user to a contextually inferred settings page."
+        )
+    }
+    
+    /// A localized string for the word "Value".
+    static var value: Self {
+        .init(
+            localized: "Value",
+            bundle: .toolkitModule,
+            comment: "A value in a set of data contained in a popup."
         )
     }
 }
