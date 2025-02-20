@@ -52,7 +52,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment size limit.
 ***REMOVED***let attachmentUploadSizeLimit = Measurement(
-***REMOVED******REMOVED***value: 50,
+***REMOVED******REMOVED***value: 999,
 ***REMOVED******REMOVED***unit: UnitInformationStorage.megabytes
 ***REMOVED***)
 ***REMOVED***

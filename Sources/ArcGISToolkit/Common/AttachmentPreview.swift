@@ -37,7 +37,7 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment download size limit.
 ***REMOVED***private let attachmentDownloadSizeLimit = Measurement(
-***REMOVED******REMOVED***value: 50,
+***REMOVED******REMOVED***value: 999,
 ***REMOVED******REMOVED***unit: UnitInformationStorage.megabytes
 ***REMOVED***)
 ***REMOVED***
