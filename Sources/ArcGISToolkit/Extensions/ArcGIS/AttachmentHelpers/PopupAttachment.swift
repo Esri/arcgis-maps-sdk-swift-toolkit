@@ -26,3 +26,11 @@ extension PopupAttachment: FeatureAttachment {
 ***REMOVED******REMOVED***Measurement(value: Double(size), unit: .bytes)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***public func _load() async throws {
+***REMOVED******REMOVED***try await load()
+***REMOVED***
+***REMOVED***
+***REMOVED***public var _loadStatus: LoadStatus {
+***REMOVED******REMOVED***loadStatus
+***REMOVED***
+***REMOVED***
