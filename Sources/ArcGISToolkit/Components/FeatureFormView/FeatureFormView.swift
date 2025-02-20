@@ -180,13 +180,25 @@ public struct FeatureFormView: View {
                                 // Determine the association's title.
                                 let associatedElement = networkSourceMember.displayedElement(for: currentFeatureGlobalID)
                                 if let arcGISFeature = try? await utilityNetwork?.features(for: [associatedElement]).first {
+                                    
                                     let title: String
                                     if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
                                         title = formDefinitionTitle
                                     } else {
                                         title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                                     }
+                                    
+                                    let connection: Association.Connection? = switch networkSourceMember.kind {
+                                    case .junctionEdgeObjectConnectivityMidspan:
+                                            .middle
+                                    case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+                                        currentFeatureGlobalID == networkSourceMember.fromElement.globalID ? .left : .right
+                                    default:
+                                        nil
+                                    }
+                                    
                                     let newAssociation = Association(
+                                        connectionPoint: connection,
                                         feature: arcGISFeature,
                                         description: nil,
                                         fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
