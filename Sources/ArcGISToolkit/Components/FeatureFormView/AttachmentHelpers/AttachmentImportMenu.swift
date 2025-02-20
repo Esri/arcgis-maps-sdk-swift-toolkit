@@ -52,7 +52,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum attachment size limit.
 ***REMOVED***let attachmentUploadSizeLimit = Measurement(
-***REMOVED******REMOVED***value: 50,
+***REMOVED******REMOVED***value: 999,
 ***REMOVED******REMOVED***unit: UnitInformationStorage.megabytes
 ***REMOVED***)
 ***REMOVED***
@@ -73,9 +73,11 @@ struct AttachmentImportMenu: View {
 ***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***cameraRequester.request {
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
-***REMOVED******REMOVED*** onAccessDenied: { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await cameraRequester.request {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
+***REMOVED******REMOVED******REMOVED*** onAccessDenied: { ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "camera")

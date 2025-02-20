@@ -1477,9 +1477,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(longTextTextInputPreview.exists)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_8_1() throws {
-***REMOVED******REMOVED***try XCTSkipIf(true, "KNOWN ISSUE -- Apollo 1058")
-***REMOVED******REMOVED***
+***REMOVED***func testCase_8_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let attachmentElementTitle = app.staticTexts["Attachments"]
 ***REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]

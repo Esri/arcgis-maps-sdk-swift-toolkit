@@ -87,7 +87,7 @@ internal import os
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await attachment.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***try await attachment._load()
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription)")
 ***REMOVED******REMOVED***
@@ -114,7 +114,7 @@ internal import os
 ***REMOVED******REMOVED***/ Synchronizes published properties with attachment metadata.
 ***REMOVED***func sync() {
 ***REMOVED******REMOVED***name = attachment.name
-***REMOVED******REMOVED***loadStatus = attachment.loadStatus
+***REMOVED******REMOVED***loadStatus = attachment._loadStatus
 ***REMOVED***
 ***REMOVED***
 
