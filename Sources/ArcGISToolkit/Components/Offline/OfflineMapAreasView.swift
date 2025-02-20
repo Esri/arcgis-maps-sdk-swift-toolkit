@@ -97,10 +97,14 @@ public struct OfflineMapAreasView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text.done
+                    }
                 }
             }
-            .navigationTitle("Map Areas")
+            .navigationTitle(mapAreas)
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -149,7 +153,7 @@ public struct OfflineMapAreasView: View {
                         OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
                     }
                     Section {
-                        Button("Add Offline Area") {
+                        Button(addOfflineArea) {
                             isAddingOnDemandArea = true
                         }
                     }
@@ -168,12 +172,12 @@ public struct OfflineMapAreasView: View {
             }
         }
     }
-
+    
     @ViewBuilder private var refreshPreplannedButton: some View {
         Button {
             Task { await mapViewModel.loadModels() }
         } label: {
-            Label("Refresh", systemImage: "arrow.clockwise")
+            Label(refresh, systemImage: "arrow.clockwise")
         }
         .font(.subheadline)
         .fontWeight(.semibold)
@@ -182,16 +186,16 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var noInternetFooter: some View {
-        Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
+        Label(noInternetFooterErrorMessage, systemImage: "wifi.exclamationmark")
             .font(.caption)
             .foregroundStyle(.secondary)
     }
     
     @ViewBuilder private var noInternetNoAreasView: some View {
         Backported.ContentUnavailableView(
-            "No Internet Connection",
+            LocalizedStringKey.init(.noInternetConnectionErrorMessage),
             systemImage: "wifi.exclamationmark",
-            description: "Could not retrieve map areas for this map."
+            description: noMapAreasErrorMessage
         ) {
             refreshPreplannedButton
         }
@@ -199,9 +203,9 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
         Backported.ContentUnavailableView(
-            "No Map Areas",
+            LocalizedStringKey(noMapAreas),
             systemImage: "arrow.down.circle",
-            description: "There are no offline map areas for this map."
+            description: noOfflineMapAreasMessage
         ) {
             refreshPreplannedButton
         }
@@ -209,9 +213,9 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var preplannedErrorView: some View {
         Backported.ContentUnavailableView(
-            "Error Fetching Map Areas",
+            LocalizedStringKey.init(errorFetchingAreas),
             systemImage: "exclamationmark.triangle",
-            description: "An error occurred while fetching map areas."
+            description: errorFetchingAreasMessage
         ) {
             refreshPreplannedButton
         }
@@ -219,14 +223,14 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
         Backported.ContentUnavailableView(
-            "No Map Areas",
+            LocalizedStringKey.init(noMapAreas),
             systemImage: "arrow.down.circle",
-            description: "There are no offline map areas for this map. Tap the button below to get started."
+            description: emptyOnDemandMessage
         ) {
             Button {
                 isAddingOnDemandArea = true
             } label: {
-                Label("Add Offline Area", systemImage: "plus")
+                Label(addOfflineArea, systemImage: "plus")
             }
             .font(.subheadline)
             .fontWeight(.semibold)
@@ -237,9 +241,9 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var offlineDisabledView: some View {
         Backported.ContentUnavailableView(
-            "Offline Disabled",
+            LocalizedStringKey.init(offlineDisabled),
             systemImage: "exclamationmark.triangle",
-            description: "Please ensure the map is offline enabled."
+            description: offlineDisabledMessage
         )
     }
 }
@@ -324,5 +328,115 @@ enum Backported {
                 .padding()
             }
         }
+    }
+}
+
+private extension OfflineMapAreasView {
+    /// A title for the `OfflineMapAreasView`.
+    var mapAreas: String {
+        .init(
+            localized: "Map Areas",
+            bundle: .toolkitModule,
+            comment: "A title for the offline map areas view."
+        )
+    }
+    
+    /// A label for a button to add an offline map area.
+    var addOfflineArea: String {
+        .init(
+            localized: "Add Offline Area",
+            bundle: .toolkitModule,
+            comment: "A label for a button to add an offline area."
+        )
+    }
+    
+    /// A localized string for the word "Refresh".
+    var refresh: String {
+        .init(
+            localized: "Refresh",
+            bundle: .toolkitModule,
+            comment: "A label for a button to refresh map area content."
+        )
+    }
+    
+    /// An error message for the footer view explaining that there is no internet connection so only downloaded ares are shown.
+    var noInternetFooterErrorMessage: String {
+        .init(
+            localized: "No internet connection. Showing downloaded areas only.",
+            bundle: .toolkitModule,
+            comment: "An error message explaining that there is no internet connection and only downloaded areas are shown."
+        )
+    }
+    
+    /// An error message explaining that map areas could not be retrieved for this map.
+    var noMapAreasErrorMessage: String {
+        .init(
+            localized: "Could not retrieve map areas for this map.",
+            bundle: .toolkitModule,
+            comment: "An error message explaining that map areas could not be retrieved for this map."
+        )
+    }
+    
+    /// A message explaining that there are no offline map areas for this map.
+    var noOfflineMapAreasMessage: String {
+        .init(
+            localized: "There are no offline map areas for this map.",
+            bundle: .toolkitModule,
+            comment: "A message explaining that there are no offline map areas for this map."
+        )
+    }
+    
+    /// A label indicating that an error occured while fetching map areas.
+    var errorFetchingAreas: String {
+        .init(
+            localized: "Error Fetching Map Areas",
+            bundle: .toolkitModule,
+            comment: "A label indicating that an error occured while fetching map areas."
+        )
+    }
+    
+    /// An error message for when fetching map areas fails.
+    var errorFetchingAreasMessage: String {
+        .init(
+            localized: "An error occurred while fetching map areas.",
+            bundle: .toolkitModule,
+            comment: "An error message for when fetching map areas fails."
+        )
+    }
+    
+    /// A label indicating that there are no map areas.
+    var noMapAreas: String {
+        .init(
+            localized: "No Map Areas",
+            bundle: .toolkitModule,
+            comment: "A label indicating that there are no map areas."
+        )
+    }
+    
+    /// A message explaining that there are no offline map areas for this map and to tap the button below to add a map area.
+    var emptyOnDemandMessage: String {
+        .init(
+            localized: "There are no offline map areas for this map. Tap the button below to get started.",
+            bundle: .toolkitModule,
+            comment: "A message explaining that there are no offline map areas for this map and to tap the button below to add a map area."
+        )
+    }
+    
+    /// A label indicating that the map is offline disabled.
+    var offlineDisabled: String {
+        .init(
+            localized: "Offline Disabled",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the map is offline disabled."
+        )
+    }
+    
+    /// A message instructing to ensure that the map is offline enabled.
+    var offlineDisabledMessage: String {
+        .init(
+            localized: "Please ensure the map is offline enabled.",
+            bundle: .toolkitModule,
+            comment: "A message instructing to ensure that the map is offline enabled."
+        )
     }
 }
