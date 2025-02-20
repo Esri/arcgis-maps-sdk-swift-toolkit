@@ -198,8 +198,8 @@ public struct FeatureFormView: View {
                                     }
                                     
                                     let newAssociation = Association(
-                                        connectionPoint: connection,
                                         feature: arcGISFeature,
+                                        connectionPoint: connection,
                                         description: nil,
                                         fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
                                         name: title,
