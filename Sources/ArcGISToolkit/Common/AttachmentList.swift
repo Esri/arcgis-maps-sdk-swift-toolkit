@@ -50,7 +50,7 @@ struct AttachmentRow: View  {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .onTapGesture {
-                if attachmentModel.attachment.loadStatus == .loaded {
+                if attachmentModel.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
                 }

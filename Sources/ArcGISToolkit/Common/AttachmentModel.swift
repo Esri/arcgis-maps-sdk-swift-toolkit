@@ -87,7 +87,7 @@ internal import os
         Task {
             loadStatus = .loading
             do {
-                try await attachment.load()
+                try await attachment._load()
             } catch {
                 Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription)")
             }
@@ -114,7 +114,7 @@ internal import os
     /// Synchronizes published properties with attachment metadata.
     func sync() {
         name = attachment.name
-        loadStatus = attachment.loadStatus
+        loadStatus = attachment._loadStatus
     }
 }
 
