@@ -25,4 +25,12 @@ extension PopupAttachment: FeatureAttachment {
     public var measuredSize: Measurement<UnitInformationStorage> {
         Measurement(value: Double(size), unit: .bytes)
     }
+    
+    public func _load() async throws {
+        try await load()
+    }
+    
+    public var _loadStatus: LoadStatus {
+        loadStatus
+    }
 }
