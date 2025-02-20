@@ -97,10 +97,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") { dismiss() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.done
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Map Areas")
+***REMOVED******REMOVED******REMOVED***.navigationTitle(mapAreas)
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
@@ -149,7 +153,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Add Offline Area") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(addOfflineArea) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -168,12 +172,12 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***@ViewBuilder private var refreshPreplannedButton: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***Task { await mapViewModel.loadModels() ***REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label("Refresh", systemImage: "arrow.clockwise")
+***REMOVED******REMOVED******REMOVED***Label(refresh, systemImage: "arrow.clockwise")
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED***.fontWeight(.semibold)
@@ -182,16 +186,16 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var noInternetFooter: some View {
-***REMOVED******REMOVED***Label("No internet connection. Showing downloaded areas only.", systemImage: "wifi.exclamationmark")
+***REMOVED******REMOVED***Label(noInternetFooterErrorMessage, systemImage: "wifi.exclamationmark")
 ***REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var noInternetNoAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***"No Internet Connection",
+***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(.noInternetConnectionErrorMessage),
 ***REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
-***REMOVED******REMOVED******REMOVED***description: "Could not retrieve map areas for this map."
+***REMOVED******REMOVED******REMOVED***description: noMapAreasErrorMessage
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***refreshPreplannedButton
 ***REMOVED***
@@ -199,9 +203,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***"No Map Areas",
+***REMOVED******REMOVED******REMOVED***LocalizedStringKey(noMapAreas),
 ***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
-***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map."
+***REMOVED******REMOVED******REMOVED***description: noOfflineMapAreasMessage
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***refreshPreplannedButton
 ***REMOVED***
@@ -209,9 +213,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var preplannedErrorView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***"Error Fetching Map Areas",
+***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(errorFetchingAreas),
 ***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
-***REMOVED******REMOVED******REMOVED***description: "An error occurred while fetching map areas."
+***REMOVED******REMOVED******REMOVED***description: errorFetchingAreasMessage
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***refreshPreplannedButton
 ***REMOVED***
@@ -219,14 +223,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***"No Map Areas",
+***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(noMapAreas),
 ***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
-***REMOVED******REMOVED******REMOVED***description: "There are no offline map areas for this map. Tap the button below to get started."
+***REMOVED******REMOVED******REMOVED***description: emptyOnDemandMessage
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("Add Offline Area", systemImage: "plus")
+***REMOVED******REMOVED******REMOVED******REMOVED***Label(addOfflineArea, systemImage: "plus")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
@@ -237,9 +241,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var offlineDisabledView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***"Offline Disabled",
+***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(offlineDisabled),
 ***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
-***REMOVED******REMOVED******REMOVED***description: "Please ensure the map is offline enabled."
+***REMOVED******REMOVED******REMOVED***description: offlineDisabledMessage
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -324,5 +328,115 @@ enum Backported {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension OfflineMapAreasView {
+***REMOVED******REMOVED***/ A title for the `OfflineMapAreasView`.
+***REMOVED***var mapAreas: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Map Areas",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A title for the offline map areas view."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to add an offline map area.
+***REMOVED***var addOfflineArea: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Add Offline Area",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to add an offline area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Refresh".
+***REMOVED***var refresh: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Refresh",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to refresh map area content."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An error message for the footer view explaining that there is no internet connection so only downloaded ares are shown.
+***REMOVED***var noInternetFooterErrorMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "No internet connection. Showing downloaded areas only.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that there is no internet connection and only downloaded areas are shown."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An error message explaining that map areas could not be retrieved for this map.
+***REMOVED***var noMapAreasErrorMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Could not retrieve map areas for this map.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that map areas could not be retrieved for this map."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message explaining that there are no offline map areas for this map.
+***REMOVED***var noOfflineMapAreasMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "There are no offline map areas for this map.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no offline map areas for this map."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label indicating that an error occured while fetching map areas.
+***REMOVED***var errorFetchingAreas: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Error Fetching Map Areas",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that an error occured while fetching map areas."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An error message for when fetching map areas fails.
+***REMOVED***var errorFetchingAreasMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "An error occurred while fetching map areas.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message for when fetching map areas fails."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label indicating that there are no map areas.
+***REMOVED***var noMapAreas: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "No Map Areas",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that there are no map areas."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message explaining that there are no offline map areas for this map and to tap the button below to add a map area.
+***REMOVED***var emptyOnDemandMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "There are no offline map areas for this map. Tap the button below to get started.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no offline map areas for this map and to tap the button below to add a map area."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label indicating that the map is offline disabled.
+***REMOVED***var offlineDisabled: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Offline Disabled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that the map is offline disabled."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message instructing to ensure that the map is offline enabled.
+***REMOVED***var offlineDisabledMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Please ensure the map is offline enabled.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A message instructing to ensure that the map is offline enabled."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
