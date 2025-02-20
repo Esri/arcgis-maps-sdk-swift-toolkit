@@ -178,7 +178,17 @@ public struct FeatureFormView: View {
                                     title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                                 }
                                 
+                                let connection: UtilityNetworkAssociationFormElementView.Association.Connection? = switch networkSourceMember.kind {
+                                case .junctionEdgeObjectConnectivityMidspan:
+                                        .middle
+                                case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+                                    currentFeatureGlobalID == networkSourceMember.fromElement.globalID ? .left : .right
+                                default:
+                                    nil
+                                }
+                                
                                 let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                    connectionPoint: connection,
                                     description: nil,
                                     fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
                                     name: title,
