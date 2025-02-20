@@ -53,6 +53,16 @@ struct UtilityNetworkAssociationFormElementView: View {
 extension UtilityNetworkAssociationFormElementView {
     struct Association: Identifiable {
         /// <#Description#>
+        enum Connection {
+            case left
+            case middle
+            case right
+        }
+        
+        /// <#Description#>
+        let connectionPoint: Connection?
+        
+        /// <#Description#>
         let description: String?
         
         /// <#Description#>
@@ -73,6 +83,18 @@ extension UtilityNetworkAssociationFormElementView {
         
         var body: some View {
             HStack {
+                if let connection = association.connectionPoint {
+                    let image: String = switch connection {
+                    case .left:
+                        "connection-end-left"
+                    case .middle:
+                        "connection-middle"
+                    case .right:
+                        "connection-end-right"
+                    }
+                    Image(image, bundle: .toolkitModule)
+                }
+                
                 VStack(alignment: .leading) {
                     Text(association.name)
                         .lineLimit(1)
