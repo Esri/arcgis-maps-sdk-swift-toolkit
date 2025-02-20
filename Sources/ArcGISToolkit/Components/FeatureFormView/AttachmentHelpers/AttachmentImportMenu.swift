@@ -52,7 +52,7 @@ struct AttachmentImportMenu: View {
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
-        value: 50,
+        value: 999,
         unit: UnitInformationStorage.megabytes
     )
     
@@ -73,9 +73,11 @@ struct AttachmentImportMenu: View {
     @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
-            cameraRequester.request {
-                cameraIsShowing = true
-            } onAccessDenied: { }
+            Task {
+                await cameraRequester.request {
+                    cameraIsShowing = true
+                } onAccessDenied: { }
+            }
         } label: {
             Text(cameraButtonLabel)
             Image(systemName: "camera")
