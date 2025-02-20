@@ -65,6 +65,18 @@ public protocol FeatureAttachment: Loadable {
 ***REMOVED******REMOVED***/ - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
 ***REMOVED***func makeThumbnail(width: Int, height: Int) async throws -> UIImage
 ***REMOVED***
+***REMOVED******REMOVED***/ Loads the metadata for the instance asynchronously.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ A workaround providing conforming types an opportunity to call their load method directly.
+***REMOVED******REMOVED***/ - Bug: Apollo #1058
+***REMOVED***func _load() async throws
+***REMOVED***
+***REMOVED******REMOVED***/ The load status.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ A workaround providing conforming types an opportunity to access their load status directly.
+***REMOVED******REMOVED***/ - Bug: Apollo #1058
+***REMOVED***var _loadStatus: LoadStatus { get ***REMOVED***
+***REMOVED***
 
 extension FeatureAttachmentKind {
 ***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
