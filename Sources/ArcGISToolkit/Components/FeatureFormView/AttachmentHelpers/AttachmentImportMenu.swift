@@ -52,7 +52,7 @@ struct AttachmentImportMenu: View {
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
-        value: 50,
+        value: 999,
         unit: UnitInformationStorage.megabytes
     )
     
