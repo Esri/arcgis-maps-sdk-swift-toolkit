@@ -42,12 +42,30 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized string for the word "OK".
-***REMOVED***static var ok: Self {
+***REMOVED******REMOVED***/ A localized string for the word "Downloaded".
+***REMOVED***static var downloaded: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "OK",
+***REMOVED******REMOVED******REMOVED***localized: "Downloaded",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for "Download failed".
+***REMOVED***static var downloadFailed: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Download failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area failed to download."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Downloading".
+***REMOVED***static var downloading: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Downloading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloading."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -60,48 +78,12 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error message explaining that there is no internet connection.
-***REMOVED***static var noInternetConnectionErrorMessage: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No Internet Connection",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that there is no internet connection."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Field".
 ***REMOVED***static var field: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Field",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A field in a set of data contained in a popup."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A localized string for the phrase "No Value".
-***REMOVED***static var noValue: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No Value",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no value has been set for a form field."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A label for a button to take the user to a contextually inferred settings page.
-***REMOVED***static var settings: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Settings",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button to take the user to a contextually inferred settings page."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A localized string for the word "Value".
-***REMOVED***static var value: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Value",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A value in a set of data contained in a popup."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -123,30 +105,48 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized string for the word "Downloading".
-***REMOVED***static var downloading: Self {
+***REMOVED******REMOVED***/ An error message explaining that there is no internet connection.
+***REMOVED***static var noInternetConnectionErrorMessage: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Downloading",
+***REMOVED******REMOVED******REMOVED***localized: "No Internet Connection",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloading."
+***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that there is no internet connection."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized string for the word "Downloaded".
-***REMOVED***static var downloaded: Self {
+***REMOVED******REMOVED***/ A localized string for the phrase "No Value".
+***REMOVED***static var noValue: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Downloaded",
+***REMOVED******REMOVED******REMOVED***localized: "No Value",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloaded."
+***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no value has been set for a form field."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized string for "Download failed".
-***REMOVED***static var downloadFailed: Self {
+***REMOVED******REMOVED***/ A localized string for the word "OK".
+***REMOVED***static var ok: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Download failed",
+***REMOVED******REMOVED******REMOVED***localized: "OK",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area failed to download."
+***REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to take the user to a contextually inferred settings page.
+***REMOVED***static var settings: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Settings",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to take the user to a contextually inferred settings page."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Value".
+***REMOVED***static var value: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Value",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A value in a set of data contained in a popup."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
