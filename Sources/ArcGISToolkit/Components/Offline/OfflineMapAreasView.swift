@@ -386,12 +386,12 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A label indicating that an error occured while fetching map areas.
+    /// A label indicating that an error occurred while fetching map areas.
     var errorFetchingAreas: String {
         .init(
             localized: "Error Fetching Map Areas",
             bundle: .toolkitModule,
-            comment: "A label indicating that an error occured while fetching map areas."
+            comment: "A label indicating that an error occurred while fetching map areas."
         )
     }
     
