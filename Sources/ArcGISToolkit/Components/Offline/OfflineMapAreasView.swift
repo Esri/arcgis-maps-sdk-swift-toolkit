@@ -153,7 +153,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(addOfflineArea) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(addMapArea) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -230,7 +230,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label(addOfflineArea, systemImage: "plus")
+***REMOVED******REMOVED******REMOVED******REMOVED***Label(addMapArea, systemImage: "plus")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
@@ -341,12 +341,12 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label for a button to add an offline map area.
-***REMOVED***var addOfflineArea: String {
+***REMOVED******REMOVED***/ A label for a button to add a map area.
+***REMOVED***var addMapArea: String {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Add Offline Area",
+***REMOVED******REMOVED******REMOVED***localized: "Add Map Area",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button to add an offline area."
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to add a map area."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -377,12 +377,12 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message explaining that there are no offline map areas for this map.
+***REMOVED******REMOVED***/ A message explaining that there are no map areas for this map.
 ***REMOVED***var noOfflineMapAreasMessage: String {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "There are no offline map areas for this map.",
+***REMOVED******REMOVED******REMOVED***localized: "There are no map areas for this map.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no offline map areas for this map."
+***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no map areas for this map."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -413,12 +413,12 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message explaining that there are no offline map areas for this map and to tap the button below to add a map area.
+***REMOVED******REMOVED***/ A message explaining that there are no map areas for this map and to tap the button below to add a map area.
 ***REMOVED***var emptyOnDemandMessage: String {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "There are no offline map areas for this map. Tap the button below to get started.",
+***REMOVED******REMOVED******REMOVED***localized: "There are no map areas for this map. Tap the button below to get started.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no offline map areas for this map and to tap the button below to add a map area."
+***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no map areas for this map and to tap the button below to add a map area."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -431,12 +431,12 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message instructing to ensure that the map is offline enabled.
+***REMOVED******REMOVED***/ A message indicating that the map is not offline enabled.
 ***REMOVED***var offlineDisabledMessage: String {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Please ensure the map is offline enabled.",
+***REMOVED******REMOVED******REMOVED***localized: "The map is not enabled for offline use.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A message instructing to ensure that the map is offline enabled."
+***REMOVED******REMOVED******REMOVED***comment: "A message indicating that the map is not offline enabled."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
