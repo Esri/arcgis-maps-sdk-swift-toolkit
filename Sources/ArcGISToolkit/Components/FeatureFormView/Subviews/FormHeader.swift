@@ -14,14 +14,54 @@
 
 import SwiftUI
 
-/// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
+/// A view shown at the top of a form.
 struct FormHeader: View {
     /// The title defined for the form.
     let title: String
     
     var body: some View {
-        Text(title)
-            .font(.title)
-            .fontWeight(.bold)
+        HStack {
+            Button {
+                
+            } label: {
+                Text.discard
+            }
+//            .opacity(<#T##opacity: Double##Double#>)
+            
+            Spacer()
+            
+            Text(title)
+                .bold()
+            
+            Spacer()
+            
+            Button {
+                
+            } label: {
+                Text.finish
+            }
+//            .opacity(<#T##opacity: Double##Double#>)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+private extension Text {
+    /// A label for a button to discard edits to the feature form.
+    static var discard: Self {
+        .init(
+            "Discard",
+            bundle: .toolkitModule,
+            comment: "A label for a button to discard edits to the feature form."
+        )
+    }
+    
+    /// A label for a button to finish editing the feature form.
+    static var finish: Self {
+        .init(
+            "Finish",
+            bundle: .toolkitModule,
+            comment: "A label for a button to finish editing the feature form."
+        )
     }
 }
