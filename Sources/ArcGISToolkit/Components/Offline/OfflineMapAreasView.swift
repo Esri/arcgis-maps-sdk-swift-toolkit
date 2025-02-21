@@ -153,7 +153,7 @@ public struct OfflineMapAreasView: View {
                         OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
                     }
                     Section {
-                        Button(addOfflineArea) {
+                        Button(addMapArea) {
                             isAddingOnDemandArea = true
                         }
                     }
@@ -230,7 +230,7 @@ public struct OfflineMapAreasView: View {
             Button {
                 isAddingOnDemandArea = true
             } label: {
-                Label(addOfflineArea, systemImage: "plus")
+                Label(addMapArea, systemImage: "plus")
             }
             .font(.subheadline)
             .fontWeight(.semibold)
@@ -341,12 +341,12 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A label for a button to add an offline map area.
-    var addOfflineArea: String {
+    /// A label for a button to add a map area.
+    var addMapArea: String {
         .init(
-            localized: "Add Offline Area",
+            localized: "Add Map Area",
             bundle: .toolkitModule,
-            comment: "A label for a button to add an offline area."
+            comment: "A label for a button to add a map area."
         )
     }
     
@@ -377,12 +377,12 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A message explaining that there are no offline map areas for this map.
+    /// A message explaining that there are no map areas for this map.
     var noOfflineMapAreasMessage: String {
         .init(
-            localized: "There are no offline map areas for this map.",
+            localized: "There are no map areas for this map.",
             bundle: .toolkitModule,
-            comment: "A message explaining that there are no offline map areas for this map."
+            comment: "A message explaining that there are no map areas for this map."
         )
     }
     
@@ -413,12 +413,12 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A message explaining that there are no offline map areas for this map and to tap the button below to add a map area.
+    /// A message explaining that there are no map areas for this map and to tap the button below to add a map area.
     var emptyOnDemandMessage: String {
         .init(
-            localized: "There are no offline map areas for this map. Tap the button below to get started.",
+            localized: "There are no map areas for this map. Tap the button below to get started.",
             bundle: .toolkitModule,
-            comment: "A message explaining that there are no offline map areas for this map and to tap the button below to add a map area."
+            comment: "A message explaining that there are no map areas for this map and to tap the button below to add a map area."
         )
     }
     
@@ -431,12 +431,12 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A message instructing to ensure that the map is offline enabled.
+    /// A message indicating that the map is not offline enabled.
     var offlineDisabledMessage: String {
         .init(
-            localized: "Please ensure the map is offline enabled.",
+            localized: "The map is not enabled for offline use.",
             bundle: .toolkitModule,
-            comment: "A message instructing to ensure that the map is offline enabled."
+            comment: "A message indicating that the map is not offline enabled."
         )
     }
 }
