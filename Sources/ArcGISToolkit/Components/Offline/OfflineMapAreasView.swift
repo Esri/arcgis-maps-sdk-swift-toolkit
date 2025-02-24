@@ -97,10 +97,8 @@ public struct OfflineMapAreasView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button {
+                    Button.done {
                         dismiss()
-                    } label: {
-                        Text.done
                     }
                 }
             }

@@ -65,10 +65,8 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button {
+                Button.done {
                     dismiss()
-                } label: {
-                    Text.done
                 }
             }
         }
