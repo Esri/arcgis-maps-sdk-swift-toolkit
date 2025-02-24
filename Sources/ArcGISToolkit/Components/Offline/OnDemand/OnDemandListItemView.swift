@@ -119,7 +119,6 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 
 private extension String {
-***REMOVED******REMOVED***/ A localized string for the word "Cancelled".
 ***REMOVED***static var cancelled: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Cancelled",

@@ -410,7 +410,6 @@ private extension UIImage {
 ***REMOVED***
 
 private extension OnDemandConfigurationView {
-***REMOVED******REMOVED***/ A title for the on demand configuration view.
 ***REMOVED***var selectArea: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Select Area",
@@ -419,7 +418,6 @@ private extension OnDemandConfigurationView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message explaining that the online map failed to load.
 ***REMOVED***var failedToLoadMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Online Map Failed to Load",
@@ -428,7 +426,6 @@ private extension OnDemandConfigurationView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message explaining that a map area cannot be downloaded at this time.
 ***REMOVED***var cannotDownloadMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "A map area cannot be downloaded at this time.",
@@ -439,7 +436,6 @@ private extension OnDemandConfigurationView {
 ***REMOVED***
 
 private extension RenameButton {
-***REMOVED******REMOVED***/ An instruction to enter a name.
 ***REMOVED***var enterName: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Enter a name",
@@ -448,7 +444,6 @@ private extension RenameButton {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An instruction to enter an area name.
 ***REMOVED***var enterAreaName: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Enter area name",

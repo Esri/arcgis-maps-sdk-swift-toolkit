@@ -427,7 +427,6 @@ struct OnDemandMapAreaConfiguration {
 ***REMOVED***
 
 private extension String {
-***REMOVED******REMOVED***/ A localized string for the word "Unknown".
 ***REMOVED***static var unknown: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Unknown",

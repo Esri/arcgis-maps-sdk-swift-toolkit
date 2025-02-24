@@ -203,7 +203,6 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 
 private extension String {
-***REMOVED******REMOVED***/ A localized string for the word "Area".
 ***REMOVED***static var area: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Area",

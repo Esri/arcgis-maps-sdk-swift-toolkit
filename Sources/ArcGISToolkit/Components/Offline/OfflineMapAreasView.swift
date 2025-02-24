@@ -332,7 +332,6 @@ enum Backported {
 ***REMOVED***
 
 private extension OfflineMapAreasView {
-***REMOVED******REMOVED***/ A title for the `OfflineMapAreasView`.
 ***REMOVED***var mapAreas: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Map Areas",
@@ -341,7 +340,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label for a button to add a map area.
 ***REMOVED***var addMapArea: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Add Map Area",
@@ -350,7 +348,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized string for the word "Refresh".
 ***REMOVED***var refresh: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Refresh",
@@ -359,7 +356,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error message for the footer view explaining that there is no internet connection so only downloaded ares are shown.
 ***REMOVED***var noInternetFooterErrorMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "No internet connection. Showing downloaded areas only.",
@@ -368,7 +364,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error message explaining that map areas could not be retrieved for this map.
 ***REMOVED***var noMapAreasErrorMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Could not retrieve map areas for this map.",
@@ -377,7 +372,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message explaining that there are no map areas for this map.
 ***REMOVED***var noOfflineMapAreasMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "There are no map areas for this map.",
@@ -386,7 +380,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label indicating that an error occurred while fetching map areas.
 ***REMOVED***var errorFetchingAreas: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Error Fetching Map Areas",
@@ -395,7 +388,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error message for when fetching map areas fails.
 ***REMOVED***var errorFetchingAreasMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "An error occurred while fetching map areas.",
@@ -404,7 +396,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label indicating that there are no map areas.
 ***REMOVED***var noMapAreas: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "No Map Areas",
@@ -413,7 +404,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message explaining that there are no map areas for this map and to tap the button below to add a map area.
 ***REMOVED***var emptyOnDemandMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "There are no map areas for this map. Tap the button below to get started.",
@@ -422,7 +412,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label indicating that the map is offline disabled.
 ***REMOVED***var offlineDisabled: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Offline Disabled",
@@ -431,7 +420,6 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message indicating that the map is not offline enabled.
 ***REMOVED***var offlineDisabledMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "The map is not enabled for offline use.",

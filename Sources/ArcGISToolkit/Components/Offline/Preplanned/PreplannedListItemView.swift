@@ -150,7 +150,6 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 
 private extension String {
-***REMOVED******REMOVED***/ A localized string for the word "Packaging".
 ***REMOVED***static var packaging: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Packaging",
@@ -159,7 +158,6 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized string for "Ready to download".
 ***REMOVED***static var readyToDownload: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Ready to download",
@@ -167,7 +165,7 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is ready to download."
 ***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized string for "Packaging failed".
+***REMOVED***
 ***REMOVED***static var packagingFailed: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Packaging failed",

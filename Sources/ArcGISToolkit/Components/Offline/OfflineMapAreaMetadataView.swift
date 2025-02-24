@@ -163,7 +163,6 @@ private class MockMetadata: OfflineMapAreaMetadata {
 ***REMOVED***
 
 private extension OfflineMapAreaMetadataView {
-***REMOVED******REMOVED***/ A localized string for the word "Description".
 ***REMOVED***var description: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Description",
@@ -172,7 +171,6 @@ private extension OfflineMapAreaMetadataView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label for a button to delete a map area.
 ***REMOVED***var deleteMapArea: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Delete Map Area",
@@ -181,7 +179,6 @@ private extension OfflineMapAreaMetadataView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label for a button to download a map area.
 ***REMOVED***var downloadMapArea: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Download Map Area",
@@ -190,7 +187,6 @@ private extension OfflineMapAreaMetadataView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label for the file size of the map area.
 ***REMOVED***var sizeLabel: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Size: \(model.directorySizeText)",
