@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 
 enum CacheScale: CaseIterable {
     case room, rooms, houseProperty, houses, smallBuilding, building, buildings, street, streets, neighborhood, town, city, cities,
@@ -79,273 +80,273 @@ enum CacheScale: CaseIterable {
         "1:\(Int(scale))"
     }
     
-    var description: String {
+    var description: LocalizedStringResource {
         switch self {
         case .room:
-            room
+                .room
         case .rooms:
-            rooms
+                .rooms
         case .houseProperty:
-            houseProperty
+                .houseProperty
         case .houses:
-            houses
+                .houses
         case .smallBuilding:
-            smallBuilding
+                .smallBuilding
         case .building:
-            building
+                .building
         case .buildings:
-            buildings
+                .buildings
         case .street:
-            street
+                .street
         case .streets:
-            streets
+                .streets
         case .neighborhood:
-            neighborhood
+                .neighborhood
         case .town:
-            town
+                .town
         case .city:
-            city
+                .city
         case .cities:
-            cities
+                .cities
         case .metropolitanArea:
-            metropolitanArea
+                .metropolitanArea
         case .county:
-            county
+                .county
         case .counties:
-            counties
+                .counties
         case .stateProvince:
-            stateProvince
+                .stateProvince
         case .statesProvinces:
-            statesProvinces
+                .statesProvinces
         case .countriesSmall:
-            countriesSmall
+                .countriesSmall
         case .countriesBig:
-            countriesBig
+                .countriesBig
         case .continent:
-            continent
+                .continent
         case .worldSmall:
-            worldSmall
+                .worldSmall
         case .worldBig:
-            worldBig
+                .worldBig
         case .world:
-            world
+                .world
         }
     }
 }
 
-private extension CacheScale {
+private extension LocalizedStringResource {
     /// A localized string for the word "Room".
-    var room: String {
+    static var room: Self {
         .init(
-            localized: "Room",
-            bundle: .toolkitModule,
+            "Room",
+            bundle: .toolkit,
             comment: "Room (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Rooms".
-    var rooms: String {
+    static var rooms: Self {
         .init(
-            localized: "Rooms",
-            bundle: .toolkitModule,
+            "Rooms",
+            bundle: .toolkit,
             comment: "Rooms (Level of Detail)"
         )
     }
     
     /// A localized string for "House Property".
-    var houseProperty: String {
+    static var houseProperty: Self {
         .init(
-            localized: "House Property",
-            bundle: .toolkitModule,
+            "House Property",
+            bundle: .toolkit,
             comment: "House Property (Level of Detail)"
         )
     }
     
     /// A localized string for "Houses".
-    var houses: String {
+    static var houses: Self {
         .init(
-            localized: "Houses",
-            bundle: .toolkitModule,
+            "Houses",
+            bundle: .toolkit,
             comment: "Houses (Level of Detail)"
         )
     }
     
     /// A localized string for "Small Building".
-    var smallBuilding: String {
+    static var smallBuilding: Self {
         .init(
-            localized: "Small Building",
-            bundle: .toolkitModule,
+            "Small Building",
+            bundle: .toolkit,
             comment: "Small Building (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Building".
-    var building: String {
+    static var building: Self {
         .init(
-            localized: "Building",
-            bundle: .toolkitModule,
+            "Building",
+            bundle: .toolkit,
             comment: "Building (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Buildings".
-    var buildings: String {
+    static var buildings: Self {
         .init(
-            localized: "Buildings",
-            bundle: .toolkitModule,
+            "Buildings",
+            bundle: .toolkit,
             comment: "Buildings (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Street".
-    var street: String {
+    static var street: Self {
         .init(
-            localized: "Street",
-            bundle: .toolkitModule,
+            "Street",
+            bundle: .toolkit,
             comment: "Street (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Streets".
-    var streets: String {
+    static var streets: Self {
         .init(
-            localized: "Streets",
-            bundle: .toolkitModule,
+            "Streets",
+            bundle: .toolkit,
             comment: "Streets (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Neighborhood".
-    var neighborhood: String {
+    static var neighborhood: Self {
         .init(
-            localized: "Neighborhood",
-            bundle: .toolkitModule,
+            "Neighborhood",
+            bundle: .toolkit,
             comment: "Neighborhood (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Town".
-    var town: String {
+    static var town: Self {
         .init(
-            localized: "Town",
-            bundle: .toolkitModule,
+            "Town",
+            bundle: .toolkit,
             comment: "Town (Level of Detail)"
         )
     }
     
     /// A localized string for the word "City".
-    var city: String {
+    static var city: Self {
         .init(
-            localized: "City",
-            bundle: .toolkitModule,
+            "City",
+            bundle: .toolkit,
             comment: "City (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Cities".
-    var cities: String {
+    static var cities: Self {
         .init(
-            localized: "Cities",
-            bundle: .toolkitModule,
+            "Cities",
+            bundle: .toolkit,
             comment: "Cities (Level of Detail)"
         )
     }
     
     /// A localized string for "Metropolitan Area".
-    var metropolitanArea: String {
+    static var metropolitanArea: Self {
         .init(
-            localized: "Metropolitan Area",
-            bundle: .toolkitModule,
+            "Metropolitan Area",
+            bundle: .toolkit,
             comment: "Metropolitan Area (Level of Detail)"
         )
     }
     
     /// A localized string for the word "County".
-    var county: String {
+    static var county: Self {
         .init(
-            localized: "County",
-            bundle: .toolkitModule,
+            "County",
+            bundle: .toolkit,
             comment: "County (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Counties".
-    var counties: String {
+    static var counties: Self {
         .init(
-            localized: "Counties",
-            bundle: .toolkitModule,
+            "Counties",
+            bundle: .toolkit,
             comment: "Counties (Level of Detail)"
         )
     }
     
     /// A localized string for "State/Province".
-    var stateProvince: String {
+    static var stateProvince: Self {
         .init(
-            localized: "State/Province",
-            bundle: .toolkitModule,
+            "State/Province",
+            bundle: .toolkit,
             comment: "State/Province (Level of Detail)"
         )
     }
     
     /// A localized string for "States/Provinces".
-    var statesProvinces: String {
+    static var statesProvinces: Self {
         .init(
-            localized: "States/Provinces",
-            bundle: .toolkitModule,
+            "States/Provinces",
+            bundle: .toolkit,
             comment: "States/Provinces (Level of Detail)"
         )
     }
     
     /// A localized string for "Countries (Small)".
-    var countriesSmall: String {
+    static var countriesSmall: Self {
         .init(
-            localized: "Countries (Small)",
-            bundle: .toolkitModule,
+            "Countries (Small)",
+            bundle: .toolkit,
             comment: "Countries (Small) (Level of Detail)"
         )
     }
     
     /// A localized string for "Countries (Big)".
-    var countriesBig: String {
+    static var countriesBig: Self {
         .init(
-            localized: "Countries (Big)",
-            bundle: .toolkitModule,
+            "Countries (Big)",
+            bundle: .toolkit,
             comment: "Countries (Big) (Level of Detail)"
         )
     }
     
     /// A localized string for the word "Continent".
-    var continent: String {
+    static var continent: Self {
         .init(
-            localized: "Continent",
-            bundle: .toolkitModule,
+            "Continent",
+            bundle: .toolkit,
             comment: "Continent (Level of Detail)"
         )
     }
     
     /// A localized string for "World (Small)".
-    var worldSmall: String {
+    static var worldSmall: Self {
         .init(
-            localized: "World (Small)",
-            bundle: .toolkitModule,
+            "World (Small)",
+            bundle: .toolkit,
             comment: "World (Small) (Level of Detail)"
         )
     }
     
     /// A localized string for "World (Big)".
-    var worldBig: String {
+    static var worldBig: Self {
         .init(
-            localized: "World (Big)",
-            bundle: .toolkitModule,
+            "World (Big)",
+            bundle: .toolkit,
             comment: "World (Big) (Level of Detail)"
         )
     }
     
     /// A localized string for the word "World".
-    var world: String {
+    static var world: Self {
         .init(
-            localized: "World",
-            bundle: .toolkitModule,
+            "World",
+            bundle: .toolkit,
             comment: "World (Level of Detail)"
         )
     }

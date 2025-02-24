@@ -105,15 +105,6 @@ extension String {
         )
     }
     
-    /// An error message explaining that there is no internet connection.
-    static var noInternetConnectionErrorMessage: Self {
-        .init(
-            localized: "No Internet Connection",
-            bundle: .toolkitModule,
-            comment: "An error message explaining that there is no internet connection."
-        )
-    }
-    
     /// A localized string for the phrase "No Value".
     static var noValue: Self {
         .init(
