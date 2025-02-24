@@ -112,11 +112,15 @@ struct OnDemandConfigurationView: View {
             VStack {
                 VStack(spacing: 0) {
                     Divider()
-                    Text(panZoomToDefineArea)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .padding(8)
-                        .frame(maxWidth: .infinity)
+                    Text.init(
+                        "Pan and zoom to define the area",
+                        bundle: .toolkitModule,
+                        comment: "A label instructing to pan and zoom the map to define an area."
+                    )
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .padding(8)
+                    .frame(maxWidth: .infinity)
                     Divider()
                     mapView
                         .overlay {
@@ -180,7 +184,11 @@ struct OnDemandConfigurationView: View {
                 Divider()
                 
                 HStack {
-                    Text(levelOfDetail)
+                    Text.init(
+                        "Level of Detail",
+                        bundle: .toolkitModule,
+                        comment: "A label for the level of detail picker view."
+                    )
                     Spacer()
                     Picker(selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
@@ -211,9 +219,13 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Text(download)
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity)
+                        Text.init(
+                            "Download",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to download a map area."
+                        )
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
                     }
                     .controlSize(.large)
                     .buttonStyle(.borderedProminent)
@@ -243,8 +255,12 @@ struct OnDemandConfigurationView: View {
             Button {
                 Task { await loadMap() }
             } label: {
-                Text(tryAgain)
-                    .buttonStyle(.borderless)
+                Text.init(
+                    "Try Again",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to try loading a map again."
+                )
+                .buttonStyle(.borderless)
             }
             .padding()
         }
@@ -296,7 +312,11 @@ private struct RenameButton: View {
             proposedNewTitle = title
             alertIsShowing = true
         } label: {
-            Text(rename)
+            Text.init(
+                "Rename",
+                bundle: .toolkitModule,
+                comment: "A label for a button to rename a map area."
+            )
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
@@ -308,7 +328,11 @@ private struct RenameButton: View {
                 .disabled(!proposedTitleIsValid)
             Button(String.cancel, role: .cancel) {}
         } message: {
-            Text(uniqueNameMessage)
+            Text.init(
+                "The name for the map area must be unique.",
+                bundle: .toolkitModule,
+                comment: "A message explaining that the map area name must be unique."
+            )
         }
         .onChange(proposedNewTitle) {
             proposedTitleIsValid = isValidCheck($0)
@@ -395,33 +419,6 @@ private extension OnDemandConfigurationView {
         )
     }
     
-    /// A label instructing to pan and zoom the map to define an area.
-    var panZoomToDefineArea: String {
-        .init(
-            localized: "Pan and zoom to define the area",
-            bundle: .toolkitModule,
-            comment: "A label instructing to pan and zoom the map to define an area."
-        )
-    }
-    
-    /// A label for the level of detail picker view.
-    var levelOfDetail: String {
-        .init(
-            localized: "Level of Detail",
-            bundle: .toolkitModule,
-            comment: "A label for the level of detail picker view."
-        )
-    }
-    
-    /// A localized string for the word "Download".
-    var download: String {
-        .init(
-            localized: "Download",
-            bundle: .toolkitModule,
-            comment: "A label for a button to download a map area."
-        )
-    }
-    
     /// A message explaining that the online map failed to load.
     var failedToLoadMessage: String {
         .init(
@@ -439,27 +436,9 @@ private extension OnDemandConfigurationView {
             comment: "A message explaining that a map area cannot be downloaded at this time."
         )
     }
-    
-    /// A localized string for the phrase "Try Again".
-    var tryAgain: String {
-        .init(
-            localized: "Try Again",
-            bundle: .toolkitModule,
-            comment: "A label for a button to try loading a map again."
-        )
-    }
 }
 
 private extension RenameButton {
-    /// A localized string for the word "Rename".
-    var rename: String {
-        .init(
-            localized: "Rename",
-            bundle: .toolkitModule,
-            comment: "A label for a button to rename a map area."
-        )
-    }
-    
     /// An instruction to enter a name.
     var enterName: String {
         .init(
@@ -475,15 +454,6 @@ private extension RenameButton {
             localized: "Enter area name",
             bundle: .toolkitModule,
             comment: "An instruction to enter an area name."
-        )
-    }
-    
-    /// A message explaining that the map area name must be unique.
-    var uniqueNameMessage: String {
-        .init(
-            localized: "The name for the map area must be unique.",
-            bundle: .toolkitModule,
-            comment: "A message explaining that the map area name must be unique."
         )
     }
 }
