@@ -427,7 +427,6 @@ struct OnDemandMapAreaConfiguration {
 }
 
 private extension String {
-    /// A localized string for the word "Unknown".
     static var unknown: Self {
         .init(
             localized: "Unknown",

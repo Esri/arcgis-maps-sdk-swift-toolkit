@@ -163,7 +163,6 @@ private class MockMetadata: OfflineMapAreaMetadata {
 }
 
 private extension OfflineMapAreaMetadataView {
-    /// A localized string for the word "Description".
     var description: String {
         .init(
             localized: "Description",
@@ -172,7 +171,6 @@ private extension OfflineMapAreaMetadataView {
         )
     }
     
-    /// A label for a button to delete a map area.
     var deleteMapArea: String {
         .init(
             localized: "Delete Map Area",
@@ -181,7 +179,6 @@ private extension OfflineMapAreaMetadataView {
         )
     }
     
-    /// A label for a button to download a map area.
     var downloadMapArea: String {
         .init(
             localized: "Download Map Area",
@@ -190,7 +187,6 @@ private extension OfflineMapAreaMetadataView {
         )
     }
     
-    /// A label for the file size of the map area.
     var sizeLabel: String {
         .init(
             localized: "Size: \(model.directorySizeText)",

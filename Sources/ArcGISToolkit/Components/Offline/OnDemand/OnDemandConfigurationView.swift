@@ -410,7 +410,6 @@ private extension UIImage {
 }
 
 private extension OnDemandConfigurationView {
-    /// A title for the on demand configuration view.
     var selectArea: String {
         .init(
             localized: "Select Area",
@@ -419,7 +418,6 @@ private extension OnDemandConfigurationView {
         )
     }
     
-    /// A message explaining that the online map failed to load.
     var failedToLoadMessage: String {
         .init(
             localized: "Online Map Failed to Load",
@@ -428,7 +426,6 @@ private extension OnDemandConfigurationView {
         )
     }
     
-    /// A message explaining that a map area cannot be downloaded at this time.
     var cannotDownloadMessage: String {
         .init(
             localized: "A map area cannot be downloaded at this time.",
@@ -439,7 +436,6 @@ private extension OnDemandConfigurationView {
 }
 
 private extension RenameButton {
-    /// An instruction to enter a name.
     var enterName: String {
         .init(
             localized: "Enter a name",
@@ -448,7 +444,6 @@ private extension RenameButton {
         )
     }
     
-    /// An instruction to enter an area name.
     var enterAreaName: String {
         .init(
             localized: "Enter area name",
