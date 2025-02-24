@@ -239,13 +239,13 @@ struct OnDemandConfigurationView: View {
         VStack {
             if hasNoInternetConnection {
                 Backported.ContentUnavailableView(
-                    LocalizedStringKey.init(.noInternetConnectionErrorMessage),
+                    .noInternetConnectionErrorMessage,
                     systemImage: "wifi.exclamationmark",
                     description: cannotDownloadMessage
                 )
             } else {
                 Backported.ContentUnavailableView(
-                    LocalizedStringKey.init(failedToLoadMessage),
+                    failedToLoadMessage,
                     systemImage: "exclamationmark.triangle",
                     description: cannotDownloadMessage
                 )
@@ -416,18 +416,18 @@ private extension OnDemandConfigurationView {
         )
     }
     
-    var failedToLoadMessage: String {
+    var failedToLoadMessage: LocalizedStringResource {
         .init(
-            localized: "Online Map Failed to Load",
-            bundle: .toolkitModule,
+            "Online Map Failed to Load",
+            bundle: .toolkit,
             comment: "A message explaining that the online map failed to load."
         )
     }
     
-    var cannotDownloadMessage: String {
+    var cannotDownloadMessage: LocalizedStringResource {
         .init(
-            localized: "A map area cannot be downloaded at this time.",
-            bundle: .toolkitModule,
+            "A map area cannot be downloaded at this time.",
+            bundle: .toolkit,
             comment: "A message explaining that a map area cannot be downloaded at this time."
         )
     }

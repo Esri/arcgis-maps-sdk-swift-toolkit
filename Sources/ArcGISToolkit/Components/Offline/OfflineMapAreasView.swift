@@ -191,7 +191,7 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var noInternetNoAreasView: some View {
         Backported.ContentUnavailableView(
-            LocalizedStringKey.init(.noInternetConnectionErrorMessage),
+            .noInternetConnectionErrorMessage,
             systemImage: "wifi.exclamationmark",
             description: noMapAreasErrorMessage
         ) {
@@ -201,7 +201,7 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
         Backported.ContentUnavailableView(
-            LocalizedStringKey(noMapAreas),
+            noMapAreas,
             systemImage: "arrow.down.circle",
             description: noOfflineMapAreasMessage
         ) {
@@ -211,7 +211,7 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var preplannedErrorView: some View {
         Backported.ContentUnavailableView(
-            LocalizedStringKey.init(errorFetchingAreas),
+            errorFetchingAreas,
             systemImage: "exclamationmark.triangle",
             description: errorFetchingAreasMessage
         ) {
@@ -221,7 +221,7 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
         Backported.ContentUnavailableView(
-            LocalizedStringKey.init(noMapAreas),
+            noMapAreas,
             systemImage: "arrow.down.circle",
             description: emptyOnDemandMessage
         ) {
@@ -239,7 +239,7 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var offlineDisabledView: some View {
         Backported.ContentUnavailableView(
-            LocalizedStringKey.init(offlineDisabled),
+            offlineDisabled,
             systemImage: "exclamationmark.triangle",
             description: offlineDisabledMessage
         )
@@ -269,15 +269,15 @@ public struct OfflineMapAreasView: View {
 enum Backported {
     /// A content unavailable view that can be used in older operating systems.
     struct ContentUnavailableView<Actions: View>: View {
-        let title: LocalizedStringKey
+        let title: LocalizedStringResource
         let systemImage: String
-        let description: String?
+        let description: LocalizedStringResource?
         let actions: () -> Actions
         
         init(
-            _ title: LocalizedStringKey,
+            _ title: LocalizedStringResource,
             systemImage name: String,
-            description: String? = nil,
+            description: LocalizedStringResource? = nil,
             @ViewBuilder actions: @escaping () -> Actions
         ) {
             self.title = title
@@ -287,9 +287,9 @@ enum Backported {
         }
         
         init(
-            _ title: LocalizedStringKey,
+            _ title: LocalizedStringResource,
             systemImage name: String,
-            description: String? = nil
+            description: LocalizedStringResource? = nil
         ) where Actions == EmptyView {
             self.title = title
             self.systemImage = name
@@ -300,7 +300,7 @@ enum Backported {
         var body: some View {
             if #available(iOS 17, *) {
                 SwiftUI.ContentUnavailableView {
-                    Label(title, systemImage: systemImage)
+                    Label(title.key, systemImage: systemImage)
                 } description: {
                     if let description {
                         Text(description)
@@ -362,66 +362,66 @@ private extension OfflineMapAreasView {
         )
     }
     
-    var noMapAreasErrorMessage: String {
+    var noMapAreasErrorMessage: LocalizedStringResource {
         .init(
-            localized: "Could not retrieve map areas for this map.",
-            bundle: .toolkitModule,
+            "Could not retrieve map areas for this map.",
+            bundle: .toolkit,
             comment: "An error message explaining that map areas could not be retrieved for this map."
         )
     }
     
-    var noOfflineMapAreasMessage: String {
+    var noOfflineMapAreasMessage: LocalizedStringResource {
         .init(
-            localized: "There are no map areas for this map.",
-            bundle: .toolkitModule,
+            "There are no map areas for this map.",
+            bundle: .toolkit,
             comment: "A message explaining that there are no map areas for this map."
         )
     }
     
-    var errorFetchingAreas: String {
+    var errorFetchingAreas: LocalizedStringResource {
         .init(
-            localized: "Error Fetching Map Areas",
-            bundle: .toolkitModule,
+            "Error Fetching Map Areas",
+            bundle: .toolkit,
             comment: "A label indicating that an error occurred while fetching map areas."
         )
     }
     
-    var errorFetchingAreasMessage: String {
+    var errorFetchingAreasMessage: LocalizedStringResource {
         .init(
-            localized: "An error occurred while fetching map areas.",
-            bundle: .toolkitModule,
+            "An error occurred while fetching map areas.",
+            bundle: .toolkit,
             comment: "An error message for when fetching map areas fails."
         )
     }
     
-    var noMapAreas: String {
+    var noMapAreas: LocalizedStringResource {
         .init(
-            localized: "No Map Areas",
-            bundle: .toolkitModule,
+            "No Map Areas",
+            bundle: .toolkit,
             comment: "A label indicating that there are no map areas."
         )
     }
     
-    var emptyOnDemandMessage: String {
+    var emptyOnDemandMessage: LocalizedStringResource {
         .init(
-            localized: "There are no map areas for this map. Tap the button below to get started.",
-            bundle: .toolkitModule,
+            "There are no map areas for this map. Tap the button below to get started.",
+            bundle: .toolkit,
             comment: "A message explaining that there are no map areas for this map and to tap the button below to add a map area."
         )
     }
     
-    var offlineDisabled: String {
+    var offlineDisabled: LocalizedStringResource {
         .init(
-            localized: "Offline Disabled",
-            bundle: .toolkitModule,
+            "Offline Disabled",
+            bundle: .toolkit,
             comment: "A label indicating that the map is offline disabled."
         )
     }
     
-    var offlineDisabledMessage: String {
+    var offlineDisabledMessage: LocalizedStringResource {
         .init(
-            localized: "The map is not enabled for offline use.",
-            bundle: .toolkitModule,
+            "The map is not enabled for offline use.",
+            bundle: .toolkit,
             comment: "A message indicating that the map is not offline enabled."
         )
     }
