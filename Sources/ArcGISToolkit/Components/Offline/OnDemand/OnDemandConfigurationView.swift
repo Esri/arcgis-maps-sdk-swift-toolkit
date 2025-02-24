@@ -79,10 +79,8 @@ struct OnDemandConfigurationView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button {
+                    Button.cancel {
                         dismiss()
-                    } label: {
-                        Text(String.cancel)
                     }
                 }
             }
