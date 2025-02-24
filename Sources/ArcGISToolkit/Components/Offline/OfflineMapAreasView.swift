@@ -332,7 +332,6 @@ enum Backported {
 }
 
 private extension OfflineMapAreasView {
-    /// A title for the `OfflineMapAreasView`.
     var mapAreas: String {
         .init(
             localized: "Map Areas",
@@ -341,7 +340,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A label for a button to add a map area.
     var addMapArea: String {
         .init(
             localized: "Add Map Area",
@@ -350,7 +348,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A localized string for the word "Refresh".
     var refresh: String {
         .init(
             localized: "Refresh",
@@ -359,7 +356,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// An error message for the footer view explaining that there is no internet connection so only downloaded ares are shown.
     var noInternetFooterErrorMessage: String {
         .init(
             localized: "No internet connection. Showing downloaded areas only.",
@@ -368,7 +364,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// An error message explaining that map areas could not be retrieved for this map.
     var noMapAreasErrorMessage: String {
         .init(
             localized: "Could not retrieve map areas for this map.",
@@ -377,7 +372,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A message explaining that there are no map areas for this map.
     var noOfflineMapAreasMessage: String {
         .init(
             localized: "There are no map areas for this map.",
@@ -386,7 +380,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A label indicating that an error occurred while fetching map areas.
     var errorFetchingAreas: String {
         .init(
             localized: "Error Fetching Map Areas",
@@ -395,7 +388,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// An error message for when fetching map areas fails.
     var errorFetchingAreasMessage: String {
         .init(
             localized: "An error occurred while fetching map areas.",
@@ -404,7 +396,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A label indicating that there are no map areas.
     var noMapAreas: String {
         .init(
             localized: "No Map Areas",
@@ -413,7 +404,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A message explaining that there are no map areas for this map and to tap the button below to add a map area.
     var emptyOnDemandMessage: String {
         .init(
             localized: "There are no map areas for this map. Tap the button below to get started.",
@@ -422,7 +412,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A label indicating that the map is offline disabled.
     var offlineDisabled: String {
         .init(
             localized: "Offline Disabled",
@@ -431,7 +420,6 @@ private extension OfflineMapAreasView {
         )
     }
     
-    /// A message indicating that the map is not offline enabled.
     var offlineDisabledMessage: String {
         .init(
             localized: "The map is not enabled for offline use.",

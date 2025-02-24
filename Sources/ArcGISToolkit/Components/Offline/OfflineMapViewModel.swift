@@ -203,7 +203,6 @@ class OfflineMapViewModel: ObservableObject {
 }
 
 private extension String {
-    /// A localized string for the word "Area".
     static var area: Self {
         .init(
             localized: "Area",

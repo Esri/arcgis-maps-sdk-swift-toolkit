@@ -150,7 +150,6 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 }
 
 private extension String {
-    /// A localized string for the word "Packaging".
     static var packaging: Self {
         .init(
             localized: "Packaging",
@@ -159,7 +158,6 @@ private extension String {
         )
     }
     
-    /// A localized string for "Ready to download".
     static var readyToDownload: Self {
         .init(
             localized: "Ready to download",
@@ -167,7 +165,7 @@ private extension String {
             comment: "The status text when a map area is ready to download."
         )
     }
-    /// A localized string for "Packaging failed".
+    
     static var packagingFailed: Self {
         .init(
             localized: "Packaging failed",

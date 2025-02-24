@@ -119,7 +119,6 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 }
 
 private extension String {
-    /// A localized string for the word "Cancelled".
     static var cancelled: Self {
         .init(
             localized: "Cancelled",
