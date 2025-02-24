@@ -105,15 +105,6 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error message explaining that there is no internet connection.
-***REMOVED***static var noInternetConnectionErrorMessage: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No Internet Connection",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that there is no internet connection."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the phrase "No Value".
 ***REMOVED***static var noValue: Self {
 ***REMOVED******REMOVED***.init(

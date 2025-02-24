@@ -13,6 +13,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Foundation
 
 enum CacheScale: CaseIterable {
 ***REMOVED***case room, rooms, houseProperty, houses, smallBuilding, building, buildings, street, streets, neighborhood, town, city, cities,
@@ -79,273 +80,273 @@ enum CacheScale: CaseIterable {
 ***REMOVED******REMOVED***"1:\(Int(scale))"
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var description: String {
+***REMOVED***var description: LocalizedStringResource {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .room:
-***REMOVED******REMOVED******REMOVED***room
+***REMOVED******REMOVED******REMOVED******REMOVED***.room
 ***REMOVED******REMOVED***case .rooms:
-***REMOVED******REMOVED******REMOVED***rooms
+***REMOVED******REMOVED******REMOVED******REMOVED***.rooms
 ***REMOVED******REMOVED***case .houseProperty:
-***REMOVED******REMOVED******REMOVED***houseProperty
+***REMOVED******REMOVED******REMOVED******REMOVED***.houseProperty
 ***REMOVED******REMOVED***case .houses:
-***REMOVED******REMOVED******REMOVED***houses
+***REMOVED******REMOVED******REMOVED******REMOVED***.houses
 ***REMOVED******REMOVED***case .smallBuilding:
-***REMOVED******REMOVED******REMOVED***smallBuilding
+***REMOVED******REMOVED******REMOVED******REMOVED***.smallBuilding
 ***REMOVED******REMOVED***case .building:
-***REMOVED******REMOVED******REMOVED***building
+***REMOVED******REMOVED******REMOVED******REMOVED***.building
 ***REMOVED******REMOVED***case .buildings:
-***REMOVED******REMOVED******REMOVED***buildings
+***REMOVED******REMOVED******REMOVED******REMOVED***.buildings
 ***REMOVED******REMOVED***case .street:
-***REMOVED******REMOVED******REMOVED***street
+***REMOVED******REMOVED******REMOVED******REMOVED***.street
 ***REMOVED******REMOVED***case .streets:
-***REMOVED******REMOVED******REMOVED***streets
+***REMOVED******REMOVED******REMOVED******REMOVED***.streets
 ***REMOVED******REMOVED***case .neighborhood:
-***REMOVED******REMOVED******REMOVED***neighborhood
+***REMOVED******REMOVED******REMOVED******REMOVED***.neighborhood
 ***REMOVED******REMOVED***case .town:
-***REMOVED******REMOVED******REMOVED***town
+***REMOVED******REMOVED******REMOVED******REMOVED***.town
 ***REMOVED******REMOVED***case .city:
-***REMOVED******REMOVED******REMOVED***city
+***REMOVED******REMOVED******REMOVED******REMOVED***.city
 ***REMOVED******REMOVED***case .cities:
-***REMOVED******REMOVED******REMOVED***cities
+***REMOVED******REMOVED******REMOVED******REMOVED***.cities
 ***REMOVED******REMOVED***case .metropolitanArea:
-***REMOVED******REMOVED******REMOVED***metropolitanArea
+***REMOVED******REMOVED******REMOVED******REMOVED***.metropolitanArea
 ***REMOVED******REMOVED***case .county:
-***REMOVED******REMOVED******REMOVED***county
+***REMOVED******REMOVED******REMOVED******REMOVED***.county
 ***REMOVED******REMOVED***case .counties:
-***REMOVED******REMOVED******REMOVED***counties
+***REMOVED******REMOVED******REMOVED******REMOVED***.counties
 ***REMOVED******REMOVED***case .stateProvince:
-***REMOVED******REMOVED******REMOVED***stateProvince
+***REMOVED******REMOVED******REMOVED******REMOVED***.stateProvince
 ***REMOVED******REMOVED***case .statesProvinces:
-***REMOVED******REMOVED******REMOVED***statesProvinces
+***REMOVED******REMOVED******REMOVED******REMOVED***.statesProvinces
 ***REMOVED******REMOVED***case .countriesSmall:
-***REMOVED******REMOVED******REMOVED***countriesSmall
+***REMOVED******REMOVED******REMOVED******REMOVED***.countriesSmall
 ***REMOVED******REMOVED***case .countriesBig:
-***REMOVED******REMOVED******REMOVED***countriesBig
+***REMOVED******REMOVED******REMOVED******REMOVED***.countriesBig
 ***REMOVED******REMOVED***case .continent:
-***REMOVED******REMOVED******REMOVED***continent
+***REMOVED******REMOVED******REMOVED******REMOVED***.continent
 ***REMOVED******REMOVED***case .worldSmall:
-***REMOVED******REMOVED******REMOVED***worldSmall
+***REMOVED******REMOVED******REMOVED******REMOVED***.worldSmall
 ***REMOVED******REMOVED***case .worldBig:
-***REMOVED******REMOVED******REMOVED***worldBig
+***REMOVED******REMOVED******REMOVED******REMOVED***.worldBig
 ***REMOVED******REMOVED***case .world:
-***REMOVED******REMOVED******REMOVED***world
+***REMOVED******REMOVED******REMOVED******REMOVED***.world
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-private extension CacheScale {
+private extension LocalizedStringResource {
 ***REMOVED******REMOVED***/ A localized string for the word "Room".
-***REMOVED***var room: String {
+***REMOVED***static var room: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Room",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Room",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Room (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Rooms".
-***REMOVED***var rooms: String {
+***REMOVED***static var rooms: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Rooms",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Rooms",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Rooms (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "House Property".
-***REMOVED***var houseProperty: String {
+***REMOVED***static var houseProperty: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "House Property",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"House Property",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "House Property (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "Houses".
-***REMOVED***var houses: String {
+***REMOVED***static var houses: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Houses",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Houses",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Houses (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "Small Building".
-***REMOVED***var smallBuilding: String {
+***REMOVED***static var smallBuilding: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Small Building",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Small Building",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Small Building (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Building".
-***REMOVED***var building: String {
+***REMOVED***static var building: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Building",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Building",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Building (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Buildings".
-***REMOVED***var buildings: String {
+***REMOVED***static var buildings: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Buildings",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Buildings",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Buildings (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Street".
-***REMOVED***var street: String {
+***REMOVED***static var street: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Street",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Street",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Street (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Streets".
-***REMOVED***var streets: String {
+***REMOVED***static var streets: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Streets",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Streets",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Streets (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Neighborhood".
-***REMOVED***var neighborhood: String {
+***REMOVED***static var neighborhood: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Neighborhood",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Neighborhood",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Neighborhood (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Town".
-***REMOVED***var town: String {
+***REMOVED***static var town: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Town",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Town",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Town (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "City".
-***REMOVED***var city: String {
+***REMOVED***static var city: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "City",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"City",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "City (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Cities".
-***REMOVED***var cities: String {
+***REMOVED***static var cities: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Cities",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Cities",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Cities (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "Metropolitan Area".
-***REMOVED***var metropolitanArea: String {
+***REMOVED***static var metropolitanArea: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Metropolitan Area",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Metropolitan Area",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Metropolitan Area (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "County".
-***REMOVED***var county: String {
+***REMOVED***static var county: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "County",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"County",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "County (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Counties".
-***REMOVED***var counties: String {
+***REMOVED***static var counties: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Counties",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Counties",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Counties (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "State/Province".
-***REMOVED***var stateProvince: String {
+***REMOVED***static var stateProvince: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "State/Province",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"State/Province",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "State/Province (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "States/Provinces".
-***REMOVED***var statesProvinces: String {
+***REMOVED***static var statesProvinces: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "States/Provinces",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"States/Provinces",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "States/Provinces (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "Countries (Small)".
-***REMOVED***var countriesSmall: String {
+***REMOVED***static var countriesSmall: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Countries (Small)",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Countries (Small)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Countries (Small) (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "Countries (Big)".
-***REMOVED***var countriesBig: String {
+***REMOVED***static var countriesBig: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Countries (Big)",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Countries (Big)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Countries (Big) (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Continent".
-***REMOVED***var continent: String {
+***REMOVED***static var continent: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Continent",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Continent",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "Continent (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "World (Small)".
-***REMOVED***var worldSmall: String {
+***REMOVED***static var worldSmall: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "World (Small)",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"World (Small)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "World (Small) (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for "World (Big)".
-***REMOVED***var worldBig: String {
+***REMOVED***static var worldBig: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "World (Big)",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"World (Big)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "World (Big) (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "World".
-***REMOVED***var world: String {
+***REMOVED***static var world: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "World",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"World",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "World (Level of Detail)"
 ***REMOVED******REMOVED***)
 ***REMOVED***

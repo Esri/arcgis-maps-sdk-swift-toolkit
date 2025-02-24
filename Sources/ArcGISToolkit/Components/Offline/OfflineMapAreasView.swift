@@ -191,7 +191,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var noInternetNoAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(.noInternetConnectionErrorMessage),
+***REMOVED******REMOVED******REMOVED***.noInternetConnectionErrorMessage,
 ***REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
 ***REMOVED******REMOVED******REMOVED***description: noMapAreasErrorMessage
 ***REMOVED******REMOVED***) {
@@ -201,7 +201,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***LocalizedStringKey(noMapAreas),
+***REMOVED******REMOVED******REMOVED***noMapAreas,
 ***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
 ***REMOVED******REMOVED******REMOVED***description: noOfflineMapAreasMessage
 ***REMOVED******REMOVED***) {
@@ -211,7 +211,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var preplannedErrorView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(errorFetchingAreas),
+***REMOVED******REMOVED******REMOVED***errorFetchingAreas,
 ***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
 ***REMOVED******REMOVED******REMOVED***description: errorFetchingAreasMessage
 ***REMOVED******REMOVED***) {
@@ -221,7 +221,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(noMapAreas),
+***REMOVED******REMOVED******REMOVED***noMapAreas,
 ***REMOVED******REMOVED******REMOVED***systemImage: "arrow.down.circle",
 ***REMOVED******REMOVED******REMOVED***description: emptyOnDemandMessage
 ***REMOVED******REMOVED***) {
@@ -239,7 +239,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var offlineDisabledView: some View {
 ***REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(offlineDisabled),
+***REMOVED******REMOVED******REMOVED***offlineDisabled,
 ***REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
 ***REMOVED******REMOVED******REMOVED***description: offlineDisabledMessage
 ***REMOVED******REMOVED***)
@@ -269,15 +269,15 @@ public struct OfflineMapAreasView: View {
 enum Backported {
 ***REMOVED******REMOVED***/ A content unavailable view that can be used in older operating systems.
 ***REMOVED***struct ContentUnavailableView<Actions: View>: View {
-***REMOVED******REMOVED***let title: LocalizedStringKey
+***REMOVED******REMOVED***let title: LocalizedStringResource
 ***REMOVED******REMOVED***let systemImage: String
-***REMOVED******REMOVED***let description: String?
+***REMOVED******REMOVED***let description: LocalizedStringResource?
 ***REMOVED******REMOVED***let actions: () -> Actions
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***_ title: LocalizedStringKey,
+***REMOVED******REMOVED******REMOVED***_ title: LocalizedStringResource,
 ***REMOVED******REMOVED******REMOVED***systemImage name: String,
-***REMOVED******REMOVED******REMOVED***description: String? = nil,
+***REMOVED******REMOVED******REMOVED***description: LocalizedStringResource? = nil,
 ***REMOVED******REMOVED******REMOVED***@ViewBuilder actions: @escaping () -> Actions
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***self.title = title
@@ -287,9 +287,9 @@ enum Backported {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***_ title: LocalizedStringKey,
+***REMOVED******REMOVED******REMOVED***_ title: LocalizedStringResource,
 ***REMOVED******REMOVED******REMOVED***systemImage name: String,
-***REMOVED******REMOVED******REMOVED***description: String? = nil
+***REMOVED******REMOVED******REMOVED***description: LocalizedStringResource? = nil
 ***REMOVED******REMOVED***) where Actions == EmptyView {
 ***REMOVED******REMOVED******REMOVED***self.title = title
 ***REMOVED******REMOVED******REMOVED***self.systemImage = name
@@ -300,7 +300,7 @@ enum Backported {
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(title, systemImage: systemImage)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(title.key, systemImage: systemImage)
 ***REMOVED******REMOVED******REMOVED*** description: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
@@ -362,66 +362,66 @@ private extension OfflineMapAreasView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var noMapAreasErrorMessage: String {
+***REMOVED***var noMapAreasErrorMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Could not retrieve map areas for this map.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Could not retrieve map areas for this map.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that map areas could not be retrieved for this map."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var noOfflineMapAreasMessage: String {
+***REMOVED***var noOfflineMapAreasMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "There are no map areas for this map.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"There are no map areas for this map.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no map areas for this map."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var errorFetchingAreas: String {
+***REMOVED***var errorFetchingAreas: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Error Fetching Map Areas",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Error Fetching Map Areas",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating that an error occurred while fetching map areas."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var errorFetchingAreasMessage: String {
+***REMOVED***var errorFetchingAreasMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "An error occurred while fetching map areas.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"An error occurred while fetching map areas.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message for when fetching map areas fails."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var noMapAreas: String {
+***REMOVED***var noMapAreas: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No Map Areas",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"No Map Areas",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating that there are no map areas."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var emptyOnDemandMessage: String {
+***REMOVED***var emptyOnDemandMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "There are no map areas for this map. Tap the button below to get started.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"There are no map areas for this map. Tap the button below to get started.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A message explaining that there are no map areas for this map and to tap the button below to add a map area."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var offlineDisabled: String {
+***REMOVED***var offlineDisabled: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Offline Disabled",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Offline Disabled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating that the map is offline disabled."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var offlineDisabledMessage: String {
+***REMOVED***var offlineDisabledMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "The map is not enabled for offline use.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"The map is not enabled for offline use.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A message indicating that the map is not offline enabled."
 ***REMOVED******REMOVED***)
 ***REMOVED***

@@ -239,13 +239,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if hasNoInternetConnection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(.noInternetConnectionErrorMessage),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.noInternetConnectionErrorMessage,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "wifi.exclamationmark",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: cannotDownloadMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Backported.ContentUnavailableView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LocalizedStringKey.init(failedToLoadMessage),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***failedToLoadMessage,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: cannotDownloadMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -416,18 +416,18 @@ private extension OnDemandConfigurationView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var failedToLoadMessage: String {
+***REMOVED***var failedToLoadMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Online Map Failed to Load",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Online Map Failed to Load",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A message explaining that the online map failed to load."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var cannotDownloadMessage: String {
+***REMOVED***var cannotDownloadMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "A map area cannot be downloaded at this time.",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"A map area cannot be downloaded at this time.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "A message explaining that a map area cannot be downloaded at this time."
 ***REMOVED******REMOVED***)
 ***REMOVED***
