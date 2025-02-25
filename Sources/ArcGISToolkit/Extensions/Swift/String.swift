@@ -42,33 +42,6 @@ extension String {
         )
     }
     
-    /// A localized string for the word "Downloaded".
-    static var downloaded: Self {
-        .init(
-            localized: "Downloaded",
-            bundle: .toolkitModule,
-            comment: "The status text when a map area is downloaded."
-        )
-    }
-    
-    /// A localized string for "Download failed".
-    static var downloadFailed: Self {
-        .init(
-            localized: "Download failed",
-            bundle: .toolkitModule,
-            comment: "The status text when a map area failed to download."
-        )
-    }
-    
-    /// A localized string for the word "Downloading".
-    static var downloading: Self {
-        .init(
-            localized: "Downloading",
-            bundle: .toolkitModule,
-            comment: "The status text when a map area is downloading."
-        )
-    }
-    
     /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
     static var emptyAttachmentDownloadErrorMessage: Self {
         .init(
@@ -84,24 +57,6 @@ extension String {
             localized: "Field",
             bundle: .toolkitModule,
             comment: "A field in a set of data contained in a popup."
-        )
-    }
-    
-    /// A localized string for the word "Loading".
-    static var loading: Self {
-        .init(
-            localized: "Loading",
-            bundle: .toolkitModule,
-            comment: "The status text when a map area is loading."
-        )
-    }
-    
-    /// A localized string for "Loading failed".
-    static var loadingFailed: Self {
-        .init(
-            localized: "Loading failed",
-            bundle: .toolkitModule,
-            comment: "The status text when a map area failed to load."
         )
     }
     

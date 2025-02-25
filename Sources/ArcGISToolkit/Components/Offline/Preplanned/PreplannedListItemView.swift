@@ -112,7 +112,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
 extension PreplannedMapModel: OfflineMapAreaListItemInfo {
     var listItemDescription: String { description }
     
-    var statusText: String {
+    var statusText: LocalizedStringResource {
         switch status {
         case .notLoaded, .loading:
                 .loading
@@ -149,27 +149,27 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
     var jobProgress: Progress? { job?.progress }
 }
 
-private extension String {
+private extension LocalizedStringResource {
     static var packaging: Self {
         .init(
-            localized: "Packaging",
-            bundle: .toolkitModule,
+            "Packaging",
+            bundle: .toolkit,
             comment: "The status text when a map area is packaging."
         )
     }
     
     static var readyToDownload: Self {
         .init(
-            localized: "Ready to download",
-            bundle: .toolkitModule,
+            "Ready to download",
+            bundle: .toolkit,
             comment: "The status text when a map area is ready to download."
         )
     }
     
     static var packagingFailed: Self {
         .init(
-            localized: "Packaging failed",
-            bundle: .toolkitModule,
+            "Packaging failed",
+            bundle: .toolkit,
             comment: "The status text when a map area packaging failed."
         )
     }

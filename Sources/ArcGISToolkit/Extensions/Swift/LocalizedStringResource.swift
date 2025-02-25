@@ -21,7 +21,46 @@ extension LocalizedStringResource.BundleDescription {
 
 
 extension LocalizedStringResource {
-    /// An error message explaining that there is no internet connection.
+    static var downloaded: Self {
+        .init(
+            "Downloaded",
+            bundle: .toolkit,
+            comment: "The status text when a map area is downloaded."
+        )
+    }
+    
+    static var downloadFailed: Self {
+        .init(
+            "Download failed",
+            bundle: .toolkit,
+            comment: "The status text when a map area failed to download."
+        )
+    }
+    
+    static var downloading: Self {
+        .init(
+            "Downloading",
+            bundle: .toolkit,
+            comment: "The status text when a map area is downloading."
+        )
+    }
+    
+    static var loading: Self {
+        .init(
+            "Loading",
+            bundle: .toolkit,
+            comment: "The status text when a map area is loading."
+        )
+    }
+    
+    static var loadingFailed: Self {
+        .init(
+            "Loading failed",
+            bundle: .toolkit,
+            comment: "The status text when a map area failed to load."
+        )
+    }
+    
     static var noInternetConnectionErrorMessage: Self {
         .init(
             "No Internet Connection",
