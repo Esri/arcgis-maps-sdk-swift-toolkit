@@ -69,7 +69,7 @@ struct NavigationLayer<Content: View>: View {
         
         var body: some View {
             List {
-                Button("Present a simple view") {
+                Button("Present a view") {
                     model.push { Text("View") }
                 }
                 Button("Present a view with a title") {
