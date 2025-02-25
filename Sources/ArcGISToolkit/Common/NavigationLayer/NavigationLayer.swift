@@ -69,7 +69,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a simple view") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push { Text("View") ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view with a title") {
