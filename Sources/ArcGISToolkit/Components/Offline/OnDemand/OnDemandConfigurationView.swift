@@ -253,12 +253,8 @@ struct OnDemandConfigurationView: View {
             Button {
                 Task { await loadMap() }
             } label: {
-                Text.init(
-                    "Try Again",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to try loading a map again."
-                )
-                .buttonStyle(.borderless)
+                Text.tryAgain
+                    .buttonStyle(.borderless)
             }
             .padding()
         }
@@ -310,11 +306,7 @@ private struct RenameButton: View {
             proposedNewTitle = title
             alertIsShowing = true
         } label: {
-            Text.init(
-                "Rename",
-                bundle: .toolkitModule,
-                comment: "A label for a button to rename a map area."
-            )
+            Text.rename
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
