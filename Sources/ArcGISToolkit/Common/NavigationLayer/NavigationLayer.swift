@@ -89,7 +89,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***startPoint: .topLeading, endPoint: .bottomTrailing
 ***REMOVED***)
 ***REMOVED***.ignoresSafeArea(edges: .all)
-***REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED***.floatingPanel(isPresented: $isPresented) {
 ***REMOVED******REMOVED***NavigationLayer {
 ***REMOVED******REMOVED******REMOVED***SampleList()
 ***REMOVED***
