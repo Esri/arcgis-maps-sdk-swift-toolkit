@@ -185,7 +185,11 @@ class OfflineMapViewModel: ObservableObject {
     /// Returns the next title for the on-demand map area.
     func nextOnDemandAreaTitle() -> String {
         func title(forIndex index: Int) -> String {
-            "\(area) \(index)"
+            .init(
+                localized: "Area \(index)",
+                bundle: .toolkitModule,
+                comment: "The title for a map area."
+            )
         }
         
         var index = onDemandMapModels.count + 1
@@ -199,15 +203,5 @@ class OfflineMapViewModel: ObservableObject {
     /// is unique.
     func isProposeOnDemandAreaTitleUnique(_ proposedTitle: String) -> Bool {
         !onDemandMapModels.contains { $0.title == proposedTitle }
-    }
-}
-
-private extension OfflineMapViewModel {
-    var area: LocalizedStringResource {
-        .init(
-            "Area",
-            bundle: .toolkit,
-            comment: "A default title for a map area."
-        )
     }
 }
