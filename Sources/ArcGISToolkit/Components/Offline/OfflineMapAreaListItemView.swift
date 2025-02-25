@@ -132,7 +132,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 @MainActor
 protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
     var listItemDescription: String { get }
-    var statusText: String { get }
+    var statusText: LocalizedStringResource { get }
     var statusSystemImage: String { get }
     var jobProgress: Progress? { get }
     
@@ -159,7 +159,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
     var isDownloaded: Bool { true }
     var allowsDownload: Bool { true }
     var directorySize: Int { 1_000_000_000 }
-    var statusText: String { "Downloaded" }
+    var statusText: LocalizedStringResource { "Downloaded" }
     var statusSystemImage: String { "exclamationmark.circle" }
     var jobProgress: Progress? { nil }
     var dismissMetadataViewOnDelete: Bool { false }
