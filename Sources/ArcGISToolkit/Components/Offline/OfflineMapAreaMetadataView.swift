@@ -42,20 +42,32 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             
             if model.isDownloaded && !isSelected {
                 Section {
-                    Button(deleteMapArea, role: .destructive) {
+                    Button(role: .destructive) {
                         if model.dismissMetadataViewOnDelete {
                             dismiss()
                         }
                         model.removeDownloadedArea()
+                    } label: {
+                        Text.init(
+                            "Delete Map Area",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to delete a map area."
+                        )
                     }
                 }
             }
             
             if !model.isDownloaded {
                 Section {
-                    Button(downloadMapArea) {
+                    Button {
                         dismiss()
                         model.startDownload()
+                    } label: {
+                        Text.init(
+                            "Download Map Area",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to download a map area."
+                        )
                     }
                     .disabled(!model.allowsDownload)
                 }
@@ -102,9 +114,13 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .fontWeight(.bold)
             
             if model.isDownloaded {
-                Text(sizeLabel)
-                    .lineLimit(1)
-                    .foregroundStyle(.secondary)
+                Text.init(
+                    "Size: \(model.directorySizeText)",
+                    bundle: .toolkitModule,
+                    comment: "A label for the file size of the map area."
+                )
+                .lineLimit(1)
+                .foregroundStyle(.secondary)
             }
         }
         .listRowBackground(EmptyView())
@@ -166,30 +182,6 @@ private extension OfflineMapAreaMetadataView {
             localized: "Description",
             bundle: .toolkitModule,
             comment: "A label for the description of the map area"
-        )
-    }
-    
-    var deleteMapArea: String {
-        .init(
-            localized: "Delete Map Area",
-            bundle: .toolkitModule,
-            comment: "A label for a button to delete a map area."
-        )
-    }
-    
-    var downloadMapArea: String {
-        .init(
-            localized: "Download Map Area",
-            bundle: .toolkitModule,
-            comment: "A label for a button to download a map area."
-        )
-    }
-    
-    var sizeLabel: String {
-        .init(
-            localized: "Size: \(model.directorySizeText)",
-            bundle: .toolkitModule,
-            comment: "A label for the file size of the map area."
         )
     }
 }
