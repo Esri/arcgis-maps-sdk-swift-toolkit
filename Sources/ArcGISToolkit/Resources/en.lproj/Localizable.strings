@@ -160,7 +160,7 @@ east, etc.). */
 "Delete all starting points?" = "Delete all starting points?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "Delete Map Area"
+"Delete Map Area" = "Delete Map Area";
 
 /* A label for the description of the map area. */
 "Description" = "Description";
@@ -325,7 +325,7 @@ AR experience. */
 "Media" = "Media";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "Metropolitan Area"
+"Metropolitan Area" = "Metropolitan Area";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Microphone access has been disabled in Settings.";
@@ -493,7 +493,7 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Sites";
 
 /* A label for the file size of the map area. */
-"Size: %lld" = "Size: %lld"
+"Size: %lld" = "Size: %lld";
 
 /* Small Building (Level of Detail) */
 "Small Building" = "Small Building";
