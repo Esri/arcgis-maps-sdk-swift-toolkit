@@ -362,12 +362,8 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.proceedToPicker()
                     } label: {
-                        Text(
-                            "Try Again",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button allowing the user to retry an operation."
-                        )
-                        .padding(.horizontal)
+                        Text.tryAgain
+                            .padding(.horizontal)
                     }
                     .buttonStyle(.borderedProminent)
                     Spacer()
