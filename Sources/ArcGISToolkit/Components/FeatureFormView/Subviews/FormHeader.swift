@@ -46,6 +46,38 @@ struct FormHeader: View {
     }
 }
 
+/// A view shown at the top of a form.
+struct FormHeader: View {
+    /// The title defined for the form.
+    let title: String
+    
+    var body: some View {
+        HStack {
+            Button {
+                
+            } label: {
+                Text.discard
+            }
+            //            .opacity(<#T##opacity: Double##Double#>)
+            
+            Spacer()
+            
+            Text(title)
+                .bold()
+            
+            Spacer()
+            
+            Button {
+                
+            } label: {
+                Text.finish
+            }
+            //            .opacity(<#T##opacity: Double##Double#>)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
 private extension Text {
     /// A label for a button to discard edits to the feature form.
     static var discard: Self {
