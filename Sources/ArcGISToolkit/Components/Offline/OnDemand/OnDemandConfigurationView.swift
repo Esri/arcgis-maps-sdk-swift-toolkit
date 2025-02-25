@@ -253,12 +253,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { await loadMap() ***REMOVED***
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text.init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Try Again",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to try loading a map again."
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text.tryAgain
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
@@ -310,11 +306,7 @@ private struct RenameButton: View {
 ***REMOVED******REMOVED******REMOVED***proposedNewTitle = title
 ***REMOVED******REMOVED******REMOVED***alertIsShowing = true
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text.init(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Rename",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename a map area."
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***Text.rename
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.buttonBorderShape(.capsule)
