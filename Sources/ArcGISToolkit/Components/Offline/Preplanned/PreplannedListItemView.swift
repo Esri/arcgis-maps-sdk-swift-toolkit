@@ -112,7 +112,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
 extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***var listItemDescription: String { description ***REMOVED***
 ***REMOVED***
-***REMOVED***var statusText: String {
+***REMOVED***var statusText: LocalizedStringResource {
 ***REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED***case .notLoaded, .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED***.loading
@@ -149,27 +149,27 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***var jobProgress: Progress? { job?.progress ***REMOVED***
 ***REMOVED***
 
-private extension String {
+private extension LocalizedStringResource {
 ***REMOVED***static var packaging: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Packaging",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Packaging",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is packaging."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static var readyToDownload: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Ready to download",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Ready to download",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is ready to download."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static var packagingFailed: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Packaging failed",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Packaging failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area packaging failed."
 ***REMOVED******REMOVED***)
 ***REMOVED***

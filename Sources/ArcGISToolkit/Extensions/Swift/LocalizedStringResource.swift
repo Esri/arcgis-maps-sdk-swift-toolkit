@@ -21,7 +21,46 @@ extension LocalizedStringResource.BundleDescription {
 
 
 extension LocalizedStringResource {
-***REMOVED******REMOVED***/ An error message explaining that there is no internet connection.
+***REMOVED***static var downloaded: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Downloaded",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloaded."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var downloadFailed: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Download failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area failed to download."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var downloading: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Downloading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is downloading."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var loading: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Loading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area is loading."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var loadingFailed: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Loading failed",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area failed to load."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static var noInternetConnectionErrorMessage: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***"No Internet Connection",

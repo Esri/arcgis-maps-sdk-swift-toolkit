@@ -88,7 +88,7 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var statusText: String {
+***REMOVED***var statusText: LocalizedStringResource {
 ***REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED***case .initialized:
 ***REMOVED******REMOVED******REMOVED******REMOVED***.loading
@@ -118,11 +118,11 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***var jobProgress: Progress? { job?.progress ***REMOVED***
 ***REMOVED***
 
-private extension String {
+private extension LocalizedStringResource {
 ***REMOVED***static var cancelled: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Cancelled",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***"Cancelled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area download is cancelled."
 ***REMOVED******REMOVED***)
 ***REMOVED***
