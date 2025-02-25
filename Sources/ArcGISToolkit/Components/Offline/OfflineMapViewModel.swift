@@ -185,7 +185,11 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Returns the next title for the on-demand map area.
 ***REMOVED***func nextOnDemandAreaTitle() -> String {
 ***REMOVED******REMOVED***func title(forIndex index: Int) -> String {
-***REMOVED******REMOVED******REMOVED***"\(area) \(index)"
+***REMOVED******REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Area \(index)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "The title for a map area."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var index = onDemandMapModels.count + 1
@@ -199,15 +203,5 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ is unique.
 ***REMOVED***func isProposeOnDemandAreaTitleUnique(_ proposedTitle: String) -> Bool {
 ***REMOVED******REMOVED***!onDemandMapModels.contains { $0.title == proposedTitle ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension OfflineMapViewModel {
-***REMOVED***var area: LocalizedStringResource {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***"Area",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
-***REMOVED******REMOVED******REMOVED***comment: "A default title for a map area."
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
