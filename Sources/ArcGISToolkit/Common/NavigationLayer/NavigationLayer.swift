@@ -89,7 +89,7 @@ struct NavigationLayer<Content: View>: View {
         startPoint: .topLeading, endPoint: .bottomTrailing
     )
     .ignoresSafeArea(edges: .all)
-    .sheet(isPresented: $isPresented) {
+    .floatingPanel(isPresented: $isPresented) {
         NavigationLayer {
             SampleList()
         }
