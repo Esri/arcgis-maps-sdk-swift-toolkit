@@ -114,22 +114,14 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
     
     var statusText: LocalizedStringResource {
         switch status {
-        case .notLoaded, .loading:
-                .loading
-        case .loadFailure, .mmpkLoadFailure:
-                .loadingFailed
-        case .packaging:
-                .packaging
-        case .packaged:
-                .readyToDownload
-        case .packageFailure:
-                .packagingFailed
-        case .downloading:
-                .downloading
-        case .downloaded:
-                .downloaded
-        case .downloadFailure:
-                .downloadFailed
+        case .notLoaded, .loading: .loading
+        case .loadFailure, .mmpkLoadFailure: .loadingFailed
+        case .packaging: .packaging
+        case .packaged: .readyToDownload
+        case .packageFailure: .packagingFailed
+        case .downloading: .downloading
+        case .downloaded: .downloaded
+        case .downloadFailure: .downloadFailed
         }
     }
     

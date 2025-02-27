@@ -82,54 +82,30 @@ enum CacheScale: CaseIterable {
     
     var description: LocalizedStringResource {
         switch self {
-        case .room:
-                .room
-        case .rooms:
-                .rooms
-        case .houseProperty:
-                .houseProperty
-        case .houses:
-                .houses
-        case .smallBuilding:
-                .smallBuilding
-        case .building:
-                .building
-        case .buildings:
-                .buildings
-        case .street:
-                .street
-        case .streets:
-                .streets
-        case .neighborhood:
-                .neighborhood
-        case .town:
-                .town
-        case .city:
-                .city
-        case .cities:
-                .cities
-        case .metropolitanArea:
-                .metropolitanArea
-        case .county:
-                .county
-        case .counties:
-                .counties
-        case .stateProvince:
-                .stateProvince
-        case .statesProvinces:
-                .statesProvinces
-        case .countriesSmall:
-                .countriesSmall
-        case .countriesBig:
-                .countriesBig
-        case .continent:
-                .continent
-        case .worldSmall:
-                .worldSmall
-        case .worldBig:
-                .worldBig
-        case .world:
-                .world
+        case .room: .room
+        case .rooms: .rooms
+        case .houseProperty: .houseProperty
+        case .houses: .houses
+        case .smallBuilding: .smallBuilding
+        case .building: .building
+        case .buildings: .buildings
+        case .street: .street
+        case .streets: .streets
+        case .neighborhood: .neighborhood
+        case .town: .town
+        case .city: .city
+        case .cities: .cities
+        case .metropolitanArea: .metropolitanArea
+        case .county: .county
+        case .counties: .counties
+        case .stateProvince: .stateProvince
+        case .statesProvinces: .statesProvinces
+        case .countriesSmall: .countriesSmall
+        case .countriesBig: .countriesBig
+        case .continent: .continent
+        case .worldSmall: .worldSmall
+        case .worldBig: .worldBig
+        case .world: .world
         }
     }
 }
