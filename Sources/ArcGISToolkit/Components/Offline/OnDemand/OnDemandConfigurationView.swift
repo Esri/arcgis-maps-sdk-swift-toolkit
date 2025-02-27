@@ -85,7 +85,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task { await loadMap() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationBarTitle(selectArea)
+***REMOVED******REMOVED******REMOVED***.navigationBarTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Select Area",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A title for the on demand configuration view."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
@@ -313,10 +319,10 @@ private struct RenameButton: View {
 ***REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED***.alert(enterName, isPresented: $alertIsShowing) {
-***REMOVED******REMOVED******REMOVED***TextField(enterAreaName, text: $proposedNewTitle)
+***REMOVED******REMOVED******REMOVED***TextField(text: $proposedNewTitle, prompt: areaName) {***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button(String.ok, action: submitNewTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!proposedTitleIsValid)
-***REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {***REMOVED***
+***REMOVED******REMOVED******REMOVED***Button.cancel {***REMOVED***
 ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"The name for the map area must be unique.",
@@ -400,14 +406,6 @@ private extension UIImage {
 ***REMOVED***
 
 private extension OnDemandConfigurationView {
-***REMOVED***var selectArea: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Select Area",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A title for the on demand configuration view."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED***var failedToLoadMessage: LocalizedStringResource {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***"Online Map Failed to Load",
@@ -426,19 +424,19 @@ private extension OnDemandConfigurationView {
 ***REMOVED***
 
 private extension RenameButton {
-***REMOVED***var enterName: String {
+***REMOVED***var enterName: Text {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Enter a name",
+***REMOVED******REMOVED******REMOVED***"Enter a name",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "An instruction to enter a name."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var enterAreaName: String {
+***REMOVED***var areaName: Text {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Enter area name",
+***REMOVED******REMOVED******REMOVED***"Area Name",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "An instruction to enter an area name."
+***REMOVED******REMOVED******REMOVED***comment: "A hint for the user to enter an area name in the text field."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

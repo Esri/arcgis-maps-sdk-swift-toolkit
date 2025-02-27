@@ -102,7 +102,13 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle(mapAreas)
+***REMOVED******REMOVED******REMOVED***.navigationTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Map Areas",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A title for the offline map areas view."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
@@ -151,8 +157,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(addMapArea) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addMapArea
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -175,7 +183,15 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***Task { await mapViewModel.loadModels() ***REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label(refresh, systemImage: "arrow.clockwise")
+***REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Refresh",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to refresh map area content."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.clockwise")
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED***.fontWeight(.semibold)
@@ -184,9 +200,13 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var noInternetFooter: some View {
-***REMOVED******REMOVED***Label(noInternetFooterErrorMessage, systemImage: "wifi.exclamationmark")
-***REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED***noInternetFooterErrorMessage
+***REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "wifi.exclamationmark")
+***REMOVED***
+***REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var noInternetNoAreasView: some View {
@@ -228,7 +248,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label(addMapArea, systemImage: "plus")
+***REMOVED******REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addMapArea
+***REMOVED******REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
@@ -330,33 +354,17 @@ enum Backported {
 ***REMOVED***
 
 private extension OfflineMapAreasView {
-***REMOVED***var mapAreas: String {
+***REMOVED***var addMapArea: Text {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Map Areas",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A title for the offline map areas view."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***var addMapArea: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Add Map Area",
+***REMOVED******REMOVED******REMOVED***"Add Map Area",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to add a map area."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var refresh: String {
+***REMOVED***var noInternetFooterErrorMessage: Text {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Refresh",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button to refresh map area content."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***var noInternetFooterErrorMessage: String {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No internet connection. Showing downloaded areas only.",
+***REMOVED******REMOVED******REMOVED***"No internet connection. Showing downloaded areas only.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that there is no internet connection and only downloaded areas are shown."
 ***REMOVED******REMOVED***)
