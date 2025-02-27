@@ -110,7 +110,7 @@ struct OnDemandConfigurationView: View {
             VStack {
                 VStack(spacing: 0) {
                     Divider()
-                    Text.init(
+                    Text(
                         "Pan and zoom to define the area",
                         bundle: .toolkitModule,
                         comment: "A label instructing to pan and zoom the map to define an area."
@@ -182,7 +182,7 @@ struct OnDemandConfigurationView: View {
                 Divider()
                 
                 HStack {
-                    Text.init(
+                    Text(
                         "Level of Detail",
                         bundle: .toolkitModule,
                         comment: "A label for the level of detail picker view."
@@ -217,7 +217,7 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Text.init(
+                        Text(
                             "Download",
                             bundle: .toolkitModule,
                             comment: "A label for a button to download a map area."
@@ -318,7 +318,7 @@ private struct RenameButton: View {
                 .disabled(!proposedTitleIsValid)
             Button(String.cancel, role: .cancel) {}
         } message: {
-            Text.init(
+            Text(
                 "The name for the map area must be unique.",
                 bundle: .toolkitModule,
                 comment: "A message explaining that the map area name must be unique."
