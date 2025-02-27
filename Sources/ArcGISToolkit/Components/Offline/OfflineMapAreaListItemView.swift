@@ -110,7 +110,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
             if isSelected {
-                Text.init(
+                Text(
                     "Currently open",
                     bundle: .toolkitModule,
                     comment: "The status text for an opened map area."
@@ -192,7 +192,7 @@ struct OpenOfflineMapAreaButton: View {
                 dismiss()
             }
         } label: {
-            Text.init(
+            Text(
                 "Open",
                 bundle: .toolkitModule,
                 comment: "The label for a button to open a map area."

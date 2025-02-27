@@ -48,7 +48,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                         }
                         model.removeDownloadedArea()
                     } label: {
-                        Text.init(
+                        Text(
                             "Delete Map Area",
                             bundle: .toolkitModule,
                             comment: "A label for a button to delete a map area."
@@ -63,7 +63,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                         dismiss()
                         model.startDownload()
                     } label: {
-                        Text.init(
+                        Text(
                             "Download Map Area",
                             bundle: .toolkitModule,
                             comment: "A label for a button to download a map area."
@@ -114,7 +114,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .fontWeight(.bold)
             
             if model.isDownloaded {
-                Text.init(
+                Text(
                     "Size: \(model.directorySizeText)",
                     bundle: .toolkitModule,
                     comment: "A label for the file size of the map area."
