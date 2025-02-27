@@ -82,54 +82,30 @@ enum CacheScale: CaseIterable {
 ***REMOVED***
 ***REMOVED***var description: LocalizedStringResource {
 ***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .room:
-***REMOVED******REMOVED******REMOVED******REMOVED***.room
-***REMOVED******REMOVED***case .rooms:
-***REMOVED******REMOVED******REMOVED******REMOVED***.rooms
-***REMOVED******REMOVED***case .houseProperty:
-***REMOVED******REMOVED******REMOVED******REMOVED***.houseProperty
-***REMOVED******REMOVED***case .houses:
-***REMOVED******REMOVED******REMOVED******REMOVED***.houses
-***REMOVED******REMOVED***case .smallBuilding:
-***REMOVED******REMOVED******REMOVED******REMOVED***.smallBuilding
-***REMOVED******REMOVED***case .building:
-***REMOVED******REMOVED******REMOVED******REMOVED***.building
-***REMOVED******REMOVED***case .buildings:
-***REMOVED******REMOVED******REMOVED******REMOVED***.buildings
-***REMOVED******REMOVED***case .street:
-***REMOVED******REMOVED******REMOVED******REMOVED***.street
-***REMOVED******REMOVED***case .streets:
-***REMOVED******REMOVED******REMOVED******REMOVED***.streets
-***REMOVED******REMOVED***case .neighborhood:
-***REMOVED******REMOVED******REMOVED******REMOVED***.neighborhood
-***REMOVED******REMOVED***case .town:
-***REMOVED******REMOVED******REMOVED******REMOVED***.town
-***REMOVED******REMOVED***case .city:
-***REMOVED******REMOVED******REMOVED******REMOVED***.city
-***REMOVED******REMOVED***case .cities:
-***REMOVED******REMOVED******REMOVED******REMOVED***.cities
-***REMOVED******REMOVED***case .metropolitanArea:
-***REMOVED******REMOVED******REMOVED******REMOVED***.metropolitanArea
-***REMOVED******REMOVED***case .county:
-***REMOVED******REMOVED******REMOVED******REMOVED***.county
-***REMOVED******REMOVED***case .counties:
-***REMOVED******REMOVED******REMOVED******REMOVED***.counties
-***REMOVED******REMOVED***case .stateProvince:
-***REMOVED******REMOVED******REMOVED******REMOVED***.stateProvince
-***REMOVED******REMOVED***case .statesProvinces:
-***REMOVED******REMOVED******REMOVED******REMOVED***.statesProvinces
-***REMOVED******REMOVED***case .countriesSmall:
-***REMOVED******REMOVED******REMOVED******REMOVED***.countriesSmall
-***REMOVED******REMOVED***case .countriesBig:
-***REMOVED******REMOVED******REMOVED******REMOVED***.countriesBig
-***REMOVED******REMOVED***case .continent:
-***REMOVED******REMOVED******REMOVED******REMOVED***.continent
-***REMOVED******REMOVED***case .worldSmall:
-***REMOVED******REMOVED******REMOVED******REMOVED***.worldSmall
-***REMOVED******REMOVED***case .worldBig:
-***REMOVED******REMOVED******REMOVED******REMOVED***.worldBig
-***REMOVED******REMOVED***case .world:
-***REMOVED******REMOVED******REMOVED******REMOVED***.world
+***REMOVED******REMOVED***case .room: .room
+***REMOVED******REMOVED***case .rooms: .rooms
+***REMOVED******REMOVED***case .houseProperty: .houseProperty
+***REMOVED******REMOVED***case .houses: .houses
+***REMOVED******REMOVED***case .smallBuilding: .smallBuilding
+***REMOVED******REMOVED***case .building: .building
+***REMOVED******REMOVED***case .buildings: .buildings
+***REMOVED******REMOVED***case .street: .street
+***REMOVED******REMOVED***case .streets: .streets
+***REMOVED******REMOVED***case .neighborhood: .neighborhood
+***REMOVED******REMOVED***case .town: .town
+***REMOVED******REMOVED***case .city: .city
+***REMOVED******REMOVED***case .cities: .cities
+***REMOVED******REMOVED***case .metropolitanArea: .metropolitanArea
+***REMOVED******REMOVED***case .county: .county
+***REMOVED******REMOVED***case .counties: .counties
+***REMOVED******REMOVED***case .stateProvince: .stateProvince
+***REMOVED******REMOVED***case .statesProvinces: .statesProvinces
+***REMOVED******REMOVED***case .countriesSmall: .countriesSmall
+***REMOVED******REMOVED***case .countriesBig: .countriesBig
+***REMOVED******REMOVED***case .continent: .continent
+***REMOVED******REMOVED***case .worldSmall: .worldSmall
+***REMOVED******REMOVED***case .worldBig: .worldBig
+***REMOVED******REMOVED***case .world: .world
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

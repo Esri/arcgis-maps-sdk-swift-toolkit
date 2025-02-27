@@ -90,18 +90,12 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***var statusText: LocalizedStringResource {
 ***REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED***case .initialized:
-***REMOVED******REMOVED******REMOVED******REMOVED***.loading
-***REMOVED******REMOVED***case .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***.loadingFailed
-***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloading
-***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloaded
-***REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloadFailed
-***REMOVED******REMOVED***case .downloadCancelled:
-***REMOVED******REMOVED******REMOVED******REMOVED***.cancelled
+***REMOVED******REMOVED***case .initialized: .loading
+***REMOVED******REMOVED***case .mmpkLoadFailure: .loadingFailed
+***REMOVED******REMOVED***case .downloading: .downloading
+***REMOVED******REMOVED***case .downloaded: .downloaded
+***REMOVED******REMOVED***case .downloadFailure: .downloadFailed
+***REMOVED******REMOVED***case .downloadCancelled: .cancelled
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

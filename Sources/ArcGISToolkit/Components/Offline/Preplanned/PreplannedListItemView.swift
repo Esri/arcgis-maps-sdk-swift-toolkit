@@ -114,22 +114,14 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***var statusText: LocalizedStringResource {
 ***REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED***case .notLoaded, .loading:
-***REMOVED******REMOVED******REMOVED******REMOVED***.loading
-***REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***.loadingFailed
-***REMOVED******REMOVED***case .packaging:
-***REMOVED******REMOVED******REMOVED******REMOVED***.packaging
-***REMOVED******REMOVED***case .packaged:
-***REMOVED******REMOVED******REMOVED******REMOVED***.readyToDownload
-***REMOVED******REMOVED***case .packageFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***.packagingFailed
-***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloading
-***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloaded
-***REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloadFailed
+***REMOVED******REMOVED***case .notLoaded, .loading: .loading
+***REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure: .loadingFailed
+***REMOVED******REMOVED***case .packaging: .packaging
+***REMOVED******REMOVED***case .packaged: .readyToDownload
+***REMOVED******REMOVED***case .packageFailure: .packagingFailed
+***REMOVED******REMOVED***case .downloading: .downloading
+***REMOVED******REMOVED***case .downloaded: .downloaded
+***REMOVED******REMOVED***case .downloadFailure: .downloadFailed
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
