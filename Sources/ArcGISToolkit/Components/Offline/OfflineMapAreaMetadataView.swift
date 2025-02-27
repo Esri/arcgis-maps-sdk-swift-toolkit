@@ -120,11 +120,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .fontWeight(.bold)
             
             if model.isDownloaded {
-                Text(
-                    "Size: \(model.directorySizeText)",
-                    bundle: .toolkitModule,
-                    comment: "A label for the file size of the map area."
-                )
+                Text(model.directorySizeText)
                 .lineLimit(1)
                 .foregroundStyle(.secondary)
             }
@@ -159,9 +155,16 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 }
 
 extension OfflineMapAreaMetadata {
+    private var directorySizeMeasurement: Measurement<UnitInformationStorage> {
+        Measurement(value: Double(directorySize), unit: .bytes)
+    }
+    
     var directorySizeText: String {
-        let measurement = Measurement(value: Double(directorySize), unit: UnitInformationStorage.bytes)
-        return measurement.formatted(.byteCount(style: .file))
+        .init(
+            localized: "Size: \(directorySizeMeasurement, format: .byteCount(style: .file))",
+            bundle: .toolkitModule,
+            comment: "A label for the file size of the map area."
+        )
     }
 }
 
