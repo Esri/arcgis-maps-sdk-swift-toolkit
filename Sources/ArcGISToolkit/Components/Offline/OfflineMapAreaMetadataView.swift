@@ -120,11 +120,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if model.isDownloaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Size: \(model.directorySizeText)",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for the file size of the map area."
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(model.directorySizeText)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
@@ -159,9 +155,16 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 ***REMOVED***
 
 extension OfflineMapAreaMetadata {
+***REMOVED***private var directorySizeMeasurement: Measurement<UnitInformationStorage> {
+***REMOVED******REMOVED***Measurement(value: Double(directorySize), unit: .bytes)
+***REMOVED***
+***REMOVED***
 ***REMOVED***var directorySizeText: String {
-***REMOVED******REMOVED***let measurement = Measurement(value: Double(directorySize), unit: UnitInformationStorage.bytes)
-***REMOVED******REMOVED***return measurement.formatted(.byteCount(style: .file))
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Size: \(directorySizeMeasurement, format: .byteCount(style: .file))",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for the file size of the map area."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
