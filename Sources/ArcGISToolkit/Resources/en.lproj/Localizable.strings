@@ -35,6 +35,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* The title for a map area. */
 "Area %lld" = "Area %lld";
 
+/* A hint for the user to enter an area name in the text field. */
+"Area Name" = "Area Name";
+
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
 
@@ -214,9 +217,6 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "Enter a name";
-
-/* An instruction to enter an area name. */
-"Enter area name" = "Enter area name";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Enter Value";
