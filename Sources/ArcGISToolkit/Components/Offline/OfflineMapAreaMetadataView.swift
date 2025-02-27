@@ -33,9 +33,15 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             Section { header }
             
             if !model.description.isEmpty {
-                Section(description) {
+                Section {
                     Text(model.description)
                         .foregroundStyle(.secondary)
+                } header: {
+                    Text(
+                        "Description",
+                        bundle: .toolkitModule,
+                        comment: "A label for the description of the map area"
+                    )
                 }
                 .textCase(nil)
             }
@@ -174,14 +180,4 @@ private class MockMetadata: OfflineMapAreaMetadata {
     
     func removeDownloadedArea() {}
     func startDownload() {}
-}
-
-private extension OfflineMapAreaMetadataView {
-    var description: String {
-        .init(
-            localized: "Description",
-            bundle: .toolkitModule,
-            comment: "A label for the description of the map area"
-        )
-    }
 }

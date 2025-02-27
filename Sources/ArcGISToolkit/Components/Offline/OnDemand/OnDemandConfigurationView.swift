@@ -85,7 +85,13 @@ struct OnDemandConfigurationView: View {
                 }
             }
             .task { await loadMap() }
-            .navigationBarTitle(selectArea)
+            .navigationBarTitle(
+                Text(
+                    "Select Area",
+                    bundle: .toolkitModule,
+                    comment: "A title for the on demand configuration view."
+                )
+            )
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -313,10 +319,10 @@ private struct RenameButton: View {
         .font(.subheadline)
         .fontWeight(.semibold)
         .alert(enterName, isPresented: $alertIsShowing) {
-            TextField(enterAreaName, text: $proposedNewTitle)
+            TextField(text: $proposedNewTitle, prompt: areaName) {}
             Button(String.ok, action: submitNewTitle)
                 .disabled(!proposedTitleIsValid)
-            Button(String.cancel, role: .cancel) {}
+            Button.cancel {}
         } message: {
             Text(
                 "The name for the map area must be unique.",
@@ -400,14 +406,6 @@ private extension UIImage {
 }
 
 private extension OnDemandConfigurationView {
-    var selectArea: String {
-        .init(
-            localized: "Select Area",
-            bundle: .toolkitModule,
-            comment: "A title for the on demand configuration view."
-        )
-    }
-    
     var failedToLoadMessage: LocalizedStringResource {
         .init(
             "Online Map Failed to Load",
@@ -426,19 +424,19 @@ private extension OnDemandConfigurationView {
 }
 
 private extension RenameButton {
-    var enterName: String {
+    var enterName: Text {
         .init(
-            localized: "Enter a name",
+            "Enter a name",
             bundle: .toolkitModule,
             comment: "An instruction to enter a name."
         )
     }
     
-    var enterAreaName: String {
+    var areaName: Text {
         .init(
-            localized: "Enter area name",
+            "Area Name",
             bundle: .toolkitModule,
-            comment: "An instruction to enter an area name."
+            comment: "A hint for the user to enter an area name in the text field."
         )
     }
 }

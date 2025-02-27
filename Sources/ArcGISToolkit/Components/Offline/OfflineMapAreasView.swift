@@ -102,7 +102,13 @@ public struct OfflineMapAreasView: View {
                     }
                 }
             }
-            .navigationTitle(mapAreas)
+            .navigationTitle(
+                Text(
+                    "Map Areas",
+                    bundle: .toolkitModule,
+                    comment: "A title for the offline map areas view."
+                )
+            )
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -151,8 +157,10 @@ public struct OfflineMapAreasView: View {
                         OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
                     }
                     Section {
-                        Button(addMapArea) {
+                        Button {
                             isAddingOnDemandArea = true
+                        } label: {
+                            addMapArea
                         }
                     }
                 }
@@ -175,7 +183,15 @@ public struct OfflineMapAreasView: View {
         Button {
             Task { await mapViewModel.loadModels() }
         } label: {
-            Label(refresh, systemImage: "arrow.clockwise")
+            Label {
+                Text(
+                    "Refresh",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to refresh map area content."
+                )
+            } icon: {
+                Image(systemName: "arrow.clockwise")
+            }
         }
         .font(.subheadline)
         .fontWeight(.semibold)
@@ -184,9 +200,13 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var noInternetFooter: some View {
-        Label(noInternetFooterErrorMessage, systemImage: "wifi.exclamationmark")
-            .font(.caption)
-            .foregroundStyle(.secondary)
+        Label {
+            noInternetFooterErrorMessage
+        } icon: {
+            Image(systemName: "wifi.exclamationmark")
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
     }
     
     @ViewBuilder private var noInternetNoAreasView: some View {
@@ -228,7 +248,11 @@ public struct OfflineMapAreasView: View {
             Button {
                 isAddingOnDemandArea = true
             } label: {
-                Label(addMapArea, systemImage: "plus")
+                Label {
+                    addMapArea
+                } icon: {
+                    Image(systemName: "plus")
+                }
             }
             .font(.subheadline)
             .fontWeight(.semibold)
@@ -330,33 +354,17 @@ enum Backported {
 }
 
 private extension OfflineMapAreasView {
-    var mapAreas: String {
+    var addMapArea: Text {
         .init(
-            localized: "Map Areas",
-            bundle: .toolkitModule,
-            comment: "A title for the offline map areas view."
-        )
-    }
-    
-    var addMapArea: String {
-        .init(
-            localized: "Add Map Area",
+            "Add Map Area",
             bundle: .toolkitModule,
             comment: "A label for a button to add a map area."
         )
     }
     
-    var refresh: String {
+    var noInternetFooterErrorMessage: Text {
         .init(
-            localized: "Refresh",
-            bundle: .toolkitModule,
-            comment: "A label for a button to refresh map area content."
-        )
-    }
-    
-    var noInternetFooterErrorMessage: String {
-        .init(
-            localized: "No internet connection. Showing downloaded areas only.",
+            "No internet connection. Showing downloaded areas only.",
             bundle: .toolkitModule,
             comment: "An error message explaining that there is no internet connection and only downloaded areas are shown."
         )
