@@ -59,6 +59,11 @@ struct FeatureFormExampleView: View {
                 .task {
                     let publicSample = try? await ArcGISCredential.publicSample
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+                    
+                    #warning("FeatureForm will eventually handle UN loading. This is temporary.")
+                    for network in map.utilityNetworks {
+                        try? await network.load()
+                    }
                 }
                 .ignoresSafeArea(.keyboard)
                 .floatingPanel(
