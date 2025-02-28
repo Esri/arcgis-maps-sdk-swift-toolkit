@@ -177,17 +177,6 @@ struct InternalFeatureFormView: View {
     }
 }
 
-private extension UtilityAssociation {
-    /// Determines whether to show the `fromElement` or `toElement`.
-    func displayedElement(for id: UUID) -> UtilityElement {
-        if id == toElement.globalID {
-            fromElement
-        } else {
-            toElement
-        }
-    }
-}
-
 private extension EnvironmentValues {
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
 }
