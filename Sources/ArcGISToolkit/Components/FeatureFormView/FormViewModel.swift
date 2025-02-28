@@ -41,15 +41,11 @@
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility tasks group.
 ***REMOVED***private var isVisibleTask: Task<Void, Never>?
-
-#warning("TODO: This property to be removed.")
-***REMOVED***let utilityNetwork: UtilityNetwork?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork?) {
+***REMOVED***public init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
-***REMOVED******REMOVED***self.utilityNetwork = utilityNetwork
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {
