@@ -32,6 +32,7 @@ import SwiftUI
 /// can be expanded, to show all enclosed elements, or collapsed, hiding
 /// the elements it contains.
 /// - Text Element - used to display read-only plain or Markdown-formatted text.
+/// - Utility Associations Element - used to edit associations in utility networks.
 ///
 /// A Field Element has a single input type object. The following are the supported input types:
 ///
