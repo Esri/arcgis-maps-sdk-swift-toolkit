@@ -15,6 +15,8 @@
 import SwiftUI
 
 struct UtilityNetworkAssociationFormElementView: View {
+    @EnvironmentObject private var model: NavigationLayerModel
+    
     /// <#Description#>
     let description: String
     
@@ -43,9 +45,29 @@ struct UtilityNetworkAssociationFormElementView: View {
             //
             // TODO: End InputFooter replacement section -----------------------
             
-            ForEach(associationKindGroups) { group in
-                AssociationKindGroupView(associationKindGroup: group)
-            }
+            FeatureFormGroupedContentView(
+                content: associationKindGroups.map { group in
+                    Button {
+                        model.push(
+                            title: group.name,
+                            subtitle: group.presentingForm
+                        ) {
+                            AssociationKindGroupView(associationKindGroup: group)
+                        }
+                    } label: {
+                        HStack {
+                            Text(group.name)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Group {
+                                Text(group.networkSourceGroups.flatMap( { $0.associations.compactMap { $0 } } ).count.formatted())
+                                Image(systemName: "chevron.right")
+                            }
+                            .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            )
         }
     }
 }
@@ -75,6 +97,9 @@ extension UtilityNetworkAssociationFormElementView {
         let name: String
         
         /// <#Description#>
+        let selectionAction: (() -> Void)
+        
+        /// <#Description#>
         let terminalName: String?
     }
     
@@ -82,37 +107,45 @@ extension UtilityNetworkAssociationFormElementView {
         var association: Association
         
         var body: some View {
-            HStack {
-                if let connection = association.connectionPoint {
-                    let image: String = switch connection {
-                    case .left:
-                        "connection-end-left"
-                    case .middle:
-                        "connection-middle"
-                    case .right:
-                        "connection-end-right"
-                    }
-                    Image(image, bundle: .toolkitModule)
-                }
-                
-                VStack(alignment: .leading) {
-                    Text(association.name)
-                        .lineLimit(1)
-                    if let description = association.description {
-                        Text(description)
-                            .font(.caption2)
-                    }
-                }
-                Spacer()
-                Button {
+            Button {
+                association.selectionAction()
+            } label: {
+                HStack {
                     
-                } label: {
-                    Image(systemName: "chevron.right")
+                    if let connection = association.connectionPoint {
+                        let image: String = switch connection {
+                        case .left:
+                            "connection-end-left"
+                        case .middle:
+                            "connection-middle"
+                        case .right:
+                            "connection-end-right"
+                        }
+                        Image(image, bundle: .toolkitModule)
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text(association.name)
+                            .lineLimit(1)
+                        if let description = association.description {
+                            Text(description)
+                                .font(.caption2)
+                        }
+                    }
+                    Spacer()
+                    Group {
+                        if let percent = association.fractionAlongEdge {
+                            Text(percent.formatted(.percent))
+                        } else if let terminal = association.terminalName {
+                            Text("Terminal: \(terminal)")
+                        }
+                    }
+                    .padding(2.5)
+                    .background(Color(uiColor: .systemBackground))
+                    .cornerRadius(5)
+                    .font(.caption2)
                 }
-                .buttonStyle(.plain)
-                .font(.caption2)
             }
-            .padding(.leading)
         }
     }
     
@@ -125,25 +158,37 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let name: String
+        
+        /// <#Description#>
+        let presentingForm: String
     }
     
     struct AssociationKindGroupView: View {
+        @EnvironmentObject private var model: NavigationLayerModel
+        
         let associationKindGroup: AssociationKindGroup
         
         @State private var isExpanded = false
         
         var body: some View {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(associationKindGroup.networkSourceGroups) {
-                    NetworkSourceGroupView(networkSourceGroup: $0)
+            List(associationKindGroup.networkSourceGroups) { group in
+                Button {
+                    model.push(
+                        title: group.name,
+                        subtitle: group.presentingForm
+                    ) {
+                        NetworkSourceGroupView(networkSourceGroup: group)
+                    }
+                } label: {
+                    HStack {
+                        Text(group.name)
+                        Spacer()
+                        Text(group.associations.count.formatted())
+                    }
                 }
-            } label: {
-                HStack {
-                    Text(associationKindGroup.name)
-                    Spacer()
-                    Text(associationKindGroup.networkSourceGroups.map({ $0.associations.count }).count.formatted())
-                }
+                .listRowBackground(Color(uiColor: .tertiarySystemFill))
             }
+            .scrollContentBackground(.hidden)
         }
     }
     
@@ -156,24 +201,20 @@ extension UtilityNetworkAssociationFormElementView {
         
         /// <#Description#>
         let name: String
+        
+        /// <#Description#>
+        let presentingForm: String
     }
     
     struct NetworkSourceGroupView: View {
         let networkSourceGroup:  NetworkSourceGroup
         
         var body: some View {
-            DisclosureGroup {
-                ForEach(networkSourceGroup.associations) {
-                    AssociationView(association: $0)
-                }
-            } label: {
-                HStack {
-                    Text(networkSourceGroup.name)
-                    Spacer()
-                    Text(networkSourceGroup.associations.count.formatted())
-                }
+            List(networkSourceGroup.associations) {
+                AssociationView(association: $0)
+                    .listRowBackground(Color(uiColor: .tertiarySystemFill))
             }
-            .padding(.leading)
+            .scrollContentBackground(.hidden)
         }
     }
 }
