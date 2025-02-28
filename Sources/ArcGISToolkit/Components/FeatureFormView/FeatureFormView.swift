@@ -251,6 +251,10 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED******REMOVED***.padding(.top, formElementPadding)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***UtilityAssociationsFormElementView(element: element)
+***REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
