@@ -16,6 +16,8 @@
 
 public extension FeatureFormView {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***enum ValidationErrorVisibility: Sendable {
 ***REMOVED******REMOVED******REMOVED***/ Errors may be visible or hidden for a given form field depending on its focus state.
 ***REMOVED******REMOVED***case automatic
@@ -25,6 +27,12 @@ public extension FeatureFormView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Specifies the visibility of validation errors in the form.
 ***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of validation errors in the form.
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
+***REMOVED***@available(*, deprecated, message: """
+As of 200.7, this modifier will have no effect. 
+FeatureFormView will control visibility of validation errors.
+"""
+)
 ***REMOVED***func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.validationErrorVisibility = visibility
@@ -34,6 +42,8 @@ public extension FeatureFormView {
 
 extension EnvironmentValues {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***var validationErrorVisibility: FeatureFormView.ValidationErrorVisibility {
 ***REMOVED******REMOVED***get { self[FormViewValidationErrorVisibility.self] ***REMOVED***
 ***REMOVED******REMOVED***set { self[FormViewValidationErrorVisibility.self] = newValue ***REMOVED***
@@ -41,6 +51,8 @@ extension EnvironmentValues {
 ***REMOVED***
 
 ***REMOVED***/ The validation error visibility configuration of a form.
+***REMOVED***/ - Attention: Deprecated at 200.7.
+@available(*, deprecated)
 struct FormViewValidationErrorVisibility: EnvironmentKey {
 ***REMOVED***static let defaultValue: FeatureFormView.ValidationErrorVisibility = .automatic
 ***REMOVED***
