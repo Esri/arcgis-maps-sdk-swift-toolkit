@@ -32,6 +32,7 @@
 ***REMOVED***/ can be expanded, to show all enclosed elements, or collapsed, hiding
 ***REMOVED***/ the elements it contains.
 ***REMOVED***/ - Text Element - used to display read-only plain or Markdown-formatted text.
+***REMOVED***/ - Utility Associations Element - used to edit associations in utility networks.
 ***REMOVED***/
 ***REMOVED***/ A Field Element has a single input type object. The following are the supported input types:
 ***REMOVED***/
