@@ -322,6 +322,7 @@ private struct RenameButton: View {
             TextField(text: $proposedNewTitle, prompt: areaName) {}
             Button(String.ok, action: submitNewTitle)
                 .disabled(!proposedTitleIsValid)
+                .keyboardShortcut(.defaultAction)
             Button.cancel {}
         } message: {
             Text(
