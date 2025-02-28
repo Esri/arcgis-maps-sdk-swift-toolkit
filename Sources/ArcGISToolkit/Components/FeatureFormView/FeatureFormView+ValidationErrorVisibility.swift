@@ -16,6 +16,8 @@ import SwiftUI
 
 public extension FeatureFormView {
     /// The validation error visibility configuration of a form.
+    /// - Attention: Deprecated at 200.7.
+    @available(*, deprecated)
     enum ValidationErrorVisibility: Sendable {
         /// Errors may be visible or hidden for a given form field depending on its focus state.
         case automatic
@@ -25,6 +27,12 @@ public extension FeatureFormView {
     
     /// Specifies the visibility of validation errors in the form.
     /// - Parameter visibility: The preferred visibility of validation errors in the form.
+    /// - Attention: Deprecated at 200.7.
+    @available(*, deprecated, message: """
+As of 200.7, this modifier will have no effect. 
+FeatureFormView will control visibility of validation errors.
+"""
+)
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
         var copy = self
         copy.validationErrorVisibility = visibility
@@ -34,6 +42,8 @@ public extension FeatureFormView {
 
 extension EnvironmentValues {
     /// The validation error visibility configuration of a form.
+    /// - Attention: Deprecated at 200.7.
+    @available(*, deprecated)
     var validationErrorVisibility: FeatureFormView.ValidationErrorVisibility {
         get { self[FormViewValidationErrorVisibility.self] }
         set { self[FormViewValidationErrorVisibility.self] = newValue }
@@ -41,6 +51,8 @@ extension EnvironmentValues {
 }
 
 /// The validation error visibility configuration of a form.
+/// - Attention: Deprecated at 200.7.
+@available(*, deprecated)
 struct FormViewValidationErrorVisibility: EnvironmentKey {
     static let defaultValue: FeatureFormView.ValidationErrorVisibility = .automatic
 }
