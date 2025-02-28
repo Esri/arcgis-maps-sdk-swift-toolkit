@@ -43,6 +43,7 @@ extension NavigationLayer {
                         if let subtitle = model.presented?.subtitle {
                             Text(subtitle)
                                 .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
                     .onGeometryChange(for: CGFloat.self) { proxy in
