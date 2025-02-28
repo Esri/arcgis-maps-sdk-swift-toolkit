@@ -14,27 +14,8 @@
 
 import ArcGIS
 import Foundation
-import UIKit
 
 extension ArcGISFeature {
-    /// <#Description#>
-    /// - Returns: <#description#>
-    func makeSymbol() async -> UIImage? {
-        if let featureLayer = table?.layer as? FeatureLayer,
-           let renderer = featureLayer.renderer,
-           let symbol = renderer.symbol(for: self) {
-            let scale: CGFloat
-#if os(visionOS)
-            scale = 1
-#else
-            scale = await UIScreen.main.scale
-#endif
-            return try? await symbol.makeSwatch(scale: scale)
-        } else {
-            return nil
-        }
-    }
-    
     /// The global ID of the feature.
     ///
     /// This property is `nil` if there is no global ID.
