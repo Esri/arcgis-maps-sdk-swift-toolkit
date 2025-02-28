@@ -13,67 +13,200 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***
 
-struct UtilityNetworkAssociationFormElementView: View {
-***REMOVED***@EnvironmentObject private var model: NavigationLayerModel
+***REMOVED***/ <#Description#>
+struct UtilityAssociationsFormElementView: View {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***let description: String
+***REMOVED***@State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***let associationKindGroups: [AssociationKindGroup]
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***let title: String
+***REMOVED***let element: UtilityAssociationsFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: InputHeader to replace following in final implementation --
-***REMOVED******REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: End InputHeader replacement section -----------------------
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: InputFooter to replace following in final implementation --
-***REMOVED******REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: End InputFooter replacement section -----------------------
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***FeatureFormGroupedContentView(
-***REMOVED******REMOVED******REMOVED******REMOVED***content: associationKindGroups.map { group in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: group.name,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: group.presentingForm
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AssociationKindGroupView(associationKindGroup: group)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.primary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.networkSourceGroups.flatMap( { $0.associations.compactMap { $0 ***REMOVED*** ***REMOVED*** ).count.formatted())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
+***REMOVED******REMOVED******REMOVED***if $0.resultCount > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED***
+***REMOVED***)
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***try? await element.fetchAssociationsFilterResults()
+***REMOVED******REMOVED******REMOVED***associationsFilterResults = element.associationsFilterResults
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-extension UtilityNetworkAssociationFormElementView {
-***REMOVED***struct Association: Identifiable {
+***REMOVED***/ <#Description#>
+private struct UtilityAssociationGroupResultView: View {
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let utilityAssociationGroupResult: UtilityAssociationGroupResult
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+***REMOVED******REMOVED******REMOVED***if let currentFeatureGlobalID = formViewModel.featureForm.feature.globalID {
+***REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = utilityAssociationResult.association.displayedElement(for: currentFeatureGlobalID)
+***REMOVED******REMOVED******REMOVED******REMOVED***let title: String = {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formDefinitionTitle
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***()
+***REMOVED******REMOVED******REMOVED******REMOVED***let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.middle
+***REMOVED******REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentFeatureGlobalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***association: UtilityAssociationView.Association(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: associatedElement.terminal?.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ <#Description#>
+private struct UtilityAssociationsFilterResultListRowView: View {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(utilityAssociationsFilterResult.filter.filterType)".capitalized)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ <#Description#>
+private struct UtilityAssociationsFilterResultView: View {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+***REMOVED******REMOVED******REMOVED***Button(utilityAssociationGroupResult.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ <#Description#>
+private struct UtilityAssociationView: View {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***var association: Association
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***association.selectionAction()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let connection = association.connectionPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image: String = switch connection {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .left:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-left"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .middle:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-middle"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .right:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-right"
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(image, bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let percent = association.fractionAlongEdge {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(percent.formatted(.percent))
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let terminal = association.terminalName {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Terminal: \(terminal)")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(2.5)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension UtilityAssociation {
+***REMOVED******REMOVED***/ Determines whether to show the `fromElement` or `toElement`.
+***REMOVED******REMOVED***/ - Parameter id: <#id description#>
+***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED***func displayedElement(for id: UUID) -> UtilityElement {
+***REMOVED******REMOVED***if id == toElement.globalID {
+***REMOVED******REMOVED******REMOVED***fromElement
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***toElement
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension UtilityAssociationView {
+***REMOVED***struct Association {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***enum Connection {
 ***REMOVED******REMOVED******REMOVED***case left
@@ -91,9 +224,6 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***let fractionAlongEdge: Double?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let id = UUID()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let name: String
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
@@ -101,120 +231,5 @@ extension UtilityNetworkAssociationFormElementView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let terminalName: String?
-***REMOVED***
-***REMOVED***
-***REMOVED***struct AssociationView: View {
-***REMOVED******REMOVED***var association: Association
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***association.selectionAction()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let connection = association.connectionPoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image: String = switch connection {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .left:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-left"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .middle:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-middle"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .right:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-right"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(image, bundle: .toolkitModule)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let percent = association.fractionAlongEdge {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(percent.formatted(.percent))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let terminal = association.terminalName {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Terminal: \(terminal)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(2.5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***struct AssociationKindGroup: Identifiable {
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let networkSourceGroups: [NetworkSourceGroup]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let id = UUID()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let name: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let presentingForm: String
-***REMOVED***
-***REMOVED***
-***REMOVED***struct AssociationKindGroupView: View {
-***REMOVED******REMOVED***@EnvironmentObject private var model: NavigationLayerModel
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let associationKindGroup: AssociationKindGroup
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***@State private var isExpanded = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***List(associationKindGroup.networkSourceGroups) { group in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: group.name,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: group.presentingForm
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NetworkSourceGroupView(networkSourceGroup: group)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(group.associations.count.formatted())
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color(uiColor: .tertiarySystemFill))
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***struct NetworkSourceGroup: Identifiable {
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let associations: [Association]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let id = UUID()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let name: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let presentingForm: String
-***REMOVED***
-***REMOVED***
-***REMOVED***struct NetworkSourceGroupView: View {
-***REMOVED******REMOVED***let networkSourceGroup:  NetworkSourceGroup
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***List(networkSourceGroup.associations) {
-***REMOVED******REMOVED******REMOVED******REMOVED***AssociationView(association: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color(uiColor: .tertiarySystemFill))
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
