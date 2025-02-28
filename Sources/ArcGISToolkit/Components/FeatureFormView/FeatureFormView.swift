@@ -66,6 +66,55 @@
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
+***REMOVED******REMOVED***/ The root feature form.
+***REMOVED***let featureForm: FeatureForm
+***REMOVED***
+#warning("TODO: This property to be removed.")
+***REMOVED***let utilityNetwork: UtilityNetwork?
+***REMOVED***
+***REMOVED******REMOVED***/ The visibility of the form header.
+***REMOVED***var headerVisibility: Visibility = .automatic
+***REMOVED***
+***REMOVED******REMOVED***/ The closure to perform when the form has changed.
+***REMOVED***var onFormChangedAction: ((FeatureForm) -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
+***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+***REMOVED***
+***REMOVED******REMOVED***/ Initializes a form view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
+***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED******REMOVED***self.utilityNetwork = utilityNetwork
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***NavigationLayer {
+***REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
+***REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: utilityNetwork
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
+***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the view’s form changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form has changed.
+***REMOVED***public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onFormChangedAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
+struct InternalFeatureFormView: View {
+***REMOVED***@Environment(\.formChangedAction) var onFormChangedAction
+***REMOVED***
+***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
@@ -78,28 +127,28 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***let utilityNetwork: UtilityNetwork?
-***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
-***REMOVED***
-***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
-***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
-***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
-***REMOVED******REMOVED***self.utilityNetwork = utilityNetwork
+***REMOVED******REMOVED***/   - headerVisibility: The visibility of the form header.
+***REMOVED***init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
+***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
+***REMOVED******REMOVED***self.headerVisibility = headerVisibility
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***if initialExpressionsAreEvaluating {
-***REMOVED******REMOVED******REMOVED***initialBody
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***evaluatedForm
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if initialExpressionsAreEvaluating {
+***REMOVED******REMOVED******REMOVED******REMOVED***initialBody
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***evaluatedForm
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***onFormChangedAction?(model.featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -143,13 +192,12 @@ public struct FeatureFormView: View {
 #if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
-***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await utilityNetwork?.load()
-***REMOVED******REMOVED******REMOVED***if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
+***REMOVED******REMOVED******REMOVED***try? await model.utilityNetwork?.load()
+***REMOVED******REMOVED******REMOVED***if let utilityElement = model.utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Grab Utility Network Associations for the element being edited
-***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await utilityNetwork?.associations(for: utilityElement),
+***REMOVED******REMOVED******REMOVED******REMOVED***if let associations = try? await model.utilityNetwork?.associations(for: utilityElement),
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let currentFeatureGlobalID = model.featureForm.feature.globalID {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a set of the unique association kinds present
@@ -168,7 +216,6 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var associations: [UtilityNetworkAssociationFormElementView.Association] = []
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For each association, create a Toolkit representation and add it to the group
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for networkSourceMember in networkSourceMembers {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Determine the association's title.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = networkSourceMember.displayedElement(for: currentFeatureGlobalID)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let title: String
@@ -186,33 +233,45 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: associatedElement.terminal?.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: arcGISFeature),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerVisibility: headerVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityNetwork: model.utilityNetwork
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: associatedElement.terminal?.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations.append(newAssociation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associations: associations,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: networkSourceName
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: networkSourceName,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentingForm: title
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networkSourceGroups.append(networkSourceGroup)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***groups.append(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView.AssociationKindGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networkSourceGroups: networkSourceGroups,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "\(associationKind)".capitalized
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "\(associationKind)".capitalized,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentingForm: title
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.groups = groups
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Not a Utility Element")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Not a Utility Element")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -229,7 +288,11 @@ private extension UtilityAssociation {
 ***REMOVED***
 ***REMOVED***
 
-extension FeatureFormView {
+private extension EnvironmentValues {
+***REMOVED***@Entry var formChangedAction: ((FeatureForm) -> Void)?
+***REMOVED***
+
+extension InternalFeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
