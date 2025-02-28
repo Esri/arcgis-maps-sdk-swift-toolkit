@@ -105,15 +105,15 @@ public struct FeatureFormView: View {
 }
 
 struct InternalFeatureFormView: View {
-    @Environment(\.formChangedAction) var onFormChangedAction
+    @Environment(\.formChangedAction) var formChangedAction
+    
+#warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
+    @Environment(\.formElementPadding) var formElementPadding
     
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
     
     /// The view model for the form.
     @StateObject private var model: FormViewModel
-    
-    /// <#Description#>
-    @State private var groups: [UtilityNetworkAssociationFormElementView.AssociationKindGroup]?
     
     /// A Boolean value indicating whether initial expression evaluation is running.
     @State private var initialExpressionsAreEvaluating = true
@@ -137,7 +137,7 @@ struct InternalFeatureFormView: View {
             }
         }
         .onAppear {
-            onFormChangedAction?(model.featureForm)
+            formChangedAction?(model.featureForm)
         }
     }
     
@@ -145,7 +145,7 @@ struct InternalFeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty /*&& headerVisibility != .hidden*/ {
+                    if !title.isEmpty {
                         FormHeader(title: title)
                         Divider()
                     }
@@ -158,14 +158,6 @@ struct InternalFeatureFormView: View {
                         // this can call makeElement(_:) instead and makeElement(_:) should have a
                         // case added for AttachmentsFormElement.
                         AttachmentsFeatureElementView(featureElement: attachmentsElement)
-                    }
-                    if let groups = groups, groups.count > 0 {
-                        UtilityNetworkAssociationFormElementView(
-                            description: "[UtilityNetworkAssociationsFormElement.description]",
-                            associationKindGroups: groups,
-                            title: "[UtilityNetworkAssociationsFormElement.label]"
-                        )
-                        .padding(.bottom)
                     }
                 }
             }
@@ -258,7 +250,7 @@ extension InternalFeatureFormView {
                 .foregroundStyle(.secondary)
             Spacer()
         }
-        .padding(.top, elementPadding)
+        .padding(.top, formElementPadding)
         if !element.description.isEmpty {
             Text(element.description)
                 .font(.footnote)
