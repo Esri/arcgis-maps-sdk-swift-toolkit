@@ -31,9 +31,6 @@ struct FeatureFormExampleView: View {
     @State private var map = makeMap()
 //    @State private var map = Map(url: .sampleData)!
     
-    /// The validation error visibility configuration of the form.
-    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
-    
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var model = Model()
     
@@ -80,13 +77,9 @@ struct FeatureFormExampleView: View {
                             .onFormChanged { presentedForm in
                                 print("Presented feature: \( presentedForm.feature.attributes["globalid"] ?? "?")")
                             }
-                            .validationErrors(validationErrorVisibility)
                             .padding(.horizontal)
                             .padding(.top, 16)
                     }
-                }
-                .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
-                    if !formIsPresented { validationErrorVisibility = .automatic }
                 }
                 .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
                     Button("Discard edits", role: .destructive) {
@@ -137,7 +130,6 @@ struct FeatureFormExampleView: View {
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button("Submit") {
-                                validationErrorVisibility = .visible
                                 Task {
                                     await model.submitEdits()
                                 }

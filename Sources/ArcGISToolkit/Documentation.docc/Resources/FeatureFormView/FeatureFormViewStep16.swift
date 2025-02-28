@@ -17,8 +17,6 @@ struct FeatureFormExampleView: View {
     
     @State private var map = makeMap()
     
-    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
-    
     @StateObject private var model = Model()
     
     var body: some View {
@@ -48,13 +46,9 @@ struct FeatureFormExampleView: View {
                     ) {
                         if let featureForm = model.featureForm {
                             FeatureFormView(featureForm: featureForm)
-                                .validationErrors(validationErrorVisibility)
                                 .padding(.horizontal)
                                 .padding(.top, 16)
                         }
-                    }
-                    .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
-                        if !formIsPresented { validationErrorVisibility = .automatic }
                     }
                     .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
                         Button("Discard edits", role: .destructive) {
@@ -68,6 +62,14 @@ struct FeatureFormExampleView: View {
                     } message: {
                         Text("Updates to this feature will be lost.")
                     }
+                    .alert(
+                        "The form wasn't submitted",
+                        isPresented: model.alertIsPresented
+                    ) { } message: {
+                        if case let .generalError(_, errorMessage) = model.state {
+                            errorMessage
+                        }
+                    }
                     .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
                     .toolbar {
                         if model.formIsPresented.wrappedValue {
@@ -80,7 +82,6 @@ struct FeatureFormExampleView: View {
                             }
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Submit") {
-                                    validationErrorVisibility = .visible
                                     Task {
                                         await model.submitEdits()
                                     }

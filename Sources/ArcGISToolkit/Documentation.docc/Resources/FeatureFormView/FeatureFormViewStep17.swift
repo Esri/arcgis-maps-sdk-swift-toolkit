@@ -17,8 +17,6 @@ struct FeatureFormExampleView: View {
     
     @State private var map = makeMap()
     
-    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
-    
     @StateObject private var model = Model()
     
     var body: some View {
@@ -48,13 +46,9 @@ struct FeatureFormExampleView: View {
                     ) {
                         if let featureForm = model.featureForm {
                             FeatureFormView(featureForm: featureForm)
-                                .validationErrors(validationErrorVisibility)
                                 .padding(.horizontal)
                                 .padding(.top, 16)
                         }
-                    }
-                    .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
-                        if !formIsPresented { validationErrorVisibility = .automatic }
                     }
                     .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
                         Button("Discard edits", role: .destructive) {
@@ -77,6 +71,21 @@ struct FeatureFormExampleView: View {
                         }
                     }
                     .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
+                    .overlay {
+                        switch model.state {
+                        case .validating, .finishingEdits, .applyingEdits:
+                            HStack(spacing: 5) {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                                Text(model.state.label)
+                            }
+                            .padding()
+                            .background(.thinMaterial)
+                            .clipShape(.rect(cornerRadius: 10))
+                        default:
+                            EmptyView()
+                        }
+                    }
                     .toolbar {
                         if model.formIsPresented.wrappedValue {
                             ToolbarItem(placement: .navigationBarLeading) {
@@ -88,7 +97,6 @@ struct FeatureFormExampleView: View {
                             }
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Submit") {
-                                    validationErrorVisibility = .visible
                                     Task {
                                         await model.submitEdits()
                                     }
