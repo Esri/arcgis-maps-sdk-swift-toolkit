@@ -41,15 +41,11 @@ import SwiftUI
     
     /// The visibility tasks group.
     private var isVisibleTask: Task<Void, Never>?
-
-#warning("TODO: This property to be removed.")
-    let utilityNetwork: UtilityNetwork?
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork?) {
+    public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
-        self.utilityNetwork = utilityNetwork
     }
     
     deinit {
