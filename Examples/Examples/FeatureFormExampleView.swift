@@ -59,6 +59,11 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#warning("FeatureForm will eventually handle UN loading. This is temporary.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for network in map.utilityNetworks {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await network.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
