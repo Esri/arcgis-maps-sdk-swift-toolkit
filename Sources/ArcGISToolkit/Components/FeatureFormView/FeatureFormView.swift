@@ -69,9 +69,6 @@ public struct FeatureFormView: View {
     /// The root feature form.
     let featureForm: FeatureForm
     
-#warning("TODO: This property to be removed.")
-    let utilityNetwork: UtilityNetwork?
-    
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
     
@@ -84,17 +81,14 @@ public struct FeatureFormView: View {
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+    public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
-        self.utilityNetwork = utilityNetwork
     }
     
     public var body: some View {
         NavigationLayer {
             InternalFeatureFormView(
-                featureForm: featureForm,
-                headerVisibility: headerVisibility,
-                utilityNetwork: utilityNetwork
+                featureForm: featureForm
             )
         }
         .environment(\.formChangedAction, onFormChangedAction)
@@ -127,16 +121,11 @@ struct InternalFeatureFormView: View {
     /// The title of the feature form view.
     @State private var title = ""
     
-    /// The visibility of the form header.
-    var headerVisibility: Visibility = .automatic
-    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    ///   - headerVisibility: The visibility of the form header.
-    init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
-        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
-        self.headerVisibility = headerVisibility
+    init(featureForm: FeatureForm) {
+        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
     }
     
     public var body: some View {
@@ -156,7 +145,7 @@ struct InternalFeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty && headerVisibility != .hidden {
+                    if !title.isEmpty /*&& headerVisibility != .hidden*/ {
                         FormHeader(title: title)
                         Divider()
                     }
@@ -193,87 +182,6 @@ struct InternalFeatureFormView: View {
         .scrollDismissesKeyboard(.immediately)
 #endif
         .environmentObject(model)
-        .task {
-            try? await model.utilityNetwork?.load()
-            if let utilityElement = model.utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
-                // Grab Utility Network Associations for the element being edited
-                if let associations = try? await model.utilityNetwork?.associations(for: utilityElement),
-                   let currentFeatureGlobalID = model.featureForm.feature.globalID {
-                    var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
-                    // Create a set of the unique association kinds present
-                    let associationKinds = Array(Set(associations.map { $0.kind }))
-                    for associationKind in associationKinds {
-                        // Filter the associations by kind
-                        let associationKindMembers = associations.filter { $0.kind == associationKind }
-                        // Create a set of the unique network sources within the association kind group.
-                        let networkSourceNames = Array(Set(
-                            associationKindMembers.map { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name }
-                        ))
-                        var networkSourceGroups: [UtilityNetworkAssociationFormElementView.NetworkSourceGroup] = []
-                        for networkSourceName in networkSourceNames {
-                            // Filter the associations by network source
-                            let networkSourceMembers = associationKindMembers.filter { $0.displayedElement(for: currentFeatureGlobalID).networkSource.name == networkSourceName }
-                            var associations: [UtilityNetworkAssociationFormElementView.Association] = []
-                            // For each association, create a Toolkit representation and add it to the group
-                            for networkSourceMember in networkSourceMembers {
-                                // Determine the association's title.
-                                let associatedElement = networkSourceMember.displayedElement(for: currentFeatureGlobalID)
-                                let title: String
-                                if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
-                                    title = formDefinitionTitle
-                                } else {
-                                    title = "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
-                                }
-                                
-                                let connection: UtilityNetworkAssociationFormElementView.Association.Connection? = switch networkSourceMember.kind {
-                                case .junctionEdgeObjectConnectivityMidspan:
-                                        .middle
-                                case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-                                    currentFeatureGlobalID == networkSourceMember.fromElement.globalID ? .left : .right
-                                default:
-                                    nil
-                                }
-                                if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
-                                    let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                        connectionPoint: connection,
-                                        description: nil,
-                                        fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
-                                        name: title,
-                                        selectionAction: {
-                                            navigationLayerModel.push {
-                                                InternalFeatureFormView(
-                                                    featureForm: FeatureForm(feature: arcGISFeature),
-                                                    headerVisibility: headerVisibility,
-                                                    utilityNetwork: model.utilityNetwork
-                                                )
-                                            }
-                                        },
-                                        terminalName: associatedElement.terminal?.name
-                                    )
-                                    associations.append(newAssociation)
-                                }
-                            }
-                            let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
-                                associations: associations,
-                                name: networkSourceName,
-                                presentingForm: title
-                            )
-                            networkSourceGroups.append(networkSourceGroup)
-                        }
-                        groups.append(
-                            UtilityNetworkAssociationFormElementView.AssociationKindGroup(
-                                networkSourceGroups: networkSourceGroups,
-                                name: "\(associationKind)".capitalized,
-                                presentingForm: title
-                            )
-                        )
-                    }
-                    self.groups = groups
-                } else {
-                    print("Not a Utility Element")
-                }
-            }
-        }
     }
 }
 
@@ -303,6 +211,8 @@ extension InternalFeatureFormView {
             GroupView(element: element, viewCreator: { internalMakeElement($0) })
         case let element as TextFormElement:
             makeTextElement(element)
+        case let element as UtilityAssociationsFormElement:
+            makeUtilityAssociationsFormElement(element)
         default:
             EmptyView()
         }
@@ -316,6 +226,8 @@ extension InternalFeatureFormView {
             makeFieldElement(element)
         case let element as TextFormElement:
             makeTextElement(element)
+        case let element as UtilityAssociationsFormElement:
+            makeUtilityAssociationsFormElement(element)
         default:
             EmptyView()
         }
@@ -337,6 +249,23 @@ extension InternalFeatureFormView {
         Divider()
     }
     
+    /// Makes UI for a utility associations element including a divider beneath it.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
+        HStack {
+            Text(element.label.isEmpty ? "Associations" : element.label)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Spacer()
+        }
+        .padding(.top, elementPadding)
+        if !element.description.isEmpty {
+            Text(element.description)
+                .font(.footnote)
+        }
+        Divider()
+    }
+    
     /// The progress view to be shown while initial expression evaluation is running.
     ///
     /// This avoids flashing elements that may immediately be set hidden or have
@@ -347,21 +276,5 @@ extension InternalFeatureFormView {
                 await model.initialEvaluation()
                 initialExpressionsAreEvaluating = false
             }
-    }
-}
-
-// TODO: See if we can avoid these conformances. If not, verify they're correct and move to a better location.
-
-extension UtilityNetworkSource: @retroactive Equatable {
-    public static func == (lhs: UtilityNetworkSource, rhs: UtilityNetworkSource) -> Bool {
-        lhs.id == rhs.id
-        && lhs.name == rhs.name
-    }
-}
-
-extension UtilityNetworkSource: @retroactive Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(id)
     }
 }

@@ -73,7 +73,7 @@ struct FeatureFormExampleView: View {
                     isPresented: model.formIsPresented
                 ) {
                     if let featureForm = model.featureForm {
-                        FeatureFormView(featureForm: featureForm, utilityNetwork: map.utilityNetworks.first)
+                        FeatureFormView(featureForm: featureForm)
                             .onFormChanged { presentedForm in
                                 print("Presented feature: \( presentedForm.feature.attributes["globalid"] ?? "?")")
                             }
