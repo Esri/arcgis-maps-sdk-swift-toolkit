@@ -66,6 +66,55 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// The root feature form.
+    let featureForm: FeatureForm
+    
+#warning("TODO: This property to be removed.")
+    let utilityNetwork: UtilityNetwork?
+    
+    /// The visibility of the form header.
+    var headerVisibility: Visibility = .automatic
+    
+    /// The closure to perform when the form has changed.
+    var onFormChangedAction: ((FeatureForm) -> Void)?
+    
+    /// The validation error visibility configuration of the form.
+    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+    
+    /// Initializes a form view.
+    /// - Parameters:
+    ///   - featureForm: The feature form defining the editing experience.
+    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
+        self.featureForm = featureForm
+        self.utilityNetwork = utilityNetwork
+    }
+    
+    public var body: some View {
+        NavigationLayer {
+            InternalFeatureFormView(
+                featureForm: featureForm,
+                headerVisibility: headerVisibility,
+                utilityNetwork: utilityNetwork
+            )
+        }
+        .environment(\.formChangedAction, onFormChangedAction)
+        .environment(\.validationErrorVisibility, validationErrorVisibility)
+    }
+    
+    /// Sets a closure to perform when the view’s form changes.
+    /// - Parameter action: The closure to perform when the form has changed.
+    public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
+        var copy = self
+        copy.onFormChangedAction = action
+        return copy
+    }
+}
+
+struct InternalFeatureFormView: View {
+    @Environment(\.formChangedAction) var onFormChangedAction
+    
+    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
@@ -78,28 +127,28 @@ public struct FeatureFormView: View {
     /// The title of the feature form view.
     @State private var title = ""
     
-    /// <#Description#>
-    let utilityNetwork: UtilityNetwork?
-    
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
-    
-    /// The validation error visibility configuration of the form.
-    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork? = nil) {
-        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
-        self.utilityNetwork = utilityNetwork
+    ///   - headerVisibility: The visibility of the form header.
+    init(featureForm: FeatureForm, headerVisibility: Visibility, utilityNetwork: UtilityNetwork? = nil) {
+        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm, utilityNetwork: utilityNetwork))
+        self.headerVisibility = headerVisibility
     }
     
     public var body: some View {
-        if initialExpressionsAreEvaluating {
-            initialBody
-        } else {
-            evaluatedForm
+        Group {
+            if initialExpressionsAreEvaluating {
+                initialBody
+            } else {
+                evaluatedForm
+            }
+        }
+        .onAppear {
+            onFormChangedAction?(model.featureForm)
         }
     }
     
@@ -143,13 +192,12 @@ public struct FeatureFormView: View {
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
         .task {
-            try? await utilityNetwork?.load()
-            if let utilityElement = utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
+            try? await model.utilityNetwork?.load()
+            if let utilityElement = model.utilityNetwork?.makeElement(arcGISFeature: model.featureForm.feature) {
                 // Grab Utility Network Associations for the element being edited
-                if let associations = try? await utilityNetwork?.associations(for: utilityElement),
+                if let associations = try? await model.utilityNetwork?.associations(for: utilityElement),
                    let currentFeatureGlobalID = model.featureForm.feature.globalID {
                     var groups = [UtilityNetworkAssociationFormElementView.AssociationKindGroup]()
                     // Create a set of the unique association kinds present
@@ -168,7 +216,6 @@ public struct FeatureFormView: View {
                             var associations: [UtilityNetworkAssociationFormElementView.Association] = []
                             // For each association, create a Toolkit representation and add it to the group
                             for networkSourceMember in networkSourceMembers {
-                                
                                 // Determine the association's title.
                                 let associatedElement = networkSourceMember.displayedElement(for: currentFeatureGlobalID)
                                 let title: String
@@ -186,33 +233,45 @@ public struct FeatureFormView: View {
                                 default:
                                     nil
                                 }
-                                
-                                let newAssociation = UtilityNetworkAssociationFormElementView.Association(
-                                    connectionPoint: connection,
-                                    description: nil,
-                                    fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
-                                    name: title,
-                                    terminalName: associatedElement.terminal?.name
-                                )
-                                associations.append(newAssociation)
+                                if let arcGISFeature = try? await model.utilityNetwork?.features(for: [associatedElement]).first {
+                                    let newAssociation = UtilityNetworkAssociationFormElementView.Association(
+                                        connectionPoint: connection,
+                                        description: nil,
+                                        fractionAlongEdge: networkSourceMember.fractionAlongEdge.isZero ? nil : networkSourceMember.fractionAlongEdge,
+                                        name: title,
+                                        selectionAction: {
+                                            navigationLayerModel.push {
+                                                InternalFeatureFormView(
+                                                    featureForm: FeatureForm(feature: arcGISFeature),
+                                                    headerVisibility: headerVisibility,
+                                                    utilityNetwork: model.utilityNetwork
+                                                )
+                                            }
+                                        },
+                                        terminalName: associatedElement.terminal?.name
+                                    )
+                                    associations.append(newAssociation)
+                                }
                             }
                             let networkSourceGroup = UtilityNetworkAssociationFormElementView.NetworkSourceGroup(
                                 associations: associations,
-                                name: networkSourceName
+                                name: networkSourceName,
+                                presentingForm: title
                             )
                             networkSourceGroups.append(networkSourceGroup)
                         }
                         groups.append(
                             UtilityNetworkAssociationFormElementView.AssociationKindGroup(
                                 networkSourceGroups: networkSourceGroups,
-                                name: "\(associationKind)".capitalized
+                                name: "\(associationKind)".capitalized,
+                                presentingForm: title
                             )
                         )
                     }
                     self.groups = groups
+                } else {
+                    print("Not a Utility Element")
                 }
-            } else {
-                print("Not a Utility Element")
             }
         }
     }
@@ -229,7 +288,11 @@ private extension UtilityAssociation {
     }
 }
 
-extension FeatureFormView {
+private extension EnvironmentValues {
+    @Entry var formChangedAction: ((FeatureForm) -> Void)?
+}
+
+extension InternalFeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {

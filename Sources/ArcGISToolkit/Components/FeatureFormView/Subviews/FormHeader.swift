@@ -16,12 +16,29 @@ import SwiftUI
 
 /// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
 struct FormHeader: View {
+    /// <#Description#>
+    let backNavigationAction: (() -> Void)?
+    
     /// The title defined for the form.
     let title: String
     
+    init(title: String, backNavigationAction: (() -> Void)? = nil) {
+        self.backNavigationAction = backNavigationAction
+        self.title = title
+    }
+    
     var body: some View {
-        Text(title)
-            .font(.title)
-            .fontWeight(.bold)
+        HStack {
+            if let backNavigationAction {
+                Button("Back", systemImage: "chevron.backward") {
+                    backNavigationAction()
+                }
+                .labelStyle(.iconOnly)
+            }
+            Text(title)
+                .font(.title)
+                .fontWeight(.bold)
+                .lineLimit(1)
+        }
     }
 }

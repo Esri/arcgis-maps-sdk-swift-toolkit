@@ -25,6 +25,8 @@ import SwiftUI
         }
     }
     
+    @Published var presentedForm: FeatureFormView?
+    
     /// The set of all elements which previously held focus.
     @Published var previouslyFocusedElements = [FormElement]()
     
@@ -39,11 +41,15 @@ import SwiftUI
     
     /// The visibility tasks group.
     private var isVisibleTask: Task<Void, Never>?
+
+#warning("TODO: This property to be removed.")
+    let utilityNetwork: UtilityNetwork?
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
-    init(featureForm: FeatureForm) {
+    public init(featureForm: FeatureForm, utilityNetwork: UtilityNetwork?) {
         self.featureForm = featureForm
+        self.utilityNetwork = utilityNetwork
     }
     
     deinit {
