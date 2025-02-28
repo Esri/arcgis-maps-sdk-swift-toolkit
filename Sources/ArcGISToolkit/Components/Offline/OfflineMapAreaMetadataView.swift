@@ -121,8 +121,8 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             
             if model.isDownloaded {
                 Text(model.directorySizeText)
-                .lineLimit(1)
-                .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .foregroundStyle(.secondary)
             }
         }
         .listRowBackground(EmptyView())
