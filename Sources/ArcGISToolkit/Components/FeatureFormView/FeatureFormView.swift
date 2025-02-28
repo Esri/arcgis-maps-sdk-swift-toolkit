@@ -105,15 +105,15 @@ public struct FeatureFormView: View {
 ***REMOVED***
 
 struct InternalFeatureFormView: View {
-***REMOVED***@Environment(\.formChangedAction) var onFormChangedAction
+***REMOVED***@Environment(\.formChangedAction) var formChangedAction
+***REMOVED***
+#warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
+***REMOVED***@Environment(\.formElementPadding) var formElementPadding
 ***REMOVED***
 ***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var groups: [UtilityNetworkAssociationFormElementView.AssociationKindGroup]?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether initial expression evaluation is running.
 ***REMOVED***@State private var initialExpressionsAreEvaluating = true
@@ -137,7 +137,7 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***onFormChangedAction?(model.featureForm)
+***REMOVED******REMOVED******REMOVED***formChangedAction?(model.featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -145,7 +145,7 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty /*&& headerVisibility != .hidden*/ {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !title.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -158,14 +158,6 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this can call makeElement(_:) instead and makeElement(_:) should have a
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** case added for AttachmentsFormElement.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let groups = groups, groups.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkAssociationFormElementView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "[UtilityNetworkAssociationsFormElement.description]",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associationKindGroups: groups,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "[UtilityNetworkAssociationsFormElement.label]"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -258,7 +250,7 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
-***REMOVED******REMOVED***.padding(.top, elementPadding)
+***REMOVED******REMOVED***.padding(.top, formElementPadding)
 ***REMOVED******REMOVED***if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
