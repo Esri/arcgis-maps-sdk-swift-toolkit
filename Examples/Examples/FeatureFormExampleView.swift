@@ -26,8 +26,10 @@ struct FeatureFormExampleView: View {
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
+#warning("TO BE UNDONE. For UN testing only.")
     /// The `Map` displayed in the `MapView`.
     @State private var map = makeMap()
+//    @State private var map = Map(url: .sampleData)!
     
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
@@ -57,6 +59,7 @@ struct FeatureFormExampleView: View {
                     }
                 }
                 .task {
+#warning("TO BE REMOVED. Public credential is for UN testing only.")
                     let publicSample = try? await ArcGISCredential.publicSample
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
                     
