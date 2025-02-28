@@ -177,17 +177,6 @@ struct InternalFeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension UtilityAssociation {
-***REMOVED******REMOVED***/ Determines whether to show the `fromElement` or `toElement`.
-***REMOVED***func displayedElement(for id: UUID) -> UtilityElement {
-***REMOVED******REMOVED***if id == toElement.globalID {
-***REMOVED******REMOVED******REMOVED***fromElement
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***toElement
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension EnvironmentValues {
 ***REMOVED***@Entry var formChangedAction: ((FeatureForm) -> Void)?
 ***REMOVED***
