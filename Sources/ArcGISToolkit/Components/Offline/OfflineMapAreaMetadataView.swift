@@ -121,8 +121,8 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if model.isDownloaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(model.directorySizeText)
-***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listRowBackground(EmptyView())
