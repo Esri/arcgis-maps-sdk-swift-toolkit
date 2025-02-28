@@ -251,6 +251,10 @@ extension InternalFeatureFormView {
             Spacer()
         }
         .padding(.top, formElementPadding)
+        
+        UtilityAssociationsFormElementView(element: element)
+            .environmentObject(model)
+        
         if !element.description.isEmpty {
             Text(element.description)
                 .font(.footnote)
