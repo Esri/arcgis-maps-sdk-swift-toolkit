@@ -60,7 +60,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#warning("FeatureForm will eventually handle UN loading. This is temporary.")
+#warning("TO BE REMOVED. FeatureForm will automatically load the correct UN.")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for network in map.utilityNetworks {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await network.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -146,6 +146,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
 ***REMOVED******REMOVED***/ Makes a map from a portal item.
 ***REMOVED***static func makeMap() -> Map {
 ***REMOVED******REMOVED***let portalItem = PortalItem(
@@ -180,6 +181,7 @@ private extension URL {
 ***REMOVED***
 ***REMOVED***
 
+#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
 private extension ArcGISCredential {
 ***REMOVED***static var publicSample: ArcGISCredential {
 ***REMOVED******REMOVED***get async throws {
