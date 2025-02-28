@@ -17,8 +17,6 @@ struct FeatureFormExampleView: View {
     
     @State private var map = makeMap()
     
-    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
-    
     @StateObject private var model = Model()
     
     var body: some View {
@@ -36,11 +34,10 @@ struct FeatureFormExampleView: View {
                         }
                     }
                     .task(id: identifyScreenPoint) {
-                        .task(id: identifyScreenPoint) {
-                            if let feature = await identifyFeature(with: mapViewProxy) {
-                                model.state = .editing(FeatureForm(feature: feature))
-                            }
+                        if let feature = await identifyFeature(with: mapViewProxy) {
+                            model.state = .editing(FeatureForm(feature: feature))
                         }
+                    }
                     .ignoresSafeArea(.keyboard)
                     .floatingPanel(
                         selectedDetent: $detent,
@@ -49,13 +46,33 @@ struct FeatureFormExampleView: View {
                     ) {
                         if let featureForm = model.featureForm {
                             FeatureFormView(featureForm: featureForm)
-                                .validationErrors(validationErrorVisibility)
                                 .padding(.horizontal)
                                 .padding(.top, 16)
                         }
                     }
-                    .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
-                        if !formIsPresented { validationErrorVisibility = .automatic }
+                    .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
+                        Button("Discard edits", role: .destructive) {
+                            model.discardEdits()
+                        }
+                        if case let .cancellationPending(featureForm) = model.state {
+                            Button("Continue editing", role: .cancel) {
+                                model.state = .editing(featureForm)
+                            }
+                        }
+                    } message: {
+                        Text("Updates to this feature will be lost.")
+                    }
+                    .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
+                    .toolbar {
+                        if model.formIsPresented.wrappedValue {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Cancel", role: .cancel) {
+                                    guard case let .editing(featureForm) = model.state else { return }
+                                    model.state = .cancellationPending(featureForm)
+                                }
+                                .disabled(model.formControlsAreDisabled)
+                            }
+                        }
                     }
             }
         }
