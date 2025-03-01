@@ -29,37 +29,10 @@ struct FormHeader: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let backNavigationAction {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Back", systemImage: "chevron.backward") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backNavigationAction()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text.discard
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(<#T##opacity: Double##Double#>)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text.finish
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(<#T##opacity: Double##Double#>)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
