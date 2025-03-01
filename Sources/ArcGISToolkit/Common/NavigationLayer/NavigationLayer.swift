@@ -22,8 +22,6 @@ import SwiftUI
 struct NavigationLayer<Content: View>: View {
     let root: () -> Content
     
-    @State private var width: CGFloat = .zero
-    
     @StateObject private var model: NavigationLayerModel
     
     init(_ root: @escaping () -> Content) {
@@ -32,32 +30,28 @@ struct NavigationLayer<Content: View>: View {
     }
     
     var body: some View {
-        Group {
-            if model.views.isEmpty {
-                root()
+        GeometryReader { geometryProxy in
+            Group {
+                if model.views.isEmpty {
+                    root()
+                        .transition(model.transition)
+                } else if let presented = model.presented?.view {
+                    VStack {
+                        DestinationHeader()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                        Spacer()
+                        AnyView(presented())
+                        Spacer()
+                    }
+                    // Re-trigger the transition animation when view count changes.
+                    .id(model.views.count)
                     .transition(model.transition)
-            } else if let presented = model.presented?.view {
-                VStack {
-                    DestinationHeader()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                    Spacer()
-                    AnyView(presented())
-                    Spacer()
                 }
-                // Re-trigger the transition animation when view count changes.
-                .id(model.views.count)
-                .transition(model.transition)
             }
-        }
-        .environmentObject(model)
-        // Apply container width so the animated transitions work correctly.
-        .frame(width: width)
-        .frame(maxWidth: .infinity)
-        .onGeometryChange(for: CGFloat.self) { proxy in
-            proxy.size.width
-        } action: { newValue in
-            width = newValue
+            .environmentObject(model)
+            // Apply container width so the animated transitions work correctly.
+            .frame(width: geometryProxy.size.width)
         }
     }
 }
