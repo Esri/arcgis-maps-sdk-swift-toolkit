@@ -29,37 +29,10 @@ struct FormHeader: View {
     
     var body: some View {
         HStack {
-//            if let backNavigationAction {
-//                Button("Back", systemImage: "chevron.backward") {
-//                    backNavigationAction()
-//                }
-//                .labelStyle(.iconOnly)
-//            }
-//            Text(title)
-//                .font(.title)
-//                .fontWeight(.bold)
-//                .lineLimit(1)
-            
-            Button {
-                
-            } label: {
-                Text.discard
-            }
-//            .opacity(<#T##opacity: Double##Double#>)
-            
-            Spacer()
-            
             Text(title)
-                .bold()
-            
-            Spacer()
-            
-            Button {
-                
-            } label: {
-                Text.finish
-            }
-//            .opacity(<#T##opacity: Double##Double#>)
+                .font(.title)
+                .fontWeight(.bold)
+                .lineLimit(1)
         }
         .frame(maxWidth: .infinity)
     }
