@@ -87,10 +87,17 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***NavigationLayer {
-***REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED***NavigationLayer {
+***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+#warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
+***REMOVED******REMOVED******REMOVED***FormFooter()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(Divider(), alignment: .top)
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
