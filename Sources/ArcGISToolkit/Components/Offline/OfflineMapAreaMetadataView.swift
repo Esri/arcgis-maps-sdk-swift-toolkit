@@ -33,29 +33,47 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
             Section { header }
             
             if !model.description.isEmpty {
-                Section("Description") {
+                Section {
                     Text(model.description)
                         .foregroundStyle(.secondary)
+                } header: {
+                    Text(
+                        "Description",
+                        bundle: .toolkitModule,
+                        comment: "A label for the description of the map area"
+                    )
                 }
                 .textCase(nil)
             }
             
             if model.isDownloaded && !isSelected {
                 Section {
-                    Button("Delete Map", role: .destructive) {
+                    Button(role: .destructive) {
                         if model.dismissMetadataViewOnDelete {
                             dismiss()
                         }
                         model.removeDownloadedArea()
+                    } label: {
+                        Text(
+                            "Delete Map Area",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to delete a map area."
+                        )
                     }
                 }
             }
             
             if !model.isDownloaded {
                 Section {
-                    Button("Download Map") {
+                    Button {
                         dismiss()
                         model.startDownload()
+                    } label: {
+                        Text(
+                            "Download Map Area",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to download a map area."
+                        )
                     }
                     .disabled(!model.allowsDownload)
                 }
@@ -65,7 +83,9 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") { dismiss() }
+                Button.done {
+                    dismiss()
+                }
             }
         }
     }
@@ -100,7 +120,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .fontWeight(.bold)
             
             if model.isDownloaded {
-                Text("Size: \(model.directorySizeText)")
+                Text(model.directorySizeText)
                     .lineLimit(1)
                     .foregroundStyle(.secondary)
             }
@@ -135,9 +155,16 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 }
 
 extension OfflineMapAreaMetadata {
+    private var directorySizeMeasurement: Measurement<UnitInformationStorage> {
+        Measurement(value: Double(directorySize), unit: .bytes)
+    }
+    
     var directorySizeText: String {
-        let measurement = Measurement(value: Double(directorySize), unit: UnitInformationStorage.bytes)
-        return measurement.formatted(.byteCount(style: .file))
+        .init(
+            localized: "Size: \(directorySizeMeasurement, format: .byteCount(style: .file))",
+            bundle: .toolkitModule,
+            comment: "A label for the file size of the map area."
+        )
     }
 }
 

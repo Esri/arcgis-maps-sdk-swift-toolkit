@@ -185,7 +185,11 @@ class OfflineMapViewModel: ObservableObject {
     /// Returns the next title for the on-demand map area.
     func nextOnDemandAreaTitle() -> String {
         func title(forIndex index: Int) -> String {
-            "Area \(index)"
+            .init(
+                localized: "Area \(index)",
+                bundle: .toolkitModule,
+                comment: "The title for a map area."
+            )
         }
         
         var index = onDemandMapModels.count + 1

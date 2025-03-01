@@ -69,6 +69,15 @@ extension String {
         )
     }
     
+    /// A localized string for the word "OK".
+    static var ok: Self {
+        .init(
+            localized: "OK",
+            bundle: .toolkitModule,
+            comment: "A label for button to proceed with an operation."
+        )
+    }
+    
     /// A label for a button to take the user to a contextually inferred settings page.
     static var settings: String {
         .init(
