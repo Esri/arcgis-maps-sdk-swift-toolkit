@@ -87,10 +87,17 @@ public struct FeatureFormView: View {
     }
     
     public var body: some View {
-        NavigationLayer {
-            InternalFeatureFormView(
-                featureForm: featureForm
-            )
+        VStack(spacing: 0) {
+            NavigationLayer {
+                InternalFeatureFormView(
+                    featureForm: featureForm
+                )
+            }
+#warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
+            FormFooter()
+                .padding()
+                .padding([.bottom])
+                .overlay(Divider(), alignment: .top)
         }
         .environment(\.formChangedAction, onFormChangedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
