@@ -79,13 +79,19 @@ struct OnDemandConfigurationView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button.cancel {
                         dismiss()
                     }
                 }
             }
             .task { await loadMap() }
-            .navigationBarTitle("Select Area")
+            .navigationBarTitle(
+                Text(
+                    "Select Area",
+                    bundle: .toolkitModule,
+                    comment: "A title for the on demand configuration view."
+                )
+            )
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -110,11 +116,15 @@ struct OnDemandConfigurationView: View {
             VStack {
                 VStack(spacing: 0) {
                     Divider()
-                    Text("Pan and zoom to define the area")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .padding(8)
-                        .frame(maxWidth: .infinity)
+                    Text(
+                        "Pan and zoom to define the area",
+                        bundle: .toolkitModule,
+                        comment: "A label instructing to pan and zoom the map to define an area."
+                    )
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .padding(8)
+                    .frame(maxWidth: .infinity)
                     Divider()
                     mapView
                         .overlay {
@@ -178,7 +188,11 @@ struct OnDemandConfigurationView: View {
                 Divider()
                 
                 HStack {
-                    Text("Level of Detail")
+                    Text(
+                        "Level of Detail",
+                        bundle: .toolkitModule,
+                        comment: "A label for the level of detail picker view."
+                    )
                     Spacer()
                     Picker(selection: $maxScale) {
                         ForEach(CacheScale.allCases, id: \.self) {
@@ -209,9 +223,13 @@ struct OnDemandConfigurationView: View {
                             dismiss()
                         }
                     } label: {
-                        Text("Download")
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity)
+                        Text(
+                            "Download",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to download a map area."
+                        )
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
                     }
                     .controlSize(.large)
                     .buttonStyle(.borderedProminent)
@@ -227,21 +245,21 @@ struct OnDemandConfigurationView: View {
         VStack {
             if hasNoInternetConnection {
                 Backported.ContentUnavailableView(
-                    "No Internet Connection",
+                    .noInternetConnectionErrorMessage,
                     systemImage: "wifi.exclamationmark",
-                    description: "A map area cannot be downloaded at this time."
+                    description: cannotDownloadMessage
                 )
             } else {
                 Backported.ContentUnavailableView(
-                    "Online Map Failed to Load",
+                    failedToLoadMessage,
                     systemImage: "exclamationmark.triangle",
-                    description: "A map area cannot be downloaded at this time."
+                    description: cannotDownloadMessage
                 )
             }
             Button {
                 Task { await loadMap() }
             } label: {
-                Text("Try Again")
+                Text.tryAgain
                     .buttonStyle(.borderless)
             }
             .padding()
@@ -294,19 +312,24 @@ private struct RenameButton: View {
             proposedNewTitle = title
             alertIsShowing = true
         } label: {
-            Text("Rename")
+            Text.rename
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
         .font(.subheadline)
         .fontWeight(.semibold)
-        .alert("Enter a name", isPresented: $alertIsShowing) {
-            TextField("Enter area name", text: $proposedNewTitle)
-            Button("OK", action: submitNewTitle)
+        .alert(enterName, isPresented: $alertIsShowing) {
+            TextField(text: $proposedNewTitle, prompt: areaName) {}
+            Button(String.ok, action: submitNewTitle)
                 .disabled(!proposedTitleIsValid)
-            Button("Cancel", role: .cancel) {}
+                .keyboardShortcut(.defaultAction)
+            Button.cancel {}
         } message: {
-            Text("The name for the map area must be unique.")
+            Text(
+                "The name for the map area must be unique.",
+                bundle: .toolkitModule,
+                comment: "A message explaining that the map area name must be unique."
+            )
         }
         .onChange(proposedNewTitle) {
             proposedTitleIsValid = isValidCheck($0)
@@ -380,5 +403,41 @@ private extension UIImage {
         }
         
         return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
+    }
+}
+
+private extension OnDemandConfigurationView {
+    var failedToLoadMessage: LocalizedStringResource {
+        .init(
+            "Online Map Failed to Load",
+            bundle: .toolkit,
+            comment: "A message explaining that the online map failed to load."
+        )
+    }
+    
+    var cannotDownloadMessage: LocalizedStringResource {
+        .init(
+            "A map area cannot be downloaded at this time.",
+            bundle: .toolkit,
+            comment: "A message explaining that a map area cannot be downloaded at this time."
+        )
+    }
+}
+
+private extension RenameButton {
+    var enterName: Text {
+        .init(
+            "Enter a name",
+            bundle: .toolkitModule,
+            comment: "An instruction to enter a name."
+        )
+    }
+    
+    var areaName: Text {
+        .init(
+            "Area Name",
+            bundle: .toolkitModule,
+            comment: "A hint for the user to enter an area name in the text field."
+        )
     }
 }

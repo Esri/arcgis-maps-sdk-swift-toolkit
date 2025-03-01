@@ -112,7 +112,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         self.configuration = nil
         self.job = job
         self.areaID = areaID
-        self.title = job.parameters.itemInfo?.title ?? "Unknown"
+        self.title = job.parameters.itemInfo?.title ?? .unknown
         self.portalItemID = portalItemID
         self.onRemoveDownloadAction = onRemoveDownload
         self.offlineMapTask = nil
@@ -424,4 +424,14 @@ struct OnDemandMapAreaConfiguration {
     let areaOfInterest: Geometry
     /// The thumbnail of the area.
     let thumbnail: UIImage?
+}
+
+private extension String {
+    static var unknown: Self {
+        .init(
+            localized: "Unknown",
+            bundle: .toolkitModule,
+            comment: "The default title of a map area with an unknown title."
+        )
+    }
 }

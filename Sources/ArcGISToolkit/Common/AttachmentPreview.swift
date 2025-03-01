@@ -106,11 +106,7 @@ struct AttachmentPreview: View {
                                 }
                             } label: {
                                 Label {
-                                    Text(
-                                        "Rename",
-                                        bundle: .toolkitModule,
-                                        comment: "A label for a button to rename an attachment."
-                                    )
+                                    Text.rename
                                 } icon: {
                                     Image(systemName: "pencil")
                                 }

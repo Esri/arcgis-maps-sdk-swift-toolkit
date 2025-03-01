@@ -110,9 +110,13 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     @ViewBuilder private var statusView: some View {
         HStack(spacing: 4) {
             if isSelected {
-                Text("Currently open")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                Text(
+                    "Currently open",
+                    bundle: .toolkitModule,
+                    comment: "The status text for an opened map area."
+                )
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
             } else {
                 if !model.statusSystemImage.isEmpty {
                     Image(systemName: model.statusSystemImage)
@@ -128,7 +132,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 @MainActor
 protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
     var listItemDescription: String { get }
-    var statusText: String { get }
+    var statusText: LocalizedStringResource { get }
     var statusSystemImage: String { get }
     var jobProgress: Progress? { get }
     
@@ -155,7 +159,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
     var isDownloaded: Bool { true }
     var allowsDownload: Bool { true }
     var directorySize: Int { 1_000_000_000 }
-    var statusText: String { "Downloaded" }
+    var statusText: LocalizedStringResource { "Downloaded" }
     var statusSystemImage: String { "exclamationmark.circle" }
     var jobProgress: Progress? { nil }
     var dismissMetadataViewOnDelete: Bool { false }
@@ -188,9 +192,13 @@ struct OpenOfflineMapAreaButton: View {
                 dismiss()
             }
         } label: {
-            Text("Open")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            Text(
+                "Open",
+                bundle: .toolkitModule,
+                comment: "The label for a button to open a map area."
+            )
+            .font(.subheadline)
+            .fontWeight(.semibold)
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)

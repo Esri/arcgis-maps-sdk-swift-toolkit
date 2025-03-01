@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 
 enum CacheScale: CaseIterable {
     case room, rooms, houseProperty, houses, smallBuilding, building, buildings, street, streets, neighborhood, town, city, cities,
@@ -79,56 +80,250 @@ enum CacheScale: CaseIterable {
         "1:\(Int(scale))"
     }
     
-    var description: String {
+    var description: LocalizedStringResource {
         switch self {
-        case .room:
-            "Room"
-        case .rooms:
-            "Rooms"
-        case .houseProperty:
-            "House Property"
-        case .houses:
-            "Houses"
-        case .smallBuilding:
-            "Small Building"
-        case .building:
-            "Building"
-        case .buildings:
-            "Buildings"
-        case .street:
-            "Street"
-        case .streets:
-            "Streets"
-        case .neighborhood:
-            "Neighborhood"
-        case .town:
-            "Town"
-        case .city:
-            "City"
-        case .cities:
-            "Cities"
-        case .metropolitanArea:
-            "Metropolitan Area"
-        case .county:
-            "County"
-        case .counties:
-            "Counties"
-        case .stateProvince:
-            "State/Province"
-        case .statesProvinces:
-            "States/Provinces"
-        case .countriesSmall:
-            "Countries (Small)"
-        case .countriesBig:
-            "Countries (Big)"
-        case .continent:
-            "Continent"
-        case .worldSmall:
-            "World (Small)"
-        case .worldBig:
-            "World (Big)"
-        case .world:
-            "World"
+        case .room: .room
+        case .rooms: .rooms
+        case .houseProperty: .houseProperty
+        case .houses: .houses
+        case .smallBuilding: .smallBuilding
+        case .building: .building
+        case .buildings: .buildings
+        case .street: .street
+        case .streets: .streets
+        case .neighborhood: .neighborhood
+        case .town: .town
+        case .city: .city
+        case .cities: .cities
+        case .metropolitanArea: .metropolitanArea
+        case .county: .county
+        case .counties: .counties
+        case .stateProvince: .stateProvince
+        case .statesProvinces: .statesProvinces
+        case .countriesSmall: .countriesSmall
+        case .countriesBig: .countriesBig
+        case .continent: .continent
+        case .worldSmall: .worldSmall
+        case .worldBig: .worldBig
+        case .world: .world
         }
+    }
+}
+
+private extension LocalizedStringResource {
+    /// A localized string for the word "Room".
+    static var room: Self {
+        .init(
+            "Room",
+            bundle: .toolkit,
+            comment: "Room (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Rooms".
+    static var rooms: Self {
+        .init(
+            "Rooms",
+            bundle: .toolkit,
+            comment: "Rooms (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "House Property".
+    static var houseProperty: Self {
+        .init(
+            "House Property",
+            bundle: .toolkit,
+            comment: "House Property (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "Houses".
+    static var houses: Self {
+        .init(
+            "Houses",
+            bundle: .toolkit,
+            comment: "Houses (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "Small Building".
+    static var smallBuilding: Self {
+        .init(
+            "Small Building",
+            bundle: .toolkit,
+            comment: "Small Building (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Building".
+    static var building: Self {
+        .init(
+            "Building",
+            bundle: .toolkit,
+            comment: "Building (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Buildings".
+    static var buildings: Self {
+        .init(
+            "Buildings",
+            bundle: .toolkit,
+            comment: "Buildings (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Street".
+    static var street: Self {
+        .init(
+            "Street",
+            bundle: .toolkit,
+            comment: "Street (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Streets".
+    static var streets: Self {
+        .init(
+            "Streets",
+            bundle: .toolkit,
+            comment: "Streets (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Neighborhood".
+    static var neighborhood: Self {
+        .init(
+            "Neighborhood",
+            bundle: .toolkit,
+            comment: "Neighborhood (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Town".
+    static var town: Self {
+        .init(
+            "Town",
+            bundle: .toolkit,
+            comment: "Town (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "City".
+    static var city: Self {
+        .init(
+            "City",
+            bundle: .toolkit,
+            comment: "City (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Cities".
+    static var cities: Self {
+        .init(
+            "Cities",
+            bundle: .toolkit,
+            comment: "Cities (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "Metropolitan Area".
+    static var metropolitanArea: Self {
+        .init(
+            "Metropolitan Area",
+            bundle: .toolkit,
+            comment: "Metropolitan Area (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "County".
+    static var county: Self {
+        .init(
+            "County",
+            bundle: .toolkit,
+            comment: "County (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Counties".
+    static var counties: Self {
+        .init(
+            "Counties",
+            bundle: .toolkit,
+            comment: "Counties (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "State/Province".
+    static var stateProvince: Self {
+        .init(
+            "State/Province",
+            bundle: .toolkit,
+            comment: "State/Province (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "States/Provinces".
+    static var statesProvinces: Self {
+        .init(
+            "States/Provinces",
+            bundle: .toolkit,
+            comment: "States/Provinces (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "Countries (Small)".
+    static var countriesSmall: Self {
+        .init(
+            "Countries (Small)",
+            bundle: .toolkit,
+            comment: "Countries (Small) (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "Countries (Big)".
+    static var countriesBig: Self {
+        .init(
+            "Countries (Big)",
+            bundle: .toolkit,
+            comment: "Countries (Big) (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "Continent".
+    static var continent: Self {
+        .init(
+            "Continent",
+            bundle: .toolkit,
+            comment: "Continent (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "World (Small)".
+    static var worldSmall: Self {
+        .init(
+            "World (Small)",
+            bundle: .toolkit,
+            comment: "World (Small) (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for "World (Big)".
+    static var worldBig: Self {
+        .init(
+            "World (Big)",
+            bundle: .toolkit,
+            comment: "World (Big) (Level of Detail)"
+        )
+    }
+    
+    /// A localized string for the word "World".
+    static var world: Self {
+        .init(
+            "World",
+            bundle: .toolkit,
+            comment: "World (Level of Detail)"
+        )
     }
 }
