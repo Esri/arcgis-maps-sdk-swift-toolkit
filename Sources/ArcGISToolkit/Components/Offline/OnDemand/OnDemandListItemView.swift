@@ -88,20 +88,14 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var statusText: String {
+***REMOVED***var statusText: LocalizedStringResource {
 ***REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED***case .initialized:
-***REMOVED******REMOVED******REMOVED***"Loading"
-***REMOVED******REMOVED***case .mmpkLoadFailure:
-***REMOVED******REMOVED******REMOVED***"Loading failed"
-***REMOVED******REMOVED***case .downloading:
-***REMOVED******REMOVED******REMOVED***"Downloading"
-***REMOVED******REMOVED***case .downloaded:
-***REMOVED******REMOVED******REMOVED***"Downloaded"
-***REMOVED******REMOVED***case .downloadFailure:
-***REMOVED******REMOVED******REMOVED***"Download failed"
-***REMOVED******REMOVED***case .downloadCancelled:
-***REMOVED******REMOVED******REMOVED***"Cancelled"
+***REMOVED******REMOVED***case .initialized: .loading
+***REMOVED******REMOVED***case .mmpkLoadFailure: .loadingFailed
+***REMOVED******REMOVED***case .downloading: .downloading
+***REMOVED******REMOVED***case .downloaded: .downloaded
+***REMOVED******REMOVED***case .downloadFailure: .downloadFailed
+***REMOVED******REMOVED***case .downloadCancelled: .cancelled
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -116,4 +110,14 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var jobProgress: Progress? { job?.progress ***REMOVED***
+***REMOVED***
+
+private extension LocalizedStringResource {
+***REMOVED***static var cancelled: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Cancelled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area download is cancelled."
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***

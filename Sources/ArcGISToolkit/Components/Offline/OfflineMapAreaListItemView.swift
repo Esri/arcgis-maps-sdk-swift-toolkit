@@ -110,9 +110,13 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 ***REMOVED***@ViewBuilder private var statusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
 ***REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Currently open")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Currently open",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The status text for an opened map area."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !model.statusSystemImage.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: model.statusSystemImage)
@@ -128,7 +132,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 @MainActor
 protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED***var listItemDescription: String { get ***REMOVED***
-***REMOVED***var statusText: String { get ***REMOVED***
+***REMOVED***var statusText: LocalizedStringResource { get ***REMOVED***
 ***REMOVED***var statusSystemImage: String { get ***REMOVED***
 ***REMOVED***var jobProgress: Progress? { get ***REMOVED***
 ***REMOVED***
@@ -155,7 +159,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
 ***REMOVED***var isDownloaded: Bool { true ***REMOVED***
 ***REMOVED***var allowsDownload: Bool { true ***REMOVED***
 ***REMOVED***var directorySize: Int { 1_000_000_000 ***REMOVED***
-***REMOVED***var statusText: String { "Downloaded" ***REMOVED***
+***REMOVED***var statusText: LocalizedStringResource { "Downloaded" ***REMOVED***
 ***REMOVED***var statusSystemImage: String { "exclamationmark.circle" ***REMOVED***
 ***REMOVED***var jobProgress: Progress? { nil ***REMOVED***
 ***REMOVED***var dismissMetadataViewOnDelete: Bool { false ***REMOVED***
@@ -188,9 +192,13 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Open")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Open",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "The label for a button to open a map area."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.buttonBorderShape(.capsule)
