@@ -22,8 +22,6 @@
 struct NavigationLayer<Content: View>: View {
 ***REMOVED***let root: () -> Content
 ***REMOVED***
-***REMOVED***@State private var width: CGFloat = .zero
-***REMOVED***
 ***REMOVED***@StateObject private var model: NavigationLayerModel
 ***REMOVED***
 ***REMOVED***init(_ root: @escaping () -> Content) {
@@ -32,32 +30,28 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***root()
+***REMOVED******REMOVED***GeometryReader { geometryProxy in
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
+***REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DestinationHeader()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
-***REMOVED******REMOVED*** else if let presented = model.presented?.view {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DestinationHeader()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
-***REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
-***REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.environmentObject(model)
-***REMOVED******REMOVED******REMOVED*** Apply container width so the animated transitions work correctly.
-***REMOVED******REMOVED***.frame(width: width)
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED***.onGeometryChange(for: CGFloat.self) { proxy in
-***REMOVED******REMOVED******REMOVED***proxy.size.width
-***REMOVED*** action: { newValue in
-***REMOVED******REMOVED******REMOVED***width = newValue
+***REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Apply container width so the animated transitions work correctly.
+***REMOVED******REMOVED******REMOVED***.frame(width: geometryProxy.size.width)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
