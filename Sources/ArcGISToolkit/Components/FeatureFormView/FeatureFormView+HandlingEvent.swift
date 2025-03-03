@@ -25,11 +25,3 @@ public extension FeatureFormView {
 ***REMOVED******REMOVED***case StartedEditing(FeatureForm)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when a form handling event occurs.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form handling event occurs.
-***REMOVED***func onFormHandlingEvent(perform action: @escaping (HandlingEvent) -> Void) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onFormHandlingEventAction = action
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***

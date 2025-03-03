@@ -79,6 +79,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when the close button is pressed.
+***REMOVED***var onCloseAction: (() -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when a ``HandlingEvent`` occurs.
 ***REMOVED***var onFormHandlingEventAction: ((HandlingEvent) -> Void)?
 ***REMOVED***
@@ -95,6 +98,12 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED***if let onCloseAction {
+***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
+#warning("TODO: Check if the presented form has edits.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCloseAction()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
@@ -119,6 +128,27 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+public extension FeatureFormView {
+***REMOVED******REMOVED***/ Sets a closure to perform when the form's close button is pressed.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form's close button is pressed.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Use this modifier to show a close button on the form. If the feature form has edits the user will be
+***REMOVED******REMOVED***/ prompted to first save or discard the edits.
+***REMOVED***func onClose(perform action: @escaping () -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onCloseAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when a form handling event occurs.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form handling event occurs.
+***REMOVED***func onFormHandlingEvent(perform action: @escaping (HandlingEvent) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onFormHandlingEventAction = action
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
