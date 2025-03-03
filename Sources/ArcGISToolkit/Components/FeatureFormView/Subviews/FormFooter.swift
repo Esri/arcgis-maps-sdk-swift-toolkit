@@ -15,10 +15,14 @@
 import SwiftUI
 
 struct FormFooter: View {
+    let discardAction: () -> Void
+    
+    let saveAction: () -> Void
+    
     var body: some View {
         HStack {
             Button {
-                
+                discardAction()
             } label: {
                 Text(
                     "Discard",
@@ -30,7 +34,7 @@ struct FormFooter: View {
             Spacer()
             
             Button {
-                
+                saveAction()
             } label: {
                 Text(
                     "Save",
