@@ -44,6 +44,8 @@ struct UtilityAssociationsFormElementView: View {
 
 /// <#Description#>
 private struct UtilityAssociationGroupResultView: View {
+    @Environment(\.formChangedAction) var formChangedAction
+    
     /// The view model for the form.
     @EnvironmentObject private var formViewModel: FormViewModel
     
@@ -90,6 +92,12 @@ private struct UtilityAssociationGroupResultView: View {
                     )
                 )
             }
+        }
+        .onAppear {
+            // This view is considered the tail end of a navigable FeatureForm.
+            // When a user is backing out of a navigation path, this view
+            // appearing is considered a change to the presented FeatureForm.
+            formChangedAction?(formViewModel.featureForm)
         }
     }
 }
