@@ -195,7 +195,7 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Open",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "The label for a button to open a map area."
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to open a map area."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)

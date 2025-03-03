@@ -40,7 +40,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Description",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for the description of the map area"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for the description of the map area."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
