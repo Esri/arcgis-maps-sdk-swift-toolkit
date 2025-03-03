@@ -166,7 +166,7 @@ east, etc.). */
 /* A label for a button to delete a map area. */
 "Delete Map Area" = "Delete Map Area";
 
-/* A label for the description of the map area */
+/* A label for the description of the map area. */
 "Description" = "Description";
 
 /* E.g. Close/hide a sheet or pop-up. */
@@ -400,7 +400,7 @@ AR experience. */
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Online Map Failed to Load";
 
-/* The label for a button to open a map area. */
+/* A label for a button to open a map area. */
 "Open" = "Open";
 
 /* The status text when a map area is packaging. */
