@@ -112,6 +112,12 @@ public struct FeatureFormView: View {
     }
 }
 
+
+extension EnvironmentValues {
+    /// The environment value to access the closure to call when the presented feature form changes.
+    @Entry var formChangedAction: ((FeatureForm) -> Void)?
+}
+
 struct InternalFeatureFormView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
@@ -183,10 +189,6 @@ struct InternalFeatureFormView: View {
 #endif
         .environmentObject(model)
     }
-}
-
-private extension EnvironmentValues {
-    @Entry var formChangedAction: ((FeatureForm) -> Void)?
 }
 
 extension InternalFeatureFormView {
