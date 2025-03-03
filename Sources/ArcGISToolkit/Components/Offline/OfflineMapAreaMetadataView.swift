@@ -40,7 +40,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                     Text(
                         "Description",
                         bundle: .toolkitModule,
-                        comment: "A label for the description of the map area"
+                        comment: "A label for the description of the map area."
                     )
                 }
                 .textCase(nil)

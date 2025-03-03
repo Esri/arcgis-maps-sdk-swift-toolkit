@@ -195,7 +195,7 @@ struct OpenOfflineMapAreaButton: View {
             Text(
                 "Open",
                 bundle: .toolkitModule,
-                comment: "The label for a button to open a map area."
+                comment: "A label for a button to open a map area."
             )
             .font(.subheadline)
             .fontWeight(.semibold)
