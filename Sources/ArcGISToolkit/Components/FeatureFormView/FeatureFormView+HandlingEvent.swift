@@ -24,12 +24,4 @@ public extension FeatureFormView {
         /// <#Description#>
         case StartedEditing(FeatureForm)
     }
-    
-    /// Sets a closure to perform when a form handling event occurs.
-    /// - Parameter action: The closure to perform when the form handling event occurs.
-    func onFormHandlingEvent(perform action: @escaping (HandlingEvent) -> Void) -> Self {
-        var copy = self
-        copy.onFormHandlingEventAction = action
-        return copy
-    }
 }

@@ -74,8 +74,19 @@ struct FeatureFormExampleView: View {
                 ) {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm)
-                            .onFormChanged { presentedForm in
-                                print("Presented feature: \( presentedForm.feature.attributes["globalid"] ?? "?")")
+                            .onClose {
+                                model.state = .idle
+                            }
+                            .onFormHandlingEvent { action in
+                                print(action)
+                                switch action {
+                                case .DiscardedEdits(let featureForm, let willNavigate):
+                                    print(featureForm.feature.attributes["objectid"])
+                                case .FinishedEditing(let featureForm, let willNavigate):
+                                    print(featureForm.feature.attributes["objectid"])
+                                case .StartedEditing(let featureForm):
+                                    print(featureForm.feature.attributes["objectid"])
+                                }
                             }
                             .padding(.horizontal)
                             .padding(.top, 16)
