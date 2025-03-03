@@ -67,14 +67,20 @@
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
+***REMOVED******REMOVED***/ The feature form currently visible in the navigation layer.
+***REMOVED***@State private var presentedForm: FeatureForm?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
+***REMOVED***@State private var hasEdits: Bool = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The root feature form.
-***REMOVED***let featureForm: FeatureForm
+***REMOVED***let rootFeatureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the form header.
 ***REMOVED***var headerVisibility: Visibility = .automatic
 ***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when the form has changed.
-***REMOVED***var onFormChangedAction: ((FeatureForm) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when a ``HandlingEvent`` occurs.
+***REMOVED***var onFormHandlingEventAction: ((HandlingEvent) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -83,24 +89,51 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
 ***REMOVED***public init(featureForm: FeatureForm) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED******REMOVED***self.rootFeatureForm = featureForm
+***REMOVED******REMOVED***_presentedForm = .init(initialValue: featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED***NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if hasEdits {
 #warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
-***REMOVED******REMOVED******REMOVED***FormFooter()
+***REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***discardAction: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.discardEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormHandlingEventAction?(.DiscardedEdits(presentedForm, willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***saveAction: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await presentedForm.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormHandlingEventAction?(.FinishedEditing(presentedForm, willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(Divider(), alignment: .top)
+***REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .bottom))
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED******REMOVED***.task(id: presentedForm?.feature.globalID) {
+***REMOVED******REMOVED******REMOVED***if let presentedForm {
+***REMOVED******REMOVED******REMOVED******REMOVED***onFormHandlingEventAction?(.StartedEditing(presentedForm))
+***REMOVED******REMOVED******REMOVED******REMOVED***for await hasEdits in presentedForm.$hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { self.hasEdits = hasEdits ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
