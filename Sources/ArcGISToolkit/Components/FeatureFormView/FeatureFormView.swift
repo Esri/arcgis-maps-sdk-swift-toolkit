@@ -79,6 +79,9 @@ public struct FeatureFormView: View {
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
     
+    /// The action to perform when the close button is pressed.
+    var onCloseAction: (() -> Void)?
+    
     /// The closure to perform when a ``HandlingEvent`` occurs.
     var onFormHandlingEventAction: ((HandlingEvent) -> Void)?
     
@@ -95,6 +98,12 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
+            if let onCloseAction {
+                XButton(.dismiss) {
+#warning("TODO: Check if the presented form has edits.")
+                    onCloseAction()
+                }
+            }
             NavigationLayer {
                 InternalFeatureFormView(
                     featureForm: rootFeatureForm
@@ -119,6 +128,27 @@ public struct FeatureFormView: View {
                 }
             }
         }
+    }
+}
+
+public extension FeatureFormView {
+    /// Sets a closure to perform when the form's close button is pressed.
+    /// - Parameter action: The closure to perform when the form's close button is pressed.
+    ///
+    /// Use this modifier to show a close button on the form. If the feature form has edits the user will be
+    /// prompted to first save or discard the edits.
+    func onClose(perform action: @escaping () -> Void) -> Self {
+        var copy = self
+        copy.onCloseAction = action
+        return copy
+    }
+    
+    /// Sets a closure to perform when a form handling event occurs.
+    /// - Parameter action: The closure to perform when the form handling event occurs.
+    func onFormHandlingEvent(perform action: @escaping (HandlingEvent) -> Void) -> Self {
+        var copy = self
+        copy.onFormHandlingEventAction = action
+        return copy
     }
 }
 
