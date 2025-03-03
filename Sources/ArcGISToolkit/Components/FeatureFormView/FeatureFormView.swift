@@ -102,13 +102,23 @@ public struct FeatureFormView: View {
         .environment(\.formChangedAction, onFormChangedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
     }
-    
-    /// Sets a closure to perform when the view’s form changes.
-    /// - Parameter action: The closure to perform when the form has changed.
-    public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
-        var copy = self
-        copy.onFormChangedAction = action
-        return copy
+}
+
+extension FeatureFormView {
+    /// The closure to perform when the presented feature form changes.
+    ///
+    /// - Note: This action has the potential to be called under four scenarios. Whenever an
+    /// ``InternalFeatureFormView`` appears (which can happen during forward
+    /// or reverse navigation) and whenever a ``UtilityAssociationGroupResultView`` appears
+    /// (which can also happen during forward or reverse navigation). Because those two views (and the
+    /// intermediate ``UtilityAssociationsFilterResultView`` are all considered to be apart of
+    /// the same ``FeatureForm`` make sure not to over-emit form handling events.
+    var onFormChangedAction: (FeatureForm) -> Void {
+        { featureForm in
+            if featureForm.feature.globalID != presentedForm?.feature.globalID {
+                self.presentedForm = featureForm
+            }
+        }
     }
 }
 
