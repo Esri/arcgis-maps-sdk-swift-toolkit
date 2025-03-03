@@ -100,28 +100,13 @@ public struct FeatureFormView: View {
                     featureForm: rootFeatureForm
                 )
             }
-            if hasEdits {
+            if let presentedForm, let onFormHandlingEventAction, hasEdits {
 #warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
-                FormFooter(
-                    discardAction: {
-                        if let presentedForm {
-                            presentedForm.discardEdits()
-                            onFormHandlingEventAction?(.DiscardedEdits(presentedForm, willNavigate: false))
-                        }
-                    },
-                    saveAction: {
-                        if let presentedForm {
-                            Task {
-                                try? await presentedForm.finishEditing()
-                                onFormHandlingEventAction?(.FinishedEditing(presentedForm, willNavigate: false))
-                            }
-                        }
-                    }
-                )
-                .padding()
-                .padding([.bottom])
-                .overlay(Divider(), alignment: .top)
-                .transition(.move(edge: .bottom))
+                FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
+                    .padding()
+                    .padding([.bottom])
+                    .overlay(Divider(), alignment: .top)
+                    .transition(.move(edge: .bottom))
             }
         }
         .environment(\.formChangedAction, onFormChangedAction)
