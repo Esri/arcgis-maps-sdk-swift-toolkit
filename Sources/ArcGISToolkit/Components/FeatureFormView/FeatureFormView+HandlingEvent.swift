@@ -1,0 +1,35 @@
+***REMOVED*** Copyright 2025 Esri
+***REMOVED***
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+
+public extension FeatureFormView {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***enum HandlingEvent {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***case DiscardedEdits(FeatureForm, willNavigate: Bool)
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***case FinishedEditing(FeatureForm, willNavigate: Bool)
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***case StartedEditing(FeatureForm)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when a form handling event occurs.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form handling event occurs.
+***REMOVED***func onFormHandlingEvent(perform action: @escaping (HandlingEvent) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onFormHandlingEventAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
