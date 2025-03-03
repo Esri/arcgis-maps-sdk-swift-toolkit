@@ -103,12 +103,22 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when the view’s form changes.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form has changed.
-***REMOVED***public func onFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onFormChangedAction = action
-***REMOVED******REMOVED***return copy
+
+extension FeatureFormView {
+***REMOVED******REMOVED***/ The closure to perform when the presented feature form changes.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: This action has the potential to be called under four scenarios. Whenever an
+***REMOVED******REMOVED***/ ``InternalFeatureFormView`` appears (which can happen during forward
+***REMOVED******REMOVED***/ or reverse navigation) and whenever a ``UtilityAssociationGroupResultView`` appears
+***REMOVED******REMOVED***/ (which can also happen during forward or reverse navigation). Because those two views (and the
+***REMOVED******REMOVED***/ intermediate ``UtilityAssociationsFilterResultView`` are all considered to be apart of
+***REMOVED******REMOVED***/ the same ``FeatureForm`` make sure not to over-emit form handling events.
+***REMOVED***var onFormChangedAction: (FeatureForm) -> Void {
+***REMOVED******REMOVED***{ featureForm in
+***REMOVED******REMOVED******REMOVED***if featureForm.feature.globalID != presentedForm?.feature.globalID {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.presentedForm = featureForm
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
