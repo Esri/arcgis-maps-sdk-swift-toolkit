@@ -13,16 +13,18 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***
 
 struct FormFooter: View {
-***REMOVED***let discardAction: () -> Void
+***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
-***REMOVED***let saveAction: () -> Void
+***REMOVED***let formHandlingEventAction: (FeatureFormView.HandlingEvent) -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***discardAction()
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm.discardEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.DiscardedEdits(featureForm, willNavigate: false))
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Discard",
@@ -34,7 +36,10 @@ struct FormFooter: View {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***saveAction()
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.FinishedEditing(featureForm, willNavigate: false))
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Save",

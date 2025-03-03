@@ -100,28 +100,13 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if hasEdits {
+***REMOVED******REMOVED******REMOVED***if let presentedForm, let onFormHandlingEventAction, hasEdits {
 #warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
-***REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***discardAction: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.discardEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormHandlingEventAction?(.DiscardedEdits(presentedForm, willNavigate: false))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***saveAction: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await presentedForm.finishEditing()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormHandlingEventAction?(.FinishedEditing(presentedForm, willNavigate: false))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(Divider(), alignment: .top)
-***REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .bottom))
+***REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(Divider(), alignment: .top)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .bottom))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
