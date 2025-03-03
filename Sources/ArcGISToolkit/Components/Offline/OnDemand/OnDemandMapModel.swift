@@ -142,7 +142,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         guard FileManager.default.fileExists(atPath: mmpkDirectory.path()) else { return nil }
         let mmpk = MobileMapPackage(fileURL: mmpkDirectory)
         try? await mmpk.load()
-        title = mmpk.item?.title ?? "Unknown"
+        title = mmpk.item?.title ?? .unknown
         thumbnail = UIImage(contentsOfFile: thumbnailURL.path())
         Logger.offlineManager.debug("Found on-demand area at \(self.mmpkDirectoryURL.path(), privacy: .private)")
         await loadAndUpdateMobileMapPackage(mmpk: mmpk)
