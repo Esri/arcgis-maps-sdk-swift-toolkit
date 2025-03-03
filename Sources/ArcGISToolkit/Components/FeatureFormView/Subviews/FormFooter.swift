@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import SwiftUI
 
 struct FormFooter: View {
-    let discardAction: () -> Void
+    let featureForm: FeatureForm
     
-    let saveAction: () -> Void
+    let formHandlingEventAction: (FeatureFormView.HandlingEvent) -> Void
     
     var body: some View {
         HStack {
             Button {
-                discardAction()
+                featureForm.discardEdits()
+                formHandlingEventAction(.DiscardedEdits(featureForm, willNavigate: false))
             } label: {
                 Text(
                     "Discard",
@@ -34,7 +36,10 @@ struct FormFooter: View {
             Spacer()
             
             Button {
-                saveAction()
+                Task {
+                    try? await featureForm.finishEditing()
+                    formHandlingEventAction(.FinishedEditing(featureForm, willNavigate: false))
+                }
             } label: {
                 Text(
                     "Save",
