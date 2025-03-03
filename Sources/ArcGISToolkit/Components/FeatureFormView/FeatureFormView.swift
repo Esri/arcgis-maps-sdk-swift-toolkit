@@ -67,14 +67,20 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// The feature form currently visible in the navigation layer.
+    @State private var presentedForm: FeatureForm?
+    
+    /// A Boolean value indicating whether the presented feature form has edits.
+    @State private var hasEdits: Bool = false
+    
     /// The root feature form.
-    let featureForm: FeatureForm
+    let rootFeatureForm: FeatureForm
     
     /// The visibility of the form header.
     var headerVisibility: Visibility = .automatic
     
-    /// The closure to perform when the form has changed.
-    var onFormChangedAction: ((FeatureForm) -> Void)?
+    /// The closure to perform when a ``HandlingEvent`` occurs.
+    var onFormHandlingEventAction: ((HandlingEvent) -> Void)?
     
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -83,24 +89,51 @@ public struct FeatureFormView: View {
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
-        self.featureForm = featureForm
+        self.rootFeatureForm = featureForm
+        _presentedForm = .init(initialValue: featureForm)
     }
     
     public var body: some View {
         VStack(spacing: 0) {
             NavigationLayer {
                 InternalFeatureFormView(
-                    featureForm: featureForm
+                    featureForm: rootFeatureForm
                 )
             }
+            if hasEdits {
 #warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
-            FormFooter()
+                FormFooter(
+                    discardAction: {
+                        if let presentedForm {
+                            presentedForm.discardEdits()
+                            onFormHandlingEventAction?(.DiscardedEdits(presentedForm, willNavigate: false))
+                        }
+                    },
+                    saveAction: {
+                        if let presentedForm {
+                            Task {
+                                try? await presentedForm.finishEditing()
+                                onFormHandlingEventAction?(.FinishedEditing(presentedForm, willNavigate: false))
+                            }
+                        }
+                    }
+                )
                 .padding()
                 .padding([.bottom])
                 .overlay(Divider(), alignment: .top)
+                .transition(.move(edge: .bottom))
+            }
         }
         .environment(\.formChangedAction, onFormChangedAction)
         .environment(\.validationErrorVisibility, validationErrorVisibility)
+        .task(id: presentedForm?.feature.globalID) {
+            if let presentedForm {
+                onFormHandlingEventAction?(.StartedEditing(presentedForm))
+                for await hasEdits in presentedForm.$hasEdits {
+                    withAnimation { self.hasEdits = hasEdits }
+                }
+            }
+        }
     }
 }
 
