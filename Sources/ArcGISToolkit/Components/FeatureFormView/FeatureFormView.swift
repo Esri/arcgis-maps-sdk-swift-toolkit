@@ -142,7 +142,7 @@ struct InternalFeatureFormView: View {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
     }
     
-    public var body: some View {
+    var body: some View {
         Group {
             if initialExpressionsAreEvaluating {
                 initialBody
