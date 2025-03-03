@@ -8,11 +8,11 @@
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "A certificate is required to access content on %@.";
 
-/* A label for a button to add a map area. */
-"Add Map Area" = "Add Map Area";
-
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A map area cannot be downloaded at this time.";
+
+/* A label for a button to add a map area. */
+"Add Map Area" = "Add Map Area";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Add New";
@@ -72,7 +72,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Camera access is disabled";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Title for a button that cancels an action. */
 "Cancel" = "Cancel";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -108,8 +109,17 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
+
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
+
+/* A label for a button used to continue the authentication operation. */
+"Continue" = "Continue";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Could not retrieve map areas for this map.";
@@ -125,15 +135,6 @@ for the AR experience. */
 
 /* County (Level of Detail) */
 "County" = "County";
-
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
-
-/* A label for a button used to continue the authentication operation. */
-"Continue" = "Continue";
 
 /* The status text for an opened map area. */
 "Currently open" = "Currently open";
@@ -165,7 +166,7 @@ east, etc.). */
 /* A label for a button to delete a map area. */
 "Delete Map Area" = "Delete Map Area";
 
-/* A label for the description of the map area. */
+/* A label for the description of the map area */
 "Description" = "Description";
 
 /* E.g. Close/hide a sheet or pop-up. */
@@ -297,7 +298,7 @@ AR experience. */
 /* House Property (Level of Detail) */
 "House Property" = "House Property";
 
-/* Houses (Level of Detail */
+/* Houses (Level of Detail) */
 "Houses" = "Houses";
 
 /* Text indicating a field's value must be within the allowed range. */
@@ -393,13 +394,13 @@ AR experience. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Offline Disabled";
 
-/* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "Online Map Failed to Load";
-
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
-/* A label for a button to open a map area. */
+/* A message explaining that the online map failed to load. */
+"Online Map Failed to Load" = "Online Map Failed to Load";
+
+/* The label for a button to open a map area. */
 "Open" = "Open";
 
 /* The status text when a map area is packaging. */
@@ -493,7 +494,7 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Sites";
 
 /* A label for the file size of the map area. */
-"Size: %lld" = "Size: %lld";
+"Size: %@" = "Size: %@";
 
 /* Small Building (Level of Detail) */
 "Small Building" = "Small Building";
