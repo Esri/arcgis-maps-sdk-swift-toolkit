@@ -142,7 +142,7 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public var body: some View {
+***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if initialExpressionsAreEvaluating {
 ***REMOVED******REMOVED******REMOVED******REMOVED***initialBody
