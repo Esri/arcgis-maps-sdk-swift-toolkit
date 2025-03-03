@@ -44,6 +44,8 @@ struct UtilityAssociationsFormElementView: View {
 
 ***REMOVED***/ <#Description#>
 private struct UtilityAssociationGroupResultView: View {
+***REMOVED***@Environment(\.formChangedAction) var formChangedAction
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
 ***REMOVED***
@@ -90,6 +92,12 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED*** This view is considered the tail end of a navigable FeatureForm.
+***REMOVED******REMOVED******REMOVED******REMOVED*** When a user is backing out of a navigation path, this view
+***REMOVED******REMOVED******REMOVED******REMOVED*** appearing is considered a change to the presented FeatureForm.
+***REMOVED******REMOVED******REMOVED***formChangedAction?(formViewModel.featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
