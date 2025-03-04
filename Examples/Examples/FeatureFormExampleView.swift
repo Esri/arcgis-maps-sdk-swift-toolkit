@@ -59,11 +59,6 @@ struct FeatureFormExampleView: View {
 #warning("TO BE REMOVED. Public credential is for UN testing only.")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-#warning("TO BE REMOVED. FeatureForm will automatically load the correct UN.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for network in map.utilityNetworks {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await network.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
