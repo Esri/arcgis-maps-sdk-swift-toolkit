@@ -101,7 +101,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 ***REMOVED***
 
-struct MyModifier: ViewModifier {
+struct NavigationLayerFooterContent: ViewModifier {
 ***REMOVED***@EnvironmentObject var model: NavigationLayerModel
 ***REMOVED***
 ***REMOVED***let id: UUID
@@ -124,6 +124,6 @@ extension View {
 ***REMOVED******REMOVED***id: UUID = UUID(),
 ***REMOVED******REMOVED***@ViewBuilder _ view: @escaping () -> (any View)
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***modifier(MyModifier(id: id, footerContent: view))
+***REMOVED******REMOVED***modifier(NavigationLayerFooterContent(id: id, footerContent: view))
 ***REMOVED***
 ***REMOVED***
