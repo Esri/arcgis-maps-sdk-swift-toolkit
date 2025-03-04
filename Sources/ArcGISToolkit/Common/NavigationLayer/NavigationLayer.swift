@@ -20,6 +20,8 @@ import SwiftUI
 /// presented a Toolkit component, NavigationLayer provides a simple navigation implementation that can be
 /// used in a component presented either modally (e.g. a Sheet) or non-modally (a Floating Panel).
 struct NavigationLayer<Content: View>: View {
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
+    
     let root: () -> Content
     
     @StateObject private var model: NavigationLayerModel
@@ -31,7 +33,7 @@ struct NavigationLayer<Content: View>: View {
     
     var body: some View {
         GeometryReader { geometryProxy in
-            Group {
+            VStack(spacing: 0) {
                 if model.views.isEmpty {
                     root()
                         .transition(model.transition)
@@ -47,6 +49,13 @@ struct NavigationLayer<Content: View>: View {
                     // Re-trigger the transition animation when view count changes.
                     .id(model.views.count)
                     .transition(model.transition)
+                }
+                if let footerContent = model.footerContent {
+                    AnyView(footerContent())
+                        .padding()
+                        .padding([.bottom], isPortraitOrientation ? nil : .zero)
+                        .overlay(Divider(), alignment: .top)
+                        .transition(.move(edge: .bottom))
                 }
             }
             .environmentObject(model)
@@ -89,5 +98,32 @@ struct NavigationLayer<Content: View>: View {
         }
         .interactiveDismissDisabled()
         .presentationDetents([.medium])
+    }
+}
+
+struct MyModifier: ViewModifier {
+    @EnvironmentObject var model: NavigationLayerModel
+    
+    let id: UUID
+    
+    let footerContent: () -> (any View)
+    
+    func body(content: Content) -> some View {
+#warning("onChange(of: UUID) action tried to update multiple times per frame.")
+        content
+            .task(id: id) {
+                withAnimation {
+                    model.footerContent = footerContent
+                }
+            }
+    }
+}
+
+extension View {
+    func navigationLayerFooter(
+        id: UUID = UUID(),
+        @ViewBuilder _ view: @escaping () -> (any View)
+    ) -> some View {
+        modifier(MyModifier(id: id, footerContent: view))
     }
 }

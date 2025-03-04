@@ -108,14 +108,11 @@ public struct FeatureFormView: View {
                 InternalFeatureFormView(
                     featureForm: rootFeatureForm
                 )
-            }
-            if let presentedForm, let onFormHandlingEventAction, hasEdits {
-#warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
-                FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
-                    .padding()
-                    .padding([.bottom])
-                    .overlay(Divider(), alignment: .top)
-                    .transition(.move(edge: .bottom))
+                .navigationLayerFooter {
+                    if let presentedForm, let onFormHandlingEventAction, hasEdits {
+                        FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
+                    }
+                }
             }
         }
         .environment(\.formChangedAction, onFormChangedAction)
