@@ -108,14 +108,11 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let presentedForm, let onFormHandlingEventAction, hasEdits {
-#warning("TODO: Only apply additional bottom padding to FormFooter in compact environments to get us into the safe area.")
-***REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(Divider(), alignment: .top)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .bottom))
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerFooter {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm, let onFormHandlingEventAction, hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)

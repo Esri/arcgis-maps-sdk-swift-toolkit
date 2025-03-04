@@ -27,6 +27,9 @@ class NavigationLayerModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***@Published private(set) var views: [Item] = []
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@Published var footerContent: (() -> (any View))?
+***REMOVED***
 ***REMOVED***var presented: Item? {
 ***REMOVED******REMOVED***views.last
 ***REMOVED***
