@@ -27,6 +27,9 @@ class NavigationLayerModel: ObservableObject {
     
     @Published private(set) var views: [Item] = []
     
+    /// <#Description#>
+    @Published var footerContent: (() -> (any View))?
+    
     var presented: Item? {
         views.last
     }
