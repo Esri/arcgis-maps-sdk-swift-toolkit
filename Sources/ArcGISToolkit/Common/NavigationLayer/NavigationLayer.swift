@@ -101,7 +101,7 @@ struct NavigationLayer<Content: View>: View {
     }
 }
 
-struct MyModifier: ViewModifier {
+struct NavigationLayerFooterContent: ViewModifier {
     @EnvironmentObject var model: NavigationLayerModel
     
     let id: UUID
@@ -124,6 +124,6 @@ extension View {
         id: UUID = UUID(),
         @ViewBuilder _ view: @escaping () -> (any View)
     ) -> some View {
-        modifier(MyModifier(id: id, footerContent: view))
+        modifier(NavigationLayerFooterContent(id: id, footerContent: view))
     }
 }
