@@ -108,10 +108,9 @@ public struct FeatureFormView: View {
                 InternalFeatureFormView(
                     featureForm: rootFeatureForm
                 )
-                .navigationLayerFooter {
-                    if let presentedForm, let onFormHandlingEventAction, hasEdits {
-                        FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
-                    }
+            } footer: {
+                if let presentedForm, let onFormHandlingEventAction, hasEdits {
+                    FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
                 }
             }
         }
