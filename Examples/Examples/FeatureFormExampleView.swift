@@ -57,8 +57,12 @@ struct FeatureFormExampleView: View {
                 }
                 .task {
 #warning("TO BE REMOVED. Public credential is for UN testing only.")
-                    let publicSample = try? await ArcGISCredential.publicSample
-                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+                    do {
+                        let publicSample = try await ArcGISCredential.publicSample
+                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
+                    } catch {
+                        print("Error resolving credential: \(error.localizedDescription)")
+                    }
                 }
                 .ignoresSafeArea(.keyboard)
                 .floatingPanel(
