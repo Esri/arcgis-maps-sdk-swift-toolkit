@@ -83,8 +83,8 @@ struct FeatureFormExampleView: View {
                                     print(featureForm.feature.attributes["objectid"])
                                 }
                             }
-                            .padding(.horizontal)
-                            .padding(.top, 16)
+//                            .padding(.horizontal)
+//                            .padding(.top, 16)
                     }
                 }
                 .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {

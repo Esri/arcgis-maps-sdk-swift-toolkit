@@ -114,14 +114,16 @@ private struct UtilityAssociationsFilterResultListRowView: View {
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
+        let listRowTitle = "\(utilityAssociationsFilterResult.filter.filterType)".capitalized
         Button {
             navigationLayerModel.push {
                 UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
+                    .navigationLayerTitle(formViewModel.featureForm.title, subtitle: listRowTitle)
                     .environmentObject(formViewModel)
             }
         } label: {
             HStack {
-                Text("\(utilityAssociationsFilterResult.filter.filterType)".capitalized)
+                Text(listRowTitle)
                 Spacer()
                 Text(utilityAssociationsFilterResult.resultCount.formatted())
                 Image(systemName: "chevron.right")
@@ -146,6 +148,7 @@ private struct UtilityAssociationsFilterResultView: View {
             Button(utilityAssociationGroupResult.name) {
                 navigationLayerModel.push {
                     UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+                        .navigationLayerTitle(formViewModel.featureForm.title, subtitle: utilityAssociationGroupResult.name)
                         .environmentObject(formViewModel)
                 }
             }

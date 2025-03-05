@@ -80,6 +80,7 @@ struct InternalFeatureFormView: View {
             .onTitleChange(of: model.featureForm) { newTitle in
                 title = newTitle
             }
+            .navigationLayerTitle(title)
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)

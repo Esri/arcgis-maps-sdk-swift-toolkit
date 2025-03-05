@@ -22,7 +22,10 @@ import SwiftUI
 struct NavigationLayer<Content: View>: View {
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
-    /// The navigation footer.
+    /// The header trailing content.
+    let headerTrailing: (() -> any View)?
+    
+    /// The footer content.
     let footer: (() -> any View)?
     
     /// The root view.
@@ -31,35 +34,58 @@ struct NavigationLayer<Content: View>: View {
     @StateObject private var model: NavigationLayerModel
     
     init(_ root: @escaping () -> Content) {
-        self.root = root
+        self.headerTrailing = nil
         self.footer = nil
+        self.root = root
+        _model = StateObject(wrappedValue: NavigationLayerModel())
+    }
+    
+    init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View)) {
+        self.headerTrailing = headerTrailing
+        self.footer = nil
+        self.root = root
         _model = StateObject(wrappedValue: NavigationLayerModel())
     }
     
     init(_ root: @escaping () -> Content, @ViewBuilder footer: (@escaping () -> any View)) {
-        self.root = root
+        self.headerTrailing = nil
         self.footer = footer
+        self.root = root
+        _model = StateObject(wrappedValue: NavigationLayerModel())
+    }
+    
+    init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View), @ViewBuilder footer: (@escaping () -> any View)) {
+        self.headerTrailing = headerTrailing
+        self.footer = footer
+        self.root = root
         _model = StateObject(wrappedValue: NavigationLayerModel())
     }
     
     var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
-                if model.views.isEmpty {
-                    root()
-                        .transition(model.transition)
-                } else if let presented = model.presented?.view {
-                    VStack {
-                        DestinationHeader()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                        Spacer()
+                DestinationHeader(headerTrailing: headerTrailing)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Group {
+                    if model.views.isEmpty {
+                        root()
+                            .transition(model.transition)
+                    } else if let presented = model.presented?.view {
                         AnyView(presented())
-                        Spacer()
+                            // Re-trigger the transition animation when view count changes.
+                            .id(model.views.count)
+                            .transition(model.transition)
                     }
-                    // Re-trigger the transition animation when view count changes.
-                    .id(model.views.count)
-                    .transition(model.transition)
+                }
+                .onPreferenceChange(NavigationLayerTitle.self) { title in
+                    Task { @MainActor in
+                        self.model.title = title
+                    }
+                }
+                .onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
+                    Task { @MainActor in
+                        self.model.subtitle = subtitle
+                    }
                 }
                 if let footer {
                     AnyView(footer())
@@ -84,13 +110,21 @@ struct NavigationLayer<Content: View>: View {
         var body: some View {
             List {
                 Button("Present a view") {
-                    model.push { Text("View") }
+                    model.push {
+                        Text("View")
+                    }
                 }
                 Button("Present a view with a title") {
-                    model.push(title: "Title") { Text("View") }
+                    model.push {
+                        Text("View")
+                            .navigationLayerTitle("Title")
+                    }
                 }
                 Button("Present a view with a title & subtitle") {
-                    model.push(title: "Title", subtitle: "Subtitle") { Text("View") }
+                    model.push {
+                        Text("View")
+                            .navigationLayerTitle("Title", subtitle: "Subtitle")
+                    }
                 }
             }
         }
@@ -109,5 +143,39 @@ struct NavigationLayer<Content: View>: View {
         }
         .interactiveDismissDisabled()
         .presentationDetents([.medium])
+    }
+}
+
+struct NavigationLayerTitle: PreferenceKey {
+    static let defaultValue: String? = nil
+    
+    static func reduce(value: inout String?, nextValue: () -> String?) {
+        value = nextValue()
+    }
+}
+
+struct NavigationLayerSubtitle: PreferenceKey {
+    static let defaultValue: String? = nil
+    
+    static func reduce(value: inout String?, nextValue: () -> String?) {
+        value = nextValue()
+    }
+}
+
+extension View {
+    /// Sets a title for the navigation layer destination.
+    /// - Parameters:
+    ///   - title: The title for the navigation layer destination.
+    func navigationLayerTitle(_ title: String) -> some View {
+        preference(key: NavigationLayerTitle.self, value: title)
+    }
+    
+    /// Sets a title and subtitle for the navigation layer destination.
+    /// - Parameters:
+    ///   - title: The title for the navigation layer destination.
+    ///   - subtitle: The subtitle for the navigation layer destination.
+    func navigationLayerTitle(_ title: String, subtitle: String) -> some View {
+        preference(key: NavigationLayerTitle.self, value: title)
+            .preference(key: NavigationLayerSubtitle.self, value: subtitle)
     }
 }

@@ -98,16 +98,18 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            if let onCloseAction {
-                XButton(.dismiss) {
-#warning("TODO: Check if the presented form has edits.")
-                    onCloseAction()
-                }
-            }
             NavigationLayer {
                 InternalFeatureFormView(
                     featureForm: rootFeatureForm
                 )
+            } headerTrailing: {
+                if let onCloseAction {
+                    XButton(.dismiss) {
+#warning("TODO: Check if the presented form has edits.")
+                        onCloseAction()
+                    }
+                    .font(.title)
+                }
             } footer: {
                 if let presentedForm, let onFormHandlingEventAction, hasEdits {
                     FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)

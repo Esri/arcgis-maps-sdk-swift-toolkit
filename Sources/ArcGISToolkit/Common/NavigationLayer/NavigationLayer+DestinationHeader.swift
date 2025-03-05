@@ -20,27 +20,33 @@ extension NavigationLayer {
         
         @State private var size: CGFloat = .zero
         
+        /// The header trailing content.
+        let headerTrailing: (() -> any View)?
+        
         var body: some View {
             HStack {
-                Button {
-                    model.pop()
-                } label: {
-                    let label = Label("Back", systemImage: "chevron.left")
-                    if model.presented?.title == nil {
-                        label
-                            .labelStyle(.titleAndIcon)
-                    } else {
-                        label
-                            .labelStyle(.iconOnly)
+                if !model.views.isEmpty {
+                    Button {
+                        model.pop()
+                    } label: {
+                        let label = Label("Back", systemImage: "chevron.left")
+                        if model.title == nil {
+                            label
+                                .labelStyle(.titleAndIcon)
+                        } else {
+                            label
+                                .labelStyle(.iconOnly)
+                        }
                     }
                 }
-                if let title = model.presented?.title {
+                Spacer()
+                if let title = model.title {
                     Divider()
                         .frame(height: size)
                     VStack(alignment: .leading) {
                         Text(title)
                             .bold()
-                        if let subtitle = model.presented?.subtitle {
+                        if let subtitle = model.subtitle {
                             Text(subtitle)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -51,6 +57,10 @@ extension NavigationLayer {
                     } action: { newValue in
                         size = newValue
                     }
+                }
+                Spacer()
+                if let headerTrailing {
+                    AnyView(headerTrailing())
                 }
             }
         }
