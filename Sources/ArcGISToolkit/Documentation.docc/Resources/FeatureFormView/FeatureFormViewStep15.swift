@@ -62,16 +62,8 @@ struct FeatureFormExampleView: View {
                     } message: {
                         Text("Updates to this feature will be lost.")
                     }
-                    .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
                     .toolbar {
                         if model.formIsPresented.wrappedValue {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button("Cancel", role: .cancel) {
-                                    guard case let .editing(featureForm) = model.state else { return }
-                                    model.state = .cancellationPending(featureForm)
-                                }
-                                .disabled(model.formControlsAreDisabled)
-                            }
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Submit") {
                                     Task {
