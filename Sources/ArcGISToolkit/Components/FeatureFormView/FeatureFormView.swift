@@ -108,10 +108,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerFooter {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm, let onFormHandlingEventAction, hasEdits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** footer: {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm, let onFormHandlingEventAction, hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

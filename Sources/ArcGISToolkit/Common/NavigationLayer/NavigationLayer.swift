@@ -22,12 +22,23 @@
 struct NavigationLayer<Content: View>: View {
 ***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
+***REMOVED******REMOVED***/ The navigation footer.
+***REMOVED***let footer: (() -> any View)?
+***REMOVED***
+***REMOVED******REMOVED***/ The root view.
 ***REMOVED***let root: () -> Content
 ***REMOVED***
 ***REMOVED***@StateObject private var model: NavigationLayerModel
 ***REMOVED***
 ***REMOVED***init(_ root: @escaping () -> Content) {
 ***REMOVED******REMOVED***self.root = root
+***REMOVED******REMOVED***self.footer = nil
+***REMOVED******REMOVED***_model = StateObject(wrappedValue: NavigationLayerModel())
+***REMOVED***
+***REMOVED***
+***REMOVED***init(_ root: @escaping () -> Content, @ViewBuilder footer: (@escaping () -> any View)) {
+***REMOVED******REMOVED***self.root = root
+***REMOVED******REMOVED***self.footer = footer
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: NavigationLayerModel())
 ***REMOVED***
 ***REMOVED***
@@ -50,8 +61,8 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let footerContent = model.footerContent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(footerContent())
+***REMOVED******REMOVED******REMOVED******REMOVED***if let footer {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(footer())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], isPortraitOrientation ? nil : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(Divider(), alignment: .top)
@@ -98,32 +109,5 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED***.presentationDetents([.medium])
-***REMOVED***
-***REMOVED***
-
-struct NavigationLayerFooterContent: ViewModifier {
-***REMOVED***@EnvironmentObject var model: NavigationLayerModel
-***REMOVED***
-***REMOVED***let id: UUID
-***REMOVED***
-***REMOVED***let footerContent: () -> (any View)
-***REMOVED***
-***REMOVED***func body(content: Content) -> some View {
-#warning("onChange(of: UUID) action tried to update multiple times per frame.")
-***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.task(id: id) {
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.footerContent = footerContent
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension View {
-***REMOVED***func navigationLayerFooter(
-***REMOVED******REMOVED***id: UUID = UUID(),
-***REMOVED******REMOVED***@ViewBuilder _ view: @escaping () -> (any View)
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***modifier(NavigationLayerFooterContent(id: id, footerContent: view))
 ***REMOVED***
 ***REMOVED***
