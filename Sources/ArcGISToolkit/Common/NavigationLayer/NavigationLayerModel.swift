@@ -16,10 +16,6 @@ import SwiftUI
 
 class NavigationLayerModel: ObservableObject {
     struct Item {
-        let title: String?
-        
-        let subtitle: String?
-        
         let view: () -> any View
     }
     
@@ -27,10 +23,17 @@ class NavigationLayerModel: ObservableObject {
     
     @Published private(set) var views: [Item] = []
     
+    /// The title for the current destination.
+    @Published var title: String? = nil
+    
+    /// The subtitle for the current destination.
+    @Published var subtitle: String? = nil
+    
     var presented: Item? {
         views.last
     }
     
+    /// Pop the current view.
     func pop() {
         guard !views.isEmpty else { return }
         transition = .pop
@@ -42,30 +45,9 @@ class NavigationLayerModel: ObservableObject {
     /// Push a view.
     /// - Parameter view: The view to push.
     func push(_ view: @escaping () -> any View) {
-        push(.init(title: nil, subtitle: nil, view: view))
-    }
-    
-    /// Push a view with a title.
-    /// - Parameters:
-    ///   - title: The title for the view.
-    ///   - view: The view to push.
-    func push(title: String, _ view: @escaping () -> any View) {
-        push(.init(title: title, subtitle: nil, view: view))
-    }
-    
-    /// Push a view with a title and subtitle.
-    /// - Parameters:
-    ///   - title: The title for the view.
-    ///   - subtitle: The subtitle for the view.
-    ///   - view: The view to push.
-    func push(title: String, subtitle: String, _ view: @escaping () -> any View) {
-        push(.init(title: title, subtitle: subtitle, view: view))
-    }
-    
-    private func push(_ view: Item) {
         transition = .push
         withAnimation {
-            views.append(view)
+            views.append(.init(view: view))
         }
     }
 }
