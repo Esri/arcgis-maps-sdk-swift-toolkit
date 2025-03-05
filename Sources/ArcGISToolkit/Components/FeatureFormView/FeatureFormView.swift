@@ -98,16 +98,18 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED***if let onCloseAction {
-***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
-#warning("TODO: Check if the presented form has edits.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCloseAction()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** headerTrailing: {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let onCloseAction {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
+#warning("TODO: Check if the presented form has edits.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCloseAction()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** footer: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm, let onFormHandlingEventAction, hasEdits {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)

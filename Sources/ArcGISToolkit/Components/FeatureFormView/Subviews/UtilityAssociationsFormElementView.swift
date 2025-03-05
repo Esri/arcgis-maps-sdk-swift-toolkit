@@ -114,14 +114,16 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***let listRowTitle = "\(utilityAssociationsFilterResult.filter.filterType)".capitalized
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(formViewModel.featureForm.title, subtitle: listRowTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(utilityAssociationsFilterResult.filter.filterType)".capitalized)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(listRowTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
@@ -146,6 +148,7 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED******REMOVED******REMOVED***Button(utilityAssociationGroupResult.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(formViewModel.featureForm.title, subtitle: utilityAssociationGroupResult.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

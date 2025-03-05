@@ -16,10 +16,6 @@
 
 class NavigationLayerModel: ObservableObject {
 ***REMOVED***struct Item {
-***REMOVED******REMOVED***let title: String?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let subtitle: String?
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view: () -> any View
 ***REMOVED***
 ***REMOVED***
@@ -27,10 +23,17 @@ class NavigationLayerModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***@Published private(set) var views: [Item] = []
 ***REMOVED***
+***REMOVED******REMOVED***/ The title for the current destination.
+***REMOVED***@Published var title: String? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ The subtitle for the current destination.
+***REMOVED***@Published var subtitle: String? = nil
+***REMOVED***
 ***REMOVED***var presented: Item? {
 ***REMOVED******REMOVED***views.last
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Pop the current view.
 ***REMOVED***func pop() {
 ***REMOVED******REMOVED***guard !views.isEmpty else { return ***REMOVED***
 ***REMOVED******REMOVED***transition = .pop
@@ -42,30 +45,9 @@ class NavigationLayerModel: ObservableObject {
 ***REMOVED******REMOVED***/ Push a view.
 ***REMOVED******REMOVED***/ - Parameter view: The view to push.
 ***REMOVED***func push(_ view: @escaping () -> any View) {
-***REMOVED******REMOVED***push(.init(title: nil, subtitle: nil, view: view))
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Push a view with a title.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - title: The title for the view.
-***REMOVED******REMOVED***/   - view: The view to push.
-***REMOVED***func push(title: String, _ view: @escaping () -> any View) {
-***REMOVED******REMOVED***push(.init(title: title, subtitle: nil, view: view))
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Push a view with a title and subtitle.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - title: The title for the view.
-***REMOVED******REMOVED***/   - subtitle: The subtitle for the view.
-***REMOVED******REMOVED***/   - view: The view to push.
-***REMOVED***func push(title: String, subtitle: String, _ view: @escaping () -> any View) {
-***REMOVED******REMOVED***push(.init(title: title, subtitle: subtitle, view: view))
-***REMOVED***
-***REMOVED***
-***REMOVED***private func push(_ view: Item) {
 ***REMOVED******REMOVED***transition = .push
 ***REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED***views.append(view)
+***REMOVED******REMOVED******REMOVED***views.append(.init(view: view))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

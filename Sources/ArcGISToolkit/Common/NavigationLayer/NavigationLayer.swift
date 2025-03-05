@@ -22,7 +22,10 @@
 struct NavigationLayer<Content: View>: View {
 ***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
-***REMOVED******REMOVED***/ The navigation footer.
+***REMOVED******REMOVED***/ The header trailing content.
+***REMOVED***let headerTrailing: (() -> any View)?
+***REMOVED***
+***REMOVED******REMOVED***/ The footer content.
 ***REMOVED***let footer: (() -> any View)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The root view.
@@ -31,35 +34,58 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***@StateObject private var model: NavigationLayerModel
 ***REMOVED***
 ***REMOVED***init(_ root: @escaping () -> Content) {
-***REMOVED******REMOVED***self.root = root
+***REMOVED******REMOVED***self.headerTrailing = nil
 ***REMOVED******REMOVED***self.footer = nil
+***REMOVED******REMOVED***self.root = root
+***REMOVED******REMOVED***_model = StateObject(wrappedValue: NavigationLayerModel())
+***REMOVED***
+***REMOVED***
+***REMOVED***init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View)) {
+***REMOVED******REMOVED***self.headerTrailing = headerTrailing
+***REMOVED******REMOVED***self.footer = nil
+***REMOVED******REMOVED***self.root = root
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: NavigationLayerModel())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***init(_ root: @escaping () -> Content, @ViewBuilder footer: (@escaping () -> any View)) {
-***REMOVED******REMOVED***self.root = root
+***REMOVED******REMOVED***self.headerTrailing = nil
 ***REMOVED******REMOVED***self.footer = footer
+***REMOVED******REMOVED***self.root = root
+***REMOVED******REMOVED***_model = StateObject(wrappedValue: NavigationLayerModel())
+***REMOVED***
+***REMOVED***
+***REMOVED***init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View), @ViewBuilder footer: (@escaping () -> any View)) {
+***REMOVED******REMOVED***self.headerTrailing = headerTrailing
+***REMOVED******REMOVED***self.footer = footer
+***REMOVED******REMOVED***self.root = root
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: NavigationLayerModel())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
-***REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DestinationHeader()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***DestinationHeader(headerTrailing: headerTrailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerTitle.self) { title in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.title = title
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.subtitle = subtitle
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let footer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(footer())
@@ -84,13 +110,21 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push { Text("View") ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("View")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view with a title") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push(title: "Title") { Text("View") ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("View")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view with a title & subtitle") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push(title: "Title", subtitle: "Subtitle") { Text("View") ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("View")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title", subtitle: "Subtitle")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -109,5 +143,39 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED***.presentationDetents([.medium])
+***REMOVED***
+***REMOVED***
+
+struct NavigationLayerTitle: PreferenceKey {
+***REMOVED***static let defaultValue: String? = nil
+***REMOVED***
+***REMOVED***static func reduce(value: inout String?, nextValue: () -> String?) {
+***REMOVED******REMOVED***value = nextValue()
+***REMOVED***
+***REMOVED***
+
+struct NavigationLayerSubtitle: PreferenceKey {
+***REMOVED***static let defaultValue: String? = nil
+***REMOVED***
+***REMOVED***static func reduce(value: inout String?, nextValue: () -> String?) {
+***REMOVED******REMOVED***value = nextValue()
+***REMOVED***
+***REMOVED***
+
+extension View {
+***REMOVED******REMOVED***/ Sets a title for the navigation layer destination.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - title: The title for the navigation layer destination.
+***REMOVED***func navigationLayerTitle(_ title: String) -> some View {
+***REMOVED******REMOVED***preference(key: NavigationLayerTitle.self, value: title)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a title and subtitle for the navigation layer destination.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - title: The title for the navigation layer destination.
+***REMOVED******REMOVED***/   - subtitle: The subtitle for the navigation layer destination.
+***REMOVED***func navigationLayerTitle(_ title: String, subtitle: String) -> some View {
+***REMOVED******REMOVED***preference(key: NavigationLayerTitle.self, value: title)
+***REMOVED******REMOVED******REMOVED***.preference(key: NavigationLayerSubtitle.self, value: subtitle)
 ***REMOVED***
 ***REMOVED***
