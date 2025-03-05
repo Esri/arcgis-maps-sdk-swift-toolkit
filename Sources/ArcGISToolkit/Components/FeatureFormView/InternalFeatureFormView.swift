@@ -53,10 +53,6 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !model.title.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: model.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
