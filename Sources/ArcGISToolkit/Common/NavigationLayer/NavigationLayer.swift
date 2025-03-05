@@ -22,12 +22,23 @@ import SwiftUI
 struct NavigationLayer<Content: View>: View {
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
+    /// The navigation footer.
+    let footer: (() -> any View)?
+    
+    /// The root view.
     let root: () -> Content
     
     @StateObject private var model: NavigationLayerModel
     
     init(_ root: @escaping () -> Content) {
         self.root = root
+        self.footer = nil
+        _model = StateObject(wrappedValue: NavigationLayerModel())
+    }
+    
+    init(_ root: @escaping () -> Content, @ViewBuilder footer: (@escaping () -> any View)) {
+        self.root = root
+        self.footer = footer
         _model = StateObject(wrappedValue: NavigationLayerModel())
     }
     
@@ -50,8 +61,8 @@ struct NavigationLayer<Content: View>: View {
                     .id(model.views.count)
                     .transition(model.transition)
                 }
-                if let footerContent = model.footerContent {
-                    AnyView(footerContent())
+                if let footer {
+                    AnyView(footer())
                         .padding()
                         .padding([.bottom], isPortraitOrientation ? nil : .zero)
                         .overlay(Divider(), alignment: .top)
@@ -98,32 +109,5 @@ struct NavigationLayer<Content: View>: View {
         }
         .interactiveDismissDisabled()
         .presentationDetents([.medium])
-    }
-}
-
-struct NavigationLayerFooterContent: ViewModifier {
-    @EnvironmentObject var model: NavigationLayerModel
-    
-    let id: UUID
-    
-    let footerContent: () -> (any View)
-    
-    func body(content: Content) -> some View {
-#warning("onChange(of: UUID) action tried to update multiple times per frame.")
-        content
-            .task(id: id) {
-                withAnimation {
-                    model.footerContent = footerContent
-                }
-            }
-    }
-}
-
-extension View {
-    func navigationLayerFooter(
-        id: UUID = UUID(),
-        @ViewBuilder _ view: @escaping () -> (any View)
-    ) -> some View {
-        modifier(NavigationLayerFooterContent(id: id, footerContent: view))
     }
 }
