@@ -30,6 +30,9 @@ import SwiftUI
     /// The set of all elements which previously held focus.
     @Published var previouslyFocusedElements = [FormElement]()
     
+    /// The title of the feature form view.
+    @Published var title = ""
+    
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
