@@ -53,10 +53,6 @@ struct InternalFeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !model.title.isEmpty {
-                        FormHeader(title: model.title)
-                        Divider()
-                    }
                     ForEach(model.visibleElements, id: \.self) { element in
                         makeElement(element)
                     }
