@@ -29,9 +29,6 @@ struct InternalFeatureFormView: View {
     /// A Boolean value indicating whether initial expression evaluation is running.
     @State private var initialExpressionsAreEvaluating = true
     
-    /// The title of the feature form view.
-    @State private var title = ""
-    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
@@ -56,8 +53,8 @@ struct InternalFeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty {
-                        FormHeader(title: title)
+                    if !model.title.isEmpty {
+                        FormHeader(title: model.title)
                         Divider()
                     }
                     ForEach(model.visibleElements, id: \.self) { element in
@@ -78,9 +75,9 @@ struct InternalFeatureFormView: View {
                 }
             }
             .onTitleChange(of: model.featureForm) { newTitle in
-                title = newTitle
+                model.title = newTitle
             }
-            .navigationLayerTitle(title)
+            .navigationLayerTitle(model.title)
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
