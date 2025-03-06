@@ -82,6 +82,12 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: Visibility = .hidden
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var alertContinuationAction: (willNavigate: Bool, () -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var alertIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
 ***REMOVED***@State private var hasEdits: Bool = false
 ***REMOVED***
@@ -103,8 +109,14 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED*** headerTrailing: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if closeButtonVisibility != .hidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
-***REMOVED***#warning("TODO: Check if the presented form has edits.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.wrappedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertContinuationAction = (false, {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.wrappedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.wrappedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -114,6 +126,36 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Discard Edits?",
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $alertIsPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***actions: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let (willNavigate, continuation) = alertContinuationAction {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard Edits", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.wrappedValue?.discardEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Save Edits") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await presentedForm.wrappedValue?.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#warning("Handle thrown errors.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue Editing", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertIsPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to the form will be lost.")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
 ***REMOVED******REMOVED******REMOVED***.environment(\._validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED***.task(id: presentedForm.wrappedValue?.feature.globalID) {
@@ -122,7 +164,6 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { self.hasEdits = hasEdits ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
