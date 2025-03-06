@@ -18,14 +18,16 @@ extension NavigationLayer {
     struct Header: View {
         @EnvironmentObject private var model: NavigationLayerModel
         
-        @State private var size: CGFloat = .zero
+        @State private var height: CGFloat = .zero
+        
+        let width: CGFloat
         
         /// The header trailing content.
         let headerTrailing: (() -> any View)?
         
         var body: some View {
             HStack(alignment: .top) {
-                if showsBack {
+                Group {
                     Button {
                         model.pop()
                     } label: {
@@ -38,31 +40,40 @@ extension NavigationLayer {
                                 .labelStyle(.iconOnly)
                         }
                     }
+                }
+                .opacity(showsBack ? 1 : .zero)
+                .frame(!showsBack, width: width / 6)
+                if showsBack {
                     Divider()
-                        .frame(height: size)
+                        .frame(height: height)
                 }
                 if !showsBack {
                     Spacer()
                 }
-                if let title = model.title, !title.isEmpty {
-                    VStack(alignment: showsBack ? .leading : .center) {
-                        Text(title)
-                            .bold()
-                        if let subtitle = model.subtitle, !subtitle.isEmpty  {
-                            Text(subtitle)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                Group {
+                    if let title = model.title, !title.isEmpty {
+                        VStack(alignment: showsBack ? .leading : .center) {
+                            Text(title)
+                                .bold()
+                            if let subtitle = model.subtitle, !subtitle.isEmpty  {
+                                Text(subtitle)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .lineLimit(1)
+                        .onGeometryChange(for: CGFloat.self) { proxy in
+                            proxy.size.height
+                        } action: { newValue in
+                            height = newValue
                         }
                     }
-                    .onGeometryChange(for: CGFloat.self) { proxy in
-                        proxy.size.height
-                    } action: { newValue in
-                        size = newValue
-                    }
                 }
+                .frame(maxWidth: (width / 6) * 4, alignment: showsBack ? .leading : .center)
                 Spacer()
                 if let headerTrailing {
                     AnyView(headerTrailing())
+                        .frame(width: width / 6, alignment: .trailing)
                 }
             }
             .padding(showsBack || (model.title != nil && !model.title!.isEmpty))
@@ -74,7 +85,15 @@ extension NavigationLayer {
     }
 }
 
-extension View {
+fileprivate extension View {
+    @ViewBuilder
+    func frame(_ applied: Bool, width: CGFloat) -> some View {
+        if applied {
+            self.frame(width: width, alignment: .leading)
+        } else {
+            self
+        }
+    }
     /// Optionally adds an equal padding amount to specific edges of this view.
     /// - Parameter applied: A Boolean condition indicating whether padding is applied.
     /// - Returns: A view that’s padded if specified.
