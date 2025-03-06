@@ -174,6 +174,17 @@ extension FeatureFormExampleView {
 ***REMOVED***.first
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the form is presented.
+***REMOVED***private var isPresented: Binding<Bool> {
+***REMOVED******REMOVED***.init {
+***REMOVED******REMOVED******REMOVED***featureForm != nil
+***REMOVED*** set: { newValue in
+***REMOVED******REMOVED******REMOVED***if !newValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
 extension ArcGISFeature {
 ***REMOVED***var globalID: UUID? {
