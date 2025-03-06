@@ -40,8 +40,6 @@ public extension FeatureFormView /* Deprecated */ {
     /// validation error visibility.
     @available(*, deprecated)
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
-        var copy = self
-        copy.validationErrorVisibility = visibility
-        return copy
+        self
     }
 }
