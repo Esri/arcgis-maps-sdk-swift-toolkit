@@ -16,6 +16,9 @@
 
 extension NavigationLayer {
 ***REMOVED***struct Header: View {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***@Binding var onBackNavigationInterruptionAction: ((() -> Void) -> Void)?
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@EnvironmentObject private var model: NavigationLayerModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var height: CGFloat = .zero
@@ -29,6 +32,11 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let onBackNavigationInterruptionAction {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onBackNavigationInterruptionAction( { model.pop() ***REMOVED*** )
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let label = Label("Back", systemImage: "chevron.left")

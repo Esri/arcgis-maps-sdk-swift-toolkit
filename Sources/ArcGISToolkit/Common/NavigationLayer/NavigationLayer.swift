@@ -64,8 +64,12 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Header(width: geometryProxy.size.width, headerTrailing: headerTrailing)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED***Header(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onBackNavigationInterruptionAction: .constant(nil),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerTrailing: headerTrailing
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root()
