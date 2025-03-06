@@ -14,29 +14,13 @@
 
 ***REMOVED***
 
-public extension FeatureFormView {
+extension FeatureFormView {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
-***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
-***REMOVED***@available(*, deprecated)
-***REMOVED***enum ValidationErrorVisibility: Sendable {
+***REMOVED***enum _ValidationErrorVisibility: Sendable {
 ***REMOVED******REMOVED******REMOVED***/ Errors may be visible or hidden for a given form field depending on its focus state.
 ***REMOVED******REMOVED***case automatic
 ***REMOVED******REMOVED******REMOVED***/ Errors will always be visible for a given form field.
 ***REMOVED******REMOVED***case visible
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Specifies the visibility of validation errors in the form.
-***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of validation errors in the form.
-***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
-***REMOVED***@available(*, deprecated, message: """
-As of 200.7, this modifier will have no effect. 
-FeatureFormView will control visibility of validation errors.
-"""
-)
-***REMOVED***func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.validationErrorVisibility = visibility
-***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
