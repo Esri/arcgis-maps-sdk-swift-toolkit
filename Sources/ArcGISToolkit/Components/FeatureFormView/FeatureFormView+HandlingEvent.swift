@@ -16,12 +16,10 @@ import ArcGIS
 
 public extension FeatureFormView {
     /// <#Description#>
-    enum HandlingEvent {
+    enum EditingEvent {
         /// <#Description#>
-        case DiscardedEdits(FeatureForm, willNavigate: Bool)
+        case discardedEdits(willNavigate: Bool)
         /// <#Description#>
-        case FinishedEditing(FeatureForm, willNavigate: Bool)
-        /// <#Description#>
-        case StartedEditing(FeatureForm)
+        case savedEdits(willNavigate: Bool)
     }
 }
