@@ -106,43 +106,76 @@ struct NavigationLayer<Content: View>: View {
 #Preview {
     struct SampleList: View {
         @EnvironmentObject private var model: NavigationLayerModel
+        @Binding var includeFooter: Bool
+        @Binding var includeHeader: Bool
+        @Binding var rootSubtitle: String
+        @Binding var rootTitle: String
         
         var body: some View {
             List {
-                Button("Present a view") {
-                    model.push {
-                        Text("View")
-                    }
+                Section("Configuration") {
+                    Toggle("Include header trailing content", isOn: $includeHeader)
+                    Toggle("Include footer", isOn: $includeFooter)
+                    TextField("Root title", text: $rootTitle)
+                    TextField("Root subtitle", text: $rootSubtitle)
                 }
-                Button("Present a view with a title") {
-                    model.push {
-                        Text("View")
-                            .navigationLayerTitle("Title")
+                Section("Presentation") {
+                    Button("Present a view") {
+                        model.push {
+                            Text("View")
+                        }
                     }
-                }
-                Button("Present a view with a title & subtitle") {
-                    model.push {
-                        Text("View")
-                            .navigationLayerTitle("Title", subtitle: "Subtitle")
+                    Button("Present a view with a title") {
+                        model.push {
+                            Text("View")
+                                .navigationLayerTitle("Title")
+                        }
+                    }
+                    Button("Present a view with a title & subtitle") {
+                        model.push {
+                            Text("View")
+                                .navigationLayerTitle("Title", subtitle: "Subtitle")
+                        }
                     }
                 }
             }
         }
     }
     
+    @Previewable @State var includeHeader = false
+    @Previewable @State var includeFooter = false
     @Previewable @State var isPresented = true
+    @Previewable @State var rootSubtitle = ""
+    @Previewable @State var rootTitle = ""
     
     return LinearGradient(
         colors: [.red, .orange, .yellow],
         startPoint: .topLeading, endPoint: .bottomTrailing
     )
+    .onTapGesture {
+        isPresented.toggle()
+    }
     .ignoresSafeArea(edges: .all)
     .floatingPanel(isPresented: $isPresented) {
         NavigationLayer {
-            SampleList()
+            SampleList(
+                includeFooter: $includeFooter,
+                includeHeader: $includeHeader,
+                rootSubtitle: $rootSubtitle,
+                rootTitle: $rootTitle
+            )
+            .navigationLayerTitle(rootTitle, subtitle: rootSubtitle)
+        } headerTrailing: {
+            if includeHeader {
+                Button("Done") {
+                    isPresented = false
+                }
+            }
+        } footer: {
+            if includeFooter {
+                Text("Footer")
+            }
         }
-        .interactiveDismissDisabled()
-        .presentationDetents([.medium])
     }
 }
 
