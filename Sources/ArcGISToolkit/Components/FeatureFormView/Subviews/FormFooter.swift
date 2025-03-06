@@ -18,13 +18,13 @@
 struct FormFooter: View {
 ***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
-***REMOVED***let formHandlingEventAction: (FeatureFormView.HandlingEvent) -> Void
+***REMOVED***let formHandlingEventAction: (FeatureFormView.EditingEvent) -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm.discardEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.DiscardedEdits(featureForm, willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.discardedEdits(willNavigate: false))
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Discard",
@@ -38,7 +38,7 @@ struct FormFooter: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm.finishEditing()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.FinishedEditing(featureForm, willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.savedEdits(willNavigate: false))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
