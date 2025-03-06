@@ -24,8 +24,8 @@ extension NavigationLayer {
         let headerTrailing: (() -> any View)?
         
         var body: some View {
-                if !model.views.isEmpty {
             HStack(alignment: .top) {
+                if showsBack {
                     Button {
                         model.pop()
                     } label: {
@@ -38,17 +38,19 @@ extension NavigationLayer {
                                 .labelStyle(.iconOnly)
                         }
                     }
-                }
-                Spacer()
-                if let title = model.title {
                     Divider()
                         .frame(height: size)
-                    VStack(alignment: .leading) {
+                }
+                if !showsBack {
+                    Spacer()
+                }
+                if let title = model.title, !title.isEmpty {
+                    VStack(alignment: showsBack ? .leading : .center) {
                         Text(title)
                             .bold()
-                        if let subtitle = model.subtitle {
+                        if let subtitle = model.subtitle, !subtitle.isEmpty  {
                             Text(subtitle)
-                                .font(.caption)
+                                .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -63,6 +65,8 @@ extension NavigationLayer {
                     AnyView(headerTrailing())
                 }
             }
+            .padding()
+        }
         
         var showsBack: Bool {
             !model.views.isEmpty
