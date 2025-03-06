@@ -173,6 +173,17 @@ extension FeatureFormExampleView {
             }.first
         }.first
     }
+    
+    /// A Boolean value indicating whether the form is presented.
+    private var isPresented: Binding<Bool> {
+        .init {
+            featureForm != nil
+        } set: { newValue in
+            if !newValue {
+                featureForm = nil
+            }
+        }
+    }
 }
 
 extension ArcGISFeature {
