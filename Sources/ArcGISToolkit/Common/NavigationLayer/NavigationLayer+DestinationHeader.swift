@@ -63,6 +63,9 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(headerTrailing())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var showsBack: Bool {
+***REMOVED******REMOVED******REMOVED***!model.views.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
