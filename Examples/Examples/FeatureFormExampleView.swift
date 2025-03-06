@@ -44,18 +44,11 @@ struct FeatureFormExampleView: View {
                     attributionBarHeight = $0
                 }
                 .onSingleTapGesture { screenPoint, _ in
-                    switch model.state {
-                    case .idle:
-                        identifyScreenPoint = screenPoint
-                    case let .editing(featureForm):
-                        model.state = .cancellationPending(featureForm)
-                    default:
-                        return
-                    }
+                    identifyScreenPoint = screenPoint
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy) {
-                        model.state = .editing(FeatureForm(feature: feature))
+                        featureForm = FeatureForm(feature: feature)
                     }
                 }
                 .task {
@@ -72,77 +65,57 @@ struct FeatureFormExampleView: View {
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
-                    isPresented: model.formIsPresented
+                    isPresented: isPresented
                 ) {
-                    if let featureForm = model.featureForm {
-                        FeatureFormView(featureForm: featureForm)
-                            .onClose {
-                                model.state = .idle
-                            }
-                            .onFormHandlingEvent { action in
-                                print(action)
-                                switch action {
-                                case .DiscardedEdits(let featureForm, let willNavigate):
-                                    print(featureForm.feature.attributes["objectid"])
-                                case .FinishedEditing(let featureForm, let willNavigate):
-                                    print(featureForm.feature.attributes["objectid"])
-                                case .StartedEditing(let featureForm):
-                                    print(featureForm.feature.attributes["objectid"])
-                                }
-                            }
-//                            .padding(.horizontal)
-//                            .padding(.top, 16)
-                    }
-                }
-                .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
-                    Button("Discard edits", role: .destructive) {
-                        model.discardEdits()
-                    }
-                    if case let .cancellationPending(featureForm) = model.state {
-                        Button("Continue editing", role: .cancel) {
-                            model.state = .editing(featureForm)
+                    FeatureFormView(featureForm: $featureForm)
+                        .closeButton(.visible) // Defaults to .automatic
+                        .onFormEditingEvent { action in
+                            print(action)
                         }
-                    }
-                } message: {
-                    Text("Updates to this feature will be lost.")
-                }
-                .alert(
-                    "The form wasn't submitted",
-                    isPresented: model.alertIsPresented
-                ) {
-                    // No actions.
-                } message: {
-                    if case let .generalError(_, errorMessage) = model.state {
-                        errorMessage
-                    }
-                }
-                .overlay {
-                    switch model.state {
-                    case .validating, .finishingEdits, .applyingEdits:
-                        HStack(spacing: 5) {
-                            ProgressView()
-                                .progressViewStyle(.circular)
-                            Text(model.state.label)
+                        .onChange(featureForm?.feature) { _ in
+                            print(featureForm?.feature.globalID)
                         }
-                        .padding()
-                        .background(.thinMaterial)
-                        .clipShape(.rect(cornerRadius: 10))
-                    default:
-                        EmptyView()
-                    }
+                    //                            .padding(.horizontal)
+                    //                            .padding(.top, 16)
+                    //                    }
                 }
-                .toolbar {
-                    if model.formIsPresented.wrappedValue {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Submit") {
-                                Task {
-                                    await model.submitEdits()
-                                }
-                            }
-                            .disabled(model.formControlsAreDisabled)
-                        }
-                    }
-                }
+//                .alert(
+//                    "The form wasn't submitted",
+//                    isPresented: model.alertIsPresented
+//                ) {
+//                    // No actions.
+//                } message: {
+//                    if case let .generalError(_, errorMessage) = model.state {
+//                        errorMessage
+//                    }
+//                }
+//                .overlay {
+//                    switch model.state {
+//                    case .validating, .finishingEdits, .applyingEdits:
+//                        HStack(spacing: 5) {
+//                            ProgressView()
+//                                .progressViewStyle(.circular)
+//                            Text(model.state.label)
+//                        }
+//                        .padding()
+//                        .background(.thinMaterial)
+//                        .clipShape(.rect(cornerRadius: 10))
+//                    default:
+//                        EmptyView()
+//                    }
+//                }
+//                .toolbar {
+//                    if model.formIsPresented.wrappedValue {
+//                        ToolbarItem(placement: .navigationBarTrailing) {
+//                            Button("Submit") {
+//                                Task {
+//                                    await model.submitEdits()
+//                                }
+//                            }
+//                            .disabled(model.formControlsAreDisabled)
+//                        }
+//                    }
+//                }
         }
     }
     
