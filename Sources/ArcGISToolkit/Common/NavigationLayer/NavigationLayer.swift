@@ -31,6 +31,8 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***/ The root view.
 ***REMOVED***let root: () -> Content
 ***REMOVED***
+***REMOVED***var backNavInter: ( (@escaping () -> Void) -> Void)?
+***REMOVED***
 ***REMOVED***@StateObject private var model: NavigationLayerModel
 ***REMOVED***
 ***REMOVED***init(_ root: @escaping () -> Content) {
@@ -65,7 +67,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onBackNavigationInterruptionAction: .constant(nil),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onBackNavigationInterruptionAction: backNavInter,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerTrailing: headerTrailing
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -180,6 +182,14 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Footer")
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension NavigationLayer {
+***REMOVED***func backNavInter(_ action: @escaping (@escaping () -> Void) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.backNavInter = action
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
