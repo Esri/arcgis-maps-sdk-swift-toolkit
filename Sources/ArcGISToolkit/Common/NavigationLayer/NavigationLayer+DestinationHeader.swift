@@ -24,8 +24,8 @@ extension NavigationLayer {
         let headerTrailing: (() -> any View)?
         
         var body: some View {
-            HStack {
                 if !model.views.isEmpty {
+            HStack(alignment: .top) {
                     Button {
                         model.pop()
                     } label: {
