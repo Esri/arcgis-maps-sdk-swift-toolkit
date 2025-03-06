@@ -129,6 +129,14 @@ public struct FeatureFormView: View {
 ***REMOVED***
 
 public extension FeatureFormView {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***enum EditingEvent {
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***case discardedEdits(willNavigate: Bool)
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***case savedEdits(willNavigate: Bool)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the close button on the form.
 ***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the close button.
 ***REMOVED***func closeButton(_ visibility: Visibility) -> Self {
