@@ -231,11 +231,11 @@ extension FeatureFormView {
 }
 
 extension EnvironmentValues {
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
-    
     /// The environment value to access the closure to call when the presented feature form changes.
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
+    
+    /// The environment value to set the continuation to use when the user responds to the alert.
+    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
     
     /// The environment value to access the validation error visibility.
     @Entry var _validationErrorVisibility: Visibility = .hidden
