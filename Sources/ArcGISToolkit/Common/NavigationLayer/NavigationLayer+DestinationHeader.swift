@@ -24,8 +24,8 @@ extension NavigationLayer {
 ***REMOVED******REMOVED***let headerTrailing: (() -> any View)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !model.views.isEmpty {
+***REMOVED******REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
