@@ -18,13 +18,13 @@ import SwiftUI
 struct FormFooter: View {
     let featureForm: FeatureForm
     
-    let formHandlingEventAction: (FeatureFormView.HandlingEvent) -> Void
+    let formHandlingEventAction: (FeatureFormView.EditingEvent) -> Void
     
     var body: some View {
         HStack {
             Button {
                 featureForm.discardEdits()
-                formHandlingEventAction(.DiscardedEdits(featureForm, willNavigate: false))
+                formHandlingEventAction(.discardedEdits(willNavigate: false))
             } label: {
                 Text(
                     "Discard",
@@ -38,7 +38,7 @@ struct FormFooter: View {
             Button {
                 Task {
                     try? await featureForm.finishEditing()
-                    formHandlingEventAction(.FinishedEditing(featureForm, willNavigate: false))
+                    formHandlingEventAction(.savedEdits(willNavigate: false))
                 }
             } label: {
                 Text(
