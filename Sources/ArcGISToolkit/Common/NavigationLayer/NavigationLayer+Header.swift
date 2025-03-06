@@ -16,37 +16,23 @@
 
 extension NavigationLayer {
 ***REMOVED***struct Header: View {
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let onBackNavigationInterruptionAction: ((@escaping () -> Void) -> Void)?
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@EnvironmentObject private var model: NavigationLayerModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var height: CGFloat = .zero
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let backNavigationDisabled: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let width: CGFloat
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The header trailing content.
 ***REMOVED******REMOVED***let headerTrailing: (() -> any View)?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***onBackNavigationInterruptionAction: ( (() -> Void) -> Void)?,
-***REMOVED******REMOVED******REMOVED***width: CGFloat,
-***REMOVED******REMOVED******REMOVED***headerTrailing: ( () -> any View)?
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***self.onBackNavigationInterruptionAction = onBackNavigationInterruptionAction
-***REMOVED******REMOVED******REMOVED***self.width = width
-***REMOVED******REMOVED******REMOVED***self.headerTrailing = headerTrailing
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let onBackNavigationInterruptionAction {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onBackNavigationInterruptionAction( { model.pop() ***REMOVED*** )
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let label = Label("Back", systemImage: "chevron.left")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.title == nil {
@@ -57,6 +43,7 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(backNavigationDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(showsBack ? 1 : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(!showsBack, width: width / 6)

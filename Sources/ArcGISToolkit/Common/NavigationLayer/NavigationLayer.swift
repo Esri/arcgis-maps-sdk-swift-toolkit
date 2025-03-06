@@ -31,7 +31,8 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***/ The root view.
 ***REMOVED***let root: () -> Content
 ***REMOVED***
-***REMOVED***var backNavInter: ( (@escaping () -> Void) -> Void)?
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***var backNavigationDisabled: Bool = false
 ***REMOVED***
 ***REMOVED***@StateObject private var model: NavigationLayerModel
 ***REMOVED***
@@ -67,7 +68,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onBackNavigationInterruptionAction: backNavInter,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backNavigationDisabled: backNavigationDisabled,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerTrailing: headerTrailing
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -186,9 +187,12 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 
 extension NavigationLayer {
-***REMOVED***func backNavInter(_ action: @escaping (@escaping () -> Void) -> Void) -> Self {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ - Parameter disabled: <#disabled description#>
+***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED***func backNavigationDisabled(_ disabled: Bool) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.backNavInter = action
+***REMOVED******REMOVED***copy.backNavigationDisabled = disabled
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
