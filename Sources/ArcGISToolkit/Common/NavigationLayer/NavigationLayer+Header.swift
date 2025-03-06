@@ -16,6 +16,9 @@ import SwiftUI
 
 extension NavigationLayer {
     struct Header: View {
+        /// <#Description#>
+        @Binding var onBackNavigationInterruptionAction: ((() -> Void) -> Void)?
+        
         @EnvironmentObject private var model: NavigationLayerModel
         
         @State private var height: CGFloat = .zero
@@ -29,6 +32,11 @@ extension NavigationLayer {
             HStack(alignment: .top) {
                 Group {
                     Button {
+                        if let onBackNavigationInterruptionAction {
+                            onBackNavigationInterruptionAction( { model.pop() } )
+                        } else {
+                            model.pop()
+                        }
                         model.pop()
                     } label: {
                         let label = Label("Back", systemImage: "chevron.left")
