@@ -64,7 +64,7 @@ struct NavigationLayer<Content: View>: View {
     var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
-                DestinationHeader(headerTrailing: headerTrailing)
+                Header(headerTrailing: headerTrailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Group {
                     if model.views.isEmpty {
