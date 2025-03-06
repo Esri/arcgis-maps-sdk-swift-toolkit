@@ -124,7 +124,7 @@ public struct FeatureFormView: View {
                 .backNavigationDisabled(hasEdits)
             }
             .alert(
-                "Discard Edits?",
+                (presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
                 isPresented: alertIsPresented,
                 actions: {
                     if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
@@ -133,14 +133,16 @@ public struct FeatureFormView: View {
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                             continuation()
                         }
-                        Button("Save Edits") {
-                            Task {
-                                do {
-                                    try await presentedForm.finishEditing()
-                                    onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
-                                    continuation()
-                                } catch {
-                                    #warning("Handle thrown errors.")
+                        if (presentedForm.validationErrors.isEmpty) {
+                            Button("Save Edits") {
+                                Task {
+                                    do {
+                                        try await presentedForm.finishEditing()
+                                        onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+                                        continuation()
+                                    } catch {
+                                        #warning("Handle thrown errors.")
+                                    }
                                 }
                             }
                         }
@@ -150,7 +152,12 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
-                    Text("Updates to the form will be lost.")
+                    if let validationErrors = presentedForm.wrappedValue?.validationErrors,
+                       !validationErrors.isEmpty {
+                        Text("You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.")
+                    } else {
+                        Text("Updates to the form will be lost.")
+                    }
                 }
             )
             .environment(\.formChangedAction, onFormChangedAction)
