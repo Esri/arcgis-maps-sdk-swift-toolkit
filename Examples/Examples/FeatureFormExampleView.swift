@@ -172,6 +172,24 @@ extension FeatureFormExampleView {
 ***REMOVED***
 ***REMOVED***
 
+extension ArcGISFeature {
+***REMOVED***var globalID: UUID? {
+***REMOVED******REMOVED***if let id = attributes["globalid"] as? UUID {
+***REMOVED******REMOVED******REMOVED***return id
+***REMOVED*** else if let id = attributes["GLOBALID"] as? UUID {
+***REMOVED******REMOVED******REMOVED***return id
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension ArcGISFeature: @retroactive Equatable {
+***REMOVED***public static func == (lhs: ArcGIS.ArcGISFeature, rhs: ArcGIS.ArcGISFeature) -> Bool {
+***REMOVED******REMOVED***lhs.globalID == rhs.globalID
+***REMOVED***
+***REMOVED***
+
 private extension URL {
 ***REMOVED***static var sampleData: Self {
 ***REMOVED******REMOVED***.init(string: "https:***REMOVED***www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
