@@ -124,7 +124,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.backNavigationDisabled(hasEdits)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.alert(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Discard Edits?",
+***REMOVED******REMOVED******REMOVED******REMOVED***(presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertIsPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***actions: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
@@ -133,14 +133,16 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Save Edits") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await presentedForm.finishEditing()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#warning("Handle thrown errors.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (presentedForm.validationErrors.isEmpty) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Save Edits") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await presentedForm.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#warning("Handle thrown errors.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -150,7 +152,12 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to the form will be lost.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let validationErrors = presentedForm.wrappedValue?.validationErrors,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !validationErrors.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.")
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to the form will be lost.")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
