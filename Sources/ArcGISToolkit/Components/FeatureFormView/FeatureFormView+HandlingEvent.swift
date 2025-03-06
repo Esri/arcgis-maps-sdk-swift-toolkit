@@ -16,12 +16,10 @@
 
 public extension FeatureFormView {
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***enum HandlingEvent {
+***REMOVED***enum EditingEvent {
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***case DiscardedEdits(FeatureForm, willNavigate: Bool)
+***REMOVED******REMOVED***case discardedEdits(willNavigate: Bool)
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***case FinishedEditing(FeatureForm, willNavigate: Bool)
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***case StartedEditing(FeatureForm)
+***REMOVED******REMOVED***case savedEdits(willNavigate: Bool)
 ***REMOVED***
 ***REMOVED***
