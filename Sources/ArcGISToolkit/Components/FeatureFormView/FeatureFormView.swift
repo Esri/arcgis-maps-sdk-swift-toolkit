@@ -153,6 +153,7 @@ public struct FeatureFormView: View {
                 }
             )
             .environment(\.formChangedAction, onFormChangedAction)
+            .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\._validationErrorVisibility, validationErrorVisibility)
             .task(id: presentedForm.wrappedValue?.feature.globalID) {
                 if let presentedForm = presentedForm.wrappedValue {
@@ -220,9 +221,19 @@ extension FeatureFormView {
             }
         }
     }
+    
+    /// A closure used to set the alert continuation.
+    var setAlertContinuation: (Bool, @escaping () -> Void) -> Void {
+        { willNavigate, continuation in
+            alertContinuation = (willNavigate: willNavigate, action: continuation)
+        }
+    }
 }
 
 extension EnvironmentValues {
+    /// The environment value to set the continuation to use when the user responds to the alert.
+    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
+    
     /// The environment value to access the closure to call when the presented feature form changes.
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
     
