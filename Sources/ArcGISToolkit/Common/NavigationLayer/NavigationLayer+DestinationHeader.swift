@@ -24,8 +24,8 @@ extension NavigationLayer {
 ***REMOVED******REMOVED***let headerTrailing: (() -> any View)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !model.views.isEmpty {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .top) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if showsBack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
@@ -38,17 +38,19 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***if let title = model.title {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: size)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if !showsBack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let title = model.title, !title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: showsBack ? .leading : .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let subtitle = model.subtitle {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let subtitle = model.subtitle, !subtitle.isEmpty  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -63,6 +65,8 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(headerTrailing())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var showsBack: Bool {
 ***REMOVED******REMOVED******REMOVED***!model.views.isEmpty
