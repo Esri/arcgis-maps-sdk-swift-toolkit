@@ -68,84 +68,80 @@ import SwiftUI
 /// - Since: 200.4
 public struct FeatureFormView: View {
     /// The feature form currently visible in the navigation layer.
-    @State private var presentedForm: FeatureForm?
-    
-    /// A Boolean value indicating whether the presented feature form has edits.
-    @State private var hasEdits: Bool = false
+    private let presentedForm: Binding<FeatureForm?>
     
     /// The root feature form.
-    let rootFeatureForm: FeatureForm
+    private let rootFeatureForm: FeatureForm?
     
-    /// The visibility of the form header.
-    var headerVisibility: Visibility = .automatic
+    /// The visibility of the close button.
+    var closeButtonVisibility: Visibility = .automatic
     
-    /// The action to perform when the close button is pressed.
-    var onCloseAction: (() -> Void)?
-    
-    /// The closure to perform when a ``HandlingEvent`` occurs.
-    var onFormHandlingEventAction: ((HandlingEvent) -> Void)?
+    /// The closure to perform when a ``EditingEvent`` occurs.
+    var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
+    /// A Boolean value indicating whether the presented feature form has edits.
+    @State private var hasEdits: Bool = false
+    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm) {
-        self.rootFeatureForm = featureForm
-        _presentedForm = .init(initialValue: featureForm)
+    public init(featureForm: Binding<FeatureForm?>) {
+        self.rootFeatureForm = featureForm.wrappedValue
+        self.presentedForm = featureForm
     }
     
     public var body: some View {
-        VStack(spacing: 0) {
-            NavigationLayer {
-                InternalFeatureFormView(
-                    featureForm: rootFeatureForm
-                )
-            } headerTrailing: {
-                if let onCloseAction {
-                    XButton(.dismiss) {
-#warning("TODO: Check if the presented form has edits.")
-                        onCloseAction()
+        if let rootFeatureForm {
+            VStack(spacing: 0) {
+                NavigationLayer {
+                    InternalFeatureFormView(
+                        featureForm: rootFeatureForm
+                    )
+                } headerTrailing: {
+                    if closeButtonVisibility != .hidden {
+                        XButton(.dismiss) {
+    #warning("TODO: Check if the presented form has edits.")
+                            presentedForm.wrappedValue = nil
+                        }
+                        .font(.title)
                     }
-                    .font(.title)
-                }
-            } footer: {
-                if let presentedForm, let onFormHandlingEventAction, hasEdits {
-                    FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
+                } footer: {
+                    if let presentedForm = presentedForm.wrappedValue, let onFormEditingEventAction, hasEdits {
+                        FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormEditingEventAction)
+                    }
                 }
             }
-        }
-        .environment(\.formChangedAction, onFormChangedAction)
-        .environment(\.validationErrorVisibility, validationErrorVisibility)
-        .task(id: presentedForm?.feature.globalID) {
-            if let presentedForm {
-                onFormHandlingEventAction?(.StartedEditing(presentedForm))
-                for await hasEdits in presentedForm.$hasEdits {
-                    withAnimation { self.hasEdits = hasEdits }
+            .environment(\.formChangedAction, onFormChangedAction)
+            .environment(\.validationErrorVisibility, validationErrorVisibility)
+            .task(id: presentedForm.wrappedValue?.feature.globalID) {
+                if let presentedForm = presentedForm.wrappedValue {
+                    for await hasEdits in presentedForm.$hasEdits {
+                        withAnimation { self.hasEdits = hasEdits }
+                    }
                 }
+                
             }
         }
     }
 }
 
 public extension FeatureFormView {
-    /// Sets a closure to perform when the form's close button is pressed.
-    /// - Parameter action: The closure to perform when the form's close button is pressed.
-    ///
-    /// Use this modifier to show a close button on the form. If the feature form has edits the user will be
-    /// prompted to first save or discard the edits.
-    func onClose(perform action: @escaping () -> Void) -> Self {
+    /// Sets the visibility of the close button on the form.
+    /// - Parameter visibility: The visibility of the close button.
+    func closeButton(_ visibility: Visibility) -> Self {
         var copy = self
-        copy.onCloseAction = action
+        copy.closeButtonVisibility = visibility
         return copy
     }
     
-    /// Sets a closure to perform when a form handling event occurs.
-    /// - Parameter action: The closure to perform when the form handling event occurs.
-    func onFormHandlingEvent(perform action: @escaping (HandlingEvent) -> Void) -> Self {
+    /// Sets a closure to perform when a form editing event occurs.
+    /// - Parameter action: The closure to perform when the form editing event occurs.
+    func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         var copy = self
-        copy.onFormHandlingEventAction = action
+        copy.onFormEditingEventAction = action
         return copy
     }
 }
@@ -161,13 +157,14 @@ extension FeatureFormView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var onFormChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != presentedForm?.feature.globalID {
-                self.presentedForm = featureForm
+            if let presentedForm = presentedForm.wrappedValue {
+                if featureForm.feature.globalID != presentedForm.feature.globalID {
+                    self.presentedForm.wrappedValue = featureForm
+                }
             }
         }
     }
 }
-
 
 extension EnvironmentValues {
     /// The environment value to access the closure to call when the presented feature form changes.
