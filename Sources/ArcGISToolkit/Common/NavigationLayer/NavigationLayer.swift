@@ -31,7 +31,8 @@ struct NavigationLayer<Content: View>: View {
     /// The root view.
     let root: () -> Content
     
-    var backNavInter: ( (@escaping () -> Void) -> Void)?
+    /// <#Description#>
+    var backNavigationDisabled: Bool = false
     
     @StateObject private var model: NavigationLayerModel
     
@@ -67,7 +68,7 @@ struct NavigationLayer<Content: View>: View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
                 Header(
-                    onBackNavigationInterruptionAction: backNavInter,
+                    backNavigationDisabled: backNavigationDisabled,
                     width: geometryProxy.size.width,
                     headerTrailing: headerTrailing
                 )
@@ -186,9 +187,12 @@ struct NavigationLayer<Content: View>: View {
 }
 
 extension NavigationLayer {
-    func backNavInter(_ action: @escaping (@escaping () -> Void) -> Void) -> Self {
+    /// <#Description#>
+    /// - Parameter disabled: <#disabled description#>
+    /// - Returns: <#description#>
+    func backNavigationDisabled(_ disabled: Bool) -> Self {
         var copy = self
-        copy.backNavInter = action
+        copy.backNavigationDisabled = disabled
         return copy
     }
 }

@@ -121,13 +121,7 @@ public struct FeatureFormView: View {
                         FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormEditingEventAction)
                     }
                 }
-                .backNavInter { continuation in
-                    if hasEdits {
-                        alertContinuation = (true, { continuation() } )
-                    } else {
-                        continuation()
-                    }
-                }
+                .backNavigationDisabled(hasEdits)
             }
             .alert(
                 "Discard Edits?",
