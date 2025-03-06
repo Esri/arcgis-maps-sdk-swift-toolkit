@@ -84,7 +84,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let navigation: () -> Void = {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let navigationAction: () -> Void = {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
@@ -92,9 +92,9 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if formViewModel.featureForm.hasEdits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setAlertContinuation?(true, navigation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setAlertContinuation?(true, navigationAction)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigation()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationAction()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: associatedElement.terminal?.name
