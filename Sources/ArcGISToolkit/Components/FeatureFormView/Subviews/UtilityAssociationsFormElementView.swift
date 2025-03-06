@@ -46,6 +46,8 @@ struct UtilityAssociationsFormElementView: View {
 private struct UtilityAssociationGroupResultView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
+    @Environment(\.setAlertContinuation) var setAlertContinuation
+    
     /// The view model for the form.
     @EnvironmentObject private var formViewModel: FormViewModel
     
@@ -82,10 +84,17 @@ private struct UtilityAssociationGroupResultView: View {
                         fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
                         name: title,
                         selectionAction: {
-                            navigationLayerModel.push {
-                                InternalFeatureFormView(
-                                    featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                                )
+                            let navigation: () -> Void = {
+                                navigationLayerModel.push {
+                                    InternalFeatureFormView(
+                                        featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+                                    )
+                                }
+                            }
+                            if formViewModel.featureForm.hasEdits {
+                                setAlertContinuation?(true, navigation)
+                            } else {
+                                navigation()
                             }
                         },
                         terminalName: associatedElement.terminal?.name
