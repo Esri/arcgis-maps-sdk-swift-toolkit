@@ -63,6 +63,9 @@ extension NavigationLayer {
                     AnyView(headerTrailing())
                 }
             }
+        
+        var showsBack: Bool {
+            !model.views.isEmpty
         }
     }
 }
