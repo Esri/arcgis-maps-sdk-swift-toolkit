@@ -84,7 +84,7 @@ private struct UtilityAssociationGroupResultView: View {
                         fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
                         name: title,
                         selectionAction: {
-                            let navigation: () -> Void = {
+                            let navigationAction: () -> Void = {
                                 navigationLayerModel.push {
                                     InternalFeatureFormView(
                                         featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
@@ -92,9 +92,9 @@ private struct UtilityAssociationGroupResultView: View {
                                 }
                             }
                             if formViewModel.featureForm.hasEdits {
-                                setAlertContinuation?(true, navigation)
+                                setAlertContinuation?(true, navigationAction)
                             } else {
-                                navigation()
+                                navigationAction()
                             }
                         },
                         terminalName: associatedElement.terminal?.name
