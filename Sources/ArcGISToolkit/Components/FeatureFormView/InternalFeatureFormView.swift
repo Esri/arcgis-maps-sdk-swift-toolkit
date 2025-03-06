@@ -135,7 +135,7 @@ extension InternalFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
         HStack {
-            Text(element.label.isEmpty ? "Associations" : element.label)
+            Text(element.label)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Spacer()
