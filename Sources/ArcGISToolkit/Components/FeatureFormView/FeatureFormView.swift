@@ -82,11 +82,8 @@ public struct FeatureFormView: View {
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: Visibility = .hidden
     
-    /// <#Description#>
-    @State private var alertContinuationAction: (willNavigate: Bool, () -> Void)?
-    
-    /// <#Description#>
-    @State private var alertIsPresented = false
+    /// Continuation information for the alert.
+    @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits: Bool = false
@@ -110,8 +107,7 @@ public struct FeatureFormView: View {
                     if closeButtonVisibility != .hidden {
                         XButton(.dismiss) {
                             if hasEdits {
-                                alertIsPresented = true
-                                alertContinuationAction = (false, {
+                                alertContinuation = (false, {
                                     presentedForm.wrappedValue = nil
                                 })
                             } else {
@@ -128,18 +124,18 @@ public struct FeatureFormView: View {
             }
             .alert(
                 "Discard Edits?",
-                isPresented: $alertIsPresented,
+                isPresented: alertIsPresented,
                 actions: {
-                    if let (willNavigate, continuation) = alertContinuationAction {
+                    if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
                         Button("Discard Edits", role: .destructive) {
-                            presentedForm.wrappedValue?.discardEdits()
+                            presentedForm.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                             continuation()
                         }
                         Button("Save Edits") {
                             Task {
                                 do {
-                                    try await presentedForm.wrappedValue?.finishEditing()
+                                    try await presentedForm.finishEditing()
                                     onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                     continuation()
                                 } catch {
@@ -148,7 +144,7 @@ public struct FeatureFormView: View {
                             }
                         }
                         Button("Continue Editing", role: .cancel) {
-                            alertIsPresented = false
+                            alertIsPresented.wrappedValue = false
                         }
                     }
                 },
@@ -196,6 +192,17 @@ public extension FeatureFormView {
 }
 
 extension FeatureFormView {
+    /// A Boolean value indicating whether the alert is presented.
+    var alertIsPresented: Binding<Bool> {
+        Binding {
+            alertContinuation != nil
+        } set: { newIsPresented in
+            if !newIsPresented {
+                alertContinuation = nil
+            }
+        }
+    }
+    
     /// The closure to perform when the presented feature form changes.
     ///
     /// - Note: This action has the potential to be called under four scenarios. Whenever an
