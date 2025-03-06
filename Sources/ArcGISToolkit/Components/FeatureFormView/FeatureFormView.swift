@@ -80,7 +80,7 @@ public struct FeatureFormView: View {
 ***REMOVED***var onFormEditingEventAction: ((EditingEvent) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
-***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+***REMOVED***var validationErrorVisibility: Visibility = .hidden
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
 ***REMOVED***@State private var hasEdits: Bool = false
@@ -115,7 +115,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
-***REMOVED******REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED******REMOVED******REMOVED***.environment(\._validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED***.task(id: presentedForm.wrappedValue?.feature.globalID) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await hasEdits in presentedForm.$hasEdits {
@@ -169,4 +169,7 @@ extension FeatureFormView {
 extension EnvironmentValues {
 ***REMOVED******REMOVED***/ The environment value to access the closure to call when the presented feature form changes.
 ***REMOVED***@Entry var formChangedAction: ((FeatureForm) -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ The environment value to access the validation error visibility.
+***REMOVED***@Entry var _validationErrorVisibility: Visibility = .hidden
 ***REMOVED***

@@ -20,7 +20,7 @@ struct InputFooter: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
-***REMOVED***@Environment(\.validationErrorVisibility) private var validationErrorVisibility
+***REMOVED***@Environment(\._validationErrorVisibility) private var validationErrorVisibility
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel

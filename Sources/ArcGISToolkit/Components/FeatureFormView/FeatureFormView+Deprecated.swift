@@ -40,8 +40,6 @@ public extension FeatureFormView /* Deprecated */ {
 ***REMOVED******REMOVED***/ validation error visibility.
 ***REMOVED***@available(*, deprecated)
 ***REMOVED***func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.validationErrorVisibility = visibility
-***REMOVED******REMOVED***return copy
+***REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
