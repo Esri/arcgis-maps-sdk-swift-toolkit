@@ -17,7 +17,7 @@ import SwiftUI
 extension NavigationLayer {
     struct Header: View {
         /// <#Description#>
-        @Binding var onBackNavigationInterruptionAction: ((() -> Void) -> Void)?
+        let onBackNavigationInterruptionAction: ((@escaping () -> Void) -> Void)?
         
         @EnvironmentObject private var model: NavigationLayerModel
         
@@ -28,6 +28,16 @@ extension NavigationLayer {
         /// The header trailing content.
         let headerTrailing: (() -> any View)?
         
+        init(
+            onBackNavigationInterruptionAction: ( (() -> Void) -> Void)?,
+            width: CGFloat,
+            headerTrailing: ( () -> any View)?
+        ) {
+            self.onBackNavigationInterruptionAction = onBackNavigationInterruptionAction
+            self.width = width
+            self.headerTrailing = headerTrailing
+        }
+        
         var body: some View {
             HStack(alignment: .top) {
                 Group {
@@ -37,7 +47,6 @@ extension NavigationLayer {
                         } else {
                             model.pop()
                         }
-                        model.pop()
                     } label: {
                         let label = Label("Back", systemImage: "chevron.left")
                         if model.title == nil {

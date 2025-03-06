@@ -31,6 +31,8 @@ struct NavigationLayer<Content: View>: View {
     /// The root view.
     let root: () -> Content
     
+    var backNavInter: ( (@escaping () -> Void) -> Void)?
+    
     @StateObject private var model: NavigationLayerModel
     
     init(_ root: @escaping () -> Content) {
@@ -65,7 +67,7 @@ struct NavigationLayer<Content: View>: View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
                 Header(
-                    onBackNavigationInterruptionAction: .constant(nil),
+                    onBackNavigationInterruptionAction: backNavInter,
                     width: geometryProxy.size.width,
                     headerTrailing: headerTrailing
                 )
@@ -180,6 +182,14 @@ struct NavigationLayer<Content: View>: View {
                 Text("Footer")
             }
         }
+    }
+}
+
+extension NavigationLayer {
+    func backNavInter(_ action: @escaping (@escaping () -> Void) -> Void) -> Self {
+        var copy = self
+        copy.backNavInter = action
+        return copy
     }
 }
 
