@@ -15,7 +15,7 @@
 import SwiftUI
 
 extension NavigationLayer {
-    struct DestinationHeader: View {
+    struct Header: View {
         @EnvironmentObject private var model: NavigationLayerModel
         
         @State private var size: CGFloat = .zero
@@ -65,11 +65,25 @@ extension NavigationLayer {
                     AnyView(headerTrailing())
                 }
             }
-            .padding()
+            .padding(showsBack || (model.title != nil && !model.title!.isEmpty))
         }
         
         var showsBack: Bool {
             !model.views.isEmpty
+        }
+    }
+}
+
+extension View {
+    /// Optionally adds an equal padding amount to specific edges of this view.
+    /// - Parameter applied: A Boolean condition indicating whether padding is applied.
+    /// - Returns: A view that’s padded if specified.
+    @ViewBuilder
+    func padding(_ applied: Bool) -> some View {
+        if applied {
+            self.padding()
+        } else {
+            self
         }
     }
 }
