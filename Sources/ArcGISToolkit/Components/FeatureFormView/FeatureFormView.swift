@@ -82,11 +82,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: Visibility = .hidden
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var alertContinuationAction: (willNavigate: Bool, () -> Void)?
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var alertIsPresented = false
+***REMOVED******REMOVED***/ Continuation information for the alert.
+***REMOVED***@State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
 ***REMOVED***@State private var hasEdits: Bool = false
@@ -110,8 +107,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if closeButtonVisibility != .hidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if hasEdits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertIsPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertContinuationAction = (false, {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertContinuation = (false, {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.wrappedValue = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
@@ -128,18 +124,18 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Discard Edits?",
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $alertIsPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertIsPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***actions: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let (willNavigate, continuation) = alertContinuationAction {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard Edits", role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.wrappedValue?.discardEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.discardEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Save Edits") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await presentedForm.wrappedValue?.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await presentedForm.finishEditing()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
@@ -148,7 +144,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue Editing", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertIsPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertIsPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***,
@@ -196,6 +192,17 @@ public extension FeatureFormView {
 ***REMOVED***
 
 extension FeatureFormView {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the alert is presented.
+***REMOVED***var alertIsPresented: Binding<Bool> {
+***REMOVED******REMOVED***Binding {
+***REMOVED******REMOVED******REMOVED***alertContinuation != nil
+***REMOVED*** set: { newIsPresented in
+***REMOVED******REMOVED******REMOVED***if !newIsPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED***alertContinuation = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when the presented feature form changes.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Note: This action has the potential to be called under four scenarios. Whenever an
