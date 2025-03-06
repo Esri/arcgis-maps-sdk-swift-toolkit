@@ -129,6 +129,14 @@ public struct FeatureFormView: View {
 }
 
 public extension FeatureFormView {
+    /// <#Description#>
+    enum EditingEvent {
+        /// <#Description#>
+        case discardedEdits(willNavigate: Bool)
+        /// <#Description#>
+        case savedEdits(willNavigate: Bool)
+    }
+    
     /// Sets the visibility of the close button on the form.
     /// - Parameter visibility: The visibility of the close button.
     func closeButton(_ visibility: Visibility) -> Self {
