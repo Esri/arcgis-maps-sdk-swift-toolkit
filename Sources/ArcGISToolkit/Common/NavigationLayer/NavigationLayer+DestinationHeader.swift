@@ -15,7 +15,7 @@
 ***REMOVED***
 
 extension NavigationLayer {
-***REMOVED***struct DestinationHeader: View {
+***REMOVED***struct Header: View {
 ***REMOVED******REMOVED***@EnvironmentObject private var model: NavigationLayerModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var size: CGFloat = .zero
@@ -65,11 +65,25 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(headerTrailing())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***.padding(showsBack || (model.title != nil && !model.title!.isEmpty))
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var showsBack: Bool {
 ***REMOVED******REMOVED******REMOVED***!model.views.isEmpty
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension View {
+***REMOVED******REMOVED***/ Optionally adds an equal padding amount to specific edges of this view.
+***REMOVED******REMOVED***/ - Parameter applied: A Boolean condition indicating whether padding is applied.
+***REMOVED******REMOVED***/ - Returns: A view that’s padded if specified.
+***REMOVED***@ViewBuilder
+***REMOVED***func padding(_ applied: Bool) -> some View {
+***REMOVED******REMOVED***if applied {
+***REMOVED******REMOVED******REMOVED***self.padding()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
