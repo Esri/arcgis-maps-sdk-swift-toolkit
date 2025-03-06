@@ -82,6 +82,12 @@ public struct FeatureFormView: View {
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: Visibility = .hidden
     
+    /// <#Description#>
+    @State private var alertContinuationAction: (willNavigate: Bool, () -> Void)?
+    
+    /// <#Description#>
+    @State private var alertIsPresented = false
+    
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits: Bool = false
     
@@ -103,8 +109,14 @@ public struct FeatureFormView: View {
                 } headerTrailing: {
                     if closeButtonVisibility != .hidden {
                         XButton(.dismiss) {
-    #warning("TODO: Check if the presented form has edits.")
-                            presentedForm.wrappedValue = nil
+                            if hasEdits {
+                                alertIsPresented = true
+                                alertContinuationAction = (false, {
+                                    presentedForm.wrappedValue = nil
+                                })
+                            } else {
+                                presentedForm.wrappedValue = nil
+                            }
                         }
                         .font(.title)
                     }
@@ -114,6 +126,36 @@ public struct FeatureFormView: View {
                     }
                 }
             }
+            .alert(
+                "Discard Edits?",
+                isPresented: $alertIsPresented,
+                actions: {
+                    if let (willNavigate, continuation) = alertContinuationAction {
+                        Button("Discard Edits", role: .destructive) {
+                            presentedForm.wrappedValue?.discardEdits()
+                            onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            continuation()
+                        }
+                        Button("Save Edits") {
+                            Task {
+                                do {
+                                    try await presentedForm.wrappedValue?.finishEditing()
+                                    onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+                                    continuation()
+                                } catch {
+                                    #warning("Handle thrown errors.")
+                                }
+                            }
+                        }
+                        Button("Continue Editing", role: .cancel) {
+                            alertIsPresented = false
+                        }
+                    }
+                },
+                message: {
+                    Text("Updates to the form will be lost.")
+                }
+            )
             .environment(\.formChangedAction, onFormChangedAction)
             .environment(\._validationErrorVisibility, validationErrorVisibility)
             .task(id: presentedForm.wrappedValue?.feature.globalID) {
@@ -122,7 +164,6 @@ public struct FeatureFormView: View {
                         withAnimation { self.hasEdits = hasEdits }
                     }
                 }
-                
             }
         }
     }
