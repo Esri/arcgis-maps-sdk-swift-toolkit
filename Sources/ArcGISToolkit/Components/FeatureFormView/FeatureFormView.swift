@@ -153,6 +153,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
+***REMOVED******REMOVED******REMOVED***.environment(\.setAlertContinuation, setAlertContinuation)
 ***REMOVED******REMOVED******REMOVED***.environment(\._validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED***.task(id: presentedForm.wrappedValue?.feature.globalID) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue {
@@ -221,8 +222,18 @@ extension FeatureFormView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A closure used to set the alert continuation.
+***REMOVED***var setAlertContinuation: (Bool, @escaping () -> Void) -> Void {
+***REMOVED******REMOVED***{ willNavigate, continuation in
+***REMOVED******REMOVED******REMOVED***alertContinuation = (willNavigate: willNavigate, action: continuation)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
 extension EnvironmentValues {
+***REMOVED******REMOVED***/ The environment value to set the continuation to use when the user responds to the alert.
+***REMOVED***@Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ The environment value to access the closure to call when the presented feature form changes.
 ***REMOVED***@Entry var formChangedAction: ((FeatureForm) -> Void)?
 ***REMOVED***
