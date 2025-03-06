@@ -68,84 +68,80 @@
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The feature form currently visible in the navigation layer.
-***REMOVED***@State private var presentedForm: FeatureForm?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
-***REMOVED***@State private var hasEdits: Bool = false
+***REMOVED***private let presentedForm: Binding<FeatureForm?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The root feature form.
-***REMOVED***let rootFeatureForm: FeatureForm
+***REMOVED***private let rootFeatureForm: FeatureForm?
 ***REMOVED***
-***REMOVED******REMOVED***/ The visibility of the form header.
-***REMOVED***var headerVisibility: Visibility = .automatic
+***REMOVED******REMOVED***/ The visibility of the close button.
+***REMOVED***var closeButtonVisibility: Visibility = .automatic
 ***REMOVED***
-***REMOVED******REMOVED***/ The action to perform when the close button is pressed.
-***REMOVED***var onCloseAction: (() -> Void)?
-***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when a ``HandlingEvent`` occurs.
-***REMOVED***var onFormHandlingEventAction: ((HandlingEvent) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when a ``EditingEvent`` occurs.
+***REMOVED***var onFormEditingEventAction: ((EditingEvent) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
+***REMOVED***@State private var hasEdits: Bool = false
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
-***REMOVED***public init(featureForm: FeatureForm) {
-***REMOVED******REMOVED***self.rootFeatureForm = featureForm
-***REMOVED******REMOVED***_presentedForm = .init(initialValue: featureForm)
+***REMOVED***public init(featureForm: Binding<FeatureForm?>) {
+***REMOVED******REMOVED***self.rootFeatureForm = featureForm.wrappedValue
+***REMOVED******REMOVED***self.presentedForm = featureForm
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED***NavigationLayer {
-***REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** headerTrailing: {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let onCloseAction {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
-#warning("TODO: Check if the presented form has edits.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCloseAction()
+***REMOVED******REMOVED***if let rootFeatureForm {
+***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLayer {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** headerTrailing: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if closeButtonVisibility != .hidden {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
+***REMOVED***#warning("TODO: Check if the presented form has edits.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentedForm.wrappedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** footer: {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm, let onFormHandlingEventAction, hasEdits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormHandlingEventAction)
+***REMOVED******REMOVED******REMOVED*** footer: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, let onFormEditingEventAction, hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormEditingEventAction)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
-***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
-***REMOVED******REMOVED***.task(id: presentedForm?.feature.globalID) {
-***REMOVED******REMOVED******REMOVED***if let presentedForm {
-***REMOVED******REMOVED******REMOVED******REMOVED***onFormHandlingEventAction?(.StartedEditing(presentedForm))
-***REMOVED******REMOVED******REMOVED******REMOVED***for await hasEdits in presentedForm.$hasEdits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { self.hasEdits = hasEdits ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.environment(\.formChangedAction, onFormChangedAction)
+***REMOVED******REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
+***REMOVED******REMOVED******REMOVED***.task(id: presentedForm.wrappedValue?.feature.globalID) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await hasEdits in presentedForm.$hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { self.hasEdits = hasEdits ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 public extension FeatureFormView {
-***REMOVED******REMOVED***/ Sets a closure to perform when the form's close button is pressed.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form's close button is pressed.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Use this modifier to show a close button on the form. If the feature form has edits the user will be
-***REMOVED******REMOVED***/ prompted to first save or discard the edits.
-***REMOVED***func onClose(perform action: @escaping () -> Void) -> Self {
+***REMOVED******REMOVED***/ Sets the visibility of the close button on the form.
+***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the close button.
+***REMOVED***func closeButton(_ visibility: Visibility) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onCloseAction = action
+***REMOVED******REMOVED***copy.closeButtonVisibility = visibility
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when a form handling event occurs.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form handling event occurs.
-***REMOVED***func onFormHandlingEvent(perform action: @escaping (HandlingEvent) -> Void) -> Self {
+***REMOVED******REMOVED***/ Sets a closure to perform when a form editing event occurs.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form editing event occurs.
+***REMOVED***func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onFormHandlingEventAction = action
+***REMOVED******REMOVED***copy.onFormEditingEventAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
@@ -161,13 +157,14 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ the same ``FeatureForm`` make sure not to over-emit form handling events.
 ***REMOVED***var onFormChangedAction: (FeatureForm) -> Void {
 ***REMOVED******REMOVED***{ featureForm in
-***REMOVED******REMOVED******REMOVED***if featureForm.feature.globalID != presentedForm?.feature.globalID {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.presentedForm = featureForm
+***REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***if featureForm.feature.globalID != presentedForm.feature.globalID {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.presentedForm.wrappedValue = featureForm
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
 
 extension EnvironmentValues {
 ***REMOVED******REMOVED***/ The environment value to access the closure to call when the presented feature form changes.
