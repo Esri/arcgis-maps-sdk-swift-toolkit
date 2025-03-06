@@ -23,6 +23,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
+***REMOVED******REMOVED***/ The presented feature form.
+***REMOVED***@State private var featureForm: FeatureForm?
+***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
