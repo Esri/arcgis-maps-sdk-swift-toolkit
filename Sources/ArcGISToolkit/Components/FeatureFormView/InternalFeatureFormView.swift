@@ -26,9 +26,6 @@ struct InternalFeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
-    /// A Boolean value indicating whether initial expression evaluation is running.
-    @State private var initialExpressionsAreEvaluating = true
-    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
@@ -37,20 +34,6 @@ struct InternalFeatureFormView: View {
     }
     
     var body: some View {
-        Group {
-            if initialExpressionsAreEvaluating {
-                initialBody
-            } else {
-                evaluatedForm
-                    .padding([.horizontal])
-            }
-        }
-        .onAppear {
-            formChangedAction?(model.featureForm)
-        }
-    }
-    
-    var evaluatedForm: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
@@ -80,6 +63,13 @@ struct InternalFeatureFormView: View {
         .scrollDismissesKeyboard(.immediately)
 #endif
         .environmentObject(model)
+        .padding([.horizontal])
+        .task {
+            await model.initialEvaluation()
+        }
+        .onAppear {
+            formChangedAction?(model.featureForm)
+        }
     }
 }
 
@@ -151,17 +141,5 @@ extension InternalFeatureFormView {
                 .font(.footnote)
         }
         Divider()
-    }
-    
-    /// The progress view to be shown while initial expression evaluation is running.
-    ///
-    /// This avoids flashing elements that may immediately be set hidden or have
-    /// values change as a result of initial expression evaluation.
-    var initialBody: some View {
-        ProgressView()
-            .task {
-                await model.initialEvaluation()
-                initialExpressionsAreEvaluating = false
-            }
     }
 }
