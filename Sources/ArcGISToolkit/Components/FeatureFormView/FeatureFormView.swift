@@ -232,6 +232,7 @@ extension FeatureFormView {
 ***REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if featureForm.feature.globalID != presentedForm.feature.globalID {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.presentedForm.wrappedValue = featureForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .hidden
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
