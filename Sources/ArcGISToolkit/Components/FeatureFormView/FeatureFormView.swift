@@ -135,6 +135,7 @@ public struct FeatureFormView: View {
                         Button("Discard Edits", role: .destructive) {
                             presentedForm.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            validationErrorVisibility = .hidden
                             continuation()
                         }
                         if (presentedForm.validationErrors.isEmpty) {
