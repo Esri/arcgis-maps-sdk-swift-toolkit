@@ -33,6 +33,7 @@ struct FormFooter: View {
             Button {
                 featureForm.discardEdits()
                 formHandlingEventAction?(.discardedEdits(willNavigate: false))
+                validationErrorVisibility = .hidden
             } label: {
                 Text(
                     "Discard",
