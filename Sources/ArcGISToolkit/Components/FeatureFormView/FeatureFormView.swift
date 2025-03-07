@@ -79,14 +79,14 @@ public struct FeatureFormView: View {
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
-    /// The validation error visibility configuration of the form.
-    var validationErrorVisibility: Visibility = .hidden
-    
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits: Bool = false
+    
+    /// The validation error visibility configuration of the form.
+    @State private var validationErrorVisibility: Visibility = .hidden
     
     /// Initializes a form view.
     /// - Parameters:
@@ -118,7 +118,11 @@ public struct FeatureFormView: View {
                     }
                 } footer: {
                     if let presentedForm = presentedForm.wrappedValue, hasEdits {
-                        FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormEditingEventAction)
+                        FormFooter(
+                            featureForm: presentedForm,
+                            formHandlingEventAction: onFormEditingEventAction,
+                            validationErrorVisibility: $validationErrorVisibility
+                        )
                     }
                 }
                 .backNavigationDisabled(hasEdits)
@@ -206,7 +210,9 @@ extension FeatureFormView {
         Binding {
             alertContinuation != nil
         } set: { newIsPresented in
-            if !newIsPresented {
+            if newIsPresented {
+                validationErrorVisibility = .visible
+            } else {
                 alertContinuation = nil
             }
         }
