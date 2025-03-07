@@ -26,9 +26,6 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether initial expression evaluation is running.
-***REMOVED***@State private var initialExpressionsAreEvaluating = true
-***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
@@ -37,20 +34,6 @@ struct InternalFeatureFormView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if initialExpressionsAreEvaluating {
-***REMOVED******REMOVED******REMOVED******REMOVED***initialBody
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***evaluatedForm
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***formChangedAction?(model.featureForm)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var evaluatedForm: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
@@ -80,6 +63,13 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
 ***REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED***.padding([.horizontal])
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***formChangedAction?(model.featureForm)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -151,17 +141,5 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED***
 ***REMOVED******REMOVED***Divider()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The progress view to be shown while initial expression evaluation is running.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This avoids flashing elements that may immediately be set hidden or have
-***REMOVED******REMOVED***/ values change as a result of initial expression evaluation.
-***REMOVED***var initialBody: some View {
-***REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
-***REMOVED******REMOVED******REMOVED******REMOVED***initialExpressionsAreEvaluating = false
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
