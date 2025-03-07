@@ -232,6 +232,7 @@ extension FeatureFormView {
             if let presentedForm = presentedForm.wrappedValue {
                 if featureForm.feature.globalID != presentedForm.feature.globalID {
                     self.presentedForm.wrappedValue = featureForm
+                    validationErrorVisibility = .hidden
                 }
             }
         }
