@@ -117,7 +117,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** footer: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, let onFormEditingEventAction, hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, hasEdits {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormEditingEventAction)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***

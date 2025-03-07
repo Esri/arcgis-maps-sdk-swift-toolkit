@@ -18,13 +18,17 @@
 struct FormFooter: View {
 ***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
-***REMOVED***let formHandlingEventAction: (FeatureFormView.EditingEvent) -> Void
+***REMOVED******REMOVED***/ The closure to perform when a choice is made.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: This property is optional as the modifier providing the closure may not be applied
+***REMOVED******REMOVED***/ to the ``FeatureFormView``.
+***REMOVED***let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm.discardEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.discardedEdits(willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.discardedEdits(willNavigate: false))
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Discard",
@@ -38,7 +42,7 @@ struct FormFooter: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm.finishEditing()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction(.savedEdits(willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
