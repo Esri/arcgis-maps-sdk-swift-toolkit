@@ -24,6 +24,10 @@ struct FormFooter: View {
     /// to the ``FeatureFormView``.
     let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
+    @Binding var validationErrorVisibility: Visibility
+    
+    @Environment(\.setAlertContinuation) var setAlertContinuation
+    
     var body: some View {
         HStack {
             Button {
@@ -40,10 +44,15 @@ struct FormFooter: View {
             Spacer()
             
             Button {
-                Task {
-                    try? await featureForm.finishEditing()
-                    formHandlingEventAction?(.savedEdits(willNavigate: false))
-                }
+                    if featureForm.validationErrors.isEmpty {
+                        Task {
+                            try? await featureForm.finishEditing()
+                            formHandlingEventAction?(.savedEdits(willNavigate: false))
+                        }
+                    } else {
+                        validationErrorVisibility = .visible
+                        setAlertContinuation?(false, {})
+                    }
             } label: {
                 Text(
                     "Save",
