@@ -42,6 +42,7 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***initialBody
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***evaluatedForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
