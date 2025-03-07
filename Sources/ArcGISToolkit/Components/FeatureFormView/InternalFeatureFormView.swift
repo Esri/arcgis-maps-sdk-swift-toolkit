@@ -42,6 +42,7 @@ struct InternalFeatureFormView: View {
                 initialBody
             } else {
                 evaluatedForm
+                    .padding([.horizontal])
             }
         }
         .onAppear {
