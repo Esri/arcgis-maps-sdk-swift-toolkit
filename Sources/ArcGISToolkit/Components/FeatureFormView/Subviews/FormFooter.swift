@@ -24,6 +24,10 @@ struct FormFooter: View {
 ***REMOVED******REMOVED***/ to the ``FeatureFormView``.
 ***REMOVED***let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
 ***REMOVED***
+***REMOVED***@Binding var validationErrorVisibility: Visibility
+***REMOVED***
+***REMOVED***@Environment(\.setAlertContinuation) var setAlertContinuation
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button {
@@ -40,10 +44,15 @@ struct FormFooter: View {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm.finishEditing()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if featureForm.validationErrors.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setAlertContinuation?(false, {***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Save",

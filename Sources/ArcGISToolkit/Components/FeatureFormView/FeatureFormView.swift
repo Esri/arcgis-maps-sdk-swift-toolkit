@@ -79,14 +79,14 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The closure to perform when a ``EditingEvent`` occurs.
 ***REMOVED***var onFormEditingEventAction: ((EditingEvent) -> Void)?
 ***REMOVED***
-***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
-***REMOVED***var validationErrorVisibility: Visibility = .hidden
-***REMOVED***
 ***REMOVED******REMOVED***/ Continuation information for the alert.
 ***REMOVED***@State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
 ***REMOVED***@State private var hasEdits: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
+***REMOVED***@State private var validationErrorVisibility: Visibility = .hidden
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -118,7 +118,11 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** footer: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, hasEdits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormEditingEventAction)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: presentedForm,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction: onFormEditingEventAction,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility: $validationErrorVisibility
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.backNavigationDisabled(hasEdits)
@@ -206,7 +210,9 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***Binding {
 ***REMOVED******REMOVED******REMOVED***alertContinuation != nil
 ***REMOVED*** set: { newIsPresented in
-***REMOVED******REMOVED******REMOVED***if !newIsPresented {
+***REMOVED******REMOVED******REMOVED***if newIsPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertContinuation = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
