@@ -43,6 +43,7 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(backNavigationDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(showsBack ? 1 : .zero)
