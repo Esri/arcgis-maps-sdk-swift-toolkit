@@ -43,6 +43,7 @@ extension NavigationLayer {
                                 .labelStyle(.iconOnly)
                         }
                     }
+                    .font(.title2)
                     .disabled(backNavigationDisabled)
                 }
                 .opacity(showsBack ? 1 : .zero)
