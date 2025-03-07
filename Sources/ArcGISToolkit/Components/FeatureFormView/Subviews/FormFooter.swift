@@ -18,13 +18,17 @@ import SwiftUI
 struct FormFooter: View {
     let featureForm: FeatureForm
     
-    let formHandlingEventAction: (FeatureFormView.EditingEvent) -> Void
+    /// The closure to perform when a choice is made.
+    ///
+    /// - Note: This property is optional as the modifier providing the closure may not be applied
+    /// to the ``FeatureFormView``.
+    let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
     var body: some View {
         HStack {
             Button {
                 featureForm.discardEdits()
-                formHandlingEventAction(.discardedEdits(willNavigate: false))
+                formHandlingEventAction?(.discardedEdits(willNavigate: false))
             } label: {
                 Text(
                     "Discard",
@@ -38,7 +42,7 @@ struct FormFooter: View {
             Button {
                 Task {
                     try? await featureForm.finishEditing()
-                    formHandlingEventAction(.savedEdits(willNavigate: false))
+                    formHandlingEventAction?(.savedEdits(willNavigate: false))
                 }
             } label: {
                 Text(

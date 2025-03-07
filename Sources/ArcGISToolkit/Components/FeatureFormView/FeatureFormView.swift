@@ -117,7 +117,7 @@ public struct FeatureFormView: View {
                         .font(.title)
                     }
                 } footer: {
-                    if let presentedForm = presentedForm.wrappedValue, let onFormEditingEventAction, hasEdits {
+                    if let presentedForm = presentedForm.wrappedValue, hasEdits {
                         FormFooter(featureForm: presentedForm, formHandlingEventAction: onFormEditingEventAction)
                     }
                 }
