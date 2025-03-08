@@ -55,9 +55,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ A timer to allow for the scheduling of the auto-hide animation.
 ***REMOVED***@State private var autoHideTimer: Timer?
 ***REMOVED***
-***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
-***REMOVED***@State private var height: Double?
-***REMOVED***
 ***REMOVED******REMOVED***/ Controls the current opacity of the scalebar.
 ***REMOVED***@State private var opacity: Double
 ***REMOVED***
@@ -197,14 +194,8 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onGeometryChange(for: CGFloat.self) { proxy in
-***REMOVED******REMOVED******REMOVED***proxy.frame(in: .global).height
-***REMOVED*** action: { newValue in
-***REMOVED******REMOVED******REMOVED***height = newValue
-***REMOVED***
 ***REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
-***REMOVED******REMOVED******REMOVED***height: height ?? .zero
+***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.environment(\.scalebarSettings, settings)
 ***REMOVED***
