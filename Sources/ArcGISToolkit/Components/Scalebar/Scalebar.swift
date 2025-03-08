@@ -194,9 +194,7 @@ public struct Scalebar: View {
                 }
             }
         }
-        .frame(
-            width: $viewModel.displayLength.wrappedValue
-        )
+        .frame(width: $viewModel.displayLength.wrappedValue)
         .environment(\.scalebarSettings, settings)
     }
 }
