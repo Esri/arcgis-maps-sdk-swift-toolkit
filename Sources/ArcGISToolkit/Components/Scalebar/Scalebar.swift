@@ -194,9 +194,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.frame(width: $viewModel.displayLength.wrappedValue)
 ***REMOVED******REMOVED***.environment(\.scalebarSettings, settings)
 ***REMOVED***
 ***REMOVED***
