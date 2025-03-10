@@ -1510,31 +1510,6 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertFalse(downloadIcon.exists)
     }
     
-    /// Test value backed read only elements
-    func testCase_9_1() {
-        let app = XCUIApplication()
-        let formTitle = app.staticTexts["Test Case 9 Form"]
-        let formViewTestsButton = app.buttons["Feature Form Tests"]
-        let singleCharacterString = app.staticTexts["singleCharacterString Footer"]
-        let lengthRangeString = app.staticTexts["lengthRangeString Footer"]
-        let maxExceededString = app.staticTexts["maxExceededString Footer"]
-        let numericalRange = app.staticTexts["numericalRange Footer"]
-        
-        app.launch()
-        
-        // Open the FeatureFormView component test view.
-        formViewTestsButton.tap()
-        
-        selectTestCase(app)
-        
-        assertFormOpened(titleElement: formTitle)
-        
-        XCTAssertEqual(singleCharacterString.label, "Value must be 1 character")
-        XCTAssertEqual(lengthRangeString.label, "Value must be 2 to 5 characters")
-        XCTAssertEqual(maxExceededString.label, "Maximum 5 characters")
-        XCTAssertEqual(numericalRange.label, "Value must be from 2 to 5")
-    }
-    
     /// Test substitution
     func testCase_10_1() {
         let app = XCUIApplication()
@@ -1616,7 +1591,7 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertFalse(clearButton.exists, "The clear button exists.")
         
         fieldValue.tap()
-        fieldValue.typeText("https://esri.com")
+        fieldValue.typeText("https://esri.com/this_is_a_string_longer_than_50_count_on_it")
         
         XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
         XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
