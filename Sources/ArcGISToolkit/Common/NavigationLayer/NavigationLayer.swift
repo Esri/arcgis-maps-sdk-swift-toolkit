@@ -31,8 +31,11 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***/ The root view.
 ***REMOVED***let root: () -> Content
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the back button in the navigation bar is disabled.
 ***REMOVED***var backNavigationDisabled: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ The closure to perform when model's path changes.
+***REMOVED***var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
 ***REMOVED***
 ***REMOVED***@StateObject private var model: NavigationLayerModel
 ***REMOVED***
@@ -105,6 +108,9 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Apply container width so the animated transitions work correctly.
 ***REMOVED******REMOVED******REMOVED***.frame(width: geometryProxy.size.width)
+***REMOVED******REMOVED******REMOVED***.onChange(model.views.count) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***onNavigationChangedAction?(model.presented ?? nil)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -187,12 +193,21 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 
 extension NavigationLayer {
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***/ - Parameter disabled: <#disabled description#>
-***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED******REMOVED***/ Adds a condition that controls whether the navigation back button is disabled.
+***REMOVED******REMOVED***/ - Parameter disabled: A Boolean value that determines whether the navigation back button is disabled.
+***REMOVED******REMOVED***/ - Returns: A NavigationLayer with the back button conditionally disabled.
 ***REMOVED***func backNavigationDisabled(_ disabled: Bool) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.backNavigationDisabled = disabled
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the navigation layer's path changed.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the navigation layer's path changed
+***REMOVED******REMOVED***/ - Note: If no item is provided, the root view is presented..
+***REMOVED***func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onNavigationChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

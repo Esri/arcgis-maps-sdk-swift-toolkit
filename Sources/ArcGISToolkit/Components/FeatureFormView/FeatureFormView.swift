@@ -79,6 +79,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The closure to perform when a ``EditingEvent`` occurs.
 ***REMOVED***var onFormEditingEventAction: ((EditingEvent) -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value that indicates whether a FeatureForm is the presented view in the NavigationLayer.
+***REMOVED***@State private var aFeatureFormIsPresented = true
+***REMOVED***
 ***REMOVED******REMOVED***/ Continuation information for the alert.
 ***REMOVED***@State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
 ***REMOVED***
@@ -125,7 +128,16 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.backNavigationDisabled(hasEdits)
+***REMOVED******REMOVED******REMOVED******REMOVED***.backNavigationDisabled(aFeatureFormIsPresented && hasEdits)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onNavigationPathChanged { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let item {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if type(of: item.view()) == InternalFeatureFormView.self {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***aFeatureFormIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***aFeatureFormIsPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***(presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
