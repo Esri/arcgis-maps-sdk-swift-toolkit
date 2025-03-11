@@ -31,8 +31,11 @@ struct NavigationLayer<Content: View>: View {
     /// The root view.
     let root: () -> Content
     
-    /// <#Description#>
+    /// A Boolean value indicating whether the back button in the navigation bar is disabled.
     var backNavigationDisabled: Bool = false
+    
+    /// The closure to perform when model's path changes.
+    var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
     
     @StateObject private var model: NavigationLayerModel
     
@@ -105,6 +108,9 @@ struct NavigationLayer<Content: View>: View {
             .environmentObject(model)
             // Apply container width so the animated transitions work correctly.
             .frame(width: geometryProxy.size.width)
+            .onChange(model.views.count) { _ in
+                onNavigationChangedAction?(model.presented ?? nil)
+            }
         }
     }
 }
@@ -187,12 +193,21 @@ struct NavigationLayer<Content: View>: View {
 }
 
 extension NavigationLayer {
-    /// <#Description#>
-    /// - Parameter disabled: <#disabled description#>
-    /// - Returns: <#description#>
+    /// Adds a condition that controls whether the navigation back button is disabled.
+    /// - Parameter disabled: A Boolean value that determines whether the navigation back button is disabled.
+    /// - Returns: A NavigationLayer with the back button conditionally disabled.
     func backNavigationDisabled(_ disabled: Bool) -> Self {
         var copy = self
         copy.backNavigationDisabled = disabled
+        return copy
+    }
+    
+    /// Sets a closure to perform when the navigation layer's path changed.
+    /// - Parameter action: The closure to perform when the navigation layer's path changed
+    /// - Note: If no item is provided, the root view is presented..
+    func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
+        var copy = self
+        copy.onNavigationChangedAction = action
         return copy
     }
 }

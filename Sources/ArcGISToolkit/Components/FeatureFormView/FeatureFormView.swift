@@ -79,6 +79,9 @@ public struct FeatureFormView: View {
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
+    /// A Boolean value that indicates whether a FeatureForm is the presented view in the NavigationLayer.
+    @State private var aFeatureFormIsPresented = true
+    
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
@@ -125,7 +128,16 @@ public struct FeatureFormView: View {
                         )
                     }
                 }
-                .backNavigationDisabled(hasEdits)
+                .backNavigationDisabled(aFeatureFormIsPresented && hasEdits)
+                .onNavigationPathChanged { item in
+                    if let item {
+                        if type(of: item.view()) == InternalFeatureFormView.self {
+                            aFeatureFormIsPresented = true
+                        } else {
+                            aFeatureFormIsPresented = false
+                        }
+                    }
+                }
             }
             .alert(
                 (presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
