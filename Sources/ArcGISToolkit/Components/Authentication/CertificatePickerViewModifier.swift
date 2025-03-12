@@ -207,11 +207,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                     }
                 ),
                 continueAction: .init(
-                    title: String(
-                        localized: "OK",
-                        bundle: .toolkitModule,
-                        comment: "A label for button to proceed with an operation."
-                    ),
+                    title: String.ok,
                     handler: { _, password in
                         viewModel.proceedToUseCertificate(withPassword: password)
                     }
@@ -366,12 +362,8 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.proceedToPicker()
                     } label: {
-                        Text(
-                            "Try Again",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button allowing the user to retry an operation."
-                        )
-                        .padding(.horizontal)
+                        Text.tryAgain
+                            .padding(.horizontal)
                     }
                     .buttonStyle(.borderedProminent)
                     Spacer()
