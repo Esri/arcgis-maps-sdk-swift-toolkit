@@ -24,12 +24,30 @@ extension Text {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Localized text for the word "Rename".
+***REMOVED***static var rename: Self {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Rename",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename an attachment."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Localized text for the word "Required".
 ***REMOVED***static var required: Self {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Required",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating a field is required"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Localized text for the phrase "Try Again".
+***REMOVED***static var tryAgain: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Try Again",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button allowing the user to retry an operation."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

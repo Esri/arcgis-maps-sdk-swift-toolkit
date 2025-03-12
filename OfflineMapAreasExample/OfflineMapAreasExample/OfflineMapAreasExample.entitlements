@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-***REMOVED***Apple***REMOVED***DTD PLIST 1.0***REMOVED***EN" "http:***REMOVED***www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+***REMOVED***<key>com.apple.security.app-sandbox</key>
+***REMOVED***<true/>
+***REMOVED***<key>com.apple.security.files.user-selected.read-only</key>
+***REMOVED***<true/>
+</dict>
+</plist>
