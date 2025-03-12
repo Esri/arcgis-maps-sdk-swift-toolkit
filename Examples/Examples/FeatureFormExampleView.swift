@@ -41,10 +41,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The visibility of the submit button.
 ***REMOVED***@State private var submitButtonVisibility = Visibility.hidden
 ***REMOVED***
-#warning("TO BE UNDONE. For UN testing only.")
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***@State private var map = makeMap()
-***REMOVED******REMOVED***@State private var map = Map(url: .sampleData)!
+***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
@@ -58,15 +56,6 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: identifyScreenPoint) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.task {
-#warning("TO BE REMOVED. Public credential is for UN testing only.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try await ArcGISCredential.publicSample
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
-***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Error resolving credential: \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
@@ -119,16 +108,6 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
-***REMOVED******REMOVED***/ Makes a map from a portal item.
-***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***let portalItem = PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
 
@@ -226,53 +205,15 @@ extension FeatureFormExampleView {
 ***REMOVED***
 ***REMOVED***
 
-extension ArcGISFeature {
-***REMOVED***var globalID: UUID? {
-***REMOVED******REMOVED***if let id = attributes["globalid"] as? UUID {
-***REMOVED******REMOVED******REMOVED***return id
-***REMOVED*** else if let id = attributes["GLOBALID"] as? UUID {
-***REMOVED******REMOVED******REMOVED***return id
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension ArcGISFeature: @retroactive Equatable {
-***REMOVED***public static func == (lhs: ArcGIS.ArcGISFeature, rhs: ArcGIS.ArcGISFeature) -> Bool {
-***REMOVED******REMOVED***lhs.globalID == rhs.globalID
+private extension Array where Element == FeatureEditResult {
+***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
+***REMOVED***var errors: [Error] {
+***REMOVED******REMOVED***compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension URL {
 ***REMOVED***static var sampleData: Self {
 ***REMOVED******REMOVED***.init(string: "https:***REMOVED***www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
-***REMOVED***
-***REMOVED***
-
-#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
-private extension ArcGISCredential {
-***REMOVED***static var publicSample: ArcGISCredential {
-***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await TokenCredential.credential(
-***REMOVED******REMOVED******REMOVED******REMOVED***for: URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!,
-***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
-***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension FeatureForm {
-***REMOVED******REMOVED***/ The layer to which the feature belongs.
-***REMOVED***var featureLayer: FeatureLayer? {
-***REMOVED******REMOVED***feature.table?.layer as? FeatureLayer
-***REMOVED***
-***REMOVED***
-
-private extension Array where Element == FeatureEditResult {
-***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
-***REMOVED***var errors: [Error] {
-***REMOVED******REMOVED***compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
