@@ -70,7 +70,7 @@ struct FeatureFormExampleView: View {
                         .onFormEditingEvent { editingEvent in
                             if case .savedEdits = editingEvent,
                                let table = featureForm?.feature.table as? ServiceFeatureTable,
-                               !editedTables.contains(where: { $0.tableName == table.tableName }) {
+                               !editedTables.contains(where: { $0 === table }) {
                                 editedTables.append(table)
                                 updateSubmitButtonVisibility()
                             }
