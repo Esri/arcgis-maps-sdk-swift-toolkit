@@ -70,7 +70,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onFormEditingEvent { editingEvent in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case .savedEdits = editingEvent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let table = featureForm?.feature.table as? ServiceFeatureTable,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !editedTables.contains(where: { $0.tableName == table.tableName ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !editedTables.contains(where: { $0 === table ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editedTables.append(table)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateSubmitButtonVisibility()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
