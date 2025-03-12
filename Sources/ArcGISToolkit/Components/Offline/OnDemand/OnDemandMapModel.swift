@@ -411,19 +411,24 @@ struct OnDemandAreaID: CustomStringConvertible, Equatable {
 ***REMOVED***
 
 ***REMOVED*** A value that carries configuration for an on-demand map area.
-struct OnDemandMapAreaConfiguration {
+@MainActor
+final class OnDemandMapAreaConfiguration: ObservableObject {
 ***REMOVED******REMOVED***/ A unique ID for the on-demand map area.
 ***REMOVED***let areaID = OnDemandAreaID()
 ***REMOVED******REMOVED***/ A title for the offline area.
-***REMOVED***let title: String
+***REMOVED***@Published var title: String
 ***REMOVED******REMOVED***/ The min-scale to take offline.
-***REMOVED***let minScale: Double
+***REMOVED***let minScale: Double = 0
 ***REMOVED******REMOVED***/ The max-scale to take offline.
-***REMOVED***let maxScale: Double
+***REMOVED***@Published var maxScale: Double = 0
 ***REMOVED******REMOVED***/ The area of interest to take offline.
-***REMOVED***let areaOfInterest: Geometry
+***REMOVED***@Published var areaOfInterest: Geometry = Envelope(center: .init(x: 0, y: 0), width: 1, height: 1)
 ***REMOVED******REMOVED***/ The thumbnail of the area.
-***REMOVED***let thumbnail: UIImage?
+***REMOVED***@Published var thumbnail: UIImage? = nil
+***REMOVED***
+***REMOVED***init(title: String) {
+***REMOVED******REMOVED***self.title = title
+***REMOVED***
 ***REMOVED***
 
 private extension String {

@@ -17,11 +17,11 @@
 
 ***REMOVED***/ A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
+***REMOVED******REMOVED***/ The configuration for the map area.
+***REMOVED***@StateObject var configuration: OnDemandMapAreaConfiguration
+***REMOVED***
 ***REMOVED******REMOVED***/ The online map.
 ***REMOVED***@State private(set) var map: Map
-***REMOVED***
-***REMOVED******REMOVED***/ The title of the map area.
-***REMOVED***@State private(set) var title: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ A check to perform to validate a proposed title for uniqueness.
 ***REMOVED***let titleIsValidCheck: (String) -> Bool
@@ -135,6 +135,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(selectedRect) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedExtent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configuration.areaOfInterest = selectedExtent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(maxScale) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configuration.maxScale = maxScale.scale
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -174,13 +181,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***BottomCard(background: background) {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(configuration.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RenameButton(title: title, isValidCheck: titleIsValidCheck) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = $0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RenameButton(title: configuration.title, isValidCheck: titleIsValidCheck) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configuration.title = $0
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
@@ -207,18 +214,10 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: selectedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: selectedExtent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configuration.thumbnail = thumbnail
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction(configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
