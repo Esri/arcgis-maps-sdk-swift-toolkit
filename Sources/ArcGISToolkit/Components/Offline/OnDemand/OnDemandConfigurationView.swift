@@ -17,11 +17,11 @@ import SwiftUI
 
 /// A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
+    /// The configuration for the map area.
+    @StateObject var configuration: OnDemandMapAreaConfiguration
+    
     /// The online map.
     @State private(set) var map: Map
-    
-    /// The title of the map area.
-    @State private(set) var title: String
     
     /// A check to perform to validate a proposed title for uniqueness.
     let titleIsValidCheck: (String) -> Bool
@@ -135,6 +135,13 @@ struct OnDemandConfigurationView: View {
                         }
                         .onChange(selectedRect) { _ in
                             selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                            
+                            if let selectedExtent {
+                                configuration.areaOfInterest = selectedExtent
+                            }
+                        }
+                        .onChange(maxScale) { _ in
+                            configuration.maxScale = maxScale.scale
                         }
                 }
             }
@@ -174,13 +181,13 @@ struct OnDemandConfigurationView: View {
         BottomCard(background: background) {
             VStack(alignment: .leading) {
                 HStack {
-                    Text(title)
+                    Text(configuration.title)
                         .font(.title2)
                         .fontWeight(.bold)
                         .lineLimit(1)
                     Spacer()
-                    RenameButton(title: title, isValidCheck: titleIsValidCheck) {
-                        title = $0
+                    RenameButton(title: configuration.title, isValidCheck: titleIsValidCheck) {
+                        configuration.title = $0
                     }
                     .disabled(downloadIsDisabled)
                 }
@@ -207,18 +214,10 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let selectedExtent else { return }
                         Task {
                             let image = try? await mapView.exportImage()
                             let thumbnail = image?.crop(to: selectedRect)
-                            
-                            let configuration = OnDemandMapAreaConfiguration(
-                                title: title,
-                                minScale: 0,
-                                maxScale: maxScale.scale,
-                                areaOfInterest: selectedExtent,
-                                thumbnail: thumbnail
-                            )
+                            configuration.thumbnail = thumbnail
                             onCompleteAction(configuration)
                             dismiss()
                         }

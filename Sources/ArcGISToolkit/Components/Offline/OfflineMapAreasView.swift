@@ -170,8 +170,8 @@ public struct OfflineMapAreasView: View {
         }
         .sheet(isPresented: $isAddingOnDemandArea) {
             OnDemandConfigurationView(
+                configuration: OnDemandMapAreaConfiguration(title: mapViewModel.nextOnDemandAreaTitle()),
                 map: onlineMap.clone(),
-                title: mapViewModel.nextOnDemandAreaTitle(),
                 titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
             ) {
                 mapViewModel.addOnDemandMapArea(with: $0)
