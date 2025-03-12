@@ -41,10 +41,8 @@ struct FeatureFormExampleView: View {
     /// The visibility of the submit button.
     @State private var submitButtonVisibility = Visibility.hidden
     
-#warning("TO BE UNDONE. For UN testing only.")
     /// The `Map` displayed in the `MapView`.
-    @State private var map = makeMap()
-//    @State private var map = Map(url: .sampleData)!
+    @State private var map = Map(url: .sampleData)!
     
     var body: some View {
         MapViewReader { mapViewProxy in
@@ -58,15 +56,6 @@ struct FeatureFormExampleView: View {
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy) {
                         featureForm = FeatureForm(feature: feature)
-                    }
-                }
-                .task {
-#warning("TO BE REMOVED. Public credential is for UN testing only.")
-                    do {
-                        let publicSample = try await ArcGISCredential.publicSample
-                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
-                    } catch {
-                        print("Error resolving credential: \(error.localizedDescription)")
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -119,16 +108,6 @@ struct FeatureFormExampleView: View {
                     }
                 }
         }
-    }
-    
-#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
-    /// Makes a map from a portal item.
-    static func makeMap() -> Map {
-        let portalItem = PortalItem(
-            portal: .arcGISOnline(connection: .anonymous),
-            id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
-        )
-        return Map(item: portalItem)
     }
 }
 
@@ -226,53 +205,15 @@ extension FeatureFormExampleView {
     }
 }
 
-extension ArcGISFeature {
-    var globalID: UUID? {
-        if let id = attributes["globalid"] as? UUID {
-            return id
-        } else if let id = attributes["GLOBALID"] as? UUID {
-            return id
-        } else {
-            return nil
-        }
-    }
-}
-
-extension ArcGISFeature: @retroactive Equatable {
-    public static func == (lhs: ArcGIS.ArcGISFeature, rhs: ArcGIS.ArcGISFeature) -> Bool {
-        lhs.globalID == rhs.globalID
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }
 
 private extension URL {
     static var sampleData: Self {
         .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
-    }
-}
-
-#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
-private extension ArcGISCredential {
-    static var publicSample: ArcGISCredential {
-        get async throws {
-            try await TokenCredential.credential(
-                for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
-                username: "viewer01",
-                password: "I68VGU^nMurF"
-            )
-        }
-    }
-}
-
-private extension FeatureForm {
-    /// The layer to which the feature belongs.
-    var featureLayer: FeatureLayer? {
-        feature.table?.layer as? FeatureLayer
-    }
-}
-
-private extension Array where Element == FeatureEditResult {
-    ///  Any errors from the edit results and their inner attachment results.
-    var errors: [Error] {
-        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }
