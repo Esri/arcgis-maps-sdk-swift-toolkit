@@ -91,6 +91,7 @@ extension Category {
                 Example("Bookmarks", content: BookmarksExampleView()),
                 Example("Compass", content: CompassExampleView()),
                 Example("Feature Form", content: FeatureFormExampleView()),
+                Example("Feature Editor", content: FeatureEditorExampleView()),
                 Example("Floor Filter", content: FloorFilterExampleView()),
                 Example("Overview Map", content: OverviewMapExampleView()),
                 Example("Popup", content: PopupExampleView()),
