@@ -60,6 +60,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
 ***REMOVED******REMOVED******REMOVED***if let currentFeatureGlobalID = formViewModel.featureForm.feature.globalID {
+#warning("TODO: Confirm associatedElement here. Should we use utilityAssociationResult.associatedFeature instead?")
 ***REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = utilityAssociationResult.association.displayedElement(for: currentFeatureGlobalID)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let title: String = {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
@@ -72,7 +73,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.middle
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentFeatureGlobalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedFeature.globalID  == utilityAssociationResult.association.fromElement.globalID ? .left : .right
 ***REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED******REMOVED***
