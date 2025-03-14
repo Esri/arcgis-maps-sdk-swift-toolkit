@@ -128,7 +128,13 @@ public struct FeatureFormView: View {
                         )
                     }
                 }
-                .backNavigationDisabled(aFeatureFormIsPresented && hasEdits)
+                .backNavigationAction { navigationLayerModel in
+                    if aFeatureFormIsPresented && hasEdits {
+                        alertContinuation = (true, { navigationLayerModel.pop() })
+                    } else {
+                        navigationLayerModel.pop()
+                    }
+                }
                 .onNavigationPathChanged { item in
                     if let item {
                         if type(of: item.view()) == InternalFeatureFormView.self {

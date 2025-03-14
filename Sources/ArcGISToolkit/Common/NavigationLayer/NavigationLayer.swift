@@ -31,8 +31,8 @@ struct NavigationLayer<Content: View>: View {
     /// The root view.
     let root: () -> Content
     
-    /// A Boolean value indicating whether the back button in the navigation bar is disabled.
-    var backNavigationDisabled: Bool = false
+    /// The optional closure to perform when the back navigation button is pressed.
+    var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
     
     /// The closure to perform when model's path changes.
     var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
@@ -71,9 +71,9 @@ struct NavigationLayer<Content: View>: View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
                 Header(
-                    backNavigationDisabled: backNavigationDisabled,
-                    width: geometryProxy.size.width,
-                    headerTrailing: headerTrailing
+                    backNavigationAction: backNavigationAction,
+                    headerTrailing: headerTrailing,
+                    width: geometryProxy.size.width
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Group {
@@ -193,12 +193,14 @@ struct NavigationLayer<Content: View>: View {
 }
 
 extension NavigationLayer {
-    /// Adds a condition that controls whether the navigation back button is disabled.
-    /// - Parameter disabled: A Boolean value that determines whether the navigation back button is disabled.
-    /// - Returns: A NavigationLayer with the back button conditionally disabled.
-    func backNavigationDisabled(_ disabled: Bool) -> Self {
+    /// Sets a closure to perform when the back navigation button is pressed.
+    /// - Parameter action: The closure to perform when the back navigation button is pressed.
+    /// - Note: Use this to interrupt reverse navigation (e.g. to warn a user of unsaved edits). The closure
+    /// provides a reference to the navigation layer module which can be used to trigger the reverse
+    /// navigation when ready.
+    func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
         var copy = self
-        copy.backNavigationDisabled = disabled
+        copy.backNavigationAction = action
         return copy
     }
     
