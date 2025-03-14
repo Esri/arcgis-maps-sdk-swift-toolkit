@@ -24,47 +24,18 @@ final class PieChartModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter chartData: The data used for the pie chart.
 ***REMOVED***init(chartData: [ChartData]) {
 ***REMOVED******REMOVED***var slices = [PieSlice]()
-***REMOVED******REMOVED***var dataTotal: Double = 0
-***REMOVED******REMOVED***_ = chartData.map { dataTotal += $0.value ***REMOVED***
+***REMOVED******REMOVED***let dataTotal = chartData.reduce(0) { $0 + $1.value ***REMOVED***
 ***REMOVED******REMOVED***for i in 0..<chartData.count {
+***REMOVED******REMOVED******REMOVED***let data = chartData[i]
 ***REMOVED******REMOVED******REMOVED***slices.append(
 ***REMOVED******REMOVED******REMOVED******REMOVED***PieSlice(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fraction: chartData[i].value / dataTotal,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: PieChartModel.color(for: i),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: chartData[i].label
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fraction: data.value / dataTotal,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color(data.color),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: data.label
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***pieSlices = slices
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The pre-defined colors for the pie slices.
-***REMOVED***static let sliceColors: [Color] = [
-***REMOVED******REMOVED***.mint,
-***REMOVED******REMOVED***.teal,
-***REMOVED******REMOVED***.green,
-***REMOVED******REMOVED***.cyan,
-***REMOVED******REMOVED***.yellow,
-***REMOVED******REMOVED***.blue,
-***REMOVED******REMOVED***.orange,
-***REMOVED******REMOVED***.indigo,
-***REMOVED******REMOVED***.red,
-***REMOVED******REMOVED***.purple,
-***REMOVED******REMOVED***.pink,
-***REMOVED******REMOVED***.brown
-***REMOVED***]
-***REMOVED***
-***REMOVED******REMOVED***/ Calculates a slice color for the given slice index.
-***REMOVED******REMOVED***/ - Parameter index: The index of the slice.
-***REMOVED******REMOVED***/ - Returns: The color for the slice at `index`.
-***REMOVED***static func color(for index: Int) -> Color {
-***REMOVED******REMOVED******REMOVED*** We don't want to just wrap color indices because we don't want
-***REMOVED******REMOVED******REMOVED*** two adjacent slices to have the same color. "extra" will skip the
-***REMOVED******REMOVED******REMOVED*** the 1st color for the second time through the list, skip the 2nd
-***REMOVED******REMOVED******REMOVED*** color the third time through the list, etc., ensuring that we
-***REMOVED******REMOVED******REMOVED*** don't get adjacent colors.
-***REMOVED******REMOVED***let extra = index / sliceColors.count
-***REMOVED******REMOVED***return sliceColors[(index + extra) % sliceColors.count].opacity(0.75)
 ***REMOVED***
 ***REMOVED***
 
