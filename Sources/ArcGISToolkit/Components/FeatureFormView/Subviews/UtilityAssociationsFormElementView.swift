@@ -132,7 +132,13 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(listRowTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(listRowTitle)
+#warning("TODO: Description line is not showing.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.filter.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
