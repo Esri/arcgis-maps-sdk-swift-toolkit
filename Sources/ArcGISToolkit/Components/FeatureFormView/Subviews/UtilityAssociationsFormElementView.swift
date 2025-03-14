@@ -127,7 +127,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(formViewModel.title, subtitle: listRowTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
