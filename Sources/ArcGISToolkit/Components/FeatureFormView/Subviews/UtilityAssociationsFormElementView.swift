@@ -127,7 +127,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
         Button {
             navigationLayerModel.push {
                 UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-                    .navigationLayerTitle(formViewModel.title, subtitle: listRowTitle)
+                    .navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
                     .environmentObject(formViewModel)
             }
         } label: {
