@@ -163,7 +163,10 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(formViewModel.title, subtitle: utilityAssociationGroupResult.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationGroupResult.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: utilityAssociationsFilterResult.filter.title
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
