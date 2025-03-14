@@ -163,7 +163,10 @@ private struct UtilityAssociationsFilterResultView: View {
             Button {
                 navigationLayerModel.push {
                     UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
-                        .navigationLayerTitle(formViewModel.title, subtitle: utilityAssociationGroupResult.name)
+                        .navigationLayerTitle(
+                            utilityAssociationGroupResult.name,
+                            subtitle: utilityAssociationsFilterResult.filter.title
+                        )
                         .environmentObject(formViewModel)
                 }
             } label: {
