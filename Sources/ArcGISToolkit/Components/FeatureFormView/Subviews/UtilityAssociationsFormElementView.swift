@@ -132,7 +132,13 @@ private struct UtilityAssociationsFilterResultListRowView: View {
             }
         } label: {
             HStack {
-                Text(listRowTitle)
+                VStack {
+                    Text(listRowTitle)
+#warning("TODO: Description line is not showing.")
+                    Text(utilityAssociationsFilterResult.filter.description)
+                        .font(.caption)
+                }
+                .lineLimit(1)
                 Spacer()
                 Text(utilityAssociationsFilterResult.resultCount.formatted())
                 Image(systemName: "chevron.right")
