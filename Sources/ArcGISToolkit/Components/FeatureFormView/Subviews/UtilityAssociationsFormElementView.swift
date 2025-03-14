@@ -160,11 +160,17 @@ private struct UtilityAssociationsFilterResultView: View {
     
     var body: some View {
         List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-            Button(utilityAssociationGroupResult.name) {
+            Button {
                 navigationLayerModel.push {
                     UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
                         .navigationLayerTitle(formViewModel.title, subtitle: utilityAssociationGroupResult.name)
                         .environmentObject(formViewModel)
+                }
+            } label: {
+                HStack {
+                    Text(utilityAssociationGroupResult.name)
+                    Spacer()
+                    Text(utilityAssociationGroupResult.associationResults.count.formatted())
                 }
             }
         }
