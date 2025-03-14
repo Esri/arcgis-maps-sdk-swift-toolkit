@@ -123,7 +123,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***let listRowTitle = "\(utilityAssociationsFilterResult.filter.filterType)".capitalized
+***REMOVED******REMOVED***let listRowTitle = "\(utilityAssociationsFilterResult.filter.title)".capitalized
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
