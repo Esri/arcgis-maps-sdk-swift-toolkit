@@ -40,10 +40,12 @@ struct LineChart: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
 ***REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(Color($0.color))
 ***REMOVED******REMOVED******REMOVED***PointMark(
 ***REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
 ***REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(Color($0.color))
 ***REMOVED***
 ***REMOVED******REMOVED***.chartXAxis {
 ***REMOVED******REMOVED******REMOVED***AxisMarks { _ in
