@@ -60,6 +60,7 @@ private struct UtilityAssociationGroupResultView: View {
     var body: some View {
         List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
             if let currentFeatureGlobalID = formViewModel.featureForm.feature.globalID {
+#warning("TODO: Confirm associatedElement here. Should we use utilityAssociationResult.associatedFeature instead?")
                 let associatedElement = utilityAssociationResult.association.displayedElement(for: currentFeatureGlobalID)
                 let title: String = {
                     if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
@@ -72,7 +73,7 @@ private struct UtilityAssociationGroupResultView: View {
                 case .junctionEdgeObjectConnectivityMidspan:
                         .middle
                 case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-                    currentFeatureGlobalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+                    utilityAssociationResult.associatedFeature.globalID  == utilityAssociationResult.association.fromElement.globalID ? .left : .right
                 default:
                     nil
                 }
