@@ -20,19 +20,23 @@ extension NavigationLayer {
         
         @State private var height: CGFloat = .zero
         
-        /// <#Description#>
-        let backNavigationDisabled: Bool
-        
-        let width: CGFloat
+        /// The optional closure to perform when the back navigation button is pressed.
+        let backNavigationAction: ((NavigationLayerModel) -> Void)?
         
         /// The header trailing content.
         let headerTrailing: (() -> any View)?
+        
+        let width: CGFloat
         
         var body: some View {
             HStack(alignment: .top) {
                 Group {
                     Button {
-                        model.pop()
+                        if let backNavigationAction {
+                            backNavigationAction(model)
+                        } else {
+                            model.pop()
+                        }
                     } label: {
                         let label = Label("Back", systemImage: "chevron.left")
                         if model.title == nil {
@@ -44,7 +48,6 @@ extension NavigationLayer {
                         }
                     }
                     .font(.title2)
-                    .disabled(backNavigationDisabled)
                 }
                 .opacity(showsBack ? 1 : .zero)
                 .frame(!showsBack, width: width / 6)
