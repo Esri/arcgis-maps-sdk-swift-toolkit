@@ -128,7 +128,13 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.backNavigationDisabled(aFeatureFormIsPresented && hasEdits)
+***REMOVED******REMOVED******REMOVED******REMOVED***.backNavigationAction { navigationLayerModel in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if aFeatureFormIsPresented && hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertContinuation = (true, { navigationLayerModel.pop() ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.pop()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onNavigationPathChanged { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let item {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if type(of: item.view()) == InternalFeatureFormView.self {

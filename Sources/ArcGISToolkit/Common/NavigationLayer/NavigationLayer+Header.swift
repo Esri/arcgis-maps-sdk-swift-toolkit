@@ -20,19 +20,23 @@ extension NavigationLayer {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var height: CGFloat = .zero
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let backNavigationDisabled: Bool
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let width: CGFloat
+***REMOVED******REMOVED******REMOVED***/ The optional closure to perform when the back navigation button is pressed.
+***REMOVED******REMOVED***let backNavigationAction: ((NavigationLayerModel) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The header trailing content.
 ***REMOVED******REMOVED***let headerTrailing: (() -> any View)?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let width: CGFloat
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let backNavigationAction {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backNavigationAction(model)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pop()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let label = Label("Back", systemImage: "chevron.left")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.title == nil {
@@ -44,7 +48,6 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(backNavigationDisabled)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(showsBack ? 1 : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(!showsBack, width: width / 6)

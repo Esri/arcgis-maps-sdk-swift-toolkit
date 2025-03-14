@@ -31,8 +31,8 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***/ The root view.
 ***REMOVED***let root: () -> Content
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the back button in the navigation bar is disabled.
-***REMOVED***var backNavigationDisabled: Bool = false
+***REMOVED******REMOVED***/ The optional closure to perform when the back navigation button is pressed.
+***REMOVED***var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when model's path changes.
 ***REMOVED***var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
@@ -71,9 +71,9 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backNavigationDisabled: backNavigationDisabled,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerTrailing: headerTrailing
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backNavigationAction: backNavigationAction,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerTrailing: headerTrailing,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
@@ -193,12 +193,14 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 
 extension NavigationLayer {
-***REMOVED******REMOVED***/ Adds a condition that controls whether the navigation back button is disabled.
-***REMOVED******REMOVED***/ - Parameter disabled: A Boolean value that determines whether the navigation back button is disabled.
-***REMOVED******REMOVED***/ - Returns: A NavigationLayer with the back button conditionally disabled.
-***REMOVED***func backNavigationDisabled(_ disabled: Bool) -> Self {
+***REMOVED******REMOVED***/ Sets a closure to perform when the back navigation button is pressed.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the back navigation button is pressed.
+***REMOVED******REMOVED***/ - Note: Use this to interrupt reverse navigation (e.g. to warn a user of unsaved edits). The closure
+***REMOVED******REMOVED***/ provides a reference to the navigation layer module which can be used to trigger the reverse
+***REMOVED******REMOVED***/ navigation when ready.
+***REMOVED***func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.backNavigationDisabled = disabled
+***REMOVED******REMOVED***copy.backNavigationAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
