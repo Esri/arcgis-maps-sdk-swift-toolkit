@@ -160,11 +160,17 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-***REMOVED******REMOVED******REMOVED***Button(utilityAssociationGroupResult.name) {
+***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(formViewModel.title, subtitle: utilityAssociationGroupResult.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.associationResults.count.formatted())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
