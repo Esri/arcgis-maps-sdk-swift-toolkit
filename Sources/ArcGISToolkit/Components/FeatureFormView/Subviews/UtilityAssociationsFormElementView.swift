@@ -59,50 +59,47 @@ private struct UtilityAssociationGroupResultView: View {
     
     var body: some View {
         List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-            if let currentFeatureGlobalID = formViewModel.featureForm.feature.globalID {
-#warning("TODO: Confirm associatedElement here. Should we use utilityAssociationResult.associatedFeature instead?")
-                let associatedElement = utilityAssociationResult.association.displayedElement(for: currentFeatureGlobalID)
-                let associatedFeature = utilityAssociationResult.associatedFeature
-                let title: String = {
-                    if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
-                        formDefinitionTitle
-                    } else {
-                        "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
-                    }
-                }()
-                let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
-                case .junctionEdgeObjectConnectivityMidspan:
-                        .middle
-                case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-                    associatedFeature.globalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
-                default:
-                    nil
+            let associatedElement = utilityAssociationResult.associatedElement
+            let associatedFeature = utilityAssociationResult.associatedFeature
+            let title: String = {
+                if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
+                    formDefinitionTitle
+                } else {
+                    "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                 }
-                
-                UtilityAssociationView(
-                    association: UtilityAssociationView.Association(
-                        connectionPoint: connection,
-                        description: associatedElement.assetGroup.name,
-                        fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
-                        name: title,
-                        selectionAction: {
-                            let navigationAction: () -> Void = {
-                                navigationLayerModel.push {
-                                    InternalFeatureFormView(
-                                        featureForm: FeatureForm(feature: associatedFeature)
-                                    )
-                                }
-                            }
-                            if formViewModel.featureForm.hasEdits {
-                                setAlertContinuation?(true, navigationAction)
-                            } else {
-                                navigationAction()
-                            }
-                        },
-                        terminalName: associatedElement.terminal?.name
-                    )
-                )
+            }()
+            let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
+            case .junctionEdgeObjectConnectivityMidspan:
+                    .middle
+            case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+                associatedFeature.globalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+            default:
+                nil
             }
+            
+            UtilityAssociationView(
+                association: UtilityAssociationView.Association(
+                    connectionPoint: connection,
+                    description: associatedElement.assetGroup.name,
+                    fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
+                    name: title,
+                    selectionAction: {
+                        let navigationAction: () -> Void = {
+                            navigationLayerModel.push {
+                                InternalFeatureFormView(
+                                    featureForm: FeatureForm(feature: associatedFeature)
+                                )
+                            }
+                        }
+                        if formViewModel.featureForm.hasEdits {
+                            setAlertContinuation?(true, navigationAction)
+                        } else {
+                            navigationAction()
+                        }
+                    },
+                    terminalName: associatedElement.terminal?.name
+                )
+            )
         }
         .onAppear {
             // This view is considered the tail end of a navigable FeatureForm.
@@ -229,15 +226,13 @@ private struct UtilityAssociationView: View {
     }
 }
 
-private extension UtilityAssociation {
-    /// Determines whether to show the `fromElement` or `toElement`.
-    /// - Parameter id: <#id description#>
-    /// - Returns: <#description#>
-    func displayedElement(for id: UUID) -> UtilityElement {
-        if id == toElement.globalID {
-            fromElement
+private extension UtilityAssociationResult {
+    /// The utility element for the association.
+    var associatedElement: UtilityElement {
+        if associatedFeature.globalID == association.toElement.globalID {
+            association.toElement
         } else {
-            toElement
+            association.fromElement
         }
     }
 }
