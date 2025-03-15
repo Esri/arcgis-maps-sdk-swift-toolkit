@@ -61,6 +61,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED***List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
 ***REMOVED******REMOVED******REMOVED***let associatedElement = utilityAssociationResult.associatedElement
 ***REMOVED******REMOVED******REMOVED***let associatedFeature = utilityAssociationResult.associatedFeature
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let title: String = {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formDefinitionTitle
@@ -68,11 +69,19 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
 ***REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.middle
 ***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
 ***REMOVED******REMOVED******REMOVED******REMOVED***associatedFeature.globalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let terminalName: String? = switch utilityAssociationResult.association.kind {
+***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedElement.terminal?.name
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
@@ -97,7 +106,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationAction()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: associatedElement.terminal?.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: terminalName
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
