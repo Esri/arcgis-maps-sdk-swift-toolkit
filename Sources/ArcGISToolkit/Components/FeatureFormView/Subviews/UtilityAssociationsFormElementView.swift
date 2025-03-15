@@ -247,8 +247,10 @@ private struct UtilityAssociationView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let percent = association.fractionAlongEdge {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(percent.formatted(.percent))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let containmentIsVisible = association.containmentIsVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Containment Visible: \(containmentIsVisible)".capitalized)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let fractionAlongEdge = association.fractionAlongEdge {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(fractionAlongEdge.formatted(.percent))
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if let terminal = association.terminalName {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Terminal: \(terminal)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
