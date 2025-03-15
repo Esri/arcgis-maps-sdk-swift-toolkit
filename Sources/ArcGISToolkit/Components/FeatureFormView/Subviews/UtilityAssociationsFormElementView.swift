@@ -247,8 +247,10 @@ private struct UtilityAssociationView: View {
                 }
                 Spacer()
                 Group {
-                    if let percent = association.fractionAlongEdge {
-                        Text(percent.formatted(.percent))
+                    if let containmentIsVisible = association.containmentIsVisible {
+                        Text("Containment Visible: \(containmentIsVisible)".capitalized)
+                    } else if let fractionAlongEdge = association.fractionAlongEdge {
+                        Text(fractionAlongEdge.formatted(.percent))
                     } else if let terminal = association.terminalName {
                         Text("Terminal: \(terminal)")
                     }
