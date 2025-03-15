@@ -62,8 +62,9 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED***if let currentFeatureGlobalID = formViewModel.featureForm.feature.globalID {
 #warning("TODO: Confirm associatedElement here. Should we use utilityAssociationResult.associatedFeature instead?")
 ***REMOVED******REMOVED******REMOVED******REMOVED***let associatedElement = utilityAssociationResult.association.displayedElement(for: currentFeatureGlobalID)
+***REMOVED******REMOVED******REMOVED******REMOVED***let associatedFeature = utilityAssociationResult.associatedFeature
 ***REMOVED******REMOVED******REMOVED******REMOVED***let title: String = {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formDefinitionTitle
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
@@ -73,7 +74,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.middle
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedFeature.globalID  == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associatedFeature.globalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
 ***REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED******REMOVED***
@@ -81,14 +82,14 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***association: UtilityAssociationView.Association(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: associatedElement.assetGroup.name,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let navigationAction: () -> Void = {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: associatedFeature)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
