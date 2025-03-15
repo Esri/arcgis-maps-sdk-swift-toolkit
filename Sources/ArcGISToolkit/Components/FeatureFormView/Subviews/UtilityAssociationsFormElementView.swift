@@ -62,8 +62,9 @@ private struct UtilityAssociationGroupResultView: View {
             if let currentFeatureGlobalID = formViewModel.featureForm.feature.globalID {
 #warning("TODO: Confirm associatedElement here. Should we use utilityAssociationResult.associatedFeature instead?")
                 let associatedElement = utilityAssociationResult.association.displayedElement(for: currentFeatureGlobalID)
+                let associatedFeature = utilityAssociationResult.associatedFeature
                 let title: String = {
-                    if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
+                    if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
                         formDefinitionTitle
                     } else {
                         "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
@@ -73,7 +74,7 @@ private struct UtilityAssociationGroupResultView: View {
                 case .junctionEdgeObjectConnectivityMidspan:
                         .middle
                 case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-                    utilityAssociationResult.associatedFeature.globalID  == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+                    associatedFeature.globalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
                 default:
                     nil
                 }
@@ -81,14 +82,14 @@ private struct UtilityAssociationGroupResultView: View {
                 UtilityAssociationView(
                     association: UtilityAssociationView.Association(
                         connectionPoint: connection,
-                        description: nil,
+                        description: associatedElement.assetGroup.name,
                         fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
                         name: title,
                         selectionAction: {
                             let navigationAction: () -> Void = {
                                 navigationLayerModel.push {
                                     InternalFeatureFormView(
-                                        featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+                                        featureForm: FeatureForm(feature: associatedFeature)
                                     )
                                 }
                             }
