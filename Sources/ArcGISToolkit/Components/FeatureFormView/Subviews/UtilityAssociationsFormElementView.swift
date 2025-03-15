@@ -61,6 +61,7 @@ private struct UtilityAssociationGroupResultView: View {
         List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
             let associatedElement = utilityAssociationResult.associatedElement
             let associatedFeature = utilityAssociationResult.associatedFeature
+            
             let title: String = {
                 if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
                     formDefinitionTitle
@@ -68,11 +69,19 @@ private struct UtilityAssociationGroupResultView: View {
                     "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
                 }
             }()
+            
             let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
             case .junctionEdgeObjectConnectivityMidspan:
                     .middle
             case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
                 associatedFeature.globalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
+            default:
+                nil
+            }
+            
+            let terminalName: String? = switch utilityAssociationResult.association.kind {
+            case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+                utilityAssociationResult.associatedElement.terminal?.name
             default:
                 nil
             }
@@ -97,7 +106,7 @@ private struct UtilityAssociationGroupResultView: View {
                             navigationAction()
                         }
                     },
-                    terminalName: associatedElement.terminal?.name
+                    terminalName: terminalName
                 )
             )
         }
