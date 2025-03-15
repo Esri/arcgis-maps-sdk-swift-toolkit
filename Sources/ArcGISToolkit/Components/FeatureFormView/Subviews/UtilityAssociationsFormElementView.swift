@@ -82,7 +82,7 @@ private struct UtilityAssociationGroupResultView: View {
             
             // Resolve the terminal name
             let terminalName: String? = switch utilityAssociationResult.association.kind {
-            case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+            case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
                 if associatedElement.networkSource.kind == .junction {
                     utilityAssociationResult.associatedElement.terminal?.name
                 } else {
@@ -94,7 +94,7 @@ private struct UtilityAssociationGroupResultView: View {
             
             // Resolve fraction along edge
             let fractionAlongEdge: Double? = switch utilityAssociationResult.association.kind {
-            case .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+            case .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
                 if associatedElement.networkSource.kind == .edge {
                     utilityAssociationResult.association.fractionAlongEdge
                 } else {
@@ -104,9 +104,18 @@ private struct UtilityAssociationGroupResultView: View {
                 nil
             }
             
+            // Resolve containment visibility
+            let containmentIsVisible: Bool? = switch utilityAssociationResult.association.kind {
+            case .containment:
+                utilityAssociationResult.association.containmentIsVisible
+            default:
+                nil
+            }
+            
             UtilityAssociationView(
                 association: UtilityAssociationView.Association(
                     connectionPoint: connection,
+                    containmentIsVisible: containmentIsVisible,
                     description: associatedElement.assetGroup.name,
                     fractionAlongEdge: fractionAlongEdge,
                     name: title,
@@ -275,6 +284,9 @@ private extension UtilityAssociationView {
         
         /// <#Description#>
         let connectionPoint: Connection?
+        
+        /// <#Description#>
+        let containmentIsVisible: Bool?
         
         /// <#Description#>
         let description: String?
