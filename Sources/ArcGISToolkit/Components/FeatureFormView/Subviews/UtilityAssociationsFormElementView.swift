@@ -82,7 +82,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the terminal name
 ***REMOVED******REMOVED******REMOVED***let terminalName: String? = switch utilityAssociationResult.association.kind {
-***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
 ***REMOVED******REMOVED******REMOVED******REMOVED***if associatedElement.networkSource.kind == .junction {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedElement.terminal?.name
 ***REMOVED******REMOVED******REMOVED*** else {
@@ -94,7 +94,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve fraction along edge
 ***REMOVED******REMOVED******REMOVED***let fractionAlongEdge: Double? = switch utilityAssociationResult.association.kind {
-***REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
 ***REMOVED******REMOVED******REMOVED******REMOVED***if associatedElement.networkSource.kind == .edge {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.association.fractionAlongEdge
 ***REMOVED******REMOVED******REMOVED*** else {
@@ -104,9 +104,18 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve containment visibility
+***REMOVED******REMOVED******REMOVED***let containmentIsVisible: Bool? = switch utilityAssociationResult.association.kind {
+***REMOVED******REMOVED******REMOVED***case .containment:
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.association.containmentIsVisible
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***UtilityAssociationView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***association: UtilityAssociationView.Association(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***containmentIsVisible: containmentIsVisible,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: associatedElement.assetGroup.name,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: fractionAlongEdge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
@@ -275,6 +284,9 @@ private extension UtilityAssociationView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let connectionPoint: Connection?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***let containmentIsVisible: Bool?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let description: String?
