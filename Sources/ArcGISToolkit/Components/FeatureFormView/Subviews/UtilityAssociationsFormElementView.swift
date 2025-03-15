@@ -70,6 +70,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the connection icon
 ***REMOVED******REMOVED******REMOVED***let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
 ***REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.middle
@@ -79,6 +80,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the terminal name
 ***REMOVED******REMOVED******REMOVED***let terminalName: String? = switch utilityAssociationResult.association.kind {
 ***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedElement.terminal?.name
