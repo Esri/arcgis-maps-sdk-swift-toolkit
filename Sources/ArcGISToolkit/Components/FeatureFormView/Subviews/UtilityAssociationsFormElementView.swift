@@ -83,7 +83,23 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the terminal name
 ***REMOVED******REMOVED******REMOVED***let terminalName: String? = switch utilityAssociationResult.association.kind {
 ***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-***REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedElement.terminal?.name
+***REMOVED******REMOVED******REMOVED******REMOVED***if associatedElement.networkSource.kind == .junction {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedElement.terminal?.name
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve fraction along edge
+***REMOVED******REMOVED******REMOVED***let fractionAlongEdge: Double? = switch utilityAssociationResult.association.kind {
+***REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED******REMOVED***if associatedElement.networkSource.kind == .edge {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.association.fractionAlongEdge
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
@@ -92,7 +108,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***association: UtilityAssociationView.Association(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: associatedElement.assetGroup.name,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: fractionAlongEdge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let navigationAction: () -> Void = {
