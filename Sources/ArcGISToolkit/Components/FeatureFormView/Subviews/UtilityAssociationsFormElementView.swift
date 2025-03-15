@@ -70,6 +70,7 @@ private struct UtilityAssociationGroupResultView: View {
                 }
             }()
             
+            // Resolve the connection icon
             let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
             case .junctionEdgeObjectConnectivityMidspan:
                     .middle
@@ -79,6 +80,7 @@ private struct UtilityAssociationGroupResultView: View {
                 nil
             }
             
+            // Resolve the terminal name
             let terminalName: String? = switch utilityAssociationResult.association.kind {
             case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
                 utilityAssociationResult.associatedElement.terminal?.name
