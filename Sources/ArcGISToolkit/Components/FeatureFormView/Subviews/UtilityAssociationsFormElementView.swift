@@ -83,7 +83,23 @@ private struct UtilityAssociationGroupResultView: View {
             // Resolve the terminal name
             let terminalName: String? = switch utilityAssociationResult.association.kind {
             case .connectivity, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-                utilityAssociationResult.associatedElement.terminal?.name
+                if associatedElement.networkSource.kind == .junction {
+                    utilityAssociationResult.associatedElement.terminal?.name
+                } else {
+                    nil
+                }
+            default:
+                nil
+            }
+            
+            // Resolve fraction along edge
+            let fractionAlongEdge: Double? = switch utilityAssociationResult.association.kind {
+            case .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+                if associatedElement.networkSource.kind == .edge {
+                    utilityAssociationResult.association.fractionAlongEdge
+                } else {
+                    nil
+                }
             default:
                 nil
             }
@@ -92,7 +108,7 @@ private struct UtilityAssociationGroupResultView: View {
                 association: UtilityAssociationView.Association(
                     connectionPoint: connection,
                     description: associatedElement.assetGroup.name,
-                    fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
+                    fractionAlongEdge: fractionAlongEdge,
                     name: title,
                     selectionAction: {
                         let navigationAction: () -> Void = {
