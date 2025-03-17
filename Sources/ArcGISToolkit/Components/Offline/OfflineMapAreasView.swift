@@ -26,7 +26,7 @@ public struct OfflineMapAreasView: View {
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     /// A Boolean value indicating whether an on-demand map area is being added.
-    @State private var isAddingOnDemandArea = false
+    @State private var onDemandConfigurationMap: IdentifiableBox<Map>?
     
     /// The portal item for the web map to be taken offline.
     private var portalItem: PortalItem {
@@ -158,7 +158,8 @@ public struct OfflineMapAreasView: View {
                     }
                     Section {
                         Button {
-                            isAddingOnDemandArea = true
+                            print("-- setting 2")
+                            onDemandConfigurationMap = IdentifiableBox(boxed: onlineMap.clone())
                         } label: {
                             addMapArea
                         }
@@ -168,9 +169,9 @@ public struct OfflineMapAreasView: View {
                 emptyOnDemandOfflineAreasView
             }
         }
-        .sheet(isPresented: $isAddingOnDemandArea) {
+        .sheet(item: $onDemandConfigurationMap) { box in
             OnDemandConfigurationView(
-                map: onlineMap.clone(),
+                map: box.boxed,
                 title: mapViewModel.nextOnDemandAreaTitle(),
                 titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
             ) {
@@ -246,7 +247,8 @@ public struct OfflineMapAreasView: View {
             description: emptyOnDemandMessage
         ) {
             Button {
-                isAddingOnDemandArea = true
+                print("-- setting 1")
+                onDemandConfigurationMap = IdentifiableBox(boxed: onlineMap.clone())
             } label: {
                 Label {
                     addMapArea
@@ -288,6 +290,14 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
+}
+
+private struct IdentifiableBox<Boxed: AnyObject>: Identifiable {
+    let boxed: Boxed
+    
+    var id: ObjectIdentifier {
+        ObjectIdentifier(boxed)
+    }
 }
 
 enum Backported {
