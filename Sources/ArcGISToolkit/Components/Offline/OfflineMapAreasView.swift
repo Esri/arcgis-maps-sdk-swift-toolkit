@@ -95,6 +95,15 @@ public struct OfflineMapAreasView: View {
             .task {
                 await mapViewModel.loadModels()
             }
+            .sheet(isPresented: $isAddingOnDemandArea) {
+                OnDemandConfigurationView(
+                    map: onlineMap.clone(),
+                    title: mapViewModel.nextOnDemandAreaTitle(),
+                    titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+                ) {
+                    mapViewModel.addOnDemandMapArea(with: $0)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button.done {
@@ -166,15 +175,6 @@ public struct OfflineMapAreasView: View {
                 }
             } else {
                 emptyOnDemandOfflineAreasView
-            }
-        }
-        .sheet(isPresented: $isAddingOnDemandArea) {
-            OnDemandConfigurationView(
-                map: onlineMap.clone(),
-                title: mapViewModel.nextOnDemandAreaTitle(),
-                titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
-            ) {
-                mapViewModel.addOnDemandMapArea(with: $0)
             }
         }
     }
