@@ -15,6 +15,32 @@
 import ArcGIS
 import SwiftUI
 
+@MainActor class OnDemandConfigurationViewModel: ObservableObject {
+    @Published var title: String
+    
+    @Published var maxScale: Double? = nil
+    
+    @Published var areaOfInterest: Envelope? = nil
+    
+    @Published var thumbnail: UIImage? = nil
+    
+    init(title: String) {
+        self.title = title
+    }
+    
+    var configuration: OnDemandMapAreaConfiguration? {
+        guard let maxScale, let areaOfInterest else { return nil }
+        
+        return OnDemandMapAreaConfiguration(
+            title: title,
+            minScale: 0,
+            maxScale: maxScale,
+            areaOfInterest: areaOfInterest,
+            thumbnail: thumbnail
+        )
+    }
+}
+
 /// A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
     /// The online map.
@@ -22,6 +48,9 @@ struct OnDemandConfigurationView: View {
     
     /// The title of the map area.
     @State private(set) var title: String
+    
+    /// The view model for the on demand configuration view.
+    @StateObject private var viewModel: OnDemandConfigurationViewModel
     
     /// A check to perform to validate a proposed title for uniqueness.
     let titleIsValidCheck: (String) -> Bool
@@ -63,6 +92,22 @@ struct OnDemandConfigurationView: View {
         case nil:
             false
         }
+    }
+    
+    init(
+        map: Map,
+        title: String,
+        titleIsValidCheck: @escaping (String) -> Bool,
+        onCompleteAction: @escaping (OnDemandMapAreaConfiguration) -> Void
+    ) {
+        self.map = map
+        self.title = title
+        self.titleIsValidCheck = titleIsValidCheck
+        self.onCompleteAction = onCompleteAction
+        
+        _viewModel = StateObject(
+            wrappedValue: OnDemandConfigurationViewModel(title: title)
+        )
     }
     
     var body: some View {
@@ -135,6 +180,12 @@ struct OnDemandConfigurationView: View {
                         }
                         .onChange(selectedRect) { _ in
                             selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                            
+                            guard let selectedExtent else { return }
+                            viewModel.areaOfInterest = selectedExtent
+                        }
+                        .onChange(maxScale) { _ in
+                            viewModel.maxScale = maxScale.scale
                         }
                 }
             }
@@ -174,13 +225,13 @@ struct OnDemandConfigurationView: View {
         BottomCard(background: background) {
             VStack(alignment: .leading) {
                 HStack {
-                    Text(title)
+                    Text(viewModel.title)
                         .font(.title2)
                         .fontWeight(.bold)
                         .lineLimit(1)
                     Spacer()
-                    RenameButton(title: title, isValidCheck: titleIsValidCheck) {
-                        title = $0
+                    RenameButton(title: viewModel.title, isValidCheck: titleIsValidCheck) {
+                        viewModel.title = $0
                     }
                     .disabled(downloadIsDisabled)
                 }
@@ -207,18 +258,12 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let selectedExtent else { return }
                         Task {
                             let image = try? await mapView.exportImage()
                             let thumbnail = image?.crop(to: selectedRect)
+                            viewModel.thumbnail = thumbnail
                             
-                            let configuration = OnDemandMapAreaConfiguration(
-                                title: title,
-                                minScale: 0,
-                                maxScale: maxScale.scale,
-                                areaOfInterest: selectedExtent,
-                                thumbnail: thumbnail
-                            )
+                            guard let configuration = viewModel.configuration else { return }
                             onCompleteAction(configuration)
                             dismiss()
                         }
