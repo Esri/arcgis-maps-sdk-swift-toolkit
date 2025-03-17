@@ -127,7 +127,7 @@ struct OnDemandConfigurationView: View {
                     .frame(maxWidth: .infinity)
                     Divider()
                     mapView
-                        .ignoresSafeArea([.all], edges: .bottom)
+                        .ignoresSafeArea(edges: .bottom)
                         .overlay {
                             if mapIsReady {
                                 // Don't add the selector view until the map is ready.

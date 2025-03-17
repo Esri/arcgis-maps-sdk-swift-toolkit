@@ -59,14 +59,14 @@ struct OnDemandMapAreaSelectorView: View {
     var body: some View {
         GeometryReader { geometry in
             dimmedMaskedView
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
                 .allowsHitTesting(false)
                 .overlay { handles }
                 .onChange(safeAreaInsets) { _ in
                     updateMaxRect(geometry: geometry)
                 }
         }
-        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea()
         .onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
             self.safeAreaInsets = safeAreaInsets
         }
