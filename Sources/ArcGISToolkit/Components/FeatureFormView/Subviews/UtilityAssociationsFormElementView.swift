@@ -59,92 +59,22 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-***REMOVED******REMOVED******REMOVED***let associatedElement = utilityAssociationResult.associatedElement
-***REMOVED******REMOVED******REMOVED***let associatedFeature = utilityAssociationResult.associatedFeature
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the title
-***REMOVED******REMOVED******REMOVED***let title: String = {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let table = associatedFeature.table as? ArcGISFeatureTable, let title = table.featureFormDefinition?.title {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the description
-***REMOVED******REMOVED******REMOVED***let description: String = {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let table = associatedFeature.table as? ArcGISFeatureTable, let description = table.featureFormDefinition?.description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associatedElement.assetGroup.name
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the connection icon
-***REMOVED******REMOVED******REMOVED***let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
-***REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.middle
-***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-***REMOVED******REMOVED******REMOVED******REMOVED***associatedFeature.globalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the terminal name
-***REMOVED******REMOVED******REMOVED***let terminalName: String? = switch utilityAssociationResult.association.kind {
-***REMOVED******REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
-***REMOVED******REMOVED******REMOVED******REMOVED***if associatedElement.networkSource.kind == .junction {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.associatedElement.terminal?.name
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve fraction along edge
-***REMOVED******REMOVED******REMOVED***let fractionAlongEdge: Double? = switch utilityAssociationResult.association.kind {
-***REMOVED******REMOVED******REMOVED***case .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
-***REMOVED******REMOVED******REMOVED******REMOVED***if associatedElement.networkSource.kind == .edge {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.association.fractionAlongEdge
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***nil
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve containment visibility
-***REMOVED******REMOVED******REMOVED***let containmentIsVisible: Bool? = switch utilityAssociationResult.association.kind {
-***REMOVED******REMOVED******REMOVED***case .containment:
-***REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationResult.association.containmentIsVisible
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***UtilityAssociationView(
-***REMOVED******REMOVED******REMOVED******REMOVED***association: UtilityAssociationView.Association(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***containmentIsVisible: containmentIsVisible,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: fractionAlongEdge,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let navigationAction: () -> Void = {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: associatedFeature)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***UtilityAssociationResultView(
+***REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let navigationAction: () -> Void = {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if formViewModel.featureForm.hasEdits {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setAlertContinuation?(true, navigationAction)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationAction()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***terminalName: terminalName
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if formViewModel.featureForm.hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setAlertContinuation?(true, navigationAction)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationAction()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***result: utilityAssociationResult
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
@@ -226,43 +156,35 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED***
 
 ***REMOVED***/ <#Description#>
-private struct UtilityAssociationView: View {
+private struct UtilityAssociationResultView: View {
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***var association: Association
+***REMOVED***let selectionAction: (() -> Void)
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let result: UtilityAssociationResult
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***association.selectionAction()
+***REMOVED******REMOVED******REMOVED***selectionAction()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let connection = association.connectionPoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image: String = switch connection {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .left:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-left"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .middle:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-middle"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .right:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-right"
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(image, bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED***if let icon {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***icon
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(association.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description = association.description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let containmentIsVisible = association.containmentIsVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let containmentIsVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Containment Visible: \(containmentIsVisible)".capitalized)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let fractionAlongEdge = association.fractionAlongEdge {
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let fractionAlongEdge {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(fractionAlongEdge.formatted(.percent))
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let terminal = association.terminalName {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Terminal: \(terminal)")
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let terminalName {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Terminal: \(terminalName)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(2.5)
@@ -285,34 +207,80 @@ private extension UtilityAssociationResult {
 ***REMOVED***
 ***REMOVED***
 
-private extension UtilityAssociationView {
-***REMOVED***struct Association {
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***enum Connection {
-***REMOVED******REMOVED******REMOVED***case left
-***REMOVED******REMOVED******REMOVED***case middle
-***REMOVED******REMOVED******REMOVED***case right
+private extension UtilityAssociationResultView {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the containment is visible if result represents a containment association.
+***REMOVED***var containmentIsVisible: Bool? {
+***REMOVED******REMOVED***switch result.association.kind {
+***REMOVED******REMOVED***case .containment:
+***REMOVED******REMOVED******REMOVED***result.association.containmentIsVisible
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***nil
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A description for the result.
+***REMOVED***var description: String {
+***REMOVED******REMOVED***if let table = result.associatedFeature.table as? ArcGISFeatureTable,
+***REMOVED******REMOVED***   let description = table.featureFormDefinition?.description {
+***REMOVED******REMOVED******REMOVED***description
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***result.associatedElement.assetGroup.name
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The relative location along a non-spatial edge where the junction represented via the association is
+***REMOVED******REMOVED***/ (logically) located.
+***REMOVED***var fractionAlongEdge: Double? {
+***REMOVED******REMOVED***switch result.association.kind {
+***REMOVED******REMOVED***case .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED***if result.associatedElement.networkSource.kind == .edge {
+***REMOVED******REMOVED******REMOVED******REMOVED***result.association.fractionAlongEdge
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let connectionPoint: Connection?
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An icon representing the association.
+***REMOVED***var icon: Image? {
+***REMOVED******REMOVED***let imageName: String? = switch result.association.kind {
+***REMOVED******REMOVED***case .junctionEdgeObjectConnectivityMidspan:
+***REMOVED******REMOVED******REMOVED***"connection-middle"
+***REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED***if result.associatedFeature.globalID == result.association.fromElement.globalID {
+***REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-left"
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***"connection-end-right"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let containmentIsVisible: Bool?
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***nil
+***REMOVED***
+***REMOVED******REMOVED***return imageName != nil ? Image(imageName!, bundle: .toolkitModule) : nil
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The UtilityTerminal of the associated utility network feature.
+***REMOVED***var terminalName: String? {
+***REMOVED******REMOVED***switch result.association.kind {
+***REMOVED******REMOVED***case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
+***REMOVED******REMOVED******REMOVED***if result.associatedElement.networkSource.kind == .junction {
+***REMOVED******REMOVED******REMOVED******REMOVED***result.associatedElement.terminal?.name
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let description: String?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let fractionAlongEdge: Double?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let name: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let selectionAction: (() -> Void)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***let terminalName: String?
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A title for the result.
+***REMOVED***var title: String {
+***REMOVED******REMOVED***if let table = result.associatedFeature.table as? ArcGISFeatureTable,
+***REMOVED******REMOVED***   let title = table.featureFormDefinition?.title {
+***REMOVED******REMOVED******REMOVED***title
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***"\(result.associatedElement.assetGroup.name) - \(result.associatedElement.objectID)"
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
