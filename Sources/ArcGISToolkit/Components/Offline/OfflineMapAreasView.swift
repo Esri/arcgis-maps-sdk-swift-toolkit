@@ -26,7 +26,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding private var selectedMap: Map?
 ***REMOVED******REMOVED***/ A Boolean value indicating whether an on-demand map area is being added.
-***REMOVED***@State private var isAddingOnDemandArea = false
+***REMOVED***@State private var onDemandConfigurationMap: IdentifiableBox<Map>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal item for the web map to be taken offline.
 ***REMOVED***private var portalItem: PortalItem {
@@ -158,7 +158,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- setting 2")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDemandConfigurationMap = IdentifiableBox(boxed: onlineMap.clone())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addMapArea
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -168,9 +169,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyOnDemandOfflineAreasView
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
+***REMOVED******REMOVED***.sheet(item: $onDemandConfigurationMap) { box in
 ***REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
+***REMOVED******REMOVED******REMOVED******REMOVED***map: box.boxed,
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
 ***REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
 ***REMOVED******REMOVED******REMOVED***) {
@@ -246,7 +247,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***description: emptyOnDemandMessage
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***isAddingOnDemandArea = true
+***REMOVED******REMOVED******REMOVED******REMOVED***print("-- setting 1")
+***REMOVED******REMOVED******REMOVED******REMOVED***onDemandConfigurationMap = IdentifiableBox(boxed: onlineMap.clone())
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addMapArea
@@ -288,6 +290,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***return OfflineMapAreasViewPreview()
+***REMOVED***
+
+private struct IdentifiableBox<Boxed: AnyObject>: Identifiable {
+***REMOVED***let boxed: Boxed
+***REMOVED***
+***REMOVED***var id: ObjectIdentifier {
+***REMOVED******REMOVED***ObjectIdentifier(boxed)
+***REMOVED***
 ***REMOVED***
 
 enum Backported {
