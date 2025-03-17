@@ -95,6 +95,8 @@ public struct OfflineMapAreasView: View {
             .task {
                 await mapViewModel.loadModels()
             }
+            // Note: the sheet has to be here rather than off of the `onDemandMapAreasView`
+            // or else the state is lost when backgrounding and foregrounding the application.
             .sheet(isPresented: $isAddingOnDemandArea) {
                 OnDemandConfigurationView(
                     map: onlineMap.clone(),
