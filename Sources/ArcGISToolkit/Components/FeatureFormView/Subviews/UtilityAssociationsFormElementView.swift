@@ -62,11 +62,21 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED***let associatedElement = utilityAssociationResult.associatedElement
 ***REMOVED******REMOVED******REMOVED***let associatedFeature = utilityAssociationResult.associatedFeature
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the title
 ***REMOVED******REMOVED******REMOVED***let title: String = {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formDefinitionTitle
+***REMOVED******REMOVED******REMOVED******REMOVED***if let table = associatedFeature.table as? ArcGISFeatureTable, let title = table.featureFormDefinition?.title {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Resolve the description
+***REMOVED******REMOVED******REMOVED***let description: String = {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let table = associatedFeature.table as? ArcGISFeatureTable, let description = table.featureFormDefinition?.description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***associatedElement.assetGroup.name
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***()
 ***REMOVED******REMOVED******REMOVED***
@@ -116,7 +126,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***association: UtilityAssociationView.Association(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***connectionPoint: connection,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***containmentIsVisible: containmentIsVisible,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: associatedElement.assetGroup.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fractionAlongEdge: fractionAlongEdge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionAction: {
