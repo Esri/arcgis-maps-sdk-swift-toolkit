@@ -59,14 +59,14 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED***dimmedMaskedView
-***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay { handles ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(safeAreaInsets) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateMaxRect(geometry: geometry)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
+***REMOVED******REMOVED***.ignoresSafeArea()
 ***REMOVED******REMOVED***.onGeometryChange(for: EdgeInsets.self, of: \.safeAreaInsets) { safeAreaInsets in
 ***REMOVED******REMOVED******REMOVED***self.safeAreaInsets = safeAreaInsets
 ***REMOVED***
