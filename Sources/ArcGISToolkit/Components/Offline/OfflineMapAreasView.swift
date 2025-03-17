@@ -95,6 +95,15 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.loadModels()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
+***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button.done {
@@ -166,15 +175,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyOnDemandOfflineAreasView
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
-***REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
-***REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
-***REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
