@@ -95,6 +95,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.loadModels()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Note: the sheet has to be here rather than off of the `onDemandMapAreasView`
+***REMOVED******REMOVED******REMOVED******REMOVED*** or else the state is lost when backgrounding and foregrounding the application.
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
