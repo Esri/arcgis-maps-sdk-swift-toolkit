@@ -127,6 +127,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea([.all], edges: .bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
