@@ -15,6 +15,32 @@
 ***REMOVED***
 ***REMOVED***
 
+@MainActor class OnDemandConfigurationViewModel: ObservableObject {
+***REMOVED***@Published var title: String
+***REMOVED***
+***REMOVED***@Published var maxScale: Double? = nil
+***REMOVED***
+***REMOVED***@Published var areaOfInterest: Envelope? = nil
+***REMOVED***
+***REMOVED***@Published var thumbnail: UIImage? = nil
+***REMOVED***
+***REMOVED***init(title: String) {
+***REMOVED******REMOVED***self.title = title
+***REMOVED***
+***REMOVED***
+***REMOVED***var configuration: OnDemandMapAreaConfiguration? {
+***REMOVED******REMOVED***guard let maxScale, let areaOfInterest else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return OnDemandMapAreaConfiguration(
+***REMOVED******REMOVED******REMOVED***title: title,
+***REMOVED******REMOVED******REMOVED***minScale: 0,
+***REMOVED******REMOVED******REMOVED***maxScale: maxScale,
+***REMOVED******REMOVED******REMOVED***areaOfInterest: areaOfInterest,
+***REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The online map.
@@ -22,6 +48,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the map area.
 ***REMOVED***@State private(set) var title: String
+***REMOVED***
+***REMOVED******REMOVED***/ The view model for the on demand configuration view.
+***REMOVED***@StateObject private var viewModel: OnDemandConfigurationViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A check to perform to validate a proposed title for uniqueness.
 ***REMOVED***let titleIsValidCheck: (String) -> Bool
@@ -63,6 +92,22 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***case nil:
 ***REMOVED******REMOVED******REMOVED***false
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***init(
+***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***title: String,
+***REMOVED******REMOVED***titleIsValidCheck: @escaping (String) -> Bool,
+***REMOVED******REMOVED***onCompleteAction: @escaping (OnDemandMapAreaConfiguration) -> Void
+***REMOVED***) {
+***REMOVED******REMOVED***self.map = map
+***REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED***self.titleIsValidCheck = titleIsValidCheck
+***REMOVED******REMOVED***self.onCompleteAction = onCompleteAction
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_viewModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: OnDemandConfigurationViewModel(title: title)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -135,6 +180,12 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(selectedRect) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.areaOfInterest = selectedExtent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(maxScale) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.maxScale = maxScale.scale
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -174,13 +225,13 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***BottomCard(background: background) {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RenameButton(title: title, isValidCheck: titleIsValidCheck) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title = $0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RenameButton(title: viewModel.title, isValidCheck: titleIsValidCheck) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.title = $0
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(downloadIsDisabled)
 ***REMOVED******REMOVED******REMOVED***
@@ -207,18 +258,12 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.thumbnail = thumbnail
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = OnDemandMapAreaConfiguration(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minScale: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxScale: maxScale.scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaOfInterest: selectedExtent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let configuration = viewModel.configuration else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCompleteAction(configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
