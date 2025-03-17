@@ -62,11 +62,21 @@ private struct UtilityAssociationGroupResultView: View {
             let associatedElement = utilityAssociationResult.associatedElement
             let associatedFeature = utilityAssociationResult.associatedFeature
             
+            // Resolve the title
             let title: String = {
-                if let table = associatedFeature.table as? ArcGISFeatureTable, let formDefinitionTitle = table.featureFormDefinition?.title {
-                    formDefinitionTitle
+                if let table = associatedFeature.table as? ArcGISFeatureTable, let title = table.featureFormDefinition?.title {
+                    title
                 } else {
                     "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+                }
+            }()
+            
+            // Resolve the description
+            let description: String = {
+                if let table = associatedFeature.table as? ArcGISFeatureTable, let description = table.featureFormDefinition?.description {
+                    description
+                } else {
+                    associatedElement.assetGroup.name
                 }
             }()
             
@@ -116,7 +126,7 @@ private struct UtilityAssociationGroupResultView: View {
                 association: UtilityAssociationView.Association(
                     connectionPoint: connection,
                     containmentIsVisible: containmentIsVisible,
-                    description: associatedElement.assetGroup.name,
+                    description: description,
                     fractionAlongEdge: fractionAlongEdge,
                     name: title,
                     selectionAction: {
