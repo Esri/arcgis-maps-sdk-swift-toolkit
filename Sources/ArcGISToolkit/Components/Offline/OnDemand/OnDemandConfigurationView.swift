@@ -154,6 +154,7 @@ struct OnDemandConfigurationView: View {
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
             .onDrawStatusChanged { drawStatus in
+                guard !mapIsReady else { return }
                 if drawStatus == .completed && map.loadStatus == .loaded {
                     mapIsReady = true
                 }
