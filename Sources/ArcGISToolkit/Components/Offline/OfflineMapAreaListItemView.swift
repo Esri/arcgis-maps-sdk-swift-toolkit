@@ -183,13 +183,13 @@ struct OpenOfflineMapAreaButton: View {
     /// The action to dismiss the view.
     /// Note: if this is not passed in to this view, and we use
     /// the environment here, it doesn't work.
-    let dismiss: DismissAction
+    let dismiss: DismissAction?
     
     var body: some View {
         Button {
             if let map {
                 selectedMap = map
-                dismiss()
+                dismiss?()
             }
         } label: {
             Text(
