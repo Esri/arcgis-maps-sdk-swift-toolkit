@@ -95,6 +95,17 @@ public struct OfflineMapAreasView: View {
             .task {
                 await mapViewModel.loadModels()
             }
+            // Note: the sheet has to be here rather than off of the `onDemandMapAreasView`
+            // or else the state is lost when backgrounding and foregrounding the application.
+            .sheet(isPresented: $isAddingOnDemandArea) {
+                OnDemandConfigurationView(
+                    map: onlineMap.clone(),
+                    title: mapViewModel.nextOnDemandAreaTitle(),
+                    titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+                ) {
+                    mapViewModel.addOnDemandMapArea(with: $0)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button.done {
@@ -166,15 +177,6 @@ public struct OfflineMapAreasView: View {
                 }
             } else {
                 emptyOnDemandOfflineAreasView
-            }
-        }
-        .sheet(isPresented: $isAddingOnDemandArea) {
-            OnDemandConfigurationView(
-                map: onlineMap.clone(),
-                title: mapViewModel.nextOnDemandAreaTitle(),
-                titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
-            ) {
-                mapViewModel.addOnDemandMapArea(with: $0)
             }
         }
     }
