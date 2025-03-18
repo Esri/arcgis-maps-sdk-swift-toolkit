@@ -113,35 +113,39 @@ struct OnDemandConfigurationView: View {
     
     @ViewBuilder private var loadedView: some View {
         MapViewReader { mapViewProxy in
-            VStack {
-                VStack(spacing: 0) {
-                    Divider()
-                    Text(
-                        "Pan and zoom to define the area",
-                        bundle: .toolkitModule,
-                        comment: "A label instructing to pan and zoom the map to define an area."
-                    )
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .padding(8)
-                    .frame(maxWidth: .infinity)
-                    Divider()
-                    mapView
-                        .overlay {
-                            if mapIsReady {
-                                // Don't add the selector view until the map is ready.
-                                OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
-                            }
+            VStack(spacing: 0) {
+                instructionsView
+                mapView
+                    .overlay {
+                        if mapIsReady {
+                            // Don't add the selector view until the map is ready.
+                            OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
                         }
-                        .onChange(selectedRect) { _ in
-                            selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-                        }
-                }
+                    }
+                    .onChange(selectedRect) { _ in
+                        selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                    }
             }
             .safeAreaInset(edge: .bottom) {
                 bottomPane(mapView: mapViewProxy)
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
+        }
+    }
+    
+    @ViewBuilder private var instructionsView: some View {
+        VStack(spacing: 0) {
+            Divider()
+            Text(
+                "Pan and zoom to define the area",
+                bundle: .toolkitModule,
+                comment: "A label instructing to pan and zoom the map to define an area."
+            )
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .padding(8)
+            .frame(maxWidth: .infinity)
+            Divider()
         }
     }
     
