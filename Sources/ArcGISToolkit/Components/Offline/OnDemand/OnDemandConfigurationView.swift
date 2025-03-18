@@ -153,11 +153,9 @@ struct OnDemandConfigurationView: View {
         #endif
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onLayerViewStateChanged { _, _ in
-                Task { @MainActor in
-                    // Sleep for a moment to give the map a chance to become fully ready
-                    // to convert coordinates from screen to location.
-                    try? await Task.sleep(for: .milliseconds(250))
+            .onDrawStatusChanged { drawStatus in
+                guard !mapIsReady else { return }
+                if drawStatus == .completed && map.loadStatus == .loaded {
                     mapIsReady = true
                 }
             }
