@@ -183,13 +183,13 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED******REMOVED***/ Note: if this is not passed in to this view, and we use
 ***REMOVED******REMOVED***/ the environment here, it doesn't work.
-***REMOVED***let dismiss: DismissAction
+***REMOVED***let dismiss: DismissAction?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***if let map {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = map
-***REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss?()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(
