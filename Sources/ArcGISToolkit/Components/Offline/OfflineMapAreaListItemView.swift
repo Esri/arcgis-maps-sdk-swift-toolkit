@@ -181,7 +181,7 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED***let isSelected: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
-***REMOVED******REMOVED***/ Note: if this is not passed in to this view, and we use
+***REMOVED******REMOVED***/ - Note: If this is not passed in to this view, and we use
 ***REMOVED******REMOVED***/ the environment here, it doesn't work.
 ***REMOVED***let dismiss: DismissAction?
 ***REMOVED***
