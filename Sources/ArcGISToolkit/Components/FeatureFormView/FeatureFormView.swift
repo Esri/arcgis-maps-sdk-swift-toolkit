@@ -156,6 +156,11 @@ public struct FeatureFormView: View {
                             validationErrorVisibility = .hidden
                             continuation()
                         }
+                        .onAppear {
+                            if !presentedForm.validationErrors.isEmpty {
+                                validationErrorVisibility = .visible
+                            }
+                        }
                         if (presentedForm.validationErrors.isEmpty) {
                             Button("Save Edits") {
                                 Task {
@@ -229,9 +234,7 @@ extension FeatureFormView {
         Binding {
             alertContinuation != nil
         } set: { newIsPresented in
-            if newIsPresented {
-                validationErrorVisibility = .visible
-            } else {
+            if !newIsPresented {
                 alertContinuation = nil
             }
         }
