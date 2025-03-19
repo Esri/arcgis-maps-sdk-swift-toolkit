@@ -33,7 +33,7 @@ struct OnDemandListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the view should dismiss.
-***REMOVED***var shouldDismiss = true
+***REMOVED***let shouldDismiss: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
