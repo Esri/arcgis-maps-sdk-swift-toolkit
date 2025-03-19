@@ -1,9 +1,18 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "Izbran %lld";
 
+/* A label indicating the number of results of a utility network trace. */
+"^[%lld Results](inflect: true)" = "Š_^[%lld Results](inflect: true)_______________________________č";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Za dostop do vsebine na %@ je potreben certifikat.";
+
+/* A message explaining that a map area cannot be downloaded at this time. */
+"A map area cannot be downloaded at this time." = "Š_A map area cannot be downloaded at this time________________________č.";
+
+/* A label for a button to add a map area. */
+"Add Map Area" = "Š_Add Map Area_____________č";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Dodaj novo";
@@ -12,13 +21,22 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Napredne možnosti";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Vsa spletna mesta";
+"All Sites" = "Š_All Sites___________________č";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Vse sledi vnosov in rezultatov bodo izgubljene.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Dovoli";
+
+/* An error message for when fetching map areas fails. */
+"An error occurred while fetching map areas." = "Š_An error occurred while fetching map areas_______________________č.";
+
+/* The title for a map area. */
+"Area %lld" = "Š_Area %lld___________________č";
+
+/* A hint for the user to enter an area name in the text field. */
+"Area Name" = "Š_Area Name___________________č";
 
 /* A label in reference to attachments. */
 "Attachments" = "Priloge";
@@ -38,6 +56,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Prebrskaj";
 
+/* Building (Level of Detail) */
+"Building" = "Š_Building_________________č";
+
+/* Buildings (Level of Detail) */
+"Buildings" = "Š_Buildings___________________č";
+
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibriranje";
 
@@ -48,11 +72,15 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Dostop do kamere je onemogočen";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Title for a button that cancels an action. */
 "Cancel" = "Prekliči";
 
 /* A label for a button to cancel the starting point selection operation. */
 "Cancel Starting Point Selection" = "Prekliči izbiro začetne točke";
+
+/* The status text when a map area download is cancelled. */
+"Cancelled" = "Š_Cancelled___________________č";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certifikat je obvezen";
@@ -66,7 +94,13 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Izberi iz knjižnice";
 
-/* The label of a button that clears a form's input. */
+/* Cities (Level of Detail) */
+"Cities" = "Š_Cities_____________č";
+
+/* City (Level of Detail) */
+"City" = "Š_City_________č";
+
+/* E.g. Remove text from a text field. */
 "Clear" = "Počisti";
 
 /* A directive to clear all of the completed utility network traces. */
@@ -81,8 +115,29 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompas, usmerjenost %lld stopinj %@";
 
+/* Continent (Level of Detail) */
+"Continent" = "Š_Continent___________________č";
+
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Nadaljuj";
+
+/* An error message explaining that map areas could not be retrieved for this map. */
+"Could not retrieve map areas for this map." = "Š_Could not retrieve map areas for this map______________________č.";
+
+/* Counties (Level of Detail) */
+"Counties" = "Š_Counties_________________č";
+
+/* Countries (Big) (Level of Detail) */
+"Countries (Big)" = "Š_Countries (Big)________________č";
+
+/* Countries (Small) (Level of Detail) */
+"Countries (Small)" = "Š_Countries (Small)__________________č";
+
+/* County (Level of Detail) */
+"County" = "Š_County_____________č";
+
+/* The status text for an opened map area. */
+"Currently open" = "Š_Currently open_______________č";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nevarno: certifikata, ki ga zagotavlja '%@', ni podpisala zaupanja vredna ustanova.";
@@ -102,8 +157,38 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Izbriši";
 
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "Š_Delete All Starting Points___________________________č";
+
+/* The title of the dialogue confirming deletion of all points. */
+"Delete all starting points?" = "Š_Delete all starting points____________________________č?";
+
+/* A label for a button to delete a map area. */
+"Delete Map Area" = "Š_Delete Map Area________________č";
+
+/* A label for the description of the map area. */
+"Description" = "Š_Description____________č";
+
+/* E.g. Close/hide a sheet or pop-up. */
+"Dismiss" = "Š_Dismiss_______________č";
+
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Končano";
+
+/* A label for a button to download a map area. */
+"Download" = "Š_Download_________________č";
+
+/* The status text when a map area failed to download. */
+"Download failed" = "Š_Download failed________________č";
+
+/* A label for a button to download a map area. */
+"Download Map Area" = "Š_Download Map Area__________________č";
+
+/* The status text when a map area is downloaded. */
+"Downloaded" = "Š_Downloaded_____________________č";
+
+/* The status text when a map area is downloading. */
+"Downloading" = "Š_Downloading____________č";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -131,6 +216,9 @@ hold the minimum and maximum length respectively. */
 /* Text indicating the user should enter a field's exact number of characters. */
 "Enter ^[%lld characters](inflect: true)" = "Vnesite ^[%lld znakov](inflect: true)";
 
+/* An instruction to enter a name. */
+"Enter a name" = "Š_Enter a name_____________č";
+
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Vnesite vrednost";
 
@@ -140,6 +228,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Napaka";
+
+/* A label indicating that an error occurred while fetching map areas. */
+"Error Fetching Map Areas" = "Š_Error Fetching Map Areas_________________________č";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -204,8 +295,26 @@ trace operation. */
 AR experience. */
 "heading" = "glava";
 
+/* House Property (Level of Detail) */
+"House Property" = "Š_House Property_______________č";
+
+/* Houses (Level of Detail) */
+"Houses" = "Š_Houses_____________č";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Manj kot najmanjša vrednost";
+
+/* A label for the level of detail picker view. */
+"Level of Detail" = "Š_Level of Detail________________č";
+
+/* The status text when a map area is loading. */
+"Loading" = "Š_Loading_______________č";
+
+/* The status text when a map area failed to load. */
+"Loading failed" = "Š_Loading failed_______________č";
+
+/* A title for the offline map areas view. */
+"Map Areas" = "Š_Map Areas___________________č";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Največ ^[%lld znakov](inflect: true)";
@@ -215,6 +324,9 @@ AR experience. */
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Mediji";
+
+/* Metropolitan Area (Level of Detail) */
+"Metropolitan Area" = "Š_Metropolitan Area__________________č";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Dostop do mikrofona je bil onemogočen v Nastavitvah.";
@@ -227,6 +339,9 @@ AR experience. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Ime";
+
+/* Neighborhood (Level of Detail) */
+"Neighborhood" = "Š_Neighborhood_____________č";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Omrežje";
@@ -242,6 +357,15 @@ AR experience. */
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Na voljo ni nobena konfiguracija.";
+
+/* An error message explaining that there is no internet connection. */
+"No Internet Connection" = "Š_No Internet Connection_______________________č";
+
+/* An error message explaining that there is no internet connection and only downloaded areas are shown. */
+"No internet connection. Showing downloaded areas only." = "Š_No internet connection. Showing downloaded areas only____________________________č.";
+
+/* A label indicating that there are no map areas. */
+"No Map Areas" = "Š_No Map Areas_____________č";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Ni najdenih zadetkov.";
@@ -267,8 +391,26 @@ AR experience. */
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID objekta: %@";
 
+/* A label indicating that the map is offline disabled. */
+"Offline Disabled" = "Š_Offline Disabled_________________č";
+
 /* A label for button to proceed with an operation. */
 "OK" = "V redu";
+
+/* A message explaining that the online map failed to load. */
+"Online Map Failed to Load" = "Š_Online Map Failed to Load__________________________č";
+
+/* A label for a button to open a map area. */
+"Open" = "Š_Open_________č";
+
+/* The status text when a map area is packaging. */
+"Packaging" = "Š_Packaging___________________č";
+
+/* The status text when a map area packaging failed. */
+"Packaging failed" = "Š_Packaging failed_________________č";
+
+/* A label instructing to pan and zoom the map to define an area. */
+"Pan and zoom to define the area" = "Š_Pan and zoom to define the area_________________č";
 
 /* A label in reference to a credential password. */
 "Password" = "Geslo";
@@ -294,8 +436,14 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Ovrednotenje pojavnega okna ni uspelo: %@";
 
+/* The status text when a map area is ready to download. */
+"Ready to download" = "Š_Ready to download__________________č";
+
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Posnemi samo video";
+
+/* A label for a button to refresh map area content. */
+"Refresh" = "Š_Refresh_______________č";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Preimenuj";
@@ -314,6 +462,12 @@ current visible extent of the map or scene. */
 /* A label for a button to show utility network trace results. */
 "Results" = "Rezultati";
 
+/* Room (Level of Detail) */
+"Room" = "Š_Room_________č";
+
+/* Rooms (Level of Detail) */
+"Rooms" = "Š_Rooms___________č";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Iskalna poizvedba";
 
@@ -323,6 +477,9 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Izberi objekt";
+
+/* A title for the on demand configuration view. */
+"Select Area" = "Š_Select Area____________č";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Izberi omrežje";
@@ -336,6 +493,12 @@ or more levels in a floor-aware map or scene. */
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Spletna mesta";
 
+/* A label for the file size of the map area. */
+"Size: %@" = "Š_Size: %@_________________č";
+
+/* Small Building (Level of Detail) */
+"Small Building" = "Š_Small Building_______________č";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Neujemanje koordinatnega sistema.";
@@ -343,6 +506,18 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Začetne točke";
+
+/* State/Province (Level of Detail) */
+"State/Province" = "Š_State/Province_______________č";
+
+/* States/Provinces (Level of Detail) */
+"States/Provinces" = "Š_States/Provinces_________________č";
+
+/* Street (Level of Detail) */
+"Street" = "Š_Street_____________č";
+
+/* Streets (Level of Detail) */
+"Streets" = "Š_Streets_______________č";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Zajemi fotografijo ali video";
@@ -378,6 +553,12 @@ match the spatial reference of the map. */
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Karta nima koordinatnega sistema.";
 
+/* A message indicating that the map is not offline enabled. */
+"The map is not enabled for offline use." = "Š_The map is not enabled for offline use_____________________č.";
+
+/* A message explaining that the map area name must be unique. */
+"The name for the map area must be unique." = "Š_The name for the map area must be unique______________________č.";
+
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Geslo je bilo neveljavno.";
 
@@ -391,8 +572,17 @@ to be imported as an attachment. */
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-ja ni bilo mogoče doseči oziroma ni vseboval podatkov o sliki.";
 
+/* A message explaining that there are no map areas for this map. */
+"There are no map areas for this map." = "Š_There are no map areas for this map___________________č.";
+
+/* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
+"There are no map areas for this map. Tap the button below to get started." = "Š_There are no map areas for this map. Tap the button below to get started______________________________________č.";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Danes";
+
+/* Town (Level of Detail) */
+"Town" = "Š_Town_________č";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Sled";
@@ -406,11 +596,17 @@ to be imported as an attachment. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Poskusite znova";
 
+/* The default title of a map area with an unknown title. */
+"Unknown" = "Š_Unknown_______________č";
+
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Neznana napaka pri preverjanju veljavnosti";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Neimenovani tip sredstva";
+
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "Š_Unsupported Value__________________č";
 
 /* A label in reference to a credential username. */
 "Username" = "Uporabniško ime";
@@ -444,6 +640,18 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Vrednost ne sme biti prazna";
+
+/* E.g. Open a hyperlink. */
+"View" = "Š_View_________č";
+
+/* World (Level of Detail) */
+"World" = "Š_World___________č";
+
+/* World (Big) (Level of Detail) */
+"World (Big)" = "Š_World (Big)____________č";
+
+/* World (Small) (Level of Detail) */
+"World (Small)" = "Š_World (Small)______________č";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

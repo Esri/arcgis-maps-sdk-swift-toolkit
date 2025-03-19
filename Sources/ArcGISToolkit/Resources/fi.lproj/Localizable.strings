@@ -1,9 +1,18 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld valittu";
 
+/* A label indicating the number of results of a utility network trace. */
+"^[%lld Results](inflect: true)" = "Å_^[%lld Results](inflect: true)_______________________________ö";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Varmenne tarvitaan, jotta kohteen %@ sisältöä voidaan käyttää.";
+
+/* A message explaining that a map area cannot be downloaded at this time. */
+"A map area cannot be downloaded at this time." = "Å_A map area cannot be downloaded at this time________________________ö.";
+
+/* A label for a button to add a map area. */
+"Add Map Area" = "Å_Add Map Area_____________ö";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Lisää uusi";
@@ -12,13 +21,22 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Lisäasetukset";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Kaikki sivustot";
+"All Sites" = "Å_All Sites___________________ö";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Kaikki jäljityksen syötteet ja tulokset menetetään.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Salli";
+
+/* An error message for when fetching map areas fails. */
+"An error occurred while fetching map areas." = "Å_An error occurred while fetching map areas_______________________ö.";
+
+/* The title for a map area. */
+"Area %lld" = "Å_Area %lld___________________ö";
+
+/* A hint for the user to enter an area name in the text field. */
+"Area Name" = "Å_Area Name___________________ö";
 
 /* A label in reference to attachments. */
 "Attachments" = "Liitteet";
@@ -38,6 +56,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Selaa";
 
+/* Building (Level of Detail) */
+"Building" = "Å_Building_________________ö";
+
+/* Buildings (Level of Detail) */
+"Buildings" = "Å_Buildings___________________ö";
+
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibroi";
 
@@ -48,11 +72,15 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Kameran käyttöoikeus poistettu käytöstä";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Title for a button that cancels an action. */
 "Cancel" = "Peruuta";
 
 /* A label for a button to cancel the starting point selection operation. */
 "Cancel Starting Point Selection" = "Peruuta aloituspisteen valinta";
+
+/* The status text when a map area download is cancelled. */
+"Cancelled" = "Å_Cancelled___________________ö";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Varmenne vaaditaan";
@@ -66,7 +94,13 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Valitse kirjastosta";
 
-/* The label of a button that clears a form's input. */
+/* Cities (Level of Detail) */
+"Cities" = "Å_Cities_____________ö";
+
+/* City (Level of Detail) */
+"City" = "Å_City_________ö";
+
+/* E.g. Remove text from a text field. */
 "Clear" = "Tyhjennä";
 
 /* A directive to clear all of the completed utility network traces. */
@@ -81,8 +115,29 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompassi, suunta %lld astetta %@";
 
+/* Continent (Level of Detail) */
+"Continent" = "Å_Continent___________________ö";
+
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Jatka";
+
+/* An error message explaining that map areas could not be retrieved for this map. */
+"Could not retrieve map areas for this map." = "Å_Could not retrieve map areas for this map______________________ö.";
+
+/* Counties (Level of Detail) */
+"Counties" = "Å_Counties_________________ö";
+
+/* Countries (Big) (Level of Detail) */
+"Countries (Big)" = "Å_Countries (Big)________________ö";
+
+/* Countries (Small) (Level of Detail) */
+"Countries (Small)" = "Å_Countries (Small)__________________ö";
+
+/* County (Level of Detail) */
+"County" = "Å_County_____________ö";
+
+/* The status text for an opened map area. */
+"Currently open" = "Å_Currently open_______________ö";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Vaara: luotettava valtuuttaja ei ole allekirjoittanut kohteen %@ varmennetta.";
@@ -102,8 +157,38 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Poista";
 
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "Å_Delete All Starting Points___________________________ö";
+
+/* The title of the dialogue confirming deletion of all points. */
+"Delete all starting points?" = "Å_Delete all starting points____________________________ö?";
+
+/* A label for a button to delete a map area. */
+"Delete Map Area" = "Å_Delete Map Area________________ö";
+
+/* A label for the description of the map area. */
+"Description" = "Å_Description____________ö";
+
+/* E.g. Close/hide a sheet or pop-up. */
+"Dismiss" = "Å_Dismiss_______________ö";
+
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Valmis";
+
+/* A label for a button to download a map area. */
+"Download" = "Å_Download_________________ö";
+
+/* The status text when a map area failed to download. */
+"Download failed" = "Å_Download failed________________ö";
+
+/* A label for a button to download a map area. */
+"Download Map Area" = "Å_Download Map Area__________________ö";
+
+/* The status text when a map area is downloaded. */
+"Downloaded" = "Å_Downloaded_____________________ö";
+
+/* The status text when a map area is downloading. */
+"Downloading" = "Å_Downloading____________ö";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -131,6 +216,9 @@ hold the minimum and maximum length respectively. */
 /* Text indicating the user should enter a field's exact number of characters. */
 "Enter ^[%lld characters](inflect: true)" = "Anna ^[%lld characters](inflect: true)";
 
+/* An instruction to enter a name. */
+"Enter a name" = "Å_Enter a name_____________ö";
+
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Anna arvo";
 
@@ -140,6 +228,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Virhe";
+
+/* A label indicating that an error occurred while fetching map areas. */
+"Error Fetching Map Areas" = "Å_Error Fetching Map Areas_________________________ö";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -204,8 +295,26 @@ trace operation. */
 AR experience. */
 "heading" = "suunta";
 
+/* House Property (Level of Detail) */
+"House Property" = "Å_House Property_______________ö";
+
+/* Houses (Level of Detail) */
+"Houses" = "Å_Houses_____________ö";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Pienempi kuin vähimmäisarvo";
+
+/* A label for the level of detail picker view. */
+"Level of Detail" = "Å_Level of Detail________________ö";
+
+/* The status text when a map area is loading. */
+"Loading" = "Å_Loading_______________ö";
+
+/* The status text when a map area failed to load. */
+"Loading failed" = "Å_Loading failed_______________ö";
+
+/* A title for the offline map areas view. */
+"Map Areas" = "Å_Map Areas___________________ö";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Enintään ^[%lld characters](inflect: true)";
@@ -215,6 +324,9 @@ AR experience. */
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
+
+/* Metropolitan Area (Level of Detail) */
+"Metropolitan Area" = "Å_Metropolitan Area__________________ö";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Mikrofonin käyttöoikeus on poistettu käytöstä Asetuksista.";
@@ -227,6 +339,9 @@ AR experience. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nimi";
+
+/* Neighborhood (Level of Detail) */
+"Neighborhood" = "Å_Neighborhood_____________ö";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Verkko";
@@ -242,6 +357,15 @@ AR experience. */
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Määrityksiä ei ole käytettävissä.";
+
+/* An error message explaining that there is no internet connection. */
+"No Internet Connection" = "Å_No Internet Connection_______________________ö";
+
+/* An error message explaining that there is no internet connection and only downloaded areas are shown. */
+"No internet connection. Showing downloaded areas only." = "Å_No internet connection. Showing downloaded areas only____________________________ö.";
+
+/* A label indicating that there are no map areas. */
+"No Map Areas" = "Å_No Map Areas_____________ö";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Vastaavuuksia ei löytynyt.";
@@ -267,8 +391,26 @@ AR experience. */
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Objektin tunnus: %@";
 
+/* A label indicating that the map is offline disabled. */
+"Offline Disabled" = "Å_Offline Disabled_________________ö";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
+
+/* A message explaining that the online map failed to load. */
+"Online Map Failed to Load" = "Å_Online Map Failed to Load__________________________ö";
+
+/* A label for a button to open a map area. */
+"Open" = "Å_Open_________ö";
+
+/* The status text when a map area is packaging. */
+"Packaging" = "Å_Packaging___________________ö";
+
+/* The status text when a map area packaging failed. */
+"Packaging failed" = "Å_Packaging failed_________________ö";
+
+/* A label instructing to pan and zoom the map to define an area. */
+"Pan and zoom to define the area" = "Å_Pan and zoom to define the area_________________ö";
 
 /* A label in reference to a credential password. */
 "Password" = "Salasana";
@@ -294,8 +436,14 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Ponnahdusikkunan arviointi epäonnistui: %@";
 
+/* The status text when a map area is ready to download. */
+"Ready to download" = "Å_Ready to download__________________ö";
+
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Vain videon tallennus";
+
+/* A label for a button to refresh map area content. */
+"Refresh" = "Å_Refresh_______________ö";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Nimeä uudelleen";
@@ -314,6 +462,12 @@ current visible extent of the map or scene. */
 /* A label for a button to show utility network trace results. */
 "Results" = "Tulokset";
 
+/* Room (Level of Detail) */
+"Room" = "Å_Room_________ö";
+
+/* Rooms (Level of Detail) */
+"Rooms" = "Å_Rooms___________ö";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Hakukysely";
 
@@ -323,6 +477,9 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Valitse palvelu";
+
+/* A title for the on demand configuration view. */
+"Select Area" = "Å_Select Area____________ö";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Valitse verkko";
@@ -336,6 +493,12 @@ or more levels in a floor-aware map or scene. */
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sivustot";
 
+/* A label for the file size of the map area. */
+"Size: %@" = "Å_Size: %@_________________ö";
+
+/* Small Building (Level of Detail) */
+"Small Building" = "Å_Small Building_______________ö";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Koordinaatistotiedon ristiriita.";
@@ -343,6 +506,18 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Aloituspisteet";
+
+/* State/Province (Level of Detail) */
+"State/Province" = "Å_State/Province_______________ö";
+
+/* States/Provinces (Level of Detail) */
+"States/Provinces" = "Å_States/Provinces_________________ö";
+
+/* Street (Level of Detail) */
+"Street" = "Å_Street_____________ö";
+
+/* Streets (Level of Detail) */
+"Streets" = "Å_Streets_______________ö";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Ota valokuva tai video";
@@ -378,6 +553,12 @@ match the spatial reference of the map. */
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kartta ei sisällä koordinaatistotietoa.";
 
+/* A message indicating that the map is not offline enabled. */
+"The map is not enabled for offline use." = "Å_The map is not enabled for offline use_____________________ö.";
+
+/* A message explaining that the map area name must be unique. */
+"The name for the map area must be unique." = "Å_The name for the map area must be unique______________________ö.";
+
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Salasana oli virheellinen.";
 
@@ -391,8 +572,17 @@ to be imported as an attachment. */
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-osoitetta ei voitu käyttää tai se ei sisältänyt kuva-aineistoa.";
 
+/* A message explaining that there are no map areas for this map. */
+"There are no map areas for this map." = "Å_There are no map areas for this map___________________ö.";
+
+/* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
+"There are no map areas for this map. Tap the button below to get started." = "Å_There are no map areas for this map. Tap the button below to get started______________________________________ö.";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Tänään";
+
+/* Town (Level of Detail) */
+"Town" = "Å_Town_________ö";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Jäljitys";
@@ -406,11 +596,17 @@ to be imported as an attachment. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Yritä uudelleen";
 
+/* The default title of a map area with an unknown title. */
+"Unknown" = "Å_Unknown_______________ö";
+
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Tuntematon validointivirhe";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Nimeämätön omaisuustyyppi";
+
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "Å_Unsupported Value__________________ö";
 
 /* A label in reference to a credential username. */
 "Username" = "Käyttäjänimi:";
@@ -444,6 +640,18 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Arvo ei saa olla tyhjä";
+
+/* E.g. Open a hyperlink. */
+"View" = "Å_View_________ö";
+
+/* World (Level of Detail) */
+"World" = "Å_World___________ö";
+
+/* World (Big) (Level of Detail) */
+"World (Big)" = "Å_World (Big)____________ö";
+
+/* World (Small) (Level of Detail) */
+"World (Small)" = "Å_World (Small)______________ö";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
