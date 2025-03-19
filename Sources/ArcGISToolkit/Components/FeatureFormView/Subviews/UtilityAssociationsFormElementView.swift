@@ -210,11 +210,14 @@ private extension UtilityAssociationResult {
 private extension UtilityAssociationResultView {
     /// A Boolean value indicating whether the containment is visible if result represents a containment association.
     var containmentIsVisible: Bool? {
+        guard (result.association.toElement.globalID == result.associatedElement.globalID) else {
+            return nil
+        }
         switch result.association.kind {
         case .containment:
-            result.association.containmentIsVisible
+            return result.association.containmentIsVisible
         default:
-            nil
+            return nil
         }
     }
     
