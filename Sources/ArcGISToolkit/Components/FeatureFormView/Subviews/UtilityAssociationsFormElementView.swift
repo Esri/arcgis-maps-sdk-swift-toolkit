@@ -210,11 +210,14 @@ private extension UtilityAssociationResult {
 private extension UtilityAssociationResultView {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the containment is visible if result represents a containment association.
 ***REMOVED***var containmentIsVisible: Bool? {
+***REMOVED******REMOVED***guard (result.association.toElement.globalID == result.associatedElement.globalID) else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
 ***REMOVED******REMOVED***switch result.association.kind {
 ***REMOVED******REMOVED***case .containment:
-***REMOVED******REMOVED******REMOVED***result.association.containmentIsVisible
+***REMOVED******REMOVED******REMOVED***return result.association.containmentIsVisible
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***nil
+***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
