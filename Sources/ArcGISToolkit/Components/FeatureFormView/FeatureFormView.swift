@@ -156,6 +156,11 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .hidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !presentedForm.validationErrors.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (presentedForm.validationErrors.isEmpty) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Save Edits") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
@@ -229,9 +234,7 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***Binding {
 ***REMOVED******REMOVED******REMOVED***alertContinuation != nil
 ***REMOVED*** set: { newIsPresented in
-***REMOVED******REMOVED******REMOVED***if newIsPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible
-***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***if !newIsPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertContinuation = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
