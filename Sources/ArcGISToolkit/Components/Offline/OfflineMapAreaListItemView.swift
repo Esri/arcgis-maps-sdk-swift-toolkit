@@ -181,7 +181,7 @@ struct OpenOfflineMapAreaButton: View {
     let isSelected: Bool
     
     /// The action to dismiss the view.
-    /// Note: if this is not passed in to this view, and we use
+    /// - Note: If this is not passed in to this view, and we use
     /// the environment here, it doesn't work.
     let dismiss: DismissAction?
     
