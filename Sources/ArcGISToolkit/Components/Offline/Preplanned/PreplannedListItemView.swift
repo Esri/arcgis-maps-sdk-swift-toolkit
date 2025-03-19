@@ -38,7 +38,7 @@ struct PreplannedListItemView: View {
     }
     
     /// A Boolean value indicating whether the view should dismiss.
-    var shouldDismiss = true
+    let shouldDismiss: Bool
     
     var body: some View {
         OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
@@ -89,7 +89,8 @@ struct PreplannedListItemView: View {
             preplannedMapAreaID: .init("preview")!,
             onRemoveDownload: {}
         ),
-        selectedMap: .constant(nil)
+        selectedMap: .constant(nil),
+        shouldDismiss: true
     )
     .padding()
 }
