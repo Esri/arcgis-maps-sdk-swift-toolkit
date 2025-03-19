@@ -31,6 +31,9 @@ struct FeatureFormTestView: View {
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
     
+    /// The string for the test search bar.
+    @State private var searchTerm: String = ""
+    
     /// The current test case.
     @State private var testCase: TestCase?
     
@@ -74,15 +77,18 @@ private extension FeatureFormTestView {
                 horizontalAlignment: .leading,
                 isPresented: $isPresented
             ) {
-                FeatureFormView(featureForm: featureForm!)
-                    .padding()
+                FeatureFormView(featureForm: $featureForm)
             }
             .navigationBarBackButtonHidden(isPresented)
     }
     
     /// Test case selection UI.
     var testCaseSelector: some View {
-        ScrollView {
+        List {
+            Section {
+                TextField("Search", text: $searchTerm, prompt: Text("Search"))
+            }
+            let cases = searchTerm.isEmpty ? cases : cases.filter { $0.id.localizedStandardContains(searchTerm) }
             ForEach(cases) { testCase in
                 Button(testCase.id) {
                     self.testCase = testCase
@@ -91,14 +97,6 @@ private extension FeatureFormTestView {
                 .buttonStyle(.plain)
             }
         }
-    }
-    
-    /// A Boolean value indicating whether the form controls should be shown directly in the form's
-    ///  presenting container.
-    var useControlsInForm: Bool {
-        verticalSizeClass == .compact ||
-        UIDevice.current.userInterfaceIdiom == .mac ||
-        UIDevice.current.userInterfaceIdiom == .pad
     }
     
     /// Test conditions for a Form View.
