@@ -117,13 +117,13 @@ public struct FeatureFormView: View {
                         .font(.title)
                     }
                 } footer: {
-                    if let presentedForm = presentedForm.wrappedValue, hasEdits {
-                        FormFooter(
-                            featureForm: presentedForm,
-                            formHandlingEventAction: onFormEditingEventAction,
-                            validationErrorVisibility: $validationErrorVisibility
-                        )
-                    }
+//                    if let presentedForm = presentedForm.wrappedValue, hasEdits {
+//                        FormFooter(
+//                            featureForm: presentedForm,
+//                            formHandlingEventAction: onFormEditingEventAction,
+//                            validationErrorVisibility: $validationErrorVisibility
+//                        )
+//                    }
                 }
                 .backNavigationDisabled(hasEdits)
             }
