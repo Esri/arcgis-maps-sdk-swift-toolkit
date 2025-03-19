@@ -20,30 +20,30 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***continueAfterFailure = false
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Verifies that the form is opened by asserting the existence of the form title.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ A timeout is added for resiliency when forms are occasionally slow to load.
-***REMOVED******REMOVED***/ - Parameter titleElement: The query for the form title element.
-***REMOVED***func assertFormOpened(titleElement: XCUIElement) {
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***titleElement.waitForExistence(timeout: 30),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 30 seconds."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets the map and feature based on the current test case.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - app: The current application.
-***REMOVED******REMOVED***/   - id: The name of the test case.
-***REMOVED***func selectTestCase(_ app: XCUIApplication, id: String = #function) {
+***REMOVED***func openFeatureFormView(id: String = #function, titleElement: XCUIElement) {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED******REMOVED*** Open tests
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Select test case
 ***REMOVED******REMOVED***let testCase = String(id.dropLast(2))
+***REMOVED******REMOVED***let textField = app.textFields["Search"]
+***REMOVED******REMOVED***textField.tap()
+***REMOVED******REMOVED***textField.typeText(testCase)
 ***REMOVED******REMOVED***let testCaseButton = app.buttons[testCase]
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***testCaseButton.waitForExistence(timeout: 5),
 ***REMOVED******REMOVED******REMOVED***"The button doesn't exist for \(testCase)"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***testCaseButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***titleElement.waitForExistence(timeout: 30),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 30 seconds."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Test case 1: Text Box with no hint, no description, value not required
@@ -55,17 +55,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -121,18 +113,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
@@ -201,20 +185,12 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
 ***REMOVED******REMOVED***let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
@@ -291,17 +267,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let footer = app.staticTexts["numbers Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Domain"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let textField = app.textFields["numbers Text Input"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***textField.value as? String,
@@ -353,17 +321,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Date Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Date Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Required Date Now Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fieldValue.label != "No Value" {
 ***REMOVED******REMOVED******REMOVED***clearButton.tap()
@@ -420,17 +380,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
@@ -485,17 +437,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.isHittable,
@@ -545,17 +489,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date Time End Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date Time End Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date Time End Now Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fieldValue.label != "No Value" {
 ***REMOVED******REMOVED******REMOVED***clearButton.tap()
@@ -611,19 +547,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["start and end date time Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["start and end date time Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["start and end date time Now Button"]
 ***REMOVED******REMOVED***let previousMonthButton = datePicker.buttons["Previous Month"]
 ***REMOVED******REMOVED***let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
@@ -669,16 +597,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -707,17 +627,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Combo String Footer"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -763,17 +675,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo Integer"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo Integer Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo Integer Options Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -804,16 +708,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -859,17 +755,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -912,18 +800,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Combo Box Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
 ***REMOVED******REMOVED***let oakButton = app.buttons["Oak"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -980,18 +860,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo No Value False Combo Box Value"]
 ***REMOVED******REMOVED***let firstOption = app.buttons["First"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No Value"]
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo No Value False Options Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1048,19 +920,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Unsupported Value"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
 ***REMOVED******REMOVED***let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
 ***REMOVED******REMOVED***let unsupportedValue = app.buttons["0"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1105,19 +969,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text *"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog Radio Button"]
 ***REMOVED******REMOVED***let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
 ***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No Value Radio Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1157,18 +1013,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueDisabledRadioButton = app.buttons["No Value Disabled One Radio Button"]
 ***REMOVED******REMOVED***let noValueEnabledRadioButton = app.buttons["No Value Enabled N/A Radio Button"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify the Radio Button fallback to Combo Box was successful.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -1196,17 +1044,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch integer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch integer Switch"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1231,17 +1071,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch string"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch string Switch"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -1272,16 +1104,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch double"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch double Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
@@ -1300,7 +1124,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
 ***REMOVED******REMOVED***let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
@@ -1312,14 +1135,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
 #endif
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***expandedGroup.exists,
@@ -1358,7 +1174,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_6_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let groupElement = app.staticTexts["single line text 3"]
 ***REMOVED******REMOVED***let showElementsButton = app.buttons["show invisible form element"]
 ***REMOVED******REMOVED***
@@ -1370,14 +1185,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
 #endif
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***hiddenElementsGroup.exists,
@@ -1419,7 +1227,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_7_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let elementsAreEditableSwitch = app.switches["Elements are editable Switch"]
 ***REMOVED******REMOVED***let elementInTheGroupIsEditableReadOnlyInput = app.staticTexts["Element in the group is editable Read Only Input"]
 ***REMOVED******REMOVED***let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
@@ -1439,14 +1246,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
 ***REMOVED******REMOVED***let longTextTextInputPreview = app.staticTexts["Long text Text Input Preview"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
 ***REMOVED******REMOVED***
@@ -1483,19 +1283,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]
 ***REMOVED******REMOVED***let downloadIcon = app.images["Download"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Esri Location"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let placeholderImage = app.images["Photo"]
 ***REMOVED******REMOVED***let sizeLabel = app.staticTexts["154 kB"]
 ***REMOVED******REMOVED***let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
 ***REMOVED******REMOVED***XCTAssertTrue(placeholderImage.exists)
@@ -1514,20 +1306,12 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_10_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let losAngelesText = app.staticTexts["Title of the map is Los Angeles."]
 ***REMOVED******REMOVED***let redlandsText = app.staticTexts["Title of the map is Redlands."]
 ***REMOVED******REMOVED***let titleClearButton = app.buttons["Title Clear Button"]
 ***REMOVED******REMOVED***let titleTextField = app.textFields["Title Text Input"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***titleTextField.waitForExistence(timeout: 10),
@@ -1553,17 +1337,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_10_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 10 Layer"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let plainText = app.staticTexts["#### **A Bold and Large Heading**"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(plainText.exists)
 ***REMOVED***
@@ -1572,20 +1348,12 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_11_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test case 11.1 Layer"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let scanButton = app.buttons["Barcode Scan Button"]
 ***REMOVED******REMOVED***let clearButton = app.buttons["Barcode Clear Button"]
 ***REMOVED******REMOVED***let barcodeValidationString = app.staticTexts["Barcode Footer"]
 ***REMOVED******REMOVED***let fieldValue = app.textFields["Barcode Text Input"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectTestCase(app)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
 ***REMOVED******REMOVED***XCTAssertFalse(clearButton.exists, "The clear button exists.")

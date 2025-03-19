@@ -31,6 +31,9 @@ struct FeatureFormTestView: View {
 ***REMOVED******REMOVED***/ The form being edited in the form view.
 ***REMOVED***@State private var featureForm: FeatureForm?
 ***REMOVED***
+***REMOVED******REMOVED***/ The string for the test search bar.
+***REMOVED***@State private var searchTerm: String = ""
+***REMOVED***
 ***REMOVED******REMOVED***/ The current test case.
 ***REMOVED***@State private var testCase: TestCase?
 ***REMOVED***
@@ -74,15 +77,18 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm!)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: $featureForm)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(isPresented)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case selection UI.
 ***REMOVED***var testCaseSelector: some View {
-***REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED***TextField("Search", text: $searchTerm, prompt: Text("Search"))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let cases = searchTerm.isEmpty ? cases : cases.filter { $0.id.localizedStandardContains(searchTerm) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***ForEach(cases) { testCase in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(testCase.id) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.testCase = testCase
@@ -91,14 +97,6 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the form controls should be shown directly in the form's
-***REMOVED******REMOVED***/  presenting container.
-***REMOVED***var useControlsInForm: Bool {
-***REMOVED******REMOVED***verticalSizeClass == .compact ||
-***REMOVED******REMOVED***UIDevice.current.userInterfaceIdiom == .mac ||
-***REMOVED******REMOVED***UIDevice.current.userInterfaceIdiom == .pad
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test conditions for a Form View.
