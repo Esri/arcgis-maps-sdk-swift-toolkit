@@ -75,9 +75,6 @@ public struct FeatureFormView: View {
     /// The title of the feature form view.
     @State private var title = ""
     
-    /// The visibility of the form header.
-    var headerVisibility: Visibility = .automatic
-    
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
@@ -100,7 +97,7 @@ public struct FeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty && headerVisibility != .hidden {
+                    if !title.isEmpty {
                         FormHeader(title: title)
                         Divider()
                     }
