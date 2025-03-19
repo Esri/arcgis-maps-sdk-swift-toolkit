@@ -150,7 +150,11 @@ private struct FeatureEditorModifier<PanelContent>: ViewModifier where PanelCont
             HStack {
                 VStack {
                     if featureForm.wrappedValue != nil {
-                        FeatureEditorToolbar(featureForm: featureForm, geometryEditor: geometryEditor)
+                        FeatureEditorToolbar(
+                            featureForm: featureForm,
+                            geometryEditor: geometryEditor,
+                            isPresented: isPresented
+                        )
                             .frame(maxWidth: 300)
                             .esriBorder()
                             .padding(24)
@@ -189,6 +193,8 @@ struct FeatureEditorToolbar: View {
     
     let geometryEditor: GeometryEditor
     
+    let isPresented: Binding<Bool>
+    
     @State var hasEdits = false
     @State var geometryChanged: Bool = false
     
@@ -198,8 +204,24 @@ struct FeatureEditorToolbar: View {
 
     var body: some View {
         VStack(alignment: .center) {
-            Text("Feature Editor")
-                .font(.title3)
+            ZStack {
+                Text("Feature Editor")
+                    .font(.title3)
+                HStack {
+                    Spacer()
+                    Button("", systemImage: "xmark") {
+                        geometryEditor.stop()
+                        (featureForm.wrappedValue?.feature.table?.layer as? FeatureLayer)?.clearSelection()
+                        isPresented.wrappedValue = false
+                    }
+                    .labelStyle(.iconOnly)
+                    .symbolRenderingMode(.hierarchical)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.secondary)
+                    .symbolVariant(.circle.fill)
+                    .disabled(hasEdits || geometryChanged)
+                }
+            }
             Divider()
             Group {
                 if geometryChanged {
@@ -216,6 +238,7 @@ struct FeatureEditorToolbar: View {
                 Button("Discard", systemImage: "point.topleft.down.to.point.bottomright.curvepath") {
                     // Start Geometry Editing
                     //                editorType.wrappedValue = .geometry
+                    discard()
                 }
                 .labelStyle(.titleOnly)
                 .disabled(!hasEdits && !geometryChanged)
@@ -244,6 +267,7 @@ struct FeatureEditorToolbar: View {
                 Button("Save", systemImage: "list.bullet.rectangle.portrait") {
                     // Start Attribute Editing
                     //                editorType.wrappedValue = .attributes
+                    save()
                 }
                 .disabled(!hasEdits && !geometryChanged)
                 .labelStyle(.titleOnly)
@@ -258,8 +282,18 @@ struct FeatureEditorToolbar: View {
                 }
             }
             .task(id: ObjectIdentifier(geometryEditor)) {
-                for await _ in geometryEditor.$geometry.dropFirst() {
-                    self.geometryChanged = true
+                for await geometry in geometryEditor.$geometry.dropFirst() {
+                    let oldGeometry = featureForm.wrappedValue?.feature.geometry
+                    if let geometry, let oldGeometry {
+                        self.geometryChanged = !GeometryEngine.isGeometry(
+                            geometry,
+                            equivalentTo: oldGeometry
+                        )
+                    } else if oldGeometry == nil, let geometry {
+                        self.geometryChanged = false
+                    } else {
+                        self.geometryChanged = true
+                    }
                 }
             }
         }
@@ -282,6 +316,22 @@ struct FeatureEditorToolbar: View {
         //            .buttonBorderShape(.roundedRectangle)
         //            .font(.largeTitle)
         //        }
+    }
+    
+    func save() {
+        Task {
+            (featureForm.wrappedValue?.feature.table?.layer as? FeatureLayer)?.clearSelection()
+            featureForm.wrappedValue?.feature.geometry = geometryEditor.stop()
+            try? await featureForm.wrappedValue?.finishEditing()
+            isPresented.wrappedValue = false
+        }
+    }
+    
+    func discard() {
+        (featureForm.wrappedValue?.feature.table?.layer as? FeatureLayer)?.clearSelection()
+        featureForm.wrappedValue?.discardEdits()
+        geometryEditor.stop()
+        isPresented.wrappedValue = false
     }
 }
 
