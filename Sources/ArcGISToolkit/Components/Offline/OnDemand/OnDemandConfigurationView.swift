@@ -129,7 +129,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
+***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .all)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
