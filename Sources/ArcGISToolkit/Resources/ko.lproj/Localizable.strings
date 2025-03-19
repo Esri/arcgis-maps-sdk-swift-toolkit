@@ -1,9 +1,18 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld개 선택됨";
 
+/* A label indicating the number of results of a utility network trace. */
+"^[%lld Results](inflect: true)" = "한_^[%lld Results](inflect: true)_______________________________빠";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "%@의 콘텐츠에 접근하려면 인증서가 필요합니다.";
+
+/* A message explaining that a map area cannot be downloaded at this time. */
+"A map area cannot be downloaded at this time." = "한_A map area cannot be downloaded at this time________________________빠.";
+
+/* A label for a button to add a map area. */
+"Add Map Area" = "한_Add Map Area_____________빠";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "새 항목 추가";
@@ -12,13 +21,22 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "고급 옵션";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "모든 사이트";
+"All Sites" = "한_All Sites___________________빠";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "모든 추적 입력 및 결과가 손실됩니다.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "허용";
+
+/* An error message for when fetching map areas fails. */
+"An error occurred while fetching map areas." = "한_An error occurred while fetching map areas_______________________빠.";
+
+/* The title for a map area. */
+"Area %lld" = "한_Area %lld___________________빠";
+
+/* A hint for the user to enter an area name in the text field. */
+"Area Name" = "한_Area Name___________________빠";
 
 /* A label in reference to attachments. */
 "Attachments" = "첨부 파일";
@@ -38,6 +56,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "찾아보기";
 
+/* Building (Level of Detail) */
+"Building" = "한_Building_________________빠";
+
+/* Buildings (Level of Detail) */
+"Buildings" = "한_Buildings___________________빠";
+
 /* A label for a button to show the calibration view. */
 "Calibrate" = "보정";
 
@@ -48,11 +72,15 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "카메라 접근 권한이 비활성화됨";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Title for a button that cancels an action. */
 "Cancel" = "취소";
 
 /* A label for a button to cancel the starting point selection operation. */
 "Cancel Starting Point Selection" = "시작점 선택 취소";
+
+/* The status text when a map area download is cancelled. */
+"Cancelled" = "한_Cancelled___________________빠";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "인증서 필요";
@@ -66,7 +94,13 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "라이브러리에서 선택";
 
-/* The label of a button that clears a form's input. */
+/* Cities (Level of Detail) */
+"Cities" = "한_Cities_____________빠";
+
+/* City (Level of Detail) */
+"City" = "한_City_________빠";
+
+/* E.g. Remove text from a text field. */
 "Clear" = "지우기";
 
 /* A directive to clear all of the completed utility network traces. */
@@ -81,8 +115,29 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "나침반, 진행 방향 %lld도 %@";
 
+/* Continent (Level of Detail) */
+"Continent" = "한_Continent___________________빠";
+
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "계속";
+
+/* An error message explaining that map areas could not be retrieved for this map. */
+"Could not retrieve map areas for this map." = "한_Could not retrieve map areas for this map______________________빠.";
+
+/* Counties (Level of Detail) */
+"Counties" = "한_Counties_________________빠";
+
+/* Countries (Big) (Level of Detail) */
+"Countries (Big)" = "한_Countries (Big)________________빠";
+
+/* Countries (Small) (Level of Detail) */
+"Countries (Small)" = "한_Countries (Small)__________________빠";
+
+/* County (Level of Detail) */
+"County" = "한_County_____________빠";
+
+/* The status text for an opened map area. */
+"Currently open" = "한_Currently open_______________빠";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "위험: '%@'에서 제공된 인증서가 신뢰할 수 있는 기관에서 서명되지 않았습니다.";
@@ -102,8 +157,38 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "삭제";
 
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "한_Delete All Starting Points___________________________빠";
+
+/* The title of the dialogue confirming deletion of all points. */
+"Delete all starting points?" = "한_Delete all starting points____________________________빠?";
+
+/* A label for a button to delete a map area. */
+"Delete Map Area" = "한_Delete Map Area________________빠";
+
+/* A label for the description of the map area. */
+"Description" = "한_Description____________빠";
+
+/* E.g. Close/hide a sheet or pop-up. */
+"Dismiss" = "한_Dismiss_______________빠";
+
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "완료";
+
+/* A label for a button to download a map area. */
+"Download" = "한_Download_________________빠";
+
+/* The status text when a map area failed to download. */
+"Download failed" = "한_Download failed________________빠";
+
+/* A label for a button to download a map area. */
+"Download Map Area" = "한_Download Map Area__________________빠";
+
+/* The status text when a map area is downloaded. */
+"Downloaded" = "한_Downloaded_____________________빠";
+
+/* The status text when a map area is downloading. */
+"Downloading" = "한_Downloading____________빠";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -131,6 +216,9 @@ hold the minimum and maximum length respectively. */
 /* Text indicating the user should enter a field's exact number of characters. */
 "Enter ^[%lld characters](inflect: true)" = "^[%lld 자] 입력(변화: true)";
 
+/* An instruction to enter a name. */
+"Enter a name" = "한_Enter a name_____________빠";
+
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "값 입력";
 
@@ -140,6 +228,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "오류";
+
+/* A label indicating that an error occurred while fetching map areas. */
+"Error Fetching Map Areas" = "한_Error Fetching Map Areas_________________________빠";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -204,8 +295,26 @@ trace operation. */
 AR experience. */
 "heading" = "방향";
 
+/* House Property (Level of Detail) */
+"House Property" = "한_House Property_______________빠";
+
+/* Houses (Level of Detail) */
+"Houses" = "한_Houses_____________빠";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "최소값보다 작음";
+
+/* A label for the level of detail picker view. */
+"Level of Detail" = "한_Level of Detail________________빠";
+
+/* The status text when a map area is loading. */
+"Loading" = "한_Loading_______________빠";
+
+/* The status text when a map area failed to load. */
+"Loading failed" = "한_Loading failed_______________빠";
+
+/* A title for the offline map areas view. */
+"Map Areas" = "한_Map Areas___________________빠";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "최소 ^[%lld 자](변화: true)";
@@ -215,6 +324,9 @@ AR experience. */
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "미디어";
+
+/* Metropolitan Area (Level of Detail) */
+"Metropolitan Area" = "한_Metropolitan Area__________________빠";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "설정에서 마이크 접근 권한이 비활성화되었습니다.";
@@ -227,6 +339,9 @@ AR experience. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "이름";
+
+/* Neighborhood (Level of Detail) */
+"Neighborhood" = "한_Neighborhood_____________빠";
 
 /* A label in reference to a specific utility network. */
 "Network" = "네트워크";
@@ -242,6 +357,15 @@ AR experience. */
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "사용 가능한 구성이 없습니다.";
+
+/* An error message explaining that there is no internet connection. */
+"No Internet Connection" = "한_No Internet Connection_______________________빠";
+
+/* An error message explaining that there is no internet connection and only downloaded areas are shown. */
+"No internet connection. Showing downloaded areas only." = "한_No internet connection. Showing downloaded areas only____________________________빠.";
+
+/* A label indicating that there are no map areas. */
+"No Map Areas" = "한_No Map Areas_____________빠";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "일치하는 항목이 없습니다.";
@@ -267,8 +391,26 @@ AR experience. */
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Object ID: %@";
 
+/* A label indicating that the map is offline disabled. */
+"Offline Disabled" = "한_Offline Disabled_________________빠";
+
 /* A label for button to proceed with an operation. */
 "OK" = "확인";
+
+/* A message explaining that the online map failed to load. */
+"Online Map Failed to Load" = "한_Online Map Failed to Load__________________________빠";
+
+/* A label for a button to open a map area. */
+"Open" = "한_Open_________빠";
+
+/* The status text when a map area is packaging. */
+"Packaging" = "한_Packaging___________________빠";
+
+/* The status text when a map area packaging failed. */
+"Packaging failed" = "한_Packaging failed_________________빠";
+
+/* A label instructing to pan and zoom the map to define an area. */
+"Pan and zoom to define the area" = "한_Pan and zoom to define the area_________________빠";
 
 /* A label in reference to a credential password. */
 "Password" = "비밀번호";
@@ -294,8 +436,14 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "팝업 평가 실패: %@";
 
+/* The status text when a map area is ready to download. */
+"Ready to download" = "한_Ready to download__________________빠";
+
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "비디오만 녹화";
+
+/* A label for a button to refresh map area content. */
+"Refresh" = "한_Refresh_______________빠";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "이름 바꾸기";
@@ -314,6 +462,12 @@ current visible extent of the map or scene. */
 /* A label for a button to show utility network trace results. */
 "Results" = "결과";
 
+/* Room (Level of Detail) */
+"Room" = "한_Room_________빠";
+
+/* Rooms (Level of Detail) */
+"Rooms" = "한_Rooms___________빠";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "검색 쿼리";
 
@@ -323,6 +477,9 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "시설 선택";
+
+/* A title for the on demand configuration view. */
+"Select Area" = "한_Select Area____________빠";
 
 /* A label for button to select a utility network. */
 "Select Network" = "네트워크 선택";
@@ -336,6 +493,12 @@ or more levels in a floor-aware map or scene. */
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "사이트";
 
+/* A label for the file size of the map area. */
+"Size: %@" = "한_Size: %@_________________빠";
+
+/* Small Building (Level of Detail) */
+"Small Building" = "한_Small Building_______________빠";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "공간 기준 체계가 불일치합니다.";
@@ -343,6 +506,18 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "시작점";
+
+/* State/Province (Level of Detail) */
+"State/Province" = "한_State/Province_______________빠";
+
+/* States/Provinces (Level of Detail) */
+"States/Provinces" = "한_States/Provinces_________________빠";
+
+/* Street (Level of Detail) */
+"Street" = "한_Street_____________빠";
+
+/* Streets (Level of Detail) */
+"Streets" = "한_Streets_______________빠";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "사진 또는 비디오 촬영";
@@ -378,6 +553,12 @@ match the spatial reference of the map. */
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "맵에 공간 기준 체계가 없습니다.";
 
+/* A message indicating that the map is not offline enabled. */
+"The map is not enabled for offline use." = "한_The map is not enabled for offline use_____________________빠.";
+
+/* A message explaining that the map area name must be unique. */
+"The name for the map area must be unique." = "한_The name for the map area must be unique______________________빠.";
+
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "비밀번호가 잘못되었습니다.";
 
@@ -391,8 +572,17 @@ to be imported as an attachment. */
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL에 연결할 수 없거나 이미지 데이터가 없습니다.";
 
+/* A message explaining that there are no map areas for this map. */
+"There are no map areas for this map." = "한_There are no map areas for this map___________________빠.";
+
+/* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
+"There are no map areas for this map. Tap the button below to get started." = "한_There are no map areas for this map. Tap the button below to get started______________________________________빠.";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "오늘";
+
+/* Town (Level of Detail) */
+"Town" = "한_Town_________빠";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "추적";
@@ -406,11 +596,17 @@ to be imported as an attachment. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "다시 시도";
 
+/* The default title of a map area with an unknown title. */
+"Unknown" = "한_Unknown_______________빠";
+
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "알 수 없는 유효성 검사 오류";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "이름이 정의되지 않은 자산 유형";
+
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "한_Unsupported Value__________________빠";
 
 /* A label in reference to a credential username. */
 "Username" = "사용자 이름";
@@ -444,6 +640,18 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "값은 비워 둘 수 없음";
+
+/* E.g. Open a hyperlink. */
+"View" = "한_View_________빠";
+
+/* World (Level of Detail) */
+"World" = "한_World___________빠";
+
+/* World (Big) (Level of Detail) */
+"World (Big)" = "한_World (Big)____________빠";
+
+/* World (Small) (Level of Detail) */
+"World (Small)" = "한_World (Small)______________빠";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
