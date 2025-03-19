@@ -129,7 +129,7 @@ struct OnDemandConfigurationView: View {
             .safeAreaInset(edge: .bottom) {
                 bottomPane(mapView: mapViewProxy)
             }
-            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .ignoresSafeArea(.keyboard, edges: .all)
         }
     }
     
