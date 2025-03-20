@@ -27,6 +27,12 @@ public struct OfflineMapAreasView: View {
     @Binding private var selectedMap: Map?
     /// A Boolean value indicating whether an on-demand map area is being added.
     @State private var isAddingOnDemandArea = false
+    /// The visibility of the done button.
+    private var doneVisibility: Visibility = .automatic
+    /// A Boolean value indicating whether the view should dismiss.
+    private var shouldDismiss: Bool {
+        doneVisibility == .automatic || doneVisibility == .visible
+    }
     
     /// The portal item for the web map to be taken offline.
     private var portalItem: PortalItem {
@@ -66,6 +72,14 @@ public struct OfflineMapAreasView: View {
         _selectedMap = selection
     }
     
+    /// Specifies the visibility of the done button.
+    /// - Parameter visibility: The preferred visibility of the done button.
+    public func doneButton(_ visibility: Visibility) -> Self {
+        var copy = self
+        copy.doneVisibility = visibility
+        return copy
+    }
+    
     public var body: some View {
         NavigationStack {
             VStack {
@@ -95,10 +109,23 @@ public struct OfflineMapAreasView: View {
             .task {
                 await mapViewModel.loadModels()
             }
+            // Note: the sheet has to be here rather than off of the `onDemandMapAreasView`
+            // or else the state is lost when backgrounding and foregrounding the application.
+            .sheet(isPresented: $isAddingOnDemandArea) {
+                OnDemandConfigurationView(
+                    map: onlineMap.clone(),
+                    title: mapViewModel.nextOnDemandAreaTitle(),
+                    titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+                ) {
+                    mapViewModel.addOnDemandMapArea(with: $0)
+                }
+            }
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button.done {
-                        dismiss()
+                if shouldDismiss {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button.done {
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -120,7 +147,11 @@ public struct OfflineMapAreasView: View {
                 List {
                     Section {
                         ForEach(models) { preplannedMapModel in
-                            PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+                            PreplannedListItemView(
+                                model: preplannedMapModel,
+                                selectedMap: $selectedMap,
+                                shouldDismiss: shouldDismiss
+                            )
                         }
                     } footer: {
                         if mapViewModel.isShowingOnlyOfflineModels {
@@ -154,7 +185,11 @@ public struct OfflineMapAreasView: View {
             if !mapViewModel.onDemandMapModels.isEmpty {
                 List {
                     ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
-                        OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+                        OnDemandListItemView(
+                            model: onDemandMapModel,
+                            selectedMap: $selectedMap,
+                            shouldDismiss: shouldDismiss
+                        )
                     }
                     Section {
                         Button {
@@ -166,15 +201,6 @@ public struct OfflineMapAreasView: View {
                 }
             } else {
                 emptyOnDemandOfflineAreasView
-            }
-        }
-        .sheet(isPresented: $isAddingOnDemandArea) {
-            OnDemandConfigurationView(
-                map: onlineMap.clone(),
-                title: mapViewModel.nextOnDemandAreaTitle(),
-                titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
-            ) {
-                mapViewModel.addOnDemandMapArea(with: $0)
             }
         }
     }

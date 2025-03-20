@@ -37,6 +37,9 @@ struct PreplannedListItemView: View {
         selectedMap?.item?.title == model.preplannedMapArea.title
     }
     
+    /// A Boolean value indicating whether the view should dismiss.
+    let shouldDismiss: Bool
+    
     var body: some View {
         OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
             trailingButton
@@ -59,7 +62,7 @@ struct PreplannedListItemView: View {
                 selectedMap: $selectedMap,
                 map: model.map,
                 isSelected: isSelected,
-                dismiss: dismiss
+                dismiss: shouldDismiss ? dismiss : nil
             )
         }
     }
@@ -86,7 +89,8 @@ struct PreplannedListItemView: View {
             preplannedMapAreaID: .init("preview")!,
             onRemoveDownload: {}
         ),
-        selectedMap: .constant(nil)
+        selectedMap: .constant(nil),
+        shouldDismiss: true
     )
     .padding()
 }
