@@ -32,6 +32,9 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED***selectedMap?.item?.title == model.title
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the view should dismiss.
+***REMOVED***let shouldDismiss: Bool
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
 ***REMOVED******REMOVED******REMOVED***trailingButton
@@ -47,7 +50,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: model.map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSelected: isSelected,
-***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: dismiss
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: shouldDismiss ? dismiss : nil
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .initialized:
 ***REMOVED******REMOVED******REMOVED***EmptyView()

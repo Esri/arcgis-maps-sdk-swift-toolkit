@@ -113,35 +113,39 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var loadedView: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Pan and zoom to define the area",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label instructing to pan and zoom the map to define an area."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED***instructionsView
+***REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(selectedRect) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(selectedRect) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
+***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .all)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var instructionsView: some View {
+***REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Pan and zoom to define the area",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label instructing to pan and zoom the map to define an area."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -153,11 +157,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***#endif
 ***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED***.onLayerViewStateChanged { _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Sleep for a moment to give the map a chance to become fully ready
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to convert coordinates from screen to location.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(for: .milliseconds(250))
+***REMOVED******REMOVED******REMOVED***.onDrawStatusChanged { drawStatus in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard !mapIsReady else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if drawStatus == .completed && map.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

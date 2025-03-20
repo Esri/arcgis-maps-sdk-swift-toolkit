@@ -27,6 +27,12 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***@Binding private var selectedMap: Map?
 ***REMOVED******REMOVED***/ A Boolean value indicating whether an on-demand map area is being added.
 ***REMOVED***@State private var isAddingOnDemandArea = false
+***REMOVED******REMOVED***/ The visibility of the done button.
+***REMOVED***private var doneVisibility: Visibility = .automatic
+***REMOVED******REMOVED***/ A Boolean value indicating whether the view should dismiss.
+***REMOVED***private var shouldDismiss: Bool {
+***REMOVED******REMOVED***doneVisibility == .automatic || doneVisibility == .visible
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal item for the web map to be taken offline.
 ***REMOVED***private var portalItem: PortalItem {
@@ -66,6 +72,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***_selectedMap = selection
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Specifies the visibility of the done button.
+***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of the done button.
+***REMOVED***public func doneButton(_ visibility: Visibility) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.doneVisibility = visibility
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -95,10 +109,23 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.loadModels()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Note: the sheet has to be here rather than off of the `onDemandMapAreasView`
+***REMOVED******REMOVED******REMOVED******REMOVED*** or else the state is lost when backgrounding and foregrounding the application.
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
+***REMOVED******REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button.done {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED***if shouldDismiss {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button.done {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -120,7 +147,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldDismiss: shouldDismiss
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** footer: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.isShowingOnlyOfflineModels {
@@ -154,7 +185,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***if !mapViewModel.onDemandMapModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: onDemandMapModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldDismiss: shouldDismiss
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -166,15 +201,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyOnDemandOfflineAreasView
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $isAddingOnDemandArea) {
-***REMOVED******REMOVED******REMOVED***OnDemandConfigurationView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: onlineMap.clone(),
-***REMOVED******REMOVED******REMOVED******REMOVED***title: mapViewModel.nextOnDemandAreaTitle(),
-***REMOVED******REMOVED******REMOVED******REMOVED***titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.addOnDemandMapArea(with: $0)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
