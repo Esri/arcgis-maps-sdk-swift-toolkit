@@ -19,6 +19,9 @@
 struct FeatureFormTestView: View {
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
+***REMOVED******REMOVED***/ A message describing an error during test view setup.
+***REMOVED***@State private var alertError: String?
+***REMOVED***
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
 ***REMOVED***@State private var attributionBarHeight: CGFloat = 0
 ***REMOVED***
@@ -68,17 +71,32 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Error",
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError != nil
+***REMOVED******REMOVED******REMOVED*** set: { _ in ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***actions: { ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: { Text(alertError!) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***let featureLayer = map.operationalLayers.first as? FeatureLayer
-***REMOVED******REMOVED******REMOVED******REMOVED***let parameters = QueryParameters()
-***REMOVED******REMOVED******REMOVED******REMOVED***parameters.addObjectID(testCase.objectID)
-***REMOVED******REMOVED******REMOVED******REMOVED***let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await feature.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***featureLayer?.selectFeature(feature)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let featureLayer = map.operationalLayers.first as? FeatureLayer
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters.addObjectID(testCase.objectID)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let result = try await featureLayer?.featureTable?.queryFeatures(using: parameters)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError = "No match for feature \(testCase.objectID.formatted()) found."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await feature.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureLayer?.selectFeature(feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED***.floatingPanel(
