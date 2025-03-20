@@ -1364,6 +1364,13 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
         XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
     }
+    
+    func testCase_12_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts[""]
+        
+        openFeatureFormView(titleElement: formTitle)
+    }
 }
 
 private extension String {
