@@ -72,7 +72,7 @@ class OfflineMapViewModel: ObservableObject {
     
     /// A Boolean value indicating if there are any preplanned map areas.
     private var hasAnyPreplannedMapAreas: Bool {
-        return switch preplannedMapModels {
+        switch preplannedMapModels {
         case .success(let success):
             !success.isEmpty
         case .failure:
