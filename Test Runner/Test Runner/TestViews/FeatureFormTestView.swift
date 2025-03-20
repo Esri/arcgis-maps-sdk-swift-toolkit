@@ -19,6 +19,9 @@ import SwiftUI
 struct FeatureFormTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
+    /// A message describing an error during test view setup.
+    @State private var alertError: String?
+    
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
     
@@ -68,17 +71,32 @@ private extension FeatureFormTestView {
             .onAttributionBarHeightChanged {
                 attributionBarHeight = $0
             }
+            .alert(
+                "Error",
+                isPresented: Binding {
+                    alertError != nil
+                } set: { _ in },
+                actions: { },
+                message: { Text(alertError!) }
+            )
             .task {
-                try? await map.load()
-                let featureLayer = map.operationalLayers.first as? FeatureLayer
-                let parameters = QueryParameters()
-                parameters.addObjectID(testCase.objectID)
-                let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
-                guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
-                try? await feature.load()
-                featureLayer?.selectFeature(feature)
-                featureForm = FeatureForm(feature: feature)
-                isPresented = true
+                do {
+                    try await map.load()
+                    let featureLayer = map.operationalLayers.first as? FeatureLayer
+                    let parameters = QueryParameters()
+                    parameters.addObjectID(testCase.objectID)
+                    let result = try await featureLayer?.featureTable?.queryFeatures(using: parameters)
+                    guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else {
+                        alertError = "No match for feature \(testCase.objectID.formatted()) found."
+                        return
+                    }
+                    try await feature.load()
+                    featureLayer?.selectFeature(feature)
+                    featureForm = FeatureForm(feature: feature)
+                    isPresented = true
+                } catch {
+                    alertError = error.localizedDescription
+                }
             }
             .ignoresSafeArea(.keyboard)
             .floatingPanel(
