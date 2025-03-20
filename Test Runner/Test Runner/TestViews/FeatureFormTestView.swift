@@ -41,6 +41,16 @@ struct FeatureFormTestView: View {
         Group {
             if let map, let testCase {
                 makeMapView(map, testCase)
+                    .task {
+                        if let credentialInfo = testCase.credentialInfo,
+                           let credential = try? await TokenCredential.credential(
+                            for: credentialInfo.portal,
+                            username: credentialInfo.username,
+                            password: credentialInfo.password
+                           ) {
+                            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+                        }
+                    }
             } else {
                 testCaseSelector
             }
@@ -101,6 +111,16 @@ private extension FeatureFormTestView {
     
     /// Test conditions for a Form View.
     struct TestCase: Identifiable {
+        /// Storing credential info allows for lazily initialization of token credentials, as opposed to each
+        /// time the test cases are created.
+        struct CredentialInfo {
+            let portal: URL
+            let username: String
+            let password: String
+        }
+        
+        /// Optional ArcGIS credential info for the test data.
+        let credentialInfo: CredentialInfo?
         /// The name of the test case.
         let id: String
         /// The object ID of the feature being tested.
@@ -113,7 +133,9 @@ private extension FeatureFormTestView {
         ///   - name: The name of the test case.
         ///   - objectID: The object ID of the feature being tested.
         ///   - portalID: The portal ID of the test data.
-        init(_ name: String, objectID: Int, portalID: String) {
+        ///   - credentialInfo: Optional ArcGIS credential info for the test data.
+        init(_ name: String, objectID: Int, portalID: String, credentialInfo: CredentialInfo? = nil) {
+            self.credentialInfo = credentialInfo
             self.id = name
             self.objectID = objectID
             self.url = .init(
@@ -154,6 +176,7 @@ private extension FeatureFormTestView {
         .init("testCase_10_1", objectID: 1, portalID: .testCase10),
         .init("testCase_10_2", objectID: 1, portalID: .testCase10),
         .init("testCase_11_1", objectID: 2, portalID: .testCase11),
+        .init("testCase_12_1", objectID: 1, portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
     ]}
 }
 
@@ -163,6 +186,7 @@ private extension String {
     static let dateMapID = "ec09090060664cbda8d814e017337837"
     static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
     static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
+    static let napervilleElectricUtilityNetwork = "471eb0bf37074b1fbb972b1da70fb310"
     static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
     static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
     static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
@@ -170,4 +194,20 @@ private extension String {
     static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
     static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
     static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
+}
+
+private extension FeatureFormTestView.TestCase.CredentialInfo {
+    static var sampleServer7Viewer01: Self {
+        .init(
+            portal: .sampleServer7Portal,
+            username: "viewer01",
+            password: "I68VGU^nMurF"
+        )
+    }
+}
+
+private extension URL {
+    static var sampleServer7Portal: Self {
+        .init(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!
+    }
 }
