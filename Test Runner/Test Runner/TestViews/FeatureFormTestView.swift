@@ -41,6 +41,16 @@ struct FeatureFormTestView: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if let map, let testCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeMapView(map, testCase)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let credentialInfo = testCase.credentialInfo,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let credential = try? await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: credentialInfo.portal,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: credentialInfo.username,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: credentialInfo.password
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   ) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***testCaseSelector
 ***REMOVED******REMOVED***
@@ -101,6 +111,16 @@ private extension FeatureFormTestView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test conditions for a Form View.
 ***REMOVED***struct TestCase: Identifiable {
+***REMOVED******REMOVED******REMOVED***/ Storing credential info allows for lazily initialization of token credentials, as opposed to each
+***REMOVED******REMOVED******REMOVED***/ time the test cases are created.
+***REMOVED******REMOVED***struct CredentialInfo {
+***REMOVED******REMOVED******REMOVED***let portal: URL
+***REMOVED******REMOVED******REMOVED***let username: String
+***REMOVED******REMOVED******REMOVED***let password: String
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Optional ArcGIS credential info for the test data.
+***REMOVED******REMOVED***let credentialInfo: CredentialInfo?
 ***REMOVED******REMOVED******REMOVED***/ The name of the test case.
 ***REMOVED******REMOVED***let id: String
 ***REMOVED******REMOVED******REMOVED***/ The object ID of the feature being tested.
@@ -113,7 +133,9 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED***/   - name: The name of the test case.
 ***REMOVED******REMOVED******REMOVED***/   - objectID: The object ID of the feature being tested.
 ***REMOVED******REMOVED******REMOVED***/   - portalID: The portal ID of the test data.
-***REMOVED******REMOVED***init(_ name: String, objectID: Int, portalID: String) {
+***REMOVED******REMOVED******REMOVED***/   - credentialInfo: Optional ArcGIS credential info for the test data.
+***REMOVED******REMOVED***init(_ name: String, objectID: Int, portalID: String, credentialInfo: CredentialInfo? = nil) {
+***REMOVED******REMOVED******REMOVED***self.credentialInfo = credentialInfo
 ***REMOVED******REMOVED******REMOVED***self.id = name
 ***REMOVED******REMOVED******REMOVED***self.objectID = objectID
 ***REMOVED******REMOVED******REMOVED***self.url = .init(
@@ -154,6 +176,7 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_10_1", objectID: 1, portalID: .testCase10),
 ***REMOVED******REMOVED***.init("testCase_10_2", objectID: 1, portalID: .testCase10),
 ***REMOVED******REMOVED***.init("testCase_11_1", objectID: 2, portalID: .testCase11),
+***REMOVED******REMOVED***.init("testCase_12_1", objectID: 1, portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
 ***REMOVED***]***REMOVED***
 ***REMOVED***
 
@@ -163,6 +186,7 @@ private extension String {
 ***REMOVED***static let dateMapID = "ec09090060664cbda8d814e017337837"
 ***REMOVED***static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
 ***REMOVED***static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
+***REMOVED***static let napervilleElectricUtilityNetwork = "471eb0bf37074b1fbb972b1da70fb310"
 ***REMOVED***static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
 ***REMOVED***static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
 ***REMOVED***static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
@@ -170,4 +194,20 @@ private extension String {
 ***REMOVED***static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
 ***REMOVED***static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
 ***REMOVED***static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
+***REMOVED***
+
+private extension FeatureFormTestView.TestCase.CredentialInfo {
+***REMOVED***static var sampleServer7Viewer01: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***portal: .sampleServer7Portal,
+***REMOVED******REMOVED******REMOVED***username: "viewer01",
+***REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private extension URL {
+***REMOVED***static var sampleServer7Portal: Self {
+***REMOVED******REMOVED***.init(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!
+***REMOVED***
 ***REMOVED***
