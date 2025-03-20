@@ -72,7 +72,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if there are any preplanned map areas.
 ***REMOVED***private var hasAnyPreplannedMapAreas: Bool {
-***REMOVED******REMOVED***return switch preplannedMapModels {
+***REMOVED******REMOVED***switch preplannedMapModels {
 ***REMOVED******REMOVED***case .success(let success):
 ***REMOVED******REMOVED******REMOVED***!success.isEmpty
 ***REMOVED******REMOVED***case .failure:
