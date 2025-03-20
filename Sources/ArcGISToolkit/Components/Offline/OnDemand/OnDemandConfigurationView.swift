@@ -113,35 +113,39 @@ struct OnDemandConfigurationView: View {
     
     @ViewBuilder private var loadedView: some View {
         MapViewReader { mapViewProxy in
-            VStack {
-                VStack(spacing: 0) {
-                    Divider()
-                    Text(
-                        "Pan and zoom to define the area",
-                        bundle: .toolkitModule,
-                        comment: "A label instructing to pan and zoom the map to define an area."
-                    )
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .padding(8)
-                    .frame(maxWidth: .infinity)
-                    Divider()
-                    mapView
-                        .overlay {
-                            if mapIsReady {
-                                // Don't add the selector view until the map is ready.
-                                OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
-                            }
+            VStack(spacing: 0) {
+                instructionsView
+                mapView
+                    .overlay {
+                        if mapIsReady {
+                            // Don't add the selector view until the map is ready.
+                            OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
                         }
-                        .onChange(selectedRect) { _ in
-                            selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-                        }
-                }
+                    }
+                    .onChange(selectedRect) { _ in
+                        selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                    }
             }
             .safeAreaInset(edge: .bottom) {
                 bottomPane(mapView: mapViewProxy)
             }
-            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .ignoresSafeArea(.keyboard, edges: .all)
+        }
+    }
+    
+    @ViewBuilder private var instructionsView: some View {
+        VStack(spacing: 0) {
+            Divider()
+            Text(
+                "Pan and zoom to define the area",
+                bundle: .toolkitModule,
+                comment: "A label instructing to pan and zoom the map to define an area."
+            )
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .padding(8)
+            .frame(maxWidth: .infinity)
+            Divider()
         }
     }
     
@@ -153,11 +157,9 @@ struct OnDemandConfigurationView: View {
         #endif
             .attributionBarHidden(true)
             .interactionModes([.pan, .zoom])
-            .onLayerViewStateChanged { _, _ in
-                Task { @MainActor in
-                    // Sleep for a moment to give the map a chance to become fully ready
-                    // to convert coordinates from screen to location.
-                    try? await Task.sleep(for: .milliseconds(250))
+            .onDrawStatusChanged { drawStatus in
+                guard !mapIsReady else { return }
+                if drawStatus == .completed && map.loadStatus == .loaded {
                     mapIsReady = true
                 }
             }

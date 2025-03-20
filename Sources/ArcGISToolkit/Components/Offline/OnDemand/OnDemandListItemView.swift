@@ -32,6 +32,9 @@ struct OnDemandListItemView: View {
         selectedMap?.item?.title == model.title
     }
     
+    /// A Boolean value indicating whether the view should dismiss.
+    let shouldDismiss: Bool
+    
     var body: some View {
         OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
             trailingButton
@@ -47,7 +50,7 @@ struct OnDemandListItemView: View {
                 selectedMap: $selectedMap,
                 map: model.map,
                 isSelected: isSelected,
-                dismiss: dismiss
+                dismiss: shouldDismiss ? dismiss : nil
             )
         case .initialized:
             EmptyView()
