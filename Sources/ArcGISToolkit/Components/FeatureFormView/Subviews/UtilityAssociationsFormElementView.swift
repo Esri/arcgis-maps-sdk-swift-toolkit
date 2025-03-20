@@ -109,9 +109,10 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(listRowTitle)
-#warning("TODO: Description line is not showing.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.filter.description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !utilityAssociationsFilterResult.filter.description.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.filter.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
