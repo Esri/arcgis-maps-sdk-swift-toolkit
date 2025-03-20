@@ -109,9 +109,10 @@ private struct UtilityAssociationsFilterResultListRowView: View {
             HStack {
                 VStack {
                     Text(listRowTitle)
-#warning("TODO: Description line is not showing.")
-                    Text(utilityAssociationsFilterResult.filter.description)
-                        .font(.caption)
+                    if !utilityAssociationsFilterResult.filter.description.isEmpty {
+                        Text(utilityAssociationsFilterResult.filter.description)
+                            .font(.caption)
+                    }
                 }
                 .lineLimit(1)
                 Spacer()
