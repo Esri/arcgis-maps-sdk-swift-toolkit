@@ -1406,6 +1406,9 @@ final class FeatureFormViewTests: XCTestCase {
         featureTitle.tap()
         
         assertFormOpened(titleElement: formTitle)
+        
+        app.buttons["Container, 1"].exists
+        app.buttons["Connected, 7"].exists
     }
 }
 
