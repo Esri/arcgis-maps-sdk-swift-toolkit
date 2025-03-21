@@ -33,10 +33,10 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     @ObservedObject var model: Model
     
     /// A Boolean value indicating if the map is currently selected.
-    let isSelected: Bool
+    private let isSelected: Bool
     
     /// The content to display in the card.
-    let trailingContent: () -> TrailingContent
+    private let trailingContent: () -> TrailingContent
     
     /// A Boolean value indicating if the metadata view is presented.
     @State private var metadataViewIsPresented = false
