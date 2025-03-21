@@ -42,7 +42,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos.
+***REMOVED******REMOVED******REMOVED*** Retrieve the offline map infos.
 ***REMOVED******REMOVED***loadOfflineMapInfos()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Observe each job's status.
@@ -58,7 +58,9 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
-***REMOVED******REMOVED***/ - Parameter job: The job to start.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - job: The job to start.
+***REMOVED******REMOVED***/   - portalItem: The portal item whose map is being taken offline.
 ***REMOVED***func start(job: any JobProtocol, portalItem: PortalItem) {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Starting Job from offline manager")
 ***REMOVED******REMOVED***jobManager.jobs.append(job)

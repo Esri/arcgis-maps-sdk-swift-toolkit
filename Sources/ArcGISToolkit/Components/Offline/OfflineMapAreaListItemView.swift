@@ -18,7 +18,7 @@
 ***REMOVED***/ A view that shows information for an offline area for use in a List.
 @MainActor
 struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
-***REMOVED******REMOVED***/ Creates an `OfflineMapAreaItemView`.
+***REMOVED******REMOVED***/ Creates an `OfflineMapAreaListItemView`.
 ***REMOVED***init(
 ***REMOVED******REMOVED***model: Model,
 ***REMOVED******REMOVED***isSelected: Bool,
@@ -207,7 +207,7 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED***
 
 ***REMOVED***/ A button for downloading a map area.
-***REMOVED***/ This button is meant to be used in the `OfflineMapAreaItemView`.
+***REMOVED***/ This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model
@@ -227,7 +227,7 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED***
 
 ***REMOVED***/ A view for displaying the progress of an offline job.
-***REMOVED***/ This button is meant to be used in the `OfflineMapAreaItemView`.
+***REMOVED***/ This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model

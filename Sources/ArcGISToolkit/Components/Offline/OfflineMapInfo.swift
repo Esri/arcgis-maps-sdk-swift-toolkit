@@ -66,7 +66,6 @@ public extension OfflineMapInfo {
 ***REMOVED***var portalItemID: Item.ID { .init(info.portalItemID)! ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ Information for an online map that has been taken offline.
 private extension OfflineMapInfo {
 ***REMOVED******REMOVED***/ The codable info is stored in json.
 ***REMOVED***struct CodableInfo: Codable {

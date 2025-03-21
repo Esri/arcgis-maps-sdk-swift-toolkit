@@ -43,7 +43,8 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The mode that we are displaying models in.
 ***REMOVED***@Published private(set) var mode: Mode = .undetermined
 ***REMOVED***
-***REMOVED***@Published private(set) var isLoadingModels: Bool = false
+***REMOVED******REMOVED***/ A Boolean value indicating whether the models are loading.
+***REMOVED***@Published private(set) var isLoadingModels = false
 
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the web map is offline disabled.
 ***REMOVED***@Published private(set) var mapIsOfflineDisabled: Bool = false
@@ -60,7 +61,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether there are downloaded on demand map areas for the web map.
+***REMOVED******REMOVED***/ A Boolean value indicating whether there are downloaded on-demand map areas for the web map.
 ***REMOVED***private var hasDownloadedOnDemandMapAreas: Bool {
 ***REMOVED******REMOVED***!onDemandMapModels.filter(\.status.isDownloaded).isEmpty
 ***REMOVED***
@@ -133,6 +134,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Loads the preplanned map models.
 ***REMOVED***private func loadPreplannedMapModels() async {
 ***REMOVED******REMOVED***let models = await PreplannedMapModel.loadPreplannedMapModels(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
@@ -143,8 +145,8 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***isShowingOnlyOfflineModels = models.onlyOfflineModelsAreAvailable
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The function called when a downloaded on demand map area is removed.
-***REMOVED******REMOVED***/ - Parameter model: The on demand map model.
+***REMOVED******REMOVED***/ The function called when a downloaded on-demand map area is removed.
+***REMOVED******REMOVED***/ - Parameter model: The on-demand map model.
 ***REMOVED***func onRemoveDownloadOfOnDemandArea(for model: OnDemandMapModel) {
 ***REMOVED******REMOVED***onDemandMapModels.removeAll(where: { $0 === model ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Delete the saved map info if there are no more downloads for the
@@ -199,7 +201,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED******REMOVED***return title(forIndex: index)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns a Boolean value indicating if a proposed on demand map area title
+***REMOVED******REMOVED***/ Returns a Boolean value indicating if a proposed on-demand map area title
 ***REMOVED******REMOVED***/ is unique.
 ***REMOVED***func isProposeOnDemandAreaTitleUnique(_ proposedTitle: String) -> Bool {
 ***REMOVED******REMOVED***!onDemandMapModels.contains { $0.title == proposedTitle ***REMOVED***
