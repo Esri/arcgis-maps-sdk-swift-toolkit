@@ -26,7 +26,7 @@ struct OnDemandListItemView: View {
     @State private var metadataViewIsPresented = false
     
     /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss: DismissAction
+    @Environment(\.dismiss) private var dismiss
     
     var isSelected: Bool {
         selectedMap?.item?.title == model.title
