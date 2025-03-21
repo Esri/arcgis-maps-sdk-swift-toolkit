@@ -145,8 +145,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***
@@ -219,8 +218,7 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED***.disabled(!model.allowsDownload)
 ***REMOVED***
@@ -240,8 +238,7 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(progress)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.cancelGauge)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
