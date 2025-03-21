@@ -1,0 +1,89 @@
+@Tutorial(time: 20) {
+    @Intro(title: "OfflineMapAreasView Tutorial") {
+        The `OfflineMapAreasView` is a view that allows downloading map areas from a web map 
+        for offline use.
+        
+        @Image(source: OfflineMapAreasView, alt: "An image of the OfflineMapAreasView component")
+    }
+    
+    @Section(title: "Using the OfflineMapAreasView") {
+        @ContentAndMedia {
+            @Image(source: OfflineMapAreasView, alt: "An image of the OfflineMapAreasView component")
+        }
+        
+        @Steps {
+            @Step {
+                To begin, we initialize a map with a portal item for a web map that has
+                preplanned map areas and is offline enabled.
+                
+                We place a `MapView` nested within a `NavigationStack`.
+                @Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep1.swift)
+            }
+            
+            @Step {
+                Create a binding for the selected map area.
+                
+                Show the selected map area in the `MapView`.
+                @Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep2.swift)
+            }
+            
+            @Step {
+                Place a menu in the top bar with buttons to show the online map and the 
+                offline map areas.
+                
+                @Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep3.swift)
+            }
+            
+            @Step {
+                Show the `OfflineMapAreasView` in a sheet.
+
+                Available preplanned map areas are displayed and can be downloaded to device.
+                @Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep4.swift)
+            }
+            
+            @Step {
+                Map area download jobs are handled in the component using the `JobManager`. The job
+                manager allows download jobs to continue to run if the app is backgrounded or even 
+                terminated. The `OfflineMapAreasView` requires additional setup to use the job manager.
+                
+                Apply the view modifier `.offlineManager(preferredBackgroundStatusCheckSchedule:)` at the entry point of the application. Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)` to check the status of the download job in the background
+                every 30 seconds.
+                @Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep1.swift)
+            }
+            
+            @Step {
+                To add background download support some changes to the project settings 
+                are required. Enable "Background fetch" in the Background Modes project setting.
+                
+                @Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
+            }
+            
+            
+            @Step {
+                The job manager requires the following keys in the application's 
+                Information Property List. 
+                
+                Add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
+                to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes. 
+                @Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
+            }
+            
+            
+            @Step {
+                With background processing set up, we will work on sending a notification
+                for when map area downloads finish while the app is backgrounded.
+                
+                Add a task modifier to the `OfflineMapAreasView` and in the closure request
+                authorization to send the user notifications.
+                @Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep5.swift, previousFile: OfflineMapAreasViewStep4.swift)
+            }
+            
+            @Step {
+                Use the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)` to send a notification once a download job completes.
+                
+                Add a method to construct and send a notification.
+                @Code(name: "OfflineMapAreasTutorialApp.swift.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
+            }
+        }
+    }
+}
