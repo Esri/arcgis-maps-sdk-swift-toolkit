@@ -1367,9 +1367,15 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_12_1() {
         let app = XCUIApplication()
-        let formTitle = app.staticTexts[""]
+        let featureTitle = app.buttons["Object ID: 5050"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
         
-        openFeatureFormView(titleElement: formTitle)
+        openTestCase()
+        
+        XCTAssertTrue(featureTitle.waitForExistence(timeout: 10), "The feature title wasn't found.")
+        featureTitle.tap()
+        
+        assertFormOpened(titleElement: formTitle)
     }
 }
 
