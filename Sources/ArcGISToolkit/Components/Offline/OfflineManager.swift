@@ -42,7 +42,7 @@ public class OfflineManager: ObservableObject {
     private init() {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
-        // Retrieves the offline map infos.
+        // Retrieve the offline map infos.
         loadOfflineMapInfos()
         
         // Observe each job's status.
@@ -58,7 +58,9 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Starts a job that will be managed by this instance.
-    /// - Parameter job: The job to start.
+    /// - Parameters:
+    ///   - job: The job to start.
+    ///   - portalItem: The portal item whose map is being taken offline.
     func start(job: any JobProtocol, portalItem: PortalItem) {
         Logger.offlineManager.debug("Starting Job from offline manager")
         jobManager.jobs.append(job)
@@ -178,36 +180,37 @@ public class OfflineManager: ObservableObject {
     /// folder to its final destination.
     private func handlePendingMapInfo<Output>(
         for result: Result<Output, Error>,
-        portalItemID: Item.ID) {
-            guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }) else { return }
-            switch result {
-            case .success:
-                // Move the pending info into the correct folder.
-                let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
-                let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-                guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return }
-                for file in contents {
-                    let source = pendingURL.appending(path: file)
-                    let dest = portalItemDir.appending(path: file)
-                    // Don't overwrite if file already exists.
-                    guard !FileManager.default.fileExists(atPath: dest.path()) else { continue }
-                    Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
-                    do {
-                        try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
-                    } catch {
-                        Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
-                    }
-                    if let info = OfflineMapInfo.make(from: portalItemDir) {
-                        offlineMapInfos.append(info)
-                    }
+        portalItemID: Item.ID
+    ) {
+        guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }) else { return }
+        switch result {
+        case .success:
+            // Move the pending info into the correct folder.
+            let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
+            let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
+            guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return }
+            for file in contents {
+                let source = pendingURL.appending(path: file)
+                let dest = portalItemDir.appending(path: file)
+                // Don't overwrite if file already exists.
+                guard !FileManager.default.fileExists(atPath: dest.path()) else { continue }
+                Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
+                do {
+                    try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
+                } catch {
+                    Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
                 }
-            case .failure:
-                // If job failed then do nothing. Pending info can stay in the caches directory
-                // as it is likely going to be used when then user tries again.
-                // If not, the OS will eventually delete it.
-                break
+                if let info = OfflineMapInfo.make(from: portalItemDir) {
+                    offlineMapInfos.append(info)
+                }
             }
+        case .failure:
+            // If job failed then do nothing. Pending info can stay in the caches directory
+            // as it is likely going to be used when then user tries again.
+            // If not, the OS will eventually delete it.
+            break
         }
+    }
     
     /// Removes all downloads for all offline maps.
     public func removeAllDownloads() throws {

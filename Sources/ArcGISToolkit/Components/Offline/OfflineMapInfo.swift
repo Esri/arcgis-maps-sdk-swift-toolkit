@@ -66,7 +66,6 @@ public extension OfflineMapInfo {
     var portalItemID: Item.ID { .init(info.portalItemID)! }
 }
 
-/// Information for an online map that has been taken offline.
 private extension OfflineMapInfo {
     /// The codable info is stored in json.
     struct CodableInfo: Codable {
@@ -100,7 +99,7 @@ extension OfflineMapInfo {
         guard FileManager.default.fileExists(atPath: urls.info.path()) else { return nil }
         Logger.offlineManager.debug("Found offline map info at \(urls.info.path())")
         guard let data = try? Data(contentsOf: urls.info),
-              let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
+              let info = try? JSONDecoder().decode(CodableInfo.self, from: data)
         else { return nil }
         let thumbnail = UIImage(contentsOfFile: urls.thumbnail.path())
         return .init(info: info, thumbnail: thumbnail)
@@ -118,7 +117,7 @@ extension OfflineMapInfo {
         }
         
         // Save thumbnail to file.
-        if let thumbnail, let pngData = thumbnail.pngData() {
+        if let pngData = thumbnail?.pngData() {
             try? pngData.write(to: urls.thumbnail, options: .atomic)
         }
     }
