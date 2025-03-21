@@ -25,14 +25,17 @@ struct FeatureFormTestView: View {
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
 ***REMOVED***@State private var attributionBarHeight: CGFloat = 0
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***@State private var map: Map?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
-***REMOVED***@State private var isPresented = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The form being edited in the form view.
 ***REMOVED***@State private var featureForm: FeatureForm?
+***REMOVED***
+***REMOVED******REMOVED***/ The list of identify layer results.
+***REMOVED***@State private var identifyLayerResults = [IdentifyLayerResult]()
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the initial draw of the map view completed.
+***REMOVED***@State private var initialDrawCompleted = false
+***REMOVED***
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map: Map?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string for the test search bar.
 ***REMOVED***@State private var searchTerm: String = ""
@@ -40,78 +43,137 @@ struct FeatureFormTestView: View {
 ***REMOVED******REMOVED***/ The current test case.
 ***REMOVED***@State private var testCase: TestCase?
 ***REMOVED***
+***REMOVED******REMOVED***/ The test setup task to run once was the map has finished its initial draw.
+***REMOVED***@State private var testSetupTask: Task<Void, Never>?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if let map, let testCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeMapView(map, testCase)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let credentialInfo = testCase.credentialInfo,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let credential = try? await TokenCredential.credential(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: credentialInfo.portal,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: credentialInfo.username,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: credentialInfo.password
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   ) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let credentialInfo = testCase.credentialInfo {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await addCredential(credentialInfo)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***testCaseSelector
+***REMOVED******REMOVED******REMOVED******REMOVED***testCaseList
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.navigationBarBackButtonHidden(featureForm != nil)
 ***REMOVED***
 ***REMOVED***
 
 private extension FeatureFormTestView {
+***REMOVED******REMOVED***/ Adds a credential for the given credential info.
+***REMOVED***func addCredential(_ info: TestCase.CredentialInfo) async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***let credential = try await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED***for: info.portal,
+***REMOVED******REMOVED******REMOVED******REMOVED***username: info.username,
+***REMOVED******REMOVED******REMOVED******REMOVED***password: info.password
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Make the main test UI.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - map: The map under test.
 ***REMOVED******REMOVED***/   - testCase: The test definition.
 ***REMOVED***func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
-***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.alert(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Error",
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError != nil
-***REMOVED******REMOVED******REMOVED*** set: { _ in ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***actions: { ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***message: { Text(alertError!) ***REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let featureLayer = map.operationalLayers.first as? FeatureLayer
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let parameters = QueryParameters()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters.addObjectID(testCase.objectID)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let result = try await featureLayer?.featureTable?.queryFeatures(using: parameters)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError = "No match for feature \(testCase.objectID.formatted()) found."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***MapViewReader { mapView in
+***REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onDrawStatusChanged { drawStatus in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !initialDrawCompleted, drawStatus == .completed {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialDrawCompleted = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***testSetupTask = Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let point = testCase.point {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await mapView.setViewpoint(Viewpoint(center: point, scale: 1000))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let screenPoint = mapView.screenPoint(fromLocation: point) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyLayerResults = try await mapView.identifyLayers(screenPoint: screenPoint, tolerance: 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let objectID = testCase.objectID {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await selectObjectID(objectID, on: map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await feature.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureLayer?.selectFeature(feature)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
-***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Error",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError != nil
+***REMOVED******REMOVED******REMOVED******REMOVED*** set: { _ in ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions: { ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: { Text(alertError ?? "Unknown error") ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: Binding(get: { !identifyLayerResults.isEmpty ***REMOVED***, set: { _ in ***REMOVED***)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyLayerResultsList
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.full),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding(get: { featureForm != nil ***REMOVED***, set: { _ in ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: $featureForm)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func selectObjectID(_ objectID: Int, on map: Map) async {
+***REMOVED******REMOVED***guard let featureLayer = map.operationalLayers.first as? FeatureLayer else {
+***REMOVED******REMOVED******REMOVED***alertError = "Can't resolve layer"
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED***parameters.addObjectID(objectID)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***let result = try await featureLayer.featureTable?.queryFeatures(using: parameters)
+***REMOVED******REMOVED******REMOVED***guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else {
+***REMOVED******REMOVED******REMOVED******REMOVED***alertError = "No match for feature \(objectID.formatted()) found."
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try await feature.load()
+***REMOVED******REMOVED******REMOVED***featureLayer.selectFeature(feature)
+***REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The list of identify layer results.
+***REMOVED***var identifyLayerResultsList: some View {
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***Section("ArcGIS Features") {
+***REMOVED******REMOVED******REMOVED******REMOVED***let features = identifyLayerResults.flatMap { $0.geoElements.compactMap { $0 as? ArcGISFeature ***REMOVED*** ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(features.enumerated().map{ $0 ***REMOVED***, id: \.0) { _, feature in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(feature.displayName) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.identifyLayerResults.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
-***REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.full),
-***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: $featureForm)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(isPresented)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Test case selection UI.
-***REMOVED***var testCaseSelector: some View {
+***REMOVED***
+***REMOVED******REMOVED***/ The list of test cases.
+***REMOVED***var testCaseList: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextField("Search", text: $searchTerm, prompt: Text("Search"))
@@ -142,7 +204,9 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED***/ The name of the test case.
 ***REMOVED******REMOVED***let id: String
 ***REMOVED******REMOVED******REMOVED***/ The object ID of the feature being tested.
-***REMOVED******REMOVED***let objectID: Int
+***REMOVED******REMOVED***let objectID: Int?
+***REMOVED******REMOVED******REMOVED***/ The map location of the feature under test.
+***REMOVED******REMOVED***let point: Point?
 ***REMOVED******REMOVED******REMOVED***/ The test data location.
 ***REMOVED******REMOVED***let url: URL
 ***REMOVED******REMOVED***
@@ -151,11 +215,25 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED***/   - name: The name of the test case.
 ***REMOVED******REMOVED******REMOVED***/   - objectID: The object ID of the feature being tested.
 ***REMOVED******REMOVED******REMOVED***/   - portalID: The portal ID of the test data.
+***REMOVED******REMOVED***init(_ name: String, objectID: Int, portalID: String) {
+***REMOVED******REMOVED******REMOVED***self.init(credentialInfo: nil, id: name, objectID: objectID, point: nil, portalID: portalID)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Creates a FeatureFormView test case.
+***REMOVED******REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED******REMOVED***/   - name: The name of the test case.
+***REMOVED******REMOVED******REMOVED***/   - point: The map location of the feature under test.
+***REMOVED******REMOVED******REMOVED***/   - portalID: The portal ID of the test data.
 ***REMOVED******REMOVED******REMOVED***/   - credentialInfo: Optional ArcGIS credential info for the test data.
-***REMOVED******REMOVED***init(_ name: String, objectID: Int, portalID: String, credentialInfo: CredentialInfo? = nil) {
+***REMOVED******REMOVED***init(_ name: String, point: Point, portalID: String, credentialInfo: CredentialInfo) {
+***REMOVED******REMOVED******REMOVED***self.init(credentialInfo: credentialInfo, id: name, objectID: nil, point: point, portalID: portalID)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***private init(credentialInfo: CredentialInfo?, id: String, objectID: Int?, point: Point?, portalID: String) {
 ***REMOVED******REMOVED******REMOVED***self.credentialInfo = credentialInfo
-***REMOVED******REMOVED******REMOVED***self.id = name
+***REMOVED******REMOVED******REMOVED***self.id = id
 ***REMOVED******REMOVED******REMOVED***self.objectID = objectID
+***REMOVED******REMOVED******REMOVED***self.point = point
 ***REMOVED******REMOVED******REMOVED***self.url = .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: String("https:***REMOVED***arcgis.com/home/item.html?id=\(portalID)")
 ***REMOVED******REMOVED******REMOVED***)!
@@ -194,8 +272,27 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_10_1", objectID: 1, portalID: .testCase10),
 ***REMOVED******REMOVED***.init("testCase_10_2", objectID: 1, portalID: .testCase10),
 ***REMOVED******REMOVED***.init("testCase_11_1", objectID: 2, portalID: .testCase11),
-***REMOVED******REMOVED***.init("testCase_12_1", objectID: 1, portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+***REMOVED******REMOVED***.init("testCase_12_1", point: Point(x: -9815314.206573399, y: 5130328.983696212, spatialReference: .webMercator), portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
 ***REMOVED***]***REMOVED***
+***REMOVED***
+
+private extension ArcGISFeature {
+***REMOVED***var displayName: String {
+***REMOVED******REMOVED***if let objectID {
+***REMOVED******REMOVED******REMOVED***return "Object ID:  \(objectID.formatted(.number.grouping(.never)))"
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return "Object ID: N/A"
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var objectID: Int64? {
+***REMOVED******REMOVED***if let id = attributes["objectid"] as? Int64 {
+***REMOVED******REMOVED******REMOVED***return id
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***print(type(of: attributes["objectid"]!))
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 
 private extension String {
