@@ -117,7 +117,7 @@ extension OfflineMapInfo {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save thumbnail to file.
-***REMOVED******REMOVED***if let thumbnail, let pngData = thumbnail.pngData() {
+***REMOVED******REMOVED***if let pngData = thumbnail?.pngData() {
 ***REMOVED******REMOVED******REMOVED***try? pngData.write(to: urls.thumbnail, options: .atomic)
 ***REMOVED***
 ***REMOVED***
