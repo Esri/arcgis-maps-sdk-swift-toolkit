@@ -22,8 +22,8 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     init(
         model: Model,
         isSelected: Bool,
-        @ViewBuilder trailingContent: @escaping () -> TrailingContent)
-    {
+        @ViewBuilder trailingContent: @escaping () -> TrailingContent
+    ) {
         self.model = model
         self.isSelected = isSelected
         self.trailingContent = trailingContent
