@@ -1406,6 +1406,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***featureTitle.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.buttons["Container, 1"].exists
+***REMOVED******REMOVED***app.buttons["Connected, 7"].exists
 ***REMOVED***
 ***REMOVED***
 
