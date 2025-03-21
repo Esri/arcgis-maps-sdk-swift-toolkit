@@ -42,7 +42,7 @@ public class OfflineManager: ObservableObject {
     private init() {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
-        // Retrieves the offline map infos.
+        // Retrieve the offline map infos.
         loadOfflineMapInfos()
         
         // Observe each job's status.
@@ -58,7 +58,9 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Starts a job that will be managed by this instance.
-    /// - Parameter job: The job to start.
+    /// - Parameters:
+    ///   - job: The job to start.
+    ///   - portalItem: The portal item whose map is being taken offline.
     func start(job: any JobProtocol, portalItem: PortalItem) {
         Logger.offlineManager.debug("Starting Job from offline manager")
         jobManager.jobs.append(job)

@@ -43,7 +43,8 @@ class OfflineMapViewModel: ObservableObject {
     /// The mode that we are displaying models in.
     @Published private(set) var mode: Mode = .undetermined
     
-    @Published private(set) var isLoadingModels: Bool = false
+    /// A Boolean value indicating whether the models are loading.
+    @Published private(set) var isLoadingModels = false
 
     /// A Boolean value indicating whether the web map is offline disabled.
     @Published private(set) var mapIsOfflineDisabled: Bool = false
@@ -60,7 +61,7 @@ class OfflineMapViewModel: ObservableObject {
         }
     }
     
-    /// A Boolean value indicating whether there are downloaded on demand map areas for the web map.
+    /// A Boolean value indicating whether there are downloaded on-demand map areas for the web map.
     private var hasDownloadedOnDemandMapAreas: Bool {
         !onDemandMapModels.filter(\.status.isDownloaded).isEmpty
     }
@@ -133,6 +134,7 @@ class OfflineMapViewModel: ObservableObject {
         }
     }
     
+    /// Loads the preplanned map models.
     private func loadPreplannedMapModels() async {
         let models = await PreplannedMapModel.loadPreplannedMapModels(
             offlineMapTask: offlineMapTask,
@@ -143,8 +145,8 @@ class OfflineMapViewModel: ObservableObject {
         isShowingOnlyOfflineModels = models.onlyOfflineModelsAreAvailable
     }
     
-    /// The function called when a downloaded on demand map area is removed.
-    /// - Parameter model: The on demand map model.
+    /// The function called when a downloaded on-demand map area is removed.
+    /// - Parameter model: The on-demand map model.
     func onRemoveDownloadOfOnDemandArea(for model: OnDemandMapModel) {
         onDemandMapModels.removeAll(where: { $0 === model })
         // Delete the saved map info if there are no more downloads for the
@@ -199,7 +201,7 @@ class OfflineMapViewModel: ObservableObject {
         return title(forIndex: index)
     }
     
-    /// Returns a Boolean value indicating if a proposed on demand map area title
+    /// Returns a Boolean value indicating if a proposed on-demand map area title
     /// is unique.
     func isProposeOnDemandAreaTitleUnique(_ proposedTitle: String) -> Bool {
         !onDemandMapModels.contains { $0.title == proposedTitle }

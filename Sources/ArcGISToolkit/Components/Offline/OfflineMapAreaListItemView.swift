@@ -18,7 +18,7 @@ import ArcGIS
 /// A view that shows information for an offline area for use in a List.
 @MainActor
 struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
-    /// Creates an `OfflineMapAreaItemView`.
+    /// Creates an `OfflineMapAreaListItemView`.
     init(
         model: Model,
         isSelected: Bool,
@@ -207,7 +207,7 @@ struct OpenOfflineMapAreaButton: View {
 }
 
 /// A button for downloading a map area.
-/// This button is meant to be used in the `OfflineMapAreaItemView`.
+/// This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
     /// The view model for the item view.
     @ObservedObject var model: Model
@@ -227,7 +227,7 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 }
 
 /// A view for displaying the progress of an offline job.
-/// This button is meant to be used in the `OfflineMapAreaItemView`.
+/// This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
     /// The view model for the item view.
     @ObservedObject var model: Model
