@@ -18,7 +18,7 @@
 ***REMOVED***/ A view that can provides a configuration for taking an on-demand area offline.
 struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The online map.
-***REMOVED***let map: Map
+***REMOVED***@State private(set) var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the map area.
 ***REMOVED***@State private(set) var title: String
