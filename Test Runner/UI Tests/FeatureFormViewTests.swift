@@ -1395,13 +1395,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_12_1() {
-***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formTitle = app.staticTexts[""]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
-***REMOVED***
-***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
