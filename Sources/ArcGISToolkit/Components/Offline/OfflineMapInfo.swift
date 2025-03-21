@@ -99,7 +99,7 @@ extension OfflineMapInfo {
         guard FileManager.default.fileExists(atPath: urls.info.path()) else { return nil }
         Logger.offlineManager.debug("Found offline map info at \(urls.info.path())")
         guard let data = try? Data(contentsOf: urls.info),
-              let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
+              let info = try? JSONDecoder().decode(CodableInfo.self, from: data)
         else { return nil }
         let thumbnail = UIImage(contentsOfFile: urls.thumbnail.path())
         return .init(info: info, thumbnail: thumbnail)

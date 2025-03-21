@@ -38,7 +38,7 @@ class OfflineMapViewModel: ObservableObject {
     @Published private(set) var isShowingOnlyOfflineModels = false
     
     /// The on-demand map information.
-    @Published private(set) var onDemandMapModels = [OnDemandMapModel]()
+    @Published private(set) var onDemandMapModels: [OnDemandMapModel] = []
     
     /// The mode that we are displaying models in.
     @Published private(set) var mode: Mode = .undetermined
@@ -47,7 +47,7 @@ class OfflineMapViewModel: ObservableObject {
     @Published private(set) var isLoadingModels = false
 
     /// A Boolean value indicating whether the web map is offline disabled.
-    @Published private(set) var mapIsOfflineDisabled: Bool = false
+    @Published private(set) var mapIsOfflineDisabled = false
     
     /// The online map.
     private let onlineMap: Map
