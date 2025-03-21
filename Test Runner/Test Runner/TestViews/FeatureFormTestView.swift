@@ -279,7 +279,7 @@ private extension FeatureFormTestView {
 private extension ArcGISFeature {
 ***REMOVED***var displayName: String {
 ***REMOVED******REMOVED***if let objectID {
-***REMOVED******REMOVED******REMOVED***return "Object ID:  \(objectID.formatted(.number.grouping(.never)))"
+***REMOVED******REMOVED******REMOVED***return "Object ID: \(objectID.formatted(.number.grouping(.never)))"
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return "Object ID: N/A"
 ***REMOVED***
