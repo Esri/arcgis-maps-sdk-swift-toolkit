@@ -279,7 +279,7 @@ private extension FeatureFormTestView {
 private extension ArcGISFeature {
     var displayName: String {
         if let objectID {
-            return "Object ID:  \(objectID.formatted(.number.grouping(.never)))"
+            return "Object ID: \(objectID.formatted(.number.grouping(.never)))"
         } else {
             return "Object ID: N/A"
         }
