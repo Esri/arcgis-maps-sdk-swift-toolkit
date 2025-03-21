@@ -63,8 +63,7 @@ struct OnDemandListItemView: View {
             Image(systemName: "xmark.circle")
                 .imageScale(.large)
         }
-        // Have to apply a style or it won't be tappable
-        // because of the button the parent view.
+        // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
     }
 }

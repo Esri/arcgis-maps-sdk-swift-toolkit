@@ -145,8 +145,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
             Image(systemName: "arrow.down.circle")
                 .imageScale(.large)
         }
-        // Have to apply a style or it won't be tappable
-        // because of the button the parent view.
+        // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
     }
 }
@@ -219,8 +218,7 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
             Image(systemName: "arrow.down.circle")
                 .imageScale(.large)
         }
-        // Have to apply a style or it won't be tappable
-        // because of the button the parent view.
+        // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
         .disabled(!model.allowsDownload)
     }
@@ -240,8 +238,7 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
                 ProgressView(progress)
                     .progressViewStyle(.cancelGauge)
             }
-            // Have to apply a style or it won't be tappable
-            // because of the button the parent view.
+            // Have to apply a style or it won't be tappable.
             .buttonStyle(.plain)
         }
     }
