@@ -26,7 +26,7 @@ struct OnDemandListItemView: View {
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
-***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED***var isSelected: Bool {
 ***REMOVED******REMOVED***selectedMap?.item?.title == model.title
@@ -66,8 +66,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***

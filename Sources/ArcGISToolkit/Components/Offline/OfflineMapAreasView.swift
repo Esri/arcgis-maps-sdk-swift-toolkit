@@ -15,12 +15,13 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
+***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable
+***REMOVED***/ preplanned map areas or on-demand map areas from a given web map.
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: OfflineMapViewModel
 ***REMOVED******REMOVED***/ The action to dismiss the view.
-***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED******REMOVED***/ The web map to be taken offline.
 ***REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***/ The currently selected map.

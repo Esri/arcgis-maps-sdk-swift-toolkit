@@ -18,12 +18,12 @@
 ***REMOVED***/ A view that shows information for an offline area for use in a List.
 @MainActor
 struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
-***REMOVED******REMOVED***/ Creates an `OfflineMapAreaItemView`.
+***REMOVED******REMOVED***/ Creates an `OfflineMapAreaListItemView`.
 ***REMOVED***init(
 ***REMOVED******REMOVED***model: Model,
 ***REMOVED******REMOVED***isSelected: Bool,
-***REMOVED******REMOVED***@ViewBuilder trailingContent: @escaping () -> TrailingContent)
-***REMOVED***{
+***REMOVED******REMOVED***@ViewBuilder trailingContent: @escaping () -> TrailingContent
+***REMOVED***) {
 ***REMOVED******REMOVED***self.model = model
 ***REMOVED******REMOVED***self.isSelected = isSelected
 ***REMOVED******REMOVED***self.trailingContent = trailingContent
@@ -33,10 +33,10 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 ***REMOVED***@ObservedObject var model: Model
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the map is currently selected.
-***REMOVED***let isSelected: Bool
+***REMOVED***private let isSelected: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content to display in the card.
-***REMOVED***let trailingContent: () -> TrailingContent
+***REMOVED***private let trailingContent: () -> TrailingContent
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the metadata view is presented.
 ***REMOVED***@State private var metadataViewIsPresented = false
@@ -145,8 +145,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***
@@ -207,7 +206,7 @@ struct OpenOfflineMapAreaButton: View {
 ***REMOVED***
 
 ***REMOVED***/ A button for downloading a map area.
-***REMOVED***/ This button is meant to be used in the `OfflineMapAreaItemView`.
+***REMOVED***/ This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model
@@ -219,15 +218,14 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED***.disabled(!model.allowsDownload)
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A view for displaying the progress of an offline job.
-***REMOVED***/ This button is meant to be used in the `OfflineMapAreaItemView`.
+***REMOVED***/ This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED***/ The view model for the item view.
 ***REMOVED***@ObservedObject var model: Model
@@ -240,8 +238,7 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(progress)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.cancelGauge)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***

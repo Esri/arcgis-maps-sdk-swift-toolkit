@@ -42,7 +42,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos.
+***REMOVED******REMOVED******REMOVED*** Retrieve the offline map infos.
 ***REMOVED******REMOVED***loadOfflineMapInfos()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Observe each job's status.
@@ -58,7 +58,9 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
-***REMOVED******REMOVED***/ - Parameter job: The job to start.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - job: The job to start.
+***REMOVED******REMOVED***/   - portalItem: The portal item whose map is being taken offline.
 ***REMOVED***func start(job: any JobProtocol, portalItem: PortalItem) {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Starting Job from offline manager")
 ***REMOVED******REMOVED***jobManager.jobs.append(job)
@@ -178,35 +180,36 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ folder to its final destination.
 ***REMOVED***private func handlePendingMapInfo<Output>(
 ***REMOVED******REMOVED***for result: Result<Output, Error>,
-***REMOVED******REMOVED***portalItemID: Item.ID) {
-***REMOVED******REMOVED******REMOVED***guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***switch result {
-***REMOVED******REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Move the pending info into the correct folder.
-***REMOVED******REMOVED******REMOVED******REMOVED***let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
-***REMOVED******REMOVED******REMOVED******REMOVED***let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***for file in contents {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let source = pendingURL.appending(path: file)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let dest = portalItemDir.appending(path: file)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't overwrite if file already exists.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: dest.path()) else { continue ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
-***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let info = OfflineMapInfo.make(from: portalItemDir) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapInfos.append(info)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***portalItemID: Item.ID
+***REMOVED***) {
+***REMOVED******REMOVED***guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED***switch result {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Move the pending info into the correct folder.
+***REMOVED******REMOVED******REMOVED***let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
+***REMOVED******REMOVED******REMOVED***let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for file in contents {
+***REMOVED******REMOVED******REMOVED******REMOVED***let source = pendingURL.appending(path: file)
+***REMOVED******REMOVED******REMOVED******REMOVED***let dest = portalItemDir.appending(path: file)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't overwrite if file already exists.
+***REMOVED******REMOVED******REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: dest.path()) else { continue ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If job failed then do nothing. Pending info can stay in the caches directory
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** as it is likely going to be used when then user tries again.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If not, the OS will eventually delete it.
-***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED******REMOVED***if let info = OfflineMapInfo.make(from: portalItemDir) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapInfos.append(info)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED*** If job failed then do nothing. Pending info can stay in the caches directory
+***REMOVED******REMOVED******REMOVED******REMOVED*** as it is likely going to be used when then user tries again.
+***REMOVED******REMOVED******REMOVED******REMOVED*** If not, the OS will eventually delete it.
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes all downloads for all offline maps.
