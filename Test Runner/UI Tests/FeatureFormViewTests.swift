@@ -1367,9 +1367,15 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_12_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formTitle = app.staticTexts[""]
+***REMOVED******REMOVED***let featureTitle = app.buttons["Object ID: 5050"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Electric Distribution Device"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***openFeatureFormView(titleElement: formTitle)
+***REMOVED******REMOVED***openTestCase()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(featureTitle.waitForExistence(timeout: 10), "The feature title wasn't found.")
+***REMOVED******REMOVED***featureTitle.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED***
 ***REMOVED***
 
