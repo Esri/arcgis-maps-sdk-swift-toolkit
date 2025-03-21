@@ -157,7 +157,7 @@ class OfflineMapViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the on-demand map models.
-***REMOVED***func loadOnDemandMapModels() async {
+***REMOVED***private func loadOnDemandMapModels() async {
 ***REMOVED******REMOVED***onDemandMapModels = await OnDemandMapModel.loadOnDemandMapModels(
 ***REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***onRemoveDownload: onRemoveDownloadOfOnDemandArea(for:)
