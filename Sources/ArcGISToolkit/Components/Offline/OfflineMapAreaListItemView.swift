@@ -22,8 +22,8 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
 ***REMOVED***init(
 ***REMOVED******REMOVED***model: Model,
 ***REMOVED******REMOVED***isSelected: Bool,
-***REMOVED******REMOVED***@ViewBuilder trailingContent: @escaping () -> TrailingContent)
-***REMOVED***{
+***REMOVED******REMOVED***@ViewBuilder trailingContent: @escaping () -> TrailingContent
+***REMOVED***) {
 ***REMOVED******REMOVED***self.model = model
 ***REMOVED******REMOVED***self.isSelected = isSelected
 ***REMOVED******REMOVED***self.trailingContent = trailingContent
