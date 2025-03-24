@@ -17,7 +17,38 @@ import Combine
 import OSLog
 ***REMOVED***
 
-***REMOVED***/ An object that maintains state for the offline components.
+***REMOVED***/ A utility class that maintains states of offline map areas and their
+***REMOVED***/ file structures on the device.
+***REMOVED***/
+***REMOVED***/ This component is based on ``JobManager``
+***REMOVED***/ and provides high-level APIs to manage offline map areas and access
+***REMOVED***/ their data. A custom UI can be built using the APIs provided.
+***REMOVED***/
+***REMOVED***/ The offline manager is not instantiable, you must use the ``shared`` instance.
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ The component supports both ahead-of-time(preplanned) and on-demand
+***REMOVED***/ workflows for offline mapping. It allows you to:
+***REMOVED***/
+***REMOVED***/ - Observe job status.
+***REMOVED***/ - Manage offline map info so the offline map areas can be loaded while the
+***REMOVED***/ device is disconnected.
+***REMOVED***/ - Remove offline map areas from the device.
+***REMOVED***/ - Run the jobs while the app is in background.
+***REMOVED***/ - Get notified when the jobs complete.
+***REMOVED***/
+***REMOVED***/ > Note: The `OfflineManager` can be used independently of any UI components,
+***REMOVED***/ > making it suitable for automated workflows or custom implementations.
+***REMOVED***/
+***REMOVED***/ **Requirements**
+***REMOVED***/
+***REMOVED***/ To allow the offline manager to run jobs in the background, configure your
+***REMOVED***/ app as follows:
+***REMOVED***/
+***REMOVED***/ - Set the [BGTaskSchedulerPermittedIdentifiers](https:***REMOVED***developer.apple.com/documentation/bundleresources/information-property-list/bgtaskschedulerpermittedidentifiers) in the app’s **info.plist** with "com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck".
+***REMOVED***/ - In the project file's "Signing & Capabilities" tab, enable the
+***REMOVED***/ "Background Modes" capability and check "Background fetch".
 @MainActor
 public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared offline manager.
