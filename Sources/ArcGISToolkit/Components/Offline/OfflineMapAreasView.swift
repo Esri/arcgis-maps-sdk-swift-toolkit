@@ -17,6 +17,70 @@
 
 ***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable
 ***REMOVED***/ preplanned map areas or on-demand map areas from a given web map.
+***REMOVED***/
+***REMOVED***/ The component allows users to download, view, and manage offline maps
+***REMOVED***/ when network connectivity is poor or nonexistent.
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ The view supports both ahead-of-time(preplanned) and on-demand workflows
+***REMOVED***/ for offline mapping. For both workflows, the component:
+***REMOVED***/
+***REMOVED***/ - Opens a map area for viewing when selected.
+***REMOVED***/ - Shows download progress and status for map areas.
+***REMOVED***/ - Provides options to view details about downloaded map areas.
+***REMOVED***/ - Supports removing downloaded offline map areas files from the device.
+***REMOVED***/
+***REMOVED***/ For ahead-of-time(preplanned) workflows, the component:
+***REMOVED***/
+***REMOVED***/ - Displays a list of available preplanned map areas from a offline-enabled
+***REMOVED***/ web map that contains preplanned map areas when the network is connected.
+***REMOVED***/ - Displays a list of downloaded preplanned map areas on the device
+***REMOVED***/ when the network is disconnected.
+***REMOVED***/
+***REMOVED***/ For on-demand workflows, the component:
+***REMOVED***/
+***REMOVED***/ - Allows users to add on-demand map areas to the device for offline use.
+***REMOVED***/ - Displays a list of on-demand map areas available on the device that are
+***REMOVED***/ tied to a specific webmap.
+***REMOVED***/ - Opens an on-demand map area for viewing when selected.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The `OfflineMapAreasView` needs to be presented modally.
+***REMOVED***/
+***REMOVED***/ The view can be initialized with a web map or an offline map info.
+***REMOVED***/ Therefore, the component can be used either when the device is connected to
+***REMOVED***/ or disconnected from the network. In other words, the component can be used
+***REMOVED***/ in all 4 situations: (device) connected/preplanned, connected/on-demand,
+***REMOVED***/ disconnected/preplanned, disconnected/on-demand.
+***REMOVED***/
+***REMOVED***/ The view will automatically determine the mode based on the web map.
+***REMOVED***/ When the webmap contains preplanned map areas, the component will be in
+***REMOVED***/ preplanned mode. Otherwise, it will be in on-demand mode. Once the component
+***REMOVED***/ is in a mode, it will remain in that mode for the duration of the view's
+***REMOVED***/ lifecycle.
+***REMOVED***/
+***REMOVED***/ If the network connectivity changes while the view is presented, the view
+***REMOVED***/ will not automatically refresh the list of map areas. The user can
+***REMOVED***/ pull-to-refresh to reload the list of map areas. Depending on the network
+***REMOVED***/ connectivity, the view will display the appropriate content.
+***REMOVED***/
+***REMOVED***/ During the various stages of the load and download process, the view will
+***REMOVED***/ display loading indicator, progress view, and errors to indicate the status.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ OfflineMapAreasView has the following associated types:
+***REMOVED***/
+***REMOVED***/ - ``OfflineManager``
+***REMOVED***/ - ``OfflineMapInfo``
+***REMOVED***/
+***REMOVED***/ To learn more about the offline manager that downloads and manages offline
+***REMOVED***/ map areas without the integrated UI, see the the API doc for OfflineManager.
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [OfflineMapAreasExample](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/OfflineMapAreasExample) project.
+***REMOVED***/ To learn more about using the `OfflineMapAreasView` see the <doc:OfflineTutorial>.
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: OfflineMapViewModel
