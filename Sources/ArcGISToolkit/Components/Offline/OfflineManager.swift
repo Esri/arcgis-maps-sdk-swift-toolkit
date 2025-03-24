@@ -17,7 +17,38 @@ import Combine
 import OSLog
 import SwiftUI
 
-/// An object that maintains state for the offline components.
+/// A utility class that maintains states of offline map areas and their
+/// file structures on the device.
+///
+/// This component is based on ``JobManager``
+/// and provides high-level APIs to manage offline map areas and access
+/// their data. A custom UI can be built using the APIs provided.
+///
+/// The offline manager is not instantiable, you must use the ``shared`` instance.
+///
+/// **Features**
+///
+/// The component supports both ahead-of-time(preplanned) and on-demand
+/// workflows for offline mapping. It allows you to:
+///
+/// - Observe job status.
+/// - Manage offline map info so the offline map areas can be loaded while the
+/// device is disconnected.
+/// - Remove offline map areas from the device.
+/// - Run the jobs while the app is in background.
+/// - Get notified when the jobs complete.
+///
+/// > Note: The `OfflineManager` can be used independently of any UI components,
+/// > making it suitable for automated workflows or custom implementations.
+///
+/// **Requirements**
+///
+/// To allow the offline manager to run jobs in the background, configure your
+/// app as follows:
+///
+/// - Set the [BGTaskSchedulerPermittedIdentifiers](https://developer.apple.com/documentation/bundleresources/information-property-list/bgtaskschedulerpermittedidentifiers) in the app’s **info.plist** with "com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck".
+/// - In the project file's "Signing & Capabilities" tab, enable the
+/// "Background Modes" capability and check "Background fetch".
 @MainActor
 public class OfflineManager: ObservableObject {
     /// The shared offline manager.
