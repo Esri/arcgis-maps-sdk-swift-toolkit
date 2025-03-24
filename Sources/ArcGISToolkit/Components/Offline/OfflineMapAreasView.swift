@@ -17,6 +17,70 @@ import ArcGIS
 
 /// The `OfflineMapAreasView` component displays a list of downloadable
 /// preplanned map areas or on-demand map areas from a given web map.
+///
+/// The component allows users to download, view, and manage offline maps
+/// when network connectivity is poor or nonexistent.
+///
+/// **Features**
+///
+/// The view supports both ahead-of-time(preplanned) and on-demand workflows
+/// for offline mapping. For both workflows, the component:
+///
+/// - Opens a map area for viewing when selected.
+/// - Shows download progress and status for map areas.
+/// - Provides options to view details about downloaded map areas.
+/// - Supports removing downloaded offline map areas files from the device.
+///
+/// For ahead-of-time(preplanned) workflows, the component:
+///
+/// - Displays a list of available preplanned map areas from a offline-enabled
+/// web map that contains preplanned map areas when the network is connected.
+/// - Displays a list of downloaded preplanned map areas on the device
+/// when the network is disconnected.
+///
+/// For on-demand workflows, the component:
+///
+/// - Allows users to add on-demand map areas to the device for offline use.
+/// - Displays a list of on-demand map areas available on the device that are
+/// tied to a specific webmap.
+/// - Opens an on-demand map area for viewing when selected.
+///
+/// **Behavior**
+///
+/// The `OfflineMapAreasView` needs to be presented modally.
+///
+/// The view can be initialized with a web map or an offline map info.
+/// Therefore, the component can be used either when the device is connected to
+/// or disconnected from the network. In other words, the component can be used
+/// in all 4 situations: (device) connected/preplanned, connected/on-demand,
+/// disconnected/preplanned, disconnected/on-demand.
+///
+/// The view will automatically determine the mode based on the web map.
+/// When the webmap contains preplanned map areas, the component will be in
+/// preplanned mode. Otherwise, it will be in on-demand mode. Once the component
+/// is in a mode, it will remain in that mode for the duration of the view's
+/// lifecycle.
+///
+/// If the network connectivity changes while the view is presented, the view
+/// will not automatically refresh the list of map areas. The user can
+/// pull-to-refresh to reload the list of map areas. Depending on the network
+/// connectivity, the view will display the appropriate content.
+///
+/// During the various stages of the load and download process, the view will
+/// display loading indicator, progress view, and errors to indicate the status.
+///
+/// **Associated Types**
+///
+/// OfflineMapAreasView has the following associated types:
+///
+/// - ``OfflineManager``
+/// - ``OfflineMapInfo``
+///
+/// To learn more about the offline manager that downloads and manages offline
+/// map areas without the integrated UI, see the the API doc for OfflineManager.
+///
+/// To see it in action, try out the [OfflineMapAreasExample](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/OfflineMapAreasExample) project.
+/// To learn more about using the `OfflineMapAreasView` see the <doc:OfflineTutorial>.
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: OfflineMapViewModel
