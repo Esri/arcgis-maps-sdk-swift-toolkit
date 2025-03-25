@@ -24,8 +24,6 @@ import SwiftUI
 /// manage offline map areas and access their data. A custom UI can be built
 /// using the APIs provided.
 ///
-/// The offline manager is not instantiable, you must use the ``shared`` instance.
-///
 /// **Features**
 ///
 /// The component supports both ahead-of-time(preplanned) and on-demand
@@ -37,6 +35,27 @@ import SwiftUI
 /// - Remove offline map areas from the device.
 /// - Run the jobs while the app is in background or even terminated.
 /// - Get notified when the jobs complete.
+///
+/// **Behavior**
+///
+/// The offline manager is not instantiable, you must use the ``shared`` instance.
+/// You can also use the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
+/// modifier to set up the offline manager for the app. For example:
+///
+/// ```swift
+/// @main
+/// struct ExampleOfflineApp: App {
+///     var body: some SwiftUI.Scene {
+///         WindowGroup {
+///             ContentView()
+///         }
+///         // Setup the offline toolkit components for the app.
+///         .offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+///             // Do something after the job completes…
+///         }
+///     }
+/// }
+/// ```
 ///
 /// > Note: The `OfflineManager` can be used independently of any UI components,
 /// > making it suitable for automated workflows or custom implementations.
