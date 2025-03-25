@@ -74,7 +74,7 @@ public class OfflineManager: ObservableObject {
     /// The jobs managed by this instance.
     var jobs: [any JobProtocol] { jobManager.jobs }
     
-    /// The portal item information for webmaps that have downloaded map areas.
+    /// The portal item information for web maps that have downloaded map areas.
     @Published
     private(set) public var offlineMapInfos: [OfflineMapInfo] = []
     

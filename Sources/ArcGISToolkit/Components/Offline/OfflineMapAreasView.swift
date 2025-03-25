@@ -34,7 +34,7 @@ import ArcGIS
 /// For preplanned workflows, the view:
 ///
 /// - Displays a list of available preplanned map areas from a offline-enabled
-/// webmap that contains preplanned map areas when the network is connected.
+/// web map that contains preplanned map areas when the network is connected.
 /// - Displays a list of downloaded preplanned map areas on the device
 /// when the network is disconnected.
 ///
@@ -42,21 +42,21 @@ import ArcGIS
 ///
 /// - Allows users to add on-demand map areas to the device for offline use.
 /// - Displays a list of on-demand map areas available on the device that are
-/// tied to a specific webmap.
+/// tied to a specific web map.
 /// - Opens an on-demand map area for viewing when selected.
 ///
 /// **Behavior**
 ///
 /// The `OfflineMapAreasView` needs to be presented modally.
 ///
-/// The view can be initialized with a webmap or an offline map info.
+/// The view can be initialized with a web map or an offline map info.
 /// Therefore, the view can be used either when the device is connected to
 /// or disconnected from the network. In other words, the view can be used
 /// in all 4 situations: (device) connected/preplanned, connected/on-demand,
 /// disconnected/preplanned, disconnected/on-demand.
 ///
-/// The view will automatically determine the mode based on the webmap.
-/// When the webmap contains preplanned map areas, the view will be in
+/// The view will automatically determine the mode based on the web map.
+/// When the web map contains preplanned map areas, the view will be in
 /// preplanned mode. Otherwise, it will be in on-demand mode. Once the view
 /// is in a mode, it will remain in the same mode for the duration of the view's
 /// lifecycle.
