@@ -31,10 +31,10 @@ import ArcGIS
 /// - Provides options to view details about downloaded map areas.
 /// - Supports removing downloaded offline map areas files from the device.
 ///
-/// For ahead-of-time(preplanned) workflows, the view:
+/// For preplanned workflows, the view:
 ///
 /// - Displays a list of available preplanned map areas from a offline-enabled
-/// web map that contains preplanned map areas when the network is connected.
+/// webmap that contains preplanned map areas when the network is connected.
 /// - Displays a list of downloaded preplanned map areas on the device
 /// when the network is disconnected.
 ///
@@ -49,16 +49,16 @@ import ArcGIS
 ///
 /// The `OfflineMapAreasView` needs to be presented modally.
 ///
-/// The view can be initialized with a web map or an offline map info.
+/// The view can be initialized with a webmap or an offline map info.
 /// Therefore, the view can be used either when the device is connected to
 /// or disconnected from the network. In other words, the view can be used
 /// in all 4 situations: (device) connected/preplanned, connected/on-demand,
 /// disconnected/preplanned, disconnected/on-demand.
 ///
-/// The view will automatically determine the mode based on the web map.
+/// The view will automatically determine the mode based on the webmap.
 /// When the webmap contains preplanned map areas, the view will be in
 /// preplanned mode. Otherwise, it will be in on-demand mode. Once the view
-/// is in a mode, it will remain in that mode for the duration of the view's
+/// is in a mode, it will remain in the same mode for the duration of the view's
 /// lifecycle.
 ///
 /// If the network connectivity changes while the view is presented, the view
@@ -71,13 +71,13 @@ import ArcGIS
 ///
 /// **Associated Types**
 ///
-/// OfflineMapAreasView has the following associated types:
+/// `OfflineMapAreasView` has the following associated types:
 ///
 /// - ``OfflineManager``
 /// - ``OfflineMapInfo``
 ///
 /// To learn more about the offline manager that downloads and manages offline
-/// map areas without the integrated UI, see the the API doc for OfflineManager.
+/// map areas without the integrated UI, see the the API doc for `OfflineManager`.
 ///
 /// To learn more about using the `OfflineMapAreasView` see the <doc:OfflineMapAreasViewTutorial>.
 /// - Since: 200.7
