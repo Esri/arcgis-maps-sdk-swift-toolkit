@@ -1,8 +1,7 @@
 # Offline Map Areas
 
-![An image of the OfflineMapAreasView component](OfflineMapAreasView)
-
 The offline map areas toolkit components allow users to take web maps offline. 
+
 Users can download map areas created ahead-of-time(preplanned) by the 
 web map author, or they can create map areas on-demand by specifying an 
 area of interest and level of detail. Map areas are downloaded to the app's 
@@ -10,6 +9,8 @@ Documents directory and can be used when the device is disconnected from
 the network. Users can get information about a map area such as its size and 
 the geographic region it covers. They can also delete a downloaded map area to 
 free up storage space on the device.
+
+![An image of the OfflineMapAreasView component](OfflineMapAreasView)
 
 The toolkit provides the following components to work with offline map areas:
 
