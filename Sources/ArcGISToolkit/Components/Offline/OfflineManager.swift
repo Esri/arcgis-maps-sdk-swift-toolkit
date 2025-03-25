@@ -30,17 +30,16 @@ import SwiftUI
 /// workflows for offline mapping. It allows you to:
 ///
 /// - Observe job status.
-/// - Manage offline map info so the offline map areas can be loaded while the
-/// device is disconnected.
+/// - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 /// - Remove offline map areas from the device.
 /// - Run the jobs while the app is in background or even terminated.
-/// - Get notified when the jobs complete.
+/// - Get notified when the jobs complete via the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
 ///
 /// **Behavior**
 ///
 /// The offline manager is not instantiable, you must use the ``shared`` instance.
-/// You can also use the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
-/// modifier to set up the offline manager for the app. For example:
+/// You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)` modifier at the entry point of your 
+/// application to add additional setup required for the component to use the job manager. For example:
 ///
 /// ```swift
 /// @main
