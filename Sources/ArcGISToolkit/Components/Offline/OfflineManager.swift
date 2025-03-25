@@ -24,8 +24,6 @@ import OSLog
 ***REMOVED***/ manage offline map areas and access their data. A custom UI can be built
 ***REMOVED***/ using the APIs provided.
 ***REMOVED***/
-***REMOVED***/ The offline manager is not instantiable, you must use the ``shared`` instance.
-***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
 ***REMOVED***/ The component supports both ahead-of-time(preplanned) and on-demand
@@ -37,6 +35,27 @@ import OSLog
 ***REMOVED***/ - Remove offline map areas from the device.
 ***REMOVED***/ - Run the jobs while the app is in background or even terminated.
 ***REMOVED***/ - Get notified when the jobs complete.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The offline manager is not instantiable, you must use the ``shared`` instance.
+***REMOVED***/ You can also use the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
+***REMOVED***/ modifier to set up the offline manager for the app. For example:
+***REMOVED***/
+***REMOVED***/ ```swift
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ struct ExampleOfflineApp: App {
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/***REMOVED******REMOVED******REMOVED*** ContentView()
+***REMOVED***/ ***REMOVED***
+***REMOVED***/***REMOVED******REMOVED*** ***REMOVED*** Setup the offline toolkit components for the app.
+***REMOVED***/***REMOVED******REMOVED*** .offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+***REMOVED***/***REMOVED******REMOVED******REMOVED*** ***REMOVED*** Do something after the job completes…
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ```
 ***REMOVED***/
 ***REMOVED***/ > Note: The `OfflineManager` can be used independently of any UI components,
 ***REMOVED***/ > making it suitable for automated workflows or custom implementations.
