@@ -1,5 +1,7 @@
 # Offline Map Areas
 
+![An image of the OfflineMapAreasView component](OfflineMapAreasView)
+
 The offline map areas toolkit components allow users to take web maps offline. 
 Users can download map areas created ahead-of-time(preplanned) by the 
 web map author, or they can create map areas on-demand by specifying an 
