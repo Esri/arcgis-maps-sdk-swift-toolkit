@@ -1,8 +1,8 @@
 # Offline Map Areas
 
-The offline map areas toolkit components allow users to take webmaps offline. 
+The offline map areas toolkit components allow users to take web maps offline. 
 Users can download map areas created ahead-of-time(preplanned) by the 
-webmap author, or they can create map areas on-demand by specifying an 
+web map author, or they can create map areas on-demand by specifying an 
 area of interest and level of detail. Map areas are downloaded to the app's 
 Documents directory and can be used when the device is disconnected from 
 the network. Users can get information about a map area such as its size and 
@@ -12,7 +12,7 @@ free up storage space on the device.
 The toolkit provides the following components to work with offline map areas:
 
 - ``OfflineMapAreasView``: A view that allows users to download, view, and 
-manage offline map areas from webmaps. To see it in action, try out the [OfflineMapAreasExample](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/OfflineMapAreasExample) project.
+manage offline map areas from web maps. To see it in action, try out the [OfflineMapAreasExample](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/OfflineMapAreasExample) project.
 - ``OfflineManager``: A utility class that manages offline map areas. Developers
 can use the provided APIs to build their own UI to work with offline map areas.
 

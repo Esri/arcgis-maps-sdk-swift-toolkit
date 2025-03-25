@@ -74,7 +74,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ The jobs managed by this instance.
 ***REMOVED***var jobs: [any JobProtocol] { jobManager.jobs ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The portal item information for webmaps that have downloaded map areas.
+***REMOVED******REMOVED***/ The portal item information for web maps that have downloaded map areas.
 ***REMOVED***@Published
 ***REMOVED***private(set) public var offlineMapInfos: [OfflineMapInfo] = []
 ***REMOVED***

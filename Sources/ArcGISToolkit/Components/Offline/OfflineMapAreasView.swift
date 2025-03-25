@@ -34,7 +34,7 @@
 ***REMOVED***/ For preplanned workflows, the view:
 ***REMOVED***/
 ***REMOVED***/ - Displays a list of available preplanned map areas from a offline-enabled
-***REMOVED***/ webmap that contains preplanned map areas when the network is connected.
+***REMOVED***/ web map that contains preplanned map areas when the network is connected.
 ***REMOVED***/ - Displays a list of downloaded preplanned map areas on the device
 ***REMOVED***/ when the network is disconnected.
 ***REMOVED***/
@@ -42,21 +42,21 @@
 ***REMOVED***/
 ***REMOVED***/ - Allows users to add on-demand map areas to the device for offline use.
 ***REMOVED***/ - Displays a list of on-demand map areas available on the device that are
-***REMOVED***/ tied to a specific webmap.
+***REMOVED***/ tied to a specific web map.
 ***REMOVED***/ - Opens an on-demand map area for viewing when selected.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
 ***REMOVED***/ The `OfflineMapAreasView` needs to be presented modally.
 ***REMOVED***/
-***REMOVED***/ The view can be initialized with a webmap or an offline map info.
+***REMOVED***/ The view can be initialized with a web map or an offline map info.
 ***REMOVED***/ Therefore, the view can be used either when the device is connected to
 ***REMOVED***/ or disconnected from the network. In other words, the view can be used
 ***REMOVED***/ in all 4 situations: (device) connected/preplanned, connected/on-demand,
 ***REMOVED***/ disconnected/preplanned, disconnected/on-demand.
 ***REMOVED***/
-***REMOVED***/ The view will automatically determine the mode based on the webmap.
-***REMOVED***/ When the webmap contains preplanned map areas, the view will be in
+***REMOVED***/ The view will automatically determine the mode based on the web map.
+***REMOVED***/ When the web map contains preplanned map areas, the view will be in
 ***REMOVED***/ preplanned mode. Otherwise, it will be in on-demand mode. Once the view
 ***REMOVED***/ is in a mode, it will remain in the same mode for the duration of the view's
 ***REMOVED***/ lifecycle.
