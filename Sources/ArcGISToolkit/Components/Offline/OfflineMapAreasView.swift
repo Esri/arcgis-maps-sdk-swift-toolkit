@@ -80,7 +80,7 @@
 ***REMOVED***/ map areas without the integrated UI, see the the API doc for OfflineManager.
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [OfflineMapAreasExample](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/OfflineMapAreasExample) project.
-***REMOVED***/ To learn more about using the `OfflineMapAreasView` see the <doc:OfflineTutorial>.
+***REMOVED***/ To learn more about using the `OfflineMapAreasView` see the <doc:OfflineMapAreasViewTutorial>.
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: OfflineMapViewModel
