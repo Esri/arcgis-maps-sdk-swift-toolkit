@@ -18,6 +18,7 @@ import OSLog
 import UIKit.UIImage
 
 /// Information for an online map that has been taken offline.
+/// - Since: 200.7
 public struct OfflineMapInfo: Sendable {
     private let info: CodableInfo
     
