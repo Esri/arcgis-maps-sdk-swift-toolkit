@@ -29,6 +29,7 @@ provided by the ``OfflineManager`` component. To allow the offline manager to
 run jobs in the background, configure your app as follows:
 
 - Set the [BGTaskSchedulerPermittedIdentifiers](https:***REMOVED***developer.apple.com/documentation/bundleresources/information-property-list/bgtaskschedulerpermittedidentifiers) in the app’s **info.plist** with "com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck".
+- Set the [UIBackgroundModes](https:***REMOVED***developer.apple.com/documentation/bundleresources/information-property-list/uibackgroundmodes) in the app’s **info.plist** with "App downloads content from the network".
 - In the project file's "Signing & Capabilities" tab, enable the
 "Background Modes" capability and check "Background fetch".
 

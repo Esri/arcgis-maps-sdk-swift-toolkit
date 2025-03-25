@@ -30,17 +30,16 @@ import OSLog
 ***REMOVED***/ workflows for offline mapping. It allows you to:
 ***REMOVED***/
 ***REMOVED***/ - Observe job status.
-***REMOVED***/ - Manage offline map info so the offline map areas can be loaded while the
-***REMOVED***/ device is disconnected.
+***REMOVED***/ - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 ***REMOVED***/ - Remove offline map areas from the device.
 ***REMOVED***/ - Run the jobs while the app is in background or even terminated.
-***REMOVED***/ - Get notified when the jobs complete.
+***REMOVED***/ - Get notified when the jobs complete via the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
 ***REMOVED***/ The offline manager is not instantiable, you must use the ``shared`` instance.
-***REMOVED***/ You can also use the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
-***REMOVED***/ modifier to set up the offline manager for the app. For example:
+***REMOVED***/ You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)` modifier at the entry point of your 
+***REMOVED***/ application to add additional setup required for the component to use the job manager. For example:
 ***REMOVED***/
 ***REMOVED***/ ```swift
 ***REMOVED***/ ***REMOVED***
