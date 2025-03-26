@@ -15,7 +15,7 @@ struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED***/ The selected map.
 ***REMOVED***@State private var selectedOfflineMap: Map?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the offline map ares view should be presented.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the offline map areas view should be presented.
 ***REMOVED***@State private var isShowingOfflineMapAreasView = false
 ***REMOVED***
 ***REMOVED***var body: some View {
