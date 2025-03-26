@@ -38,8 +38,9 @@ import SwiftUI
 /// **Behavior**
 ///
 /// The offline manager is not instantiable, you must use the ``shared`` instance.
-/// You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)` modifier at the entry point of your 
-/// application to add additional setup required for the component to use the job manager. For example:
+/// You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)`
+/// modifier at the entry point of your application to add additional setup
+/// required for the component to use the job manager. For example:
 ///
 /// ```swift
 /// @main
