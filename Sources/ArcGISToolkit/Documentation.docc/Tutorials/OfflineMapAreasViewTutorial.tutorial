@@ -1,4 +1,4 @@
-@Tutorial(time: 20) {
+@Tutorial(time: 15) {
 ***REMOVED***@Intro(title: "OfflineMapAreasView Tutorial") {
 ***REMOVED******REMOVED***The `OfflineMapAreasView` is a view that allows downloading map areas from a web map 
 ***REMOVED******REMOVED***for offline use.
@@ -52,24 +52,8 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***To add background download support, some changes to the project settings 
-***REMOVED******REMOVED******REMOVED******REMOVED***are required. Enable "Background fetch" in the Background Modes project setting.
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***The job manager requires the following keys in the application's 
-***REMOVED******REMOVED******REMOVED******REMOVED***Information Property List. 
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
-***REMOVED******REMOVED******REMOVED******REMOVED***to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes. 
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***With background processing set up, we will work on sending a notification
-***REMOVED******REMOVED******REMOVED******REMOVED***for when map area downloads finish while the app is backgrounded.
+***REMOVED******REMOVED******REMOVED******REMOVED***Next we will work on sending a notification for when map area downloads finish while 
+***REMOVED******REMOVED******REMOVED******REMOVED***the app is backgrounded.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a task modifier to the `OfflineMapAreasView` and in the closure request
 ***REMOVED******REMOVED******REMOVED******REMOVED***authorization to send the user notifications.
@@ -81,6 +65,22 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a method to construct and send a notification.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step { 
+***REMOVED******REMOVED******REMOVED******REMOVED***Additonal setup in the project settings is required to enable background download support for the job manager.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Enable "Background fetch" in the Background Modes project setting.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***The job manager requires the following keys in the application's Information Property List 
+***REMOVED******REMOVED******REMOVED******REMOVED***to support background downloads.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
+***REMOVED******REMOVED******REMOVED******REMOVED***to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes. 
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
