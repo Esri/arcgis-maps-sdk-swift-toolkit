@@ -68,7 +68,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step { 
-***REMOVED******REMOVED******REMOVED******REMOVED***Additonal setup in the project settings is required to enable background download support for the job manager.
+***REMOVED******REMOVED******REMOVED******REMOVED***Additional setup in the project settings is required to enable background download support for the job manager.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Enable "Background fetch" in the Background Modes project setting.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
