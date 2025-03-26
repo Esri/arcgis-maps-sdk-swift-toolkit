@@ -1,4 +1,4 @@
-@Tutorial(time: 20) {
+@Tutorial(time: 15) {
     @Intro(title: "OfflineMapAreasView Tutorial") {
         The `OfflineMapAreasView` is a view that allows downloading map areas from a web map 
         for offline use.
@@ -52,24 +52,8 @@
             }
             
             @Step {
-                To add background download support, some changes to the project settings 
-                are required. Enable "Background fetch" in the Background Modes project setting.
-                
-                @Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
-            }
-            
-            @Step {
-                The job manager requires the following keys in the application's 
-                Information Property List. 
-                
-                Add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
-                to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes. 
-                @Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
-            }
-            
-            @Step {
-                With background processing set up, we will work on sending a notification
-                for when map area downloads finish while the app is backgrounded.
+                Next we will work on sending a notification for when map area downloads finish while 
+                the app is backgrounded.
                 
                 Add a task modifier to the `OfflineMapAreasView` and in the closure request
                 authorization to send the user notifications.
@@ -81,6 +65,22 @@
                 
                 Add a method to construct and send a notification.
                 @Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
+            }
+            
+            @Step { 
+                Additonal setup in the project settings is required to enable background download support for the job manager.
+                
+                Enable "Background fetch" in the Background Modes project setting.
+                @Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
+            }
+            
+            @Step {
+                The job manager requires the following keys in the application's Information Property List 
+                to support background downloads.
+                
+                Add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
+                to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes. 
+                @Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
             }
         }
     }
