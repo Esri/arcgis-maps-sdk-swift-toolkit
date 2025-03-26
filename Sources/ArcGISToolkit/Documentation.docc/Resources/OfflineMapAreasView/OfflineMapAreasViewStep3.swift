@@ -15,7 +15,7 @@ struct OfflineMapAreasExampleView: View {
     /// The selected map.
     @State private var selectedOfflineMap: Map?
     
-    /// A Boolean value indicating whether the offline map ares view should be presented.
+    /// A Boolean value indicating whether the offline map areas view should be presented.
     @State private var isShowingOfflineMapAreasView = false
     
     var body: some View {
