@@ -38,8 +38,9 @@ import OSLog
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
 ***REMOVED***/ The offline manager is not instantiable, you must use the ``shared`` instance.
-***REMOVED***/ You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)` modifier at the entry point of your 
-***REMOVED***/ application to add additional setup required for the component to use the job manager. For example:
+***REMOVED***/ You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)`
+***REMOVED***/ modifier at the entry point of your application to add additional setup
+***REMOVED***/ required for the component to use the job manager. For example:
 ***REMOVED***/
 ***REMOVED***/ ```swift
 ***REMOVED***/ ***REMOVED***
