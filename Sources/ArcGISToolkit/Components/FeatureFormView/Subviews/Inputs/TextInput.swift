@@ -59,19 +59,6 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onChange(isFocused) { isFocused in
-                if isFocused {
-                    model.focusedElement = element
-                } else if model.focusedElement == element {
-                    model.focusedElement = nil
-                }
-            }
-            .onChange(model.focusedElement) { focusedElement in
-                // Another form input took focus
-                if focusedElement != element {
-                    isFocused  = false
-                }
-            }
             .onChange(text) { text in
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
@@ -79,7 +66,6 @@ struct TextInput: View {
             .onTapGesture {
                 if element.isMultiline {
                     fullScreenTextInputIsPresented = true
-                    model.focusedElement = element
                 }
             }
 #if !os(visionOS)
@@ -120,15 +106,24 @@ private extension TextInput {
                         axis: .horizontal
                     )
                     .accessibilityIdentifier("\(element.label) Text Input")
+                    .focused($isFocused)
                     .keyboardType(keyboardType)
 #if os(visionOS)
                     // No need for hover effect since it will be applied
                     // properly at 'formInputStyle'.
                     .hoverEffectDisabled()
 #endif
+                    .onChange(isFocused) { isFocused in
+                        model.focusedElement = isFocused ? element : nil
+                    }
+                    .onChange(model.focusedElement) { focusedElement in
+                        // Another form input took focus
+                        if focusedElement != element {
+                            isFocused  = false
+                        }
+                    }
                 }
             }
-            .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
@@ -221,7 +216,7 @@ private extension TextInput {
         @Environment(\.dismiss) private var dismiss
         
         /// A Boolean value indicating whether the text field is focused.
-        @FocusState private var textFieldIsFocused: Bool
+        @FocusState private var isFocused: Bool
         
         /// The element the input belongs to.
         let element: FieldFormElement
@@ -246,9 +241,12 @@ private extension TextInput {
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }
-            .focused($textFieldIsFocused, equals: true)
+            .focused($isFocused)
             .onAppear {
-                textFieldIsFocused = true
+                isFocused = true
+            }
+            .onChange(isFocused) { isFocused in
+                model.focusedElement = isFocused ? element : nil
             }
             Spacer()
             InputFooter(element: element)
