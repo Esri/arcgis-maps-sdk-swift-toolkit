@@ -3,7 +3,6 @@ import ArcGISToolkit
 import SwiftUI
 import UserNotifications
 
-@MainActor
 struct OfflineMapAreasExampleView: View {
     /// The map of the Naperville water network.
     @State private var onlineMap = Map(
