@@ -33,12 +33,12 @@ import OSLog
 ***REMOVED***/ - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 ***REMOVED***/ - Remove offline map areas from the device.
 ***REMOVED***/ - Run the jobs while the app is in background or even terminated.
-***REMOVED***/ - Get notified when the jobs complete via the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
+***REMOVED***/ - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
 ***REMOVED***/ The offline manager is not instantiable, you must use the ``shared`` instance.
-***REMOVED***/ You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)`
+***REMOVED***/ Set the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
 ***REMOVED***/ modifier at the entry point of your application to add additional setup
 ***REMOVED***/ required for the component to use the job manager. For example:
 ***REMOVED***/
