@@ -52,12 +52,11 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***To add background download support some changes to the project settings 
+***REMOVED******REMOVED******REMOVED******REMOVED***To add background download support, some changes to the project settings 
 ***REMOVED******REMOVED******REMOVED******REMOVED***are required. Enable "Background fetch" in the Background Modes project setting.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***The job manager requires the following keys in the application's 
@@ -67,7 +66,6 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes. 
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***With background processing set up, we will work on sending a notification
@@ -82,7 +80,7 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***Use the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)` to send a notification once a download job completes.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a method to construct and send a notification.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasTutorialApp.swift.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
