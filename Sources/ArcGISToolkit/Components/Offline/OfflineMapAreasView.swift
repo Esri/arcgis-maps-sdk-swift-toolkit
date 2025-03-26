@@ -47,7 +47,10 @@ import ArcGIS
 ///
 /// **Behavior**
 ///
-/// The `OfflineMapAreasView` needs to be presented modally.
+/// The `OfflineMapAreasView` needs to be presented modally. When the view is
+/// embedded in a navigation stack, you can use the ``doneButton(_:)`` modifier
+/// to set the visibility of the done button. The default visibility is `.automatic`.
+/// The done button dismisses the view.
 ///
 /// The view can be initialized with a web map or an offline map info.
 /// Therefore, the view can be used either when the device is connected to

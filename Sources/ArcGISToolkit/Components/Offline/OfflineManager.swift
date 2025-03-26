@@ -33,12 +33,12 @@ import SwiftUI
 /// - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 /// - Remove offline map areas from the device.
 /// - Run the jobs while the app is in background or even terminated.
-/// - Get notified when the jobs complete via the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
+/// - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
 ///
 /// **Behavior**
 ///
 /// The offline manager is not instantiable, you must use the ``shared`` instance.
-/// You must set the `offlineManager(preferredBackgroundStatusCheckSchedule:)`
+/// Set the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
 /// modifier at the entry point of your application to add additional setup
 /// required for the component to use the job manager. For example:
 ///
