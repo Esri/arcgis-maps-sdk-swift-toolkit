@@ -33,7 +33,7 @@
 ***REMOVED***/
 ***REMOVED***/ For preplanned workflows, the view:
 ***REMOVED***/
-***REMOVED***/ - Displays a list of available preplanned map areas from a offline-enabled
+***REMOVED***/ - Displays a list of available preplanned map areas from an offline-enabled
 ***REMOVED***/ web map that contains preplanned map areas when the network is connected.
 ***REMOVED***/ - Displays a list of downloaded preplanned map areas on the device
 ***REMOVED***/ when the network is disconnected.
