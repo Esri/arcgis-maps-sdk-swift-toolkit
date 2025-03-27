@@ -56,11 +56,12 @@
 ***REMOVED***/ in all 4 situations: (device) connected/preplanned, connected/on-demand,
 ***REMOVED***/ disconnected/preplanned, disconnected/on-demand.
 ***REMOVED***/
-***REMOVED***/ The view will automatically determine the mode based on the web map.
-***REMOVED***/ When the web map contains preplanned map areas, the view will be in
-***REMOVED***/ preplanned mode. Otherwise, it will be in on-demand mode. Once the view
-***REMOVED***/ is in a mode, it will remain in the same mode for the duration of the view's
-***REMOVED***/ lifecycle.
+***REMOVED***/ When the network connection is available, the component will display a list
+***REMOVED***/ of preplanned map areas configured for the web map. If the web map doesn't
+***REMOVED***/ contain any preplanned map areas, users can create a map area on-demand by
+***REMOVED***/ specifying a geographic area and level of detail. When a network connection
+***REMOVED***/ is unavailable, the component will only display map areas that have already
+***REMOVED***/ been downloaded to the device.
 ***REMOVED***/
 ***REMOVED***/ If the network connectivity changes while the view is presented, the view
 ***REMOVED***/ will not automatically refresh the list of map areas. The user can
