@@ -436,7 +436,7 @@ private extension Symbol {
 }
 
 extension UIImage {
-    static var mapPin: UIImage {
-        return UIImage(named: "MapPin", in: .toolkitModule, with: nil)!
+    static var mapPin: UIImage? {
+        UIImage(named: "MapPin", in: .toolkitModule, with: nil)
     }
 }
