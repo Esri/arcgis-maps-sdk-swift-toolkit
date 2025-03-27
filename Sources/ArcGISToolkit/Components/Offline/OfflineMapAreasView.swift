@@ -47,7 +47,7 @@
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
-***REMOVED***/ The `OfflineMapAreasView` needs to be presented modally. When the view is
+***REMOVED***/ Depending on whether the `OfflineMapAreasView` is presented modally or
 ***REMOVED***/ embedded in a navigation stack, you can use the ``doneButton(_:)`` modifier
 ***REMOVED***/ to set the visibility of the done button. The default visibility is `.automatic`.
 ***REMOVED***/ The done button dismisses the view.
