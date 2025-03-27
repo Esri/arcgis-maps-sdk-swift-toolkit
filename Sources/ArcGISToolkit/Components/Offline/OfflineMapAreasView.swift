@@ -47,7 +47,7 @@ import ArcGIS
 ///
 /// **Behavior**
 ///
-/// The `OfflineMapAreasView` needs to be presented modally. When the view is
+/// Depending on whether the `OfflineMapAreasView` is presented modally or
 /// embedded in a navigation stack, you can use the ``doneButton(_:)`` modifier
 /// to set the visibility of the done button. The default visibility is `.automatic`.
 /// The done button dismisses the view.
