@@ -2,17 +2,17 @@
 "%lld selected" = "%lld επιλεγμένο";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "Đ_^[%lld Results](inflect: true)_______________________________ớ";
+"^[%lld Results](inflect: true)" = "^[%lld Αποτελέσματα](διακύμανση: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Απαιτείται πιστοποιητικό για την πρόσβαση σε περιεχόμενο στο %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "Đ_A map area cannot be downloaded at this time________________________ớ.";
+"A map area cannot be downloaded at this time." = "Δεν είναι δυνατή η λήψη περιοχής χάρτη αυτή τη στιγμή.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "Đ_Add Map Area_____________ớ";
+"Add Map Area" = "Προσθήκη περιοχής χάρτη";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Προσθήκη νέου";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Επιλογές για προχωρημένους";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "Đ_All Sites___________________ớ";
+"All Sites" = "Όλα τα sites";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Όλες οι εισαγωγές ιχνών και αποτελεσμάτων θα χαθούν.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Να επιτραπεί.";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "Đ_An error occurred while fetching map areas_______________________ớ.";
+"An error occurred while fetching map areas." = "Παρουσιάστηκε σφάλμα κατά την ανάκτηση περιοχών χάρτη.";
 
 /* The title for a map area. */
-"Area %lld" = "Đ_Area %lld___________________ớ";
+"Area %lld" = "Περιοχή %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "Đ_Area Name___________________ớ";
+"Area Name" = "Όνομα περιοχής";
 
 /* A label in reference to attachments. */
 "Attachments" = "Συνημμένα";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Περιήγηση για αναζήτηση";
 
 /* Building (Level of Detail) */
-"Building" = "Đ_Building_________________ớ";
+"Building" = "Κτήριο";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "Đ_Buildings___________________ớ";
+"Buildings" = "Κτήρια";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Βαθμονόμηση";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Ακύρωση επιλογής σημείου έναρξης";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "Đ_Cancelled___________________ớ";
+"Cancelled" = "Ακυρώθηκε";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Απαιτείται Πιστοποιητικό";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Επιλογή από Βιβλιοθήκη";
 
 /* Cities (Level of Detail) */
-"Cities" = "Đ_Cities_____________ớ";
+"Cities" = "Πόλεις";
 
 /* City (Level of Detail) */
-"City" = "Đ_City_________ớ";
+"City" = "Πόλη";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Απαλοιφή";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Πυξίδα, πορεία %lld μοίρες %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "Đ_Continent___________________ớ";
+"Continent" = "Ήπειρος";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Συνέχεια";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "Đ_Could not retrieve map areas for this map______________________ớ.";
+"Could not retrieve map areas for this map." = "Δεν ήταν δυνατή η ανάκτηση περιοχών χάρτη για αυτόν τον χάρτη.";
 
 /* Counties (Level of Detail) */
-"Counties" = "Đ_Counties_________________ớ";
+"Counties" = "Επαρχίες";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "Đ_Countries (Big)________________ớ";
+"Countries (Big)" = "Χώρες (Μεγάλες)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "Đ_Countries (Small)__________________ớ";
+"Countries (Small)" = "Χώρες (Μικρές)";
 
 /* County (Level of Detail) */
-"County" = "Đ_County_____________ớ";
+"County" = "Επαρχία";
 
 /* The status text for an opened map area. */
-"Currently open" = "Đ_Currently open_______________ớ";
+"Currently open" = "Αυτή τη στιγμή ανοιχτό";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Κίνδυνος: Το παρεχόμενο πιστοποιητικό από το '%@' δεν έχει υπογραφεί από αξιόπιστη αρχή.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Διαγραφή";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "Đ_Delete All Starting Points___________________________ớ";
+"Delete All Starting Points" = "Διαγραφή όλων των σημείων έναρξης";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "Đ_Delete all starting points____________________________ớ?";
+"Delete all starting points?" = "Θέλετε να διαγράψετε όλα τα σημεία έναρξης;";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "Đ_Delete Map Area________________ớ";
+"Delete Map Area" = "Διαγραφή περιοχής χάρτη";
 
 /* A label for the description of the map area. */
-"Description" = "Đ_Description____________ớ";
+"Description" = "Περιγραφή";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "Đ_Dismiss_______________ớ";
+"Dismiss" = "Ματαίωση";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Τέλος";
 
 /* A label for a button to download a map area. */
-"Download" = "Đ_Download_________________ớ";
+"Download" = "Λήψη";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "Đ_Download failed________________ớ";
+"Download failed" = "Η λήψη απέτυχε";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "Đ_Download Map Area__________________ớ";
+"Download Map Area" = "Λήψη περιοχής χάρτη";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "Đ_Downloaded_____________________ớ";
+"Downloaded" = "Έγινε λήψη";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "Đ_Downloading____________ớ";
+"Downloading" = "Γίνεται λήψη";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Καταχωρίστε ^[%lld χαρακτήρες](διακύμανση: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "Đ_Enter a name_____________ớ";
+"Enter a name" = "Εισαγάγετε όνομα";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Καταχωρίστε τιμή";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Σφάλμα";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "Đ_Error Fetching Map Areas_________________________ớ";
+"Error Fetching Map Areas" = "Σφάλμα κατά την ανάκτηση περιοχών χάρτη";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "επικεφαλίδα";
 
 /* House Property (Level of Detail) */
-"House Property" = "Đ_House Property_______________ớ";
+"House Property" = "Ιδιότητα σπιτιού";
 
 /* Houses (Level of Detail) */
-"Houses" = "Đ_Houses_____________ớ";
+"Houses" = "Σπίτια";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Μικρότερο από την ελάχιστη τιμή";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "Đ_Level of Detail________________ớ";
+"Level of Detail" = "Επίπεδο λεπτομέρειας";
 
 /* The status text when a map area is loading. */
-"Loading" = "Đ_Loading_______________ớ";
+"Loading" = "Φόρτωση";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "Đ_Loading failed_______________ớ";
+"Loading failed" = "Αποτυχία φόρτωσης";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "Đ_Map Areas___________________ớ";
+"Map Areas" = "Περιοχές χάρτη";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Μέγιστο ^[%lld χαρακτήρες](διακύμανση: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Πολυμέσα";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "Đ_Metropolitan Area__________________ớ";
+"Metropolitan Area" = "Μητροπολιτική περιοχή";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Η πρόσβαση στο μικρόφωνο έχει απενεργοποιηθεί στις Ρυθμίσεις.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Όνομα";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "Đ_Neighborhood_____________ớ";
+"Neighborhood" = "Γειτονιά";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Δίκτυο";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Δεν υπάρχουν διαθέσιμες παραμετροποιήσεις.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "Đ_No Internet Connection_______________________ớ";
+"No Internet Connection" = "Δεν υπάρχει σύνδεση στο διαδίκτυο";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "Đ_No internet connection. Showing downloaded areas only____________________________ớ.";
+"No internet connection. Showing downloaded areas only." = "Δεν υπάρχει σύνδεση στο διαδίκτυο. Εμφάνιση μόνο των περιοχών που έχουν ληφθεί.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "Đ_No Map Areas_____________ớ";
+"No Map Areas" = "Δεν υπάρχουν περιοχές χάρτη";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Δεν βρέθηκαν αντιστοιχίσεις.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Αναγνωριστικό αντικειμένου: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "Đ_Offline Disabled_________________ớ";
+"Offline Disabled" = "Λειτουργία χωρίς σύνδεση απενεργοποιημένη";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "Đ_Online Map Failed to Load__________________________ớ";
+"Online Map Failed to Load" = "Αποτυχία φόρτωσης χάρτη με σύνδεση";
 
 /* A label for a button to open a map area. */
-"Open" = "Đ_Open_________ớ";
+"Open" = "Άνοιγμα";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "Đ_Packaging___________________ớ";
+"Packaging" = "Δημιουργία πακέτου";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "Đ_Packaging failed_________________ớ";
+"Packaging failed" = "Αποτυχία δημιουργίας πακέτου";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "Đ_Pan and zoom to define the area_________________ớ";
+"Pan and zoom to define the area" = "Πραγματοποιήστε μετατόπιση και εστίαση για να καθορίσετε την περιοχή";
 
 /* A label in reference to a credential password. */
 "Password" = "Κωδικός πρόσβασης";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Αποτυχία αξιολόγησης αναδυόμενων: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "Đ_Ready to download__________________ớ";
+"Ready to download" = "Έτοιμο για λήψη";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Εγγραφή βίντεο μόνο";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "Đ_Refresh_______________ớ";
+"Refresh" = "Ανανέωση";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Μετονομασία";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Αποτελέσματα";
 
 /* Room (Level of Detail) */
-"Room" = "Đ_Room_________ớ";
+"Room" = "Δωμάτιο";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "Đ_Rooms___________ớ";
+"Rooms" = "Δωμάτια";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Ερώτημα Αναζήτησης";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Επιλέξτε εγκατάσταση";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "Đ_Select Area____________ớ";
+"Select Area" = "Επιλέξτε περιοχή";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Επιλογή δικτύου";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Ιστότοποι";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "Đ_Size: %@_________________ớ";
+"Size: %@" = "Μέγεθος: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "Đ_Small Building_______________ớ";
+"Small Building" = "Μικρό κτήριο";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Σημεία Έναρξης";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "Đ_State/Province_______________ớ";
+"State/Province" = "Περιφέρεια/Νομός";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "Đ_States/Provinces_________________ớ";
+"States/Provinces" = "Περιφέρειες/Νομοί";
 
 /* Street (Level of Detail) */
-"Street" = "Đ_Street_____________ớ";
+"Street" = "Δρόμος";
 
 /* Streets (Level of Detail) */
-"Streets" = "Đ_Streets_______________ớ";
+"Streets" = "Οδικό δίκτυο";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Λήψη φωτογραφίας ή βίντεο";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Ο χάρτης δεν έχει χωρική αναφορά.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "Đ_The map is not enabled for offline use_____________________ớ.";
+"The map is not enabled for offline use." = "Ο χάρτης δεν είναι ενεργοποιημένος για χρήση εκτός σύνδεσης.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "Đ_The name for the map area must be unique______________________ớ.";
+"The name for the map area must be unique." = "Το όνομα της περιοχής χάρτη πρέπει να είναι μοναδικό.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Ο κωδικός πρόσβασης ήταν άκυρος.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "Η διεύθυνση URL δεν ήταν προσβάσιμη ή δεν περιείχε δεδομένα εικόνας.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "Đ_There are no map areas for this map___________________ớ.";
+"There are no map areas for this map." = "Δεν υπάρχουν περιοχές χάρτη για αυτόν τον χάρτη.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "Đ_There are no map areas for this map. Tap the button below to get started______________________________________ớ.";
+"There are no map areas for this map. Tap the button below to get started." = "Δεν υπάρχουν περιοχές χάρτη για αυτόν τον χάρτη. Πατήστε το παρακάτω κουμπί για να ξεκινήσετε.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Σήμερα";
 
 /* Town (Level of Detail) */
-"Town" = "Đ_Town_________ớ";
+"Town" = "Κωμόπολη";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Ιχνηλάτηση";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Δοκιμάστε Ξανά";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "Đ_Unknown_______________ớ";
+"Unknown" = "Άγνωστο";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Άγνωστο σφάλμα επικύρωσης";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Τύπος Στοιχείου Χωρίς Όνομα";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "Đ_Unsupported Value__________________ớ";
+"Unsupported Value" = "Μη υποστηριζόμενη τιμή";
 
 /* A label in reference to a credential username. */
 "Username" = "Όνομα χρήστη";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Η τιμή δεν πρέπει να είναι άδεια";
 
 /* E.g. Open a hyperlink. */
-"View" = "Đ_View_________ớ";
+"View" = "Προβολή";
 
 /* World (Level of Detail) */
-"World" = "Đ_World___________ớ";
+"World" = "Κόσμος";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "Đ_World (Big)____________ớ";
+"World (Big)" = "Κόσμος (Μεγάλος)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "Đ_World (Small)______________ớ";
+"World (Small)" = "Κόσμος (Μικρός)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

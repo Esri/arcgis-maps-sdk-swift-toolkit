@@ -2,17 +2,17 @@
 "%lld selected" = "%lld が選択されました";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "須_^[%lld Results](inflect: true)_______________________________鷗";
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "%@ でコンテンツにアクセスするには証明書が必要です。";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "須_A map area cannot be downloaded at this time________________________鷗.";
+"A map area cannot be downloaded at this time." = "現時点では、マップ エリアはダウンロードできません。";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "須_Add Map Area_____________鷗";
+"Add Map Area" = "マップ エリアの追加";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "新規追加";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "高度なオプション";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "須_All Sites___________________鷗";
+"All Sites" = "すべてのサイト";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "トレースの入力および結果がすべて失われます。";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "許可";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "須_An error occurred while fetching map areas_______________________鷗.";
+"An error occurred while fetching map areas." = "マップ エリアの取得中にエラーが発生しました。";
 
 /* The title for a map area. */
-"Area %lld" = "須_Area %lld___________________鷗";
+"Area %lld" = "エリア %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "須_Area Name___________________鷗";
+"Area Name" = "エリア名";
 
 /* A label in reference to attachments. */
 "Attachments" = "添付ファイル";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "参照";
 
 /* Building (Level of Detail) */
-"Building" = "須_Building_________________鷗";
+"Building" = "建物";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "須_Buildings___________________鷗";
+"Buildings" = "建物 (複数)";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "キャリブレーション";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "始点の選択のキャンセル";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "須_Cancelled___________________鷗";
+"Cancelled" = "キャンセル済";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "証明書が必要です";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "ライブラリから選択";
 
 /* Cities (Level of Detail) */
-"Cities" = "須_Cities_____________鷗";
+"Cities" = "都市 (複数)";
 
 /* City (Level of Detail) */
-"City" = "須_City_________鷗";
+"City" = "市区町村";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "消去";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "コンパス、方位角 %lld 度 %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "須_Continent___________________鷗";
+"Continent" = "大陸";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "続行";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "須_Could not retrieve map areas for this map______________________鷗.";
+"Could not retrieve map areas for this map." = "このマップのマップ エリアを取得できませんでした。";
 
 /* Counties (Level of Detail) */
-"Counties" = "須_Counties_________________鷗";
+"Counties" = "郡 (複数)";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "須_Countries (Big)________________鷗";
+"Countries (Big)" = "国 (大)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "須_Countries (Small)__________________鷗";
+"Countries (Small)" = "国 (小)";
 
 /* County (Level of Detail) */
-"County" = "須_County_____________鷗";
+"County" = "郡";
 
 /* The status text for an opened map area. */
-"Currently open" = "須_Currently open_______________鷗";
+"Currently open" = "現在開いている";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "危険: %@ が提供する証明書は、信頼された認証機関が署名していません。";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "削除";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "須_Delete All Starting Points___________________________鷗";
+"Delete All Starting Points" = "すべての始点を削除";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "須_Delete all starting points____________________________鷗?";
+"Delete all starting points?" = "すべての始点を削除しますか？";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "須_Delete Map Area________________鷗";
+"Delete Map Area" = "マップ エリアの削除";
 
 /* A label for the description of the map area. */
-"Description" = "須_Description____________鷗";
+"Description" = "説明";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "須_Dismiss_______________鷗";
+"Dismiss" = "終了";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "終了";
 
 /* A label for a button to download a map area. */
-"Download" = "須_Download_________________鷗";
+"Download" = "ダウンロード";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "須_Download failed________________鷗";
+"Download failed" = "ダウンロードできませんでした";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "須_Download Map Area__________________鷗";
+"Download Map Area" = "マップ エリアのダウンロード";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "須_Downloaded_____________________鷗";
+"Downloaded" = "ダウンロード済み";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "須_Downloading____________鷗";
+"Downloading" = "ダウンロードしています";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "^[%lld characters](inflect: true) と入力してください";
 
 /* An instruction to enter a name. */
-"Enter a name" = "須_Enter a name_____________鷗";
+"Enter a name" = "名前を入力";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "値を入力";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "エラー";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "須_Error Fetching Map Areas_________________________鷗";
+"Error Fetching Map Areas" = "マップ エリア取得エラー";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "方位";
 
 /* House Property (Level of Detail) */
-"House Property" = "須_House Property_______________鷗";
+"House Property" = "住宅物件";
 
 /* Houses (Level of Detail) */
-"Houses" = "須_Houses_____________鷗";
+"Houses" = "家屋";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "最小値未満です";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "須_Level of Detail________________鷗";
+"Level of Detail" = "詳細レベル";
 
 /* The status text when a map area is loading. */
-"Loading" = "須_Loading_______________鷗";
+"Loading" = "読み込んでいます";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "須_Loading failed_______________鷗";
+"Loading failed" = "読み込めませんでした";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "須_Map Areas___________________鷗";
+"Map Areas" = "マップ エリア";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "最大 ^[%lld characters](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "メディア";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "須_Metropolitan Area__________________鷗";
+"Metropolitan Area" = "都市圏";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "設定でマイクへのアクセスが無効になっています。";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "名前";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "須_Neighborhood_____________鷗";
+"Neighborhood" = "近郊";
 
 /* A label in reference to a specific utility network. */
 "Network" = "ネットワーク";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "使用できる構成がありません。";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "須_No Internet Connection_______________________鷗";
+"No Internet Connection" = "インターネット接続なし";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "須_No internet connection. Showing downloaded areas only____________________________鷗.";
+"No internet connection. Showing downloaded areas only." = "インターネットに接続されていません。 ダウンロードしたエリアのみを表示します。";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "須_No Map Areas_____________鷗";
+"No Map Areas" = "マップ エリアなし";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "一致するものが見つかりません。";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Object ID: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "須_Offline Disabled_________________鷗";
+"Offline Disabled" = "オフラインが無効";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "須_Online Map Failed to Load__________________________鷗";
+"Online Map Failed to Load" = "オンライン マップを読み込めませんでした";
 
 /* A label for a button to open a map area. */
-"Open" = "須_Open_________鷗";
+"Open" = "開く";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "須_Packaging___________________鷗";
+"Packaging" = "パッケージ化";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "須_Packaging failed_________________鷗";
+"Packaging failed" = "パッケージ化に失敗しました";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "須_Pan and zoom to define the area_________________鷗";
+"Pan and zoom to define the area" = "画面移動およびズームでエリアを定義する";
 
 /* A label in reference to a credential password. */
 "Password" = "パスワード";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "ポップアップの評価に失敗しました: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "須_Ready to download__________________鷗";
+"Ready to download" = "ダウンロードの準備ができました";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "ビデオのみ録画";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "須_Refresh_______________鷗";
+"Refresh" = "更新";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "名前の変更";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "結果";
 
 /* Room (Level of Detail) */
-"Room" = "須_Room_________鷗";
+"Room" = "部屋";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "須_Rooms___________鷗";
+"Rooms" = "部屋 (複数)";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "検索クエリ";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "施設の選択";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "須_Select Area____________鷗";
+"Select Area" = "エリアの選択";
 
 /* A label for button to select a utility network. */
 "Select Network" = "ネットワークの選択";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "サイト";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "須_Size: %@_________________鷗";
+"Size: %@" = "サイズ: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "須_Small Building_______________鷗";
+"Small Building" = "建物 (小)";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "始点";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "須_State/Province_______________鷗";
+"State/Province" = "都道府県";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "須_States/Provinces_________________鷗";
+"States/Provinces" = "都道府県 (複数)";
 
 /* Street (Level of Detail) */
-"Street" = "須_Street_____________鷗";
+"Street" = "道路";
 
 /* Streets (Level of Detail) */
-"Streets" = "須_Streets_______________鷗";
+"Streets" = "道路 (複数)";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "写真またはビデオを撮る";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "マップに空間参照がありません。";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "須_The map is not enabled for offline use_____________________鷗.";
+"The map is not enabled for offline use." = "マップはオフラインでは使用できません。";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "須_The name for the map area must be unique______________________鷗.";
+"The name for the map area must be unique." = "マップ エリアの名前は一意である必要があります。";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "パスワードが無効です。";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL に到達できなかったか、画像データが含まれていませんでした。";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "須_There are no map areas for this map___________________鷗.";
+"There are no map areas for this map." = "このマップにはマップ エリアはありません。";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "須_There are no map areas for this map. Tap the button below to get started______________________________________鷗.";
+"There are no map areas for this map. Tap the button below to get started." = "このマップにはマップ エリアはありません。 以下のボタンをタップして開始します。";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "今日";
 
 /* Town (Level of Detail) */
-"Town" = "須_Town_________鷗";
+"Town" = "町";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "トレース";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "再試行";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "須_Unknown_______________鷗";
+"Unknown" = "不明";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "不明な検証エラー";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "無名のアセット タイプ";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "須_Unsupported Value__________________鷗";
+"Unsupported Value" = "サポートされていない値";
 
 /* A label in reference to a credential username. */
 "Username" = "ユーザー名";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "値は空にしてはなりません";
 
 /* E.g. Open a hyperlink. */
-"View" = "須_View_________鷗";
+"View" = "表示";
 
 /* World (Level of Detail) */
-"World" = "須_World___________鷗";
+"World" = "世界";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "須_World (Big)____________鷗";
+"World (Big)" = "世界 (大)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "須_World (Small)______________鷗";
+"World (Small)" = "世界 (小)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

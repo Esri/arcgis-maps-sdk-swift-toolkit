@@ -2,17 +2,17 @@
 "%lld selected" = "%lld geselecteerd";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "Ĳ_^[%lld Results](inflect: true)_______________________________ä";
+"^[%lld Results](inflect: true)" = "^[%lld resultaten](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Er is een certificaat nodig voor het openen van content in %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "Ĳ_A map area cannot be downloaded at this time________________________ä.";
+"A map area cannot be downloaded at this time." = "Er kan momenteel geen kaartgebied worden gedownload.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "Ĳ_Add Map Area_____________ä";
+"Add Map Area" = "Kaartgebied toevoegen";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Nieuwe toevoegen";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Geavanceerde opties";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "Ĳ_All Sites___________________ä";
+"All Sites" = "Alle locaties";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Alle traceringsinvoer en resultaten gaan verloren.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Toestaan";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "Ĳ_An error occurred while fetching map areas_______________________ä.";
+"An error occurred while fetching map areas." = "Er is een fout opgetreden bij het ophalen van kaartgebieden.";
 
 /* The title for a map area. */
-"Area %lld" = "Ĳ_Area %lld___________________ä";
+"Area %lld" = "Gebied %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "Ĳ_Area Name___________________ä";
+"Area Name" = "Naam gebied";
 
 /* A label in reference to attachments. */
 "Attachments" = "Bijlagen";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Bladeren";
 
 /* Building (Level of Detail) */
-"Building" = "Ĳ_Building_________________ä";
+"Building" = "Gebouw";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "Ĳ_Buildings___________________ä";
+"Buildings" = "Gebouwen";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibreren";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Startpuntselectie annuleren";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "Ĳ_Cancelled___________________ä";
+"Cancelled" = "Geannuleerd";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificaat vereist";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Kiezen uit galerij";
 
 /* Cities (Level of Detail) */
-"Cities" = "Ĳ_Cities_____________ä";
+"Cities" = "Steden";
 
 /* City (Level of Detail) */
-"City" = "Ĳ_City_________ä";
+"City" = "Plaats";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Wissen";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompas, richting %lld graden %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "Ĳ_Continent___________________ä";
+"Continent" = "Continent";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Doorgaan";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "Ĳ_Could not retrieve map areas for this map______________________ä.";
+"Could not retrieve map areas for this map." = "Kan geen kaartgebieden ophalen voor deze kaart.";
 
 /* Counties (Level of Detail) */
-"Counties" = "Ĳ_Counties_________________ä";
+"Counties" = "Regio's";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "Ĳ_Countries (Big)________________ä";
+"Countries (Big)" = "Landen (groot)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "Ĳ_Countries (Small)__________________ä";
+"Countries (Small)" = "Landen (klein)";
 
 /* County (Level of Detail) */
-"County" = "Ĳ_County_____________ä";
+"County" = "Regio";
 
 /* The status text for an opened map area. */
-"Currently open" = "Ĳ_Currently open_______________ä";
+"Currently open" = "Momenteel geopend";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Gevaar: het certificaat dat door '%@' wordt verstrekt, is niet ondertekend door een vertrouwde autoriteit.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Verwijderen";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "Ĳ_Delete All Starting Points___________________________ä";
+"Delete All Starting Points" = "Alle startpunten verwijderen";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "Ĳ_Delete all starting points____________________________ä?";
+"Delete all starting points?" = "Alle startpunten verwijderen";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "Ĳ_Delete Map Area________________ä";
+"Delete Map Area" = "Kaartgebied verwijderen";
 
 /* A label for the description of the map area. */
-"Description" = "Ĳ_Description____________ä";
+"Description" = "Beschrijving";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "Ĳ_Dismiss_______________ä";
+"Dismiss" = "Verwijderen";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Gereed";
 
 /* A label for a button to download a map area. */
-"Download" = "Ĳ_Download_________________ä";
+"Download" = "Downloaden";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "Ĳ_Download failed________________ä";
+"Download failed" = "Kan niet downloaden";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "Ĳ_Download Map Area__________________ä";
+"Download Map Area" = "Kaartgebied downloaden";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "Ĳ_Downloaded_____________________ä";
+"Downloaded" = "Gedownload";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "Ĳ_Downloading____________ä";
+"Downloading" = "Bezig met downloaden";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Voer ^[%lld tekens] in (inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "Ĳ_Enter a name_____________ä";
+"Enter a name" = "Voer een naam in";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Waarde invoeren";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Fout";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "Ĳ_Error Fetching Map Areas_________________________ä";
+"Error Fetching Map Areas" = "Fout bij ophalen kaaartgebieden";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "richting";
 
 /* House Property (Level of Detail) */
-"House Property" = "Ĳ_House Property_______________ä";
+"House Property" = "Eigenschap huis";
 
 /* Houses (Level of Detail) */
-"Houses" = "Ĳ_Houses_____________ä";
+"Houses" = "Huizen";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Minder dan minimumwaarde";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "Ĳ_Level of Detail________________ä";
+"Level of Detail" = "Detailniveau";
 
 /* The status text when a map area is loading. */
-"Loading" = "Ĳ_Loading_______________ä";
+"Loading" = "Bezig met laden";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "Ĳ_Loading failed_______________ä";
+"Loading failed" = "Kan niet laden";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "Ĳ_Map Areas___________________ä";
+"Map Areas" = "Kaartgebieden";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maximaal ^[%lld tekens](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Media";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "Ĳ_Metropolitan Area__________________ä";
+"Metropolitan Area" = "Grootstedelijk gebied";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Microfoontoegang is uitgeschakeld in Instellingen.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Naam";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "Ĳ_Neighborhood_____________ä";
+"Neighborhood" = "Wijk";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Netwerk";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Er zijn geen configuraties beschikbaar.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "Ĳ_No Internet Connection_______________________ä";
+"No Internet Connection" = "Er is geen internetverbinding";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "Ĳ_No internet connection. Showing downloaded areas only____________________________ä.";
+"No internet connection. Showing downloaded areas only." = "Er is geen internetverbinding. Er worden alleen gedownloade gebieden weergegeven.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "Ĳ_No Map Areas_____________ä";
+"No Map Areas" = "Geen kaartgebieden";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Kan geen overeenkomsten vinden.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Object-id: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "Ĳ_Offline Disabled_________________ä";
+"Offline Disabled" = "Offline uitgeschakeld";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "Ĳ_Online Map Failed to Load__________________________ä";
+"Online Map Failed to Load" = "Kan offline kaart niet laden";
 
 /* A label for a button to open a map area. */
-"Open" = "Ĳ_Open_________ä";
+"Open" = "Openen";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "Ĳ_Packaging___________________ä";
+"Packaging" = "Bezig met inpakken";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "Ĳ_Packaging failed_________________ä";
+"Packaging failed" = "Kan niet inpakken";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "Ĳ_Pan and zoom to define the area_________________ä";
+"Pan and zoom to define the area" = "Gebruik pannen en zoomen om het gebied te definiëren";
 
 /* A label in reference to a credential password. */
 "Password" = "Wachtwoord";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Pop-upevaluatie is mislukt: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "Ĳ_Ready to download__________________ä";
+"Ready to download" = "Klaar om te downloaden";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Alleen video opnemen";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "Ĳ_Refresh_______________ä";
+"Refresh" = "Vernieuwen";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Naam wijzigen";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Resultaten";
 
 /* Room (Level of Detail) */
-"Room" = "Ĳ_Room_________ä";
+"Room" = "Ruimte";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "Ĳ_Rooms___________ä";
+"Rooms" = "Ruimtes";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Zoekopdracht";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Selecteer een faciliteit";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "Ĳ_Select Area____________ä";
+"Select Area" = "Gebied selecteren";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Netwerk selecteren";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Sites";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "Ĳ_Size: %@_________________ä";
+"Size: %@" = "Grootte: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "Ĳ_Small Building_______________ä";
+"Small Building" = "Klein gebouw";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Startpunten";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "Ĳ_State/Province_______________ä";
+"State/Province" = "Staat/provincie";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "Ĳ_States/Provinces_________________ä";
+"States/Provinces" = "Staten/provincies";
 
 /* Street (Level of Detail) */
-"Street" = "Ĳ_Street_____________ä";
+"Street" = "Straat";
 
 /* Streets (Level of Detail) */
-"Streets" = "Ĳ_Streets_______________ä";
+"Streets" = "Straten";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Foto of video maken";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "De kaart heeft geen ruimtelijke referentie.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "Ĳ_The map is not enabled for offline use_____________________ä.";
+"The map is not enabled for offline use." = "Offline gebruik is niet ingeschakeld voor deze kaart.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "Ĳ_The name for the map area must be unique______________________ä.";
+"The name for the map area must be unique." = "De naam van het kaartgebied moet uniek zijn.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Het wachtwoord is ongeldig.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "Kan de URL niet bereiken of de URL bevat geen beeldgegevens.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "Ĳ_There are no map areas for this map___________________ä.";
+"There are no map areas for this map." = "Er zijn geen kaartgebieden voor deze kaart.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "Ĳ_There are no map areas for this map. Tap the button below to get started______________________________________ä.";
+"There are no map areas for this map. Tap the button below to get started." = "Er zijn geen kaartgebieden voor deze kaart. Tik op de onderstaande knop om aan de slag te gaan.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Vandaag";
 
 /* Town (Level of Detail) */
-"Town" = "Ĳ_Town_________ä";
+"Town" = "Kleine stad";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Tracering";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Opnieuw proberen";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "Ĳ_Unknown_______________ä";
+"Unknown" = "Onbekend";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Onbekende validatiefout";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Naamloos type activa";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "Ĳ_Unsupported Value__________________ä";
+"Unsupported Value" = "Niet-ondersteunde waarde";
 
 /* A label in reference to a credential username. */
 "Username" = "Gebruikersnaam";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Waarde mag niet leeg zijn";
 
 /* E.g. Open a hyperlink. */
-"View" = "Ĳ_View_________ä";
+"View" = "Weergeven";
 
 /* World (Level of Detail) */
-"World" = "Ĳ_World___________ä";
+"World" = "Wereld";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "Ĳ_World (Big)____________ä";
+"World (Big)" = "Wereld (groot)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "Ĳ_World (Small)______________ä";
+"World (Small)" = "Wereld (klein)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
