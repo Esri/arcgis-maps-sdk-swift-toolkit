@@ -18,9 +18,6 @@
 ***REMOVED***/ The `OfflineMapAreasView` displays a list of downloadable preplanned or
 ***REMOVED***/ on-demand map areas from a given web map.
 ***REMOVED***/
-***REMOVED***/ The view allows users to download, view, and manage offline maps
-***REMOVED***/ when network connectivity is poor or nonexistent.
-***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
 ***REMOVED***/ The view supports both ahead-of-time(preplanned) and on-demand workflows
