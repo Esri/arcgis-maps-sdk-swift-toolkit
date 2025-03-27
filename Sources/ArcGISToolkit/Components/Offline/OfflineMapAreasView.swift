@@ -21,11 +21,11 @@ import ArcGIS
 /// **Features**
 ///
 /// The view supports both ahead-of-time(preplanned) and on-demand map areas
-/// for an offline enabled web map.
-/// The view:
+/// for an offline enabled web map. The view:
 ///
-/// - Opens a map area for viewing when selected.
+/// - Displays a list of map areas.
 /// - Shows download progress and status for map areas.
+/// - Opens a map area for viewing when selected.
 /// - Provides options to view details about downloaded map areas.
 /// - Supports removing downloaded offline map areas files from the device.
 ///
@@ -33,6 +33,7 @@ import ArcGIS
 ///
 /// - Displays a list of available preplanned map areas from an offline-enabled
 /// web map that contains preplanned map areas when the network is connected.
+/// - Downloads preplanned map areas in the list.
 /// - Displays a list of downloaded preplanned map areas on the device
 /// when the network is disconnected.
 ///
