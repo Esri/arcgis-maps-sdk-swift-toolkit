@@ -56,11 +56,12 @@ import ArcGIS
 /// in all 4 situations: (device) connected/preplanned, connected/on-demand,
 /// disconnected/preplanned, disconnected/on-demand.
 ///
-/// The view will automatically determine the mode based on the web map.
-/// When the web map contains preplanned map areas, the view will be in
-/// preplanned mode. Otherwise, it will be in on-demand mode. Once the view
-/// is in a mode, it will remain in the same mode for the duration of the view's
-/// lifecycle.
+/// When the network connection is available, the component will display a list
+/// of preplanned map areas configured for the web map. If the web map doesn't
+/// contain any preplanned map areas, users can create a map area on-demand by
+/// specifying a geographic area and level of detail. When a network connection
+/// is unavailable, the component will only display map areas that have already
+/// been downloaded to the device.
 ///
 /// If the network connectivity changes while the view is presented, the view
 /// will not automatically refresh the list of map areas. The user can
