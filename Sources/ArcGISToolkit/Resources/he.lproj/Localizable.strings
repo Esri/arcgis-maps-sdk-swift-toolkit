@@ -2,17 +2,17 @@
 "%lld selected" = "%lld נבחר";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "כן_^[%lld Results](inflect: true)_______________________________ש";
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "אישור נדרש כדי לגשת לתוכן ב-%@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "כן_A map area cannot be downloaded at this time________________________ש.";
+"A map area cannot be downloaded at this time." = "לא ניתן להוריד מפה כרגע.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "כן_Add Map Area_____________ש";
+"Add Map Area" = "הוסף אזור מפה";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "הוסף חדש";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "אפשרויות מתקדמות";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "כן_All Sites___________________ש";
+"All Sites" = "כל האתרים";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "כל הקלטים והתוצאות של המעקב יאבדו.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "הרשה";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "כן_An error occurred while fetching map areas_______________________ש.";
+"An error occurred while fetching map areas." = "אירעה שגיאה במהלך אחזור אזורי מפה.";
 
 /* The title for a map area. */
-"Area %lld" = "כן_Area %lld___________________ש";
+"Area %lld" = "אזור %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "כן_Area Name___________________ש";
+"Area Name" = "שם אזור";
 
 /* A label in reference to attachments. */
 "Attachments" = "קבצים מצורפים";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "עיון";
 
 /* Building (Level of Detail) */
-"Building" = "כן_Building_________________ש";
+"Building" = "מבנה";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "כן_Buildings___________________ש";
+"Buildings" = "מבנים";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "כייל";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "בטל בחירת נקודת התחלה";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "כן_Cancelled___________________ש";
+"Cancelled" = "בוטל";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "נדרש אישור";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "בחר מספרייה";
 
 /* Cities (Level of Detail) */
-"Cities" = "כן_Cities_____________ש";
+"Cities" = "ערים";
 
 /* City (Level of Detail) */
-"City" = "כן_City_________ש";
+"City" = "עיר";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "נקה";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "מצפן, בכיוון %lld מעלות %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "כן_Continent___________________ש";
+"Continent" = "יבשת";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "המשך";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "כן_Could not retrieve map areas for this map______________________ש.";
+"Could not retrieve map areas for this map." = "לא ניתן לאחזר אזורי מפה עבור מפה זו.";
 
 /* Counties (Level of Detail) */
-"Counties" = "כן_Counties_________________ש";
+"Counties" = "מחוזות";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "כן_Countries (Big)________________ש";
+"Countries (Big)" = "ארצות (גדול)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "כן_Countries (Small)__________________ש";
+"Countries (Small)" = "ארצות (קטן)";
 
 /* County (Level of Detail) */
-"County" = "כן_County_____________ש";
+"County" = "מחוז";
 
 /* The status text for an opened map area. */
-"Currently open" = "כן_Currently open_______________ש";
+"Currently open" = "פתוח כרגע";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "סכנה: האישור שסופק על ידי '%@' לא חתום על ידי רשות מהימנה.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "מחק";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "כן_Delete All Starting Points___________________________ש";
+"Delete All Starting Points" = "מחק את כל נקודות ההתחלה";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "כן_Delete all starting points____________________________ש?";
+"Delete all starting points?" = "למחוק את כל נקודות ההתחלה?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "כן_Delete Map Area________________ש";
+"Delete Map Area" = "מחק אזור מפה";
 
 /* A label for the description of the map area. */
-"Description" = "כן_Description____________ש";
+"Description" = "תיאור";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "כן_Dismiss_______________ש";
+"Dismiss" = "בטל";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "בוצע";
 
 /* A label for a button to download a map area. */
-"Download" = "כן_Download_________________ש";
+"Download" = "הורד";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "כן_Download failed________________ש";
+"Download failed" = "ההורדה נכשלה";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "כן_Download Map Area__________________ש";
+"Download Map Area" = "הורד אזור מפה";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "כן_Downloaded_____________________ש";
+"Downloaded" = "הורדה הושלמה";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "כן_Downloading____________ש";
+"Downloading" = "מוריד";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "הזן ^[%lld תווים](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "כן_Enter a name_____________ש";
+"Enter a name" = "הזן שם";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "הזן ערך";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "שגיאה";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "כן_Error Fetching Map Areas_________________________ש";
+"Error Fetching Map Areas" = "שגיאה באחזור אזורי מפה";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "כיוון";
 
 /* House Property (Level of Detail) */
-"House Property" = "כן_House Property_______________ש";
+"House Property" = "מאפיין בית";
 
 /* Houses (Level of Detail) */
-"Houses" = "כן_Houses_____________ש";
+"Houses" = "בתים";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "פחות מהערך המינימלי";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "כן_Level of Detail________________ש";
+"Level of Detail" = "רמת פירוט";
 
 /* The status text when a map area is loading. */
-"Loading" = "כן_Loading_______________ש";
+"Loading" = "טוען";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "כן_Loading failed_______________ש";
+"Loading failed" = "הטעינה נכשלה";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "כן_Map Areas___________________ש";
+"Map Areas" = "אזורי מפה";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "מקסימום ^[%lld תווים](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "מדיה";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "כן_Metropolitan Area__________________ש";
+"Metropolitan Area" = "אזור מטרופוליני";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "הגישה למיקרופון הושבתה בהגדרות.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "שם";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "כן_Neighborhood_____________ש";
+"Neighborhood" = "שכונה";
 
 /* A label in reference to a specific utility network. */
 "Network" = "רשת";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "אין תצורות זמינות.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "כן_No Internet Connection_______________________ש";
+"No Internet Connection" = "אין חיבור לאינטרנט";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "כן_No internet connection. Showing downloaded areas only____________________________ש.";
+"No internet connection. Showing downloaded areas only." = "אין חיבור לאינטרנט. מציג אזורים שהורדו בלבד.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "כן_No Map Areas_____________ש";
+"No Map Areas" = "אין אזורי מפה";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "לא נמצאו התאמות.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "מזהה אובייקט: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "כן_Offline Disabled_________________ש";
+"Offline Disabled" = "מצב לא מקוון מושבת";
 
 /* A label for button to proceed with an operation. */
 "OK" = "אישור";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "כן_Online Map Failed to Load__________________________ש";
+"Online Map Failed to Load" = "טעינת מפה מקוונת נכשלה";
 
 /* A label for a button to open a map area. */
-"Open" = "כן_Open_________ש";
+"Open" = "פתוח";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "כן_Packaging___________________ש";
+"Packaging" = "יצירת חבילה";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "כן_Packaging failed_________________ש";
+"Packaging failed" = "יצירת חבילה נכשלה";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "כן_Pan and zoom to define the area_________________ש";
+"Pan and zoom to define the area" = "הזז ובצע זום כדי להגדיר את האזור";
 
 /* A label in reference to a credential password. */
 "Password" = "סיסמה";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "הערכת חלון קופץ נכשלה: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "כן_Ready to download__________________ש";
+"Ready to download" = "מוכן להורדה";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "הקלט וידאו בלבד";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "כן_Refresh_______________ש";
+"Refresh" = "רענן";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "שנה שם";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "תוצאות";
 
 /* Room (Level of Detail) */
-"Room" = "כן_Room_________ש";
+"Room" = "חדר";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "כן_Rooms___________ש";
+"Rooms" = "חדרים";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "שאילתת חיפוש";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "בחר מתקן";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "כן_Select Area____________ש";
+"Select Area" = "בחר אזור";
 
 /* A label for button to select a utility network. */
 "Select Network" = "בחר רשת";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "אתרים";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "כן_Size: %@_________________ש";
+"Size: %@" = "גודל: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "כן_Small Building_______________ש";
+"Small Building" = "בניין קטן";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "נקודות התחלה";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "כן_State/Province_______________ש";
+"State/Province" = "מדינה/מחוז";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "כן_States/Provinces_________________ש";
+"States/Provinces" = "מדינות/מחוזות";
 
 /* Street (Level of Detail) */
-"Street" = "כן_Street_____________ש";
+"Street" = "רחוב";
 
 /* Streets (Level of Detail) */
-"Streets" = "כן_Streets_______________ש";
+"Streets" = "רחובות";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "צלם תמונה או סרטון";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "למפה אין ייחוס מרחבי.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "כן_The map is not enabled for offline use_____________________ש.";
+"The map is not enabled for offline use." = "המפה אינה מופעלת לשימוש במצב לא-מקוון.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "כן_The name for the map area must be unique______________________ש.";
+"The name for the map area must be unique." = "השם עבור אזור המפה חייב להיות ייחודי.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "הסיסמה הייתה לא חוקית.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "לא ניתן להגיע לכתובת ה-URL או שהכתובת לא הכילה נתוני תמונה.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "כן_There are no map areas for this map___________________ש.";
+"There are no map areas for this map." = "אין אזורי מפה עבור מפה זו.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "כן_There are no map areas for this map. Tap the button below to get started______________________________________ש.";
+"There are no map areas for this map. Tap the button below to get started." = "אין אזורי מפה עבור מפה זו. הקש על הלחצן להלן כדי להתחיל.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "היום";
 
 /* Town (Level of Detail) */
-"Town" = "כן_Town_________ש";
+"Town" = "עיר";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "עקיבה";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "נסה שוב";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "כן_Unknown_______________ש";
+"Unknown" = "לא ידוע";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "שגיאת אימות לא ידועה";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "סוג נכס ללא שם";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "כן_Unsupported Value__________________ש";
+"Unsupported Value" = "ערך שאינו נתמך";
 
 /* A label in reference to a credential username. */
 "Username" = "שם משתמש";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "הערך לא יכול להיות ריק";
 
 /* E.g. Open a hyperlink. */
-"View" = "כן_View_________ש";
+"View" = "הצג";
 
 /* World (Level of Detail) */
-"World" = "כן_World___________ש";
+"World" = "עולם";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "כן_World (Big)____________ש";
+"World (Big)" = "עולם (גדול)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "כן_World (Small)______________ש";
+"World (Small)" = "עולם (קטן)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
