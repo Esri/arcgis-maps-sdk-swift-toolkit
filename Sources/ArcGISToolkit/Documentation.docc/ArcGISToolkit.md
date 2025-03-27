@@ -19,6 +19,7 @@ Learn how to use ArcGISToolkit with <doc:ToolkitTutorials>
 - <doc:FloatingPanel>
 - ``FloorFilter``
 - ``JobManager``
+- ``OfflineMapAreasView``
 - ``OverviewMap``
 - ``PopupView``
 - ``Scalebar``

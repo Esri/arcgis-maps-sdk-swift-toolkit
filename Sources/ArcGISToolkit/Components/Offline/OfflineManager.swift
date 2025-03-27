@@ -251,7 +251,7 @@ public extension SwiftUI.Scene {
 ***REMOVED******REMOVED***/ Sets up the offline manager for offline toolkit components.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule. See ``JobManager/preferredBackgroundStatusCheckSchedule`` for more details.
-***REMOVED******REMOVED***/   - jobCompletion: An action to perform when a job completes.
+***REMOVED******REMOVED***/   - jobCompletionAction: An action to perform when a job completes.
 ***REMOVED***@MainActor
 ***REMOVED***func offlineManager(
 ***REMOVED******REMOVED***preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
