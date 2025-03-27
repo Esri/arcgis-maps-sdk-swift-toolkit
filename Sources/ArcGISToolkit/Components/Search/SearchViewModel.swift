@@ -428,9 +428,13 @@ private extension Graphic {
 private extension Symbol {
     /// A search result marker symbol.
     static func searchResult() -> MarkerSymbol {
-        let image = UIImage.mapPin
-        let symbol = PictureMarkerSymbol(image: image)
-        symbol.offsetY = image.size.height / 2.0
+        var symbol: MarkerSymbol
+        if let image = UIImage.mapPin {
+            symbol = PictureMarkerSymbol(image: image)
+            symbol.offsetY = image.size.height / 2.0
+        } else {
+            symbol = SimpleMarkerSymbol()
+        }
         return symbol
     }
 }
