@@ -436,7 +436,7 @@ private extension Symbol {
 ***REMOVED***
 
 extension UIImage {
-***REMOVED***static var mapPin: UIImage {
-***REMOVED******REMOVED***return UIImage(named: "MapPin", in: .toolkitModule, with: nil)!
+***REMOVED***static var mapPin: UIImage? {
+***REMOVED******REMOVED***UIImage(named: "MapPin", in: .toolkitModule, with: nil)
 ***REMOVED***
 ***REMOVED***
