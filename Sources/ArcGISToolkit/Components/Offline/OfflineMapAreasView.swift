@@ -20,8 +20,9 @@ import ArcGIS
 ///
 /// **Features**
 ///
-/// The view supports both ahead-of-time(preplanned) and on-demand workflows
-/// for offline mapping. For both workflows, the view:
+/// The view supports both ahead-of-time(preplanned) and on-demand map areas
+/// for an offline enabled web map.
+/// The view:
 ///
 /// - Opens a map area for viewing when selected.
 /// - Shows download progress and status for map areas.
