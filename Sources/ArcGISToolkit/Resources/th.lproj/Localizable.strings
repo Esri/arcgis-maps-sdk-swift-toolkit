@@ -2,17 +2,17 @@
 "%lld selected" = "%lld ที่เลือก";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "ก้_^[%lld Results](inflect: true)_______________________________ษฺ";
+"^[%lld Results](inflect: true)" = "^[%lld ผลลัพธ์](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "จำเป็นต้องใช้ใบรับรองในการเข้าถึงเนื้อหาบน %@";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "ก้_A map area cannot be downloaded at this time________________________ษฺ.";
+"A map area cannot be downloaded at this time." = "ไม่สามารถดาวน์โหลดพื้นที่แผนที่ได้ในครั้งนี้";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "ก้_Add Map Area_____________ษฺ";
+"Add Map Area" = "เพิ่มพื้นที่แผนที่";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "เพิ่มใหม่";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "ตัวเลือกขั้นสูง";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "ก้_All Sites___________________ษฺ";
+"All Sites" = "ไซต์ทั้งหมด";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "อินพุทและผลลัพธ์การติดตามทั้งหมดจะสูญหาย";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "อนุญาต";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "ก้_An error occurred while fetching map areas_______________________ษฺ.";
+"An error occurred while fetching map areas." = "เกิดข้อผิดพลาดขึ้นขณะดึงข้อมูลพื้นที่แผนที่";
 
 /* The title for a map area. */
-"Area %lld" = "ก้_Area %lld___________________ษฺ";
+"Area %lld" = "พื้นที่ %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "ก้_Area Name___________________ษฺ";
+"Area Name" = "ชื่อพื้นที่";
 
 /* A label in reference to attachments. */
 "Attachments" = "เอกสารแนบ";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "เรียกดู";
 
 /* Building (Level of Detail) */
-"Building" = "ก้_Building_________________ษฺ";
+"Building" = "ขอบเขตอาคาร";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "ก้_Buildings___________________ษฺ";
+"Buildings" = "ขอบเขตอาคารต่างๆ";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "ปรับเทียบ";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "ยกเลิกการเลือกจุดเริ่มต้น";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "ก้_Cancelled___________________ษฺ";
+"Cancelled" = "ยกเลิกแล้ว";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "จำเป็นต้องใช้ใบรับรอง";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "เลือกจากห้องสมุด";
 
 /* Cities (Level of Detail) */
-"Cities" = "ก้_Cities_____________ษฺ";
+"Cities" = "เมือง";
 
 /* City (Level of Detail) */
-"City" = "ก้_City_________ษฺ";
+"City" = "เมือง";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "ชัดเจน";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "เข็มทิศ, ทิศทาง %lld องศา %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "ก้_Continent___________________ษฺ";
+"Continent" = "ทวีป";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "ดำเนินการต่อ";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "ก้_Could not retrieve map areas for this map______________________ษฺ.";
+"Could not retrieve map areas for this map." = "ไม่สามารถดึงข้อมูลพื้นที่แผนที่สำหรับแผนที่นี้ได้";
 
 /* Counties (Level of Detail) */
-"Counties" = "ก้_Counties_________________ษฺ";
+"Counties" = "เขต";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "ก้_Countries (Big)________________ษฺ";
+"Countries (Big)" = "ประเทศ (ใหญ่)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "ก้_Countries (Small)__________________ษฺ";
+"Countries (Small)" = "ประเทศ (เล็ก)";
 
 /* County (Level of Detail) */
-"County" = "ก้_County_____________ษฺ";
+"County" = "เขต";
 
 /* The status text for an opened map area. */
-"Currently open" = "ก้_Currently open_______________ษฺ";
+"Currently open" = "เปิดอยู่ในปัจจุบัน";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "อันตราย: ใบรับรองที่ระบุโดย '%@' ไม่มีลายเซ็นของหน่วยงานที่เชื่อถือได้";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "ลบ";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "ก้_Delete All Starting Points___________________________ษฺ";
+"Delete All Starting Points" = "ลบจุดเริ่มต้นทั้งหมด";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "ก้_Delete all starting points____________________________ษฺ?";
+"Delete all starting points?" = "ลบจุดเริ่มต้นทั้งหมดหรือไม่";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "ก้_Delete Map Area________________ษฺ";
+"Delete Map Area" = "ลบพื้นที่แผนที่";
 
 /* A label for the description of the map area. */
-"Description" = "ก้_Description____________ษฺ";
+"Description" = "รายละเอียด";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "ก้_Dismiss_______________ษฺ";
+"Dismiss" = "ยกเลิก";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "สำเร็จ";
 
 /* A label for a button to download a map area. */
-"Download" = "ก้_Download_________________ษฺ";
+"Download" = "ดาวน์โหลด";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "ก้_Download failed________________ษฺ";
+"Download failed" = "การดาวน์โหลดล้มเหลว";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "ก้_Download Map Area__________________ษฺ";
+"Download Map Area" = "ดาวน์โหลดพื้นที่แผนที่";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "ก้_Downloaded_____________________ษฺ";
+"Downloaded" = "ดาวน์โหลดแล้ว";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "ก้_Downloading____________ษฺ";
+"Downloading" = "กำลังดาวน์โหลด";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "ป้อน ^[%lld ตัวอักขระ](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "ก้_Enter a name_____________ษฺ";
+"Enter a name" = "ป้อนชื่อ";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "ป้อนค่า";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "ข้อผิดพลาด";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "ก้_Error Fetching Map Areas_________________________ษฺ";
+"Error Fetching Map Areas" = "เกิดข้อผิดพลาดขณะดึงข้อมูลพื้นที่แผนที่";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "มุ่งหน้าสู่";
 
 /* House Property (Level of Detail) */
-"House Property" = "ก้_House Property_______________ษฺ";
+"House Property" = "ทรัพย์สินบ้าน";
 
 /* Houses (Level of Detail) */
-"Houses" = "ก้_Houses_____________ษฺ";
+"Houses" = "บ้าน";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "น้อยกว่าค่าขั้นต่ำ";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "ก้_Level of Detail________________ษฺ";
+"Level of Detail" = "ระดับรายละเอียด";
 
 /* The status text when a map area is loading. */
-"Loading" = "ก้_Loading_______________ษฺ";
+"Loading" = "กำลังโหลด";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "ก้_Loading failed_______________ษฺ";
+"Loading failed" = "โหลดไม่สำเร็จ";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "ก้_Map Areas___________________ษฺ";
+"Map Areas" = "พื้นที่แผนที่";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "สูงสุด ^[%lld ตัวอักขระ](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "มีเดีย";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "ก้_Metropolitan Area__________________ษฺ";
+"Metropolitan Area" = "เขตมหานคร";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "การเข้าถึงไมโครโฟนถูกปิดใช้งานไว้ใน การตั้งค่า";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "ชื่อ";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "ก้_Neighborhood_____________ษฺ";
+"Neighborhood" = "ย่าน";
 
 /* A label in reference to a specific utility network. */
 "Network" = "เครือข่าย";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "ไม่มีการกำหนดค่าที่พร้อมใช้งาน";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "ก้_No Internet Connection_______________________ษฺ";
+"No Internet Connection" = "ไม่มีการเชื่อมต่ออินเทอร์เน็ต";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "ก้_No internet connection. Showing downloaded areas only____________________________ษฺ.";
+"No internet connection. Showing downloaded areas only." = "ไม่มีการเชื่อมต่ออินเทอร์เน็ต กำลังแสดงเฉพาะพื้นที่ที่ดาวน์โหลด";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "ก้_No Map Areas_____________ษฺ";
+"No Map Areas" = "ไม่มีพื้นที่แผนที่";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "ไม่พบการจับคู่ที่ตรงกัน";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "ID วัตถุ: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "ก้_Offline Disabled_________________ษฺ";
+"Offline Disabled" = "ปิดใช้งานไว้ขณะออฟไลน์";
 
 /* A label for button to proceed with an operation. */
 "OK" = "ตกลง";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "ก้_Online Map Failed to Load__________________________ษฺ";
+"Online Map Failed to Load" = "โหลดแผนที่ออนไลน์ไม่สำเร็จ";
 
 /* A label for a button to open a map area. */
-"Open" = "ก้_Open_________ษฺ";
+"Open" = "เปิด";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "ก้_Packaging___________________ษฺ";
+"Packaging" = "กำลังสร้างแพ็คเกจ";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "ก้_Packaging failed_________________ษฺ";
+"Packaging failed" = "สร้างแพ็คเกจไม่สำเร็จ";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "ก้_Pan and zoom to define the area_________________ษฺ";
+"Pan and zoom to define the area" = "เลื่อนและซูมเพื่อกำหนดพื้นที่";
 
 /* A label in reference to a credential password. */
 "Password" = "รหัสผ่าน";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "ประเมินผลป็อปอัพไม่สำเร็จ: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "ก้_Ready to download__________________ษฺ";
+"Ready to download" = "พร้อมสำหรับการดาวน์โหลด";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "บันทึกวิดีโอเท่านั้น";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "ก้_Refresh_______________ษฺ";
+"Refresh" = "รีเฟรช";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "เปลี่ยนชื่อ";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "ผลลัพธ์";
 
 /* Room (Level of Detail) */
-"Room" = "ก้_Room_________ษฺ";
+"Room" = "ห้อง";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "ก้_Rooms___________ษฺ";
+"Rooms" = "ห้อง";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "คิวรีการค้นหา";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "เลือกสิ่งอำนวยความสะดวก";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "ก้_Select Area____________ษฺ";
+"Select Area" = "เลือกพื้นที่";
 
 /* A label for button to select a utility network. */
 "Select Network" = "เลือกเครือข่าย";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "เว็บไซต์";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "ก้_Size: %@_________________ษฺ";
+"Size: %@" = "ขนาด: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "ก้_Small Building_______________ษฺ";
+"Small Building" = "อาคารขนาดเล็ก";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "จุดเริ่มต้น";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "ก้_State/Province_______________ษฺ";
+"State/Province" = "รัฐ/จังหวัด";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "ก้_States/Provinces_________________ษฺ";
+"States/Provinces" = "รัฐ/จังหวัด";
 
 /* Street (Level of Detail) */
-"Street" = "ก้_Street_____________ษฺ";
+"Street" = "ถนน";
 
 /* Streets (Level of Detail) */
-"Streets" = "ก้_Streets_______________ษฺ";
+"Streets" = "ถนนต่างๆ";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "ถ่ายภาพหรือวิดีโอ";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "แผนที่ไม่มีการอ้างอิงเชิงพื้นที่";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "ก้_The map is not enabled for offline use_____________________ษฺ.";
+"The map is not enabled for offline use." = "ไม่ได้เปิดใช้งานแผนที่ไว้สำหรับการใช้ขณะออฟไลน์";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "ก้_The name for the map area must be unique______________________ษฺ.";
+"The name for the map area must be unique." = "ชื่อพื้นที่แผนที่ต้องไม่ซ้ำกัน";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "รหัสผ่านใช้งานไม่ได้";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "ไม่สามารถเข้าถึง URL ได้ หรือไม่มีข้อมูลภาพ";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "ก้_There are no map areas for this map___________________ษฺ.";
+"There are no map areas for this map." = "ไม่มีพื้นที่แผนที่สำหรับแผนที่นี้";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "ก้_There are no map areas for this map. Tap the button below to get started______________________________________ษฺ.";
+"There are no map areas for this map. Tap the button below to get started." = "ไม่มีพื้นที่แผนที่สำหรับแผนที่นี้ แตะปุ่มด้านล่างเพื่อเริ่มใช้งาน";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "วันนี้";
 
 /* Town (Level of Detail) */
-"Town" = "ก้_Town_________ษฺ";
+"Town" = "ชุมชน";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "การติดตาม";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "ลองอีกครั้ง";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "ก้_Unknown_______________ษฺ";
+"Unknown" = "ไม่ทราบ";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "ข้อผิดพลาดการตรวจสอบที่ไม่รู้จัก";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "ประเภทแอสเซ็ทที่ไม่มีชื่อ";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "ก้_Unsupported Value__________________ษฺ";
+"Unsupported Value" = "ค่าที่ไม่รองรับ";
 
 /* A label in reference to a credential username. */
 "Username" = "ชื่อผู้ใช้";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "ค่าต้องไม่ว่างเปล่า";
 
 /* E.g. Open a hyperlink. */
-"View" = "ก้_View_________ษฺ";
+"View" = "ดู";
 
 /* World (Level of Detail) */
-"World" = "ก้_World___________ษฺ";
+"World" = "โลก";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "ก้_World (Big)____________ษฺ";
+"World (Big)" = "โลก (ใหญ่)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "ก้_World (Small)______________ษฺ";
+"World (Small)" = "โลก (เล็ก)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

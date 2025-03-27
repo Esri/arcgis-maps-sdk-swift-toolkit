@@ -2,17 +2,17 @@
 "%lld selected" = "已選擇 %lld";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "試_^[%lld Results](inflect: true)_______________________________驗";
+"^[%lld Results](inflect: true)" = "^[%lld 個結果](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "需要憑證才能在 %@ 上存取內容。";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "試_A map area cannot be downloaded at this time________________________驗.";
+"A map area cannot be downloaded at this time." = "目前無法下載地圖區域。";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "試_Add Map Area_____________驗";
+"Add Map Area" = "新增地圖區域";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "新增";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "進階選項";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "試_All Sites___________________驗";
+"All Sites" = "所有網站";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "將遺失所有追蹤輸入和結果。";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "允許";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "試_An error occurred while fetching map areas_______________________驗.";
+"An error occurred while fetching map areas." = "擷取地圖區域時發生錯誤。";
 
 /* The title for a map area. */
-"Area %lld" = "試_Area %lld___________________驗";
+"Area %lld" = "區域 %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "試_Area Name___________________驗";
+"Area Name" = "區域名稱";
 
 /* A label in reference to attachments. */
 "Attachments" = "附件(A)";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "瀏覽";
 
 /* Building (Level of Detail) */
-"Building" = "試_Building_________________驗";
+"Building" = "建築物";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "試_Buildings___________________驗";
+"Buildings" = "建築物";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "校正";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "取消起點選擇";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "試_Cancelled___________________驗";
+"Cancelled" = "已取消";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "需要憑證";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "從圖庫選擇";
 
 /* Cities (Level of Detail) */
-"Cities" = "試_Cities_____________驗";
+"Cities" = "城市";
 
 /* City (Level of Detail) */
-"City" = "試_City_________驗";
+"City" = "城市";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "清除";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "羅盤儀，航向 %lld 度 %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "試_Continent___________________驗";
+"Continent" = "大陸";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "繼續";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "試_Could not retrieve map areas for this map______________________驗.";
+"Could not retrieve map areas for this map." = "無法擷取此地圖的地圖區域。";
 
 /* Counties (Level of Detail) */
-"Counties" = "試_Counties_________________驗";
+"Counties" = "郡";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "試_Countries (Big)________________驗";
+"Countries (Big)" = "國家/地區 (大)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "試_Countries (Small)__________________驗";
+"Countries (Small)" = "國家/地區 (小)";
 
 /* County (Level of Detail) */
-"County" = "試_County_____________驗";
+"County" = "郡";
 
 /* The status text for an opened map area. */
-"Currently open" = "試_Currently open_______________驗";
+"Currently open" = "目前開啟";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "危險: '%@' 提供的憑證未經信任的機構簽署。";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "刪除";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "試_Delete All Starting Points___________________________驗";
+"Delete All Starting Points" = "刪除所有起點";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "試_Delete all starting points____________________________驗?";
+"Delete all starting points?" = "是否要刪除所有起點?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "試_Delete Map Area________________驗";
+"Delete Map Area" = "刪除地圖區域";
 
 /* A label for the description of the map area. */
-"Description" = "試_Description____________驗";
+"Description" = "描述";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "試_Dismiss_______________驗";
+"Dismiss" = "清除";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "完成";
 
 /* A label for a button to download a map area. */
-"Download" = "試_Download_________________驗";
+"Download" = "下載";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "試_Download failed________________驗";
+"Download failed" = "下載失敗";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "試_Download Map Area__________________驗";
+"Download Map Area" = "下載地圖區域";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "試_Downloaded_____________________驗";
+"Downloaded" = "已下載";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "試_Downloading____________驗";
+"Downloading" = "正在下載";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "輸入 ^[%lld 個字元](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "試_Enter a name_____________驗";
+"Enter a name" = "輸入名稱";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "輸入值";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "錯誤";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "試_Error Fetching Map Areas_________________________驗";
+"Error Fetching Map Areas" = "擷取地圖區域時發生錯誤";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "標題";
 
 /* House Property (Level of Detail) */
-"House Property" = "試_House Property_______________驗";
+"House Property" = "房產";
 
 /* Houses (Level of Detail) */
-"Houses" = "試_Houses_____________驗";
+"Houses" = "房屋";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "小於最小值";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "試_Level of Detail________________驗";
+"Level of Detail" = "詳細程度";
 
 /* The status text when a map area is loading. */
-"Loading" = "試_Loading_______________驗";
+"Loading" = "正在載入";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "試_Loading failed_______________驗";
+"Loading failed" = "載入失敗";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "試_Map Areas___________________驗";
+"Map Areas" = "地圖區域";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "最多 ^[%lld 個字元](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "媒體";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "試_Metropolitan Area__________________驗";
+"Metropolitan Area" = "都會區域";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "麥克風存取已在「設定」中停用。";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "名稱";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "試_Neighborhood_____________驗";
+"Neighborhood" = "鄰里";
 
 /* A label in reference to a specific utility network. */
 "Network" = "網路";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "無可用配置。";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "試_No Internet Connection_______________________驗";
+"No Internet Connection" = "無網際網路連線";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "試_No internet connection. Showing downloaded areas only____________________________驗.";
+"No internet connection. Showing downloaded areas only." = "無網際網路連線。 僅顯示下載的區域。";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "試_No Map Areas_____________驗";
+"No Map Areas" = "無地圖區域";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "找不到相符項。";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "物件 ID: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "試_Offline Disabled_________________驗";
+"Offline Disabled" = "已停用離線";
 
 /* A label for button to proceed with an operation. */
 "OK" = "確定";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "試_Online Map Failed to Load__________________________驗";
+"Online Map Failed to Load" = "線上地圖無法載入";
 
 /* A label for a button to open a map area. */
-"Open" = "試_Open_________驗";
+"Open" = "開啟";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "試_Packaging___________________驗";
+"Packaging" = "正在封裝";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "試_Packaging failed_________________驗";
+"Packaging failed" = "封裝失敗";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "試_Pan and zoom to define the area_________________驗";
+"Pan and zoom to define the area" = "平移並縮放以定義區域";
 
 /* A label in reference to a credential password. */
 "Password" = "密碼";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "快顯視窗評估失敗: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "試_Ready to download__________________驗";
+"Ready to download" = "已準備好下載";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "僅限錄影";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "試_Refresh_______________驗";
+"Refresh" = "重新整理";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "重新命名";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "結果";
 
 /* Room (Level of Detail) */
-"Room" = "試_Room_________驗";
+"Room" = "房間";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "試_Rooms___________驗";
+"Rooms" = "房間";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "搜尋查詢";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "選擇機構";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "試_Select Area____________驗";
+"Select Area" = "選擇區域";
 
 /* A label for button to select a utility network. */
 "Select Network" = "選擇網路";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "網站";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "試_Size: %@_________________驗";
+"Size: %@" = "大小: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "試_Small Building_______________驗";
+"Small Building" = "小型建築物";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "起點";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "試_State/Province_______________驗";
+"State/Province" = "州/省";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "試_States/Provinces_________________驗";
+"States/Provinces" = "州/省";
 
 /* Street (Level of Detail) */
-"Street" = "試_Street_____________驗";
+"Street" = "街道";
 
 /* Streets (Level of Detail) */
-"Streets" = "試_Streets_______________驗";
+"Streets" = "街道";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "拍照或攝影";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "地圖沒有空間參考。";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "試_The map is not enabled for offline use_____________________驗.";
+"The map is not enabled for offline use." = "地圖未啟用離線使用。";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "試_The name for the map area must be unique______________________驗.";
+"The name for the map area must be unique." = "地圖區域的名稱必須是唯一的。";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "密碼無效。";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL 無法連線或不包含圖像資料。";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "試_There are no map areas for this map___________________驗.";
+"There are no map areas for this map." = "此地圖沒有地圖區域。";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "試_There are no map areas for this map. Tap the button below to get started______________________________________驗.";
+"There are no map areas for this map. Tap the button below to get started." = "此地圖沒有地圖區域。 點一下下方按鈕開始使用。";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "今天";
 
 /* Town (Level of Detail) */
-"Town" = "試_Town_________驗";
+"Town" = "鎮";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "軌跡";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "重試";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "試_Unknown_______________驗";
+"Unknown" = "未知";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "未知驗證錯誤";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "未命名的資產類型";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "試_Unsupported Value__________________驗";
+"Unsupported Value" = "不支援的值";
 
 /* A label in reference to a credential username. */
 "Username" = "使用者名稱";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "值不得空白";
 
 /* E.g. Open a hyperlink. */
-"View" = "試_View_________驗";
+"View" = "查看";
 
 /* World (Level of Detail) */
-"World" = "試_World___________驗";
+"World" = "世界";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "試_World (Big)____________驗";
+"World (Big)" = "世界 (大)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "試_World (Small)______________驗";
+"World (Small)" = "世界 (小)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

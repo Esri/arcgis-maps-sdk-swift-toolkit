@@ -2,17 +2,17 @@
 "%lld selected" = "%lld valgt";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "ø_^[%lld Results](inflect: true)_______________________________å";
+"^[%lld Results](inflect: true)" = "Angiv ^[%lld characters](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Et certifikat er påkrævet for at få adgang til indhold på %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "ø_A map area cannot be downloaded at this time________________________å.";
+"A map area cannot be downloaded at this time." = "Det er ikke muligt at downloade et kortområde på nuværende tidspunkt.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "ø_Add Map Area_____________å";
+"Add Map Area" = "Tilføj kortområde";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Tilføj ny";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Avancerede indstillinger";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "ø_All Sites___________________å";
+"All Sites" = "Alle sites";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Alle sporings-input og -resultater vil gå tabt.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Tillad";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "ø_An error occurred while fetching map areas_______________________å.";
+"An error occurred while fetching map areas." = "Der opstod en fejl under hentning af kortområder.";
 
 /* The title for a map area. */
-"Area %lld" = "ø_Area %lld___________________å";
+"Area %lld" = "Området %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "ø_Area Name___________________å";
+"Area Name" = "Områdenavn";
 
 /* A label in reference to attachments. */
 "Attachments" = "Vedhæftninger";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Gennemse";
 
 /* Building (Level of Detail) */
-"Building" = "ø_Building_________________å";
+"Building" = "Bygning";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "ø_Buildings___________________å";
+"Buildings" = "Bygninger";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibrér";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Annuller valg af startpunkt";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "ø_Cancelled___________________å";
+"Cancelled" = "Annulleret";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certifikat påkrævet";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Vælg fra bibliotek";
 
 /* Cities (Level of Detail) */
-"Cities" = "ø_Cities_____________å";
+"Cities" = "Byer";
 
 /* City (Level of Detail) */
-"City" = "ø_City_________å";
+"City" = "By";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Ryd";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompas, kurs %lld grader %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "ø_Continent___________________å";
+"Continent" = "Kontinent";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Fortsæt";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "ø_Could not retrieve map areas for this map______________________å.";
+"Could not retrieve map areas for this map." = "Kunne ikke hente kortområder for dette kort.";
 
 /* Counties (Level of Detail) */
-"Counties" = "ø_Counties_________________å";
+"Counties" = "Amter";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "ø_Countries (Big)________________å";
+"Countries (Big)" = "Lande (store)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "ø_Countries (Small)__________________å";
+"Countries (Small)" = "Lande (små)";
 
 /* County (Level of Detail) */
-"County" = "ø_County_____________å";
+"County" = "Amt";
 
 /* The status text for an opened map area. */
-"Currently open" = "ø_Currently open_______________å";
+"Currently open" = "Åben i øjeblikket";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Advarsel: Certifikatet angivet af '%@' er ikke signeret af en pålidelig myndighed.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Slet";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "ø_Delete All Starting Points___________________________å";
+"Delete All Starting Points" = "Slet alle startpunkter";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "ø_Delete all starting points____________________________å?";
+"Delete all starting points?" = "Vil du slette alle startpunkter?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "ø_Delete Map Area________________å";
+"Delete Map Area" = "Slet kortområde";
 
 /* A label for the description of the map area. */
-"Description" = "ø_Description____________å";
+"Description" = "Beskrivelse";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "ø_Dismiss_______________å";
+"Dismiss" = "Afvis";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Udført";
 
 /* A label for a button to download a map area. */
-"Download" = "ø_Download_________________å";
+"Download" = "Arkivér";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "ø_Download failed________________å";
+"Download failed" = "Hentning mislykkedes";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "ø_Download Map Area__________________å";
+"Download Map Area" = "Download kortområde";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "ø_Downloaded_____________________å";
+"Downloaded" = "Downloadet";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "ø_Downloading____________å";
+"Downloading" = "Downloader";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Angiv ^[%lld characters](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "ø_Enter a name_____________å";
+"Enter a name" = "Indtast et navn";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Indtast værdi";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Fejl";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "ø_Error Fetching Map Areas_________________________å";
+"Error Fetching Map Areas" = "Fejl under hentning af kortområder";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "kurs";
 
 /* House Property (Level of Detail) */
-"House Property" = "ø_House Property_______________å";
+"House Property" = "Husegenskab";
 
 /* Houses (Level of Detail) */
-"Houses" = "ø_Houses_____________å";
+"Houses" = "Huse";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mindre en minimumværdien";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "ø_Level of Detail________________å";
+"Level of Detail" = "Detaljeringsgrad";
 
 /* The status text when a map area is loading. */
-"Loading" = "ø_Loading_______________å";
+"Loading" = "Indlæser";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "ø_Loading failed_______________å";
+"Loading failed" = "Indlæsning mislykkedes";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "ø_Map Areas___________________å";
+"Map Areas" = "Kortområder";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maks. ^[%lld characters](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Medier";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "ø_Metropolitan Area__________________å";
+"Metropolitan Area" = "Storbyområde";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Mikrofonadgang er blevet deaktiveret under Indstillinger.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Navn";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "ø_Neighborhood_____________å";
+"Neighborhood" = "Kvarter";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Netværk";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Ingen konfigurationer tilgængelige";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "ø_No Internet Connection_______________________å";
+"No Internet Connection" = "Ingen internetforbindelse";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "ø_No internet connection. Showing downloaded areas only____________________________å.";
+"No internet connection. Showing downloaded areas only." = "Ingen internetforbindelse. Viser kun downloadede områder.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "ø_No Map Areas_____________å";
+"No Map Areas" = "Ingen kortområder";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Ingen matches fundet.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Objekt-id: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "ø_Offline Disabled_________________å";
+"Offline Disabled" = "Offline deaktiveret";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "ø_Online Map Failed to Load__________________________å";
+"Online Map Failed to Load" = "Online kort kunne ikke indlæses";
 
 /* A label for a button to open a map area. */
-"Open" = "ø_Open_________å";
+"Open" = "Åben";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "ø_Packaging___________________å";
+"Packaging" = "Pakning";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "ø_Packaging failed_________________å";
+"Packaging failed" = "Pakning mislykkedes";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "ø_Pan and zoom to define the area_________________å";
+"Pan and zoom to define the area" = "Panorer og zoom for at definere området";
 
 /* A label in reference to a credential password. */
 "Password" = "Adgangskode";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Evaluering af pop-up mislykkedes: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "ø_Ready to download__________________å";
+"Ready to download" = "Klar til at blive hentet";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Optag kun video";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "ø_Refresh_______________å";
+"Refresh" = "Opdatér";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Omdøb";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Resultater";
 
 /* Room (Level of Detail) */
-"Room" = "ø_Room_________å";
+"Room" = "Værelse";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "ø_Rooms___________å";
+"Rooms" = "Værelser";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Søgeforespørgsel";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Vælg en facilitet";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "ø_Select Area____________å";
+"Select Area" = "Vælg område";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Vælg netværk";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Websteder";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "ø_Size: %@_________________å";
+"Size: %@" = "Størrelse: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "ø_Small Building_______________å";
+"Small Building" = "Lille bygning";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Startpunkter";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "ø_State/Province_______________å";
+"State/Province" = "Delstat/provins";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "ø_States/Provinces_________________å";
+"States/Provinces" = "Delstater/provinser";
 
 /* Street (Level of Detail) */
-"Street" = "ø_Street_____________å";
+"Street" = "Gade";
 
 /* Streets (Level of Detail) */
-"Streets" = "ø_Streets_______________å";
+"Streets" = "Gader";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Tag foto eller video";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Kortet har ikke en spatial reference.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "ø_The map is not enabled for offline use_____________________å.";
+"The map is not enabled for offline use." = "Kortet er ikke aktiveret til offline-brug.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "ø_The name for the map area must be unique______________________å.";
+"The name for the map area must be unique." = "Navnet på kortområdet skal være entydigt.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Adgangskoden var ugyldig.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL kunne ikke nås eller indeholdt ingen billeddata.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "ø_There are no map areas for this map___________________å.";
+"There are no map areas for this map." = "Der er ingen kortområder for dette kort.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "ø_There are no map areas for this map. Tap the button below to get started______________________________________å.";
+"There are no map areas for this map. Tap the button below to get started." = "Der er ingen kortområder for dette kort. Tryk på knappen nedenfor for at komme i gang.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "I dag";
 
 /* Town (Level of Detail) */
-"Town" = "ø_Town_________å";
+"Town" = "By";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Spor";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Prøv igen";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "ø_Unknown_______________å";
+"Unknown" = "Ukendt";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Ukendt valideringsfejl";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Ikke-navngivet aktivtype";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "ø_Unsupported Value__________________å";
+"Unsupported Value" = "Ikke-understøttet værdi";
 
 /* A label in reference to a credential username. */
 "Username" = "Brugernavn";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Værdi må ikke være tom";
 
 /* E.g. Open a hyperlink. */
-"View" = "ø_View_________å";
+"View" = "Vis";
 
 /* World (Level of Detail) */
-"World" = "ø_World___________å";
+"World" = "Verden";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "ø_World (Big)____________å";
+"World (Big)" = "Verden (stor)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "ø_World (Small)______________å";
+"World (Small)" = "Verden (lille)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

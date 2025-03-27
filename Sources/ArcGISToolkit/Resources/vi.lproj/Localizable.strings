@@ -2,17 +2,17 @@
 "%lld selected" = "%lld đã chọn";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "Đ_^[%lld Results](inflect: true)_______________________________ớ";
+"^[%lld Results](inflect: true)" = "^[%lld Kết quả](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Cần có chứng chỉ để truy cập nội dung trên %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "Đ_A map area cannot be downloaded at this time________________________ớ.";
+"A map area cannot be downloaded at this time." = "Không thể tải xuống khu vực bản đồ vào lúc này.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "Đ_Add Map Area_____________ớ";
+"Add Map Area" = "Thêm Khu vực Bản đồ";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Thêm Mới";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Tùy chọn Nâng cao";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "Đ_All Sites___________________ớ";
+"All Sites" = "Tất cả các Địa điểm";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Tất cả các đầu vào và kết quả truy dấu sẽ bị mất.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Cho phép";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "Đ_An error occurred while fetching map areas_______________________ớ.";
+"An error occurred while fetching map areas." = "Đã xảy ra lỗi khi tìm nạp khu vực bản đồ.";
 
 /* The title for a map area. */
-"Area %lld" = "Đ_Area %lld___________________ớ";
+"Area %lld" = "Khu vực %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "Đ_Area Name___________________ớ";
+"Area Name" = "Tên Khu vực";
 
 /* A label in reference to attachments. */
 "Attachments" = "Các tệp đính kèm";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Duyệt tìm";
 
 /* Building (Level of Detail) */
-"Building" = "Đ_Building_________________ớ";
+"Building" = "Công trình";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "Đ_Buildings___________________ớ";
+"Buildings" = "Công trình";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Hiệu chuẩn";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Hủy Lựa chọn Điểm Bắt đầu";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "Đ_Cancelled___________________ớ";
+"Cancelled" = "Đã hủy bỏ";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Yêu cầu Chứng chỉ";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Chọn Từ Thư viện";
 
 /* Cities (Level of Detail) */
-"Cities" = "Đ_Cities_____________ớ";
+"Cities" = "Thành phố";
 
 /* City (Level of Detail) */
-"City" = "Đ_City_________ớ";
+"City" = "Thành phố";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Xóa";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "La bàn, góc %lld đầu mục %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "Đ_Continent___________________ớ";
+"Continent" = "Lục địa";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Tiếp";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "Đ_Could not retrieve map areas for this map______________________ớ.";
+"Could not retrieve map areas for this map." = "Không thể truy xuất khu vực bản đồ cho bản đồ này.";
 
 /* Counties (Level of Detail) */
-"Counties" = "Đ_Counties_________________ớ";
+"Counties" = "Hạt";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "Đ_Countries (Big)________________ớ";
+"Countries (Big)" = "Quốc gia (Lớn)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "Đ_Countries (Small)__________________ớ";
+"Countries (Small)" = "Quốc gia (Nhỏ)";
 
 /* County (Level of Detail) */
-"County" = "Đ_County_____________ớ";
+"County" = "Hạt";
 
 /* The status text for an opened map area. */
-"Currently open" = "Đ_Currently open_______________ớ";
+"Currently open" = "Hiện đang mở";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nguy hiểm: Chứng chỉ do '%@' cung cấp không được ký bởi cơ quan đáng tin cậy.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Xóa";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "Đ_Delete All Starting Points___________________________ớ";
+"Delete All Starting Points" = "Xóa Tất cả Điểm Bắt đầu";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "Đ_Delete all starting points____________________________ớ?";
+"Delete all starting points?" = "Xóa tất cả điểm bắt đầu?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "Đ_Delete Map Area________________ớ";
+"Delete Map Area" = "Xóa Khu vực Bản đồ";
 
 /* A label for the description of the map area. */
-"Description" = "Đ_Description____________ớ";
+"Description" = "Thông tin mô tả";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "Đ_Dismiss_______________ớ";
+"Dismiss" = "Bỏ qua";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Hoàn tất";
 
 /* A label for a button to download a map area. */
-"Download" = "Đ_Download_________________ớ";
+"Download" = "Tải xuống";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "Đ_Download failed________________ớ";
+"Download failed" = "Tải xuống thất bại";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "Đ_Download Map Area__________________ớ";
+"Download Map Area" = "Tải xuống Khu vực Bản đồ";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "Đ_Downloaded_____________________ớ";
+"Downloaded" = "Đã tải xuống";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "Đ_Downloading____________ớ";
+"Downloading" = "Đang tải xuống";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Nhập ^[%lld ký tự](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "Đ_Enter a name_____________ớ";
+"Enter a name" = "Nhập tên";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Nhập Giá trị";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Lỗi";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "Đ_Error Fetching Map Areas_________________________ớ";
+"Error Fetching Map Areas" = "Lỗi Tìm nạp Khu vực Bản đồ";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "đầu mục";
 
 /* House Property (Level of Detail) */
-"House Property" = "Đ_House Property_______________ớ";
+"House Property" = "Thuộc tính Nhà ở";
 
 /* Houses (Level of Detail) */
-"Houses" = "Đ_Houses_____________ớ";
+"Houses" = "Nhà ở";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Dưới giá trị tối thiểu";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "Đ_Level of Detail________________ớ";
+"Level of Detail" = "Mức độ chi tiết";
 
 /* The status text when a map area is loading. */
-"Loading" = "Đ_Loading_______________ớ";
+"Loading" = "Đang tải";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "Đ_Loading failed_______________ớ";
+"Loading failed" = "Tải không thành công";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "Đ_Map Areas___________________ớ";
+"Map Areas" = "Khu vực Bản đồ";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Tối đa ^[%lld ký tự](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Phương tiện truyền thông";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "Đ_Metropolitan Area__________________ớ";
+"Metropolitan Area" = "Khu vực Đô thị";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Quyền truy cập micrô bị tắt trong Thiết lập.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Tên";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "Đ_Neighborhood_____________ớ";
+"Neighborhood" = "Vùng lân cận";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Mạng";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Không có cấu hình nào khả dụng.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "Đ_No Internet Connection_______________________ớ";
+"No Internet Connection" = "Không có Kết nối Internet";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "Đ_No internet connection. Showing downloaded areas only____________________________ớ.";
+"No internet connection. Showing downloaded areas only." = "Không có kết nối internet. Chỉ hiển thị các khu vực đã tải xuống.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "Đ_No Map Areas_____________ớ";
+"No Map Areas" = "Không có Khu vực Bản đồ";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Không tìm thấy các mục trùng khớp.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "ID Đối tượng: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "Đ_Offline Disabled_________________ớ";
+"Offline Disabled" = "Đã tắt Ngoại tuyến";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "Đ_Online Map Failed to Load__________________________ớ";
+"Online Map Failed to Load" = "Tải Bản đồ Trực tuyến Không thành công";
 
 /* A label for a button to open a map area. */
-"Open" = "Đ_Open_________ớ";
+"Open" = "Mở";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "Đ_Packaging___________________ớ";
+"Packaging" = "Đang đóng gói";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "Đ_Packaging failed_________________ớ";
+"Packaging failed" = "Đóng gói không thành công";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "Đ_Pan and zoom to define the area_________________ớ";
+"Pan and zoom to define the area" = "Di chuyển và thu phóng để xác định khu vực";
 
 /* A label in reference to a credential password. */
 "Password" = "Mật khẩu";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Không thể đánh giá popup: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "Đ_Ready to download__________________ớ";
+"Ready to download" = "Sẵn sàng để tải xuống";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Chỉ quay video";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "Đ_Refresh_______________ớ";
+"Refresh" = "Làm mới";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Đổi tên";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Kết quả";
 
 /* Room (Level of Detail) */
-"Room" = "Đ_Room_________ớ";
+"Room" = "Phòng";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "Đ_Rooms___________ớ";
+"Rooms" = "Phòng";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Truy vấn Tìm kiếm";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Chọn một cơ sở";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "Đ_Select Area____________ớ";
+"Select Area" = "Chọn Khu vực";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Chọn Mạng";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Sites";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "Đ_Size: %@_________________ớ";
+"Size: %@" = "Kích thước: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "Đ_Small Building_______________ớ";
+"Small Building" = "Tòa nhà Nhỏ";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Điểm Bắt đầu";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "Đ_State/Province_______________ớ";
+"State/Province" = "Tiểu bang/Tỉnh";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "Đ_States/Provinces_________________ớ";
+"States/Provinces" = "Các Tiểu bang/Tỉnh";
 
 /* Street (Level of Detail) */
-"Street" = "Đ_Street_____________ớ";
+"Street" = "Đường phố";
 
 /* Streets (Level of Detail) */
-"Streets" = "Đ_Streets_______________ớ";
+"Streets" = "Các Đường phố";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Chụp Ảnh hoặc Quay Video";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Bản đồ không có mục tham chiếu không gian.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "Đ_The map is not enabled for offline use_____________________ớ.";
+"The map is not enabled for offline use." = "Bản đồ không được kích hoạt để sử dụng ngoại tuyến.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "Đ_The name for the map area must be unique______________________ớ.";
+"The name for the map area must be unique." = "Tên khu vực bản đồ phải là duy nhất.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Mật khẩu không hợp lệ.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL không thể truy cập được hoặc không chứa dữ liệu hình ảnh.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "Đ_There are no map areas for this map___________________ớ.";
+"There are no map areas for this map." = "Không có khu vực bản đồ cho bản đồ này.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "Đ_There are no map areas for this map. Tap the button below to get started______________________________________ớ.";
+"There are no map areas for this map. Tap the button below to get started." = "Không có khu vực bản đồ cho bản đồ này. Chạm vào nút bên dưới để bắt đầu.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Hôm nay";
 
 /* Town (Level of Detail) */
-"Town" = "Đ_Town_________ớ";
+"Town" = "Thị trấn/Thị xã";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Truy dấu";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Thử lại";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "Đ_Unknown_______________ớ";
+"Unknown" = "Không xác định";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Lỗi xác minh không xác định";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Loại Tài liệu Không có tên";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "Đ_Unsupported Value__________________ớ";
+"Unsupported Value" = "Giá trị Không được hỗ trợ";
 
 /* A label in reference to a credential username. */
 "Username" = "Tên người dùng";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Giá trị không được trống";
 
 /* E.g. Open a hyperlink. */
-"View" = "Đ_View_________ớ";
+"View" = "Xem";
 
 /* World (Level of Detail) */
-"World" = "Đ_World___________ớ";
+"World" = "Thế giới";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "Đ_World (Big)____________ớ";
+"World (Big)" = "Thế giới (Lớn)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "Đ_World (Small)______________ớ";
+"World (Small)" = "Thế giới (Nhỏ)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
