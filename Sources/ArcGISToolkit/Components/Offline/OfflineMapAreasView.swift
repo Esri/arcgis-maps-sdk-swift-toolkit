@@ -67,9 +67,6 @@ import ArcGIS
 /// pull-to-refresh to reload the list of map areas. Depending on the network
 /// connectivity, the view will display the appropriate content.
 ///
-/// During the various stages of the load and download process, the view will
-/// display loading indicator, progress view, and errors to indicate the status.
-///
 /// **Associated Types**
 ///
 /// `OfflineMapAreasView` has the following associated types:
