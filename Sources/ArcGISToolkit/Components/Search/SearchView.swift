@@ -475,13 +475,7 @@ extension ResultRow {
             image: AnyView(
                 (searchSuggestion.isCollection ?
                  Image(systemName: "magnifyingglass") :
-                    Image(
-                        uiImage: UIImage(
-                            named: "pin",
-                            in: .toolkitModule,
-                            with: nil
-                        )!
-                    )
+                    Image("pin", bundle: .toolkitModule)
                 )
                     .foregroundStyle(.secondary)
             )
@@ -495,7 +489,7 @@ extension ResultRow {
             title: searchResult.displayTitle,
             subtitle: searchResult.displaySubtitle,
             image: AnyView(
-                Image(uiImage: UIImage.mapPin)
+                Image("MapPin", bundle: .toolkitModule)
                     .scaleEffect(0.65)
             )
         )
