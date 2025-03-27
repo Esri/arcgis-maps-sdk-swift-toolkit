@@ -18,9 +18,6 @@ import ArcGIS
 /// The `OfflineMapAreasView` displays a list of downloadable preplanned or
 /// on-demand map areas from a given web map.
 ///
-/// The view allows users to download, view, and manage offline maps
-/// when network connectivity is poor or nonexistent.
-///
 /// **Features**
 ///
 /// The view supports both ahead-of-time(preplanned) and on-demand workflows
