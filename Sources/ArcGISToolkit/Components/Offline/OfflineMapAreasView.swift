@@ -33,7 +33,7 @@ import ArcGIS
 ///
 /// For preplanned workflows, the view:
 ///
-/// - Displays a list of available preplanned map areas from a offline-enabled
+/// - Displays a list of available preplanned map areas from an offline-enabled
 /// web map that contains preplanned map areas when the network is connected.
 /// - Displays a list of downloaded preplanned map areas on the device
 /// when the network is disconnected.
