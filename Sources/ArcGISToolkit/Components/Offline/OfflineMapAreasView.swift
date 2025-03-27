@@ -15,8 +15,8 @@
 import SwiftUI
 import ArcGIS
 
-/// The `OfflineMapAreasView` displays a list of downloadable preplanned or
-/// on-demand map areas from a given web map.
+/// The `OfflineMapAreasView` allows users to take a web map offline by
+/// downloading map areas.
 ///
 /// **Features**
 ///
