@@ -2,17 +2,17 @@
 "%lld selected" = "تم تحديد %lld";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "بيت_^[%lld Results](inflect: true)_______________________________لاحقة";
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "مطلوب شهادة للوصول إلى المحتوى الموجود على %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "بيت_A map area cannot be downloaded at this time________________________لاحقة.";
+"A map area cannot be downloaded at this time." = "يتعذر تنزيل منطقة الخريطة في هذا الوقت.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "بيت_Add Map Area_____________لاحقة";
+"Add Map Area" = "إضافة منطقة خريطة";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "إضافة جديد";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "خيارات متقدمة";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "بيت_All Sites___________________لاحقة";
+"All Sites" = "جميع المواقع";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "ستفقد جميع مدخلات ونتائج التتبع.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "السماح";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "بيت_An error occurred while fetching map areas_______________________لاحقة.";
+"An error occurred while fetching map areas." = "حدث خطأ في أثناء جلب مناطق الخريطة.";
 
 /* The title for a map area. */
-"Area %lld" = "بيت_Area %lld___________________لاحقة";
+"Area %lld" = "المنطقة %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "بيت_Area Name___________________لاحقة";
+"Area Name" = "اسم المنطقة";
 
 /* A label in reference to attachments. */
 "Attachments" = "المرفقات";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "استعراض";
 
 /* Building (Level of Detail) */
-"Building" = "بيت_Building_________________لاحقة";
+"Building" = "بناء";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "بيت_Buildings___________________لاحقة";
+"Buildings" = "مباني";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "معايرة";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "إلغاء تحديد نقطة البداية";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "بيت_Cancelled___________________لاحقة";
+"Cancelled" = "تم الإلغاء";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "الشهادة مطلوبة";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "اختيار من المكتبة";
 
 /* Cities (Level of Detail) */
-"Cities" = "بيت_Cities_____________لاحقة";
+"Cities" = "مدن";
 
 /* City (Level of Detail) */
-"City" = "بيت_City_________لاحقة";
+"City" = "المدينة";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "مسح";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "البوصلة، تتجه %lld درجة/درجات %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "بيت_Continent___________________لاحقة";
+"Continent" = "قارة";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "متابعة";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "بيت_Could not retrieve map areas for this map______________________لاحقة.";
+"Could not retrieve map areas for this map." = "يتعذر استرداد مناطق الخريطة لهذه الخريطة.";
 
 /* Counties (Level of Detail) */
-"Counties" = "بيت_Counties_________________لاحقة";
+"Counties" = "مقاطعات";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "بيت_Countries (Big)________________لاحقة";
+"Countries (Big)" = "الدول (الكبيرة)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "بيت_Countries (Small)__________________لاحقة";
+"Countries (Small)" = "الدول (الصغيرة)";
 
 /* County (Level of Detail) */
-"County" = "بيت_County_____________لاحقة";
+"County" = "مقاطعة";
 
 /* The status text for an opened map area. */
-"Currently open" = "بيت_Currently open_______________لاحقة";
+"Currently open" = "المفتوحة حاليًا";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "خطير: الشهادة المقدمة من \"%@\" غير موقعة من قبل مرجع مصدق موثوق.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "حذف";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "بيت_Delete All Starting Points___________________________لاحقة";
+"Delete All Starting Points" = "حذف جميع نقاط البدء";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "بيت_Delete all starting points____________________________لاحقة?";
+"Delete all starting points?" = "هل ترغب في حذف جميع نقاط البدء؟";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "بيت_Delete Map Area________________لاحقة";
+"Delete Map Area" = "حذف منطقة الخريطة";
 
 /* A label for the description of the map area. */
-"Description" = "بيت_Description____________لاحقة";
+"Description" = "الوصف";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "بيت_Dismiss_______________لاحقة";
+"Dismiss" = "تجاهل";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "تم";
 
 /* A label for a button to download a map area. */
-"Download" = "بيت_Download_________________لاحقة";
+"Download" = "تنزيل";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "بيت_Download failed________________لاحقة";
+"Download failed" = "فشل التنزيل";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "بيت_Download Map Area__________________لاحقة";
+"Download Map Area" = "تنزيل منطقة الخريطة";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "بيت_Downloaded_____________________لاحقة";
+"Downloaded" = "تم التنزيل";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "بيت_Downloading____________لاحقة";
+"Downloading" = "جارٍ التنزيل";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "أدخل ^[%lld characters](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "بيت_Enter a name_____________لاحقة";
+"Enter a name" = "أدخل اسمًا";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "إدخال قيمة";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "خطأ";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "بيت_Error Fetching Map Areas_________________________لاحقة";
+"Error Fetching Map Areas" = "حدث خطأ في أثناء جلب مناطق الخريطة";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "العنوان";
 
 /* House Property (Level of Detail) */
-"House Property" = "بيت_House Property_______________لاحقة";
+"House Property" = "ملكية المنزل";
 
 /* Houses (Level of Detail) */
-"Houses" = "بيت_Houses_____________لاحقة";
+"Houses" = "المنازل";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "أقل من أدنى قيمة";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "بيت_Level of Detail________________لاحقة";
+"Level of Detail" = "مستوى التفاصيل";
 
 /* The status text when a map area is loading. */
-"Loading" = "بيت_Loading_______________لاحقة";
+"Loading" = "تحميل";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "بيت_Loading failed_______________لاحقة";
+"Loading failed" = "فشل التحميل";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "بيت_Map Areas___________________لاحقة";
+"Map Areas" = "مناطق الخريطة";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "الحد الأقصى ^[%lld characters](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "وسائط";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "بيت_Metropolitan Area__________________لاحقة";
+"Metropolitan Area" = "المنطقة الحضرية";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "تم تعطيل الوصول إلى الميكروفون في الإعدادات.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "الاسم";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "بيت_Neighborhood_____________لاحقة";
+"Neighborhood" = "المجاورة";
 
 /* A label in reference to a specific utility network. */
 "Network" = "شبكة";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "لا توجد تكوينات متاحة.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "بيت_No Internet Connection_______________________لاحقة";
+"No Internet Connection" = "لا يوجد اتصال بالإنترنت";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "بيت_No internet connection. Showing downloaded areas only____________________________لاحقة.";
+"No internet connection. Showing downloaded areas only." = "لا يوجد اتصال بالإنترنت. إظهار المناطق التي تم تنزيلها فقط.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "بيت_No Map Areas_____________لاحقة";
+"No Map Areas" = "لا توجد مناطق خريطة";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "لم يتم العثور على تطابقات.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "معرف الكائن: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "بيت_Offline Disabled_________________لاحقة";
+"Offline Disabled" = "تم تعطيل عدم الاتصال";
 
 /* A label for button to proceed with an operation. */
 "OK" = "موافق";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "بيت_Online Map Failed to Load__________________________لاحقة";
+"Online Map Failed to Load" = "فشل تحميل الخريطة المتصلة";
 
 /* A label for a button to open a map area. */
-"Open" = "بيت_Open_________لاحقة";
+"Open" = "فتح";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "بيت_Packaging___________________لاحقة";
+"Packaging" = "جارٍ التعبئة";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "بيت_Packaging failed_________________لاحقة";
+"Packaging failed" = "فشلت التعبئة";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "بيت_Pan and zoom to define the area_________________لاحقة";
+"Pan and zoom to define the area" = "إزاحة وتكبير/تصغير لتعريف المنطقة";
 
 /* A label in reference to a credential password. */
 "Password" = "كلمة المرور";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "فشل تقييم النافذة المنبثقة: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "بيت_Ready to download__________________لاحقة";
+"Ready to download" = "جاهز للتنزيل";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "تسجيل الفيديو فقط";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "بيت_Refresh_______________لاحقة";
+"Refresh" = "تحديث";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "إعادة تسمية";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "النتائج";
 
 /* Room (Level of Detail) */
-"Room" = "بيت_Room_________لاحقة";
+"Room" = "غرفة";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "بيت_Rooms___________لاحقة";
+"Rooms" = "غرف";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "استعلام البحث";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "تحديد مرفق";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "بيت_Select Area____________لاحقة";
+"Select Area" = "تحديد المنطقة";
 
 /* A label for button to select a utility network. */
 "Select Network" = "تحديد شبكة";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "المواقع";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "بيت_Size: %@_________________لاحقة";
+"Size: %@" = "الحجم: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "بيت_Small Building_______________لاحقة";
+"Small Building" = "مبنى صغير";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "نقاط البداية";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "بيت_State/Province_______________لاحقة";
+"State/Province" = "الولاية/المقاطعة:";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "بيت_States/Provinces_________________لاحقة";
+"States/Provinces" = "الولايات/المقاطعات";
 
 /* Street (Level of Detail) */
-"Street" = "بيت_Street_____________لاحقة";
+"Street" = "شارع";
 
 /* Streets (Level of Detail) */
-"Streets" = "بيت_Streets_______________لاحقة";
+"Streets" = "شوارع";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "التقاط صورة أو فيديو";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "لا تحتوي الخريطة على إسناد مكاني.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "بيت_The map is not enabled for offline use_____________________لاحقة.";
+"The map is not enabled for offline use." = "لم يتم تمكين الخريطة للاستخدام دون اتصال.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "بيت_The name for the map area must be unique______________________لاحقة.";
+"The name for the map area must be unique." = "يجب أن يكون اسم منطقة الخريطة فريدًا.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "لقد كانت كلمة المرور غير صالحة.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "تعذر الوصول إلى عنوان URL أو أنه لا يحتوي على بيانات الصورة.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "بيت_There are no map areas for this map___________________لاحقة.";
+"There are no map areas for this map." = "لا توجد مناطق خريطة لهذه الخريطة.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "بيت_There are no map areas for this map. Tap the button below to get started______________________________________لاحقة.";
+"There are no map areas for this map. Tap the button below to get started." = "لا توجد مناطق خريطة لهذه الخريطة. اضغط على الزر أدناه للبدء.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "اليوم";
 
 /* Town (Level of Detail) */
-"Town" = "بيت_Town_________لاحقة";
+"Town" = "بلدة";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "تتبع";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "المحاولة مرة أخرى";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "بيت_Unknown_______________لاحقة";
+"Unknown" = "غير معروف";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "خطأ غير معروف في التحقق من الصحة";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "نوع الأصل بدون اسم";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "بيت_Unsupported Value__________________لاحقة";
+"Unsupported Value" = "قيمة غير مدعومة";
 
 /* A label in reference to a credential username. */
 "Username" = "اسم المستخدم";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "يجب ألا تكون القيمة فارغة";
 
 /* E.g. Open a hyperlink. */
-"View" = "بيت_View_________لاحقة";
+"View" = "عرض";
 
 /* World (Level of Detail) */
-"World" = "بيت_World___________لاحقة";
+"World" = "العالم";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "بيت_World (Big)____________لاحقة";
+"World (Big)" = "العالم (كبير)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "بيت_World (Small)______________لاحقة";
+"World (Small)" = "العالم (صغير)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

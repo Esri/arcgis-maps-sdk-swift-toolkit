@@ -2,17 +2,17 @@
 "%lld selected" = "%lld dipilih";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "ng_^[%lld Results](inflect: true)_______________________________ny";
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Sertifikat diperlukan untuk mengakses konten di %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "ng_A map area cannot be downloaded at this time________________________ny.";
+"A map area cannot be downloaded at this time." = "Area peta tidak dapat diunduh pada saat ini.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "ng_Add Map Area_____________ny";
+"Add Map Area" = "Tambahkan Area Peta";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Tambahkan Baru";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Opsi Lanjutan";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "ng_All Sites___________________ny";
+"All Sites" = "Semua Situs";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Semua pelacakan input dan hasil akan hilang.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Izinkan";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "ng_An error occurred while fetching map areas_______________________ny.";
+"An error occurred while fetching map areas." = "Terjadi kesalahan saat mengambil area peta.";
 
 /* The title for a map area. */
-"Area %lld" = "ng_Area %lld___________________ny";
+"Area %lld" = "Area %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "ng_Area Name___________________ny";
+"Area Name" = "Nama Area";
 
 /* A label in reference to attachments. */
 "Attachments" = "Lampiran";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Jelajahi";
 
 /* Building (Level of Detail) */
-"Building" = "ng_Building_________________ny";
+"Building" = "Gedung";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "ng_Buildings___________________ny";
+"Buildings" = "Bangunan";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibrasi";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Batalkan Pemilihan Titik Awal";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "ng_Cancelled___________________ny";
+"Cancelled" = "Dibatalkan";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Diperlukan Sertifikat";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Pilih Dari Perpustakaan";
 
 /* Cities (Level of Detail) */
-"Cities" = "ng_Cities_____________ny";
+"Cities" = "Kota";
 
 /* City (Level of Detail) */
-"City" = "ng_City_________ny";
+"City" = "Kota";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Hapus";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompas, menuju %lld derajat %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "ng_Continent___________________ny";
+"Continent" = "Benua";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Terus-menerus (kontinyu)";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "ng_Could not retrieve map areas for this map______________________ny.";
+"Could not retrieve map areas for this map." = "Tidak dapat mengambil area peta untuk peta ini.";
 
 /* Counties (Level of Detail) */
-"Counties" = "ng_Counties_________________ny";
+"Counties" = "Daerah";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "ng_Countries (Big)________________ny";
+"Countries (Big)" = "Negara (Besar)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "ng_Countries (Small)__________________ny";
+"Countries (Small)" = "Negara (Kecil)";
 
 /* County (Level of Detail) */
-"County" = "ng_County_____________ny";
+"County" = "Daerah";
 
 /* The status text for an opened map area. */
-"Currently open" = "ng_Currently open_______________ny";
+"Currently open" = "Terbuka saat ini";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Berbahaya: Sertifikat yang diberikan oleh '%@' tidak ditandatangani oleh otoritas tepercaya.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Hapus";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "ng_Delete All Starting Points___________________________ny";
+"Delete All Starting Points" = "Hapus Semua Titik Awal";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "ng_Delete all starting points____________________________ny?";
+"Delete all starting points?" = "Hapus semua titik awal?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "ng_Delete Map Area________________ny";
+"Delete Map Area" = "Hapus Area Peta";
 
 /* A label for the description of the map area. */
-"Description" = "ng_Description____________ny";
+"Description" = "Keterangan";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "ng_Dismiss_______________ny";
+"Dismiss" = "Tutup";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Selesai";
 
 /* A label for a button to download a map area. */
-"Download" = "ng_Download_________________ny";
+"Download" = "Unduh";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "ng_Download failed________________ny";
+"Download failed" = "Unduhan gagal";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "ng_Download Map Area__________________ny";
+"Download Map Area" = "Unduh Area Peta";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "ng_Downloaded_____________________ny";
+"Downloaded" = "Telah diunduh";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "ng_Downloading____________ny";
+"Downloading" = "Mengunduh";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Masukkan ^[%lld characters](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "ng_Enter a name_____________ny";
+"Enter a name" = "Masukkan nama";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Masukkan Nilai";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Kesalahan";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "ng_Error Fetching Map Areas_________________________ny";
+"Error Fetching Map Areas" = "Terjadi Kesalahan Saat Mengambil Area Peta";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "heading";
 
 /* House Property (Level of Detail) */
-"House Property" = "ng_House Property_______________ny";
+"House Property" = "Properti Rumah";
 
 /* Houses (Level of Detail) */
-"Houses" = "ng_Houses_____________ny";
+"Houses" = "Rumah";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Kurang dari nilai minimal";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "ng_Level of Detail________________ny";
+"Level of Detail" = "Tingkat Detail";
 
 /* The status text when a map area is loading. */
-"Loading" = "ng_Loading_______________ny";
+"Loading" = "Memuat";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "ng_Loading failed_______________ny";
+"Loading failed" = "Gagal memuat";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "ng_Map Areas___________________ny";
+"Map Areas" = "Area Peta";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maksimal ^[%lld characters](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Media";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "ng_Metropolitan Area__________________ny";
+"Metropolitan Area" = "Area Metropolitan";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Akses mikrofon telah dinonaktifkan di Pengaturan.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Nama";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "ng_Neighborhood_____________ny";
+"Neighborhood" = "Lingkungan";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Jaringan";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Tidak ada konfigurasi yang tersedia.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "ng_No Internet Connection_______________________ny";
+"No Internet Connection" = "Tidak Ada Koneksi Internet";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "ng_No internet connection. Showing downloaded areas only____________________________ny.";
+"No internet connection. Showing downloaded areas only." = "Tidak ada koneksi internet. Menampilkan area yang diunduh saja.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "ng_No Map Areas_____________ny";
+"No Map Areas" = "Tidak Ada Area Peta";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Tidak ada kecocokan yang ditemukan.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "ID Objek: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "ng_Offline Disabled_________________ny";
+"Offline Disabled" = "Offline Dinonaktifkan";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "ng_Online Map Failed to Load__________________________ny";
+"Online Map Failed to Load" = "Peta Online Gagal Dimuat";
 
 /* A label for a button to open a map area. */
-"Open" = "ng_Open_________ny";
+"Open" = "Buka";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "ng_Packaging___________________ny";
+"Packaging" = "Pengemasan";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "ng_Packaging failed_________________ny";
+"Packaging failed" = "Pengemasan gagal";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "ng_Pan and zoom to define the area_________________ny";
+"Pan and zoom to define the area" = "Geser dan perbesar untuk menentukan area";
 
 /* A label in reference to a credential password. */
 "Password" = "Kata Sandi";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Evaluasi popup gagal: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "ng_Ready to download__________________ny";
+"Ready to download" = "Siap diunduh";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Hanya perekaman video";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "ng_Refresh_______________ny";
+"Refresh" = "Muat Ulang";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Ubah Nama";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Hasil";
 
 /* Room (Level of Detail) */
-"Room" = "ng_Room_________ny";
+"Room" = "Kamar";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "ng_Rooms___________ny";
+"Rooms" = "Kamar";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Cari Kueri";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Pilih fasilitas";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "ng_Select Area____________ny";
+"Select Area" = "Pilih Area";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Pilih Jaringan";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Situs";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "ng_Size: %@_________________ny";
+"Size: %@" = "Ukuran: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "ng_Small Building_______________ny";
+"Small Building" = "Bangunan Kecil";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Titik Awal";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "ng_State/Province_______________ny";
+"State/Province" = "Negara Bagian/Provinsi";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "ng_States/Provinces_________________ny";
+"States/Provinces" = "Negara Bagian/Provinsi";
 
 /* Street (Level of Detail) */
-"Street" = "ng_Street_____________ny";
+"Street" = "Jalan";
 
 /* Streets (Level of Detail) */
-"Streets" = "ng_Streets_______________ny";
+"Streets" = "Jalan";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Ambil Foto atau Video";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Peta tersebut tidak memiliki referensi spasial.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "ng_The map is not enabled for offline use_____________________ny.";
+"The map is not enabled for offline use." = "Peta tidak diaktifkan untuk penggunaan offline.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "ng_The name for the map area must be unique______________________ny.";
+"The name for the map area must be unique." = "Nama untuk area peta harus unik.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Kata sandi tidak valid.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL tidak dapat dijangkau atau tidak berisi data gambar.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "ng_There are no map areas for this map___________________ny.";
+"There are no map areas for this map." = "Tidak ada area peta untuk peta ini.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "ng_There are no map areas for this map. Tap the button below to get started______________________________________ny.";
+"There are no map areas for this map. Tap the button below to get started." = "Tidak ada area peta untuk peta ini. Ketuk tombol di bawah ini untuk memulai.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Hari ini";
 
 /* Town (Level of Detail) */
-"Town" = "ng_Town_________ny";
+"Town" = "Kota";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Lacak";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Coba lagi";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "ng_Unknown_______________ny";
+"Unknown" = "Tidak Diketahui";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Kesalahan validasi tidak diketahui";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Jenis Aset Tanpa Nama";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "ng_Unsupported Value__________________ny";
+"Unsupported Value" = "Nilai Tidak Didukung";
 
 /* A label in reference to a credential username. */
 "Username" = "Nama Pengguna";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Nilai tidak boleh kosong";
 
 /* E.g. Open a hyperlink. */
-"View" = "ng_View_________ny";
+"View" = "Lihat";
 
 /* World (Level of Detail) */
-"World" = "ng_World___________ny";
+"World" = "Dunia";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "ng_World (Big)____________ny";
+"World (Big)" = "Dunia (Besar)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "ng_World (Small)______________ny";
+"World (Small)" = "Dunia (Kecil)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

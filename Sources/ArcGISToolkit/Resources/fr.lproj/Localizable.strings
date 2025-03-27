@@ -2,17 +2,17 @@
 "%lld selected" = "%lld sélectionné(s)";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "æ_^[%lld Results](inflect: true)_______________________________Â";
+"^[%lld Results](inflect: true)" = "^[%lld résultats](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Un certificat est requis pour accéder au contenu sur %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "æ_A map area cannot be downloaded at this time________________________Â.";
+"A map area cannot be downloaded at this time." = "Impossible de télécharger une zone cartographique pour l’instant.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "æ_Add Map Area_____________Â";
+"Add Map Area" = "Ajouter une zone cartographique";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Nouveau";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Options avancées";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "æ_All Sites___________________Â";
+"All Sites" = "Tous les sites";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Tous les résultats et toutes les entrées du traçage seront perdus.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Autoriser";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "æ_An error occurred while fetching map areas_______________________Â.";
+"An error occurred while fetching map areas." = "Une erreur s’est produite lors de la récupération des zones cartographiques.";
 
 /* The title for a map area. */
-"Area %lld" = "æ_Area %lld___________________Â";
+"Area %lld" = "Zone %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "æ_Area Name___________________Â";
+"Area Name" = "Nom de la zone";
 
 /* A label in reference to attachments. */
 "Attachments" = "Pièces jointes";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Parcourir";
 
 /* Building (Level of Detail) */
-"Building" = "æ_Building_________________Â";
+"Building" = "Bâtiment";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "æ_Buildings___________________Â";
+"Buildings" = "Bâtiments";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Calibrer";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Annuler la sélection du point de départ";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "æ_Cancelled___________________Â";
+"Cancelled" = "Annulé";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificat requis";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Choisir dans l’album photo";
 
 /* Cities (Level of Detail) */
-"Cities" = "æ_Cities_____________Â";
+"Cities" = "Villes";
 
 /* City (Level of Detail) */
-"City" = "æ_City_________Â";
+"City" = "Ville";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Effacer";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Boussole, direction %lld degrés %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "æ_Continent___________________Â";
+"Continent" = "Continent";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Continuer";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "æ_Could not retrieve map areas for this map______________________Â.";
+"Could not retrieve map areas for this map." = "Impossible de récupérer les zones cartographiques pour cette carte.";
 
 /* Counties (Level of Detail) */
-"Counties" = "æ_Counties_________________Â";
+"Counties" = "Comtés";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "æ_Countries (Big)________________Â";
+"Countries (Big)" = "Pays (grands)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "æ_Countries (Small)__________________Â";
+"Countries (Small)" = "Pays (petits)";
 
 /* County (Level of Detail) */
-"County" = "æ_County_____________Â";
+"County" = "Comté";
 
 /* The status text for an opened map area. */
-"Currently open" = "æ_Currently open_______________Â";
+"Currently open" = "Actuellement ouverte";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Danger : le certificat fourni par '%@' n’est pas signé par une autorité de confiance.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Supprimer";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "æ_Delete All Starting Points___________________________Â";
+"Delete All Starting Points" = "Supprimer tous les points de départ";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "æ_Delete all starting points____________________________Â?";
+"Delete all starting points?" = "Supprimer tous les points de départ ?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "æ_Delete Map Area________________Â";
+"Delete Map Area" = "Supprimer la zone cartographique";
 
 /* A label for the description of the map area. */
-"Description" = "æ_Description____________Â";
+"Description" = "Description";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "æ_Dismiss_______________Â";
+"Dismiss" = "Ignorer";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Terminé";
 
 /* A label for a button to download a map area. */
-"Download" = "æ_Download_________________Â";
+"Download" = "Télécharger";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "æ_Download failed________________Â";
+"Download failed" = "Échec du téléchargement";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "æ_Download Map Area__________________Â";
+"Download Map Area" = "Télécharger la zone cartographique";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "æ_Downloaded_____________________Â";
+"Downloaded" = "Téléchargée";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "æ_Downloading____________Â";
+"Downloading" = "Téléchargement";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Saisir ^[%lld caractères](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "æ_Enter a name_____________Â";
+"Enter a name" = "Saisir un nom";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Saisir une valeur";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Erreur";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "æ_Error Fetching Map Areas_________________________Â";
+"Error Fetching Map Areas" = "Erreur lors de la récupération des zones cartographiques";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "direction";
 
 /* House Property (Level of Detail) */
-"House Property" = "æ_House Property_______________Â";
+"House Property" = "Maison";
 
 /* Houses (Level of Detail) */
-"Houses" = "æ_Houses_____________Â";
+"Houses" = "Maisons";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Inférieur à la valeur minimale";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "æ_Level of Detail________________Â";
+"Level of Detail" = "Niveau de détail";
 
 /* The status text when a map area is loading. */
-"Loading" = "æ_Loading_______________Â";
+"Loading" = "Chargement";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "æ_Loading failed_______________Â";
+"Loading failed" = "Échec du chargement";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "æ_Map Areas___________________Â";
+"Map Areas" = "Zones cartographiques";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maximum ^[%lld caractères](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Contenu multimédia";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "æ_Metropolitan Area__________________Â";
+"Metropolitan Area" = "Agglomération";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "L’accès au microphone a été désactivé dans Paramètres.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Nom";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "æ_Neighborhood_____________Â";
+"Neighborhood" = "Quartier";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Réseau";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Aucune configuration disponible.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "æ_No Internet Connection_______________________Â";
+"No Internet Connection" = "Aucune connexion Internet";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "æ_No internet connection. Showing downloaded areas only____________________________Â.";
+"No internet connection. Showing downloaded areas only." = "Aucune connexion Internet. Affichage des zones téléchargées uniquement.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "æ_No Map Areas_____________Â";
+"No Map Areas" = "Aucune zone cartographique";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Aucune correspondance trouvée.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "ID d’objet : %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "æ_Offline Disabled_________________Â";
+"Offline Disabled" = "Utilisation hors connexion désactivée";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "æ_Online Map Failed to Load__________________________Â";
+"Online Map Failed to Load" = "Échec du chargement de la carte en ligne";
 
 /* A label for a button to open a map area. */
-"Open" = "æ_Open_________Â";
+"Open" = "Ouvrir";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "æ_Packaging___________________Â";
+"Packaging" = "Empaquetage";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "æ_Packaging failed_________________Â";
+"Packaging failed" = "Échec de l’empaquetage";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "æ_Pan and zoom to define the area_________________Â";
+"Pan and zoom to define the area" = "Utiliser le déplacement et le zoom pour définir la zone";
 
 /* A label in reference to a credential password. */
 "Password" = "Mot de passe";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "L’évaluation de la fenêtre contextuelle a échoué : %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "æ_Ready to download__________________Â";
+"Ready to download" = "Prête à être téléchargée";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Enregistrer une vidéo sans audio";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "æ_Refresh_______________Â";
+"Refresh" = "Actualiser";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Renommer";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Résultats";
 
 /* Room (Level of Detail) */
-"Room" = "æ_Room_________Â";
+"Room" = "Salle";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "æ_Rooms___________Â";
+"Rooms" = "Salles";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Requête de recherche";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Sélectionner un bâtiment";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "æ_Select Area____________Â";
+"Select Area" = "Sélectionner une zone";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Sélectionner un réseau";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Sites";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "æ_Size: %@_________________Â";
+"Size: %@" = "Taille : %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "æ_Small Building_______________Â";
+"Small Building" = "Petit bâtiment";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Points de départ";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "æ_State/Province_______________Â";
+"State/Province" = "Région/province";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "æ_States/Provinces_________________Â";
+"States/Provinces" = "Régions/provinces";
 
 /* Street (Level of Detail) */
-"Street" = "æ_Street_____________Â";
+"Street" = "Rue";
 
 /* Streets (Level of Detail) */
-"Streets" = "æ_Streets_______________Â";
+"Streets" = "Rues";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Prendre une photo ou une vidéo";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "La carte ne possède pas de référence spatiale.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "æ_The map is not enabled for offline use_____________________Â.";
+"The map is not enabled for offline use." = "L’utilisation hors connexion de la carte n’est pas activée.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "æ_The name for the map area must be unique______________________Â.";
+"The name for the map area must be unique." = "Le nom de la zone cartographique doit être unique.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Le mot de passe n’est pas valide.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "L’URL est inaccessible ou ne contient pas de données d’image.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "æ_There are no map areas for this map___________________Â.";
+"There are no map areas for this map." = "Il n’existe aucune zone cartographique pour cette carte.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "æ_There are no map areas for this map. Tap the button below to get started______________________________________Â.";
+"There are no map areas for this map. Tap the button below to get started." = "Il n’existe aucune zone cartographique pour cette carte. Appuyez sur le bouton ci-dessous pour commencer.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Aujourd’hui";
 
 /* Town (Level of Detail) */
-"Town" = "æ_Town_________Â";
+"Town" = "Village";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Tracer";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Réessayer";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "æ_Unknown_______________Â";
+"Unknown" = "Inconnu";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Erreur de validation inconnue";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Type de ressource sans nom";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "æ_Unsupported Value__________________Â";
+"Unsupported Value" = "Valeur non prise en charge";
 
 /* A label in reference to a credential username. */
 "Username" = "Nom d’utilisateur";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "La valeur ne doit pas être vide";
 
 /* E.g. Open a hyperlink. */
-"View" = "æ_View_________Â";
+"View" = "Afficher";
 
 /* World (Level of Detail) */
-"World" = "æ_World___________Â";
+"World" = "Monde";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "æ_World (Big)____________Â";
+"World (Big)" = "Monde (grand)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "æ_World (Small)______________Â";
+"World (Small)" = "Monde (petit)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

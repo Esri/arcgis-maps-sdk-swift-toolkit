@@ -2,17 +2,17 @@
 "%lld selected" = "%lld seçildi";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "ı_^[%lld Results](inflect: true)_______________________________İ";
+"^[%lld Results](inflect: true)" = "^[%lld Sonuç](çekim: doğru)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "%@ üzerindeki içeriğe erişmek için bir sertifika gerekiyor.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "ı_A map area cannot be downloaded at this time________________________İ.";
+"A map area cannot be downloaded at this time." = "Şu anda bir harita alanı indirilemiyor.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "ı_Add Map Area_____________İ";
+"Add Map Area" = "Harita Alanı Ekle";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Yeni Ekle";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Gelişmiş Seçenekler";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "ı_All Sites___________________İ";
+"All Sites" = "Tüm Siteler";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Tüm izleme girişleri ve sonuçları kaybedilecek.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "İzin ver";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "ı_An error occurred while fetching map areas_______________________İ.";
+"An error occurred while fetching map areas." = "Harita alanları getirilirken bir hata oluştu.";
 
 /* The title for a map area. */
-"Area %lld" = "ı_Area %lld___________________İ";
+"Area %lld" = "Alan %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "ı_Area Name___________________İ";
+"Area Name" = "Alan Adı";
 
 /* A label in reference to attachments. */
 "Attachments" = "Ekler";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Gözat";
 
 /* Building (Level of Detail) */
-"Building" = "ı_Building_________________İ";
+"Building" = "Bina";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "ı_Buildings___________________İ";
+"Buildings" = "Binalar";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibre et";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Başlangıç Noktası Seçimini İptal Et";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "ı_Cancelled___________________İ";
+"Cancelled" = "İptal Edildi";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Sertifika Gerekli";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Kütüphaneden Seç";
 
 /* Cities (Level of Detail) */
-"Cities" = "ı_Cities_____________İ";
+"Cities" = "Şehirler";
 
 /* City (Level of Detail) */
-"City" = "ı_City_________İ";
+"City" = "Şehir";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Temizle";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Pusula, başlık %lld derece %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "ı_Continent___________________İ";
+"Continent" = "Kıta";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Devam et";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "ı_Could not retrieve map areas for this map______________________İ.";
+"Could not retrieve map areas for this map." = "Bu harita için harita alanları alınamadı.";
 
 /* Counties (Level of Detail) */
-"Counties" = "ı_Counties_________________İ";
+"Counties" = "İdari Bölgeler";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "ı_Countries (Big)________________İ";
+"Countries (Big)" = "Ülkeler (Büyük)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "ı_Countries (Small)__________________İ";
+"Countries (Small)" = "Ülkeler (Küçük)";
 
 /* County (Level of Detail) */
-"County" = "ı_County_____________İ";
+"County" = "İdari Bölge";
 
 /* The status text for an opened map area. */
-"Currently open" = "ı_Currently open_______________İ";
+"Currently open" = "Şu anda açık";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Tehlike: '%@' tarafından sağlanan sertifika güvenilir bir otorite tarafından imzalanmamış.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Sil";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "ı_Delete All Starting Points___________________________İ";
+"Delete All Starting Points" = "Tüm Başlangıç Noktalarını Sil";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "ı_Delete all starting points____________________________İ?";
+"Delete all starting points?" = "Tüm başlangıç noktaları silinsin mi?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "ı_Delete Map Area________________İ";
+"Delete Map Area" = "Harita Alanını Sil";
 
 /* A label for the description of the map area. */
-"Description" = "ı_Description____________İ";
+"Description" = "Açıklama";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "ı_Dismiss_______________İ";
+"Dismiss" = "Vazgeç";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Tamam";
 
 /* A label for a button to download a map area. */
-"Download" = "ı_Download_________________İ";
+"Download" = "İndir";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "ı_Download failed________________İ";
+"Download failed" = "İndirme başarısız";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "ı_Download Map Area__________________İ";
+"Download Map Area" = "Harita Alanını İndir";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "ı_Downloaded_____________________İ";
+"Downloaded" = "İndirildi";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "ı_Downloading____________İ";
+"Downloading" = "İndiriliyor";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "^[%lld karakter] gir (çekim: doğru)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "ı_Enter a name_____________İ";
+"Enter a name" = "Bir ad girin";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Değer Gir";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Hata";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "ı_Error Fetching Map Areas_________________________İ";
+"Error Fetching Map Areas" = "Harita Alanları Getirilirken Hata Oluştu";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "başlık";
 
 /* House Property (Level of Detail) */
-"House Property" = "ı_House Property_______________İ";
+"House Property" = "Ev Mülkiyeti";
 
 /* Houses (Level of Detail) */
-"Houses" = "ı_Houses_____________İ";
+"Houses" = "Evler";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Minimum değerden daha küçük";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "ı_Level of Detail________________İ";
+"Level of Detail" = "Ayrıntı Seviyesi";
 
 /* The status text when a map area is loading. */
-"Loading" = "ı_Loading_______________İ";
+"Loading" = "Yükleniyor";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "ı_Loading failed_______________İ";
+"Loading failed" = "Yükleme başarısız oldu";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "ı_Map Areas___________________İ";
+"Map Areas" = "Harita Alanları";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maksimum ^[%lld karakter] (çekim: doğru)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Ortam";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "ı_Metropolitan Area__________________İ";
+"Metropolitan Area" = "Metropol Alan";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Mikrofon erişimi Ayarlar'da devre dışı bırakıldı.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Adı";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "ı_Neighborhood_____________İ";
+"Neighborhood" = "Komşuluk";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Ağ";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Kullanılabilir yapılandırma yok.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "ı_No Internet Connection_______________________İ";
+"No Internet Connection" = "İnternet Bağlantısı Yok";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "ı_No internet connection. Showing downloaded areas only____________________________İ.";
+"No internet connection. Showing downloaded areas only." = "İnternet bağlantısı yok. Yalnızca indirilen alanlar gösteriliyor.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "ı_No Map Areas_____________İ";
+"No Map Areas" = "Harita Alanı Yok";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Eşleşme bulunamadı.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Nesne Kimliği: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "ı_Offline Disabled_________________İ";
+"Offline Disabled" = "Çevrim Dışı Devre Dışı";
 
 /* A label for button to proceed with an operation. */
 "OK" = "Tamam";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "ı_Online Map Failed to Load__________________________İ";
+"Online Map Failed to Load" = "Çevrim İçi Harita Yüklenemedi";
 
 /* A label for a button to open a map area. */
-"Open" = "ı_Open_________İ";
+"Open" = "Açık";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "ı_Packaging___________________İ";
+"Packaging" = "Paketleme";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "ı_Packaging failed_________________İ";
+"Packaging failed" = "Paketleme başarısız oldu";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "ı_Pan and zoom to define the area_________________İ";
+"Pan and zoom to define the area" = "Alanı tanımlamak için kaydırın ve yakınlaştırın";
 
 /* A label in reference to a credential password. */
 "Password" = "Parola";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Açılır menü değerlendirilemedi: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "ı_Ready to download__________________İ";
+"Ready to download" = "İndirilmeye hazır";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Yalnızca video kaydet";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "ı_Refresh_______________İ";
+"Refresh" = "Yenile";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Yeniden Adlandır";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Sonuçlar";
 
 /* Room (Level of Detail) */
-"Room" = "ı_Room_________İ";
+"Room" = "Oda";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "ı_Rooms___________İ";
+"Rooms" = "Odalar";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Arama Sorgusu";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Bir tesis seç";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "ı_Select Area____________İ";
+"Select Area" = "Alan Seç";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Ağ Seç";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Siteler";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "ı_Size: %@_________________İ";
+"Size: %@" = "Boyut: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "ı_Small Building_______________İ";
+"Small Building" = "Küçük Bina";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Başlangıç Noktaları";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "ı_State/Province_______________İ";
+"State/Province" = "Eyalet/İl";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "ı_States/Provinces_________________İ";
+"States/Provinces" = "Eyaletler/İller";
 
 /* Street (Level of Detail) */
-"Street" = "ı_Street_____________İ";
+"Street" = "Sokak";
 
 /* Streets (Level of Detail) */
-"Streets" = "ı_Streets_______________İ";
+"Streets" = "Sokaklar";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Fotoğraf veya Video Çek";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Haritada bir mekansal referans yok.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "ı_The map is not enabled for offline use_____________________İ.";
+"The map is not enabled for offline use." = "Harita çevrim dışı kullanım için etkinleştirilmemiştir.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "ı_The name for the map area must be unique______________________İ.";
+"The name for the map area must be unique." = "Harita alanının adı benzersiz olmalıdır.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Parola geçersiz.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL adresine erişilemedi veya adres görüntü verisi içermiyor.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "ı_There are no map areas for this map___________________İ.";
+"There are no map areas for this map." = "Bu harita için herhangi bir harita alanı bulunmamaktadır.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "ı_There are no map areas for this map. Tap the button below to get started______________________________________İ.";
+"There are no map areas for this map. Tap the button below to get started." = "Bu harita için herhangi bir harita alanı bulunmamaktadır. Başlamak için aşağıdaki butona dokunun.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Bugün";
 
 /* Town (Level of Detail) */
-"Town" = "ı_Town_________İ";
+"Town" = "Kasaba";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "İz";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Yeniden Dene";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "ı_Unknown_______________İ";
+"Unknown" = "Bilinmeyen";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Bilinmeyen doğrulama hatası";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Adsız Varlık Türü";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "ı_Unsupported Value__________________İ";
+"Unsupported Value" = "Desteklenmeyen Değer";
 
 /* A label in reference to a credential username. */
 "Username" = "Kullanıcı adı";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Değer boş olmamalıdır";
 
 /* E.g. Open a hyperlink. */
-"View" = "ı_View_________İ";
+"View" = "Görüntüle";
 
 /* World (Level of Detail) */
-"World" = "ı_World___________İ";
+"World" = "Dünya";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "ı_World (Big)____________İ";
+"World (Big)" = "Dünya (Büyük)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "ı_World (Small)______________İ";
+"World (Small)" = "Dünya (Küçük)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
