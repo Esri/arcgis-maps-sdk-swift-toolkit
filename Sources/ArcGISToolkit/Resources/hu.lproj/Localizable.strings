@@ -2,17 +2,17 @@
 "%lld selected" = "%lld kiválasztva";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "í_^[%lld Results](inflect: true)_______________________________ő";
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "A(z) %@ helyen lévő tartalom eléréséhez tanúsítványra van szükség.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "í_A map area cannot be downloaded at this time________________________ő.";
+"A map area cannot be downloaded at this time." = "A térképterület jelenleg nem tölthető le.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "í_Add Map Area_____________ő";
+"Add Map Area" = "Térképterület hozzáadása";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Új hozzáadása";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Speciális beállítások";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "í_All Sites___________________ő";
+"All Sites" = "Összes hely";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Minden nyomkövetési bemenet és eredmény elveszik.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Megenged";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "í_An error occurred while fetching map areas_______________________ő.";
+"An error occurred while fetching map areas." = "Hiba történt a térképterületek lekérése közben.";
 
 /* The title for a map area. */
-"Area %lld" = "í_Area %lld___________________ő";
+"Area %lld" = "Terület %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "í_Area Name___________________ő";
+"Area Name" = "Terület neve";
 
 /* A label in reference to attachments. */
 "Attachments" = "Csatolmányok";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Tallózás";
 
 /* Building (Level of Detail) */
-"Building" = "í_Building_________________ő";
+"Building" = "Épület";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "í_Buildings___________________ő";
+"Buildings" = "Épületek";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibrálás";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "A kiindulási pont kiválasztásának törlése";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "í_Cancelled___________________ő";
+"Cancelled" = "Megszakítva";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Megkövetelt tanúsítvány";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Kiválasztás a könyvtárból";
 
 /* Cities (Level of Detail) */
-"Cities" = "í_Cities_____________ő";
+"Cities" = "Városok";
 
 /* City (Level of Detail) */
-"City" = "í_City_________ő";
+"City" = "Nagyváros";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Törlés";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Iránytű, irány %lld fok %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "í_Continent___________________ő";
+"Continent" = "Földrész";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Folytatás";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "í_Could not retrieve map areas for this map______________________ő.";
+"Could not retrieve map areas for this map." = "Ehhez a térképhez nem sikerült lekérni a térképterületeket.";
 
 /* Counties (Level of Detail) */
-"Counties" = "í_Counties_________________ő";
+"Counties" = "Megyék";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "í_Countries (Big)________________ő";
+"Countries (Big)" = "Országok (nagy)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "í_Countries (Small)__________________ő";
+"Countries (Small)" = "Országok (kicsi)";
 
 /* County (Level of Detail) */
-"County" = "í_County_____________ő";
+"County" = "Megyeigazgatás";
 
 /* The status text for an opened map area. */
-"Currently open" = "í_Currently open_______________ő";
+"Currently open" = "Jelenleg nyitva";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Veszélyes: %@ által megadott tanúsítványt nem megbízható hatóság írta alá.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Törlés";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "í_Delete All Starting Points___________________________ő";
+"Delete All Starting Points" = "Összes kiindulási pont törlése";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "í_Delete all starting points____________________________ő?";
+"Delete all starting points?" = "Törli az összes kiindulási pontot?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "í_Delete Map Area________________ő";
+"Delete Map Area" = "Térképterület törlése";
 
 /* A label for the description of the map area. */
-"Description" = "í_Description____________ő";
+"Description" = "Leírás";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "í_Dismiss_______________ő";
+"Dismiss" = "Elrejtés";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Kész";
 
 /* A label for a button to download a map area. */
-"Download" = "í_Download_________________ő";
+"Download" = "Letöltés";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "í_Download failed________________ő";
+"Download failed" = "A letöltés nem sikerült";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "í_Download Map Area__________________ő";
+"Download Map Area" = "Térképterület letöltése";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "í_Downloaded_____________________ő";
+"Downloaded" = "Letöltve";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "í_Downloading____________ő";
+"Downloading" = "Letöltés";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Adjon meg %lld karaktert";
 
 /* An instruction to enter a name. */
-"Enter a name" = "í_Enter a name_____________ő";
+"Enter a name" = "Név megadása";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Adja meg az értéket";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Hiba";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "í_Error Fetching Map Areas_________________________ő";
+"Error Fetching Map Areas" = "Hiba a térképterületek lekérdezése közben";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "mozgási irány";
 
 /* House Property (Level of Detail) */
-"House Property" = "í_House Property_______________ő";
+"House Property" = "Háztulajdonság";
 
 /* Houses (Level of Detail) */
-"Houses" = "í_Houses_____________ő";
+"Houses" = "Házak";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Kisebb, mint a minimális érték";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "í_Level of Detail________________ő";
+"Level of Detail" = "Részletességi szint";
 
 /* The status text when a map area is loading. */
-"Loading" = "í_Loading_______________ő";
+"Loading" = "Betöltés";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "í_Loading failed_______________ő";
+"Loading failed" = "Betöltés sikertelen";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "í_Map Areas___________________ő";
+"Map Areas" = "Térképterületek";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Legfeljebb %lld karakter";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Média";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "í_Metropolitan Area__________________ő";
+"Metropolitan Area" = "Világváros";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "A mikrofon-hozzáférés le lett tiltva a Beállításokban.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Név";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "í_Neighborhood_____________ő";
+"Neighborhood" = "Kerület";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Hálózat";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Nem állnak rendelkezésre konfigurációk.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "í_No Internet Connection_______________________ő";
+"No Internet Connection" = "Nincs internetkapcsolat";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "í_No internet connection. Showing downloaded areas only____________________________ő.";
+"No internet connection. Showing downloaded areas only." = "Nincs internetkapcsolat. Csak letöltött területek megjelenítése.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "í_No Map Areas_____________ő";
+"No Map Areas" = "Nincsenek térképterületek";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Nincs találat.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Objektumazonosító: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "í_Offline Disabled_________________ő";
+"Offline Disabled" = "Kapcsolat nélküli állapot letiltva";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "í_Online Map Failed to Load__________________________ő";
+"Online Map Failed to Load" = "Nem sikerült betölteni az online térképet";
 
 /* A label for a button to open a map area. */
-"Open" = "í_Open_________ő";
+"Open" = "Megnyitva";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "í_Packaging___________________ő";
+"Packaging" = "Csomagolás";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "í_Packaging failed_________________ő";
+"Packaging failed" = "Csomagolás sikertelen";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "í_Pan and zoom to define the area_________________ő";
+"Pan and zoom to define the area" = "Mozgatással és nagyítással/kicsinyítéssel jelölje ki a területet";
 
 /* A label in reference to a credential password. */
 "Password" = "Jelszó";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "A felugró ablak kiértékelése sikertelen: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "í_Ready to download__________________ő";
+"Ready to download" = "Letöltésre kész";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Csak videó rögzítése";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "í_Refresh_______________ő";
+"Refresh" = "Frissítés";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Átnevezés";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Eredmények";
 
 /* Room (Level of Detail) */
-"Room" = "í_Room_________ő";
+"Room" = "Szoba";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "í_Rooms___________ő";
+"Rooms" = "Szobák";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Keresési lekérdezés";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Válasszon ki egy létesítményt";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "í_Select Area____________ő";
+"Select Area" = "Terület kiválasztása";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Hálózat kiválasztása";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Webhelyek";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "í_Size: %@_________________ő";
+"Size: %@" = "Méret: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "í_Small Building_______________ő";
+"Small Building" = "Kis épület";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Kiindulási pontok";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "í_State/Province_______________ő";
+"State/Province" = "Állam/tartomány";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "í_States/Provinces_________________ő";
+"States/Provinces" = "Államok/tartományok";
 
 /* Street (Level of Detail) */
-"Street" = "í_Street_____________ő";
+"Street" = "Utca";
 
 /* Streets (Level of Detail) */
-"Streets" = "í_Streets_______________ő";
+"Streets" = "Utcák";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Fénykép vagy videó rögzítése";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "A térkép nem rendelkezik térbeli referenciával.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "í_The map is not enabled for offline use_____________________ő.";
+"The map is not enabled for offline use." = "A térkép nincs engedélyezve kapcsolat nélküli használatra";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "í_The name for the map area must be unique______________________ő.";
+"The name for the map area must be unique." = "A térképterület nevének egyedinek kell lennie.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "A jelszó érvénytelen.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "Az URL nem volt elérhető, vagy nem tartalmazott képadatokat.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "í_There are no map areas for this map___________________ő.";
+"There are no map areas for this map." = "Ehhez a térképhez nincsenek térképterületek.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "í_There are no map areas for this map. Tap the button below to get started______________________________________ő.";
+"There are no map areas for this map. Tap the button below to get started." = "Ehhez a térképhez nincsenek térképterületek. A kezdéshez koppintson az alábbi gombra.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Ma";
 
 /* Town (Level of Detail) */
-"Town" = "í_Town_________ő";
+"Town" = "Kisváros";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Nyomkövetés";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Próbálja meg újra";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "í_Unknown_______________ő";
+"Unknown" = "Ismeretlen";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Ismeretlen érvényesítési hiba";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Névtelen eszköztípus";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "í_Unsupported Value__________________ő";
+"Unsupported Value" = "Nem támogatott érték";
 
 /* A label in reference to a credential username. */
 "Username" = "Felhasználónév";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Az érték nem lehet üres";
 
 /* E.g. Open a hyperlink. */
-"View" = "í_View_________ő";
+"View" = "Megtekintés";
 
 /* World (Level of Detail) */
-"World" = "í_World___________ő";
+"World" = "Világ";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "í_World (Big)____________ő";
+"World (Big)" = "Világ (nagy)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "í_World (Small)______________ő";
+"World (Small)" = "Világ (kicsi)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

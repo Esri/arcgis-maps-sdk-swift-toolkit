@@ -2,17 +2,17 @@
 "%lld selected" = "%lld pasirinkta";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "Į_^[%lld Results](inflect: true)_______________________________š";
+"^[%lld Results](inflect: true)" = "^[%lld rezult.](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Norint pasiekti %@ turinį, reikia sertifikato.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "Į_A map area cannot be downloaded at this time________________________š.";
+"A map area cannot be downloaded at this time." = "Šiuo metu žemėlapio teritorijos negalima atsisiųsti.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "Į_Add Map Area_____________š";
+"Add Map Area" = "Pridėti žemėlapio teritoriją";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Pridėti naują";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Išplėstinės parinktys";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "Į_All Sites___________________š";
+"All Sites" = "Visos vietovės";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Visos sekimo įvestys ir rezultatai bus prarasti.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Leisti";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "Į_An error occurred while fetching map areas_______________________š.";
+"An error occurred while fetching map areas." = "Gaunant žemėlapio teritorijas įvyko klaida.";
 
 /* The title for a map area. */
-"Area %lld" = "Į_Area %lld___________________š";
+"Area %lld" = "Teritorija %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "Į_Area Name___________________š";
+"Area Name" = "Teritorijos pavadinimas";
 
 /* A label in reference to attachments. */
 "Attachments" = "Priedai";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Naršyti";
 
 /* Building (Level of Detail) */
-"Building" = "Į_Building_________________š";
+"Building" = "Pastatas";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "Į_Buildings___________________š";
+"Buildings" = "Pastatai";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibruoti";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Atšaukti pradžios taško pasirinkimą";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "Į_Cancelled___________________š";
+"Cancelled" = "Atšaukta";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Reikalingas sertifikatas";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Pasirinkti iš bibliotekos";
 
 /* Cities (Level of Detail) */
-"Cities" = "Į_Cities_____________š";
+"Cities" = "Miestai";
 
 /* City (Level of Detail) */
-"City" = "Į_City_________š";
+"City" = "Miestas";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Valyti";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompasas, kryptis %lld laipsniais %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "Į_Continent___________________š";
+"Continent" = "Žemynas";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Tęsti";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "Į_Could not retrieve map areas for this map______________________š.";
+"Could not retrieve map areas for this map." = "Nepavyko gauti šio žemėalapio teritorijų.";
 
 /* Counties (Level of Detail) */
-"Counties" = "Į_Counties_________________š";
+"Counties" = "Apygardos";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "Į_Countries (Big)________________š";
+"Countries (Big)" = "Šalys (didelės)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "Į_Countries (Small)__________________š";
+"Countries (Small)" = "Šalys (mažos)";
 
 /* County (Level of Detail) */
-"County" = "Į_County_____________š";
+"County" = "Apygarda";
 
 /* The status text for an opened map area. */
-"Currently open" = "Į_Currently open_______________š";
+"Currently open" = "Šiuo metu atidaryta";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Įspėjimas: „%@“ pateiktas sertifikatas nepasirašytas patikimos institucijos.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Ištrinti";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "Į_Delete All Starting Points___________________________š";
+"Delete All Starting Points" = "Ištrinti visus pradžios taškus";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "Į_Delete all starting points____________________________š?";
+"Delete all starting points?" = "Ištrinti visus pradžios taškus?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "Į_Delete Map Area________________š";
+"Delete Map Area" = "Ištrinti žemėlapio teritoriją";
 
 /* A label for the description of the map area. */
-"Description" = "Į_Description____________š";
+"Description" = "Aprašas";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "Į_Dismiss_______________š";
+"Dismiss" = "Atmesti";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Atlikta";
 
 /* A label for a button to download a map area. */
-"Download" = "Į_Download_________________š";
+"Download" = "Atsisiųsti";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "Į_Download failed________________š";
+"Download failed" = "Atsisiųsti nepavyko";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "Į_Download Map Area__________________š";
+"Download Map Area" = "Atsisiųsti žemėlapio teritoriją";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "Į_Downloaded_____________________š";
+"Downloaded" = "Atsisiųsta";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "Į_Downloading____________š";
+"Downloading" = "Atsisiunčiama";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Įveskite ^[%lld simb.](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "Į_Enter a name_____________š";
+"Enter a name" = "Įveskite pavadinimą";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Įvesti reikšmę";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Klaida";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "Į_Error Fetching Map Areas_________________________š";
+"Error Fetching Map Areas" = "Gaunanat žemėlapio teritorijas įvyko klaida";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "antraštė";
 
 /* House Property (Level of Detail) */
-"House Property" = "Į_House Property_______________š";
+"House Property" = "Namų nuosavybė";
 
 /* Houses (Level of Detail) */
-"Houses" = "Į_Houses_____________š";
+"Houses" = "Namai";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mažiau negu minimali reikšmė";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "Į_Level of Detail________________š";
+"Level of Detail" = "Detalumo lygis";
 
 /* The status text when a map area is loading. */
-"Loading" = "Į_Loading_______________š";
+"Loading" = "Kraunama";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "Į_Loading failed_______________š";
+"Loading failed" = "Įkelti nepavyko";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "Į_Map Areas___________________š";
+"Map Areas" = "Žemėlapio teritorijos";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maks. ^[%lld simb.](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Medija";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "Į_Metropolitan Area__________________š";
+"Metropolitan Area" = "Didmiesčio sritis";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Nustatymuose išjungta mikrofono prieiga.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Pavadinimas";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "Į_Neighborhood_____________š";
+"Neighborhood" = "Apylinkė";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Tinklas";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Galimų konfigūracijų nėra.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "Į_No Internet Connection_______________________š";
+"No Internet Connection" = "Nėra interneto ryšio";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "Į_No internet connection. Showing downloaded areas only____________________________š.";
+"No internet connection. Showing downloaded areas only." = "Nėra interneto ryšio. Rodomos tik atsisiųstos sritys.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "Į_No Map Areas_____________š";
+"No Map Areas" = "Nėra žemėlapio teritorijų";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Jokių atitikimų nerasta.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Objekto ID: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "Į_Offline Disabled_________________š";
+"Offline Disabled" = "Darbo neprisijungus prie interneto režimas išjungtas";
 
 /* A label for button to proceed with an operation. */
 "OK" = "Gerai";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "Į_Online Map Failed to Load__________________________š";
+"Online Map Failed to Load" = "Nepavyko įkelti internetinio žemėlapio";
 
 /* A label for a button to open a map area. */
-"Open" = "Į_Open_________š";
+"Open" = "Atverti";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "Į_Packaging___________________š";
+"Packaging" = "Kuriamas paketas";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "Į_Packaging failed_________________š";
+"Packaging failed" = "Paketo sukurti nepavyko";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "Į_Pan and zoom to define the area_________________š";
+"Pan and zoom to define the area" = "Pastumkite arba pakeiskite mastelį, kad apibrėžtumėte teritoriją";
 
 /* A label in reference to a credential password. */
 "Password" = "Slaptažodis";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Nepavyko įvertinti iškylančio lango: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "Į_Ready to download__________________š";
+"Ready to download" = "Parengta atsisiųsti";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Įrašyti tik vaizdo įrašą";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "Į_Refresh_______________š";
+"Refresh" = "Atnaujinti";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Pervardinti";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Rezultatai";
 
 /* Room (Level of Detail) */
-"Room" = "Į_Room_________š";
+"Room" = "Kambarys";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "Į_Rooms___________š";
+"Rooms" = "Kambariai";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Paieškos užklausa";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Pasirinkti įrenginį";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "Į_Select Area____________š";
+"Select Area" = "Pasirinkite teritoriją";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Pasirinkite tinklą";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Svetainės";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "Į_Size: %@_________________š";
+"Size: %@" = "Dydis: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "Į_Small Building_______________š";
+"Small Building" = "Mažas pastatas";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Pradžios taškai";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "Į_State/Province_______________š";
+"State/Province" = "Valstija / provincija";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "Į_States/Provinces_________________š";
+"States/Provinces" = "Valstijos / provincijos";
 
 /* Street (Level of Detail) */
-"Street" = "Į_Street_____________š";
+"Street" = "Gatvė";
 
 /* Streets (Level of Detail) */
-"Streets" = "Į_Streets_______________š";
+"Streets" = "Gatvės";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Fotografuoti arba filmuoti";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Pagrindo žemėlapis neturi koordinačių sistemos.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "Į_The map is not enabled for offline use_____________________š.";
+"The map is not enabled for offline use." = "Žemėlapio negalima naudoti neprisijungus.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "Į_The name for the map area must be unique______________________š.";
+"The name for the map area must be unique." = "Žemėlapio teritorijos pavadinimas turi būti unikalus.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Slaptažodis neteisingas.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "Nepavyko pasiekti URL arba jame nebuvo vaizdo duomenų.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "Į_There are no map areas for this map___________________š.";
+"There are no map areas for this map." = "Nėra šio žemėlapio teritorijų.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "Į_There are no map areas for this map. Tap the button below to get started______________________________________š.";
+"There are no map areas for this map. Tap the button below to get started." = "Nėra šio žemėlapio teritorijų. Norėdami pradėti, bakstelėkite toliau esantį mygtuką.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Šiandien";
 
 /* Town (Level of Detail) */
-"Town" = "Į_Town_________š";
+"Town" = "Miestelis";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Ženklas";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Bandykite dar kartą";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "Į_Unknown_______________š";
+"Unknown" = "Nežinomas";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Nežinoma tikrinimo klaida";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Išteklių tipas be pavadinimo";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "Į_Unsupported Value__________________š";
+"Unsupported Value" = "Nepalaikoma reikšmė";
 
 /* A label in reference to a credential username. */
 "Username" = "Naudotojo vardas";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Reikšmė negali būti tuščia";
 
 /* E.g. Open a hyperlink. */
-"View" = "Į_View_________š";
+"View" = "Peržiūrėkite";
 
 /* World (Level of Detail) */
-"World" = "Į_World___________š";
+"World" = "Pasaulis";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "Į_World (Big)____________š";
+"World (Big)" = "Pasaulis (didelis)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "Į_World (Small)______________š";
+"World (Small)" = "Pasaulis (mažas)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

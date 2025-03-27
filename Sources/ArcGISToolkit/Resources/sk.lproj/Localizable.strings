@@ -2,17 +2,17 @@
 "%lld selected" = "%lld vybraných";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "ĺ_^[%lld Results](inflect: true)_______________________________ľ";
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Pre prístup k obsahu na %@ je vyžadovaný certifikát.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "ĺ_A map area cannot be downloaded at this time________________________ľ.";
+"A map area cannot be downloaded at this time." = "Mapovú oblasť momentálne nie je možné stiahnuť.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "ĺ_Add Map Area_____________ľ";
+"Add Map Area" = "Pridať mapovú oblasť";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Pridať nové";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Pokročilé nastavenia";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "ĺ_All Sites___________________ľ";
+"All Sites" = "Všetky lokality";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Všetky vstupy a výsledky trasovania budú stratené.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Povoliť";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "ĺ_An error occurred while fetching map areas_______________________ľ.";
+"An error occurred while fetching map areas." = "Pri načítavaní mapových oblastí sa vyskytla chyba.";
 
 /* The title for a map area. */
-"Area %lld" = "ĺ_Area %lld___________________ľ";
+"Area %lld" = "Oblasť %lld";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "ĺ_Area Name___________________ľ";
+"Area Name" = "Názov oblasti";
 
 /* A label in reference to attachments. */
 "Attachments" = "Prílohy";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Prehľadať";
 
 /* Building (Level of Detail) */
-"Building" = "ĺ_Building_________________ľ";
+"Building" = "Budova";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "ĺ_Buildings___________________ľ";
+"Buildings" = "Budovy";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibrovať";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Zrušiť výber počiatočného bodu";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "ĺ_Cancelled___________________ľ";
+"Cancelled" = "Zrušené";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Vyžadový certifikát";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Vybrať z knižnice";
 
 /* Cities (Level of Detail) */
-"Cities" = "ĺ_Cities_____________ľ";
+"Cities" = "Mestá";
 
 /* City (Level of Detail) */
-"City" = "ĺ_City_________ľ";
+"City" = "Mesto";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Vyčistiť";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompas, kurz %lld stupňov %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "ĺ_Continent___________________ľ";
+"Continent" = "Kontinent";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Pokračovať";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "ĺ_Could not retrieve map areas for this map______________________ľ.";
+"Could not retrieve map areas for this map." = "Nepodarilo sa načítať mapové oblasti pre túto mapu.";
 
 /* Counties (Level of Detail) */
-"Counties" = "ĺ_Counties_________________ľ";
+"Counties" = "Okresy";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "ĺ_Countries (Big)________________ľ";
+"Countries (Big)" = "Krajiny (veľké)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "ĺ_Countries (Small)__________________ľ";
+"Countries (Small)" = "Krajiny (malé)";
 
 /* County (Level of Detail) */
-"County" = "ĺ_County_____________ľ";
+"County" = "Okres";
 
 /* The status text for an opened map area. */
-"Currently open" = "ĺ_Currently open_______________ľ";
+"Currently open" = "Aktuálne otvorené";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nebezpečné: Certifikát poskytnutý '%@' nie je podpísaný dôveryhodnou autoritou.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Zmazať";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "ĺ_Delete All Starting Points___________________________ľ";
+"Delete All Starting Points" = "Vymazať všetky východiskové body";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "ĺ_Delete all starting points____________________________ľ?";
+"Delete all starting points?" = "Vymazať všetky východiskové body?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "ĺ_Delete Map Area________________ľ";
+"Delete Map Area" = "Vymazať mapovú oblasť";
 
 /* A label for the description of the map area. */
-"Description" = "ĺ_Description____________ľ";
+"Description" = "Popis";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "ĺ_Dismiss_______________ľ";
+"Dismiss" = "Odmietnuť";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Hotovo";
 
 /* A label for a button to download a map area. */
-"Download" = "ĺ_Download_________________ľ";
+"Download" = "Stiahnuť";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "ĺ_Download failed________________ľ";
+"Download failed" = "Sťahovanie zlyhalo";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "ĺ_Download Map Area__________________ľ";
+"Download Map Area" = "Stiahnuť mapovú oblasť";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "ĺ_Downloaded_____________________ľ";
+"Downloaded" = "Stiahnuté";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "ĺ_Downloading____________ľ";
+"Downloading" = "Prebieha sťahovanie";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Zadajte ^[%lld characters](inflect: true)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "ĺ_Enter a name_____________ľ";
+"Enter a name" = "Zadajte názov";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Zadajte hodnotu";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Chyba";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "ĺ_Error Fetching Map Areas_________________________ľ";
+"Error Fetching Map Areas" = "Pri načítavaní mapových oblastí sa vyskytla chyba";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "nadpis";
 
 /* House Property (Level of Detail) */
-"House Property" = "ĺ_House Property_______________ľ";
+"House Property" = "Vlastnosť domu";
 
 /* Houses (Level of Detail) */
-"Houses" = "ĺ_Houses_____________ľ";
+"Houses" = "Domy";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Menej ako minimálna hodnota";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "ĺ_Level of Detail________________ľ";
+"Level of Detail" = "Úroveň detailov";
 
 /* The status text when a map area is loading. */
-"Loading" = "ĺ_Loading_______________ľ";
+"Loading" = "Načítava sa";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "ĺ_Loading failed_______________ľ";
+"Loading failed" = "Načítanie zlyhalo";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "ĺ_Map Areas___________________ľ";
+"Map Areas" = "Mapové oblasti";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maximálne ^[%lld characters](inflect: true)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Médiá";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "ĺ_Metropolitan Area__________________ľ";
+"Metropolitan Area" = "Metropolitná oblasť";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "V nastaveniach bol zakázaný prístup k mikrofónu.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Názov";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "ĺ_Neighborhood_____________ľ";
+"Neighborhood" = "Susedstvo";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Sieť";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Nie sú dostupné žiadne konfigurácie.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "ĺ_No Internet Connection_______________________ľ";
+"No Internet Connection" = "Žiadne pripojenie k internetu";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "ĺ_No internet connection. Showing downloaded areas only____________________________ľ.";
+"No internet connection. Showing downloaded areas only." = "Žiadne internetové pripojenie. Zobraziť len stiahnuté oblasti.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "ĺ_No Map Areas_____________ľ";
+"No Map Areas" = "Žiadne mapové oblasti";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Neboli nájdené žiadne zhody.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "ID objektu: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "ĺ_Offline Disabled_________________ľ";
+"Offline Disabled" = "Režim offline je zakázaný";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "ĺ_Online Map Failed to Load__________________________ľ";
+"Online Map Failed to Load" = "Offline mapu sa nepodarilo načítať";
 
 /* A label for a button to open a map area. */
-"Open" = "ĺ_Open_________ľ";
+"Open" = "Otvoriť";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "ĺ_Packaging___________________ľ";
+"Packaging" = "Vytvára sa balík";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "ĺ_Packaging failed_________________ľ";
+"Packaging failed" = "Vytváranie balíka zlyhalo";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "ĺ_Pan and zoom to define the area_________________ľ";
+"Pan and zoom to define the area" = "Posúvaním a priblížením definujte oblasť";
 
 /* A label in reference to a credential password. */
 "Password" = "Heslo";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Vyhodnotenie kontextového okna zlyhalo: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "ĺ_Ready to download__________________ľ";
+"Ready to download" = "Pripravené na stiahnutie";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Nahrať len video";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "ĺ_Refresh_______________ľ";
+"Refresh" = "Obnoviť";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Premenovať";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Výsledky";
 
 /* Room (Level of Detail) */
-"Room" = "ĺ_Room_________ľ";
+"Room" = "Miestnosť";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "ĺ_Rooms___________ľ";
+"Rooms" = "Miestnosti";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Vyhľadávací dopyt";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Vybrať zariadenie";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "ĺ_Select Area____________ľ";
+"Select Area" = "Vyberte oblasť";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Vyberte sieť";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Lokality";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "ĺ_Size: %@_________________ľ";
+"Size: %@" = "Veľkosť: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "ĺ_Small Building_______________ľ";
+"Small Building" = "Malá budova";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Počiatočné body";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "ĺ_State/Province_______________ľ";
+"State/Province" = "Štát/Provincia";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "ĺ_States/Provinces_________________ľ";
+"States/Provinces" = "Štáty/Provincie";
 
 /* Street (Level of Detail) */
-"Street" = "ĺ_Street_____________ľ";
+"Street" = "Ulica";
 
 /* Streets (Level of Detail) */
-"Streets" = "ĺ_Streets_______________ľ";
+"Streets" = "Ulice";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Odfotiť alebo natočiť video";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Mapa neobsahuje priestorovú referenciu.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "ĺ_The map is not enabled for offline use_____________________ľ.";
+"The map is not enabled for offline use." = "Túto mapu nie je možné používať offline.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "ĺ_The name for the map area must be unique______________________ľ.";
+"The name for the map area must be unique." = "Názov mapovej oblasti musí byť jedinečný.";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Heslo bolo neplatné.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL adresa nebola dostupná alebo neobsahovala obrazové dáta.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "ĺ_There are no map areas for this map___________________ľ.";
+"There are no map areas for this map." = "Pre túto mapu neexistujú žiadne mapové oblasti.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "ĺ_There are no map areas for this map. Tap the button below to get started______________________________________ľ.";
+"There are no map areas for this map. Tap the button below to get started." = "Pre túto mapu neexistujú žiadne mapové oblasti. Začnite ťuknutím na tlačidlo nižšie.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Dnes";
 
 /* Town (Level of Detail) */
-"Town" = "ĺ_Town_________ľ";
+"Town" = "Mestečko";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Trasovať";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Skúste to znova";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "ĺ_Unknown_______________ľ";
+"Unknown" = "Neznáme";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Neznáma chyba validácie";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Nepomenovaný typ prostriedku";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "ĺ_Unsupported Value__________________ľ";
+"Unsupported Value" = "Nepodporovaná hodnota";
 
 /* A label in reference to a credential username. */
 "Username" = "Používateľské meno";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Hodnota nesmie byť prázdna";
 
 /* E.g. Open a hyperlink. */
-"View" = "ĺ_View_________ľ";
+"View" = "Zobraziť";
 
 /* World (Level of Detail) */
-"World" = "ĺ_World___________ľ";
+"World" = "Svet";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "ĺ_World (Big)____________ľ";
+"World (Big)" = "Svet (veľký)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "ĺ_World (Small)______________ľ";
+"World (Small)" = "Sveta (malý)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

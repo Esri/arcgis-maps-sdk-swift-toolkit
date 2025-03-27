@@ -2,17 +2,17 @@
 "%lld selected" = "Вибрано %lld";
 
 /* A label indicating the number of results of a utility network trace. */
-"^[%lld Results](inflect: true)" = "ґ_^[%lld Results](inflect: true)_______________________________Ї";
+"^[%lld Results](inflect: true)" = "^[%lld Результати](зігнути: істина)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Для доступу до вмісту %@ потрібний сертифікат.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
-"A map area cannot be downloaded at this time." = "ґ_A map area cannot be downloaded at this time________________________Ї.";
+"A map area cannot be downloaded at this time." = "Карту цього разу не можна завантажити.";
 
 /* A label for a button to add a map area. */
-"Add Map Area" = "ґ_Add Map Area_____________Ї";
+"Add Map Area" = "Додати область карти";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Додати новий";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Розширені опції";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All Sites" = "ґ_All Sites___________________Ї";
+"All Sites" = "Всі сайти";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Усі вхідні дані та результати трасування будуть втрачені.";
@@ -30,13 +30,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Allow" = "Дозволити";
 
 /* An error message for when fetching map areas fails. */
-"An error occurred while fetching map areas." = "ґ_An error occurred while fetching map areas_______________________Ї.";
+"An error occurred while fetching map areas." = "Під час вибірки області карти сталася помилка.";
 
 /* The title for a map area. */
-"Area %lld" = "ґ_Area %lld___________________Ї";
+"Area %lld" = "%lld обалсті";
 
 /* A hint for the user to enter an area name in the text field. */
-"Area Name" = "ґ_Area Name___________________Ї";
+"Area Name" = "Назва області";
 
 /* A label in reference to attachments. */
 "Attachments" = "Прикріплення";
@@ -57,10 +57,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Перегляд";
 
 /* Building (Level of Detail) */
-"Building" = "ґ_Building_________________Ї";
+"Building" = "Будівля";
 
 /* Buildings (Level of Detail) */
-"Buildings" = "ґ_Buildings___________________Ї";
+"Buildings" = "Будівлі";
 
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Калібрувати";
@@ -80,7 +80,7 @@ Title for a button that cancels an action. */
 "Cancel Starting Point Selection" = "Скасувати вибір початкової точки";
 
 /* The status text when a map area download is cancelled. */
-"Cancelled" = "ґ_Cancelled___________________Ї";
+"Cancelled" = "Скасовано";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Потрібен сертифікат";
@@ -95,10 +95,10 @@ Title for a button that cancels an action. */
 "Choose From Library" = "Вибрати з бібліотеки";
 
 /* Cities (Level of Detail) */
-"Cities" = "ґ_Cities_____________Ї";
+"Cities" = "Міста";
 
 /* City (Level of Detail) */
-"City" = "ґ_City_________Ї";
+"City" = "Місто";
 
 /* E.g. Remove text from a text field. */
 "Clear" = "Очистити";
@@ -116,28 +116,28 @@ east, etc.). */
 "Compass, heading %lld degrees %@" = "Компас, курс %lld градусів %@";
 
 /* Continent (Level of Detail) */
-"Continent" = "ґ_Continent___________________Ї";
+"Continent" = "Континент";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Продовжити";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
-"Could not retrieve map areas for this map." = "ґ_Could not retrieve map areas for this map______________________Ї.";
+"Could not retrieve map areas for this map." = "Не вдалося отримати області карти з цієї карти.";
 
 /* Counties (Level of Detail) */
-"Counties" = "ґ_Counties_________________Ї";
+"Counties" = "Округи";
 
 /* Countries (Big) (Level of Detail) */
-"Countries (Big)" = "ґ_Countries (Big)________________Ї";
+"Countries (Big)" = "Країни (великі)";
 
 /* Countries (Small) (Level of Detail) */
-"Countries (Small)" = "ґ_Countries (Small)__________________Ї";
+"Countries (Small)" = "Країни (малі)";
 
 /* County (Level of Detail) */
-"County" = "ґ_County_____________Ї";
+"County" = "Округ";
 
 /* The status text for an opened map area. */
-"Currently open" = "ґ_Currently open_______________Ї";
+"Currently open" = "Наразі відкрито";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Небезпечно: сертифікат, наданий '%@', не підписаний довіреним центром.";
@@ -158,37 +158,37 @@ east, etc.). */
 "Delete" = "Видалити";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
-"Delete All Starting Points" = "ґ_Delete All Starting Points___________________________Ї";
+"Delete All Starting Points" = "Видалити всі початкові точки";
 
 /* The title of the dialogue confirming deletion of all points. */
-"Delete all starting points?" = "ґ_Delete all starting points____________________________Ї?";
+"Delete all starting points?" = "Видалити всі початкові точки?";
 
 /* A label for a button to delete a map area. */
-"Delete Map Area" = "ґ_Delete Map Area________________Ї";
+"Delete Map Area" = "Видалити область карти";
 
 /* A label for the description of the map area. */
-"Description" = "ґ_Description____________Ї";
+"Description" = "Опис";
 
 /* E.g. Close/hide a sheet or pop-up. */
-"Dismiss" = "ґ_Dismiss_______________Ї";
+"Dismiss" = "Відхилити";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Готово";
 
 /* A label for a button to download a map area. */
-"Download" = "ґ_Download_________________Ї";
+"Download" = "Завантажити";
 
 /* The status text when a map area failed to download. */
-"Download failed" = "ґ_Download failed________________Ї";
+"Download failed" = "Не вдалося виконати завантаження";
 
 /* A label for a button to download a map area. */
-"Download Map Area" = "ґ_Download Map Area__________________Ї";
+"Download Map Area" = "Завантажити область карти";
 
 /* The status text when a map area is downloaded. */
-"Downloaded" = "ґ_Downloaded_____________________Ї";
+"Downloaded" = "Завантажено";
 
 /* The status text when a map area is downloading. */
-"Downloading" = "ґ_Downloading____________Ї";
+"Downloading" = "Завантаження";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -217,7 +217,7 @@ hold the minimum and maximum length respectively. */
 "Enter ^[%lld characters](inflect: true)" = "Ввести ^[%lld символи(-ів)](зігнути: істина)";
 
 /* An instruction to enter a name. */
-"Enter a name" = "ґ_Enter a name_____________Ї";
+"Enter a name" = "Введіть назву";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Ввести значення";
@@ -230,7 +230,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Error" = "Помилка";
 
 /* A label indicating that an error occurred while fetching map areas. */
-"Error Fetching Map Areas" = "ґ_Error Fetching Map Areas_________________________Ї";
+"Error Fetching Map Areas" = "Помилка при отриманні областей карти";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -296,25 +296,25 @@ AR experience. */
 "heading" = "курс";
 
 /* House Property (Level of Detail) */
-"House Property" = "ґ_House Property_______________Ї";
+"House Property" = "Властивість будинку";
 
 /* Houses (Level of Detail) */
-"Houses" = "ґ_Houses_____________Ї";
+"Houses" = "Будинки";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Менше мінімального значення";
 
 /* A label for the level of detail picker view. */
-"Level of Detail" = "ґ_Level of Detail________________Ї";
+"Level of Detail" = "Рівень детальності";
 
 /* The status text when a map area is loading. */
-"Loading" = "ґ_Loading_______________Ї";
+"Loading" = "Завантаження";
 
 /* The status text when a map area failed to load. */
-"Loading failed" = "ґ_Loading failed_______________Ї";
+"Loading failed" = "Завантаження не вдалося";
 
 /* A title for the offline map areas view. */
-"Map Areas" = "ґ_Map Areas___________________Ї";
+"Map Areas" = "Області карти";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Максимум ^[%lld символи(-ів)](зігнути: істина)";
@@ -326,7 +326,7 @@ AR experience. */
 "Media" = "Середовище";
 
 /* Metropolitan Area (Level of Detail) */
-"Metropolitan Area" = "ґ_Metropolitan Area__________________Ї";
+"Metropolitan Area" = "Місто з передмістями";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Доступ до мікрофона вимкнено у налаштуваннях.";
@@ -341,7 +341,7 @@ AR experience. */
 "Name" = "Назва";
 
 /* Neighborhood (Level of Detail) */
-"Neighborhood" = "ґ_Neighborhood_____________Ї";
+"Neighborhood" = "Околиця";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Мережа";
@@ -359,13 +359,13 @@ AR experience. */
 "No configurations available." = "Немає доступних конфігурацій.";
 
 /* An error message explaining that there is no internet connection. */
-"No Internet Connection" = "ґ_No Internet Connection_______________________Ї";
+"No Internet Connection" = "Немає підключення до мережі Інтернет";
 
 /* An error message explaining that there is no internet connection and only downloaded areas are shown. */
-"No internet connection. Showing downloaded areas only." = "ґ_No internet connection. Showing downloaded areas only____________________________Ї.";
+"No internet connection. Showing downloaded areas only." = "Відсутнє підключення до Інтернету. Показує тільки завантажені області.";
 
 /* A label indicating that there are no map areas. */
-"No Map Areas" = "ґ_No Map Areas_____________Ї";
+"No Map Areas" = "Немає областей карти";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Збігів не знайдено.";
@@ -392,25 +392,25 @@ AR experience. */
 "Object ID: %@" = "Ідентифікатор об'єкту: %@";
 
 /* A label indicating that the map is offline disabled. */
-"Offline Disabled" = "ґ_Offline Disabled_________________Ї";
+"Offline Disabled" = "Автономний режим деактивовано";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
-"Online Map Failed to Load" = "ґ_Online Map Failed to Load__________________________Ї";
+"Online Map Failed to Load" = "Помилка завантаження онлайн-карти";
 
 /* A label for a button to open a map area. */
-"Open" = "ґ_Open_________Ї";
+"Open" = "Відкрити";
 
 /* The status text when a map area is packaging. */
-"Packaging" = "ґ_Packaging___________________Ї";
+"Packaging" = "Виконується пакування";
 
 /* The status text when a map area packaging failed. */
-"Packaging failed" = "ґ_Packaging failed_________________Ї";
+"Packaging failed" = "Пакування не вдалося";
 
 /* A label instructing to pan and zoom the map to define an area. */
-"Pan and zoom to define the area" = "ґ_Pan and zoom to define the area_________________Ї";
+"Pan and zoom to define the area" = "Переміщення та масштабування для визначення області";
 
 /* A label in reference to a credential password. */
 "Password" = "Пароль";
@@ -437,13 +437,13 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Помилка оцінки спливаючого вікна: %@";
 
 /* The status text when a map area is ready to download. */
-"Ready to download" = "ґ_Ready to download__________________Ї";
+"Ready to download" = "Готово до завантаження";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Записати тільки відео";
 
 /* A label for a button to refresh map area content. */
-"Refresh" = "ґ_Refresh_______________Ї";
+"Refresh" = "Оновити";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Змінити назву";
@@ -463,10 +463,10 @@ current visible extent of the map or scene. */
 "Results" = "Результати";
 
 /* Room (Level of Detail) */
-"Room" = "ґ_Room_________Ї";
+"Room" = "Кімната";
 
 /* Rooms (Level of Detail) */
-"Rooms" = "ґ_Rooms___________Ї";
+"Rooms" = "Кімнати";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Пошуковий запит";
@@ -479,7 +479,7 @@ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Вибрати пункт обслуговування";
 
 /* A title for the on demand configuration view. */
-"Select Area" = "ґ_Select Area____________Ї";
+"Select Area" = "Вибрати область";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Обрати мережу";
@@ -494,10 +494,10 @@ or more levels in a floor-aware map or scene. */
 "Sites" = "Сайти";
 
 /* A label for the file size of the map area. */
-"Size: %@" = "ґ_Size: %@_________________Ї";
+"Size: %@" = "Розмір: %@";
 
 /* Small Building (Level of Detail) */
-"Small Building" = "ґ_Small Building_______________Ї";
+"Small Building" = "Невелика будівля";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -508,16 +508,16 @@ network trace operation. */
 "Starting Points" = "Початкові точки";
 
 /* State/Province (Level of Detail) */
-"State/Province" = "ґ_State/Province_______________Ї";
+"State/Province" = "Штат/провінція";
 
 /* States/Provinces (Level of Detail) */
-"States/Provinces" = "ґ_States/Provinces_________________Ї";
+"States/Provinces" = "Штати/провінції";
 
 /* Street (Level of Detail) */
-"Street" = "ґ_Street_____________Ї";
+"Street" = "Вулиця";
 
 /* Streets (Level of Detail) */
-"Streets" = "ґ_Streets_______________Ї";
+"Streets" = "Вулиці";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Зробити фото або відео";
@@ -554,10 +554,10 @@ match the spatial reference of the map. */
 "The map does not have a spatial reference." = "Карта не має просторової прив'язки.";
 
 /* A message indicating that the map is not offline enabled. */
-"The map is not enabled for offline use." = "ґ_The map is not enabled for offline use_____________________Ї.";
+"The map is not enabled for offline use." = "Карту не активовано для використання в автономному режимі.";
 
 /* A message explaining that the map area name must be unique. */
-"The name for the map area must be unique." = "ґ_The name for the map area must be unique______________________Ї.";
+"The name for the map area must be unique." = "Назва області карти має бути унікальною";
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Пароль недійсний.";
@@ -573,16 +573,16 @@ to be imported as an attachment. */
 "The URL could not be reached or did not contain image data." = "URL-адреса недоступна або не містить даних зображення.";
 
 /* A message explaining that there are no map areas for this map. */
-"There are no map areas for this map." = "ґ_There are no map areas for this map___________________Ї.";
+"There are no map areas for this map." = "Для цієї карти немає областей карти.";
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
-"There are no map areas for this map. Tap the button below to get started." = "ґ_There are no map areas for this map. Tap the button below to get started______________________________________Ї.";
+"There are no map areas for this map. Tap the button below to get started." = "Для цієї карти немає областей карти. Натисніть кнопку нижче, щоб розпочати.";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Сьогодні";
 
 /* Town (Level of Detail) */
-"Town" = "ґ_Town_________Ї";
+"Town" = "Містечко";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Трасування";
@@ -597,7 +597,7 @@ to be imported as an attachment. */
 "Try Again" = "Спробуйте знову";
 
 /* The default title of a map area with an unknown title. */
-"Unknown" = "ґ_Unknown_______________Ї";
+"Unknown" = "Невідомий";
 
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Невідома помилка перевірки";
@@ -606,7 +606,7 @@ to be imported as an attachment. */
 "Unnamed Asset Type" = "Тип активу без назви";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
-"Unsupported Value" = "ґ_Unsupported Value__________________Ї";
+"Unsupported Value" = "Непідтримуване значення";
 
 /* A label in reference to a credential username. */
 "Username" = "Ім'я користувача";
@@ -642,16 +642,16 @@ The first and second parameter hold the minimum and maximum values respectively.
 "Value must not be empty" = "Значення не має бути порожнім";
 
 /* E.g. Open a hyperlink. */
-"View" = "ґ_View_________Ї";
+"View" = "Переглянути";
 
 /* World (Level of Detail) */
-"World" = "ґ_World___________Ї";
+"World" = "Світ";
 
 /* World (Big) (Level of Detail) */
-"World (Big)" = "ґ_World (Big)____________Ї";
+"World (Big)" = "Світ (великий)";
 
 /* World (Small) (Level of Detail) */
-"World (Small)" = "ґ_World (Small)______________Ї";
+"World (Small)" = "Світ (малий)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
