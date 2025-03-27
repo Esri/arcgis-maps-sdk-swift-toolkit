@@ -293,7 +293,7 @@ public extension SwiftUI.Scene {
     /// Sets up the offline manager for offline toolkit components.
     /// - Parameters:
     ///   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule. See ``JobManager/preferredBackgroundStatusCheckSchedule`` for more details.
-    ///   - jobCompletion: An action to perform when a job completes.
+    ///   - jobCompletionAction: An action to perform when a job completes.
     @MainActor
     func offlineManager(
         preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
