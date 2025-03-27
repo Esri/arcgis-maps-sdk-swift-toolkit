@@ -475,13 +475,7 @@ extension ResultRow {
 ***REMOVED******REMOVED******REMOVED***image: AnyView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***(searchSuggestion.isCollection ?
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Image(systemName: "magnifyingglass") :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***uiImage: UIImage(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***named: "pin",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***in: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("pin", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***)
@@ -495,7 +489,7 @@ extension ResultRow {
 ***REMOVED******REMOVED******REMOVED***title: searchResult.displayTitle,
 ***REMOVED******REMOVED******REMOVED***subtitle: searchResult.displaySubtitle,
 ***REMOVED******REMOVED******REMOVED***image: AnyView(
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage.mapPin)
+***REMOVED******REMOVED******REMOVED******REMOVED***Image("MapPin", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaleEffect(0.65)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
