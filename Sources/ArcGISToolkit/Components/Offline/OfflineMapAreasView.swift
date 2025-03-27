@@ -20,8 +20,9 @@
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
-***REMOVED***/ The view supports both ahead-of-time(preplanned) and on-demand workflows
-***REMOVED***/ for offline mapping. For both workflows, the view:
+***REMOVED***/ The view supports both ahead-of-time(preplanned) and on-demand map areas
+***REMOVED***/ for an offline enabled web map.
+***REMOVED***/ The view:
 ***REMOVED***/
 ***REMOVED***/ - Opens a map area for viewing when selected.
 ***REMOVED***/ - Shows download progress and status for map areas.
