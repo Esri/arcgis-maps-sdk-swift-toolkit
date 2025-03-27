@@ -15,8 +15,8 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `OfflineMapAreasView` displays a list of downloadable preplanned or
-***REMOVED***/ on-demand map areas from a given web map.
+***REMOVED***/ The `OfflineMapAreasView` allows users to take a web map offline by
+***REMOVED***/ downloading map areas.
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
