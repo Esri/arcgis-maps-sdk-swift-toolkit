@@ -32,5 +32,8 @@ run jobs in the background, configure your app as follows:
 - Set the [UIBackgroundModes](https:***REMOVED***developer.apple.com/documentation/bundleresources/information-property-list/uibackgroundmodes) in the app’s **info.plist** with "App downloads content from the network".
 - In the project file's "Signing & Capabilities" tab, enable the
 "Background Modes" capability and check "Background fetch".
+- Add the `.offlineManager(preferredBackgroundStatusCheckSchedule:)` modifier to
+the entry point of the app to configure the preferred schedule and perform
+actions when there is an update when the app is in the background.
 
 See the <doc:OfflineMapAreasViewTutorial> for how it looks like in the plist.
