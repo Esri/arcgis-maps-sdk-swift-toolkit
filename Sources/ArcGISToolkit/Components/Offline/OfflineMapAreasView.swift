@@ -21,11 +21,11 @@
 ***REMOVED***/ **Features**
 ***REMOVED***/
 ***REMOVED***/ The view supports both ahead-of-time(preplanned) and on-demand map areas
-***REMOVED***/ for an offline enabled web map.
-***REMOVED***/ The view:
+***REMOVED***/ for an offline enabled web map. The view:
 ***REMOVED***/
-***REMOVED***/ - Opens a map area for viewing when selected.
+***REMOVED***/ - Displays a list of map areas.
 ***REMOVED***/ - Shows download progress and status for map areas.
+***REMOVED***/ - Opens a map area for viewing when selected.
 ***REMOVED***/ - Provides options to view details about downloaded map areas.
 ***REMOVED***/ - Supports removing downloaded offline map areas files from the device.
 ***REMOVED***/
@@ -33,6 +33,7 @@
 ***REMOVED***/
 ***REMOVED***/ - Displays a list of available preplanned map areas from an offline-enabled
 ***REMOVED***/ web map that contains preplanned map areas when the network is connected.
+***REMOVED***/ - Downloads preplanned map areas in the list.
 ***REMOVED***/ - Displays a list of downloaded preplanned map areas on the device
 ***REMOVED***/ when the network is disconnected.
 ***REMOVED***/
