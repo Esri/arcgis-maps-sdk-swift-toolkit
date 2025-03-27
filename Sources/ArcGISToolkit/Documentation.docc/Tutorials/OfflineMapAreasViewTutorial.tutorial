@@ -1,0 +1,87 @@
+@Tutorial(time: 15) {
+***REMOVED***@Intro(title: "OfflineMapAreasView Tutorial") {
+***REMOVED******REMOVED***The `OfflineMapAreasView` is a view that allows downloading map areas from a web map 
+***REMOVED******REMOVED***for offline use.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Image(source: OfflineMapAreasView, alt: "An image of the OfflineMapAreasView component")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Using the OfflineMapAreasView") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: OfflineMapAreasView, alt: "An image of the OfflineMapAreasView component")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***To begin, we initialize a map with a portal item for a web map that has
+***REMOVED******REMOVED******REMOVED******REMOVED***preplanned map areas and is offline enabled.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***We place a `MapView` nested within a `NavigationStack`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep1.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Create a binding for the selected map area.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Show the selected map area in the `MapView`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep2.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Place a menu in the top bar with buttons to show the online map and the 
+***REMOVED******REMOVED******REMOVED******REMOVED***offline map areas.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep3.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Show the `OfflineMapAreasView` in a sheet.
+
+***REMOVED******REMOVED******REMOVED******REMOVED***Available preplanned map areas are displayed and can be downloaded to device.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep4.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Map area download jobs are handled in the component using the `JobManager`. The job
+***REMOVED******REMOVED******REMOVED******REMOVED***manager allows download jobs to continue to run if the app is backgrounded or even 
+***REMOVED******REMOVED******REMOVED******REMOVED***terminated. The `OfflineMapAreasView` requires additional setup to use the job manager.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Apply the view modifier `.offlineManager(preferredBackgroundStatusCheckSchedule:)` at the entry point of the application. Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)` to check the status of the download job in the background
+***REMOVED******REMOVED******REMOVED******REMOVED***every 30 seconds.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep1.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Next we will work on sending a notification for when map area downloads finish while 
+***REMOVED******REMOVED******REMOVED******REMOVED***the app is backgrounded.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a task modifier to the `OfflineMapAreasView` and in the closure request
+***REMOVED******REMOVED******REMOVED******REMOVED***authorization to send the user notifications.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasViewExample.swift", file: OfflineMapAreasViewStep5.swift, previousFile: OfflineMapAreasViewStep4.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Use the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)` to send a notification once a download job completes.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a method to construct and send a notification.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step { 
+***REMOVED******REMOVED******REMOVED******REMOVED***Additional setup in the project settings is required to enable background download support for the job manager.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Enable "Background fetch" in the Background Modes project setting.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: OfflineTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***The job manager requires the following keys in the application's Information Property List 
+***REMOVED******REMOVED******REMOVED******REMOVED***to support background downloads.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
+***REMOVED******REMOVED******REMOVED******REMOVED***to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes. 
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
