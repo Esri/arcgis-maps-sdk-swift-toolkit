@@ -49,8 +49,9 @@
 ***REMOVED***/
 ***REMOVED***/ Depending on whether the `OfflineMapAreasView` is presented modally or
 ***REMOVED***/ embedded in a navigation stack, you can use the ``doneButton(_:)`` modifier
-***REMOVED***/ to set the visibility of the done button. The default visibility is `.automatic`.
-***REMOVED***/ The done button dismisses the view.
+***REMOVED***/ to set the visibility of the done button. The done button dismisses the
+***REMOVED***/ view. The button hides when its visibility is set to `.hidden`. The default
+***REMOVED***/ visibility is `.automatic`.
 ***REMOVED***/
 ***REMOVED***/ The view can be initialized with a web map or an offline map info.
 ***REMOVED***/ Therefore, the view can be used either when the device is connected to
