@@ -67,9 +67,6 @@
 ***REMOVED***/ pull-to-refresh to reload the list of map areas. Depending on the network
 ***REMOVED***/ connectivity, the view will display the appropriate content.
 ***REMOVED***/
-***REMOVED***/ During the various stages of the load and download process, the view will
-***REMOVED***/ display loading indicator, progress view, and errors to indicate the status.
-***REMOVED***/
 ***REMOVED***/ **Associated Types**
 ***REMOVED***/
 ***REMOVED***/ `OfflineMapAreasView` has the following associated types:
