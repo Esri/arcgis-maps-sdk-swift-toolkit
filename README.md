@@ -19,6 +19,7 @@ To use Toolkit in your project:
 * **[FloorFilter](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floorfilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building.
 * **[FlyoverSceneView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/flyoversceneview)** - Allows you to explore a scene using your device as a window into the virtual world.
 * **[JobManager](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/jobmanager)** - Manages saving and loading jobs so that they can continue to run if the app is backgrounded or even terminated by the system.
+* **[OfflineMapAreas](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/offlinemapareas)** - Displays a list of downloadable preplanned or on-demand map areas from a given web map.
 * **[OverviewMap](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/overviewmap)** - Displays the visible extent of a geo view in a small "inset" map.
 * **[PopupView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/popupview)** - Displays details, media, and attachments of features and graphics.
 * **[Scalebar](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/scalebar)** - Displays current scale reference.
