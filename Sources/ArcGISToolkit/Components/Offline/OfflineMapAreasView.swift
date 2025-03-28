@@ -112,9 +112,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view with an offline-enabled web map.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This initializer is typically used when the device is connected to the
-***REMOVED******REMOVED***/ network.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - onlineMap: The web map to be taken offline.
 ***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
@@ -129,13 +126,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view with a given offline map info.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This initializer is typically used when the device is disconnected from
-***REMOVED******REMOVED***/ the network. The offline map info can be retrieved from ``OfflineManager/offlineMapInfos``.
-***REMOVED******REMOVED***/ To read more about the offline map info, see the API doc for ``OfflineMapInfo``.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - offlineMapInfo: The offline map info for which to create the view.
 ***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
+***REMOVED******REMOVED***/ - SeeAlso: ``OfflineManager/offlineMapInfos``.
 ***REMOVED***public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
 ***REMOVED******REMOVED***let item = PortalItem(url: offlineMapInfo.portalItemURL)!
 ***REMOVED******REMOVED***let onlineMap = Map(item: item)
