@@ -70,8 +70,11 @@ public extension OfflineMapInfo {
     var description: String { info.description }
     /// The URL of the portal item associated with the map.
     var portalItemURL: URL { info.portalItemURL }
+}
+
+extension OfflineMapInfo: Identifiable {
     /// The ID of the portal item associated with the map.
-    var portalItemID: Item.ID { .init(info.portalItemID)! }
+    public var id: Item.ID { .init(info.portalItemID)! }
 }
 
 private extension OfflineMapInfo {
