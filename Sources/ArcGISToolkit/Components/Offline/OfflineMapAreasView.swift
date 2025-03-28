@@ -55,8 +55,18 @@
 ***REMOVED***/ The view can be initialized with a web map or an offline map info.
 ***REMOVED***/ Therefore, the view can be used either when the device is connected to
 ***REMOVED***/ or disconnected from the network. In other words, the view can be used
-***REMOVED***/ in all 4 situations: (device) connected/preplanned, connected/on-demand,
-***REMOVED***/ disconnected/preplanned, disconnected/on-demand.
+***REMOVED***/ in the following situations:
+***REMOVED***/
+***REMOVED***/ - When the device is connected to the network…
+***REMOVED***/***REMOVED*** - The view displays preplanned map areas from a web map that are
+***REMOVED***/***REMOVED*** available for download.
+***REMOVED***/***REMOVED*** - When the web map doesn't contain preplanned map areas, users can add
+***REMOVED***/***REMOVED*** and download on-demand map areas.
+***REMOVED***/***REMOVED*** - Use ``init(onlineMap:selection:)`` to initialize the view.
+***REMOVED***/ - When the device is dsconnected from the network…
+***REMOVED***/***REMOVED*** - The view displays only downloaded map areas by retrieving
+***REMOVED***/***REMOVED*** offline map info from the device.
+***REMOVED***/***REMOVED*** - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
 ***REMOVED***/
 ***REMOVED***/ When the network connection is available, the component will display a list
 ***REMOVED***/ of preplanned map areas configured for the web map. If the web map doesn't
