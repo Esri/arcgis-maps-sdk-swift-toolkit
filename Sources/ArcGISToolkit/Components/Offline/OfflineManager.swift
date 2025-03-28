@@ -119,7 +119,7 @@ public class OfflineManager: ObservableObject {
     
     /// Retrieves the model for a given `OfflineMapInfo`.
     private func model(for offlineMapInfo: OfflineMapInfo) -> OfflineMapViewModel {
-        if let model = models[offlineMapInfo.portalItemID] {
+        if let model = models[offlineMapInfo.id] {
             return model
         } else {
             // Only create the map here if we don't already have the model in memory.
@@ -133,7 +133,7 @@ public class OfflineManager: ObservableObject {
     /// map areas.
     /// - Parameter portalItemID: The portal item ID.
     func removeMapInfo(for portalItemID: Item.ID) {
-        offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID })
+        offlineMapInfos.removeAll(where: { $0.id == portalItemID })
         OfflineMapInfo.remove(from: URL.portalItemDirectory(forPortalItemID: portalItemID))
     }
     
@@ -182,7 +182,7 @@ public class OfflineManager: ObservableObject {
         for result: Result<Output, Error>,
         portalItemID: Item.ID
     ) {
-        guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID }) else { return }
+        guard !offlineMapInfos.contains(where: { $0.id == portalItemID }) else { return }
         switch result {
         case .success:
             // Move the pending info into the correct folder.
@@ -239,11 +239,11 @@ public class OfflineManager: ObservableObject {
         }
         // Now remove any offline map areas whose model isn't in memory by simply deleting the
         // whole portal item directory. This will also delete the map info.
-        let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+        let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.id)
         try FileManager.default.removeItem(at: portalItemDirectory)
         
         // Remove offline map info for this map.
-        offlineMapInfos.removeAll { $0.portalItemID == offlineMapInfo.portalItemID }
+        offlineMapInfos.removeAll { $0.id == offlineMapInfo.id }
     }
 }
 
