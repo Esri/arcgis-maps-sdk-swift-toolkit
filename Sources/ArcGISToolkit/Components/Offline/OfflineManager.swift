@@ -21,8 +21,7 @@ import OSLog
 ***REMOVED***/ file structures on the device.
 ***REMOVED***/
 ***REMOVED***/ This component utilizes ``JobManager`` and provides high-level APIs to
-***REMOVED***/ manage offline map areas and access their data. A custom UI can be built
-***REMOVED***/ using the APIs provided.
+***REMOVED***/ manage offline map areas and access their data.
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
@@ -34,6 +33,12 @@ import OSLog
 ***REMOVED***/ - Remove offline map areas from the device.
 ***REMOVED***/ - Run the jobs while the app is in the background.
 ***REMOVED***/ - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
+***REMOVED***/
+***REMOVED***/ The component is useful both for building custom UI with the provided APIs,
+***REMOVED***/ and for supporting workflows that require retrieving offline map areas
+***REMOVED***/ information from the device. By using the `OfflineManager`, you can create
+***REMOVED***/ an `OfflineMapAreasView` using the ``OfflineMapAreasView/init(offlineMapInfo:selection:)``
+***REMOVED***/ initializer.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
