@@ -15,8 +15,72 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable
-***REMOVED***/ preplanned map areas or on-demand map areas from a given web map.
+***REMOVED***/ The `OfflineMapAreasView` allows users to take a web map offline by
+***REMOVED***/ downloading map areas.
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ The view supports both ahead-of-time(preplanned) and on-demand map areas
+***REMOVED***/ for an offline enabled web map. The view:
+***REMOVED***/
+***REMOVED***/ - Displays a list of map areas.
+***REMOVED***/ - Shows download progress and status for map areas.
+***REMOVED***/ - Opens a map area for viewing when selected.
+***REMOVED***/ - Provides options to view details about downloaded map areas.
+***REMOVED***/ - Supports removing downloaded offline map areas files from the device.
+***REMOVED***/
+***REMOVED***/ For preplanned workflows, the view:
+***REMOVED***/
+***REMOVED***/ - Displays a list of available preplanned map areas from an offline-enabled
+***REMOVED***/ web map that contains preplanned map areas when the network is connected.
+***REMOVED***/ - Downloads preplanned map areas in the list.
+***REMOVED***/ - Displays a list of downloaded preplanned map areas on the device
+***REMOVED***/ when the network is disconnected.
+***REMOVED***/
+***REMOVED***/ For on-demand workflows, the view:
+***REMOVED***/
+***REMOVED***/ - Allows users to add and download on-demand map areas to the device by
+***REMOVED***/ specifying an area of interest and level of detail.
+***REMOVED***/ - Displays a list of on-demand map areas available on the device that are
+***REMOVED***/ tied to a specific web map.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ Depending on whether the `OfflineMapAreasView` is presented modally or
+***REMOVED***/ embedded in a navigation stack, you can use the ``doneButton(_:)`` modifier
+***REMOVED***/ to set the visibility of the done button. The done button dismisses the
+***REMOVED***/ view. The button hides when its visibility is set to `.hidden`. The default
+***REMOVED***/ visibility is `.automatic`.
+***REMOVED***/
+***REMOVED***/ The view can be initialized with a web map or an offline map info.
+***REMOVED***/ Therefore, the view can be used either when the device is connected to
+***REMOVED***/ or disconnected from the network. In other words, the view can be used
+***REMOVED***/ in the following situations:
+***REMOVED***/
+***REMOVED***/ - When the device is connected to the network…
+***REMOVED***/***REMOVED*** - The view displays preplanned map areas from a web map that are
+***REMOVED***/***REMOVED*** available for download.
+***REMOVED***/***REMOVED*** - When the web map doesn't contain preplanned map areas, users can add
+***REMOVED***/***REMOVED*** and download on-demand map areas by specifying a geographic area and
+***REMOVED***/***REMOVED*** level of detail.
+***REMOVED***/***REMOVED*** - Use ``init(onlineMap:selection:)`` to initialize the view.
+***REMOVED***/ - When the device is disconnected from the network…
+***REMOVED***/***REMOVED*** - The view displays only downloaded map areas by retrieving
+***REMOVED***/***REMOVED*** offline map info from the device.
+***REMOVED***/***REMOVED*** - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ `OfflineMapAreasView` has the following associated types:
+***REMOVED***/
+***REMOVED***/ - ``OfflineManager``
+***REMOVED***/ - ``OfflineMapInfo``
+***REMOVED***/
+***REMOVED***/ To learn more about the offline manager that downloads and manages offline
+***REMOVED***/ map areas without the integrated UI, see the the API doc for `OfflineManager`.
+***REMOVED***/
+***REMOVED***/ To learn more about using the `OfflineMapAreasView` see the <doc:OfflineMapAreasViewTutorial>.
+***REMOVED***/ - Since: 200.7
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: OfflineMapViewModel
@@ -47,7 +111,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***portalItem.id!
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a view with a given web map.
+***REMOVED******REMOVED***/ Creates a view with an offline-enabled web map.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - onlineMap: The web map to be taken offline.
 ***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
@@ -65,6 +129,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - offlineMapInfo: The offline map info for which to create the view.
 ***REMOVED******REMOVED***/   - selection: A binding to the currently selected offline map.
+***REMOVED******REMOVED***/ - SeeAlso: ``OfflineManager/offlineMapInfos``.
 ***REMOVED***public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
 ***REMOVED******REMOVED***let item = PortalItem(url: offlineMapInfo.portalItemURL)!
 ***REMOVED******REMOVED***let onlineMap = Map(item: item)
