@@ -36,4 +36,4 @@ run jobs in the background, configure your app as follows:
 the entry point of the app to configure the preferred schedule and perform
 actions when there is an update when the app is in the background.
 
-See the <doc:OfflineMapAreasViewTutorial> for how it looks like in the plist.
+To learn more about using the offline map areas toolkit component see the <doc:OfflineMapAreasViewTutorial>.
