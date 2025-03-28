@@ -66,6 +66,10 @@ public extension OfflineMapInfo {
     var portalItemID: Item.ID { .init(info.portalItemID)! }
 }
 
+extension OfflineMapInfo: Identifiable {
+    public var id: Item.ID { portalItemID }
+}
+
 /// Information for an online map that has been taken offline.
 private extension OfflineMapInfo {
     /// The codable info is stored in json.
