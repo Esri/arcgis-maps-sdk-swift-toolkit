@@ -17,7 +17,56 @@ import Combine
 import OSLog
 import SwiftUI
 
-/// An object that maintains state for the offline components.
+/// A utility object that maintains the state of offline map areas and their
+/// storage on the device.
+///
+/// This component provides high-level APIs to manage offline map areas and
+/// access their data.
+/// This component manages offline jobs and it utilizes the ``JobManager``
+/// in order to facilitate jobs continuing to run while the app is backgrounded.
+///
+/// **Features**
+///
+/// The component supports both ahead-of-time(preplanned) and on-demand
+/// workflows for offline mapping. It allows you to:
+///
+/// - Observe job status.
+/// - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
+/// - Remove offline map areas from the device.
+/// - Run download jobs while the app is in the background.
+/// - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
+///
+/// The component is useful both for building custom UI with the provided APIs,
+/// and for supporting workflows that require retrieving offline map areas
+/// information from the device. By using the `OfflineManager`, you can create
+/// an `OfflineMapAreasView` using the ``OfflineMapAreasView/init(offlineMapInfo:selection:)``
+/// initializer.
+///
+/// **Behavior**
+///
+/// The offline manager is not instantiable, you must use the ``shared`` instance.
+/// Set the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
+/// modifier at the entry point of your application to add additional setup
+/// required for the component to use the job manager. For example:
+///
+/// ```swift
+/// @main
+/// struct ExampleOfflineApp: App {
+///     var body: some SwiftUI.Scene {
+///         WindowGroup {
+///             ContentView()
+///         }
+///         // Setup the offline toolkit components for the app.
+///         .offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+///             // Do something after the job completes…
+///         }
+///     }
+/// }
+/// ```
+///
+/// > Note: The `OfflineManager` can be used independently of any UI components,
+/// > making it suitable for automated workflows or custom implementations.
+/// - Since: 200.7
 @MainActor
 public class OfflineManager: ObservableObject {
     /// The shared offline manager.
@@ -32,7 +81,7 @@ public class OfflineManager: ObservableObject {
     /// The jobs managed by this instance.
     var jobs: [any JobProtocol] { jobManager.jobs }
     
-    /// The portal item information for webmaps that have downloaded map areas.
+    /// The portal item information for web maps that have downloaded map areas.
     @Published
     private(set) public var offlineMapInfos: [OfflineMapInfo] = []
     
