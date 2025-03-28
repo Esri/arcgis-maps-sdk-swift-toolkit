@@ -22,7 +22,14 @@ struct OfflineMapAreasExampleApp: App {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***OfflineMapAreasExampleView()
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Setup the offline toolkit components.
+***REMOVED******REMOVED******REMOVED*** Apply the `.offlineManager(referredBackgroundStatusCheckSchedule:jobCompletionAction:)` scene modifier
+***REMOVED******REMOVED******REMOVED*** at the entry point of the application to setup background download support for the offline component.
+***REMOVED******REMOVED******REMOVED*** Use of this scene modifier is required for the offline component to complete map area download jobs when
+***REMOVED******REMOVED******REMOVED*** the app is backgrounded.
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)` to check the status
+***REMOVED******REMOVED******REMOVED*** of the download job in the background every 30 seconds. Use the `jobCompletionAction` closure to send
+***REMOVED******REMOVED******REMOVED*** a notification once a download job completes.
 ***REMOVED******REMOVED***.offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Post a local notification that the job is finished.
 ***REMOVED******REMOVED******REMOVED***Self.notifyJobCompleted(job: job)
