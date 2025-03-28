@@ -63,7 +63,7 @@
 ***REMOVED***/***REMOVED*** - When the web map doesn't contain preplanned map areas, users can add
 ***REMOVED***/***REMOVED*** and download on-demand map areas.
 ***REMOVED***/***REMOVED*** - Use ``init(onlineMap:selection:)`` to initialize the view.
-***REMOVED***/ - When the device is dsconnected from the network…
+***REMOVED***/ - When the device is disconnected from the network…
 ***REMOVED***/***REMOVED*** - The view displays only downloaded map areas by retrieving
 ***REMOVED***/***REMOVED*** offline map info from the device.
 ***REMOVED***/***REMOVED*** - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
