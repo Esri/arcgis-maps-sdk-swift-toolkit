@@ -20,8 +20,10 @@ import OSLog
 ***REMOVED***/ A utility object that maintains the state of offline map areas and their
 ***REMOVED***/ storage on the device.
 ***REMOVED***/
-***REMOVED***/ This component utilizes the ``JobManager`` and provides high-level APIs to
-***REMOVED***/ manage offline map areas and access their data.
+***REMOVED***/ This component provides high-level APIs to manage offline map areas and
+***REMOVED***/ access their data.
+***REMOVED***/ This component manages offline jobs and it utilizes the ``JobManager``
+***REMOVED***/ in order to facilitate jobs continuing to run while the app is backgrounded.
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
