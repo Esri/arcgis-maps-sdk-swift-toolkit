@@ -27,7 +27,7 @@ struct PreplannedListItemView: View {
     @State private var metadataViewIsPresented = false
     
     /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss: DismissAction
+    @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating whether the selected map area is the same
     /// as the map area from this model.
@@ -36,6 +36,9 @@ struct PreplannedListItemView: View {
     var isSelected: Bool {
         selectedMap?.item?.title == model.preplannedMapArea.title
     }
+    
+    /// A Boolean value indicating whether the view should dismiss.
+    let shouldDismiss: Bool
     
     var body: some View {
         OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
@@ -59,7 +62,7 @@ struct PreplannedListItemView: View {
                 selectedMap: $selectedMap,
                 map: model.map,
                 isSelected: isSelected,
-                dismiss: dismiss
+                dismiss: shouldDismiss ? dismiss : nil
             )
         }
     }
@@ -86,7 +89,8 @@ struct PreplannedListItemView: View {
             preplannedMapAreaID: .init("preview")!,
             onRemoveDownload: {}
         ),
-        selectedMap: .constant(nil)
+        selectedMap: .constant(nil),
+        shouldDismiss: true
     )
     .padding()
 }

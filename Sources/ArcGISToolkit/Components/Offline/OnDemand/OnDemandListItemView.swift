@@ -26,11 +26,14 @@ struct OnDemandListItemView: View {
     @State private var metadataViewIsPresented = false
     
     /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss: DismissAction
+    @Environment(\.dismiss) private var dismiss
     
     var isSelected: Bool {
         selectedMap?.item?.title == model.title
     }
+    
+    /// A Boolean value indicating whether the view should dismiss.
+    let shouldDismiss: Bool
     
     var body: some View {
         OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
@@ -47,7 +50,7 @@ struct OnDemandListItemView: View {
                 selectedMap: $selectedMap,
                 map: model.map,
                 isSelected: isSelected,
-                dismiss: dismiss
+                dismiss: shouldDismiss ? dismiss : nil
             )
         case .initialized:
             EmptyView()
@@ -63,8 +66,7 @@ struct OnDemandListItemView: View {
             Image(systemName: "xmark.circle")
                 .imageScale(.large)
         }
-        // Have to apply a style or it won't be tappable
-        // because of the button the parent view.
+        // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
     }
 }
