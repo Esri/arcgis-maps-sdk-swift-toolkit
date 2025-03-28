@@ -38,7 +38,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The title of the map area.
 ***REMOVED***let title: String
 ***REMOVED***
-***REMOVED******REMOVED***/ The action to perform when an on demand map area is deleted.
+***REMOVED******REMOVED***/ The action to perform when an on-demand map area is deleted.
 ***REMOVED***private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
 ***REMOVED***
 ***REMOVED******REMOVED***/ A thumbnail for the map area.
@@ -179,7 +179,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Downloads the on-demand map area.
 ***REMOVED******REMOVED***/ - Precondition: `allowsDownload == true`
 ***REMOVED******REMOVED***/ - Precondition: `configuration != nil`
-***REMOVED******REMOVED***/ - Precondition: `configurofflineMapTaskation != nil`
+***REMOVED******REMOVED***/ - Precondition: `offlineMapTask != nil`
 ***REMOVED***func downloadOnDemandMapArea() async {
 ***REMOVED******REMOVED***precondition(status.allowsDownload)
 ***REMOVED******REMOVED***guard let configuration, let offlineMapTask else { preconditionFailure() ***REMOVED***
@@ -410,7 +410,7 @@ struct OnDemandAreaID: CustomStringConvertible, Equatable {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** A value that carries configuration for an on-demand map area.
+***REMOVED***/ A value that carries configuration for an on-demand map area.
 struct OnDemandMapAreaConfiguration {
 ***REMOVED******REMOVED***/ A unique ID for the on-demand map area.
 ***REMOVED***let areaID = OnDemandAreaID()

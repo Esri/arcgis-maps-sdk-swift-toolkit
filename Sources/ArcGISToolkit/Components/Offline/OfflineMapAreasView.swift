@@ -15,18 +15,25 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
+***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable
+***REMOVED***/ preplanned map areas or on-demand map areas from a given web map.
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: OfflineMapViewModel
 ***REMOVED******REMOVED***/ The action to dismiss the view.
-***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED******REMOVED***/ The web map to be taken offline.
 ***REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding private var selectedMap: Map?
 ***REMOVED******REMOVED***/ A Boolean value indicating whether an on-demand map area is being added.
 ***REMOVED***@State private var isAddingOnDemandArea = false
+***REMOVED******REMOVED***/ The visibility of the done button.
+***REMOVED***private var doneVisibility: Visibility = .automatic
+***REMOVED******REMOVED***/ A Boolean value indicating whether the view should dismiss.
+***REMOVED***private var shouldDismiss: Bool {
+***REMOVED******REMOVED***doneVisibility == .automatic || doneVisibility == .visible
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal item for the web map to be taken offline.
 ***REMOVED***private var portalItem: PortalItem {
@@ -64,6 +71,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
 ***REMOVED******REMOVED***self.onlineMap = onlineMap
 ***REMOVED******REMOVED***_selectedMap = selection
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Specifies the visibility of the done button.
+***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of the done button.
+***REMOVED***public func doneButton(_ visibility: Visibility) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.doneVisibility = visibility
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -107,9 +122,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button.done {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED***if shouldDismiss {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button.done {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -131,7 +148,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldDismiss: shouldDismiss
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** footer: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.isShowingOnlyOfflineModels {
@@ -165,7 +186,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***if !mapViewModel.onDemandMapModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandListItemView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: onDemandMapModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldDismiss: shouldDismiss
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {

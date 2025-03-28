@@ -104,7 +104,7 @@ extension OfflineMapInfo {
 ***REMOVED******REMOVED***guard FileManager.default.fileExists(atPath: urls.info.path()) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Found offline map info at \(urls.info.path())")
 ***REMOVED******REMOVED***guard let data = try? Data(contentsOf: urls.info),
-***REMOVED******REMOVED******REMOVED***  let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
+***REMOVED******REMOVED******REMOVED***  let info = try? JSONDecoder().decode(CodableInfo.self, from: data)
 ***REMOVED******REMOVED***else { return nil ***REMOVED***
 ***REMOVED******REMOVED***let thumbnail = UIImage(contentsOfFile: urls.thumbnail.path())
 ***REMOVED******REMOVED***return .init(info: info, thumbnail: thumbnail)
@@ -122,7 +122,7 @@ extension OfflineMapInfo {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save thumbnail to file.
-***REMOVED******REMOVED***if let thumbnail, let pngData = thumbnail.pngData() {
+***REMOVED******REMOVED***if let pngData = thumbnail?.pngData() {
 ***REMOVED******REMOVED******REMOVED***try? pngData.write(to: urls.thumbnail, options: .atomic)
 ***REMOVED***
 ***REMOVED***

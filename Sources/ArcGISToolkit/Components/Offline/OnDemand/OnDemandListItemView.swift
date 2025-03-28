@@ -26,11 +26,14 @@ struct OnDemandListItemView: View {
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
-***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED***var isSelected: Bool {
 ***REMOVED******REMOVED***selectedMap?.item?.title == model.title
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the view should dismiss.
+***REMOVED***let shouldDismiss: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
@@ -47,7 +50,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: model.map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSelected: isSelected,
-***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: dismiss
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: shouldDismiss ? dismiss : nil
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .initialized:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
@@ -63,8 +66,7 @@ struct OnDemandListItemView: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable
-***REMOVED******REMOVED******REMOVED*** because of the button the parent view.
+***REMOVED******REMOVED******REMOVED*** Have to apply a style or it won't be tappable.
 ***REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED***
 ***REMOVED***

@@ -27,7 +27,7 @@ struct PreplannedListItemView: View {
 ***REMOVED***@State private var metadataViewIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
-***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
+***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the selected map area is the same
 ***REMOVED******REMOVED***/ as the map area from this model.
@@ -36,6 +36,9 @@ struct PreplannedListItemView: View {
 ***REMOVED***var isSelected: Bool {
 ***REMOVED******REMOVED***selectedMap?.item?.title == model.preplannedMapArea.title
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the view should dismiss.
+***REMOVED***let shouldDismiss: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***OfflineMapAreaListItemView(model: model, isSelected: isSelected) {
@@ -59,7 +62,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedMap: $selectedMap,
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: model.map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSelected: isSelected,
-***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: dismiss
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss: shouldDismiss ? dismiss : nil
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -86,7 +89,8 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!,
 ***REMOVED******REMOVED******REMOVED***onRemoveDownload: {***REMOVED***
 ***REMOVED******REMOVED***),
-***REMOVED******REMOVED***selectedMap: .constant(nil)
+***REMOVED******REMOVED***selectedMap: .constant(nil),
+***REMOVED******REMOVED***shouldDismiss: true
 ***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
