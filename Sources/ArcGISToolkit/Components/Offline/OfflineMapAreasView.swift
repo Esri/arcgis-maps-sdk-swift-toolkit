@@ -61,19 +61,13 @@
 ***REMOVED***/***REMOVED*** - The view displays preplanned map areas from a web map that are
 ***REMOVED***/***REMOVED*** available for download.
 ***REMOVED***/***REMOVED*** - When the web map doesn't contain preplanned map areas, users can add
-***REMOVED***/***REMOVED*** and download on-demand map areas.
+***REMOVED***/***REMOVED*** and download on-demand map areas by specifying a geographic area and
+***REMOVED***/***REMOVED*** level of detail.
 ***REMOVED***/***REMOVED*** - Use ``init(onlineMap:selection:)`` to initialize the view.
 ***REMOVED***/ - When the device is disconnected from the network…
 ***REMOVED***/***REMOVED*** - The view displays only downloaded map areas by retrieving
 ***REMOVED***/***REMOVED*** offline map info from the device.
 ***REMOVED***/***REMOVED*** - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
-***REMOVED***/
-***REMOVED***/ When the network connection is available, the component will display a list
-***REMOVED***/ of preplanned map areas configured for the web map. If the web map doesn't
-***REMOVED***/ contain any preplanned map areas, users can create a map area on-demand by
-***REMOVED***/ specifying a geographic area and level of detail. When a network connection
-***REMOVED***/ is unavailable, the component will only display map areas that have already
-***REMOVED***/ been downloaded to the device.
 ***REMOVED***/
 ***REMOVED***/ **Associated Types**
 ***REMOVED***/
