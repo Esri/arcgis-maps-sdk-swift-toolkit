@@ -18,6 +18,9 @@ struct Examples: View {
     /// The categories to display.
     let categories = makeCategories()
     
+    /// The uncategorized examples.
+    let uncategorizedExamples = makeUncategorizedExamples()
+    
     /// The category selected by the user.
     @State private var selectedCategory: Category?
     /// The example selected by the user.
@@ -26,17 +29,29 @@ struct Examples: View {
     var body: some View {
         NavigationSplitView {
             NavigationStack {
-                List(categories, id: \.name, selection: $selectedCategory) { category in
-                    NavigationLink(category.name) {
-                        List(category.examples, id: \.name, selection: $selectedExample) { example in
-                            Text(example.name)
-                                .tag(example)
+                
+                #warning("This approach works, but alphabetized categories would be listed first, followed by alphabetized uncategorized Examples. We probably want the two sets mixed together.")
+                
+                List(selection: $selectedCategory) {
+                    ForEach(categories, id: \.name) { category in
+                        NavigationLink(category.name) {
+                            List(category.examples, id: \.name, selection: $selectedExample) { example in
+                                Text(example.name)
+                                    .tag(example)
+                            }
+                            .listStyle(.sidebar)
+                            .navigationTitle(category.name)
+                            .navigationBarTitleDisplayMode(.inline)
                         }
-                        .listStyle(.sidebar)
-                        .navigationTitle(category.name)
-                        .navigationBarTitleDisplayMode(.inline)
+                        .isDetailLink(false)
                     }
-                    .isDetailLink(false)
+                    ForEach(uncategorizedExamples, id: \.name) { example in
+                        Button {
+                            selectedExample = example
+                        } label: {
+                            Text(example.name)
+                        }
+                    }
                 }
                 .navigationTitle("Toolkit Examples")
             }
@@ -56,16 +71,26 @@ struct Examples: View {
     }
     
     static func makeCategories() -> [Category] {
-        let common: [Category] = [
-            .geoview,
-            .views
-        ]
 #if os(iOS) && !targetEnvironment(macCatalyst)
-        return [.augmentedReality] + common
+        return [.augmentedReality]
 #else
-        return common
+        return []
 #endif
     }
+    
+    static func makeUncategorizedExamples() -> [Example] { [
+            Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+            Example("Bookmarks", content: BookmarksExampleView()),
+            Example("Compass", content: CompassExampleView()),
+            Example("Feature Form", content: FeatureFormExampleView()),
+            Example("Floating Panel", content: FloatingPanelExampleView()),
+            Example("Floor Filter", content: FloorFilterExampleView()),
+            Example("Overview Map", content: OverviewMapExampleView()),
+            Example("Popup", content: PopupExampleView()),
+            Example("Scalebar", content: ScalebarExampleView()),
+            Example("Search", content: SearchExampleView()),
+            Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+    ] }
 }
 
 @MainActor
@@ -82,31 +107,4 @@ extension Category {
         )
     }
 #endif
-    
-    static var geoview: Self {
-        .init(
-            name: "GeoView",
-            examples: [
-                Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-                Example("Bookmarks", content: BookmarksExampleView()),
-                Example("Compass", content: CompassExampleView()),
-                Example("Feature Form", content: FeatureFormExampleView()),
-                Example("Floor Filter", content: FloorFilterExampleView()),
-                Example("Overview Map", content: OverviewMapExampleView()),
-                Example("Popup", content: PopupExampleView()),
-                Example("Scalebar", content: ScalebarExampleView()),
-                Example("Search", content: SearchExampleView()),
-                Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-            ]
-        )
-    }
-    
-    static var views: Self {
-        .init(
-            name: "Views",
-            examples: [
-                Example("Floating Panel", content: FloatingPanelExampleView())
-            ]
-        )
-    }
 }
