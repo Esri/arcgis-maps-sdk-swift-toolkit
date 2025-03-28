@@ -168,7 +168,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Retrieves the model for a given `OfflineMapInfo`.
 ***REMOVED***private func model(for offlineMapInfo: OfflineMapInfo) -> OfflineMapViewModel {
-***REMOVED******REMOVED***if let model = models[offlineMapInfo.portalItemID] {
+***REMOVED******REMOVED***if let model = models[offlineMapInfo.id] {
 ***REMOVED******REMOVED******REMOVED***return model
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Only create the map here if we don't already have the model in memory.
@@ -182,7 +182,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ map areas.
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
 ***REMOVED***func removeMapInfo(for portalItemID: Item.ID) {
-***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID ***REMOVED***)
+***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.id == portalItemID ***REMOVED***)
 ***REMOVED******REMOVED***OfflineMapInfo.remove(from: URL.portalItemDirectory(forPortalItemID: portalItemID))
 ***REMOVED***
 ***REMOVED***
@@ -231,7 +231,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***for result: Result<Output, Error>,
 ***REMOVED******REMOVED***portalItemID: Item.ID
 ***REMOVED***) {
-***REMOVED******REMOVED***guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED***guard !offlineMapInfos.contains(where: { $0.id == portalItemID ***REMOVED***) else { return ***REMOVED***
 ***REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Move the pending info into the correct folder.
@@ -288,11 +288,11 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now remove any offline map areas whose model isn't in memory by simply deleting the
 ***REMOVED******REMOVED******REMOVED*** whole portal item directory. This will also delete the map info.
-***REMOVED******REMOVED***let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+***REMOVED******REMOVED***let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.id)
 ***REMOVED******REMOVED***try FileManager.default.removeItem(at: portalItemDirectory)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Remove offline map info for this map.
-***REMOVED******REMOVED***offlineMapInfos.removeAll { $0.portalItemID == offlineMapInfo.portalItemID ***REMOVED***
+***REMOVED******REMOVED***offlineMapInfos.removeAll { $0.id == offlineMapInfo.id ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
