@@ -17,8 +17,8 @@ import Combine
 import OSLog
 ***REMOVED***
 
-***REMOVED***/ A utility class that maintains states of offline map areas and their
-***REMOVED***/ file structures on the device.
+***REMOVED***/ A utility object that maintains the state of offline map areas and their
+***REMOVED***/ storage on the device.
 ***REMOVED***/
 ***REMOVED***/ This component utilizes the ``JobManager`` and provides high-level APIs to
 ***REMOVED***/ manage offline map areas and access their data.
