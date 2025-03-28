@@ -75,11 +75,6 @@
 ***REMOVED***/ is unavailable, the component will only display map areas that have already
 ***REMOVED***/ been downloaded to the device.
 ***REMOVED***/
-***REMOVED***/ If the network connectivity changes while the view is presented, the view
-***REMOVED***/ will not automatically refresh the list of map areas. The user can
-***REMOVED***/ pull-to-refresh to reload the list of map areas. Depending on the network
-***REMOVED***/ connectivity, the view will display the appropriate content.
-***REMOVED***/
 ***REMOVED***/ **Associated Types**
 ***REMOVED***/
 ***REMOVED***/ `OfflineMapAreasView` has the following associated types:
