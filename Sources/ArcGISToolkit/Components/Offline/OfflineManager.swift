@@ -17,8 +17,8 @@ import Combine
 import OSLog
 import SwiftUI
 
-/// A utility class that maintains states of offline map areas and their
-/// file structures on the device.
+/// A utility object that maintains the state of offline map areas and their
+/// storage on the device.
 ///
 /// This component utilizes the ``JobManager`` and provides high-level APIs to
 /// manage offline map areas and access their data.
