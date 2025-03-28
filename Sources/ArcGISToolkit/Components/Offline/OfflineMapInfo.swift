@@ -62,12 +62,11 @@ public extension OfflineMapInfo {
     var description: String { info.description }
     /// The URL of the portal item associated with the map.
     var portalItemURL: URL { info.portalItemURL }
-    /// The ID of the portal item associated with the map.
-    var portalItemID: Item.ID { .init(info.portalItemID)! }
 }
 
 extension OfflineMapInfo: Identifiable {
-    public var id: Item.ID { portalItemID }
+    /// The ID of the portal item associated with the map.
+    public var id: Item.ID { .init(info.portalItemID)! }
 }
 
 /// Information for an online map that has been taken offline.
