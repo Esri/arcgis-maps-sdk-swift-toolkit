@@ -21,8 +21,7 @@ import SwiftUI
 /// file structures on the device.
 ///
 /// This component utilizes ``JobManager`` and provides high-level APIs to
-/// manage offline map areas and access their data. A custom UI can be built
-/// using the APIs provided.
+/// manage offline map areas and access their data.
 ///
 /// **Features**
 ///
@@ -34,6 +33,12 @@ import SwiftUI
 /// - Remove offline map areas from the device.
 /// - Run the jobs while the app is in the background.
 /// - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
+///
+/// The component is useful both for building custom UI with the provided APIs,
+/// and for supporting workflows that require retrieving offline map areas
+/// information from the device. By using the `OfflineManager`, you can create
+/// an `OfflineMapAreasView` using the ``OfflineMapAreasView/init(offlineMapInfo:selection:)``
+/// initializer.
 ///
 /// **Behavior**
 ///
