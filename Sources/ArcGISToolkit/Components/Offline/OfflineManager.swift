@@ -20,7 +20,7 @@ import SwiftUI
 /// A utility class that maintains states of offline map areas and their
 /// file structures on the device.
 ///
-/// This component utilizes ``JobManager`` and provides high-level APIs to
+/// This component utilizes the ``JobManager`` and provides high-level APIs to
 /// manage offline map areas and access their data.
 ///
 /// **Features**
@@ -31,7 +31,7 @@ import SwiftUI
 /// - Observe job status.
 /// - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 /// - Remove offline map areas from the device.
-/// - Run the jobs while the app is in the background.
+/// - Run download jobs while the app is in the background.
 /// - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
 ///
 /// The component is useful both for building custom UI with the provided APIs,
