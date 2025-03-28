@@ -20,7 +20,7 @@ import OSLog
 ***REMOVED***/ A utility class that maintains states of offline map areas and their
 ***REMOVED***/ file structures on the device.
 ***REMOVED***/
-***REMOVED***/ This component is based on ``JobManager`` and provides high-level APIs to
+***REMOVED***/ This component utilizes ``JobManager`` and provides high-level APIs to
 ***REMOVED***/ manage offline map areas and access their data. A custom UI can be built
 ***REMOVED***/ using the APIs provided.
 ***REMOVED***/
@@ -32,7 +32,7 @@ import OSLog
 ***REMOVED***/ - Observe job status.
 ***REMOVED***/ - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 ***REMOVED***/ - Remove offline map areas from the device.
-***REMOVED***/ - Run the jobs while the app is in background or even terminated.
+***REMOVED***/ - Run the jobs while the app is in the background.
 ***REMOVED***/ - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
