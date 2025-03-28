@@ -70,7 +70,6 @@ extension OfflineMapInfo: Identifiable {
     public var id: Item.ID { portalItemID }
 }
 
-/// Information for an online map that has been taken offline.
 private extension OfflineMapInfo {
     /// The codable info is stored in json.
     struct CodableInfo: Codable {
