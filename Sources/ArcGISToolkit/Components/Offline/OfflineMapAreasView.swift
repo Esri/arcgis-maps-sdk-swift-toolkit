@@ -63,7 +63,7 @@ import ArcGIS
 ///     - When the web map doesn't contain preplanned map areas, users can add
 ///     and download on-demand map areas.
 ///     - Use ``init(onlineMap:selection:)`` to initialize the view.
-/// - When the device is dsconnected from the network…
+/// - When the device is disconnected from the network…
 ///     - The view displays only downloaded map areas by retrieving
 ///     offline map info from the device.
 ///     - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
