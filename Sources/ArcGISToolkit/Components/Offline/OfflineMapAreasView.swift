@@ -55,8 +55,18 @@ import ArcGIS
 /// The view can be initialized with a web map or an offline map info.
 /// Therefore, the view can be used either when the device is connected to
 /// or disconnected from the network. In other words, the view can be used
-/// in all 4 situations: (device) connected/preplanned, connected/on-demand,
-/// disconnected/preplanned, disconnected/on-demand.
+/// in the following situations:
+///
+/// - When the device is connected to the network…
+///     - The view displays preplanned map areas from a web map that are
+///     available for download.
+///     - When the web map doesn't contain preplanned map areas, users can add
+///     and download on-demand map areas.
+///     - Use ``init(onlineMap:selection:)`` to initialize the view.
+/// - When the device is dsconnected from the network…
+///     - The view displays only downloaded map areas by retrieving
+///     offline map info from the device.
+///     - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
 ///
 /// When the network connection is available, the component will display a list
 /// of preplanned map areas configured for the web map. If the web map doesn't
