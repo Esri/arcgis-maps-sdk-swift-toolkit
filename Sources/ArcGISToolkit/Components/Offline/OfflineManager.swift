@@ -20,8 +20,10 @@ import SwiftUI
 /// A utility object that maintains the state of offline map areas and their
 /// storage on the device.
 ///
-/// This component utilizes the ``JobManager`` and provides high-level APIs to
-/// manage offline map areas and access their data.
+/// This component provides high-level APIs to manage offline map areas and
+/// access their data.
+/// This component manages offline jobs and it utilizes the ``JobManager``
+/// in order to facilitate jobs continuing to run while the app is backgrounded.
 ///
 /// **Features**
 ///
