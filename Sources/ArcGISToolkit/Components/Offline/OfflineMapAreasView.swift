@@ -61,19 +61,13 @@ import ArcGIS
 ///     - The view displays preplanned map areas from a web map that are
 ///     available for download.
 ///     - When the web map doesn't contain preplanned map areas, users can add
-///     and download on-demand map areas.
+///     and download on-demand map areas by specifying a geographic area and
+///     level of detail.
 ///     - Use ``init(onlineMap:selection:)`` to initialize the view.
 /// - When the device is disconnected from the network…
 ///     - The view displays only downloaded map areas by retrieving
 ///     offline map info from the device.
 ///     - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
-///
-/// When the network connection is available, the component will display a list
-/// of preplanned map areas configured for the web map. If the web map doesn't
-/// contain any preplanned map areas, users can create a map area on-demand by
-/// specifying a geographic area and level of detail. When a network connection
-/// is unavailable, the component will only display map areas that have already
-/// been downloaded to the device.
 ///
 /// **Associated Types**
 ///
