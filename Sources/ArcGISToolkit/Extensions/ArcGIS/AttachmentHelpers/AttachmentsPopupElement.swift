@@ -16,12 +16,12 @@ import ArcGIS
 
 extension AttachmentsPopupElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
-    public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
+    var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
         AttachmentsFeatureElementDisplayType(kind: displayType)
     }
     
     /// The feature attachments associated with this element. This property will be empty if the element has not yet been evaluated.
-    public var featureAttachments: [FeatureAttachment] {
+    var featureAttachments: [FeatureAttachment] {
         get async throws {
             try await attachments.map { $0 as FeatureAttachment }
         }

@@ -68,6 +68,14 @@
         @TutorialReference(tutorial: "doc:JobManagerTutorial")
     }
     
+    @Chapter(name: "OfflineMapAreasView") {
+        The `OfflineMapAreasView` is a view that allows downloading map areas from a web map 
+        for offline use.
+        
+        @Image(source: OfflineMapAreasView, alt: "An image of the OfflineMapAreasView component")
+        @TutorialReference(tutorial: "doc:OfflineMapAreasViewTutorial")
+    }
+    
     @Chapter(name: "OverviewMap") {
         `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map")
         superimposed on an existing `GeoView`, which shows a representation of the current 

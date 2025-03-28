@@ -15,18 +15,25 @@
 import SwiftUI
 import ArcGIS
 
-/// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
+/// The `OfflineMapAreasView` component displays a list of downloadable
+/// preplanned map areas or on-demand map areas from a given web map.
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: OfflineMapViewModel
     /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss: DismissAction
+    @Environment(\.dismiss) private var dismiss
     /// The web map to be taken offline.
     private let onlineMap: Map
     /// The currently selected map.
     @Binding private var selectedMap: Map?
     /// A Boolean value indicating whether an on-demand map area is being added.
     @State private var isAddingOnDemandArea = false
+    /// The visibility of the done button.
+    private var doneVisibility: Visibility = .automatic
+    /// A Boolean value indicating whether the view should dismiss.
+    private var shouldDismiss: Bool {
+        doneVisibility == .automatic || doneVisibility == .visible
+    }
     
     /// The portal item for the web map to be taken offline.
     private var portalItem: PortalItem {
@@ -64,6 +71,14 @@ public struct OfflineMapAreasView: View {
         _mapViewModel = StateObject(wrappedValue: OfflineManager.shared.model(for: onlineMap))
         self.onlineMap = onlineMap
         _selectedMap = selection
+    }
+    
+    /// Specifies the visibility of the done button.
+    /// - Parameter visibility: The preferred visibility of the done button.
+    public func doneButton(_ visibility: Visibility) -> Self {
+        var copy = self
+        copy.doneVisibility = visibility
+        return copy
     }
     
     public var body: some View {
@@ -107,9 +122,11 @@ public struct OfflineMapAreasView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button.done {
-                        dismiss()
+                if shouldDismiss {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button.done {
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -131,7 +148,11 @@ public struct OfflineMapAreasView: View {
                 List {
                     Section {
                         ForEach(models) { preplannedMapModel in
-                            PreplannedListItemView(model: preplannedMapModel, selectedMap: $selectedMap)
+                            PreplannedListItemView(
+                                model: preplannedMapModel,
+                                selectedMap: $selectedMap,
+                                shouldDismiss: shouldDismiss
+                            )
                         }
                     } footer: {
                         if mapViewModel.isShowingOnlyOfflineModels {
@@ -165,7 +186,11 @@ public struct OfflineMapAreasView: View {
             if !mapViewModel.onDemandMapModels.isEmpty {
                 List {
                     ForEach(mapViewModel.onDemandMapModels) { onDemandMapModel in
-                        OnDemandListItemView(model: onDemandMapModel, selectedMap: $selectedMap)
+                        OnDemandListItemView(
+                            model: onDemandMapModel,
+                            selectedMap: $selectedMap,
+                            shouldDismiss: shouldDismiss
+                        )
                     }
                     Section {
                         Button {
