@@ -39,10 +39,10 @@
 ***REMOVED***/
 ***REMOVED***/ For on-demand workflows, the view:
 ***REMOVED***/
-***REMOVED***/ - Allows users to add on-demand map areas to the device for offline use.
+***REMOVED***/ - Allows users to add and download on-demand map areas to the device by
+***REMOVED***/ specifying an area of interest and level of detail.
 ***REMOVED***/ - Displays a list of on-demand map areas available on the device that are
 ***REMOVED***/ tied to a specific web map.
-***REMOVED***/ - Opens an on-demand map area for viewing when selected.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
