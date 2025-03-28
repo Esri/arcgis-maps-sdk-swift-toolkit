@@ -18,6 +18,9 @@ struct Examples: View {
 ***REMOVED******REMOVED***/ The categories to display.
 ***REMOVED***let categories = makeCategories()
 ***REMOVED***
+***REMOVED******REMOVED***/ The uncategorized examples.
+***REMOVED***let uncategorizedExamples = makeUncategorizedExamples()
+***REMOVED***
 ***REMOVED******REMOVED***/ The category selected by the user.
 ***REMOVED***@State private var selectedCategory: Category?
 ***REMOVED******REMOVED***/ The example selected by the user.
@@ -26,17 +29,29 @@ struct Examples: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationSplitView {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(categories, id: \.name, selection: $selectedCategory) { category in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(category.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, id: \.name, selection: $selectedExample) { example in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.sidebar)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(category.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isDetailLink(false)
+***REMOVED******REMOVED******REMOVED******REMOVED***#warning("This approach works, but alphabetized categories would be listed first, followed by alphabetized uncategorized Examples. We probably want the two sets mixed together.")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***List(selection: $selectedCategory) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(categories, id: \.name) { category in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(category.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, id: \.name, selection: $selectedExample) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.sidebar)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(category.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isDetailLink(false)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(uncategorizedExamples, id: \.name) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExample = example
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED******REMOVED***
@@ -56,16 +71,26 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeCategories() -> [Category] {
-***REMOVED******REMOVED***let common: [Category] = [
-***REMOVED******REMOVED******REMOVED***.geoview,
-***REMOVED******REMOVED******REMOVED***.views
-***REMOVED******REMOVED***]
 #if os(iOS) && !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED***return [.augmentedReality] + common
+***REMOVED******REMOVED***return [.augmentedReality]
 #else
-***REMOVED******REMOVED***return common
+***REMOVED******REMOVED***return []
 #endif
 ***REMOVED***
+***REMOVED***
+***REMOVED***static func makeUncategorizedExamples() -> [Example] { [
+***REMOVED******REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Floating Panel", content: FloatingPanelExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED***] ***REMOVED***
 ***REMOVED***
 
 @MainActor
@@ -82,31 +107,4 @@ extension Category {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 #endif
-***REMOVED***
-***REMOVED***static var geoview: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***name: "GeoView",
-***REMOVED******REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***static var views: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***name: "Views",
-***REMOVED******REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Floating Panel", content: FloatingPanelExampleView())
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED***)
-***REMOVED***
 ***REMOVED***
