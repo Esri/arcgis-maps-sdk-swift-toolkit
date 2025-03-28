@@ -129,7 +129,7 @@ private extension TextInput {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
-                        // Known issue: This button is known to sometimes not appear. (See Apollo #1159)
+                        // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
                         positiveNegativeButton
                         Spacer()
                     }
