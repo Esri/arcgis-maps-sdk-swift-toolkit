@@ -70,7 +70,6 @@ extension OfflineMapInfo: Identifiable {
 ***REMOVED***public var id: Item.ID { portalItemID ***REMOVED***
 ***REMOVED***
 
-***REMOVED******REMOVED***/ The codable info is stored in json.
 ***REMOVED***struct CodableInfo: Codable {
 ***REMOVED******REMOVED***let portalItemID: String
 ***REMOVED******REMOVED***let title: String
