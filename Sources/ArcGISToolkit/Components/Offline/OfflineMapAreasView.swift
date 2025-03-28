@@ -39,10 +39,10 @@ import ArcGIS
 ///
 /// For on-demand workflows, the view:
 ///
-/// - Allows users to add on-demand map areas to the device for offline use.
+/// - Allows users to add and download on-demand map areas to the device by
+/// specifying an area of interest and level of detail.
 /// - Displays a list of on-demand map areas available on the device that are
 /// tied to a specific web map.
-/// - Opens an on-demand map area for viewing when selected.
 ///
 /// **Behavior**
 ///
