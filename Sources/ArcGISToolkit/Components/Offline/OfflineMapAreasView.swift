@@ -112,7 +112,10 @@ public struct OfflineMapAreasView: View {
         portalItem.id!
     }
     
-    /// Creates a view with a given web map.
+    /// Creates a view with an offline-enabled web map.
+    ///
+    /// This initializer is typically used when the device is connected to the
+    /// network.
     /// - Parameters:
     ///   - onlineMap: The web map to be taken offline.
     ///   - selection: A binding to the currently selected offline map.
@@ -127,6 +130,10 @@ public struct OfflineMapAreasView: View {
     }
     
     /// Creates a view with a given offline map info.
+    ///
+    /// This initializer is typically used when the device is disconnected from
+    /// the network. The offline map info can be retrieved from ``OfflineManager/offlineMapInfos``.
+    /// To read more about the offline map info, see the API doc for ``OfflineMapInfo``.
     /// - Parameters:
     ///   - offlineMapInfo: The offline map info for which to create the view.
     ///   - selection: A binding to the currently selected offline map.

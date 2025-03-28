@@ -18,6 +18,13 @@ import OSLog
 import UIKit.UIImage
 
 /// Information for an online map that has been taken offline.
+///
+/// When a map is taken offline, map information needs to be saved on device
+/// so that the map can be reloaded later when the device is offline. It
+/// provides access to and also enables display locally saved map information
+/// about downloaded map areas.
+///
+/// This type is typically used when there is no network connection.
 /// - Since: 200.7
 public struct OfflineMapInfo: Sendable {
     private let info: CodableInfo
