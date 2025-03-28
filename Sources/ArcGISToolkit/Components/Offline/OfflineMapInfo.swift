@@ -69,6 +69,8 @@ extension OfflineMapInfo: Identifiable {
     public var id: Item.ID { .init(info.portalItemID)! }
 }
 
+private extension OfflineMapInfo {
+     /// The codable info is stored in json.
     struct CodableInfo: Codable {
         let portalItemID: String
         let title: String
