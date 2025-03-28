@@ -75,11 +75,6 @@ import ArcGIS
 /// is unavailable, the component will only display map areas that have already
 /// been downloaded to the device.
 ///
-/// If the network connectivity changes while the view is presented, the view
-/// will not automatically refresh the list of map areas. The user can
-/// pull-to-refresh to reload the list of map areas. Depending on the network
-/// connectivity, the view will display the appropriate content.
-///
 /// **Associated Types**
 ///
 /// `OfflineMapAreasView` has the following associated types:
