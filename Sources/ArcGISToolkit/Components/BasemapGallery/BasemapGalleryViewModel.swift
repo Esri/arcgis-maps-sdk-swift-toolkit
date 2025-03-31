@@ -34,6 +34,7 @@ import Combine
         if items.isEmpty {
             // We have no basemap items, so fetch the
             // developer basemaps from AGOL.
+#warning("Should `useDeveloperBasemaps` be hardcoded true?")
             fetchBasemaps(
                 from: Portal.arcGISOnline(connection: .anonymous),
                 useDeveloperBasemaps: true
@@ -96,6 +97,9 @@ import Combine
             // If portal is non-nil, there's no need to clone the basemap
             // as the list of basemaps is reloaded from the portal each time.
             geoModel?.basemap = portal == nil ? item.basemap.clone() : item.basemap
+            print("portal == nil", portal == nil)
+            print(geoModel?.basemap?.item?.id)
+            print(geoModel?.basemap?.item?.description)
         }
     }
     
@@ -183,6 +187,10 @@ private extension BasemapGalleryViewModel {
                 } else {
                     basemaps = try await portal.basemaps
                 }
+#warning("#3D Basemaps here")
+                print("geoModel is Scene", geoModel is Scene)
+                print("geoModel is Map", geoModel is Map)
+                try await print(portal.basemaps3D.count)
                 items += basemaps.map { BasemapGalleryItem(basemap: $0) }
             } catch {
                 fetchBasemapsError = error
