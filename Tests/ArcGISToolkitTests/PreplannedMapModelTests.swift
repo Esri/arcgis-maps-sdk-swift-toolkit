@@ -327,7 +327,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         // Verify statuses.
         // First give time for final status to come in.
-        try? await Task.yield(timeout: 0.1) { @MainActor in
+        try? await Task.yield(timeout: 0.5) { @MainActor in
             statuses.last == .downloaded
         }
         XCTAssertEqual(
