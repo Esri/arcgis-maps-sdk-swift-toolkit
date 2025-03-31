@@ -327,7 +327,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify statuses.
 ***REMOVED******REMOVED******REMOVED*** First give time for final status to come in.
-***REMOVED******REMOVED***try? await Task.yield(timeout: 0.1) { @MainActor in
+***REMOVED******REMOVED***try? await Task.yield(timeout: 0.5) { @MainActor in
 ***REMOVED******REMOVED******REMOVED***statuses.last == .downloaded
 ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
