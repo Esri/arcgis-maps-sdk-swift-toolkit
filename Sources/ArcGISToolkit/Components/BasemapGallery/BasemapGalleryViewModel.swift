@@ -34,6 +34,7 @@ import Combine
 ***REMOVED******REMOVED***if items.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** We have no basemap items, so fetch the
 ***REMOVED******REMOVED******REMOVED******REMOVED*** developer basemaps from AGOL.
+#warning("Should `useDeveloperBasemaps` be hardcoded true?")
 ***REMOVED******REMOVED******REMOVED***fetchBasemaps(
 ***REMOVED******REMOVED******REMOVED******REMOVED***from: Portal.arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps: true
@@ -96,6 +97,9 @@ import Combine
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If portal is non-nil, there's no need to clone the basemap
 ***REMOVED******REMOVED******REMOVED******REMOVED*** as the list of basemaps is reloaded from the portal each time.
 ***REMOVED******REMOVED******REMOVED***geoModel?.basemap = portal == nil ? item.basemap.clone() : item.basemap
+***REMOVED******REMOVED******REMOVED***print("portal == nil", portal == nil)
+***REMOVED******REMOVED******REMOVED***print(geoModel?.basemap?.item?.id)
+***REMOVED******REMOVED******REMOVED***print(geoModel?.basemap?.item?.description)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -183,6 +187,10 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.basemaps
 ***REMOVED******REMOVED******REMOVED***
+#warning("#3D Basemaps here")
+***REMOVED******REMOVED******REMOVED******REMOVED***print("geoModel is Scene", geoModel is Scene)
+***REMOVED******REMOVED******REMOVED******REMOVED***print("geoModel is Map", geoModel is Map)
+***REMOVED******REMOVED******REMOVED******REMOVED***try await print(portal.basemaps3D.count)
 ***REMOVED******REMOVED******REMOVED******REMOVED***items += basemaps.map { BasemapGalleryItem(basemap: $0) ***REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fetchBasemapsError = error
