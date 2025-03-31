@@ -56,21 +56,31 @@ struct Examples: View {
     }
     
     static func makeCategories() -> [Category] {
-        let common: [Category] = [
-            .geoview,
-            .views
-        ]
 #if os(iOS) && !targetEnvironment(macCatalyst)
-        return [.augmentedReality] + common
+        [.accessories, .augmentedReality, .data, .other]
 #else
-        return common
+        [.accessories, .data, .other]
 #endif
     }
 }
 
 @MainActor
 extension Category {
+    /// Components that can be used with any geoview.
+    static var accessories: Self {
+        .init(
+            name: "Accessories",
+            examples: [
+                Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+                Example("Compass", content: CompassExampleView()),
+                Example("Overview Map", content: OverviewMapExampleView()),
+                Example("Scalebar", content: ScalebarExampleView())
+            ]
+        )
+    }
+    
 #if os(iOS) && !targetEnvironment(macCatalyst)
+    /// Augmented reality components.
     static var augmentedReality: Self {
         .init(
             name: "Augmented Reality",
@@ -83,27 +93,26 @@ extension Category {
     }
 #endif
     
-    static var geoview: Self {
+    /// Components requiring specific data.
+    static var data: Self {
         .init(
-            name: "GeoView",
+            name: "Data",
             examples: [
-                Example("Basemap Gallery", content: BasemapGalleryExampleView()),
                 Example("Bookmarks", content: BookmarksExampleView()),
-                Example("Compass", content: CompassExampleView()),
                 Example("Feature Form", content: FeatureFormExampleView()),
                 Example("Floor Filter", content: FloorFilterExampleView()),
                 Example("Overview Map", content: OverviewMapExampleView()),
                 Example("Popup", content: PopupExampleView()),
-                Example("Scalebar", content: ScalebarExampleView()),
                 Example("Search", content: SearchExampleView()),
                 Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
             ]
         )
     }
     
-    static var views: Self {
+    /// General purpose components.
+    static var other: Self {
         .init(
-            name: "Views",
+            name: "Other",
             examples: [
                 Example("Floating Panel", content: FloatingPanelExampleView())
             ]
