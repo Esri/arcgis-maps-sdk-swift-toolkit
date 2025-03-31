@@ -70,17 +70,17 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
     
     /// The thumbnail used to represent the `basemap`.
     @Published public private(set) var thumbnail: UIImage?
-
+    
     /// The spatial reference status of the item. This is set via a call to
     /// ``updateSpatialReferenceStatus(_:)``.
     @Published public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
     /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
     @Published private(set) var isBasemapLoading = true
-
+    
     /// The error generated loading the basemap, if any.
     @Published private(set) var loadBasemapError: Error? = nil
-
+    
     /// The spatial reference of ``basemap``. This will be `nil` until the
     /// basemap's base layers have been loaded by
     /// ``updateSpatialReferenceStatus(_:)``.
