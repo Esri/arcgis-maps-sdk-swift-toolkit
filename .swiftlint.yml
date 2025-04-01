@@ -13,7 +13,7 @@ custom_rules:
 ***REMOVED***message: "Void return and empty arguments should be avoided in closures."
   closure_opening_space:
 ***REMOVED***name: Closure Opening Space
-***REMOVED***regex: \{\s{2,***REMOVED***\[(?!\s*\n)|\{(?=\[)
+***REMOVED***regex: \{\[|\{\s{2,***REMOVED***\[
 ***REMOVED***message: "Use one space between the brace and bracket."
 
 # Rule identifiers to exclude from running
