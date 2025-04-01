@@ -33,6 +33,26 @@ struct BasemapGalleryExampleView: View {
         return map
     }()
     
+    @State private var scene: ArcGIS.Scene = {
+        let scene = Scene(basemap: Basemap(item: PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: Item.ID("0560e29930dc4d5ebeb58c635c0909c9")!
+        )))
+        scene.initialViewpoint = Viewpoint(
+            latitude: .nan,
+            longitude: .nan,
+            scale: .nan,
+            camera: Camera(
+                latitude: 40.686169,
+                longitude: -74.027986,
+                altitude: 1101.149054,
+                heading: 30.82,
+                pitch: 72,
+                roll: 0
+            )
+        )
+        return scene
+    }()
     var body: some View {
         MapView(map: map)
             .sheet(isPresented: $basemapGalleryIsPresented) {
