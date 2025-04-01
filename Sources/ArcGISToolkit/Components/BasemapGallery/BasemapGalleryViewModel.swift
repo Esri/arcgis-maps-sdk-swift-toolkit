@@ -33,8 +33,9 @@ import Combine
         
         if items.isEmpty {
             // We have no basemap items, so fetch the
-            // developer basemaps from AGOL.
-#warning("Should `useDeveloperBasemaps` be hardcoded true?")
+            // developer basemaps from AGOL. Developer
+            // basemaps are used because they're
+            // API-key metered.
             fetchBasemaps(
                 from: Portal.arcGISOnline(connection: .anonymous),
                 useDeveloperBasemaps: true
