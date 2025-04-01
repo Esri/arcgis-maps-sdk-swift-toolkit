@@ -33,26 +33,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***return map
 ***REMOVED***()
 ***REMOVED***
-***REMOVED***@State private var scene: ArcGIS.Scene = {
-***REMOVED******REMOVED***let scene = Scene(basemap: Basemap(item: PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED***id: Item.ID("0560e29930dc4d5ebeb58c635c0909c9")!
-***REMOVED******REMOVED***)))
-***REMOVED******REMOVED***scene.initialViewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***latitude: .nan,
-***REMOVED******REMOVED******REMOVED***longitude: .nan,
-***REMOVED******REMOVED******REMOVED***scale: .nan,
-***REMOVED******REMOVED******REMOVED***camera: Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: 40.686169,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: -74.027986,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: 1101.149054,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: 30.82,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 72,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***return scene
-***REMOVED***()
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $basemapGalleryIsPresented) {
