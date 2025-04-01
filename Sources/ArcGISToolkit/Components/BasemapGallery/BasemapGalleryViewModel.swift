@@ -33,8 +33,9 @@ import Combine
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if items.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** We have no basemap items, so fetch the
-***REMOVED******REMOVED******REMOVED******REMOVED*** developer basemaps from AGOL.
-#warning("Should `useDeveloperBasemaps` be hardcoded true?")
+***REMOVED******REMOVED******REMOVED******REMOVED*** developer basemaps from AGOL. Developer
+***REMOVED******REMOVED******REMOVED******REMOVED*** basemaps are used because they're
+***REMOVED******REMOVED******REMOVED******REMOVED*** API-key metered.
 ***REMOVED******REMOVED******REMOVED***fetchBasemaps(
 ***REMOVED******REMOVED******REMOVED******REMOVED***from: Portal.arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps: true
