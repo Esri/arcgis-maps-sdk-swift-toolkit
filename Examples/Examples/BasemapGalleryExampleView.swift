@@ -64,17 +64,21 @@ struct BasemapGalleryExampleView: View {
         }
     }
     
+    // SwiftLint (version 0.58.2) incorrectly warns about the following line.
+    // swiftlint:disable closure_opening_space
     private static func makeBasemapGalleryItems() -> [BasemapGalleryItem] {
-        let identifiers = [
+        [
             "46a87c20f09e4fc48fa3c38081e0cae6",
             "f33a34de3a294590ab48f246e99958c9",
-            "52bdc7ab7fb044d98add148764eaa30a",  // <<== mismatched spatial reference
-            "3a8d410a4a034a2ba9738bb0860d68c4"   // <<== incorrect portal item type
+            "52bdc7ab7fb044d98add148764eaa30a", // Mismatched spatial reference
+            "3a8d410a4a034a2ba9738bb0860d68c4"  // Incorrect portal item type
         ]
-        
-        return identifiers.map { identifier in
-            let url = URL(string: "https://www.arcgis.com/home/item.html?id=\(identifier)")!
-            return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
-        }
+            .map { identifier in
+                BasemapGalleryItem(basemap: Basemap(item: PortalItem(
+                    portal: .arcGISOnline(connection: .anonymous),
+                    id: Item.ID(identifier)!)
+                ))
+            }
     }
+    // swiftlint:enable closure_opening_space
 }
