@@ -126,6 +126,32 @@ private extension BasemapGalleryItem {
     }
 }
 
+extension BasemapGalleryItem /* Deprecated*/ {
+    /// Creates a `BasemapGalleryItem`.
+    /// - Parameters:
+    ///   - basemap: The `Basemap` represented by the item.
+    ///   - name: The item name. If `nil`, `Basemap.name` is used, if available.
+    ///   - description: The item description. If `nil`, `Basemap.Item.description`
+    ///   is used, if available.
+    ///   - thumbnail: The thumbnail used to represent the item. If `nil`,
+    ///   `Basemap.Item.thumbnail` is used, if available.
+    @available(*, deprecated, message: "Use init(basemap:name:description:thumbnail:is3D:) instead.")
+    public convenience init(
+        basemap: Basemap,
+        name: String? = nil,
+        description: String? = nil,
+        thumbnail: UIImage? = nil
+    ) {
+        self.init(
+            basemap: basemap,
+            name: name,
+            description: description,
+            thumbnail: thumbnail,
+            is3D: false
+        )
+    }
+}
+
 extension BasemapGalleryItem: Identifiable {}
 
 extension BasemapGalleryItem: Equatable {
