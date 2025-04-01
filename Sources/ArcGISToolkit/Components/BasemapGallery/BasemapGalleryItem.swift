@@ -126,7 +126,7 @@ private extension BasemapGalleryItem {
     }
 }
 
-extension BasemapGalleryItem /* Deprecated*/ {
+extension BasemapGalleryItem /* Deprecated */ {
     /// Creates a `BasemapGalleryItem`.
     /// - Parameters:
     ///   - basemap: The `Basemap` represented by the item.
