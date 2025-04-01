@@ -98,8 +98,8 @@ import Combine
             // as the list of basemaps is reloaded from the portal each time.
             geoModel?.basemap = portal == nil ? item.basemap.clone() : item.basemap
             print("portal == nil", portal == nil)
-            print(geoModel?.basemap?.item?.id)
-            print(geoModel?.basemap?.item?.description)
+#warning("Cloning removed temporarily. See #1126")
+            geoModel?.basemap = portal == nil ? item.basemap : item.basemap
         }
     }
     
@@ -179,6 +179,13 @@ private extension BasemapGalleryViewModel {
                 try await portal.load()
                 
                 let basemaps: [Basemap]
+                
+                if geoModel is Scene {
+                    try await portal.basemaps3D.forEach { basemap in
+                        items.append(BasemapGalleryItem(basemap: basemap, is3D: true))
+                    }
+                }
+                
                 if useDeveloperBasemaps {
                     basemaps = try await portal.developerBasemaps
                 } else if let portalInfo = portal.info,
@@ -187,10 +194,6 @@ private extension BasemapGalleryViewModel {
                 } else {
                     basemaps = try await portal.basemaps
                 }
-#warning("#3D Basemaps here")
-                print("geoModel is Scene", geoModel is Scene)
-                print("geoModel is Map", geoModel is Map)
-                try await print(portal.basemaps3D.count)
                 items += basemaps.map { BasemapGalleryItem(basemap: $0) }
             } catch {
                 fetchBasemapsError = error

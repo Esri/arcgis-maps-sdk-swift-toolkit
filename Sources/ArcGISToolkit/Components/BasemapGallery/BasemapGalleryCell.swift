@@ -56,6 +56,9 @@ struct BasemapGalleryCell: View {
                     .font(Font.custom("AvenirNext-Regular", fixedSize: 12))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(item.hasError ? .secondary : .primary)
+                if item.is3D {
+                    Text("3D")
+                }
             }
 #if os(visionOS)
             .contentShape(.hoverEffect, .rect(cornerRadius: 12))
