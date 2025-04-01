@@ -37,6 +37,13 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
+***REMOVED***init() {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***MapViewReader { mapViewProxy in
@@ -49,10 +56,6 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { _, mapPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
 ***REMOVED******REMOVED******REMOVED***
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapView
