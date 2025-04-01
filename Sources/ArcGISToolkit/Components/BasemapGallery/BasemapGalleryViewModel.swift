@@ -96,8 +96,6 @@ import Combine
 ***REMOVED******REMOVED******REMOVED******REMOVED*** prevents the "Object already owned" error.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If portal is non-nil, there's no need to clone the basemap
 ***REMOVED******REMOVED******REMOVED******REMOVED*** as the list of basemaps is reloaded from the portal each time.
-***REMOVED******REMOVED******REMOVED***geoModel?.basemap = portal == nil ? item.basemap.clone() : item.basemap
-***REMOVED******REMOVED******REMOVED***print("portal == nil", portal == nil)
 #warning("Cloning removed temporarily. See #1126")
 ***REMOVED******REMOVED******REMOVED***geoModel?.basemap = portal == nil ? item.basemap : item.basemap
 ***REMOVED***
