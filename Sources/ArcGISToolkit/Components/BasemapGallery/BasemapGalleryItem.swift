@@ -126,6 +126,32 @@ private extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED***
 
+extension BasemapGalleryItem /* Deprecated*/ {
+***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
+***REMOVED******REMOVED***/   - name: The item name. If `nil`, `Basemap.name` is used, if available.
+***REMOVED******REMOVED***/   - description: The item description. If `nil`, `Basemap.Item.description`
+***REMOVED******REMOVED***/   is used, if available.
+***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item. If `nil`,
+***REMOVED******REMOVED***/   `Basemap.Item.thumbnail` is used, if available.
+***REMOVED***@available(*, deprecated, message: "Use init(basemap:name:description:thumbnail:is3D:) instead.")
+***REMOVED***public convenience init(
+***REMOVED******REMOVED***basemap: Basemap,
+***REMOVED******REMOVED***name: String? = nil,
+***REMOVED******REMOVED***description: String? = nil,
+***REMOVED******REMOVED***thumbnail: UIImage? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***basemap: basemap,
+***REMOVED******REMOVED******REMOVED***name: name,
+***REMOVED******REMOVED******REMOVED***description: description,
+***REMOVED******REMOVED******REMOVED***thumbnail: thumbnail,
+***REMOVED******REMOVED******REMOVED***is3D: false
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
 extension BasemapGalleryItem: Identifiable {***REMOVED***
 
 extension BasemapGalleryItem: Equatable {
