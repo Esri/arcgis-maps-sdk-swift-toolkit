@@ -96,8 +96,6 @@ import Combine
             // prevents the "Object already owned" error.
             // If portal is non-nil, there's no need to clone the basemap
             // as the list of basemaps is reloaded from the portal each time.
-            geoModel?.basemap = portal == nil ? item.basemap.clone() : item.basemap
-            print("portal == nil", portal == nil)
 #warning("Cloning removed temporarily. See #1126")
             geoModel?.basemap = portal == nil ? item.basemap : item.basemap
         }
