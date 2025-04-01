@@ -64,8 +64,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** SwiftLint (version 0.58.2) incorrectly warns about the following line.
-***REMOVED******REMOVED*** swiftlint:disable closure_opening_space
 ***REMOVED***private static func makeBasemapGalleryItems() -> [BasemapGalleryItem] {
 ***REMOVED******REMOVED***[
 ***REMOVED******REMOVED******REMOVED***"46a87c20f09e4fc48fa3c38081e0cae6",
@@ -80,5 +78,4 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***))
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** swiftlint:enable closure_opening_space
 ***REMOVED***
