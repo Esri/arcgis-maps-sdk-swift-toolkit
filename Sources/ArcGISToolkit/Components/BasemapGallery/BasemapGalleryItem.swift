@@ -126,7 +126,7 @@ private extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED***
 
-extension BasemapGalleryItem /* Deprecated*/ {
+extension BasemapGalleryItem /* Deprecated */ {
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
