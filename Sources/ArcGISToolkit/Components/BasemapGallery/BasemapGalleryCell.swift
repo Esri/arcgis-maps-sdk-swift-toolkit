@@ -56,6 +56,9 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Font.custom("AvenirNext-Regular", fixedSize: 12))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(item.hasError ? .secondary : .primary)
+***REMOVED******REMOVED******REMOVED******REMOVED***if item.is3D {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("3D")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: 12))
