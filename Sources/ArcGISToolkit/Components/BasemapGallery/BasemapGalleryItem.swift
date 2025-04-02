@@ -136,6 +136,7 @@ extension BasemapGalleryItem /* Deprecated */ {
 ***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item. If `nil`,
 ***REMOVED******REMOVED***/   `Basemap.Item.thumbnail` is used, if available.
 ***REMOVED***@available(*, deprecated, message: "Use init(basemap:name:description:thumbnail:is3D:) instead.")
+***REMOVED***@_disfavoredOverload
 ***REMOVED***public convenience init(
 ***REMOVED******REMOVED***basemap: Basemap,
 ***REMOVED******REMOVED***name: String? = nil,
