@@ -38,20 +38,17 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
     ///   - description: The item description. If `nil`, `Basemap.Item.description`
     ///   is used, if available.
     ///   - thumbnail: The thumbnail used to represent the item. If `nil`,
-    ///   - is3D: A Boolean value indicating whether the basemap supports 3D visualization.
     ///   `Basemap.Item.thumbnail` is used, if available.
     public init(
         basemap: Basemap,
         name: String? = nil,
         description: String? = nil,
-        thumbnail: UIImage? = nil,
-        is3D: Bool = false
+        thumbnail: UIImage? = nil
     ) {
         self.basemap = basemap
         self.name = name
         self.description = description
         self.thumbnail = thumbnail
-        self.is3D = is3D
         
         Task {
             if basemap.loadStatus != .loaded {
@@ -77,9 +74,6 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
     /// The spatial reference status of the item. This is set via a call to
     /// ``updateSpatialReferenceStatus(_:)``.
     @Published public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
-    
-    /// A Boolean value indicating whether the basemap supports 3D visualization.
-    @Published private(set) var is3D = false
     
     /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
     @Published private(set) var isBasemapLoading = true
@@ -123,33 +117,6 @@ private extension BasemapGalleryItem {
         
         loadBasemapError = error
         isBasemapLoading = false
-    }
-}
-
-extension BasemapGalleryItem /* Deprecated */ {
-    /// Creates a `BasemapGalleryItem`.
-    /// - Parameters:
-    ///   - basemap: The `Basemap` represented by the item.
-    ///   - name: The item name. If `nil`, `Basemap.name` is used, if available.
-    ///   - description: The item description. If `nil`, `Basemap.Item.description`
-    ///   is used, if available.
-    ///   - thumbnail: The thumbnail used to represent the item. If `nil`,
-    ///   `Basemap.Item.thumbnail` is used, if available.
-    @available(*, deprecated, message: "Use init(basemap:name:description:thumbnail:is3D:) instead.")
-    @_disfavoredOverload
-    public convenience init(
-        basemap: Basemap,
-        name: String? = nil,
-        description: String? = nil,
-        thumbnail: UIImage? = nil
-    ) {
-        self.init(
-            basemap: basemap,
-            name: name,
-            description: description,
-            thumbnail: thumbnail,
-            is3D: false
-        )
     }
 }
 
