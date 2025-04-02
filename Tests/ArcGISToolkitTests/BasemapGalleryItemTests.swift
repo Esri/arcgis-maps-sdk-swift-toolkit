@@ -37,7 +37,7 @@ final class BasemapGalleryItemTests: XCTestCase {
     @MainActor
     func testInit() async throws {
         let basemap = Basemap(style: .arcGISLightGray)
-        let item = BasemapGalleryItem(basemap: basemap, is3D: false)
+        let item = BasemapGalleryItem(basemap: basemap)
         
         let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
         let loading = try XCTUnwrap(isBasemapLoading)
@@ -55,8 +55,7 @@ final class BasemapGalleryItemTests: XCTestCase {
             basemap: basemap2,
             name: "My Basemap",
             description: "Basemap description",
-            thumbnail: thumbnail,
-            is3D: false
+            thumbnail: thumbnail
         )
         
         let isBasemapLoading2 = try await item2.$isBasemapLoading.dropFirst().first
@@ -73,8 +72,7 @@ final class BasemapGalleryItemTests: XCTestCase {
                 item: PortalItem(
                     url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
-            ),
-            is3D: false
+            )
         )
         
         let isBasemapLoading3 = try await item3.$isBasemapLoading.dropFirst().first
@@ -94,8 +92,7 @@ final class BasemapGalleryItemTests: XCTestCase {
                 item: PortalItem(
                     url: URL(string: "https://arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
                 )!
-            ),
-            is3D: false
+            )
         )
         
         let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
@@ -107,7 +104,7 @@ final class BasemapGalleryItemTests: XCTestCase {
     @MainActor
     func testSpatialReferenceAndStatus() async throws {
         let basemap = Basemap(style: .arcGISLightGray)
-        let item = BasemapGalleryItem(basemap: basemap, is3D: false)
+        let item = BasemapGalleryItem(basemap: basemap)
         
         let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
         let loading = try XCTUnwrap(isBasemapLoading)
@@ -153,8 +150,7 @@ final class BasemapGalleryItemTests: XCTestCase {
                 item: PortalItem(
                     url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
-            ),
-            is3D: false
+            )
         )
         
         _ = try await otherItem.$isBasemapLoading.dropFirst().first
