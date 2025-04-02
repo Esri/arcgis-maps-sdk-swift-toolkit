@@ -180,7 +180,7 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoModel is Scene {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await portal.basemaps3D.forEach { basemap in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items.append(BasemapGalleryItem(basemap: basemap, is3D: true))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items.append(BasemapGalleryItem(basemap: basemap))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***

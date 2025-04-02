@@ -68,7 +68,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED***/ Creates a badge which indicates the basemap supports 3D visualization.
 ***REMOVED******REMOVED***/ - Returns: A 3D badge overlay view.
 ***REMOVED***@ViewBuilder private func make3DBadge() -> some View {
-***REMOVED******REMOVED***if item.is3D {
+***REMOVED******REMOVED***if item.basemap.is3D {
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"3D",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,

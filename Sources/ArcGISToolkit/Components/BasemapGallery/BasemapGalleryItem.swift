@@ -38,20 +38,17 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 ***REMOVED******REMOVED***/   - description: The item description. If `nil`, `Basemap.Item.description`
 ***REMOVED******REMOVED***/   is used, if available.
 ***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item. If `nil`,
-***REMOVED******REMOVED***/   - is3D: A Boolean value indicating whether the basemap supports 3D visualization.
 ***REMOVED******REMOVED***/   `Basemap.Item.thumbnail` is used, if available.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***basemap: Basemap,
 ***REMOVED******REMOVED***name: String? = nil,
 ***REMOVED******REMOVED***description: String? = nil,
-***REMOVED******REMOVED***thumbnail: UIImage? = nil,
-***REMOVED******REMOVED***is3D: Bool = false
+***REMOVED******REMOVED***thumbnail: UIImage? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.basemap = basemap
 ***REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED***self.description = description
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
-***REMOVED******REMOVED***self.is3D = is3D
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***if basemap.loadStatus != .loaded {
@@ -77,9 +74,6 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 ***REMOVED******REMOVED***/ The spatial reference status of the item. This is set via a call to
 ***REMOVED******REMOVED***/ ``updateSpatialReferenceStatus(_:)``.
 ***REMOVED***@Published public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the basemap supports 3D visualization.
-***REMOVED***@Published private(set) var is3D = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
 ***REMOVED***@Published private(set) var isBasemapLoading = true
@@ -123,33 +117,6 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***loadBasemapError = error
 ***REMOVED******REMOVED***isBasemapLoading = false
-***REMOVED***
-***REMOVED***
-
-extension BasemapGalleryItem /* Deprecated */ {
-***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
-***REMOVED******REMOVED***/   - name: The item name. If `nil`, `Basemap.name` is used, if available.
-***REMOVED******REMOVED***/   - description: The item description. If `nil`, `Basemap.Item.description`
-***REMOVED******REMOVED***/   is used, if available.
-***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item. If `nil`,
-***REMOVED******REMOVED***/   `Basemap.Item.thumbnail` is used, if available.
-***REMOVED***@available(*, deprecated, message: "Use init(basemap:name:description:thumbnail:is3D:) instead.")
-***REMOVED***@_disfavoredOverload
-***REMOVED***public convenience init(
-***REMOVED******REMOVED***basemap: Basemap,
-***REMOVED******REMOVED***name: String? = nil,
-***REMOVED******REMOVED***description: String? = nil,
-***REMOVED******REMOVED***thumbnail: UIImage? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***basemap: basemap,
-***REMOVED******REMOVED******REMOVED***name: name,
-***REMOVED******REMOVED******REMOVED***description: description,
-***REMOVED******REMOVED******REMOVED***thumbnail: thumbnail,
-***REMOVED******REMOVED******REMOVED***is3D: false
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
