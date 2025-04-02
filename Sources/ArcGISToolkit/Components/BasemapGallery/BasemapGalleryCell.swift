@@ -68,7 +68,7 @@ struct BasemapGalleryCell: View {
     /// Creates a badge which indicates the basemap supports 3D visualization.
     /// - Returns: A 3D badge overlay view.
     @ViewBuilder private func make3DBadge() -> some View {
-        if item.is3D {
+        if item.basemap.is3D {
             Text(
                 "3D",
                 bundle: .toolkitModule,

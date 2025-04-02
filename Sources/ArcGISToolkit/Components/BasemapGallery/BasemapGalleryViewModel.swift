@@ -180,7 +180,7 @@ private extension BasemapGalleryViewModel {
                 
                 if geoModel is Scene {
                     try await portal.basemaps3D.forEach { basemap in
-                        items.append(BasemapGalleryItem(basemap: basemap, is3D: true))
+                        items.append(BasemapGalleryItem(basemap: basemap))
                     }
                 }
                 
