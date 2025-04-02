@@ -17,8 +17,6 @@ import ArcGIS
 extension Basemap {
     /// A Boolean value indicating whether the basemap supports 3D visualization.
     var is3D: Bool {
-        baseLayers.contains {
-            $0 is ArcGISSceneLayer
-        }
+        baseLayers.contains(where: { $0 is ArcGISSceneLayer })
     }
 }
