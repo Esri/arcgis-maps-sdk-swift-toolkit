@@ -179,9 +179,10 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let basemaps: [Basemap]
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoModel is Scene {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await portal.basemaps3D.forEach { basemap in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items.append(BasemapGalleryItem(basemap: basemap))
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let basemaps3D = try await portal.basemaps3D
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items.append(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentsOf: basemaps3D.lazy.map { BasemapGalleryItem(basemap: $0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if useDeveloperBasemaps {
