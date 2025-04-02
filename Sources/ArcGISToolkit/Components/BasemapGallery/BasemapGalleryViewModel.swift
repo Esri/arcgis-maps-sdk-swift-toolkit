@@ -192,7 +192,7 @@ private extension BasemapGalleryViewModel {
                 } else {
                     basemaps = try await portal.basemaps
                 }
-                items += basemaps.map { BasemapGalleryItem(basemap: $0) }
+                items += basemaps.map { BasemapGalleryItem(basemap: $0, is3D: false) }
             } catch {
                 fetchBasemapsError = error
             }
@@ -205,7 +205,7 @@ private extension BasemapGalleryViewModel {
     func load(geoModel: GeoModel) async {
         try? await geoModel.load()
         if let basemap = geoModel.basemap {
-            currentItem = BasemapGalleryItem(basemap: basemap)
+            currentItem = BasemapGalleryItem(basemap: basemap, is3D: false)
         } else {
             currentItem = nil
         }
