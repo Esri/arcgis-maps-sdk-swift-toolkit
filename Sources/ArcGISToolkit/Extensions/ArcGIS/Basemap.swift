@@ -17,8 +17,6 @@
 extension Basemap {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the basemap supports 3D visualization.
 ***REMOVED***var is3D: Bool {
-***REMOVED******REMOVED***baseLayers.contains {
-***REMOVED******REMOVED******REMOVED***$0 is ArcGISSceneLayer
-***REMOVED***
+***REMOVED******REMOVED***baseLayers.contains(where: { $0 is ArcGISSceneLayer ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
