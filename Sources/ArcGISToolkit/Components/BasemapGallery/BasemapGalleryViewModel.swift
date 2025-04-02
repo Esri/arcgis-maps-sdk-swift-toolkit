@@ -179,9 +179,10 @@ private extension BasemapGalleryViewModel {
                 let basemaps: [Basemap]
                 
                 if geoModel is Scene {
-                    try await portal.basemaps3D.forEach { basemap in
-                        items.append(BasemapGalleryItem(basemap: basemap))
-                    }
+                    let basemaps3D = try await portal.basemaps3D
+                    items.append(
+                        contentsOf: basemaps3D.lazy.map { BasemapGalleryItem(basemap: $0) }
+                    )
                 }
                 
                 if useDeveloperBasemaps {
