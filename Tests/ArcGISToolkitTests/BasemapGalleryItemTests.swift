@@ -37,7 +37,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testInit() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
-***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap)
+***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap, is3D: false)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
 ***REMOVED******REMOVED***let loading = try XCTUnwrap(isBasemapLoading)
@@ -55,7 +55,8 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***basemap: basemap2,
 ***REMOVED******REMOVED******REMOVED***name: "My Basemap",
 ***REMOVED******REMOVED******REMOVED***description: "Basemap description",
-***REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
+***REMOVED******REMOVED******REMOVED***thumbnail: thumbnail,
+***REMOVED******REMOVED******REMOVED***is3D: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let isBasemapLoading2 = try await item2.$isBasemapLoading.dropFirst().first
@@ -72,7 +73,8 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***is3D: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let isBasemapLoading3 = try await item3.$isBasemapLoading.dropFirst().first
@@ -92,7 +94,8 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***is3D: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
@@ -104,7 +107,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***@MainActor
 ***REMOVED***func testSpatialReferenceAndStatus() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
-***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap)
+***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap, is3D: false)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
 ***REMOVED******REMOVED***let loading = try XCTUnwrap(isBasemapLoading)
@@ -150,7 +153,8 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***is3D: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_ = try await otherItem.$isBasemapLoading.dropFirst().first
