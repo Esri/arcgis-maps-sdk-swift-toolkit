@@ -192,7 +192,7 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.basemaps
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***items += basemaps.map { BasemapGalleryItem(basemap: $0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***items += basemaps.map { BasemapGalleryItem(basemap: $0, is3D: false) ***REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fetchBasemapsError = error
 ***REMOVED******REMOVED***
@@ -205,7 +205,7 @@ private extension BasemapGalleryViewModel {
 ***REMOVED***func load(geoModel: GeoModel) async {
 ***REMOVED******REMOVED***try? await geoModel.load()
 ***REMOVED******REMOVED***if let basemap = geoModel.basemap {
-***REMOVED******REMOVED******REMOVED***currentItem = BasemapGalleryItem(basemap: basemap)
+***REMOVED******REMOVED******REMOVED***currentItem = BasemapGalleryItem(basemap: basemap, is3D: false)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***currentItem = nil
 ***REMOVED***
