@@ -136,6 +136,7 @@ extension BasemapGalleryItem /* Deprecated */ {
     ///   - thumbnail: The thumbnail used to represent the item. If `nil`,
     ///   `Basemap.Item.thumbnail` is used, if available.
     @available(*, deprecated, message: "Use init(basemap:name:description:thumbnail:is3D:) instead.")
+    @_disfavoredOverload
     public convenience init(
         basemap: Basemap,
         name: String? = nil,
