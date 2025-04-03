@@ -37,13 +37,6 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    init() {
-        Task {
-            let publicSample = try? await ArcGISCredential.publicSample
-            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
-        }
-    }
-    
     var body: some View {
         GeometryReader { geometryProxy in
             MapViewReader { mapViewProxy in
@@ -56,6 +49,15 @@ struct UtilityNetworkTraceExampleView: View {
                 }
                 .onSingleTapGesture { _, mapPoint in
                     self.mapPoint = mapPoint
+                }
+                .task {
+                    do {
+                        let publicSample = try await ArcGISCredential.publicSample
+                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
+                    } catch {
+                        // See Also: https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1129
+                        print("Error creating credential:", error.localizedDescription)
+                    }
                 }
 #if os(visionOS)
                 mapView
