@@ -51,8 +51,13 @@ struct UtilityNetworkTraceExampleView: View {
                     self.mapPoint = mapPoint
                 }
                 .task {
-                    let publicSample = try? await ArcGISCredential.publicSample
-                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+                    do {
+                        let publicSample = try await ArcGISCredential.publicSample
+                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
+                    } catch {
+                        // See Also: https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1129
+                        print("Error creating credential:", error.localizedDescription)
+                    }
                 }
 #if os(visionOS)
                 mapView
