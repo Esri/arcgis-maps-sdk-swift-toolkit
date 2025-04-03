@@ -23,9 +23,6 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The currently selected map.
 ***REMOVED***@Binding var selectedMap: Map?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the metadata view is presented.
-***REMOVED***@State private var metadataViewIsPresented = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
