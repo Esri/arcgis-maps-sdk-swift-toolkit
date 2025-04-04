@@ -51,11 +51,7 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
         self.thumbnail = thumbnail
         
         Task {
-//            if basemap.loadStatus != .loaded {
-                await loadBasemap()
-//            } else {
-//                finalizeLoading()
-//            }
+            await loadBasemap()
         }
     }
     
@@ -93,7 +89,14 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 private extension BasemapGalleryItem {
     /// Loads the basemap and the item's thumbnail, if available.
     func loadBasemap() async {
+        // A loaded and cloned basemap set on SceneView from within a sheet does
+        // not draw correctly. To workaround this, we clone and load the basemap
+        // here, get the information needed for display and then discard the
+        // loaded copy. When a gallery selection is made, we have an
+        // unloaded instance of the basemap to set on the geo model.
+        // See Also: https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1126
         let basemap = basemap.clone()
+        
         do {
             try await basemap.load()
             if let loadableImage = basemap.item?.thumbnail {
