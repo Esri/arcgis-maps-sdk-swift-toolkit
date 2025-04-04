@@ -51,11 +51,11 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***if basemap.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***if basemap.loadStatus != .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await loadBasemap()
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***finalizeLoading()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalizeLoading()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -67,6 +67,9 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The description of the `basemap`.
 ***REMOVED***@Published public private(set) var description: String?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the basemap supports 3D visualization.
+***REMOVED***@Published public private(set) var is3D: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail used to represent the `basemap`.
 ***REMOVED***@Published public private(set) var thumbnail: UIImage?
@@ -90,21 +93,16 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Loads the basemap and the item's thumbnail, if available.
 ***REMOVED***func loadBasemap() async {
-***REMOVED******REMOVED***var loadError: Error? = nil
+***REMOVED******REMOVED***let basemap = basemap.clone()
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await basemap.load()
 ***REMOVED******REMOVED******REMOVED***if let loadableImage = basemap.item?.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await loadableImage.load()
 ***REMOVED******REMOVED***
 ***REMOVED*** catch  {
-***REMOVED******REMOVED******REMOVED***loadError = error
+***REMOVED******REMOVED******REMOVED***loadBasemapError = error
 ***REMOVED***
-***REMOVED******REMOVED***finalizeLoading(error: loadError)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the item in response to basemap loading completion.
-***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
-***REMOVED***func finalizeLoading(error: Error? = nil) {
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if name == nil {
 ***REMOVED******REMOVED******REMOVED***name = basemap.name
 ***REMOVED***
@@ -115,7 +113,8 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED******REMOVED***thumbnail = basemap.item?.thumbnail?.image ?? .defaultThumbnail()
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***loadBasemapError = error
+***REMOVED******REMOVED***is3D = basemap.baseLayers.contains(where: { $0 is ArcGISSceneLayer ***REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***isBasemapLoading = false
 ***REMOVED***
 ***REMOVED***
