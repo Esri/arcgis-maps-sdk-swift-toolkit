@@ -51,11 +51,11 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
         self.thumbnail = thumbnail
         
         Task {
-            if basemap.loadStatus != .loaded {
+//            if basemap.loadStatus != .loaded {
                 await loadBasemap()
-            } else {
-                finalizeLoading()
-            }
+//            } else {
+//                finalizeLoading()
+//            }
         }
     }
     
@@ -67,6 +67,9 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
     
     /// The description of the `basemap`.
     @Published public private(set) var description: String?
+    
+    /// A Boolean value indicating whether the basemap supports 3D visualization.
+    @Published public private(set) var is3D: Bool = false
     
     /// The thumbnail used to represent the `basemap`.
     @Published public private(set) var thumbnail: UIImage?
@@ -90,21 +93,16 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 private extension BasemapGalleryItem {
     /// Loads the basemap and the item's thumbnail, if available.
     func loadBasemap() async {
-        var loadError: Error? = nil
+        let basemap = basemap.clone()
         do {
             try await basemap.load()
             if let loadableImage = basemap.item?.thumbnail {
                 try await loadableImage.load()
             }
         } catch  {
-            loadError = error
+            loadBasemapError = error
         }
-        finalizeLoading(error: loadError)
-    }
-    
-    /// Updates the item in response to basemap loading completion.
-    /// - Parameter error: The basemap load error, if any.
-    func finalizeLoading(error: Error? = nil) {
+        
         if name == nil {
             name = basemap.name
         }
@@ -115,7 +113,8 @@ private extension BasemapGalleryItem {
             thumbnail = basemap.item?.thumbnail?.image ?? .defaultThumbnail()
         }
         
-        loadBasemapError = error
+        is3D = basemap.baseLayers.contains(where: { $0 is ArcGISSceneLayer })
+        
         isBasemapLoading = false
     }
 }
