@@ -51,11 +51,7 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***if basemap.loadStatus != .loaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***await loadBasemap()
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalizeLoading()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***await loadBasemap()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -93,7 +89,14 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
 private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Loads the basemap and the item's thumbnail, if available.
 ***REMOVED***func loadBasemap() async {
+***REMOVED******REMOVED******REMOVED*** A loaded and cloned basemap set on SceneView from within a sheet does
+***REMOVED******REMOVED******REMOVED*** not draw correctly. To workaround this, we clone and load the basemap
+***REMOVED******REMOVED******REMOVED*** here, get the information needed for display and then discard the
+***REMOVED******REMOVED******REMOVED*** loaded copy. When a gallery selection is made, we have an
+***REMOVED******REMOVED******REMOVED*** unloaded instance of the basemap to set on the geo model.
+***REMOVED******REMOVED******REMOVED*** See Also: https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1126
 ***REMOVED******REMOVED***let basemap = basemap.clone()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await basemap.load()
 ***REMOVED******REMOVED******REMOVED***if let loadableImage = basemap.item?.thumbnail {
