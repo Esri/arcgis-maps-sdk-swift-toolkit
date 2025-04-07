@@ -15,59 +15,41 @@
 import SwiftUI
 
 struct Examples: View {
-    /// The categories to display.
-    let categories = makeCategories()
-    
-    /// The uncategorized examples.
-    let uncategorizedExamples = makeUncategorizedExamples()
-    
-    /// The category selected by the user.
-    @State private var selectedCategory: Category?
-    /// The example selected by the user.
-    @State private var selectedExample: Example?
+    /// The menu items to display.
+    let menuItems = makeMenuItems()
     
     var body: some View {
         NavigationSplitView {
             NavigationStack {
-                
-                #warning("This approach works, but alphabetized categories would be listed first, followed by alphabetized uncategorized Examples. We probably want the two sets mixed together.")
-                
-                List(selection: $selectedCategory) {
-                    ForEach(categories, id: \.name) { category in
+                List(menuItems, id: \.name) { item in
+                    if let category = item as? Category {
                         NavigationLink(category.name) {
-                            List(category.examples, id: \.name, selection: $selectedExample) { example in
-                                Text(example.name)
-                                    .tag(example)
+                            List(category.examples, id: \.name) { example in
+                                makeExampleLink(example)
                             }
                             .listStyle(.sidebar)
                             .navigationTitle(category.name)
                             .navigationBarTitleDisplayMode(.inline)
                         }
                         .isDetailLink(false)
-                    }
-                    ForEach(uncategorizedExamples, id: \.name) { example in
-                        Button {
-                            selectedExample = example
-                        } label: {
-                            Text(example.name)
-                        }
+                    } else if let example = item as? Example {
+                        makeExampleLink(example)
                     }
                 }
-                .navigationTitle("Toolkit Examples")
             }
         } detail: {
-            NavigationStack {
-                if let example = selectedExample {
-                    example.view
-                        .navigationTitle(example.name)
-                        .navigationBarTitleDisplayMode(.inline)
-                } else if selectedCategory != nil {
-                    Text("Select an example")
-                } else {
-                    Text("Select a category")
-                }
-            }
+            Text("Select a example")
         }
+    }
+    
+    func makeExampleLink(_ example: Example) -> some View {
+        NavigationLink(
+            example.name,
+            destination: example.view
+                .navigationTitle(example.name)
+                .navigationBarTitleDisplayMode(.inline)
+        )
+        .isDetailLink(true)
     }
     
     static func makeCategories() -> [Category] {
@@ -76,6 +58,11 @@ struct Examples: View {
 #else
         return []
 #endif
+    }
+    
+    static func makeMenuItems() -> [any MenuItem] {
+        (makeCategories() + makeUncategorizedExamples())
+            .sorted(by: { $0.name < $1.name })
     }
     
     static func makeUncategorizedExamples() -> [Example] { [
