@@ -139,11 +139,11 @@
 			children = (
 				E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */,
 				4CD62FA92D49773000338749 /* Category.swift */,
-				8AF037FD2DA4699A000EC812 /* MenuItem.swift */,
 				E48A73402658227100F5C118 /* Example.swift */,
 				E48A733F2658227100F5C118 /* Examples.entitlements */,
 				E48A733D2658227000F5C118 /* Examples.swift */,
 				E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */,
+				8AF037FD2DA4699A000EC812 /* MenuItem.swift */,
 				E47ABE4C2652FE0C00FD2FE3 /* Info.plist */,
 				E47ABE492652FE0C00FD2FE3 /* Preview Content */,
 			);
