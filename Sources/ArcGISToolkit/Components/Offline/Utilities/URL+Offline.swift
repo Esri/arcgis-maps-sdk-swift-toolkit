@@ -24,14 +24,14 @@ extension URL {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/`
+***REMOVED******REMOVED***/ `Documents/com.esri.ArcGISToolkit.offlineManager/<Portal Item ID>/`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
 ***REMOVED***static func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
 ***REMOVED******REMOVED***return offlineManagerDirectory().appending(path: portalItemID.rawValue)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the directory for a specific map area from the preplanned map areas directory for a specific portal item.
-***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
+***REMOVED******REMOVED***/ `Documents/com.esri.ArcGISToolkit.offlineManager/<Portal Item ID>/Preplanned/<Preplanned Area ID>/`
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
 ***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area portal item.
@@ -50,6 +50,7 @@ extension URL {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the directory for a specific on-demand map area. Or if `nil` is passed for the
 ***REMOVED******REMOVED***/ map area ID, then the on-demand directory.
+***REMOVED******REMOVED***/ `Documents/com.esri.ArcGISToolkit.offlineManager/<Portal Item ID>/OnDemand/`
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
 ***REMOVED******REMOVED***/   - onDemandMapAreaID: The unique ID of the on-demand map area.
