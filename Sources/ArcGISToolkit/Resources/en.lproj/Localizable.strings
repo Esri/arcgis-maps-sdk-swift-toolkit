@@ -4,6 +4,9 @@
 /* A label indicating the number of results of a utility network trace. */
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
+/* A reference to 3D content. */
+"3D" = "3D";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "A certificate is required to access content on %@.";

@@ -33,7 +33,9 @@ import Combine
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if items.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** We have no basemap items, so fetch the
-***REMOVED******REMOVED******REMOVED******REMOVED*** developer basemaps from AGOL.
+***REMOVED******REMOVED******REMOVED******REMOVED*** developer basemaps from AGOL. Developer
+***REMOVED******REMOVED******REMOVED******REMOVED*** basemaps are used because they're
+***REMOVED******REMOVED******REMOVED******REMOVED*** API-key metered.
 ***REMOVED******REMOVED******REMOVED***fetchBasemaps(
 ***REMOVED******REMOVED******REMOVED******REMOVED***from: Portal.arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps: true
@@ -175,6 +177,14 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await portal.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let basemaps: [Basemap]
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if geoModel is Scene {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let basemaps3D = try await portal.basemaps3D
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items.append(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentsOf: basemaps3D.lazy.map { BasemapGalleryItem(basemap: $0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if useDeveloperBasemaps {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.developerBasemaps
 ***REMOVED******REMOVED******REMOVED*** else if let portalInfo = portal.info,
