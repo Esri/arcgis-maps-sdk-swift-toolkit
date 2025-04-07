@@ -79,17 +79,17 @@ struct Examples: View {
     }
     
     static func makeUncategorizedExamples() -> [Example] { [
-            Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-            Example("Bookmarks", content: BookmarksExampleView()),
-            Example("Compass", content: CompassExampleView()),
-            Example("Feature Form", content: FeatureFormExampleView()),
-            Example("Floating Panel", content: FloatingPanelExampleView()),
-            Example("Floor Filter", content: FloorFilterExampleView()),
-            Example("Overview Map", content: OverviewMapExampleView()),
-            Example("Popup", content: PopupExampleView()),
-            Example("Scalebar", content: ScalebarExampleView()),
-            Example("Search", content: SearchExampleView()),
-            Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+        Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+        Example("Bookmarks", content: BookmarksExampleView()),
+        Example("Compass", content: CompassExampleView()),
+        Example("Feature Form", content: FeatureFormExampleView()),
+        Example("Floating Panel", content: FloatingPanelExampleView()),
+        Example("Floor Filter", content: FloorFilterExampleView()),
+        Example("Overview Map", content: OverviewMapExampleView()),
+        Example("Popup", content: PopupExampleView()),
+        Example("Scalebar", content: ScalebarExampleView()),
+        Example("Search", content: SearchExampleView()),
+        Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
     ] }
 }
 
