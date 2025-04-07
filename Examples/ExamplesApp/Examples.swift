@@ -38,7 +38,7 @@ struct Examples: View {
                 }
             }
         } detail: {
-            Text("Select a example")
+            Text("Select an example")
         }
     }
     
