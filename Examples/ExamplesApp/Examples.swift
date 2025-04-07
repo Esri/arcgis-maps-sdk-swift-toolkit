@@ -38,7 +38,7 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** detail: {
-***REMOVED******REMOVED******REMOVED***Text("Select a example")
+***REMOVED******REMOVED******REMOVED***Text("Select an example")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
