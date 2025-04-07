@@ -25,8 +25,13 @@ import SwiftUI
         }
     }
     
+    @Published var presentedForm: FeatureFormView?
+    
     /// The set of all elements which previously held focus.
     @Published var previouslyFocusedElements = [FormElement]()
+    
+    /// The title of the feature form view.
+    @Published var title = ""
     
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
@@ -42,7 +47,7 @@ import SwiftUI
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
-    init(featureForm: FeatureForm) {
+    public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
     }
     
