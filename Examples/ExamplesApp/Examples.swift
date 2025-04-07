@@ -37,6 +37,7 @@ struct Examples: View {
                         .navigationBarTitleDisplayMode(.inline)
                     }
                     .isDetailLink(false)
+                    .tag(category)
                 }
                 .navigationTitle("Toolkit Examples")
             }
