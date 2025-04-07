@@ -45,3 +45,5 @@ extension Example: Hashable {
         hasher.combine(name)
     }
 }
+
+extension Example: MenuItem { }
