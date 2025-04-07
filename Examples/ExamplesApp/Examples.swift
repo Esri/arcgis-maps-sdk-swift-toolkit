@@ -36,6 +36,7 @@ struct Examples: View {
                         makeExampleLink(example)
                     }
                 }
+                .navigationTitle("Toolkit Examples")
             }
         } detail: {
             Text("Select an example")
