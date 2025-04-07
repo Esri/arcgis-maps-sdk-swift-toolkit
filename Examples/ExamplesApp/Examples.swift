@@ -79,17 +79,17 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeUncategorizedExamples() -> [Example] { [
-***REMOVED******REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Floating Panel", content: FloatingPanelExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
+***REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
+***REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView()),
+***REMOVED******REMOVED***Example("Floating Panel", content: FloatingPanelExampleView()),
+***REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
+***REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
+***REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
+***REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
+***REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
 ***REMOVED***] ***REMOVED***
 ***REMOVED***
 
