@@ -42,16 +42,14 @@ struct Examples: View {
                 .navigationTitle("Toolkit Examples")
             }
         } detail: {
-            NavigationStack {
-                if let example = selectedExample {
-                    example.view
-                        .navigationTitle(example.name)
-                        .navigationBarTitleDisplayMode(.inline)
-                } else if selectedCategory != nil {
-                    Text("Select an example")
-                } else {
-                    Text("Select a category")
-                }
+            if let example = selectedExample {
+                example.view
+                    .navigationTitle(example.name)
+                    .navigationBarTitleDisplayMode(.inline)
+            } else if selectedCategory != nil {
+                Text("Select an example")
+            } else {
+                Text("Select a category")
             }
         }
     }
