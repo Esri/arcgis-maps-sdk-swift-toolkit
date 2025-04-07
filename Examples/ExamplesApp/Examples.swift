@@ -15,59 +15,41 @@
 ***REMOVED***
 
 struct Examples: View {
-***REMOVED******REMOVED***/ The categories to display.
-***REMOVED***let categories = makeCategories()
-***REMOVED***
-***REMOVED******REMOVED***/ The uncategorized examples.
-***REMOVED***let uncategorizedExamples = makeUncategorizedExamples()
-***REMOVED***
-***REMOVED******REMOVED***/ The category selected by the user.
-***REMOVED***@State private var selectedCategory: Category?
-***REMOVED******REMOVED***/ The example selected by the user.
-***REMOVED***@State private var selectedExample: Example?
+***REMOVED******REMOVED***/ The menu items to display.
+***REMOVED***let menuItems = makeMenuItems()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationSplitView {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***#warning("This approach works, but alphabetized categories would be listed first, followed by alphabetized uncategorized Examples. We probably want the two sets mixed together.")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***List(selection: $selectedCategory) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(categories, id: \.name) { category in
+***REMOVED******REMOVED******REMOVED******REMOVED***List(menuItems, id: \.name) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let category = item as? Category {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(category.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, id: \.name, selection: $selectedExample) { example in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, id: \.name) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeExampleLink(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.sidebar)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(category.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isDetailLink(false)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(uncategorizedExamples, id: \.name) { example in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExample = example
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let example = item as? Example {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeExampleLink(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED******REMOVED***
 ***REMOVED*** detail: {
-***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let example = selectedExample {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***example.view
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED*** else if selectedCategory != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select an example")
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a category")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text("Select a example")
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeExampleLink(_ example: Example) -> some View {
+***REMOVED******REMOVED***NavigationLink(
+***REMOVED******REMOVED******REMOVED***example.name,
+***REMOVED******REMOVED******REMOVED***destination: example.view
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.isDetailLink(true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeCategories() -> [Category] {
@@ -76,6 +58,11 @@ struct Examples: View {
 #else
 ***REMOVED******REMOVED***return []
 #endif
+***REMOVED***
+***REMOVED***
+***REMOVED***static func makeMenuItems() -> [any MenuItem] {
+***REMOVED******REMOVED***(makeCategories() + makeUncategorizedExamples())
+***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.name < $1.name ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeUncategorizedExamples() -> [Example] { [

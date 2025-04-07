@@ -45,3 +45,5 @@ extension Example: Hashable {
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED***
 ***REMOVED***
+
+extension Example: MenuItem { ***REMOVED***
