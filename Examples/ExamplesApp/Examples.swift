@@ -36,6 +36,7 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeExampleLink(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED******REMOVED***
 ***REMOVED*** detail: {
 ***REMOVED******REMOVED******REMOVED***Text("Select an example")
