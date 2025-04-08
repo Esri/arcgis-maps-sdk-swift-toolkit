@@ -46,9 +46,11 @@ struct Examples: View {
 ***REMOVED***func makeExampleLink(_ example: Example) -> some View {
 ***REMOVED******REMOVED***NavigationLink(
 ***REMOVED******REMOVED******REMOVED***example.name,
-***REMOVED******REMOVED******REMOVED***destination: example.view
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED******REMOVED***destination: {
+***REMOVED******REMOVED******REMOVED******REMOVED***example.view
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.isDetailLink(true)
 ***REMOVED***
