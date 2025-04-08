@@ -15,7 +15,7 @@
 import SwiftUI
 
 struct Examples: View {
-    /// The menu items to display.
+    /// The list items to display.
     let listItems = makeListItems()
     
     /// The example selected by the user.
