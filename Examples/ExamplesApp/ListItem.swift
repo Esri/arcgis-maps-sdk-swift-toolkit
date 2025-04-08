@@ -12,6 +12,20 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-protocol ListItem {
-***REMOVED***var name: String { get ***REMOVED***
+enum ListItem {
+***REMOVED***case category(Category)
+***REMOVED***case example(Example)
+***REMOVED***
+
+extension ListItem: Hashable { ***REMOVED***
+
+extension ListItem: Identifiable {
+***REMOVED***var id: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .category(let category):
+***REMOVED******REMOVED******REMOVED***return category.id
+***REMOVED******REMOVED***case .example(let example):
+***REMOVED******REMOVED******REMOVED***return example.id
+***REMOVED***
+***REMOVED***
 ***REMOVED***

@@ -18,68 +18,67 @@ struct Examples: View {
 ***REMOVED******REMOVED***/ The menu items to display.
 ***REMOVED***let menuItems = makeListItems()
 ***REMOVED***
+***REMOVED***@State private var selectedExample: Example?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationSplitView {
 ***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(menuItems, id: \.name) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let category = item as? Category {
+***REMOVED******REMOVED******REMOVED******REMOVED***List(menuItems, selection: $selectedExample) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch item {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .category(let category):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(category.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, id: \.name) { example in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLink(for: example)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, selection: $selectedExample) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.sidebar)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(category.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isDetailLink(false)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let example = item as? Example {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLink(for: example)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .example(let example):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED******REMOVED***
 ***REMOVED*** detail: {
-***REMOVED******REMOVED******REMOVED***Text("Select an example")
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func navigationLink(for example: Example) -> some View {
-***REMOVED******REMOVED***NavigationLink(
-***REMOVED******REMOVED******REMOVED***example.name,
-***REMOVED******REMOVED******REMOVED***destination: {
-***REMOVED******REMOVED******REMOVED******REMOVED***example.view
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
+***REMOVED******REMOVED******REMOVED***if let selectedExample {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedExample.view
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(selectedExample.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Select an example")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.isDetailLink(true)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func makeCategories() -> [Category] {
+***REMOVED***
+***REMOVED***static func makeCategories() -> [ListItem] {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED***return [.augmentedReality]
+***REMOVED******REMOVED***return [.category(.augmentedReality)]
 #else
 ***REMOVED******REMOVED***return []
 #endif
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func makeListItems() -> [any ListItem] {
+***REMOVED***static func makeListItems() -> [ListItem] {
 ***REMOVED******REMOVED***(makeCategories() + makeUncategorizedExamples())
-***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.name < $1.name ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.id < $1.id ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func makeUncategorizedExamples() -> [Example] { [
-***REMOVED******REMOVED***Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-***REMOVED******REMOVED***Example("Bookmarks", content: BookmarksExampleView()),
-***REMOVED******REMOVED***Example("Compass", content: CompassExampleView()),
-***REMOVED******REMOVED***Example("Feature Form", content: FeatureFormExampleView()),
-***REMOVED******REMOVED***Example("Floating Panel", content: FloatingPanelExampleView()),
-***REMOVED******REMOVED***Example("Floor Filter", content: FloorFilterExampleView()),
-***REMOVED******REMOVED***Example("Overview Map", content: OverviewMapExampleView()),
-***REMOVED******REMOVED***Example("Popup", content: PopupExampleView()),
-***REMOVED******REMOVED***Example("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED***Example("Search", content: SearchExampleView()),
-***REMOVED******REMOVED***Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+***REMOVED***static func makeUncategorizedExamples() -> [ListItem] { [
+***REMOVED******REMOVED***.example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
+***REMOVED******REMOVED***.example(.init("Bookmarks", content: BookmarksExampleView())),
+***REMOVED******REMOVED***.example(.init("Compass", content: CompassExampleView())),
+***REMOVED******REMOVED***.example(.init("Feature Form", content: FeatureFormExampleView())),
+***REMOVED******REMOVED***.example(.init("Floating Panel", content: FloatingPanelExampleView())),
+***REMOVED******REMOVED***.example(.init("Floor Filter", content: FloorFilterExampleView())),
+***REMOVED******REMOVED***.example(.init("Overview Map", content: OverviewMapExampleView())),
+***REMOVED******REMOVED***.example(.init("Popup", content: PopupExampleView())),
+***REMOVED******REMOVED***.example(.init("Scalebar", content: ScalebarExampleView())),
+***REMOVED******REMOVED***.example(.init("Search", content: SearchExampleView())),
+***REMOVED******REMOVED***.example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
 ***REMOVED***] ***REMOVED***
 ***REMOVED***
 

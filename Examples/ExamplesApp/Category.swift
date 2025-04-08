@@ -32,4 +32,6 @@ extension Category: Hashable {
 ***REMOVED***
 ***REMOVED***
 
-extension Category: ListItem { ***REMOVED***
+extension Category: Identifiable {
+***REMOVED***var id: String { name ***REMOVED***
+***REMOVED***

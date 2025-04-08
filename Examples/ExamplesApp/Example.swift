@@ -46,4 +46,6 @@ extension Example: Hashable {
 ***REMOVED***
 ***REMOVED***
 
-extension Example: ListItem { ***REMOVED***
+extension Example: Identifiable {
+***REMOVED***var id: String { name ***REMOVED***
+***REMOVED***
