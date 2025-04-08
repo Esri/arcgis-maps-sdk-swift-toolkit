@@ -18,68 +18,67 @@ struct Examples: View {
     /// The menu items to display.
     let menuItems = makeListItems()
     
+    @State private var selectedExample: Example?
+    
     var body: some View {
         NavigationSplitView {
             NavigationStack {
-                List(menuItems, id: \.name) { item in
-                    if let category = item as? Category {
+                List(menuItems, selection: $selectedExample) { item in
+                    switch item {
+                    case .category(let category):
                         NavigationLink(category.name) {
-                            List(category.examples, id: \.name) { example in
-                                navigationLink(for: example)
+                            List(category.examples, selection: $selectedExample) { example in
+                                Text(example.name)
+                                    .tag(example)
                             }
                             .listStyle(.sidebar)
                             .navigationTitle(category.name)
                             .navigationBarTitleDisplayMode(.inline)
                         }
                         .isDetailLink(false)
-                    } else if let example = item as? Example {
-                        navigationLink(for: example)
+                    case .example(let example):
+                        Text(example.name)
+                            .tag(example)
                     }
                 }
                 .navigationTitle("Toolkit Examples")
             }
         } detail: {
-            Text("Select an example")
+            if let selectedExample {
+                selectedExample.view
+                    .navigationTitle(selectedExample.name)
+                    .navigationBarTitleDisplayMode(.inline)
+            } else {
+                Text("Select an example")
+            }
         }
     }
     
-    func navigationLink(for example: Example) -> some View {
-        NavigationLink(
-            example.name,
-            destination: {
-                example.view
-                    .navigationTitle(example.name)
-                    .navigationBarTitleDisplayMode(.inline)
-            }
-        )
-        .isDetailLink(true)
-    }
-    
-    static func makeCategories() -> [Category] {
+    static func makeCategories() -> [ListItem] {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-        return [.augmentedReality]
+        return [.category(.augmentedReality)]
 #else
         return []
 #endif
     }
     
-    static func makeListItems() -> [any ListItem] {
+    static func makeListItems() -> [ListItem] {
         (makeCategories() + makeUncategorizedExamples())
-            .sorted(by: { $0.name < $1.name })
+            .sorted(by: { $0.id < $1.id })
     }
     
-    static func makeUncategorizedExamples() -> [Example] { [
-        Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-        Example("Bookmarks", content: BookmarksExampleView()),
-        Example("Compass", content: CompassExampleView()),
-        Example("Feature Form", content: FeatureFormExampleView()),
-        Example("Floating Panel", content: FloatingPanelExampleView()),
-        Example("Floor Filter", content: FloorFilterExampleView()),
-        Example("Overview Map", content: OverviewMapExampleView()),
-        Example("Popup", content: PopupExampleView()),
-        Example("Scalebar", content: ScalebarExampleView()),
-        Example("Search", content: SearchExampleView()),
-        Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+    static func makeUncategorizedExamples() -> [ListItem] { [
+        .example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
+        .example(.init("Bookmarks", content: BookmarksExampleView())),
+        .example(.init("Compass", content: CompassExampleView())),
+        .example(.init("Feature Form", content: FeatureFormExampleView())),
+        .example(.init("Floating Panel", content: FloatingPanelExampleView())),
+        .example(.init("Floor Filter", content: FloorFilterExampleView())),
+        .example(.init("Overview Map", content: OverviewMapExampleView())),
+        .example(.init("Popup", content: PopupExampleView())),
+        .example(.init("Scalebar", content: ScalebarExampleView())),
+        .example(.init("Search", content: SearchExampleView())),
+        .example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
     ] }
 }
 

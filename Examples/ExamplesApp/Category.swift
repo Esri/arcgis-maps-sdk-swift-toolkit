@@ -32,4 +32,6 @@ extension Category: Hashable {
     }
 }
 
-extension Category: ListItem { }
+extension Category: Identifiable {
+    var id: String { name }
+}
