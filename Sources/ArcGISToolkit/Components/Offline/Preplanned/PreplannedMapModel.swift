@@ -22,7 +22,7 @@ internal import os
 @MainActor
 class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
-    let preplannedMapArea: any PreplannedMapAreaProtocol
+    let preplannedMapArea: PreplannedMapAreaProtocol
     
     /// The ID of the preplanned map area.
     let preplannedMapAreaID: Item.ID
@@ -210,7 +210,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status based on the download result of the mobile map package.
-    private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
+    private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, Error>) {
         switch downloadResult {
         case .success:
             status = .downloaded
