@@ -257,7 +257,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status based on the download result of the mobile map package.
-    private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
+    private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, Error>) {
         switch downloadResult {
         case .success:
             Logger.offlineManager.info("GenerateOfflineMap job succeeded.")
