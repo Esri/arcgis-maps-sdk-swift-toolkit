@@ -257,7 +257,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
-***REMOVED***private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, Error>) {
+***REMOVED***private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
 ***REMOVED******REMOVED***switch downloadResult {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.info("GenerateOfflineMap job succeeded.")
