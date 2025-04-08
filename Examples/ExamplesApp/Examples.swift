@@ -63,7 +63,7 @@ struct Examples: View {
 #endif
     }
     
-    static func makeMenuItems() -> [any MenuItem] {
+    static func makeMenuItems() -> [any ListItem] {
         (makeCategories() + makeUncategorizedExamples())
             .sorted(by: { $0.name < $1.name })
     }

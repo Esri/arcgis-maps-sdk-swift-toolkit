@@ -32,4 +32,4 @@ extension Category: Hashable {
     }
 }
 
-extension Category: MenuItem { }
+extension Category: ListItem { }
