@@ -18,31 +18,26 @@ struct Examples: View {
 ***REMOVED******REMOVED***/ The menu items to display.
 ***REMOVED***let menuItems = makeListItems()
 ***REMOVED***
+***REMOVED******REMOVED***/ The example selected by the user.
 ***REMOVED***@State private var selectedExample: Example?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationSplitView {
-***REMOVED******REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(menuItems, selection: $selectedExample) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch item {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .category(let category):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(category.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, selection: $selectedExample) { example in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.sidebar)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(category.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED******REMOVED***List(menuItems, selection: $selectedExample) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED***switch item {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .category(let category):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(category.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(category.examples) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isDetailLink(false)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .example(let example):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***case .example(let example):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED*** detail: {
 ***REMOVED******REMOVED******REMOVED***if let selectedExample {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedExample.view
