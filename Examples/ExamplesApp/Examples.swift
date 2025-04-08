@@ -46,9 +46,11 @@ struct Examples: View {
     func makeExampleLink(_ example: Example) -> some View {
         NavigationLink(
             example.name,
-            destination: example.view
-                .navigationTitle(example.name)
-                .navigationBarTitleDisplayMode(.inline)
+            destination: {
+                example.view
+                    .navigationTitle(example.name)
+                    .navigationBarTitleDisplayMode(.inline)
+            }
         )
         .isDetailLink(true)
     }
