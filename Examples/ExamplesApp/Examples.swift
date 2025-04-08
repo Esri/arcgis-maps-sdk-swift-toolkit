@@ -15,7 +15,7 @@
 ***REMOVED***
 
 struct Examples: View {
-***REMOVED******REMOVED***/ The menu items to display.
+***REMOVED******REMOVED***/ The list items to display.
 ***REMOVED***let listItems = makeListItems()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The example selected by the user.
