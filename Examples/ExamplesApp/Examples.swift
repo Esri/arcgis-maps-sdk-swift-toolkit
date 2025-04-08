@@ -16,7 +16,7 @@
 
 struct Examples: View {
 ***REMOVED******REMOVED***/ The menu items to display.
-***REMOVED***let menuItems = makeMenuItems()
+***REMOVED***let menuItems = makeListItems()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationSplitView {
@@ -63,7 +63,7 @@ struct Examples: View {
 #endif
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func makeMenuItems() -> [any ListItem] {
+***REMOVED***static func makeListItems() -> [any ListItem] {
 ***REMOVED******REMOVED***(makeCategories() + makeUncategorizedExamples())
 ***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.name < $1.name ***REMOVED***)
 ***REMOVED***
