@@ -12,6 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-protocol MenuItem {
+protocol ListItem {
     var name: String { get }
 }

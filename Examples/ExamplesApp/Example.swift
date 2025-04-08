@@ -46,4 +46,4 @@ extension Example: Hashable {
     }
 }
 
-extension Example: MenuItem { }
+extension Example: ListItem { }
