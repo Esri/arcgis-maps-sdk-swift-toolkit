@@ -16,7 +16,7 @@ import SwiftUI
 
 struct Examples: View {
     /// The menu items to display.
-    let menuItems = makeMenuItems()
+    let menuItems = makeListItems()
     
     var body: some View {
         NavigationSplitView {
@@ -63,7 +63,7 @@ struct Examples: View {
 #endif
     }
     
-    static func makeMenuItems() -> [any ListItem] {
+    static func makeListItems() -> [any ListItem] {
         (makeCategories() + makeUncategorizedExamples())
             .sorted(by: { $0.name < $1.name })
     }
