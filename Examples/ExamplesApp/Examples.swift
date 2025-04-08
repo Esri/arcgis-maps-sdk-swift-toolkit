@@ -18,31 +18,26 @@ struct Examples: View {
     /// The menu items to display.
     let menuItems = makeListItems()
     
+    /// The example selected by the user.
     @State private var selectedExample: Example?
     
     var body: some View {
         NavigationSplitView {
-            NavigationStack {
-                List(menuItems, selection: $selectedExample) { item in
-                    switch item {
-                    case .category(let category):
-                        NavigationLink(category.name) {
-                            List(category.examples, selection: $selectedExample) { example in
-                                Text(example.name)
-                                    .tag(example)
-                            }
-                            .listStyle(.sidebar)
-                            .navigationTitle(category.name)
-                            .navigationBarTitleDisplayMode(.inline)
+            List(menuItems, selection: $selectedExample) { item in
+                switch item {
+                case .category(let category):
+                    DisclosureGroup(category.name) {
+                        ForEach(category.examples) { example in
+                            Text(example.name)
+                                .tag(example)
                         }
-                        .isDetailLink(false)
-                    case .example(let example):
-                        Text(example.name)
-                            .tag(example)
                     }
+                case .example(let example):
+                    Text(example.name)
+                        .tag(example)
                 }
-                .navigationTitle("Toolkit Examples")
             }
+            .navigationTitle("Toolkit Examples")
         } detail: {
             if let selectedExample {
                 selectedExample.view
