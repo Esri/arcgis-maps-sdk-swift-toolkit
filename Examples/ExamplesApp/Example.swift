@@ -46,4 +46,4 @@ extension Example: Hashable {
 ***REMOVED***
 ***REMOVED***
 
-extension Example: MenuItem { ***REMOVED***
+extension Example: ListItem { ***REMOVED***

@@ -32,4 +32,4 @@ extension Category: Hashable {
 ***REMOVED***
 ***REMOVED***
 
-extension Category: MenuItem { ***REMOVED***
+extension Category: ListItem { ***REMOVED***
