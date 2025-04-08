@@ -17,8 +17,6 @@ enum ListItem {
 ***REMOVED***case example(Example)
 ***REMOVED***
 
-extension ListItem: Hashable { ***REMOVED***
-
 extension ListItem: Identifiable {
 ***REMOVED***var id: String {
 ***REMOVED******REMOVED***switch self {
