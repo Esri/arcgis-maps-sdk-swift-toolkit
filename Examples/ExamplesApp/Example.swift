@@ -46,4 +46,6 @@ extension Example: Hashable {
     }
 }
 
-extension Example: ListItem { }
+extension Example: Identifiable {
+    var id: String { name }
+}

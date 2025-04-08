@@ -12,6 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-protocol ListItem {
-    var name: String { get }
+enum ListItem {
+    case category(Category)
+    case example(Example)
+}
+
+extension ListItem: Hashable { }
+
+extension ListItem: Identifiable {
+    var id: String {
+        switch self {
+        case .category(let category):
+            return category.id
+        case .example(let example):
+            return example.id
+        }
+    }
 }
