@@ -17,8 +17,6 @@ enum ListItem {
     case example(Example)
 }
 
-extension ListItem: Hashable { }
-
 extension ListItem: Identifiable {
     var id: String {
         switch self {
