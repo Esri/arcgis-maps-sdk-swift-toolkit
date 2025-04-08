@@ -16,14 +16,14 @@ import SwiftUI
 
 struct Examples: View {
     /// The menu items to display.
-    let menuItems = makeListItems()
+    let listItems = makeListItems()
     
     /// The example selected by the user.
     @State private var selectedExample: Example?
     
     var body: some View {
         NavigationSplitView {
-            List(menuItems, selection: $selectedExample) { item in
+            List(listItems, selection: $selectedExample) { item in
                 switch item {
                 case .category(let category):
                     DisclosureGroup(category.name) {
