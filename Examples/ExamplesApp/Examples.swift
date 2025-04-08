@@ -25,7 +25,7 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let category = item as? Category {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(category.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(category.examples, id: \.name) { example in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeExampleLink(example)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLink(for: example)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.sidebar)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(category.name)
@@ -33,7 +33,7 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isDetailLink(false)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if let example = item as? Example {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeExampleLink(example)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationLink(for: example)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
@@ -43,7 +43,7 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func makeExampleLink(_ example: Example) -> some View {
+***REMOVED***func navigationLink(for example: Example) -> some View {
 ***REMOVED******REMOVED***NavigationLink(
 ***REMOVED******REMOVED******REMOVED***example.name,
 ***REMOVED******REMOVED******REMOVED***destination: {
