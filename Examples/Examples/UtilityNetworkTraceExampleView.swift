@@ -55,7 +55,6 @@ struct UtilityNetworkTraceExampleView: View {
                         let publicSample = try await ArcGISCredential.publicSample
                         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
                     } catch {
-                        // See Also: https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1129
                         print("Error creating credential:", error.localizedDescription)
                     }
                 }
