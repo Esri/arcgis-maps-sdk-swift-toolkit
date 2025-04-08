@@ -16,14 +16,14 @@
 
 struct Examples: View {
 ***REMOVED******REMOVED***/ The menu items to display.
-***REMOVED***let menuItems = makeListItems()
+***REMOVED***let listItems = makeListItems()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The example selected by the user.
 ***REMOVED***@State private var selectedExample: Example?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationSplitView {
-***REMOVED******REMOVED******REMOVED***List(menuItems, selection: $selectedExample) { item in
+***REMOVED******REMOVED******REMOVED***List(listItems, selection: $selectedExample) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch item {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .category(let category):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(category.name) {
