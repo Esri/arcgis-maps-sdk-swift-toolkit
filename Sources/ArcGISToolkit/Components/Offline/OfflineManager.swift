@@ -110,7 +110,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - job: The job to start.
 ***REMOVED******REMOVED***/   - portalItem: The portal item whose map is being taken offline.
-***REMOVED***func start(job: any JobProtocol, portalItem: PortalItem) {
+***REMOVED***func start(job: some JobProtocol, portalItem: PortalItem) {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Starting Job from offline manager")
 ***REMOVED******REMOVED***jobManager.jobs.append(job)
 ***REMOVED******REMOVED***observeJob(job)
@@ -121,7 +121,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Observes a job for completion.
-***REMOVED***private func observeJob<Job: JobProtocol>(_ job: Job) {
+***REMOVED***private func observeJob(_ job: some JobProtocol) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Observing job completion")
 ***REMOVED******REMOVED******REMOVED***
@@ -148,7 +148,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Figures out and returns the portal item associated with the online map for a particular
 ***REMOVED******REMOVED***/ offline job.
-***REMOVED***private func onlineMapPortalItem<Job: JobProtocol>(for job: Job) -> PortalItem? {
+***REMOVED***private func onlineMapPortalItem(for job: some JobProtocol) -> PortalItem? {
 ***REMOVED******REMOVED***switch job {
 ***REMOVED******REMOVED***case let downloadPreplanned as DownloadPreplannedOfflineMapJob:
 ***REMOVED******REMOVED******REMOVED***downloadPreplanned.onlineMap?.item as? PortalItem

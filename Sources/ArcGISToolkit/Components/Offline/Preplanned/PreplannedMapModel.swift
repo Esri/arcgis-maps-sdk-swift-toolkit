@@ -22,7 +22,7 @@ internal import os
 @MainActor
 class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
-***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
+***REMOVED***let preplannedMapArea: PreplannedMapAreaProtocol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the preplanned map area.
 ***REMOVED***let preplannedMapAreaID: Item.ID
@@ -210,7 +210,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
-***REMOVED***private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
+***REMOVED***private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, Error>) {
 ***REMOVED******REMOVED***switch downloadResult {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***status = .downloaded

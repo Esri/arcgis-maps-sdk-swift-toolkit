@@ -18,7 +18,7 @@ struct OfflineMapAreasExampleApp: App {
 
 extension OfflineMapAreasExampleApp {
 ***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
-***REMOVED***static func notifyJobCompleted(job: any JobProtocol) {
+***REMOVED***static func notifyJobCompleted(job: some JobProtocol) {
 ***REMOVED******REMOVED***guard
 ***REMOVED******REMOVED******REMOVED***job.status == .succeeded || job.status == .failed
 ***REMOVED******REMOVED***else { return ***REMOVED***
