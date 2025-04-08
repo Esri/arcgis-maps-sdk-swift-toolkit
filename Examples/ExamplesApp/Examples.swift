@@ -25,7 +25,7 @@ struct Examples: View {
                     if let category = item as? Category {
                         NavigationLink(category.name) {
                             List(category.examples, id: \.name) { example in
-                                makeExampleLink(example)
+                                navigationLink(for: example)
                             }
                             .listStyle(.sidebar)
                             .navigationTitle(category.name)
@@ -33,7 +33,7 @@ struct Examples: View {
                         }
                         .isDetailLink(false)
                     } else if let example = item as? Example {
-                        makeExampleLink(example)
+                        navigationLink(for: example)
                     }
                 }
                 .navigationTitle("Toolkit Examples")
@@ -43,7 +43,7 @@ struct Examples: View {
         }
     }
     
-    func makeExampleLink(_ example: Example) -> some View {
+    func navigationLink(for example: Example) -> some View {
         NavigationLink(
             example.name,
             destination: {
