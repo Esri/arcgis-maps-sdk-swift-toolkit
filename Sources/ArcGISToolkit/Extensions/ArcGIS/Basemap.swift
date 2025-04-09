@@ -1,4 +1,4 @@
-// Copyright 2021 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import ArcGIS
 
-struct ExampleView: View {
-    /// The example to display in the view.
-    var example: Example
-    
-    var body: some View {
-        example.makeBody()
-            .navigationTitle(example.name)
-            .navigationBarTitleDisplayMode(.inline)
+extension Basemap {
+    /// A Boolean value indicating whether the basemap supports 3D visualization.
+    var is3D: Bool {
+        baseLayers.contains(where: { $0 is ArcGISSceneLayer })
     }
 }

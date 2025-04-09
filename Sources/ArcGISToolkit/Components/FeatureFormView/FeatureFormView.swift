@@ -65,7 +65,6 @@ import SwiftUI
 /// `Info.plist` file.
 ///
 /// - Since: 200.4
-@available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
@@ -75,6 +74,9 @@ public struct FeatureFormView: View {
     
     /// The title of the feature form view.
     @State private var title = ""
+    
+    /// The validation error visibility configuration of the form.
+    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
     
     /// Initializes a form view.
     /// - Parameters:
@@ -123,11 +125,11 @@ public struct FeatureFormView: View {
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
+        .environment(\.validationErrorVisibility, validationErrorVisibility)
         .environmentObject(model)
     }
 }
 
-@available(visionOS, unavailable)
 extension FeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.

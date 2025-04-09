@@ -19,7 +19,6 @@ import SwiftUI
 ///
 /// This view injects a header and footer. It also monitors whether a field form element is editable and
 /// chooses the correct input view based on the input type.
-@available(visionOS, unavailable)
 struct InputWrapper: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false

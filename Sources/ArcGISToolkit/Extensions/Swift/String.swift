@@ -24,12 +24,21 @@ extension String {
         )
     }
     
-    /// A localized string for the word "Close".
-    static var close: Self {
+    /// A localized string for the word "Clear".
+    static var clear: Self {
         .init(
-            localized: "Close",
+            localized: "Clear",
             bundle: .toolkitModule,
-            comment: "A label for a button indicating that the view should be closed."
+            comment: "E.g. Remove text from a text field."
+        )
+    }
+    
+    /// A localized string for the word "Dismiss".
+    static var dismiss: Self {
+        .init(
+            localized: "Dismiss",
+            bundle: .toolkitModule,
+            comment: "E.g. Close/hide a sheet or pop-up."
         )
     }
     
@@ -57,6 +66,15 @@ extension String {
             localized: "No Value",
             bundle: .toolkitModule,
             comment: "A string indicating that no value has been set for a form field."
+        )
+    }
+    
+    /// A localized string for the word "OK".
+    static var ok: Self {
+        .init(
+            localized: "OK",
+            bundle: .toolkitModule,
+            comment: "A label for button to proceed with an operation."
         )
     }
     

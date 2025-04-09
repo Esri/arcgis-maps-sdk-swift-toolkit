@@ -16,7 +16,6 @@ import SwiftUI
 import ArcGIS
 
 /// A view which allows selection of levels represented in `FloorFacility`.
-@available(visionOS, unavailable)
 struct LevelSelector: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
@@ -50,7 +49,6 @@ struct LevelSelector: View {
     }
 }
 
-@available(visionOS, unavailable)
 extension LevelSelector {
     /// A list of all the levels to be displayed.
     ///
@@ -70,8 +68,8 @@ extension LevelSelector {
     /// The system name of the icon that reflects the current state of `isCollapsed`.
     var iconForCollapsedState: String {
         switch (isCollapsed, isTopAligned) {
-        case (true, true), (false, false): return "chevron.down.circle"
-        case (true, false), (false, true): return "chevron.up.circle"
+        case (true, true), (false, false): return "chevron.down"
+        case (true, false), (false, true): return "chevron.up"
         }
     }
     
@@ -85,7 +83,9 @@ extension LevelSelector {
         } label: {
             Image(systemName: iconForCollapsedState)
                 .padding(.toolkitDefault)
+                .contentShape(.rect)
         }
+        .buttonStyle(.plain)
         .disabled(levels.count == 1)
     }
     
@@ -93,49 +93,92 @@ extension LevelSelector {
     /// - Parameter level: The level represented by the button.
     /// - Returns: The button representing the provided level.
     @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-        Text(level.shortName)
-            .foregroundColor(.primary)
-            .padding([.vertical], 4)
-            .frame(maxWidth: .infinity)
-            .background {
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(buttonColorFor(level))
+        Button {
+            viewModel.setLevel(level)
+            if isCollapsed && levels.count > 1 {
+                isCollapsed = false
             }
-            .onTapGesture {
-                viewModel.setLevel(level)
-                if isCollapsed && levels.count > 1 {
-                    isCollapsed.toggle()
+        } label: {
+            let roundedRectangle = RoundedRectangle(cornerRadius: 5)
+            Text(level.shortName)
+                .foregroundStyle(textColor(for: level))
+                .frame(maxWidth: .infinity)
+                .padding([.vertical], 4)
+                .background {
+                    roundedRectangle
+                        .fill(buttonColor(for: level))
                 }
-            }
+                .contentShape(.hoverEffect, roundedRectangle)
+                .hoverEffect()
+        }
+        .buttonStyle(.plain)
     }
     
     /// A scrollable list of buttons; one for each level to be displayed.
     /// - Returns: The scrollable list of level buttons.
     @ViewBuilder func makeLevelButtons() -> some View {
-        ScrollViewReader { proxy in
+        let scrollView = ScrollViewReader { proxy in
             ScrollView {
-                VStack(spacing: 4) {
+                let list = VStack(spacing: 4) {
                     ForEach(filteredLevels, id: \.id) { level in
                         makeLevelButton(level)
                     }
                 }
-                .onSizeChange { contentHeight = $0.height }
+                if #available (iOS 18.0, *) {
+                    list
+                } else {
+                    list
+                        .onGeometryChange(for: CGFloat.self) { proxy in
+                            proxy.frame(in: .global).height
+                        } action: { newHeight in
+                            contentHeight = newHeight
+                        }
+                }
             }
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
             .onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
         }
+        if #available (iOS 18.0, *) {
+            scrollView
+                .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                    geometry.contentSize.height
+                } action: { _, newValue in
+                    contentHeight = newValue
+                }
+        } else {
+            scrollView
+        }
     }
     
     /// Determines a appropriate color for a button in the floor level list.
-    /// - Parameter level: THe level represented by the button.
+    /// - Parameter level: The level represented by the button.
     /// - Returns: The color for the button representing the provided level.
-    func buttonColorFor(_ level: FloorLevel) -> Color {
-        if viewModel.selection?.level == level {
-            return Color.accentColor
+    func buttonColor(for level: FloorLevel) -> Color {
+        return if viewModel.selection?.level == level {
+#if os(visionOS)
+            .white
+#else
+            .accentColor
+#endif
         } else {
-            return Color.secondary.opacity(0.5)
+            .secondary.opacity(0.1)
         }
+    }
+    
+    /// Determines a appropriate text color for a button in the floor level list.
+    /// - Parameter level: The level represented by the button.
+    /// - Returns: The color for the text on the button that is representing the provided level.
+    func textColor(for level: FloorLevel) -> Color {
+#if os(visionOS)
+        if viewModel.selection?.level == level {
+            // We need to change the text color on visionOS when a level is selected
+            // because the background is now white so the text needs to be black
+            // so the text is visible.
+            return .black
+        }
+#endif
+        return .primary
     }
     
     /// Scrolls the list within the provided proxy to the button representing the selected level.

@@ -24,65 +24,61 @@ struct FloatingPanelExampleView: View {
     @State private var demoContent: FloatingPanelDemoContent?
     
     /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(basemapStyle: .arcGISImagery)
+    @State private var map: Map = {
+        let map = Map(basemapStyle: .arcGISImagery)
+        map.initialViewpoint = Viewpoint(
+            center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+            scale: 1_000_000
+        )
+        return map
+    }()
     
     /// The Floating Panel's current detent.
     @State private var selectedDetent: FloatingPanelDetent = .half
     
-    /// The initial viewpoint shown in the map.
-    private let initialViewpoint = Viewpoint(
-        center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-        scale: 1_000_000
-    )
-    
     var body: some View {
-        MapView(
-            map: map,
-            viewpoint: initialViewpoint
-        )
-        .onAttributionBarHeightChanged {
-            attributionBarHeight = $0
-        }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-        .floatingPanel(
-            attributionBarHeight: attributionBarHeight,
-            selectedDetent: $selectedDetent,
-            isPresented: isPresented
-        ) {
-            switch demoContent {
-            case .list:
-                FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
-            case .text:
-                FloatingPanelTextContent()
-            case .textField:
-                FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
-            case .none:
-                EmptyView()
+        MapView(map: map)
+            .onAttributionBarHeightChanged {
+                attributionBarHeight = $0
             }
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                if demoContent != nil {
-                    Button("Dismiss") {
-                        demoContent = nil
-                    }
-                } else {
-                    Menu {
-                        Button("List") {
-                            demoContent = .list
-                        }
-                        Button("Text") {
-                            demoContent = .text
-                        }
-                        Button("Text Field") {
-                            demoContent = .textField
-                        }
-                    } label: {
-                        Text("Present")
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .floatingPanel(
+                attributionBarHeight: attributionBarHeight,
+                selectedDetent: $selectedDetent,
+                isPresented: isPresented
+            ) {
+                if let demoContent {
+                    switch demoContent {
+                    case .list:
+                        FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
+                    case .text:
+                        FloatingPanelTextContent()
+                    case .textField:
+                        FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
                     }
                 }
             }
-        }
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    if demoContent != nil {
+                        Button("Dismiss") {
+                            demoContent = nil
+                        }
+                    } else {
+                        Menu("Present") {
+                            Button("List") {
+                                demoContent = .list
+                            }
+                            Button("Text") {
+                                demoContent = .text
+                            }
+                            Button("Text Field") {
+                                demoContent = .textField
+                            }
+                        }
+                    }
+                }
+            }
     }
     
     /// A Boolean value indicating whether the Floating Panel is displayed or not.
@@ -183,10 +179,18 @@ private struct FloatingPanelTextFieldDemoContent: View {
             Spacer()
         }
         .padding()
+        #if os(visionOS)
+        .onChange(of: selectedDetent) { _, newDetent in
+            if newDetent != .full {
+                isFocused = false
+            }
+        }
+        #else
         .onChange(of: selectedDetent) { newDetent in
             if newDetent != .full {
                 isFocused = false
             }
         }
+        #endif
     }
 }

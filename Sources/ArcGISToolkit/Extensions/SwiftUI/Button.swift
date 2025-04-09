@@ -1,4 +1,4 @@
-// Copyright 2022 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,31 +14,28 @@
 
 import SwiftUI
 
-/// A modifier which "selects" a button. If selected, the button will be displayed with the
-/// `BorderedProminentButtonStyle`. Otherwise, the button will be displayed with the
-/// `BorderedButtonStyle`.
-struct ButtonSelectedModifier: ViewModifier {
-    /// A Boolean value that indicates whether view should display as selected.
-    let isSelected: Bool
-    
-    func body(content: Content) -> some View {
-        if isSelected {
-            content
-                .buttonStyle(BorderedProminentButtonStyle())
-        } else {
-            content
-                .buttonStyle(BorderedButtonStyle())
+extension Button<Text> {
+    /// Returns a button with the title "Cancel" and the given action.
+    /// - Parameter action: The action to perform when the user triggers the
+    /// button.
+    /// - Returns: A button.
+    static nonisolated func cancel(action: @escaping @MainActor () -> Void) -> Self {
+        Button(role: .cancel, action: action) {
+            Text(
+                "Cancel",
+                bundle: .toolkitModule,
+                comment: "Title for a button that cancels an action."
+            )
         }
     }
-}
-
-extension Button {
-    /// Button modifier used to denote the button is selected.
-    /// - Parameter isSelected: `true` if the button is selected, `false` otherwise.
-    /// - Returns: The modified button.
-    func selected(
-        _ isSelected: Bool = false
-    ) -> some View {
-        modifier(ButtonSelectedModifier(isSelected: isSelected))
+    
+    /// Returns a button with the title "Done" and the given action.
+    /// - Parameter action: The action to perform when the user triggers the
+    /// button.
+    /// - Returns: A button.
+    static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
+        Button(action: action) {
+            Text.done
+        }
     }
 }

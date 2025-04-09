@@ -18,7 +18,6 @@ import SwiftUI
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 ///
 /// If the floor aware data contains only one site, the selector opens directly to the facilities list.
-@available(visionOS, unavailable)
 struct SiteAndFacilitySelector: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
@@ -32,7 +31,7 @@ struct SiteAndFacilitySelector: View {
     /// A Boolean value indicating whether the user is typing into the text field.
     @FocusState var textFieldIsFocused: Bool
     
-    /// A Boolean value indicating whether the user tapped the "All sites" button.
+    /// A Boolean value indicating whether the user tapped the "All Sites" button.
     @State private var allSitesIsSelected = false
     
     /// The site or facility filter phrase.
@@ -48,12 +47,14 @@ struct SiteAndFacilitySelector: View {
             header
                 .padding([.leading, .top, .trailing])
             if (facilityListIsVisible && matchingFacilities.isEmpty) || (!facilityListIsVisible && matchingSites.isEmpty) {
+                Spacer()
                 if #available(iOS 17, *) {
                     ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
                 } else {
                     Text(String.noMatchesFound)
                         .frame(maxHeight: .infinity)
                 }
+                Spacer()
             } else if facilityListIsVisible {
                 facilityList
                     .transition(.move(edge: .trailing))
@@ -78,25 +79,28 @@ struct SiteAndFacilitySelector: View {
     var facilityList: some View {
         ScrollViewReader { proxy in
             List(matchingFacilities, id: \.id) { facility in
-                VStack {
-                    Text(facility.name)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    if allSitesIsSelected, let siteName = facility.site?.name {
-                        Text(siteName)
-                            .font(.caption)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                }
-                .contentShape(Rectangle())
-                .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : Color.clear)
-                .onTapGesture {
+                Button {
                     viewModel.setFacility(facility, zoomTo: true)
                     if horizontalSizeClass == .compact {
                         isPresented = false
                     }
+                } label: {
+                    VStack {
+                        Text(facility.name)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if allSitesIsSelected, let siteName = facility.site?.name {
+                            Text(siteName)
+                                .font(.caption)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
                 }
+                .contentShape(.rect)
+                .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : nil)
             }
+#if !os(visionOS)
             .listStyle(.plain)
+#endif
             .onChange(viewModel.selection) { _ in
                 if let floorFacility = viewModel.selection?.facility {
                     withAnimation {
@@ -125,7 +129,7 @@ struct SiteAndFacilitySelector: View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
                     .disableAutocorrection(true)
                     .focused($textFieldIsFocused)
@@ -135,13 +139,9 @@ struct SiteAndFacilitySelector: View {
                         textFieldIsFocused = false
                     }
                 if textFieldIsFocused && !query.isEmpty {
-                    Button {
+                    XButton(.clear) {
                         query.removeAll()
-                    } label: {
-                        Image(systemName: "x.circle.fill")
-                            .renderingMode(.template)
                     }
-                    .foregroundStyle(.secondary)
                 }
             }
             .padding(5)
@@ -164,7 +164,10 @@ struct SiteAndFacilitySelector: View {
                 userDidBackOutToSiteList = true
             } label: {
                 Image(systemName: "chevron.left")
+                    .padding(.toolkitDefault)
+                    .contentShape(.rect)
             }
+            .buttonStyle(.plain)
             .opacity(backButtonIsVisible ? 1 : 0)
             Spacer()
             Group {
@@ -176,14 +179,12 @@ struct SiteAndFacilitySelector: View {
                     Text.sites
                 }
             }
-            .font(.title3)
             Spacer()
-            Button {
+            XButton(.dismiss) {
                 isPresented = false
-            } label: {
-                Image(systemName: "xmark.circle")
             }
         }
+        .font(.title3)
     }
     
     /// A view containing a list of the site names.
@@ -198,7 +199,9 @@ struct SiteAndFacilitySelector: View {
                 viewModel.setSite(site)
             }
         }
+#if !os(visionOS)
         .listStyle(.plain)
+#endif
         .onAppear {
             allSitesIsSelected = false
         }
@@ -214,7 +217,6 @@ struct SiteAndFacilitySelector: View {
     }
 }
 
-@available(visionOS, unavailable)
 extension SiteAndFacilitySelector {
     /// A Boolean value indicating whether the back button in the header navigations controls is visible..
     var backButtonIsVisible: Bool {
@@ -262,7 +264,7 @@ extension SiteAndFacilitySelector {
 private extension String {
     static var allSites: Self {
         .init(
-            localized: "All sites",
+            localized: "All Sites",
             bundle: .toolkitModule,
             comment: "A reference to all of the sites defined in a floor aware map."
         )

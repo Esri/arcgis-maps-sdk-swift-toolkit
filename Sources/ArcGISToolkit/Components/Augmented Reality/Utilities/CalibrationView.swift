@@ -92,12 +92,16 @@ extension WorldScaleSceneView {
             VStack {
                 HStack(alignment: .firstTextBaseline) {
                     Text(calibrationLabel)
-                        .font(.title)
                         .lineLimit(1)
                     Spacer()
-                    dismissButton
-                        .layoutPriority(1)
+                    XButton(.dismiss) {
+                        withAnimation {
+                            isPresented = false
+                        }
+                    }
+                    .layoutPriority(1)
                 }
+                .font(.title)
                 .padding(.bottom)
                 headingSlider
                 Divider()
@@ -105,7 +109,7 @@ extension WorldScaleSceneView {
             }
             .padding()
             .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .clipShape(.rect(cornerRadius: 15))
             .frame(maxWidth: 430)
             .padding()
         }
@@ -161,22 +165,6 @@ extension WorldScaleSceneView {
                     }
             }
         }
-        
-        @ViewBuilder
-        var dismissButton: some View {
-            Button {
-                withAnimation {
-                    isPresented = false
-                }
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .resizable()
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 28, height: 28)
-            }
-            .buttonStyle(.plain)
-        }
     }
 }
 
@@ -214,3 +202,12 @@ private extension WorldScaleSceneView.CalibrationView {
         )
     }
 }
+
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
+#Preview {
+    WorldScaleSceneView.CalibrationView(
+        viewModel: WorldScaleCalibrationViewModel(),
+        isPresented: .constant(true)
+    )
+}
+#endif

@@ -16,7 +16,6 @@ import ArcGIS
 import SwiftUI
 
 /// A view for text input.
-@available(visionOS, unavailable)
 struct TextInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
@@ -60,19 +59,6 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onChange(isFocused) { isFocused in
-                if isFocused {
-                    model.focusedElement = element
-                } else if model.focusedElement == element {
-                    model.focusedElement = nil
-                }
-            }
-            .onChange(model.focusedElement) { focusedElement in
-                // Another form input took focus
-                if focusedElement != element {
-                    isFocused  = false
-                }
-            }
             .onChange(text) { text in
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
@@ -80,19 +66,19 @@ struct TextInput: View {
             .onTapGesture {
                 if element.isMultiline {
                     fullScreenTextInputIsPresented = true
-                    model.focusedElement = element
                 }
             }
+#if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
+#endif
             .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
                 text = newFormattedValue
             }
     }
 }
 
-@available(visionOS, unavailable)
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
@@ -120,15 +106,30 @@ private extension TextInput {
                         axis: .horizontal
                     )
                     .accessibilityIdentifier("\(element.label) Text Input")
+                    .focused($isFocused)
                     .keyboardType(keyboardType)
+#if os(visionOS)
+                    // No need for hover effect since it will be applied
+                    // properly at 'formInputStyle'.
+                    .hoverEffectDisabled()
+#endif
+                    .onChange(isFocused) { isFocused in
+                        model.focusedElement = isFocused ? element : nil
+                    }
+                    .onChange(model.focusedElement) { focusedElement in
+                        // Another form input took focus
+                        if focusedElement != element {
+                            isFocused  = false
+                        }
+                    }
                 }
             }
-            .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
+                        // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
                         positiveNegativeButton
                         Spacer()
                     }
@@ -139,7 +140,7 @@ private extension TextInput {
             if !text.isEmpty,
                !isBarcodeScanner,
                !element.isMultiline {
-                ClearButton {
+                XButton(.clear) {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
@@ -150,6 +151,7 @@ private extension TextInput {
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             }
+#if !os(visionOS)
             if isBarcodeScanner {
                 Button {
                     model.focusedElement = element
@@ -163,8 +165,9 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("\(element.label) Scan Button")
             }
+#endif
         }
-        .formInputStyle()
+        .formInputStyle(isTappable: true)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
@@ -201,7 +204,6 @@ private extension TextInput {
     }
 }
 
-@available(visionOS, unavailable)
 private extension TextInput {
     /// A view for displaying a multiline text input outside the body of the feature form view.
     ///
@@ -215,7 +217,7 @@ private extension TextInput {
         @Environment(\.dismiss) private var dismiss
         
         /// A Boolean value indicating whether the text field is focused.
-        @FocusState private var textFieldIsFocused: Bool
+        @FocusState private var isFocused: Bool
         
         /// The element the input belongs to.
         let element: FieldFormElement
@@ -229,8 +231,10 @@ private extension TextInput {
                 Button("Done") {
                     dismiss()
                 }
+#if !os(visionOS)
                 .buttonStyle(.plain)
-                .foregroundColor(.accentColor)
+                .foregroundStyle(Color.accentColor)
+#endif
             }
             RepresentedUITextView(initialText: text) { text in
                 element.convertAndUpdateValue(text)
@@ -238,9 +242,12 @@ private extension TextInput {
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }
-            .focused($textFieldIsFocused, equals: true)
+            .focused($isFocused)
             .onAppear {
-                textFieldIsFocused = true
+                isFocused = true
+            }
+            .onChange(isFocused) { isFocused in
+                model.focusedElement = isFocused ? element : nil
             }
             Spacer()
             InputFooter(element: element)
@@ -248,7 +255,6 @@ private extension TextInput {
     }
 }
 
-@available(visionOS, unavailable)
 private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput

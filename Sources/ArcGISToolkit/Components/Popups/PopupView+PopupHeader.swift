@@ -1,4 +1,4 @@
-// Copyright 2022 Esri
+// Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,8 +14,13 @@
 
 import SwiftUI
 
-/// A `PreferenceKey` that specifies a size.
-struct SizePreferenceKey: PreferenceKey {
-    static let defaultValue: CGSize = .zero
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+public extension PopupView {
+    /// Specifies the visibility of the popup header.
+    /// - Parameter visibility: The preferred visibility of the popup header.
+    /// - Since: 200.7
+    func header(_ visibility: Visibility) -> Self {
+        var copy = self
+        copy.headerVisibility = visibility
+        return copy
+    }
 }

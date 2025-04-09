@@ -62,7 +62,6 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FloorFilterExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 /// in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
-@available(visionOS, unavailable)
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -102,6 +101,11 @@ public struct FloorFilter: View {
     /// A Boolean value that indicates whether the site and facility selector is presented.
     @State private var siteAndFacilitySelectorIsPresented = false
     
+    /// A Boolean value controlling whether a site is automatically selected upon load completion.
+    ///
+    /// This property is only relevant when the FloorManager contains a single site.
+    private var automaticSingleSiteSelectionDisabled: Bool = false
+    
     /// The selected site, floor, or level.
     private var selection: Binding<FloorFilterSelection?>?
     
@@ -116,20 +120,29 @@ public struct FloorFilter: View {
     private var viewpoint: Binding<Viewpoint?>
     
     /// Button to open and close the site and facility selector.
+    @ViewBuilder
     private var sitesAndFacilitiesButton: some View {
-        Button {
-            siteAndFacilitySelectorIsPresented.toggle()
-        } label: {
-            Image(systemName: "building.2")
-                .accessibilityIdentifier("Floor Filter button")
+        if [.notLoaded, .loading].contains(viewModel.loadStatus) {
+            ProgressView()
                 .padding(.toolkitDefault)
-                .opacity(viewModel.isLoading ? .zero : 1)
-                .overlay {
-                    if viewModel.isLoading {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                    }
-                }
+                .progressViewStyle(.circular)
+        } else if viewModel.loadStatus == .loaded {
+            Button {
+                siteAndFacilitySelectorIsPresented.toggle()
+            } label: {
+                Image(systemName: "building.2")
+                    .padding(.toolkitDefault)
+                    .contentShape(.rect(cornerRadius: 5))
+                    .hoverEffect()
+            }
+            .accessibilityIdentifier("Floor Filter button")
+            .buttonStyle(.plain)
+#if !os(visionOS)
+            .foregroundStyle(.tint)
+#endif
+        } else {
+            Image(systemName: "exclamationmark.circle")
+                .padding(.toolkitDefault)
         }
     }
     
@@ -207,7 +220,7 @@ public struct FloorFilter: View {
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
         .environmentObject(viewModel)
-        .disabled(viewModel.isLoading)
+        .disabled(viewModel.loadStatus != .loaded)
         .onChange(selection?.wrappedValue) { newValue in
             // Prevent a double-set if the view model triggered the original change.
             guard newValue != viewModel.selection else { return }
@@ -216,6 +229,15 @@ public struct FloorFilter: View {
             case .facility(let facility): viewModel.setFacility(facility)
             case .level(let level): viewModel.setLevel(level)
             case .none: viewModel.clearSelection()
+            }
+        }
+        .onChange(viewModel.loadStatus) { newLoadStatus in
+            if newLoadStatus == .loaded,
+               !automaticSingleSiteSelectionDisabled,
+               viewModel.sites.count == 1,
+               let firstSite = viewModel.sites.first {
+                // If we have only one site, select it.
+                viewModel.setSite(firstSite, zoomTo: true)
             }
         }
         .onChange(viewModel.selection) { newValue in
@@ -230,11 +252,29 @@ public struct FloorFilter: View {
             }
         }
     }
+}
+
+public extension FloorFilter {
+    /// Adds a condition that controls whether a site in the Floor Manager
+    /// is automatically selected upon loading.
+    ///
+    /// Automatic selection only occurs when the Floor Manager contains a
+    /// single site.
+    /// - Parameter disabled: A Boolean value that determines whether
+    /// automatic single site selection is disabled..
+    /// - Returns: A view that conditionally disables automatic single site
+    /// selection.
+    /// - Since: 200.7
+    func automaticSingleSiteSelectionDisabled(_ disabled: Bool = true) -> Self {
+        var copy = self
+        copy.automaticSingleSiteSelectionDisabled = disabled
+        return copy
+    }
     
     /// The width of the level selector.
     /// - Parameter width: The new width for the level selector.
     /// - Returns: The `FloorFilter`.
-    public func levelSelectorWidth(_ width: CGFloat) -> Self {
+    func levelSelectorWidth(_ width: CGFloat) -> Self {
         var copy = self
         copy.levelSelectorWidth = width
         return copy

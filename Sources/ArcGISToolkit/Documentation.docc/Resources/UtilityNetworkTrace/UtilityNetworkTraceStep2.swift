@@ -9,20 +9,19 @@ struct UtilityNetworkTraceExampleView: View {
     
     @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    @State private var screenPoint: CGPoint?
-    
-    @State private var viewpoint: Viewpoint?
-    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(
                 map: map,
-                viewpoint: viewpoint,
                 graphicsOverlays: [resultGraphicsOverlay]
             )
             .task {
-                let publicSample = try? await ArcGISCredential.publicSample
-                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+                do {
+                    let publicSample = try await ArcGISCredential.publicSample
+                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
+                } catch {
+                    print("Error creating credential:", error.localizedDescription)
+                }
             }
         }
     }

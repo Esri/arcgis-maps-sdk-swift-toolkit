@@ -57,7 +57,7 @@ struct FieldsPopupElementView: View {
             VStack(alignment: .leading) {
                 Text(field.label)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 FormattedValueText(formattedValue: field.formattedValue)
                     .padding([.bottom], -1)
             }
@@ -74,8 +74,18 @@ struct FieldsPopupElementView: View {
         var body: some View {
             if formattedValue.lowercased().starts(with: "http"),
                let url = URL(string: formattedValue) {
-                Link("View", destination: url)
+                Link(destination: url) {
+                    Text(
+                        "View",
+                        bundle: .toolkitModule,
+                        comment: "E.g. Open a hyperlink."
+                    )
+                }
+#if os(visionOS)
                     .buttonStyle(.bordered)
+#else
+                    .buttonStyle(.borderless)
+#endif
             } else {
                 Text(formattedValue)
             }

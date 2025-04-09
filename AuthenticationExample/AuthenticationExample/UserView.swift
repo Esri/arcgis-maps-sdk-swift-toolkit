@@ -24,13 +24,15 @@ struct UserView: View {
         VStack {
             Group {
                 if let thumbnail = user.thumbnail {
-                    LoadableImageView(loadableImage: thumbnail)
-                        .frame(width: 100, height: 100, alignment: .center)
-                        .clipShape(Circle())
+                    LoadableImageView(loadableImage: thumbnail) {
+                        placeholderImage
+                    } loadedContent: { image in
+                        image
+                            .frame(width: 100, height: 100, alignment: .center)
+                            .clipShape(Circle())
+                    }
                 } else {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .foregroundColor(.secondary)
+                    placeholderImage
                 }
             }
             .frame(width: 100, height: 100, alignment: .center)
@@ -63,6 +65,12 @@ struct UserView: View {
             }
         }
     }
+    
+    @ViewBuilder private var placeholderImage: some View {
+        Image(systemName: "person.circle")
+            .resizable()
+            .foregroundColor(.secondary)
+    }
 }
 
 extension PortalUser.Role: @retroactive CustomStringConvertible {
@@ -92,7 +100,7 @@ struct UserAttributeView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .lineLimit(1)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .font(.footnote)
             Text(detail)
                 .font(.caption)
@@ -113,7 +121,7 @@ struct UserAttributeListView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .lineLimit(1)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .font(.footnote)
             Text(details.map(\.description).joined(separator: "\r"))
                 .font(.caption)

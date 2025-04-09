@@ -17,12 +17,20 @@ import Foundation
 
 extension FormAttachment: FeatureAttachment {
     /// The type of the attachment.
-    public var featureAttachmentKind: FeatureAttachmentKind {
+    var featureAttachmentKind: FeatureAttachmentKind {
         FeatureAttachmentKind(kind: kind)
     }
     
     /// The size of the attachment.
-    public var measuredSize: Measurement<UnitInformationStorage> {
+    var measuredSize: Measurement<UnitInformationStorage> {
         size
+    }
+    
+    func _load() async throws {
+        try await load()
+    }
+    
+    var _loadStatus: LoadStatus {
+        loadStatus
     }
 }

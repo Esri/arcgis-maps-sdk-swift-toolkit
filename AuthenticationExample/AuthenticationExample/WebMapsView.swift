@@ -69,8 +69,11 @@ struct PortalItemView: View {
     var body: some View {
         HStack {
             if let thumbnail = item.thumbnail {
-                LoadableImageView(loadableImage: thumbnail)
-                    .frame(width: 64, height: 44)
+                LoadableImageView(loadableImage: thumbnail) { image in
+                    image
+                        .resizable()
+                        .frame(width: 64, height: 44)
+                }
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.title)
@@ -80,7 +83,7 @@ struct PortalItemView: View {
                     .font(.caption)
                 Text(item.snippet)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
         }

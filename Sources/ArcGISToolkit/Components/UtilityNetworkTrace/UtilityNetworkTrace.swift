@@ -61,7 +61,6 @@ import SwiftUI
 /// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [UtilityNetworkTraceExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
 /// in the project. To learn more about using the `UtilityNetworkTrace` see the <doc:UtilityNetworkTraceTutorial>.
-@available(visionOS, unavailable)
 public struct UtilityNetworkTrace: View {
     /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?
@@ -112,6 +111,9 @@ public struct UtilityNetworkTrace: View {
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
+    /// A Boolean value indicating whether the "Delete All Starting Points" confirmation is presented.
+    @State private var deleteAllStartingPointsConfirmationIsPresented = false
+    
     /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
     @State private var shouldZoomOnTraceCompletion = true
     
@@ -131,14 +133,8 @@ public struct UtilityNetworkTrace: View {
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
     
-    /// Acts as the point of identification for items tapped in the utility network.
-    @Binding private var screenPoint: CGPoint?
-    
     /// Acts as the point at which newly selected starting point graphics will be created.
     @Binding private var mapPoint: Point?
-    
-    /// Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
-    @Binding private var viewpoint: Viewpoint?
     
     // MARK: Subviews
     
@@ -183,38 +179,38 @@ public struct UtilityNetworkTrace: View {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
             makeDetailSectionHeader(title: assetGroupName)
-            List {
-                ForEach(
-                    assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
-                    id: \.key
-                ) { (name, elements) in
-                    Section(name) {
-                        DisclosureGroup {
-                            ForEach(elements, id: \.globalID) { element in
-                                Button {
-                                    Task {
-                                        if let feature = await viewModel.feature(for: element),
-                                           let geometry = feature.geometry {
-                                            updateViewpoint(to: geometry.extent)
-                                        }
-                                    }
-                                } label: {
-                                    Label {
-                                        Text(
-                                            "Object ID: \(element.objectID, format: .number.grouping(.never))",
-                                            bundle: .toolkitModule,
-                                            comment: "A string identifying a utility network object."
-                                        )
-                                    } icon: {
-                                        Image(systemName: "scope")
+            List(
+                assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
+                id: \.key
+            ) { (name, elements) in
+                Section(name) {
+                    DisclosureGroup {
+                        ForEach(elements, id: \.globalID) { element in
+                            Button {
+                                Task {
+                                    if let feature = await viewModel.feature(for: element),
+                                       let geometry = feature.geometry {
+                                        updateViewpoint(to: geometry.extent)
                                     }
                                 }
+                            } label: {
+                                Label(
+                                    String(
+                                        localized: "Object ID: \(element.objectID, format: .number.grouping(.never))",
+                                        bundle: .toolkitModule,
+                                        comment: "A string identifying a utility network object."
+                                    ),
+                                    systemImage: "scope"
+                                )
                             }
-                        } label: {
-                            Text(elements.count, format: .number)
-                                .catalystPadding(4)
                         }
+                    } label: {
+                        Text(elements.count, format: .number)
+                            .catalystPadding(4)
                     }
+#if os(visionOS)
+                    .listItemTint(.monochrome)
+#endif
                 }
             }
         }
@@ -226,11 +222,9 @@ public struct UtilityNetworkTrace: View {
             Text(String.noConfigurationsAvailable)
         } else {
             ForEach(viewModel.configurations.sorted { $0.name < $1.name }, id: \.name) { configuration in
-                Button {
+                Button(configuration.name) {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
-                } label: {
-                    Text(configuration.name)
                 }
                 .listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
             }
@@ -240,13 +234,14 @@ public struct UtilityNetworkTrace: View {
     /// Displays the list of available networks.
     @ViewBuilder private var networksList: some View {
         ForEach(viewModel.networks, id: \.name) { network in
-            Text(network.name)
-                .lineLimit(1)
-                .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
-                .onTapGesture {
-                    viewModel.setNetwork(network)
-                    currentActivity = .creatingTrace(nil)
-                }
+            Button {
+                viewModel.setNetwork(network)
+                currentActivity = .creatingTrace(nil)
+            } label: {
+                Text(network.name)
+                    .lineLimit(1)
+            }
+            .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
         }
     }
     
@@ -283,7 +278,7 @@ public struct UtilityNetworkTrace: View {
                         .catalystPadding(4)
                 }
             }
-            Section(String.startingPointsTitle) {
+            Section {
                 Button(String.addNewButtonLabel) {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                     activeDetent = .summary
@@ -306,6 +301,35 @@ public struct UtilityNetworkTrace: View {
                         .catalystPadding(4)
                     }
                 }
+            } header: {
+                HStack {
+                    Text(String.startingPointsTitle)
+                    if !viewModel.pendingTrace.startingPoints.isEmpty {
+                        Spacer()
+                        Button(String.deleteAllStartingPoints, systemImage: "trash") {
+                            deleteAllStartingPointsConfirmationIsPresented = true
+                        }
+#if !os(visionOS)
+                        .buttonStyle(.plain)
+#endif
+                        .labelStyle(.iconOnly)
+                        .confirmationDialog(
+                            String.deleteAllStartingPointsQuestion,
+                            isPresented: $deleteAllStartingPointsConfirmationIsPresented,
+                            titleVisibility: .visible
+                        ) {
+                            Button(String.deleteButtonLabel, role: .destructive) {
+                                for startingPoint in viewModel.pendingTrace.startingPoints {
+                                    viewModel.deleteStartingPoint(startingPoint)
+                                    externalStartingPoints.removeAll()
+                                }
+                            }
+                        }
+                        // Override default uppercase capitalization for list
+                        // section headers on iOS and iPadOS.
+                        .textCase(nil)
+                    }
+                }
             }
             Section {
                 DisclosureGroup(
@@ -323,7 +347,12 @@ public struct UtilityNetworkTrace: View {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(.blue)
+#if os(visionOS)
+                            .contentShape(.hoverEffect, .rect(cornerRadius: 12))
+                            .hoverEffect()
+#else
+                            .foregroundStyle(.blue)
+#endif
                     }
                     ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
                     Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
@@ -411,20 +440,23 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
-                                HStack {
-                                    Text(assetGroupName)
-                                    Spacer()
-                                    Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
-                                }
-                                .foregroundColor(.blue)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
+                                Button {
                                     currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+                                } label: {
+                                    HStack {
+                                        Text(assetGroupName)
+                                        Spacer()
+                                        Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
+                                    }
+#if !os(visionOS)
+                                    .foregroundStyle(.blue)
+                                    .contentShape(.rect)
+#endif
                                 }
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.elementResults.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -444,7 +476,7 @@ public struct UtilityNetworkTrace: View {
                                     VStack(alignment: .trailing) {
                                         Text(item.function.functionType.title)
                                             .font(.caption)
-                                            .foregroundColor(.secondary)
+                                            .foregroundStyle(.secondary)
                                         if let result = item.result as? Double {
                                             Text(result, format: .number)
                                         } else {
@@ -459,7 +491,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         }
                     } label: {
-                        Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+                        Text.makeResultsLabel(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0)
                             .catalystPadding(4)
                     }
                 }
@@ -522,6 +554,7 @@ public struct UtilityNetworkTrace: View {
             Button(String.deleteButtonLabel, role: .destructive) {
                 if let startingPoint = selectedStartingPoint {
                     viewModel.deleteStartingPoint(startingPoint)
+                    externalStartingPoints.removeAll { $0 == startingPoint }
                     currentActivity = .creatingTrace(.viewingStartingPoints)
                 }
             }
@@ -558,18 +591,23 @@ public struct UtilityNetworkTrace: View {
                             viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
                         }
                     ) {
-                        ForEach(viewModel.pendingTrace.startingPoints.first {
-                            $0 == selectedStartingPoint
-                        }?.utilityElement?.assetType.terminalConfiguration?.terminals ?? [], id: \.self) {
+                        ForEach(
+                            viewModel.pendingTrace.startingPoints
+                                .first(where: { $0 == selectedStartingPoint })?
+                                .utilityElement?.assetType.terminalConfiguration?.terminals ?? [],
+                            id: \.self
+                        ) {
                             Text($0.name)
                         }
                     }
-                    .foregroundColor(.blue)
+#if !os(visionOS)
+                    .foregroundStyle(.blue)
+#endif
                 }
             }
             Section(String.attributesSectionTitle) {
                 ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
-                    HStack{
+                    HStack {
                         Text(item.key)
                         Spacer()
                         Text(item.value as? String ?? "")
@@ -614,25 +652,20 @@ public struct UtilityNetworkTrace: View {
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
-    ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-    ///   - startingPoints: An optional list of programmatically provided starting points.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
-        screenPoint: Binding<CGPoint?>,
-        mapViewProxy: MapViewProxy?,
-        viewpoint: Binding<Viewpoint?>,
+        mapViewProxy: MapViewProxy,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
         self.mapViewProxy = mapViewProxy
         _activeDetent = .constant(nil)
-        _screenPoint = screenPoint
         _mapPoint = mapPoint
         _graphicsOverlay = graphicsOverlay
-        _viewpoint = viewpoint
         _externalStartingPoints = startingPoints
         _viewModel = StateObject(
             wrappedValue: UtilityNetworkTraceViewModel(
@@ -663,8 +696,6 @@ public struct UtilityNetworkTrace: View {
         let newViewpoint = Viewpoint(boundingGeometry: extent)
         if let mapViewProxy {
             Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
-        } else {
-            viewpoint = newViewpoint
         }
     }
     
@@ -696,18 +727,16 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(screenPoint) { newScreenPoint in
+        .onChange(mapPoint) { newMapPoint in
             guard isFocused(traceCreationActivity: .addingStartingPoints),
-                  let mapViewProxy = mapViewProxy,
-                  let mapPoint = mapPoint,
-                  let screenPoint = newScreenPoint else {
+                  let mapPoint = newMapPoint,
+                  let mapViewProxy = mapViewProxy else {
                 return
             }
             currentActivity = .creatingTrace(.viewingStartingPoints)
             activeDetent = .half
             Task {
                 await viewModel.addStartingPoints(
-                    at: screenPoint,
                     mapPoint: mapPoint,
                     with: mapViewProxy
                 )
@@ -785,16 +814,10 @@ public struct UtilityNetworkTrace: View {
     /// - Parameter title: The button's title.
     /// - Parameter action: The action to be performed.
     /// - Returns: The configured button.
-    private func makeBackButton(title: String, _ action: @escaping () -> Void) -> some View {
-        Button { action() } label: {
-            Label {
-                Text(title)
-            } icon: {
-                Image(systemName: "chevron.backward")
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
+    private func makeBackButton(title: String, action: @escaping () -> Void) -> some View {
+        Button(title, systemImage: "chevron.backward", action: action)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     /// Returns a section header.
@@ -862,6 +885,22 @@ private extension String {
             localized: "Color",
             bundle: .toolkitModule,
             comment: "A label in reference to the color used to display utility trace result graphics."
+        )
+    }
+    
+    static var deleteAllStartingPoints: Self {
+        .init(
+            localized: "Delete All Starting Points",
+            bundle: .toolkitModule,
+            comment: "A label for a button used to delete all starting points on a pending utility network trace."
+        )
+    }
+    
+    static var deleteAllStartingPointsQuestion: Self {
+        .init(
+            localized: "Delete all starting points?",
+            bundle: .toolkitModule,
+            comment: "The title of the dialogue confirming deletion of all points."
         )
     }
     
@@ -1027,6 +1066,53 @@ private extension String {
             localized: "Zoom To Result",
             bundle: .toolkitModule,
             comment: "A user option specifying that a map should automatically change to show completed trace results."
+        )
+    }
+}
+
+public extension UtilityNetworkTrace /* Deprecated */ {
+    /// A graphical interface to run pre-configured traces on a map's utility networks.
+    /// - Parameters:
+    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
+    ///   - map: The map containing the utility network(s).
+    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
+    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
+    ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
+    ///   - startingPoints: An optional list of programmatically provided starting points. This
+    ///   property will not modify interactively added starting points.
+    /// - Attention: Deprecated at 200.7.
+    @available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
+    init(
+        graphicsOverlay: Binding<GraphicsOverlay>,
+        map: Map,
+        mapPoint: Binding<Point?>,
+        screenPoint: Binding<CGPoint?>,
+        mapViewProxy: MapViewProxy?,
+        viewpoint: Binding<Viewpoint?>,
+        startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
+    ) {
+        self.mapViewProxy = mapViewProxy
+        _activeDetent = .constant(nil)
+        _mapPoint = mapPoint
+        _graphicsOverlay = graphicsOverlay
+        _externalStartingPoints = startingPoints
+        _viewModel = StateObject(
+            wrappedValue: UtilityNetworkTraceViewModel(
+                map: map,
+                graphicsOverlay: graphicsOverlay.wrappedValue,
+                startingPoints: startingPoints.wrappedValue
+            )
+        )
+    }
+}
+
+private extension Text {
+    static func makeResultsLabel(_ results: Int) -> Self {
+        .init(
+            "^[\(results) Results](inflect: true)",
+            bundle: .toolkitModule,
+            comment: "A label indicating the number of results of a utility network trace."
         )
     }
 }

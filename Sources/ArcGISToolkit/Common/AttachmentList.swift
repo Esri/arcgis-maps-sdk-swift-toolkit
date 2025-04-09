@@ -45,12 +45,12 @@ struct AttachmentRow: View  {
                         .lineLimit(1)
                         .truncationMode(.middle)
                     Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .onTapGesture {
-                if attachmentModel.attachment.loadStatus == .loaded {
+                if attachmentModel.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
                 }
@@ -85,7 +85,7 @@ struct AttachmentLoadButton: View  {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
 #if !os(visionOS)
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor)
 #endif
                 case .loading:
                     ProgressView()
@@ -95,7 +95,7 @@ struct AttachmentLoadButton: View  {
                     Image(systemName: "exclamationmark.circle.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                         .background(Color.clear)
                 }
             }

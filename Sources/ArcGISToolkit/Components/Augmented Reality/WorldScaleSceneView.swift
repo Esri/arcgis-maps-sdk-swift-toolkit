@@ -144,7 +144,7 @@ public struct WorldScaleSceneView: View {
                         .padding()
                 }
                 .background(.regularMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(.rect(cornerRadius: 10))
                 .disabled(!initialCameraIsSet)
                 .padding()
                 .padding(.vertical)

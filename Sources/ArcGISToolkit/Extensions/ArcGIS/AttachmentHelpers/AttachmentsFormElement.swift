@@ -14,13 +14,12 @@
 
 import ArcGIS
 
-@available(visionOS, unavailable)
 extension AttachmentsFormElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
     ///
     /// - Note: Currently, ``AttachmentsFormElement`` only supports
     /// ``AttachmentsFeatureElementDisplayType/preview``.
-    public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
+    var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
         AttachmentsFeatureElementDisplayType.preview
     }
     
@@ -28,14 +27,14 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
     ///
     /// The feature attachments associated with this element.
     /// This property will be empty if the element has not yet been evaluated.
-    public var featureAttachments: [FeatureAttachment] {
+    var featureAttachments: [FeatureAttachment] {
         get async throws {
             try await attachments
         }
     }
     
     /// A descriptive label that appears with the element. Can be an empty string.
-    public var title: String {
+    var title: String {
         get {
             label
         }
