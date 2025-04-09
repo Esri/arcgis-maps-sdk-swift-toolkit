@@ -54,7 +54,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Map load error!",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,

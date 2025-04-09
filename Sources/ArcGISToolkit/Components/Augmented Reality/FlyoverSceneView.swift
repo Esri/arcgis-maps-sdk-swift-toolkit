@@ -136,6 +136,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
+***REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.realistic)
 #if os(iOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = ARPositionalTrackingConfiguration()

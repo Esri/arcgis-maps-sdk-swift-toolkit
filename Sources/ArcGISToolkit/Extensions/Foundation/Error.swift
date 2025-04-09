@@ -1,4 +1,4 @@
-***REMOVED*** Copyright 2022 Esri
+***REMOVED*** Copyright 2025 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -12,10 +12,17 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
+import Foundation
 
-***REMOVED***/ A `PreferenceKey` that specifies a size.
-struct SizePreferenceKey: PreferenceKey {
-***REMOVED***static let defaultValue: CGSize = .zero
-***REMOVED***static func reduce(value: inout CGSize, nextValue: () -> CGSize) {***REMOVED***
+extension Error {
+***REMOVED******REMOVED***/ A Boolean value indicating if the error represents an error signifying
+***REMOVED******REMOVED***/ that no internet connection is available.
+***REMOVED***var isNoInternetConnectionError: Bool {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case let urlError as URLError:
+***REMOVED******REMOVED******REMOVED***urlError.code == .notConnectedToInternet
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED***
+***REMOVED***
 ***REMOVED***

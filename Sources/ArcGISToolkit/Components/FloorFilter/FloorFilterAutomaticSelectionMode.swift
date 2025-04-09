@@ -13,7 +13,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***/ Defines automatic selection behavior.
-@available(visionOS, unavailable)
 public enum FloorFilterAutomaticSelectionMode: Sendable {
 ***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
 ***REMOVED******REMOVED***/ navigates away.

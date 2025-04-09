@@ -16,7 +16,6 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-@available(macCatalyst, unavailable)
 struct FlyoverExampleView: View {
 ***REMOVED***@State private var scene = Scene(
 ***REMOVED******REMOVED***item: PortalItem(

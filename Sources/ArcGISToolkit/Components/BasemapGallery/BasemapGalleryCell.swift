@@ -26,10 +26,9 @@ struct BasemapGalleryCell: View {
 ***REMOVED***let onSelection: () -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
-***REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***onSelection()
-***REMOVED***, label: {
+***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the thumbnail, if available.
@@ -38,10 +37,9 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeOverlay()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 8))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(make3DBadge(), alignment: .topLeading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(makeOverlay())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.all, 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -54,45 +52,61 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the name of the item.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.name ?? "")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Font.custom("AvenirNext-Regular", fixedSize: 12))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.basemapGallery)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(item.hasError ? .secondary : .primary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(item.hasError ? .secondary : .primary)
 ***REMOVED******REMOVED***
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: 12))
 ***REMOVED******REMOVED******REMOVED***.hoverEffect()
 #endif
-***REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.disabled(item.isBasemapLoading)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a badge which indicates the basemap supports 3D visualization.
+***REMOVED******REMOVED***/ - Returns: A 3D badge overlay view.
+***REMOVED***@ViewBuilder private func make3DBadge() -> some View {
+***REMOVED******REMOVED***if item.basemap.is3D {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"3D",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A reference to 3D content."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.font(.basemapGallery)
+***REMOVED******REMOVED******REMOVED***.foregroundStyle(item.hasError ? .secondary : .primary)
+***REMOVED******REMOVED******REMOVED***.padding(2.5)
+***REMOVED******REMOVED******REMOVED***.background(Material.regular)
+***REMOVED******REMOVED******REMOVED***.cornerRadius(5)
+***REMOVED******REMOVED******REMOVED***.padding(2.5)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an overlay which is either a selection outline or an error icon.
 ***REMOVED******REMOVED***/ - Returns: A thumbnail overlay view.
-***REMOVED***private func makeOverlay() -> some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if item.hasError {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For a white background behind the exclamation mark.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 16, height: 16)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 32, height: 32)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED***@ViewBuilder private func makeOverlay() -> some View {
+***REMOVED******REMOVED***if item.hasError {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For a white background behind the exclamation mark.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 16, height: 16)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 32, height: 32)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.all, -10)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: isSelected ? 2 : 0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.accentColor)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding(.all, -10)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: isSelected ? 2 : 0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -108,7 +122,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***trailing: 12)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
-***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
+***REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 8))
 ***REMOVED***
 ***REMOVED***
 
@@ -117,5 +131,11 @@ extension BasemapGalleryItem {
 ***REMOVED***var hasError: Bool {
 ***REMOVED******REMOVED***loadBasemapError != nil ||
 ***REMOVED******REMOVED***spatialReferenceStatus == .noMatch
+***REMOVED***
+***REMOVED***
+
+private extension Font {
+***REMOVED***static var basemapGallery: Self {
+***REMOVED******REMOVED***custom("AvenirNext-Regular", fixedSize: 12)
 ***REMOVED***
 ***REMOVED***

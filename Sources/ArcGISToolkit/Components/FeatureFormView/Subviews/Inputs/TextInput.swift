@@ -16,7 +16,6 @@
 ***REMOVED***
 
 ***REMOVED***/ A view for text input.
-@available(visionOS, unavailable)
 struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -60,19 +59,6 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
-***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
-***REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
@@ -80,19 +66,19 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fullScreenTextInputIsPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $scannerIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CodeScanner(code: $text, isPresented: $scannerIsPresented)
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
@@ -120,15 +106,30 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: .horizontal
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** No need for hover effect since it will be applied
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** properly at 'formInputStyle'.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffectDisabled()
+#endif
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isFocused ? element : nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -139,7 +140,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty,
 ***REMOVED******REMOVED******REMOVED***   !isBarcodeScanner,
 ***REMOVED******REMOVED******REMOVED***   !element.isMultiline {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** instantaneous focus to enable validation.
@@ -150,6 +151,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***if isBarcodeScanner {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
@@ -163,8 +165,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Scan Button")
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED***.formInputStyle(isTappable: true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
@@ -201,7 +204,6 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED******REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
 ***REMOVED******REMOVED***/
@@ -215,7 +217,7 @@ private extension TextInput {
 ***REMOVED******REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the text field is focused.
-***REMOVED******REMOVED***@FocusState private var textFieldIsFocused: Bool
+***REMOVED******REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED******REMOVED***let element: FieldFormElement
@@ -229,8 +231,10 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***RepresentedUITextView(initialText: text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
@@ -238,9 +242,12 @@ private extension TextInput {
 ***REMOVED******REMOVED*** onTextViewDidEndEditing: { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
+***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
+***REMOVED******REMOVED******REMOVED******REMOVED***isFocused = true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isFocused ? element : nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
@@ -248,7 +255,6 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 private extension TextInput {
 ***REMOVED***private var isBarcodeScanner: Bool {
 ***REMOVED******REMOVED***element.input is BarcodeScannerFormInput

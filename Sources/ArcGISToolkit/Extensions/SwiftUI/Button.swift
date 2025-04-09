@@ -1,4 +1,4 @@
-***REMOVED*** Copyright 2022 Esri
+***REMOVED*** Copyright 2025 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -14,31 +14,28 @@
 
 ***REMOVED***
 
-***REMOVED***/ A modifier which "selects" a button. If selected, the button will be displayed with the
-***REMOVED***/ `BorderedProminentButtonStyle`. Otherwise, the button will be displayed with the
-***REMOVED***/ `BorderedButtonStyle`.
-struct ButtonSelectedModifier: ViewModifier {
-***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
-***REMOVED***let isSelected: Bool
-***REMOVED***
-***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(BorderedProminentButtonStyle())
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(BorderedButtonStyle())
+extension Button<Text> {
+***REMOVED******REMOVED***/ Returns a button with the title "Cancel" and the given action.
+***REMOVED******REMOVED***/ - Parameter action: The action to perform when the user triggers the
+***REMOVED******REMOVED***/ button.
+***REMOVED******REMOVED***/ - Returns: A button.
+***REMOVED***static nonisolated func cancel(action: @escaping @MainActor () -> Void) -> Self {
+***REMOVED******REMOVED***Button(role: .cancel, action: action) {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Title for a button that cancels an action."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-extension Button {
-***REMOVED******REMOVED***/ Button modifier used to denote the button is selected.
-***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the button is selected, `false` otherwise.
-***REMOVED******REMOVED***/ - Returns: The modified button.
-***REMOVED***func selected(
-***REMOVED******REMOVED***_ isSelected: Bool = false
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***modifier(ButtonSelectedModifier(isSelected: isSelected))
+***REMOVED******REMOVED***/ Returns a button with the title "Done" and the given action.
+***REMOVED******REMOVED***/ - Parameter action: The action to perform when the user triggers the
+***REMOVED******REMOVED***/ button.
+***REMOVED******REMOVED***/ - Returns: A button.
+***REMOVED***static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
+***REMOVED******REMOVED***Button(action: action) {
+***REMOVED******REMOVED******REMOVED***Text.done
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

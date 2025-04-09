@@ -16,7 +16,6 @@
 import UIKit
 
 ***REMOVED***/ A starting point of a utility network trace.
-@available(visionOS, unavailable)
 public struct UtilityNetworkTraceStartingPoint: Sendable {
 ***REMOVED******REMOVED***/ The geo element to be used as a starting point.
 ***REMOVED***var geoElement: GeoElement
@@ -29,6 +28,9 @@ public struct UtilityNetworkTraceStartingPoint: Sendable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The symbol of the starting point as shown on the map.
 ***REMOVED***var image: UIImage?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the starting point was added externally (programmatically).
+***REMOVED***var isExternalStartingPoint = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A point on the map indicated as the location of this starting point. This can be used to indicate a
 ***REMOVED******REMOVED***/ specific location along an edge element.
@@ -47,7 +49,6 @@ public struct UtilityNetworkTraceStartingPoint: Sendable {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension UtilityNetworkTraceStartingPoint: Hashable {
 ***REMOVED***public static func == (lhs: UtilityNetworkTraceStartingPoint, rhs: UtilityNetworkTraceStartingPoint) -> Bool {
 ***REMOVED******REMOVED***lhs.id == rhs.id

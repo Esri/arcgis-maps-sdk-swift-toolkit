@@ -65,7 +65,6 @@
 ***REMOVED***/ `Info.plist` file.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
-@available(visionOS, unavailable)
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
@@ -75,6 +74,9 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
+***REMOVED***var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -123,11 +125,11 @@ public struct FeatureFormView: View {
 #if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
+***REMOVED******REMOVED***.environment(\.validationErrorVisibility, validationErrorVisibility)
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension FeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.

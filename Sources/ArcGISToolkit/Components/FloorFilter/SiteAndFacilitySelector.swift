@@ -18,7 +18,6 @@
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 ***REMOVED***/
 ***REMOVED***/ If the floor aware data contains only one site, the selector opens directly to the facilities list.
-@available(visionOS, unavailable)
 struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding var isPresented: Bool
@@ -32,7 +31,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the user is typing into the text field.
 ***REMOVED***@FocusState var textFieldIsFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the user tapped the "All sites" button.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user tapped the "All Sites" button.
 ***REMOVED***@State private var allSitesIsSelected = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The site or facility filter phrase.
@@ -48,12 +47,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***header
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
 ***REMOVED******REMOVED******REMOVED***if (facilityListIsVisible && matchingFacilities.isEmpty) || (!facilityListIsVisible && matchingSites.isEmpty) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.noMatchesFound)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: .infinity)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED*** else if facilityListIsVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilityList
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(.move(edge: .trailing))
@@ -78,25 +79,28 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***var facilityList: some View {
 ***REMOVED******REMOVED***ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSitesIsSelected, let siteName = facility.site?.name {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(siteName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : Color.clear)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .compact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSitesIsSelected, let siteName = facility.site?.name {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(siteName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+#endif
 ***REMOVED******REMOVED******REMOVED***.onChange(viewModel.selection) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let floorFacility = viewModel.selection?.facility {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
@@ -125,7 +129,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused)
@@ -135,13 +139,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if textFieldIsFocused && !query.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query.removeAll()
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "x.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding(5)
@@ -164,7 +164,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***userDidBackOutToSiteList = true
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.opacity(backButtonIsVisible ? 1 : 0)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***Group {
@@ -176,14 +179,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.sites
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***XButton(.dismiss) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.font(.title3)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view containing a list of the site names.
@@ -198,7 +199,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED***.listStyle(.plain)
+#endif
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***allSitesIsSelected = false
 ***REMOVED***
@@ -214,7 +217,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension SiteAndFacilitySelector {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the back button in the header navigations controls is visible..
 ***REMOVED***var backButtonIsVisible: Bool {
@@ -262,7 +264,7 @@ extension SiteAndFacilitySelector {
 private extension String {
 ***REMOVED***static var allSites: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "All sites",
+***REMOVED******REMOVED******REMOVED***localized: "All Sites",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED***)

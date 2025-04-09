@@ -1,4 +1,4 @@
-***REMOVED***
+***REMOVED*** Copyright 2025 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -14,13 +14,9 @@
 
 ***REMOVED***
 
-struct ExampleView: View {
-***REMOVED******REMOVED***/ The example to display in the view.
-***REMOVED***var example: Example
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***example.makeBody()
-***REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+extension Basemap {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the basemap supports 3D visualization.
+***REMOVED***var is3D: Bool {
+***REMOVED******REMOVED***baseLayers.contains(where: { $0 is ArcGISSceneLayer ***REMOVED***)
 ***REMOVED***
 ***REMOVED***

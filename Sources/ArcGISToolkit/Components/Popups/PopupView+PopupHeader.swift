@@ -1,4 +1,4 @@
-***REMOVED***
+***REMOVED*** Copyright 2024 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
 
 ***REMOVED***
 
-struct AnyExample<Content: View> {
-***REMOVED***var name: String
-***REMOVED***var content: () -> Content
+public extension PopupView {
+***REMOVED******REMOVED***/ Specifies the visibility of the popup header.
+***REMOVED******REMOVED***/ - Parameter visibility: The preferred visibility of the popup header.
+***REMOVED******REMOVED***/ - Since: 200.7
+***REMOVED***func header(_ visibility: Visibility) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.headerVisibility = visibility
+***REMOVED******REMOVED***return copy
 ***REMOVED***
-***REMOVED***init(_ name: String, content: @autoclosure @escaping () -> Content) {
-***REMOVED******REMOVED***self.name = name
-***REMOVED******REMOVED***self.content = content
-***REMOVED***
-***REMOVED***
-
-extension AnyExample: Example {
-***REMOVED***func makeBody() -> AnyView { AnyView(content()) ***REMOVED***
 ***REMOVED***

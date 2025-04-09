@@ -16,7 +16,7 @@
 import UIKit
 
 ***REMOVED***/ The type of an attachment in a FeatureAttachment.
-public enum FeatureAttachmentKind: Sendable {
+enum FeatureAttachmentKind: Sendable {
 ***REMOVED******REMOVED***/ An attachment of another type.
 ***REMOVED***case other
 ***REMOVED******REMOVED***/ An image.
@@ -29,7 +29,7 @@ public enum FeatureAttachmentKind: Sendable {
 ***REMOVED***case audio
 ***REMOVED***
 
-public protocol FeatureAttachment: Loadable {
+protocol FeatureAttachment: Loadable {
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***var featureAttachmentKind: FeatureAttachmentKind { get ***REMOVED***
 ***REMOVED***
@@ -64,6 +64,18 @@ public protocol FeatureAttachment: Loadable {
 ***REMOVED******REMOVED***/   - height: Height of the thumbnail.
 ***REMOVED******REMOVED***/ - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
 ***REMOVED***func makeThumbnail(width: Int, height: Int) async throws -> UIImage
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the metadata for the instance asynchronously.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ A workaround providing conforming types an opportunity to call their load method directly.
+***REMOVED******REMOVED***/ - Bug: Apollo #1058
+***REMOVED***func _load() async throws
+***REMOVED***
+***REMOVED******REMOVED***/ The load status.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ A workaround providing conforming types an opportunity to access their load status directly.
+***REMOVED******REMOVED***/ - Bug: Apollo #1058
+***REMOVED***var _loadStatus: LoadStatus { get ***REMOVED***
 ***REMOVED***
 
 extension FeatureAttachmentKind {

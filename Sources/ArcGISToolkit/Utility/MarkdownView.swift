@@ -22,7 +22,7 @@ internal import Markdown
 ***REMOVED***/  - Code Block
 ***REMOVED***/  - Emphasis
 ***REMOVED***/  - Heading
-***REMOVED***/***REMOVED***Horizontal Rule
+***REMOVED***/  - Horizontal Rule
 ***REMOVED***/  - Image
 ***REMOVED***/  - Inline Code
 ***REMOVED***/  - Link
@@ -241,11 +241,10 @@ struct Visitor: MarkupVisitor {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***mutating func visitText(_ text: Markdown.Text) -> Result {
-***REMOVED******REMOVED***if let link = text.linkAncestor {
-***REMOVED******REMOVED******REMOVED***let wrappedLink = "[\(text.plainText)](\(link.destination ?? ""))"
-***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(.init(wrappedLink)))
+***REMOVED******REMOVED***return if let destination = text.linkAncestor?.destination {
+***REMOVED******REMOVED******REMOVED***.other(AnyView(Link(text.plainText, destination: URL(string: destination)!)))
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return .text(SwiftUI.Text(text.plainText))
+***REMOVED******REMOVED******REMOVED***.text(SwiftUI.Text(text.plainText))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

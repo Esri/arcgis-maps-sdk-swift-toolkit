@@ -1,0 +1,63 @@
+{
+  "images" : [
+***REMOVED***{
+***REMOVED***  "idiom" : "universal",
+***REMOVED***  "platform" : "ios",
+***REMOVED***  "size" : "1024x1024"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "16x16"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "16x16"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "32x32"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "32x32"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "128x128"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "128x128"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "256x256"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "256x256"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "512x512"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "mac",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "512x512"
+***REMOVED***
+  ],
+  "info" : {
+***REMOVED***"author" : "xcode",
+***REMOVED***"version" : 1
+  ***REMOVED***
+***REMOVED***

@@ -17,7 +17,6 @@ import Combine
 import Foundation
 ***REMOVED***
 
-@available(visionOS, unavailable)
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
 ***REMOVED******REMOVED*** MARK: Published Properties
 ***REMOVED***
@@ -68,15 +67,13 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map's utility networks.
-***REMOVED***var networks: [UtilityNetwork] {
-***REMOVED******REMOVED***return map.utilityNetworks
-***REMOVED***
+***REMOVED***var networks: [UtilityNetwork] { map.utilityNetworks ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The overlay on which trace graphics will be drawn.
-***REMOVED***private var graphicsOverlay: GraphicsOverlay
+***REMOVED***private let graphicsOverlay: GraphicsOverlay
 ***REMOVED***
 ***REMOVED******REMOVED***/ A map containing one or more utility networks.
-***REMOVED***private var map: Map
+***REMOVED***private let map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starting points programmatically provided to the trace tool.
 ***REMOVED***var externalStartingPoints = [UtilityNetworkTraceStartingPoint]() {
@@ -120,18 +117,18 @@ import Foundation
 ***REMOVED***
 ***REMOVED******REMOVED***/ Adds new starting points to the pending trace.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - screenPoint: A point on the map in screen coordinates.
 ***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
 ***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ An identify operation will run on each layer in the network. Every element returned from
 ***REMOVED******REMOVED***/ each layer will be added as a new starting point.
-***REMOVED***func addStartingPoints(at screenPoint: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
+***REMOVED***func addStartingPoints(mapPoint: Point, with proxy: MapViewProxy) async {
 ***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { [weak self] taskGroup in
 ***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***for layer in network?.layers ?? [] {
 ***REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask { @MainActor @Sendable in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let screenPoint = proxy.screenPoint(fromLocation: mapPoint),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for element in result.geoElements {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.processAndAdd(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
@@ -418,10 +415,20 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save the starting points used in this trace
+***REMOVED******REMOVED***let previousStartingPoints = pendingTrace.startingPoints
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save the completed trace and select it
 ***REMOVED******REMOVED***completedTraces.append(pendingTrace)
 ***REMOVED******REMOVED***selectedTraceIndex = completedTraces.count - 1
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create and configure a new trace
 ***REMOVED******REMOVED***pendingTrace = Trace()
-***REMOVED******REMOVED***await addExternalStartingPoints()
+***REMOVED******REMOVED***for startingPoint in previousStartingPoints {
+***REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
@@ -438,7 +445,14 @@ import Foundation
 ***REMOVED***
 ***REMOVED******REMOVED***/ Adds programatic starting points to the pending trace.
 ***REMOVED***private func addExternalStartingPoints() async {
-***REMOVED******REMOVED***for startingPoint in externalStartingPoints {
+***REMOVED******REMOVED***pendingTrace.startingPoints.forEach { startingPoint in
+***REMOVED******REMOVED******REMOVED***if startingPoint.isExternalStartingPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED***deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***for var startingPoint in externalStartingPoints {
+***REMOVED******REMOVED******REMOVED***startingPoint.isExternalStartingPoint = true
 ***REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
 ***REMOVED***
 ***REMOVED***
@@ -490,7 +504,6 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 
-@available(visionOS, unavailable)
 extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***/ Finds the location on a polyline nearest the point.
 ***REMOVED******REMOVED***/ - Parameters:

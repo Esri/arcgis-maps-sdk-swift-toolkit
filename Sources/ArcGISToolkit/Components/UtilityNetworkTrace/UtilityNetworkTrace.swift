@@ -61,7 +61,6 @@
 ***REMOVED***/ To see the `UtilityNetworkTrace` in action, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [UtilityNetworkTraceExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `UtilityNetworkTrace` see the <doc:UtilityNetworkTraceTutorial>.
-@available(visionOS, unavailable)
 public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
 ***REMOVED***private var mapViewProxy: MapViewProxy?
@@ -112,6 +111,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the "Delete All Starting Points" confirmation is presented.
+***REMOVED***@State private var deleteAllStartingPointsConfirmationIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
 ***REMOVED***@State private var shouldZoomOnTraceCompletion = true
 ***REMOVED***
@@ -131,14 +133,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED***@Binding private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
-***REMOVED******REMOVED***/ Acts as the point of identification for items tapped in the utility network.
-***REMOVED***@Binding private var screenPoint: CGPoint?
-***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED***@Binding private var mapPoint: Point?
-***REMOVED***
-***REMOVED******REMOVED***/ Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
-***REMOVED***@Binding private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Subviews
 ***REMOVED***
@@ -183,38 +179,38 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(title: assetGroupName)
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: \.key
-***REMOVED******REMOVED******REMOVED******REMOVED***) { (name, elements) in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(elements, id: \.globalID) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.feature(for: element),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let geometry = feature.geometry {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateViewpoint(to: geometry.extent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Object ID: \(element.objectID, format: .number.grouping(.never))",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A string identifying a utility network object."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "scope")
+***REMOVED******REMOVED******REMOVED***List(
+***REMOVED******REMOVED******REMOVED******REMOVED***assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
+***REMOVED******REMOVED******REMOVED******REMOVED***id: \.key
+***REMOVED******REMOVED******REMOVED***) { (name, elements) in
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(elements, id: \.globalID) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.feature(for: element),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let geometry = feature.geometry {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateViewpoint(to: geometry.extent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Object ID: \(element.objectID, format: .number.grouping(.never))",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A string identifying a utility network object."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "scope"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elements.count, format: .number)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elements.count, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listItemTint(.monochrome)
+#endif
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -226,11 +222,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Text(String.noConfigurationsAvailable)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations.sorted { $0.name < $1.name ***REMOVED***, id: \.name) { configuration in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(configuration.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setPendingTrace(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(configuration.name)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED******REMOVED***
@@ -240,13 +234,14 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays the list of available networks.
 ***REMOVED***@ViewBuilder private var networksList: some View {
 ***REMOVED******REMOVED***ForEach(viewModel.networks, id: \.name) { network in
-***REMOVED******REMOVED******REMOVED***Text(network.name)
-***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setNetwork(network)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setNetwork(network)
+***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(network.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -283,7 +278,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section(String.startingPointsTitle) {
+***REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
@@ -306,6 +301,35 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** header: {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.startingPointsTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.deleteAllStartingPoints, systemImage: "trash") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deleteAllStartingPointsConfirmationIsPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+#endif
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.iconOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.confirmationDialog(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.deleteAllStartingPointsQuestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $deleteAllStartingPointsConfirmationIsPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleVisibility: .visible
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.deleteButtonLabel, role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for startingPoint in viewModel.pendingTrace.startingPoints {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***externalStartingPoints.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Override default uppercase capitalization for list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** section headers on iOS and iPadOS.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
@@ -323,7 +347,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.trailing)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
+#if os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.hoverEffect, .rect(cornerRadius: 12))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffect()
+#else
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.blue)
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
@@ -411,20 +440,23 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroupName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroupName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.blue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(.rect)
+#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.makeResultsLabel(viewModel.selectedTrace?.elementResults.count ?? 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -444,7 +476,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.functionType.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = item.result as? Double {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(result, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
@@ -459,7 +491,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.makeResultsLabel(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -522,6 +554,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Button(String.deleteButtonLabel, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let startingPoint = selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***externalStartingPoints.removeAll { $0 == startingPoint ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -558,18 +591,23 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.pendingTrace.startingPoints.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0 == selectedStartingPoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***?.utilityElement?.assetType.terminalConfiguration?.terminals ?? [], id: \.self) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.startingPoints
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { $0 == selectedStartingPoint ***REMOVED***)?
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.utilityElement?.assetType.terminalConfiguration?.terminals ?? [],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: \.self
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.blue)
+#endif
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section(String.attributesSectionTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key***REMOVED***)), id: \.key) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack{
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.key)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.value as? String ?? "")
@@ -614,25 +652,20 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
+***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points. This
+***REMOVED******REMOVED***/   property will not modify interactively added starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
-***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
-***REMOVED******REMOVED***_screenPoint = screenPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
-***REMOVED******REMOVED***_viewpoint = viewpoint
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
@@ -663,8 +696,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: extent)
 ***REMOVED******REMOVED***if let mapViewProxy {
 ***REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -696,18 +727,16 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(screenPoint) { newScreenPoint in
+***REMOVED******REMOVED***.onChange(mapPoint) { newMapPoint in
 ***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
-***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let screenPoint = newScreenPoint else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = newMapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoints(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: screenPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -785,16 +814,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ - Parameter title: The button's title.
 ***REMOVED******REMOVED***/ - Parameter action: The action to be performed.
 ***REMOVED******REMOVED***/ - Returns: The configured button.
-***REMOVED***private func makeBackButton(title: String, _ action: @escaping () -> Void) -> some View {
-***REMOVED******REMOVED***Button { action() ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.backward")
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED***private func makeBackButton(title: String, action: @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***Button(title, systemImage: "chevron.backward", action: action)
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a section header.
@@ -862,6 +885,22 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***localized: "Color",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label in reference to the color used to display utility trace result graphics."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var deleteAllStartingPoints: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Delete All Starting Points",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button used to delete all starting points on a pending utility network trace."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var deleteAllStartingPointsQuestion: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Delete all starting points?",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The title of the dialogue confirming deletion of all points."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -1027,6 +1066,53 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***localized: "Zoom To Result",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A user option specifying that a map should automatically change to show completed trace results."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+public extension UtilityNetworkTrace /* Deprecated */ {
+***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
+***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
+***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
+***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
+***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points. This
+***REMOVED******REMOVED***/   property will not modify interactively added starting points.
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.7.
+***REMOVED***@available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
+***REMOVED***init(
+***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
+***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***mapPoint: Binding<Point?>,
+***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
+***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
+***REMOVED***) {
+***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
+***REMOVED******REMOVED***_activeDetent = .constant(nil)
+***REMOVED******REMOVED***_mapPoint = mapPoint
+***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
+***REMOVED******REMOVED***_externalStartingPoints = startingPoints
+***REMOVED******REMOVED***_viewModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***startingPoints: startingPoints.wrappedValue
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private extension Text {
+***REMOVED***static func makeResultsLabel(_ results: Int) -> Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"^[\(results) Results](inflect: true)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating the number of results of a utility network trace."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
