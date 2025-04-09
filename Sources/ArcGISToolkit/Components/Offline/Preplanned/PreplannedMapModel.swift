@@ -22,7 +22,7 @@ internal import os
 @MainActor
 class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
-    let preplannedMapArea: PreplannedMapAreaProtocol
+    let preplannedMapArea: any PreplannedMapAreaProtocol
     
     /// The ID of the preplanned map area.
     let preplannedMapAreaID: Item.ID
