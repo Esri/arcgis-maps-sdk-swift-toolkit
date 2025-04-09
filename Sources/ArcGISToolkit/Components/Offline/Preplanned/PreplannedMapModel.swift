@@ -22,7 +22,7 @@ internal import os
 @MainActor
 class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
-***REMOVED***let preplannedMapArea: PreplannedMapAreaProtocol
+***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the preplanned map area.
 ***REMOVED***let preplannedMapAreaID: Item.ID
