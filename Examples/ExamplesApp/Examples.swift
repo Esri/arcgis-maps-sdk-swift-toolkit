@@ -15,18 +15,6 @@
 ***REMOVED***
 
 struct Examples: View {
-***REMOVED***enum ListItem {
-***REMOVED******REMOVED***case category(_ name: String, examples: [Example])
-***REMOVED******REMOVED***case example(Example)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var name: String {
-***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .category(let name, _): name
-***REMOVED******REMOVED******REMOVED***case .example(let example): example.name
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The list items to display.
 ***REMOVED***let listItems = makeListItems()
 ***REMOVED***
@@ -85,17 +73,17 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***static func makeUncategorizedExamples() -> [ListItem] {
 ***REMOVED******REMOVED***return [
-***REMOVED******REMOVED******REMOVED***.example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Bookmarks", content: BookmarksExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Compass", content: CompassExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Feature Form", content: FeatureFormExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Floating Panel", content: FloatingPanelExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Floor Filter", content: FloorFilterExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Overview Map", content: OverviewMapExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Popup", content: PopupExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Scalebar", content: ScalebarExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Search", content: SearchExampleView())),
-***REMOVED******REMOVED******REMOVED***.example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
+***REMOVED******REMOVED******REMOVED***.example("Basemap Gallery", content: BasemapGalleryExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Bookmarks", content: BookmarksExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Feature Form", content: FeatureFormExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Floating Panel", content: FloatingPanelExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Floor Filter", content: FloorFilterExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Overview Map", content: OverviewMapExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Popup", content: PopupExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Scalebar", content: ScalebarExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Search", content: SearchExampleView()),
+***REMOVED******REMOVED******REMOVED***.example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***
 ***REMOVED***
