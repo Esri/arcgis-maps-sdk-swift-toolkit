@@ -163,7 +163,9 @@ struct OnDemandConfigurationView: View {
                     mapIsReady = true
                 }
             }
-            .preventMapInteractionFromMovingSheet()
+            .highPriorityGesture(DragGesture())
+            .highPriorityGesture(RotateGesture())
+            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
@@ -267,23 +269,6 @@ struct OnDemandConfigurationView: View {
             .padding()
         }
         .padding()
-    }
-}
-
-private extension View {
-    /// Prevent sheet from moving when interacting with map view.
-    @ViewBuilder
-    func preventMapInteractionFromMovingSheet() -> some View {
-        if #available(iOS 17.0, *) {
-            self
-                .highPriorityGesture(DragGesture())
-                .highPriorityGesture(RotateGesture())
-                .interactiveDismissDisabled()
-        } else {
-            self
-                .highPriorityGesture(DragGesture())
-                .interactiveDismissDisabled()
-        }
     }
 }
 
