@@ -294,4 +294,40 @@ class BasemapGalleryViewModelTests: XCTestCase {
         
         XCTAssertEqual(scene.loadStatus, .loaded)
     }
+    
+    @MainActor
+    func testCase_2_5() async throws {
+        let basemap = Basemap(style: .arcGISLightGray)
+        let scene = Scene(basemap: basemap)
+        let portal = Portal.arcGISOnline(connection: .anonymous)
+        let viewModel = BasemapGalleryViewModel(scene, portal: portal)
+        XCTAssertIdentical(scene, viewModel.geoModel)
+        
+        let item = try await viewModel.$currentItem.dropFirst().first
+        let currentItem = try XCTUnwrap(item)
+        XCTAssertIdentical(currentItem?.basemap, basemap)
+        
+        XCTAssertIdentical(viewModel.portal, portal)
+        
+        let items = try await viewModel.$items.dropFirst().first
+        let basemapGalleryItems = try XCTUnwrap(items)
+        XCTAssertFalse(basemapGalleryItems.isEmpty)
+        XCTAssertEqual(basemapGalleryItems.count, 39)
+        
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for index in basemapGalleryItems.indices {
+                group.addTask {
+                    let item = basemapGalleryItems[index]
+                    try await item.basemap.load()
+                    // With a Scene, only the first 8 basemaps should be 3D.
+                    if index <= 7 {
+                        XCTAssertTrue(item.basemap.is3D)
+                    } else {
+                        XCTAssertFalse(item.basemap.is3D)
+                    }
+                }
+            }
+            try await group.waitForAll()
+        }
+    }
 }
