@@ -259,4 +259,22 @@ class BasemapGalleryViewModelTests: XCTestCase {
             defaultBasemapGalleryItems.contains(item)
         }))
     }
+    
+    @MainActor
+    func testCase_2_4() async throws {
+        let basemap = Basemap(style: .arcGISLightGray)
+        let scene = Scene(basemap: basemap)
+        let viewModel = BasemapGalleryViewModel(geoModel: scene)
+        XCTAssertIdentical(scene, viewModel.geoModel)
+        
+        let item = try await viewModel.$currentItem.dropFirst().first
+        let currentItem = try XCTUnwrap(item)
+        XCTAssertIdentical(currentItem?.basemap, basemap)
+        
+        let items = try await viewModel.$items.dropFirst().first
+        let basemapGalleryItems = try XCTUnwrap(items)
+        XCTAssertFalse(basemapGalleryItems.isEmpty)
+        
+        XCTAssertEqual(scene.loadStatus, .loaded)
+    }
 }
