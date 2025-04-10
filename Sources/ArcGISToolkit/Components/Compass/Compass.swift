@@ -131,21 +131,16 @@ private extension View {
 ***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***@ViewBuilder
 ***REMOVED***func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***if enabled {
-***REMOVED******REMOVED******REMOVED******REMOVED***sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (!oldValue.isZero && newValue.isZero) ||
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(oldValue.isZero && !newValue.isZero) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***if enabled {
+***REMOVED******REMOVED******REMOVED***sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***if (!oldValue.isZero && newValue.isZero) ||
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(oldValue.isZero && !newValue.isZero) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***self
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Fallback on earlier versions
 ***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
