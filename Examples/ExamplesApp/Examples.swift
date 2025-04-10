@@ -20,7 +20,6 @@ struct Examples: View {
     
     /// The visibility of the navigation split view's column.
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
-    
     /// The example selected by the user.
     @State private var selectedExample: Example?
     
