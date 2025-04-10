@@ -131,21 +131,16 @@ private extension View {
     @available(visionOS, unavailable)
     @ViewBuilder
     func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
-        if #available(iOS 17.0, *) {
-            if enabled {
-                sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
-                    if (!oldValue.isZero && newValue.isZero) ||
-                        (oldValue.isZero && !newValue.isZero) {
-                        return true
-                    } else {
-                        return false
-                    }
+        if enabled {
+            sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+                if (!oldValue.isZero && newValue.isZero) ||
+                    (oldValue.isZero && !newValue.isZero) {
+                    return true
+                } else {
+                    return false
                 }
-            } else {
-                self
             }
         } else {
-            // Fallback on earlier versions
             self
         }
     }
