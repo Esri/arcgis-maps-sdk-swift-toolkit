@@ -25,6 +25,7 @@ class OnDemandMapModelStatusTests: XCTestCase {
         XCTAssertFalse(Status.downloaded.allowsDownload)
         XCTAssertFalse(Status.downloadFailure(CancellationError()).allowsDownload)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
+        XCTAssertFalse(Status.downloadCancelled.allowsDownload)
     }
     
     func testIsDownloaded() {
@@ -33,5 +34,6 @@ class OnDemandMapModelStatusTests: XCTestCase {
         XCTAssertTrue(Status.downloaded.isDownloaded)
         XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
+        XCTAssertFalse(Status.downloadCancelled.isDownloaded)
     }
 }
