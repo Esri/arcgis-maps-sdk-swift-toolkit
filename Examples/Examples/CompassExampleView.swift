@@ -42,12 +42,7 @@ private extension Compass {
 ***REMOVED******REMOVED***/ when sensory feedback is available.
 ***REMOVED***@ViewBuilder
 ***REMOVED***func snapToZeroSensoryFeedbackIfAvailable() -> some View {
-***REMOVED******REMOVED***if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED***snapToZeroSensoryFeedback()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Fallback on earlier versions
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED***
+***REMOVED******REMOVED***snapToZeroSensoryFeedback()
 ***REMOVED***
 ***REMOVED***
 
