@@ -136,20 +136,20 @@ public struct OverviewMap: View {
             dataModel.graphic.geometry = visibleArea
             dataModel.graphic.symbol = symbol
         }
-        .onChange(visibleArea) { visibleArea in
+        .onChange(of: visibleArea) { _, visibleArea in
             if let visibleArea = visibleArea {
                 dataModel.graphic.geometry = visibleArea
             }
         }
-        .onChange(viewpoint) { viewpoint in
+        .onChange(of: viewpoint) { _, viewpoint in
             if visibleArea == nil,
                let viewpoint = viewpoint,
                let point = viewpoint.targetGeometry as? Point {
                 dataModel.graphic.geometry = point
             }
         }
-        .onChange(symbol) {
-            dataModel.graphic.symbol = $0
+        .onChange(of: symbol) { _, symbol in
+            dataModel.graphic.symbol = symbol
         }
     }
     

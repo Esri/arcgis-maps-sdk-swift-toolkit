@@ -63,7 +63,7 @@ struct Carousel<Content: View>: View {
             .onAppear {
                 updateCellSizeForContainer(geometry.size.width)
             }
-            .onChange(geometry.size.width) { width in
+            .onChange(of: geometry.size.width) { _, width in
                 updateCellSizeForContainer(width)
             }
         }

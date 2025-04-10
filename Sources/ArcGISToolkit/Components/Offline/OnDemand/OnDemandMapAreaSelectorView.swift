@@ -62,7 +62,7 @@ struct OnDemandMapAreaSelectorView: View {
                 .edgesIgnoringSafeArea(.all)
                 .allowsHitTesting(false)
                 .overlay { handles }
-                .onChange(safeAreaInsets) { _ in
+                .onChange(of: safeAreaInsets) { _, _ in
                     updateMaxRect(geometry: geometry)
                 }
         }

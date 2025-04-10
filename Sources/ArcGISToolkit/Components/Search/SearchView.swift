@@ -244,22 +244,22 @@ public struct SearchView: View {
             onQueryChangedAction?(viewModel.currentQuery)
             viewModel.updateSuggestions()
         }
-        .onChange(viewModel.selectedResult) { _ in
+        .onChange(of: viewModel.selectedResult) { _, _ in
             searchFieldIsFocused = false
         }
-        .onChange(viewModel.currentSuggestion) { _ in
+        .onChange(of: viewModel.currentSuggestion) { _, _ in
             searchFieldIsFocused = false
         }
-        .onChange(geoViewExtent) { _ in
+        .onChange(of: geoViewExtent) { _, _ in
             viewModel.geoViewExtent = geoViewExtent
         }
-        .onChange(isGeoViewNavigating) { _ in
+        .onChange(of: isGeoViewNavigating) { _, _ in
             viewModel.isGeoViewNavigating = isGeoViewNavigating
         }
-        .onChange(queryCenter) { _ in
+        .onChange(of: queryCenter) { _, _ in
             viewModel.queryCenter = queryCenter
         }
-        .onChange(queryArea) { _ in
+        .onChange(of: queryArea) { _, _ in
             viewModel.queryArea = queryArea
         }
         .onAppear {

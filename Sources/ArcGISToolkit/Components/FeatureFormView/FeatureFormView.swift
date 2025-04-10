@@ -113,7 +113,7 @@ public struct FeatureFormView: View {
                     }
                 }
             }
-            .onChange(model.focusedElement) { _ in
+            .onChange(of: model.focusedElement) { _, _ in
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }

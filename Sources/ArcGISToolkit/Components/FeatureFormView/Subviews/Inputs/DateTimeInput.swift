@@ -52,10 +52,10 @@ struct DateTimeInput: View {
     
     var body: some View {
         dateEditor
-            .onChange(model.focusedElement) { focusedElement in
+            .onChange(of: model.focusedElement) { _, focusedElement in
                 isEditing = focusedElement == element
             }
-            .onChange(date) { date in
+            .onChange(of: date) { _, date in
                 element.updateValue(date)
                 formattedValue = element.formattedValue
                 model.evaluateExpressions()
