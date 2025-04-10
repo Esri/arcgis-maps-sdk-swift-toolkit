@@ -48,12 +48,7 @@ struct SiteAndFacilitySelector: View {
                 .padding([.leading, .top, .trailing])
             if (facilityListIsVisible && matchingFacilities.isEmpty) || (!facilityListIsVisible && matchingSites.isEmpty) {
                 Spacer()
-                if #available(iOS 17, *) {
-                    ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
-                } else {
-                    Text(String.noMatchesFound)
-                        .frame(maxHeight: .infinity)
-                }
+                ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
                 Spacer()
             } else if facilityListIsVisible {
                 facilityList
