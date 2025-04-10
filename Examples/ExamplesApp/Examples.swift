@@ -16,12 +16,12 @@ import SwiftUI
 
 struct Examples: View {
     enum ListItem {
-        case category(Category)
+        case category(_ name: String, examples: [Example])
         case example(Example)
         
         var name: String {
             switch self {
-            case .category(let category): category.name
+            case .category(let name, _): name
             case .example(let example): example.name
             }
         }
@@ -39,9 +39,9 @@ struct Examples: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             List(listItems, id: \.name, selection: $selectedExample) { item in
                 switch item {
-                case .category(let category):
-                    DisclosureGroup(category.name) {
-                        ForEach(category.examples, id: \.name) { example in
+                case .category(let name, let examples):
+                    DisclosureGroup(name) {
+                        ForEach(examples, id: \.name) { example in
                             Text(example.name)
                                 .tag(example)
                         }
@@ -72,7 +72,7 @@ struct Examples: View {
     
     static func makeCategories() -> [ListItem] {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-        return [.category(.augmentedReality)]
+        return [.category("Augmented Reality", examples: .augmentedReality)]
 #else
         return []
 #endif
@@ -101,17 +101,14 @@ struct Examples: View {
 }
 
 @MainActor
-extension Category {
+extension Array where Element == Example {
 #if os(iOS) && !targetEnvironment(macCatalyst)
     static var augmentedReality: Self {
-        .init(
-            name: "Augmented Reality",
-            examples: [
-                Example("Flyover", content: FlyoverExampleView()),
-                Example("Tabletop", content: TableTopExampleView()),
-                Example("World Scale", content: WorldScaleExampleView())
-            ]
-        )
+        return [
+            Example("Flyover", content: FlyoverExampleView()),
+            Example("Tabletop", content: TableTopExampleView()),
+            Example("World Scale", content: WorldScaleExampleView())
+        ]
     }
 #endif
 }
