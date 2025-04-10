@@ -83,12 +83,7 @@ struct CodeScannerRepresentable: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeUIViewController(context: Context) -> ScannerViewController {
-***REMOVED******REMOVED***let scannerViewController: ScannerViewController
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***scannerViewController = ScannerViewController()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***scannerViewController = LegacyScannerViewController()
-***REMOVED***
+***REMOVED******REMOVED***let scannerViewController = ScannerViewController()
 ***REMOVED******REMOVED***scannerViewController.delegate = context.coordinator
 ***REMOVED******REMOVED***return scannerViewController
 ***REMOVED***
@@ -209,9 +204,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED******REMOVED***previewLayer.videoGravity = .resizeAspectFill
 ***REMOVED******REMOVED***view.layer.addSublayer(previewLayer)
 ***REMOVED******REMOVED***updateReticleAndAutoFocus()
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
-***REMOVED***
+***REMOVED******REMOVED***videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
 #endif
 ***REMOVED***
 ***REMOVED***
@@ -416,7 +409,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 ***REMOVED***
 ***REMOVED***
 
-@available(iOS 17.0, *)
 @available(visionOS, unavailable)
 class RotationCoordinator {
 ***REMOVED***private let rotationObservation: NSKeyValueObservation
@@ -431,42 +423,6 @@ class RotationCoordinator {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***previewLayer.connection?.videoRotationAngle = angle
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED*** MARK: Deprecated
-
-@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead.")
-@available(visionOS, unavailable)
-class LegacyScannerViewController: ScannerViewController {
-***REMOVED***override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
-***REMOVED******REMOVED***super.viewWillTransition(to: size, with: coordinator)
-***REMOVED******REMOVED***updateRotation()
-***REMOVED***
-***REMOVED***
-***REMOVED***override func viewDidLoad() {
-***REMOVED******REMOVED***super.viewDidLoad()
-***REMOVED******REMOVED***updateRotation()
-***REMOVED***
-***REMOVED***
-***REMOVED***func updateRotation() {
-***REMOVED******REMOVED***guard let connection = previewLayer.connection else { return ***REMOVED***
-***REMOVED******REMOVED***let interfaceOrientation = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.interfaceOrientation ?? .portrait
-***REMOVED******REMOVED***let newVideoOrientation = AVCaptureVideoOrientation(interfaceOrientation: interfaceOrientation)
-***REMOVED******REMOVED***connection.videoOrientation = newVideoOrientation
-***REMOVED***
-***REMOVED***
-
-@available(iOS, introduced: 16.0, deprecated: 17.0)
-@available(visionOS, unavailable)
-extension AVCaptureVideoOrientation {
-***REMOVED***init(interfaceOrientation: UIInterfaceOrientation) {
-***REMOVED******REMOVED***self = switch interfaceOrientation {
-***REMOVED******REMOVED***case .portraitUpsideDown: .portraitUpsideDown
-***REMOVED******REMOVED***case .landscapeLeft: .landscapeLeft
-***REMOVED******REMOVED***case .landscapeRight: .landscapeRight
-***REMOVED******REMOVED***default: .portrait
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
