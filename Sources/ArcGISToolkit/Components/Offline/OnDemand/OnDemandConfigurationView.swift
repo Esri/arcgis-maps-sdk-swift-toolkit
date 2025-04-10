@@ -163,7 +163,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.preventMapInteractionFromMovingSheet()
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -267,23 +269,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
-***REMOVED***
-***REMOVED***
-
-private extension View {
-***REMOVED******REMOVED***/ Prevent sheet from moving when interacting with map view.
-***REMOVED***@ViewBuilder
-***REMOVED***func preventMapInteractionFromMovingSheet() -> some View {
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
