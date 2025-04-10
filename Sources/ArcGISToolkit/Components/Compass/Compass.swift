@@ -199,7 +199,6 @@ public extension Compass {
     }
     
     /// Enables sensory feedback when the heading snaps to `zero`.
-    @available(iOS 17, *)
     func snapToZeroSensoryFeedback() -> Self {
         var copy = self
         copy.snapToZeroSensoryFeedbackEnabled = true
