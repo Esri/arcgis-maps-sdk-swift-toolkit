@@ -15,6 +15,18 @@
 import SwiftUI
 
 struct Examples: View {
+    enum ListItem {
+        case category(Category)
+        case example(Example)
+        
+        var name: String {
+            switch self {
+            case .category(let category): category.name
+            case .example(let example): example.name
+            }
+        }
+    }
+    
     /// The list items to display.
     let listItems = makeListItems()
     
@@ -26,11 +38,11 @@ struct Examples: View {
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            List(listItems, selection: $selectedExample) { item in
+            List(listItems, id: \.name, selection: $selectedExample) { item in
                 switch item {
                 case .category(let category):
                     DisclosureGroup(category.name) {
-                        ForEach(category.examples) { example in
+                        ForEach(category.examples, id: \.name) { example in
                             Text(example.name)
                                 .tag(example)
                         }
@@ -69,7 +81,7 @@ struct Examples: View {
     
     static func makeListItems() -> [ListItem] {
         (makeCategories() + makeUncategorizedExamples())
-            .sorted(by: { $0.id < $1.id })
+            .sorted(by: { $0.name < $1.name })
     }
     
     static func makeUncategorizedExamples() -> [ListItem] { [

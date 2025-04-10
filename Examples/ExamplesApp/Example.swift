@@ -45,7 +45,3 @@ extension Example: Hashable {
         hasher.combine(name)
     }
 }
-
-extension Example: Identifiable {
-    var id: String { name }
-}
