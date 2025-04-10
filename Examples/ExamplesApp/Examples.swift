@@ -51,7 +51,7 @@ struct Examples: View {
             }
         }
         // visionOS doesn't provide the column visibility toggle like
-        // Mac Catalyst and iPadOS so keep the column always visible.
+        // iPadOS and Mac Catalyst so conditionally hide the column.
 #if !os(visionOS)
         .onChange(selectedExample) { _ in
             columnVisibility = .detailOnly
