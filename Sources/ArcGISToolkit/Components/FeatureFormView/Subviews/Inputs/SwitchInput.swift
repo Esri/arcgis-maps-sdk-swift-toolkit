@@ -80,7 +80,7 @@ struct SwitchInput: View {
             // interaction because it may or may not run when the view first
             // loads, depending if the initial value matches the default value
             // defined for `isOn`.
-            .onChange(isOn) { isOn in
+            .onChange(of: isOn) { _, isOn in
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
             }

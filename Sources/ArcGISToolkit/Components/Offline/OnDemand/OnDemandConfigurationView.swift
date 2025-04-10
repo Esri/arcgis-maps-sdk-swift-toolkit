@@ -122,7 +122,7 @@ struct OnDemandConfigurationView: View {
                             OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
                         }
                     }
-                    .onChange(selectedRect) { _ in
+                    .onChange(of: selectedRect) { _, _ in
                         selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
                     }
             }
@@ -318,8 +318,8 @@ private struct RenameButton: View {
                 comment: "A message explaining that the map area name must be unique."
             )
         }
-        .onChange(proposedNewTitle) {
-            proposedTitleIsValid = isValidCheck($0)
+        .onChange(of: proposedNewTitle) { _, newProposedTitle in
+            proposedTitleIsValid = isValidCheck(newProposedTitle)
         }
     }
     

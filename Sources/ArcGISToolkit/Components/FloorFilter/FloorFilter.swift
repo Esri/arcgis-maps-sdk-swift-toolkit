@@ -221,7 +221,7 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.loadStatus != .loaded)
-        .onChange(selection?.wrappedValue) { newValue in
+        .onChange(of: selection?.wrappedValue) { _, newValue in
             // Prevent a double-set if the view model triggered the original change.
             guard newValue != viewModel.selection else { return }
             switch newValue {
@@ -231,7 +231,7 @@ public struct FloorFilter: View {
             case .none: viewModel.clearSelection()
             }
         }
-        .onChange(viewModel.loadStatus) { newLoadStatus in
+        .onChange(of: viewModel.loadStatus) { _, newLoadStatus in
             if newLoadStatus == .loaded,
                !automaticSingleSiteSelectionDisabled,
                viewModel.sites.count == 1,
@@ -240,12 +240,12 @@ public struct FloorFilter: View {
                 viewModel.setSite(firstSite, zoomTo: true)
             }
         }
-        .onChange(viewModel.selection) { newValue in
+        .onChange(of: viewModel.selection) { _, newValue in
             // Prevent a double-set if the user triggered the original change.
             guard selection?.wrappedValue != newValue else { return }
             selection?.wrappedValue = newValue
         }
-        .onChange(viewpoint.wrappedValue) { newViewpoint in
+        .onChange(of: viewpoint.wrappedValue) { _, newViewpoint in
             guard isNavigating.wrappedValue else { return }
             if let newViewpoint {
                 viewModel.onViewpointChanged(newViewpoint)
