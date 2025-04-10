@@ -295,3 +295,39 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(scene.loadStatus, .loaded)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testCase_2_5() async throws {
+***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
+***REMOVED******REMOVED***let scene = Scene(basemap: basemap)
+***REMOVED******REMOVED***let portal = Portal.arcGISOnline(connection: .anonymous)
+***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(scene, portal: portal)
+***REMOVED******REMOVED***XCTAssertIdentical(scene, viewModel.geoModel)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let item = try await viewModel.$currentItem.dropFirst().first
+***REMOVED******REMOVED***let currentItem = try XCTUnwrap(item)
+***REMOVED******REMOVED***XCTAssertIdentical(currentItem?.basemap, basemap)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertIdentical(viewModel.portal, portal)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let items = try await viewModel.$items.dropFirst().first
+***REMOVED******REMOVED***let basemapGalleryItems = try XCTUnwrap(items)
+***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.isEmpty)
+***REMOVED******REMOVED***XCTAssertEqual(basemapGalleryItems.count, 39)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try await withThrowingTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED***for index in basemapGalleryItems.indices {
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let item = basemapGalleryItems[index]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await item.basemap.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** With a Scene, only the first 8 basemaps should be 3D.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if index <= 7 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XCTAssertTrue(item.basemap.is3D)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XCTAssertFalse(item.basemap.is3D)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try await group.waitForAll()
+***REMOVED***
+***REMOVED***
+***REMOVED***
