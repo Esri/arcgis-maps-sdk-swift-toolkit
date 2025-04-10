@@ -18,11 +18,14 @@ struct Examples: View {
     /// The list items to display.
     let listItems = makeListItems()
     
+    /// The visibility of the navigation split view's column.
+    @State private var columnVisibility: NavigationSplitViewVisibility = .all
+    
     /// The example selected by the user.
     @State private var selectedExample: Example?
     
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             List(listItems, selection: $selectedExample) { item in
                 switch item {
                 case .category(let category):
@@ -47,6 +50,13 @@ struct Examples: View {
                 Text("Select an example")
             }
         }
+        // visionOS doesn't provide the column visibility toggle like
+        // Mac Catalyst and iPadOS so keep the column always visible.
+#if !os(visionOS)
+        .onChange(selectedExample) { _ in
+            columnVisibility = .detailOnly
+        }
+#endif
     }
     
     static func makeCategories() -> [ListItem] {
