@@ -20,7 +20,6 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the navigation split view's column.
 ***REMOVED***@State private var columnVisibility: NavigationSplitViewVisibility = .all
-***REMOVED***
 ***REMOVED******REMOVED***/ The example selected by the user.
 ***REMOVED***@State private var selectedExample: Example?
 ***REMOVED***
