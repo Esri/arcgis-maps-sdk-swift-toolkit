@@ -15,6 +15,18 @@
 ***REMOVED***
 
 struct Examples: View {
+***REMOVED***enum ListItem {
+***REMOVED******REMOVED***case category(Category)
+***REMOVED******REMOVED***case example(Example)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var name: String {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .category(let category): category.name
+***REMOVED******REMOVED******REMOVED***case .example(let example): example.name
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The list items to display.
 ***REMOVED***let listItems = makeListItems()
 ***REMOVED***
@@ -26,11 +38,11 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationSplitView(columnVisibility: $columnVisibility) {
-***REMOVED******REMOVED******REMOVED***List(listItems, selection: $selectedExample) { item in
+***REMOVED******REMOVED******REMOVED***List(listItems, id: \.name, selection: $selectedExample) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch item {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .category(let category):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(category.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(category.examples) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(category.examples, id: \.name) { example in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -69,7 +81,7 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***static func makeListItems() -> [ListItem] {
 ***REMOVED******REMOVED***(makeCategories() + makeUncategorizedExamples())
-***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.id < $1.id ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.name < $1.name ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeUncategorizedExamples() -> [ListItem] { [

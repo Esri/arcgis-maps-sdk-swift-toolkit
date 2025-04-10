@@ -31,7 +31,3 @@ extension Category: Hashable {
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED***
 ***REMOVED***
-
-extension Category: Identifiable {
-***REMOVED***var id: String { name ***REMOVED***
-***REMOVED***

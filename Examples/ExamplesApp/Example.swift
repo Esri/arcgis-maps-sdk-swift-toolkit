@@ -45,7 +45,3 @@ extension Example: Hashable {
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED***
 ***REMOVED***
-
-extension Example: Identifiable {
-***REMOVED***var id: String { name ***REMOVED***
-***REMOVED***
