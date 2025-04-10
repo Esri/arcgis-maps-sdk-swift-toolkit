@@ -15,18 +15,6 @@
 import SwiftUI
 
 struct Examples: View {
-    enum ListItem {
-        case category(_ name: String, examples: [Example])
-        case example(Example)
-        
-        var name: String {
-            switch self {
-            case .category(let name, _): name
-            case .example(let example): example.name
-            }
-        }
-    }
-    
     /// The list items to display.
     let listItems = makeListItems()
     
@@ -85,17 +73,17 @@ struct Examples: View {
     
     static func makeUncategorizedExamples() -> [ListItem] {
         return [
-            .example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
-            .example(.init("Bookmarks", content: BookmarksExampleView())),
-            .example(.init("Compass", content: CompassExampleView())),
-            .example(.init("Feature Form", content: FeatureFormExampleView())),
-            .example(.init("Floating Panel", content: FloatingPanelExampleView())),
-            .example(.init("Floor Filter", content: FloorFilterExampleView())),
-            .example(.init("Overview Map", content: OverviewMapExampleView())),
-            .example(.init("Popup", content: PopupExampleView())),
-            .example(.init("Scalebar", content: ScalebarExampleView())),
-            .example(.init("Search", content: SearchExampleView())),
-            .example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
+            .example("Basemap Gallery", content: BasemapGalleryExampleView()),
+            .example("Bookmarks", content: BookmarksExampleView()),
+            .example("Compass", content: CompassExampleView()),
+            .example("Feature Form", content: FeatureFormExampleView()),
+            .example("Floating Panel", content: FloatingPanelExampleView()),
+            .example("Floor Filter", content: FloorFilterExampleView()),
+            .example("Overview Map", content: OverviewMapExampleView()),
+            .example("Popup", content: PopupExampleView()),
+            .example("Scalebar", content: ScalebarExampleView()),
+            .example("Search", content: SearchExampleView()),
+            .example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
         ]
     }
 }
