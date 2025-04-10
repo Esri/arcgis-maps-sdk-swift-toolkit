@@ -31,7 +31,3 @@ extension Category: Hashable {
         hasher.combine(name)
     }
 }
-
-extension Category: Identifiable {
-    var id: String { name }
-}
