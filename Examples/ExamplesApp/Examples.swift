@@ -18,11 +18,14 @@ struct Examples: View {
 ***REMOVED******REMOVED***/ The list items to display.
 ***REMOVED***let listItems = makeListItems()
 ***REMOVED***
+***REMOVED******REMOVED***/ The visibility of the navigation split view's column.
+***REMOVED***@State private var columnVisibility: NavigationSplitViewVisibility = .all
+***REMOVED***
 ***REMOVED******REMOVED***/ The example selected by the user.
 ***REMOVED***@State private var selectedExample: Example?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationSplitView {
+***REMOVED******REMOVED***NavigationSplitView(columnVisibility: $columnVisibility) {
 ***REMOVED******REMOVED******REMOVED***List(listItems, selection: $selectedExample) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch item {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .category(let category):
@@ -47,6 +50,13 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Select an example")
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** visionOS doesn't provide the column visibility toggle like
+***REMOVED******REMOVED******REMOVED*** Mac Catalyst and iPadOS so keep the column always visible.
+#if !os(visionOS)
+***REMOVED******REMOVED***.onChange(selectedExample) { _ in
+***REMOVED******REMOVED******REMOVED***columnVisibility = .detailOnly
+***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeCategories() -> [ListItem] {
