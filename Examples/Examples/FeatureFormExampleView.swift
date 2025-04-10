@@ -70,7 +70,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, 16)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.formIsPresented.wrappedValue) { formIsPresented in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: model.formIsPresented.wrappedValue) { _, formIsPresented in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !formIsPresented { validationErrorVisibility = .automatic ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
