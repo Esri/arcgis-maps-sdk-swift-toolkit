@@ -25,6 +25,7 @@ class OnDemandMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(Status.downloaded.allowsDownload)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.downloadFailure(CancellationError()).allowsDownload)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloadCancelled.allowsDownload)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testIsDownloaded() {
@@ -33,5 +34,6 @@ class OnDemandMapModelStatusTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(Status.downloaded.isDownloaded)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
 ***REMOVED******REMOVED***XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
+***REMOVED******REMOVED***XCTAssertFalse(Status.downloadCancelled.isDownloaded)
 ***REMOVED***
 ***REMOVED***

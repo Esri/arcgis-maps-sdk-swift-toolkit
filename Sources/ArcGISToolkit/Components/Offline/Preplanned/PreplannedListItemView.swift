@@ -50,7 +50,7 @@ struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***case .loading:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED***case .packaged, .downloadFailure:
+***REMOVED******REMOVED***case .packaged, .downloadFailure, .downloadCancelled:
 ***REMOVED******REMOVED******REMOVED***DownloadOfflineMapAreaButton(model: model)
 ***REMOVED******REMOVED***case .downloading:
 ***REMOVED******REMOVED******REMOVED***OfflineJobProgressView(model: model)
@@ -123,12 +123,13 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
 ***REMOVED******REMOVED***case .downloading: .downloading
 ***REMOVED******REMOVED***case .downloaded: .downloaded
 ***REMOVED******REMOVED***case .downloadFailure: .downloadFailed
+***REMOVED******REMOVED***case .downloadCancelled: .cancelled
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var statusSystemImage: String {
 ***REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED***case .notLoaded, .loading, .packaged, .downloaded, .downloading:
+***REMOVED******REMOVED***case .notLoaded, .loading, .packaged, .downloaded, .downloading, .downloadCancelled:
 ***REMOVED******REMOVED******REMOVED***""
 ***REMOVED******REMOVED***case .loadFailure, .mmpkLoadFailure, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED***"exclamationmark.circle"
@@ -164,6 +165,14 @@ private extension LocalizedStringResource {
 ***REMOVED******REMOVED******REMOVED***"Packaging failed",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area packaging failed."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var cancelled: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Cancelled",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "The status text when a map area download is cancelled."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

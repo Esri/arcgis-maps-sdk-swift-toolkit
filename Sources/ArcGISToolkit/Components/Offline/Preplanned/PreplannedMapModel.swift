@@ -215,7 +215,13 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
+***REMOVED******REMOVED******REMOVED***if error is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.info("DownloadPreplannedOfflineMapJob job cancelled.")
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadCancelled
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("DownloadPreplannedOfflineMapJob job failed with error: \(error).")
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Remove contents of mmpk directory when download fails.
 ***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
 ***REMOVED***
@@ -251,6 +257,8 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***case downloaded
 ***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
+***REMOVED******REMOVED******REMOVED***/ The job was cancelled.
+***REMOVED******REMOVED***case downloadCancelled
 ***REMOVED******REMOVED******REMOVED***/ Downloaded mobile map package failed to load.
 ***REMOVED******REMOVED***case mmpkLoadFailure(Error)
 ***REMOVED******REMOVED***
@@ -260,7 +268,7 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loadFailure, .packageFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure, .downloadFailure, .downloadCancelled:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -271,7 +279,7 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded, .mmpkLoadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED******REMOVED***case .packaged, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***case .packaged, .downloadFailure, .downloadCancelled:
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
 ***REMOVED******REMOVED***
 ***REMOVED***
