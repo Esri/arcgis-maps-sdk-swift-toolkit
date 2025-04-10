@@ -68,7 +68,9 @@ struct FlashlightButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***device?.torchMode = isOn ? .on : .off
 ***REMOVED******REMOVED******REMOVED******REMOVED***device?.unlockForConfiguration()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.torchFeedback(trigger: torchIsOn)
+#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED***.sensoryFeedback(.selection, trigger: torchIsOn)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -76,19 +78,6 @@ struct FlashlightButton: View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.isHiddenIfUnavailable = true
 ***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-
-private extension View {
-***REMOVED***@available(visionOS, unavailable)
-***REMOVED***@ViewBuilder
-***REMOVED***func torchFeedback(trigger: Bool) -> some View {
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.sensoryFeedback(.selection, trigger: trigger)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
