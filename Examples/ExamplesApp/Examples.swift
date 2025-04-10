@@ -32,7 +32,6 @@ struct Examples: View {
     
     /// The visibility of the navigation split view's column.
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
-    
     /// The example selected by the user.
     @State private var selectedExample: Example?
     
@@ -84,19 +83,21 @@ struct Examples: View {
             .sorted(by: { $0.name < $1.name })
     }
     
-    static func makeUncategorizedExamples() -> [ListItem] { [
-        .example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
-        .example(.init("Bookmarks", content: BookmarksExampleView())),
-        .example(.init("Compass", content: CompassExampleView())),
-        .example(.init("Feature Form", content: FeatureFormExampleView())),
-        .example(.init("Floating Panel", content: FloatingPanelExampleView())),
-        .example(.init("Floor Filter", content: FloorFilterExampleView())),
-        .example(.init("Overview Map", content: OverviewMapExampleView())),
-        .example(.init("Popup", content: PopupExampleView())),
-        .example(.init("Scalebar", content: ScalebarExampleView())),
-        .example(.init("Search", content: SearchExampleView())),
-        .example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
-    ] }
+    static func makeUncategorizedExamples() -> [ListItem] {
+        return [
+            .example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
+            .example(.init("Bookmarks", content: BookmarksExampleView())),
+            .example(.init("Compass", content: CompassExampleView())),
+            .example(.init("Feature Form", content: FeatureFormExampleView())),
+            .example(.init("Floating Panel", content: FloatingPanelExampleView())),
+            .example(.init("Floor Filter", content: FloorFilterExampleView())),
+            .example(.init("Overview Map", content: OverviewMapExampleView())),
+            .example(.init("Popup", content: PopupExampleView())),
+            .example(.init("Scalebar", content: ScalebarExampleView())),
+            .example(.init("Search", content: SearchExampleView())),
+            .example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
+        ]
+    }
 }
 
 @MainActor
