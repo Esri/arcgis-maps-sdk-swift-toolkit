@@ -60,7 +60,7 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***static func makeCategories() -> [ListItem] {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED***return [.category("Augmented Reality", examples: .augmentedReality)]
+***REMOVED******REMOVED***return [.augmentedRealityCategory]
 #else
 ***REMOVED******REMOVED***return []
 #endif
@@ -88,15 +88,17 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***
 
-@MainActor
-extension Array where Element == Example {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-***REMOVED***static var augmentedReality: Self {
-***REMOVED******REMOVED***return [
-***REMOVED******REMOVED******REMOVED***Example("Flyover", content: FlyoverExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("Tabletop", content: TableTopExampleView()),
-***REMOVED******REMOVED******REMOVED***Example("World Scale", content: WorldScaleExampleView())
-***REMOVED******REMOVED***]
+extension Examples.ListItem {
+***REMOVED***static var augmentedRealityCategory: Self {
+***REMOVED******REMOVED***.category(
+***REMOVED******REMOVED******REMOVED***"Augmented Reality",
+***REMOVED******REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Flyover", content: FlyoverExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("Tabletop", content: TableTopExampleView()),
+***REMOVED******REMOVED******REMOVED******REMOVED***Example("World Scale", content: WorldScaleExampleView())
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 #endif
-***REMOVED***
