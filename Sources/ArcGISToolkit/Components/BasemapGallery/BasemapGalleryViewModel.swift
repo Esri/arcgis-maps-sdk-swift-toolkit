@@ -176,22 +176,19 @@ private extension BasemapGalleryViewModel {
             do {
                 try await portal.load()
                 
-                let basemaps: [Basemap]
+                var basemaps = [Basemap]()
                 
                 if geoModel is Scene {
-                    let basemaps3D = try await portal.basemaps3D
-                    items.append(
-                        contentsOf: basemaps3D.lazy.map { BasemapGalleryItem(basemap: $0) }
-                    )
+                    basemaps += try await portal.basemaps3D
                 }
                 
                 if useDeveloperBasemaps {
-                    basemaps = try await portal.developerBasemaps
+                    basemaps += try await portal.developerBasemaps
                 } else if let portalInfo = portal.info,
                           portalInfo.usesVectorBasemaps {
-                    basemaps = try await portal.vectorBasemaps
+                    basemaps += try await portal.vectorBasemaps
                 } else {
-                    basemaps = try await portal.basemaps
+                    basemaps += try await portal.basemaps
                 }
                 items += basemaps.map { BasemapGalleryItem(basemap: $0) }
             } catch {
