@@ -71,19 +71,21 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.id < $1.id ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func makeUncategorizedExamples() -> [ListItem] { [
-***REMOVED******REMOVED***.example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
-***REMOVED******REMOVED***.example(.init("Bookmarks", content: BookmarksExampleView())),
-***REMOVED******REMOVED***.example(.init("Compass", content: CompassExampleView())),
-***REMOVED******REMOVED***.example(.init("Feature Form", content: FeatureFormExampleView())),
-***REMOVED******REMOVED***.example(.init("Floating Panel", content: FloatingPanelExampleView())),
-***REMOVED******REMOVED***.example(.init("Floor Filter", content: FloorFilterExampleView())),
-***REMOVED******REMOVED***.example(.init("Overview Map", content: OverviewMapExampleView())),
-***REMOVED******REMOVED***.example(.init("Popup", content: PopupExampleView())),
-***REMOVED******REMOVED***.example(.init("Scalebar", content: ScalebarExampleView())),
-***REMOVED******REMOVED***.example(.init("Search", content: SearchExampleView())),
-***REMOVED******REMOVED***.example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
-***REMOVED***] ***REMOVED***
+***REMOVED***static func makeUncategorizedExamples() -> [ListItem] {
+***REMOVED******REMOVED***return [
+***REMOVED******REMOVED******REMOVED***.example(.init("Basemap Gallery", content: BasemapGalleryExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Bookmarks", content: BookmarksExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Compass", content: CompassExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Feature Form", content: FeatureFormExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Floating Panel", content: FloatingPanelExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Floor Filter", content: FloorFilterExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Overview Map", content: OverviewMapExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Popup", content: PopupExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Scalebar", content: ScalebarExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Search", content: SearchExampleView())),
+***REMOVED******REMOVED******REMOVED***.example(.init("Utility Network Trace", content: UtilityNetworkTraceExampleView()))
+***REMOVED******REMOVED***]
+***REMOVED***
 ***REMOVED***
 
 @MainActor
