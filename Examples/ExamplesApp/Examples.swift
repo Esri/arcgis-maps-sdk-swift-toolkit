@@ -16,12 +16,12 @@
 
 struct Examples: View {
 ***REMOVED***enum ListItem {
-***REMOVED******REMOVED***case category(Category)
+***REMOVED******REMOVED***case category(_ name: String, examples: [Example])
 ***REMOVED******REMOVED***case example(Example)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var name: String {
 ***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .category(let category): category.name
+***REMOVED******REMOVED******REMOVED***case .category(let name, _): name
 ***REMOVED******REMOVED******REMOVED***case .example(let example): example.name
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -39,9 +39,9 @@ struct Examples: View {
 ***REMOVED******REMOVED***NavigationSplitView(columnVisibility: $columnVisibility) {
 ***REMOVED******REMOVED******REMOVED***List(listItems, id: \.name, selection: $selectedExample) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch item {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .category(let category):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(category.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(category.examples, id: \.name) { example in
+***REMOVED******REMOVED******REMOVED******REMOVED***case .category(let name, let examples):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(examples, id: \.name) { example in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(example.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(example)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -72,7 +72,7 @@ struct Examples: View {
 ***REMOVED***
 ***REMOVED***static func makeCategories() -> [ListItem] {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-***REMOVED******REMOVED***return [.category(.augmentedReality)]
+***REMOVED******REMOVED***return [.category("Augmented Reality", examples: .augmentedReality)]
 #else
 ***REMOVED******REMOVED***return []
 #endif
@@ -101,17 +101,14 @@ struct Examples: View {
 ***REMOVED***
 
 @MainActor
-extension Category {
+extension Array where Element == Example {
 #if os(iOS) && !targetEnvironment(macCatalyst)
 ***REMOVED***static var augmentedReality: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***name: "Augmented Reality",
-***REMOVED******REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Flyover", content: FlyoverExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("Tabletop", content: TableTopExampleView()),
-***REMOVED******REMOVED******REMOVED******REMOVED***Example("World Scale", content: WorldScaleExampleView())
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return [
+***REMOVED******REMOVED******REMOVED***Example("Flyover", content: FlyoverExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("Tabletop", content: TableTopExampleView()),
+***REMOVED******REMOVED******REMOVED***Example("World Scale", content: WorldScaleExampleView())
+***REMOVED******REMOVED***]
 ***REMOVED***
 #endif
 ***REMOVED***
