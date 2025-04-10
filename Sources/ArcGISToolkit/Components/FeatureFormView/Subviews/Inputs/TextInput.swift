@@ -59,7 +59,7 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED******REMOVED***.onChange(text) { text in
+***REMOVED******REMOVED******REMOVED***.onChange(of: text) { _, text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
@@ -113,10 +113,10 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** properly at 'formInputStyle'.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffectDisabled()
 #endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { _, isFocused in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isFocused ? element : nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { _, focusedElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
@@ -246,7 +246,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isFocused = true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { _, isFocused in
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isFocused ? element : nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()

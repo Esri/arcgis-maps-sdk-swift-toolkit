@@ -244,22 +244,22 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***onQueryChangedAction?(viewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(viewModel.selectedResult) { _ in
+***REMOVED******REMOVED***.onChange(of: viewModel.selectedResult) { _, _ in
 ***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(viewModel.currentSuggestion) { _ in
+***REMOVED******REMOVED***.onChange(of: viewModel.currentSuggestion) { _, _ in
 ***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(geoViewExtent) { _ in
+***REMOVED******REMOVED***.onChange(of: geoViewExtent) { _, _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(isGeoViewNavigating) { _ in
+***REMOVED******REMOVED***.onChange(of: isGeoViewNavigating) { _, _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.isGeoViewNavigating = isGeoViewNavigating
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(queryCenter) { _ in
+***REMOVED******REMOVED***.onChange(of: queryCenter) { _, _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.queryCenter = queryCenter
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(queryArea) { _ in
+***REMOVED******REMOVED***.onChange(of: queryArea) { _, _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.queryArea = queryArea
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {

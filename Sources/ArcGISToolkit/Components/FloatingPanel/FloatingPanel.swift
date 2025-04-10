@@ -95,14 +95,14 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = geometryProxy.size.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(geometryProxy.size.height) { height in
+***REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size.height) { _, height in
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = height
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(isPresented) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(selectedDetent) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent) { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onKeyboardStateChanged { state, height in

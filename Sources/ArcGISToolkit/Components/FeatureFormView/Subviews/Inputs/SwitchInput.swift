@@ -80,7 +80,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** interaction because it may or may not run when the view first
 ***REMOVED******REMOVED******REMOVED******REMOVED*** loads, depending if the initial value matches the default value
 ***REMOVED******REMOVED******REMOVED******REMOVED*** defined for `isOn`.
-***REMOVED******REMOVED******REMOVED***.onChange(isOn) { isOn in
+***REMOVED******REMOVED******REMOVED***.onChange(of: isOn) { _, isOn in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(isOn ? input.onValue.code : input.offValue.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***

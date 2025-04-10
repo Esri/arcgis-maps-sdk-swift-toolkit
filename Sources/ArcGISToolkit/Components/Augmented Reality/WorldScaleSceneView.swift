@@ -99,7 +99,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***calibrationViewModel.cameraController.clippingDistance = clippingDistance
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(clippingDistance) { newClippingDistance in
+***REMOVED******REMOVED***.onChange(of: clippingDistance) { _, newClippingDistance in
 ***REMOVED******REMOVED******REMOVED***calibrationViewModel.cameraController.clippingDistance = newClippingDistance
 ***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
@@ -157,7 +157,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.animation(.default.speed(0.25), value: initialCameraIsSet)
-***REMOVED******REMOVED***.onChange(isCalibrating) { value in
+***REMOVED******REMOVED***.onChange(of: isCalibrating) { _, value in
 ***REMOVED******REMOVED******REMOVED***onCalibratingChangedAction?(value)
 ***REMOVED***
 ***REMOVED***
