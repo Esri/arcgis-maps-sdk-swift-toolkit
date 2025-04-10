@@ -60,7 +60,7 @@ struct Examples: View {
     
     static func makeCategories() -> [ListItem] {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-        return [.category("Augmented Reality", examples: .augmentedReality)]
+        return [.augmentedRealityCategory]
 #else
         return []
 #endif
@@ -88,15 +88,17 @@ struct Examples: View {
     }
 }
 
-@MainActor
-extension Array where Element == Example {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-    static var augmentedReality: Self {
-        return [
-            Example("Flyover", content: FlyoverExampleView()),
-            Example("Tabletop", content: TableTopExampleView()),
-            Example("World Scale", content: WorldScaleExampleView())
-        ]
+extension Examples.ListItem {
+    static var augmentedRealityCategory: Self {
+        .category(
+            "Augmented Reality",
+            examples: [
+                Example("Flyover", content: FlyoverExampleView()),
+                Example("Tabletop", content: TableTopExampleView()),
+                Example("World Scale", content: WorldScaleExampleView())
+            ]
+        )
     }
-#endif
 }
+#endif
