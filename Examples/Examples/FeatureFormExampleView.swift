@@ -70,7 +70,7 @@ struct FeatureFormExampleView: View {
                             .padding(.top, 16)
                     }
                 }
-                .onChange(model.formIsPresented.wrappedValue) { formIsPresented in
+                .onChange(of: model.formIsPresented.wrappedValue) { _, formIsPresented in
                     if !formIsPresented { validationErrorVisibility = .automatic }
                 }
                 .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
