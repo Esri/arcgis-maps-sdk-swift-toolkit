@@ -51,7 +51,7 @@ struct Examples: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** visionOS doesn't provide the column visibility toggle like
-***REMOVED******REMOVED******REMOVED*** Mac Catalyst and iPadOS so keep the column always visible.
+***REMOVED******REMOVED******REMOVED*** iPadOS and Mac Catalyst so conditionally hide the column.
 #if !os(visionOS)
 ***REMOVED******REMOVED***.onChange(selectedExample) { _ in
 ***REMOVED******REMOVED******REMOVED***columnVisibility = .detailOnly
