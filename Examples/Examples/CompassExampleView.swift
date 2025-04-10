@@ -42,12 +42,7 @@ private extension Compass {
     /// when sensory feedback is available.
     @ViewBuilder
     func snapToZeroSensoryFeedbackIfAvailable() -> some View {
-        if #available(iOS 17, *) {
-            snapToZeroSensoryFeedback()
-        } else {
-            // Fallback on earlier versions
-            self
-        }
+        snapToZeroSensoryFeedback()
     }
 }
 
