@@ -274,6 +274,23 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let items = try await viewModel.$items.dropFirst().first
 ***REMOVED******REMOVED***let basemapGalleryItems = try XCTUnwrap(items)
 ***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.isEmpty)
+***REMOVED******REMOVED***XCTAssertEqual(basemapGalleryItems.count, 37)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try await withThrowingTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED***for index in basemapGalleryItems.indices {
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let item = basemapGalleryItems[index]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await item.basemap.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** With a Scene, only the first 8 basemaps should be 3D.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if index <= 7 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XCTAssertTrue(item.basemap.is3D)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XCTAssertFalse(item.basemap.is3D)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try await group.waitForAll()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(scene.loadStatus, .loaded)
 ***REMOVED***
