@@ -260,3 +260,21 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***))
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testCase_2_4() async throws {
+***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
+***REMOVED******REMOVED***let scene = Scene(basemap: basemap)
+***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(geoModel: scene)
+***REMOVED******REMOVED***XCTAssertIdentical(scene, viewModel.geoModel)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let item = try await viewModel.$currentItem.dropFirst().first
+***REMOVED******REMOVED***let currentItem = try XCTUnwrap(item)
+***REMOVED******REMOVED***XCTAssertIdentical(currentItem?.basemap, basemap)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let items = try await viewModel.$items.dropFirst().first
+***REMOVED******REMOVED***let basemapGalleryItems = try XCTUnwrap(items)
+***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.isEmpty)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(scene.loadStatus, .loaded)
+***REMOVED***
+***REMOVED***
