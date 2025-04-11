@@ -91,18 +91,14 @@ struct FloatingPanel<Content>: View where Content: View {
             )
             .animation(.easeInOut, value: isPresented)
             .animation(.default, value: attributionBarHeight)
-            .onAppear {
+            .onChange(of: geometryProxy.size.height, initial: true) {
                 maximumHeight = geometryProxy.size.height
                 updateHeight()
             }
-            .onChange(of: geometryProxy.size.height) { _, height in
-                maximumHeight = height
+            .onChange(of: isPresented) {
                 updateHeight()
             }
-            .onChange(of: isPresented) { _, _ in
-                updateHeight()
-            }
-            .onChange(of: selectedDetent) { _, _ in
+            .onChange(of: selectedDetent) {
                 updateHeight()
             }
             .onKeyboardStateChanged { state, height in

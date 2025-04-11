@@ -87,10 +87,10 @@ public struct Compass: View {
                 .opacity(opacity)
                 .frame(width: size, height: size)
                 .onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 }
-                .onChange(of: heading) { _, newHeading in
-                    let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
+                .onChange(of: heading) {
+                    let newOpacity: Double = shouldHide(forHeading: heading) ? .zero : 1
                     guard opacity != newOpacity else { return }
-                    withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {
+                    withAnimation(.default.delay(shouldHide(forHeading: heading) ? 0.25 : 0)) {
                         opacity = newOpacity
                     }
                 }
@@ -133,12 +133,8 @@ private extension View {
     func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
         if enabled {
             sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
-                if (!oldValue.isZero && newValue.isZero) ||
-                    (oldValue.isZero && !newValue.isZero) {
-                    return true
-                } else {
-                    return false
-                }
+                (!oldValue.isZero && newValue.isZero) ||
+                (oldValue.isZero && !newValue.isZero)
             }
         } else {
             self

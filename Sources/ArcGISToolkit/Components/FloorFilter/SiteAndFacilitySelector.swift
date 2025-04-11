@@ -96,7 +96,7 @@ struct SiteAndFacilitySelector: View {
 #if !os(visionOS)
             .listStyle(.plain)
 #endif
-            .onChange(of: viewModel.selection) { _, _ in
+            .onChange(of: viewModel.selection) {
                 if let floorFacility = viewModel.selection?.facility {
                     withAnimation {
                         proxy.scrollTo(
@@ -129,7 +129,7 @@ struct SiteAndFacilitySelector: View {
                     .disableAutocorrection(true)
                     .focused($textFieldIsFocused)
                     .keyboardType(.alphabet)
-                    .onChange(of: facilityListIsVisible) { _, _ in
+                    .onChange(of: facilityListIsVisible) {
                         query.removeAll()
                         textFieldIsFocused = false
                     }

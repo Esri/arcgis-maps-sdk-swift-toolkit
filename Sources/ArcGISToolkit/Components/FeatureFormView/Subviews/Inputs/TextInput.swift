@@ -59,7 +59,7 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onChange(of: text) { _, text in
+            .onChange(of: text) {
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
@@ -113,12 +113,12 @@ private extension TextInput {
                     // properly at 'formInputStyle'.
                     .hoverEffectDisabled()
 #endif
-                    .onChange(of: isFocused) { _, isFocused in
+                    .onChange(of: isFocused) {
                         model.focusedElement = isFocused ? element : nil
                     }
-                    .onChange(of: model.focusedElement) { _, focusedElement in
-                        // Another form input took focus
-                        if focusedElement != element {
+                    .onChange(of: model.focusedElement) {
+                        // Another form input took focus.
+                        if model.focusedElement != element {
                             isFocused  = false
                         }
                     }
@@ -246,7 +246,7 @@ private extension TextInput {
             .onAppear {
                 isFocused = true
             }
-            .onChange(of: isFocused) { _, isFocused in
+            .onChange(of: isFocused) {
                 model.focusedElement = isFocused ? element : nil
             }
             Spacer()

@@ -30,19 +30,10 @@ struct CompassExampleView: View {
                 .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
                 .overlay(alignment: .topTrailing) {
                     Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
-                        .snapToZeroSensoryFeedbackIfAvailable()
+                        .snapToZeroSensoryFeedback()
                         .padding()
                 }
         }
-    }
-}
-
-private extension Compass {
-    /// Enables the sensory feedback when the compass snaps to `zero`
-    /// when sensory feedback is available.
-    @ViewBuilder
-    func snapToZeroSensoryFeedbackIfAvailable() -> some View {
-        snapToZeroSensoryFeedback()
     }
 }
 

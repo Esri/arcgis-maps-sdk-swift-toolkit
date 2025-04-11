@@ -63,8 +63,8 @@ struct Carousel<Content: View>: View {
             .onAppear {
                 updateCellSizeForContainer(geometry.size.width)
             }
-            .onChange(of: geometry.size.width) { _, width in
-                updateCellSizeForContainer(width)
+            .onChange(of: geometry.size.width) {
+                updateCellSizeForContainer(geometry.size.width)
             }
         }
         // When a GeometryReader is within a List, height must be specified.
