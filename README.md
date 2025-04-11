@@ -69,7 +69,7 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https:***REMOVED***github.com/esri/contributing).
 
 ## Licensing
-Copyright 2022 - 2024 Esri
+Copyright 2022 - 2025 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
