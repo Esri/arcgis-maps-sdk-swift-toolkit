@@ -63,9 +63,9 @@ struct FlashlightButton: View {
 ***REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***torchIsOn = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: torchIsOn) { _, isOn in
+***REMOVED******REMOVED******REMOVED***.onChange(of: torchIsOn) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? device?.lockForConfiguration()
-***REMOVED******REMOVED******REMOVED******REMOVED***device?.torchMode = isOn ? .on : .off
+***REMOVED******REMOVED******REMOVED******REMOVED***device?.torchMode = torchIsOn ? .on : .off
 ***REMOVED******REMOVED******REMOVED******REMOVED***device?.unlockForConfiguration()
 ***REMOVED******REMOVED***
 #if !os(visionOS)

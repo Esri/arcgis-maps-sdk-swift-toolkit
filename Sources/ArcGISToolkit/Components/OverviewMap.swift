@@ -136,19 +136,19 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
 ***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = symbol
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: visibleArea) { _, visibleArea in
+***REMOVED******REMOVED***.onChange(of: visibleArea) {
 ***REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint) { _, viewpoint in
+***REMOVED******REMOVED***.onChange(of: viewpoint) {
 ***REMOVED******REMOVED******REMOVED***if visibleArea == nil,
 ***REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = point
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: symbol) { _, symbol in
+***REMOVED******REMOVED***.onChange(of: symbol) {
 ***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = symbol
 ***REMOVED***
 ***REMOVED***

@@ -221,7 +221,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.loadStatus != .loaded)
-***REMOVED******REMOVED***.onChange(of: selection?.wrappedValue) { _, newValue in
+***REMOVED******REMOVED***.onChange(of: selection?.wrappedValue) {
+***REMOVED******REMOVED******REMOVED***let newValue = selection?.wrappedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the view model triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard newValue != viewModel.selection else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch newValue {
@@ -231,8 +232,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***case .none: viewModel.clearSelection()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.loadStatus) { _, newLoadStatus in
-***REMOVED******REMOVED******REMOVED***if newLoadStatus == .loaded,
+***REMOVED******REMOVED***.onChange(of: viewModel.loadStatus) {
+***REMOVED******REMOVED******REMOVED***if viewModel.loadStatus == .loaded,
 ***REMOVED******REMOVED******REMOVED***   !automaticSingleSiteSelectionDisabled,
 ***REMOVED******REMOVED******REMOVED***   viewModel.sites.count == 1,
 ***REMOVED******REMOVED******REMOVED***   let firstSite = viewModel.sites.first {
@@ -240,14 +241,15 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(firstSite, zoomTo: true)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.selection) { _, newValue in
+***REMOVED******REMOVED***.onChange(of: viewModel.selection) {
+***REMOVED******REMOVED******REMOVED***let newValue = viewModel.selection
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the user triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { _, newViewpoint in
+***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
 ***REMOVED******REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***if let newViewpoint {
+***REMOVED******REMOVED******REMOVED***if let newViewpoint = viewpoint.wrappedValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged(newViewpoint)
 ***REMOVED******REMOVED***
 ***REMOVED***

@@ -63,8 +63,8 @@ struct Carousel<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(geometry.size.width)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: geometry.size.width) { _, width in
-***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(width)
+***REMOVED******REMOVED******REMOVED***.onChange(of: geometry.size.width) {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateCellSizeForContainer(geometry.size.width)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** When a GeometryReader is within a List, height must be specified.

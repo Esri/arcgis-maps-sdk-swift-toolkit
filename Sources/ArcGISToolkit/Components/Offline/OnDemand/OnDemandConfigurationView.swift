@@ -122,7 +122,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -318,8 +318,8 @@ private struct RenameButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A message explaining that the map area name must be unique."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: proposedNewTitle) { _, newProposedTitle in
-***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck(newProposedTitle)
+***REMOVED******REMOVED***.onChange(of: proposedNewTitle) {
+***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck(proposedNewTitle)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
