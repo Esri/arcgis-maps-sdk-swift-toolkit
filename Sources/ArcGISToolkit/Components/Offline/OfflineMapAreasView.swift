@@ -414,32 +414,14 @@ enum Backported {
         }
         
         var body: some View {
-            if #available(iOS 17, *) {
-                SwiftUI.ContentUnavailableView {
-                    Label(title.key, systemImage: systemImage)
-                } description: {
-                    if let description {
-                        Text(description)
-                    }
-                } actions: {
-                    actions()
+            SwiftUI.ContentUnavailableView {
+                Label(title.key, systemImage: systemImage)
+            } description: {
+                if let description {
+                    Text(description)
                 }
-            } else {
-                VStack(alignment: .center) {
-                    Image(systemName: systemImage)
-                        .imageScale(.large)
-                        .foregroundStyle(.secondary)
-                    Text(title)
-                        .font(.headline)
-                    if let description {
-                        Text(description)
-                            .font(.subheadline)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.secondary)
-                    }
-                    actions()
-                }
-                .padding()
+            } actions: {
+                actions()
             }
         }
     }

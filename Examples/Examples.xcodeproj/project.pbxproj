@@ -15,7 +15,6 @@
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; };
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; };
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; };
-		79222E152D5008BB005C2ABA /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79222E142D5006EF005C2ABA /* View.swift */; };
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; platformFilter = ios; };
 		8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
@@ -53,7 +52,6 @@
 		75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormExampleView.swift; sourceTree = "<group>"; };
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
-		79222E142D5006EF005C2ABA /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
 		8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Examples+ListItem.swift"; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
@@ -84,14 +82,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		79222E132D5006E0005C2ABA /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				79222E142D5006EF005C2ABA /* View.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,7 +149,6 @@
 			isa = PBXGroup;
 			children = (
 				E40F58042656E509006F5CB9 /* Examples */,
-				79222E132D5006E0005C2ABA /* Extensions */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -274,7 +263,6 @@
 				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
-				79222E152D5008BB005C2ABA /* View.swift in Sources */,
 				8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
@@ -427,8 +415,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,8 +448,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
