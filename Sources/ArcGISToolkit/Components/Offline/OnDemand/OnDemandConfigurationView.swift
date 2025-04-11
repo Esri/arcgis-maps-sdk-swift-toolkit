@@ -122,7 +122,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(selectedRect) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -163,7 +163,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.preventMapInteractionFromMovingSheet()
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -270,23 +272,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension View {
-***REMOVED******REMOVED***/ Prevent sheet from moving when interacting with map view.
-***REMOVED***@ViewBuilder
-***REMOVED***func preventMapInteractionFromMovingSheet() -> some View {
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 ***REMOVED***/ A View that allows renaming of a map area.
 private struct RenameButton: View {
 ***REMOVED******REMOVED***/ The current title.
@@ -333,8 +318,8 @@ private struct RenameButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A message explaining that the map area name must be unique."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(proposedNewTitle) {
-***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck($0)
+***REMOVED******REMOVED***.onChange(of: proposedNewTitle) {
+***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck(proposedNewTitle)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

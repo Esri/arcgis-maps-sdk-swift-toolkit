@@ -414,32 +414,14 @@ enum Backported {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***if #available(iOS 17, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(title.key, systemImage: systemImage)
-***REMOVED******REMOVED******REMOVED*** description: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** actions: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions()
+***REMOVED******REMOVED******REMOVED***SwiftUI.ContentUnavailableView {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label(title.key, systemImage: systemImage)
+***REMOVED******REMOVED*** description: {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemImage)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED*** actions: {
+***REMOVED******REMOVED******REMOVED******REMOVED***actions()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

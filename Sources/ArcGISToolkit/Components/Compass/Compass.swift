@@ -87,10 +87,10 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(opacity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size, height: size)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(heading) { newHeading in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: heading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide(forHeading: heading) ? .zero : 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard opacity != newOpacity else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(shouldHide(forHeading: heading) ? 0.25 : 0)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = newOpacity
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -131,21 +131,12 @@ private extension View {
 ***REMOVED***@available(visionOS, unavailable)
 ***REMOVED***@ViewBuilder
 ***REMOVED***func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***if enabled {
-***REMOVED******REMOVED******REMOVED******REMOVED***sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if (!oldValue.isZero && newValue.isZero) ||
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(oldValue.isZero && !newValue.isZero) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***self
+***REMOVED******REMOVED***if enabled {
+***REMOVED******REMOVED******REMOVED***sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***(!oldValue.isZero && newValue.isZero) ||
+***REMOVED******REMOVED******REMOVED******REMOVED***(oldValue.isZero && !newValue.isZero)
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Fallback on earlier versions
 ***REMOVED******REMOVED******REMOVED***self
 ***REMOVED***
 ***REMOVED***
@@ -204,7 +195,6 @@ public extension Compass {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Enables sensory feedback when the heading snaps to `zero`.
-***REMOVED***@available(iOS 17, *)
 ***REMOVED***func snapToZeroSensoryFeedback() -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.snapToZeroSensoryFeedbackEnabled = true

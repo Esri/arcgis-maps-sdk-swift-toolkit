@@ -20,8 +20,8 @@ let package = Package(
 ***REMOVED***name: "arcgis-maps-sdk-swift-toolkit",
 ***REMOVED***defaultLocalization: "en",
 ***REMOVED***platforms: [
-***REMOVED******REMOVED***.iOS(.v16),
-***REMOVED******REMOVED***.macCatalyst(.v16),
+***REMOVED******REMOVED***.iOS(.v17),
+***REMOVED******REMOVED***.macCatalyst(.v17),
 ***REMOVED******REMOVED***.visionOS(.v2)
 ***REMOVED***],
 ***REMOVED***products: [

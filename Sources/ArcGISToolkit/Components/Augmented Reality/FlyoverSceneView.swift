@@ -146,8 +146,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.start(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear { session.pause() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(session.currentFrame) { frame in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let frame, let interfaceOrientation else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: session.currentFrame) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let frame = session.currentFrame, let interfaceOrientation else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
@@ -155,10 +155,10 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 #endif
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(initialCamera) { initialCamera in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: initialCamera) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = initialCamera
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(translationFactor) { translationFactor in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: translationFactor) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)

@@ -159,13 +159,13 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(anchorPoint) { anchorPoint in
+***REMOVED******REMOVED***.onChange(of: anchorPoint) {
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(translationFactor) { translationFactor in
+***REMOVED******REMOVED***.onChange(of: translationFactor) {
 ***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(clippingDistance) { clippingDistance in
+***REMOVED******REMOVED***.onChange(of: clippingDistance) {
 ***REMOVED******REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
