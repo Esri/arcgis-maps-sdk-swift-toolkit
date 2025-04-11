@@ -176,22 +176,19 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await portal.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let basemaps: [Basemap]
+***REMOVED******REMOVED******REMOVED******REMOVED***var basemaps = [Basemap]()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoModel is Scene {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let basemaps3D = try await portal.basemaps3D
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items.append(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentsOf: basemaps3D.lazy.map { BasemapGalleryItem(basemap: $0) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps += try await portal.basemaps3D
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if useDeveloperBasemaps {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.developerBasemaps
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps += try await portal.developerBasemaps
 ***REMOVED******REMOVED******REMOVED*** else if let portalInfo = portal.info,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  portalInfo.usesVectorBasemaps {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.vectorBasemaps
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps += try await portal.vectorBasemaps
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.basemaps
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps += try await portal.basemaps
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***items += basemaps.map { BasemapGalleryItem(basemap: $0) ***REMOVED***
 ***REMOVED******REMOVED*** catch {
