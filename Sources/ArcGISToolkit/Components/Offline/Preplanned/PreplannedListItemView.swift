@@ -50,7 +50,7 @@ struct PreplannedListItemView: View {
             EmptyView()
         case .loading:
             ProgressView()
-        case .packaged, .downloadFailure, .downloadCancelled:
+        case .packaged, .downloadFailure:
             DownloadOfflineMapAreaButton(model: model)
         case .downloading:
             OfflineJobProgressView(model: model)
@@ -123,13 +123,12 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
         case .downloading: .downloading
         case .downloaded: .downloaded
         case .downloadFailure: .downloadFailed
-        case .downloadCancelled: .cancelled
         }
     }
     
     var statusSystemImage: String {
         switch status {
-        case .notLoaded, .loading, .packaged, .downloaded, .downloading, .downloadCancelled:
+        case .notLoaded, .loading, .packaged, .downloaded, .downloading:
             ""
         case .loadFailure, .mmpkLoadFailure, .downloadFailure:
             "exclamationmark.circle"
@@ -165,14 +164,6 @@ private extension LocalizedStringResource {
             "Packaging failed",
             bundle: .toolkit,
             comment: "The status text when a map area packaging failed."
-        )
-    }
-    
-    static var cancelled: Self {
-        .init(
-            "Cancelled",
-            bundle: .toolkit,
-            comment: "The status text when a map area download is cancelled."
         )
     }
 }
