@@ -27,7 +27,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertFalse(Status.downloaded.canLoadPreplannedMapArea)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).canLoadPreplannedMapArea)
         XCTAssertFalse(Status.downloadFailure(CancellationError()).canLoadPreplannedMapArea)
-        XCTAssertFalse(Status.downloadCancelled.canLoadPreplannedMapArea)
         XCTAssertTrue(Status.notLoaded.canLoadPreplannedMapArea)
         XCTAssertTrue(Status.loadFailure(CancellationError()).canLoadPreplannedMapArea)
         XCTAssertTrue(Status.packageFailure.canLoadPreplannedMapArea)
@@ -43,7 +42,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertFalse(Status.downloading.allowsDownload)
         XCTAssertFalse(Status.downloaded.allowsDownload)
         XCTAssertTrue(Status.downloadFailure(CancellationError()).allowsDownload)
-        XCTAssertTrue(Status.downloadCancelled.allowsDownload)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).allowsDownload)
     }
     
@@ -57,7 +55,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertFalse(Status.downloading.isDownloaded)
         XCTAssertTrue(Status.downloaded.isDownloaded)
         XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
-        XCTAssertFalse(Status.downloadCancelled.isDownloaded)
         XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
     }
 }

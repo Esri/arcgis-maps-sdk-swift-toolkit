@@ -216,8 +216,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             status = .downloaded
         case .failure(let error):
             if error is CancellationError {
+                // Reset status to packaged if the job was cancelled.
                 Logger.offlineManager.info("DownloadPreplannedOfflineMapJob job cancelled.")
-                status = .downloadCancelled
+                status = .packaged
             } else {
                 Logger.offlineManager.error("DownloadPreplannedOfflineMapJob job failed with error: \(error).")
                 status = .downloadFailure(error)
@@ -257,8 +258,6 @@ extension PreplannedMapModel {
         case downloaded
         /// Preplanned map area failed to download.
         case downloadFailure(Error)
-        /// The job was cancelled.
-        case downloadCancelled
         /// Downloaded mobile map package failed to load.
         case mmpkLoadFailure(Error)
         
@@ -268,7 +267,7 @@ extension PreplannedMapModel {
             switch self {
             case .notLoaded, .loadFailure, .packageFailure:
                 true
-            case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure, .downloadFailure, .downloadCancelled:
+            case .loading, .packaging, .packaged, .downloading, .downloaded, .mmpkLoadFailure, .downloadFailure:
                 false
             }
         }
@@ -279,7 +278,7 @@ extension PreplannedMapModel {
             case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
                     .downloading, .downloaded, .mmpkLoadFailure:
                 false
-            case .packaged, .downloadFailure, .downloadCancelled:
+            case .packaged, .downloadFailure:
                 true
             }
         }
