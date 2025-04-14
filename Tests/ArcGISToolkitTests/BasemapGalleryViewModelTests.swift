@@ -312,7 +312,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let items = try await viewModel.$items.dropFirst().first
         let basemapGalleryItems = try XCTUnwrap(items)
         XCTAssertFalse(basemapGalleryItems.isEmpty)
-        XCTAssertEqual(basemapGalleryItems.count, 39)
+        XCTAssertEqual(basemapGalleryItems.count, 43)
         
         try await withThrowingTaskGroup(of: Void.self) { group in
             for index in basemapGalleryItems.indices {
