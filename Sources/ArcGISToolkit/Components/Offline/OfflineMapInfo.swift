@@ -18,6 +18,14 @@ import OSLog
 import UIKit.UIImage
 
 /// Information for an online map that has been taken offline.
+///
+/// When a map is taken offline, map information needs to be saved on device
+/// so that the map can be reloaded later when the device is offline. It
+/// provides access to and also enables display locally saved map information
+/// about downloaded map areas.
+///
+/// This type is typically used when there is no network connection.
+/// - Since: 200.7
 public struct OfflineMapInfo: Sendable {
     private let info: CodableInfo
     
@@ -62,11 +70,13 @@ public extension OfflineMapInfo {
     var description: String { info.description }
     /// The URL of the portal item associated with the map.
     var portalItemURL: URL { info.portalItemURL }
-    /// The ID of the portal item associated with the map.
-    var portalItemID: Item.ID { .init(info.portalItemID)! }
 }
 
-/// Information for an online map that has been taken offline.
+extension OfflineMapInfo: Identifiable {
+    /// The ID of the portal item associated with the map.
+    public var id: Item.ID { .init(info.portalItemID)! }
+}
+
 private extension OfflineMapInfo {
     /// The codable info is stored in json.
     struct CodableInfo: Codable {
@@ -100,7 +110,7 @@ extension OfflineMapInfo {
         guard FileManager.default.fileExists(atPath: urls.info.path()) else { return nil }
         Logger.offlineManager.debug("Found offline map info at \(urls.info.path())")
         guard let data = try? Data(contentsOf: urls.info),
-              let info = try? JSONDecoder().decode(OfflineMapInfo.CodableInfo.self, from: data)
+              let info = try? JSONDecoder().decode(CodableInfo.self, from: data)
         else { return nil }
         let thumbnail = UIImage(contentsOfFile: urls.thumbnail.path())
         return .init(info: info, thumbnail: thumbnail)
@@ -118,7 +128,7 @@ extension OfflineMapInfo {
         }
         
         // Save thumbnail to file.
-        if let thumbnail, let pngData = thumbnail.pngData() {
+        if let pngData = thumbnail?.pngData() {
             try? pngData.write(to: urls.thumbnail, options: .atomic)
         }
     }

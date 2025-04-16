@@ -49,7 +49,7 @@ struct InternalFeatureFormView: View {
                     }
                 }
             }
-            .onChange(model.focusedElement) { _ in
+            .onChange(of: model.focusedElement) {
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }

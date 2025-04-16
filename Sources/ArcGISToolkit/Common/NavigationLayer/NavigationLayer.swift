@@ -108,7 +108,7 @@ struct NavigationLayer<Content: View>: View {
             .environmentObject(model)
             // Apply container width so the animated transitions work correctly.
             .frame(width: geometryProxy.size.width)
-            .onChange(model.views.count) { _ in
+            .onChange(of: model.views.count) {
                 onNavigationChangedAction?(model.presented ?? nil)
             }
         }
