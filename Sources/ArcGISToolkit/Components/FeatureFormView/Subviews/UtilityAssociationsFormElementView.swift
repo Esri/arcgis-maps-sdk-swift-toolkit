@@ -36,8 +36,7 @@ struct UtilityAssociationsFormElementView: View {
             }
         })
         .task {
-            try? await element.fetchAssociationsFilterResults()
-            associationsFilterResults = element.associationsFilterResults
+            associationsFilterResults = (try? await element.associationsFilterResults) ?? []
         }
     }
 }

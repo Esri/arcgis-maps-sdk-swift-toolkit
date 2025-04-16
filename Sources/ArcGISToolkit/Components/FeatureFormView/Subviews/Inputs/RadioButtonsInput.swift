@@ -95,7 +95,7 @@ struct RadioButtonsInput: View {
                     || (input.noValueOption == .hide && !element.formattedValue.isEmpty)
                 }
             }
-            .onChange(selectedValue) { selectedValue in
+            .onChange(of: selectedValue) {
                 element.updateValue(selectedValue?.code)
                 model.evaluateExpressions()
             }
