@@ -31,7 +31,7 @@ struct CodeScanner: View {
             CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
                 .ignoresSafeArea()
                 .overlay(alignment:.topTrailing) {
-                    Button(String.cancel, role: .cancel) {
+                    Button.cancel {
                         isPresented = false
                     }
                     .buttonStyle(.borderedProminent)
