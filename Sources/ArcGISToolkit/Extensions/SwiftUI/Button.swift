@@ -36,6 +36,7 @@ extension Button<Text> {
     static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
         Button(action: action) {
             Text.done
+                .fontWeight(.semibold)
         }
     }
 }
