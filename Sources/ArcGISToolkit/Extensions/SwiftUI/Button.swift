@@ -36,6 +36,7 @@ extension Button<Text> {
 ***REMOVED***static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
 ***REMOVED******REMOVED***Button(action: action) {
 ***REMOVED******REMOVED******REMOVED***Text.done
+***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
