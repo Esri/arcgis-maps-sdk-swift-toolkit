@@ -52,7 +52,7 @@ private struct CameraRequesterModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 #endif
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.cancel, role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button.cancel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***requester.onAccessDenied?()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: {
