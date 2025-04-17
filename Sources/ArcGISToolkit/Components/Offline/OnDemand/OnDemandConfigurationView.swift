@@ -164,7 +164,6 @@ struct OnDemandConfigurationView: View {
                 }
             }
             .highPriorityGesture(DragGesture())
-            .highPriorityGesture(RotateGesture())
             .interactiveDismissDisabled()
     }
     
