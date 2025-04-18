@@ -154,8 +154,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
 ***REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
