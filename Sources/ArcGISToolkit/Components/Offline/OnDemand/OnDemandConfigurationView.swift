@@ -115,7 +115,25 @@ struct OnDemandConfigurationView: View {
         MapViewReader { mapViewProxy in
             VStack(spacing: 0) {
                 instructionsView
-                mapView
+                MapView(map: map)
+                #if !os(visionOS)
+                    .magnifierDisabled(true)
+                #endif
+                    .attributionBarHidden(true)
+                    .interactionModes([.pan, .zoom])
+                    .onDrawStatusChanged { drawStatus in
+                        guard !mapIsReady else { return }
+                        if drawStatus == .completed && map.loadStatus == .loaded {
+                            mapIsReady = true
+                        }
+                    }
+                    .onVisibleAreaChanged { _ in
+                        // Update selected extent when visible area changes.
+                        selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+                    }
+                    .highPriorityGesture(DragGesture())
+                    .highPriorityGesture(RotateGesture())
+                    .interactiveDismissDisabled()
                     .overlay {
                         if mapIsReady {
                             // Don't add the selector view until the map is ready.
@@ -123,6 +141,7 @@ struct OnDemandConfigurationView: View {
                         }
                     }
                     .onChange(of: selectedRect) {
+                        // Update selected extent when selector changes.
                         selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
                     }
             }
@@ -147,25 +166,6 @@ struct OnDemandConfigurationView: View {
             .frame(maxWidth: .infinity)
             Divider()
         }
-    }
-    
-    @ViewBuilder
-    private var mapView: some View {
-        MapView(map: map)
-        #if !os(visionOS)
-            .magnifierDisabled(true)
-        #endif
-            .attributionBarHidden(true)
-            .interactionModes([.pan, .zoom])
-            .onDrawStatusChanged { drawStatus in
-                guard !mapIsReady else { return }
-                if drawStatus == .completed && map.loadStatus == .loaded {
-                    mapIsReady = true
-                }
-            }
-            .highPriorityGesture(DragGesture())
-            .highPriorityGesture(RotateGesture())
-            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
