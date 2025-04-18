@@ -115,7 +115,25 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***instructionsView
-***REMOVED******REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***#endif
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDrawStatusChanged { drawStatus in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !mapIsReady else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if drawStatus == .completed && map.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update selected extent when visible area changes.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
@@ -123,6 +141,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update selected extent when selector changes.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -147,25 +166,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***private var mapView: some View {
-***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED***#if !os(visionOS)
-***REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
-***REMOVED******REMOVED***#endif
-***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
-***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED***.onDrawStatusChanged { drawStatus in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard !mapIsReady else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if drawStatus == .completed && map.loadStatus == .loaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
