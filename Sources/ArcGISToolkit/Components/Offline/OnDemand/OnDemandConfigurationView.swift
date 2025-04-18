@@ -154,8 +154,8 @@ struct OnDemandConfigurationView: View {
                     mapIsReady = true
                 }
             }
-            .highPriorityGesture(DragGesture())
             .highPriorityGesture(RotateGesture())
+            .highPriorityGesture(DragGesture())
             .interactiveDismissDisabled()
     }
     
