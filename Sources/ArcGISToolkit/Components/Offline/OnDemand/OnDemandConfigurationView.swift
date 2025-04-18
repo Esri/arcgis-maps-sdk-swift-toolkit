@@ -32,14 +32,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The max scale of the map to take offline.
 ***REMOVED***@State private var maxScale: CacheScale = .street
 ***REMOVED***
-***REMOVED******REMOVED***/ The visible area of the map.
-***REMOVED***@State private var visibleArea: Envelope?
-***REMOVED***
 ***REMOVED******REMOVED***/ The selected map area.
 ***REMOVED***@State private var selectedRect: CGRect = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The extent of the selected map area.
-***REMOVED***@State private var selectedExtent: Envelope?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating that the map is ready.
 ***REMOVED***@State private var mapIsReady = false
@@ -48,7 +42,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
-***REMOVED***private var downloadIsDisabled: Bool { selectedExtent == nil || hasNoInternetConnection ***REMOVED***
+***REMOVED***private var downloadIsDisabled: Bool { selectedRect == .zero || hasNoInternetConnection ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of trying to load the map.
 ***REMOVED***@State private var loadResult: Result<Void, Error>?
@@ -121,9 +115,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
@@ -211,7 +202,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent = mapView.envelope(fromViewRect: selectedRect) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: selectedRect)
