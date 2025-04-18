@@ -32,14 +32,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The max scale of the map to take offline.
 ***REMOVED***@State private var maxScale: CacheScale = .street
 ***REMOVED***
-***REMOVED******REMOVED***/ The visible area of the map.
-***REMOVED***@State private var visibleArea: Envelope?
-***REMOVED***
 ***REMOVED******REMOVED***/ The selected map area.
 ***REMOVED***@State private var selectedRect: CGRect = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The extent of the selected map area.
-***REMOVED***@State private var selectedExtent: Envelope?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating that the map is ready.
 ***REMOVED***@State private var mapIsReady = false
@@ -48,7 +42,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
-***REMOVED***private var downloadIsDisabled: Bool { selectedExtent == nil || hasNoInternetConnection ***REMOVED***
+***REMOVED***private var downloadIsDisabled: Bool { selectedRect == .zero || hasNoInternetConnection ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of trying to load the map.
 ***REMOVED***@State private var loadResult: Result<Void, Error>?
@@ -115,34 +109,12 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***instructionsView
-***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***#if !os(visionOS)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***#endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDrawStatusChanged { drawStatus in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !mapIsReady else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if drawStatus == .completed && map.loadStatus == .loaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update selected extent when visible area changes.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED******REMOVED******REMOVED***mapView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapIsReady {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't add the selector view until the map is ready.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedRect) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update selected extent when selector changes.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
@@ -166,6 +138,25 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder
+***REMOVED***private var mapView: some View {
+***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED***#if !os(visionOS)
+***REMOVED******REMOVED******REMOVED***.magnifierDisabled(true)
+***REMOVED******REMOVED***#endif
+***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED***.interactionModes([.pan, .zoom])
+***REMOVED******REMOVED******REMOVED***.onDrawStatusChanged { drawStatus in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard !mapIsReady else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if drawStatus == .completed && map.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -211,7 +202,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent = mapView.envelope(fromViewRect: selectedRect) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: selectedRect)
