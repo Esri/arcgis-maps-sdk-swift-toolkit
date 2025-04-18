@@ -19,8 +19,15 @@ extension LocalizedStringResource.BundleDescription {
     static let toolkit: Self = .atURL(Bundle.toolkitModule.bundleURL)
 }
 
-
 extension LocalizedStringResource {
+    static var cancel: Self {
+        .init(
+            "Cancel",
+            bundle: .toolkit,
+            comment: "A label for a button to cancel an operation."
+        )
+    }
+    
     static var downloaded: Self {
         .init(
             "Downloaded",
@@ -66,6 +73,15 @@ extension LocalizedStringResource {
             "No Internet Connection",
             bundle: .toolkit,
             comment: "An error message explaining that there is no internet connection."
+        )
+    }
+    
+    /// A localized string for the word "OK".
+    static var ok: Self {
+        .init(
+            "OK",
+            bundle: .toolkit,
+            comment: "A label for button to proceed with an operation."
         )
     }
 }
