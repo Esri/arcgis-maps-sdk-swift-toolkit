@@ -291,7 +291,7 @@ extension CredentialInputSheetView {
 ***REMOVED******REMOVED***/ A configuration for an alert action.
 ***REMOVED***struct Action {
 ***REMOVED******REMOVED******REMOVED***/ The title of the action.
-***REMOVED******REMOVED***let title: String
+***REMOVED******REMOVED***let title: LocalizedStringResource
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The block to execute when the action is triggered.
 ***REMOVED******REMOVED******REMOVED***/ The parameters are the username and the password.
