@@ -32,14 +32,8 @@ struct OnDemandConfigurationView: View {
     /// The max scale of the map to take offline.
     @State private var maxScale: CacheScale = .street
     
-    /// The visible area of the map.
-    @State private var visibleArea: Envelope?
-    
     /// The selected map area.
     @State private var selectedRect: CGRect = .zero
-    
-    /// The extent of the selected map area.
-    @State private var selectedExtent: Envelope?
     
     /// A Boolean value indicating that the map is ready.
     @State private var mapIsReady = false
@@ -48,7 +42,7 @@ struct OnDemandConfigurationView: View {
     @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating if the download button is disabled.
-    private var downloadIsDisabled: Bool { selectedExtent == nil || hasNoInternetConnection }
+    private var downloadIsDisabled: Bool { selectedRect == .zero || hasNoInternetConnection }
     
     /// The result of trying to load the map.
     @State private var loadResult: Result<Void, Error>?
@@ -115,34 +109,12 @@ struct OnDemandConfigurationView: View {
         MapViewReader { mapViewProxy in
             VStack(spacing: 0) {
                 instructionsView
-                MapView(map: map)
-                #if !os(visionOS)
-                    .magnifierDisabled(true)
-                #endif
-                    .attributionBarHidden(true)
-                    .interactionModes([.pan, .zoom])
-                    .onDrawStatusChanged { drawStatus in
-                        guard !mapIsReady else { return }
-                        if drawStatus == .completed && map.loadStatus == .loaded {
-                            mapIsReady = true
-                        }
-                    }
-                    .onVisibleAreaChanged { _ in
-                        // Update selected extent when visible area changes.
-                        selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-                    }
-                    .highPriorityGesture(DragGesture())
-                    .highPriorityGesture(RotateGesture())
-                    .interactiveDismissDisabled()
+                mapView
                     .overlay {
                         if mapIsReady {
                             // Don't add the selector view until the map is ready.
                             OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
                         }
-                    }
-                    .onChange(of: selectedRect) {
-                        // Update selected extent when selector changes.
-                        selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
                     }
             }
             .safeAreaInset(edge: .bottom) {
@@ -166,6 +138,25 @@ struct OnDemandConfigurationView: View {
             .frame(maxWidth: .infinity)
             Divider()
         }
+    }
+    
+    @ViewBuilder
+    private var mapView: some View {
+        MapView(map: map)
+        #if !os(visionOS)
+            .magnifierDisabled(true)
+        #endif
+            .attributionBarHidden(true)
+            .interactionModes([.pan, .zoom])
+            .onDrawStatusChanged { drawStatus in
+                guard !mapIsReady else { return }
+                if drawStatus == .completed && map.loadStatus == .loaded {
+                    mapIsReady = true
+                }
+            }
+            .highPriorityGesture(DragGesture())
+            .highPriorityGesture(RotateGesture())
+            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
@@ -211,7 +202,7 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let selectedExtent else { return }
+                        guard let selectedExtent = mapView.envelope(fromViewRect: selectedRect) else { return }
                         Task {
                             let image = try? await mapView.exportImage()
                             let thumbnail = image?.crop(to: selectedRect)
