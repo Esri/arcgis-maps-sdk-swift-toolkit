@@ -36,8 +36,9 @@ struct UtilityAssociationsFormElementView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***)
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await element.fetchAssociationsFilterResults()
-***REMOVED******REMOVED******REMOVED***associationsFilterResults = element.associationsFilterResults
+***REMOVED******REMOVED******REMOVED***if let results = try? await element.associationsFilterResults {
+***REMOVED******REMOVED******REMOVED******REMOVED***associationsFilterResults = results
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
