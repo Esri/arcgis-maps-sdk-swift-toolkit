@@ -75,8 +75,7 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Camera access is disabled";
 
-/* A label for a button to cancel an operation.
-Title for a button that cancels an action. */
+/* A label for a button to cancel an operation. */
 "Cancel" = "Cancel";
 
 /* A label for a button to cancel the starting point selection operation. */
