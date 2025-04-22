@@ -62,7 +62,7 @@ struct OnDemandMapAreaSelectorView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.all)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay { handles ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(safeAreaInsets) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: safeAreaInsets) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateMaxRect(geometry: geometry)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***

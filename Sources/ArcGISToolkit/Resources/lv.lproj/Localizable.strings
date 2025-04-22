@@ -1,9 +1,18 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld ir atlasīts";
 
+/* A label indicating the number of results of a utility network trace. */
+"^[%lld Results](inflect: true)" = "^[%lld Rezultāti](inflect: true)";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Lai piekļūtu saturam %@, ir nepieciešams sertifikāts.";
+
+/* A message explaining that a map area cannot be downloaded at this time. */
+"A map area cannot be downloaded at this time." = "Šoreiz kartes teritoriju nevar ielādēt.";
+
+/* A label for a button to add a map area. */
+"Add Map Area" = "Pievienot kartes teritoriju";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Pievienot jaunu";
@@ -12,13 +21,22 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Paplašinātās iespējas";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Visas vietnes";
+"All Sites" = "Visas vietnes";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Tiks zaudētas visas izsekošanas ievades un rezultāti.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Atļaut";
+
+/* An error message for when fetching map areas fails. */
+"An error occurred while fetching map areas." = "Ienesot kartes teritorijas, radās kļūda.";
+
+/* The title for a map area. */
+"Area %lld" = "Teritorija %lld";
+
+/* A hint for the user to enter an area name in the text field. */
+"Area Name" = "Teritorijas nosaukums";
 
 /* A label in reference to attachments. */
 "Attachments" = "Pielikumi";
@@ -38,6 +56,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Pārlūkot";
 
+/* Building (Level of Detail) */
+"Building" = "Ēka";
+
+/* Buildings (Level of Detail) */
+"Buildings" = "Ēkas";
+
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibrēt";
 
@@ -48,11 +72,15 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Liegta piekļuve kamerai";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Title for a button that cancels an action. */
 "Cancel" = "Atcelt";
 
 /* A label for a button to cancel the starting point selection operation. */
 "Cancel Starting Point Selection" = "Atcelt sākumpunkta atlasi";
+
+/* The status text when a map area download is cancelled. */
+"Cancelled" = "Atcelts";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Ir nepieciešams sertifikāts";
@@ -66,7 +94,13 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Izvēlēties no bibliotēkas";
 
-/* The label of a button that clears a form's input. */
+/* Cities (Level of Detail) */
+"Cities" = "Pilsētas";
+
+/* City (Level of Detail) */
+"City" = "Pilsēta";
+
+/* E.g. Remove text from a text field. */
 "Clear" = "Notīrīt";
 
 /* A directive to clear all of the completed utility network traces. */
@@ -81,8 +115,29 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompass, virziens %lld grādos %@";
 
+/* Continent (Level of Detail) */
+"Continent" = "Kontinents";
+
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Turpināt";
+
+/* An error message explaining that map areas could not be retrieved for this map. */
+"Could not retrieve map areas for this map." = "Nevar izgūt kartes teritorijas šai kartei.";
+
+/* Counties (Level of Detail) */
+"Counties" = "Novadi";
+
+/* Countries (Big) (Level of Detail) */
+"Countries (Big)" = "Valstis (lielas)";
+
+/* Countries (Small) (Level of Detail) */
+"Countries (Small)" = "Valstis (mazas)";
+
+/* County (Level of Detail) */
+"County" = "Novads";
+
+/* The status text for an opened map area. */
+"Currently open" = "Pašreiz atvērts";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Bīstami: '%@' nodrošināto sertifikātu nav parakstījusi uzticama iestāde.";
@@ -102,8 +157,38 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Dzēst";
 
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "Dzēst visus sākumpunktus";
+
+/* The title of the dialogue confirming deletion of all points. */
+"Delete all starting points?" = "Vai dzēst visus sākumpunktus?";
+
+/* A label for a button to delete a map area. */
+"Delete Map Area" = "Dzēst kartes teritoriju";
+
+/* A label for the description of the map area. */
+"Description" = "Apraksts";
+
+/* E.g. Close/hide a sheet or pop-up. */
+"Dismiss" = "Noraidīt";
+
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Pabeigts";
+
+/* A label for a button to download a map area. */
+"Download" = "Lejupielāde";
+
+/* The status text when a map area failed to download. */
+"Download failed" = "Lejupielāde neizdevās";
+
+/* A label for a button to download a map area. */
+"Download Map Area" = "Lejupielādēt kartes teritoriju";
+
+/* The status text when a map area is downloaded. */
+"Downloaded" = "Lejupielādēts";
+
+/* The status text when a map area is downloading. */
+"Downloading" = "Lejupielādē";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -131,6 +216,9 @@ hold the minimum and maximum length respectively. */
 /* Text indicating the user should enter a field's exact number of characters. */
 "Enter ^[%lld characters](inflect: true)" = "Ievadīt ^[%lld rakstzīmes](inflect: true)";
 
+/* An instruction to enter a name. */
+"Enter a name" = "Ievadīt nosaukumu";
+
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Ievadiet vērtību";
 
@@ -140,6 +228,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Kļūda";
+
+/* A label indicating that an error occurred while fetching map areas. */
+"Error Fetching Map Areas" = "Ienesot kartes teritorijas, radās kļūda";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -204,8 +295,26 @@ trace operation. */
 AR experience. */
 "heading" = "kurss";
 
+/* House Property (Level of Detail) */
+"House Property" = "Ēkas īpašums";
+
+/* Houses (Level of Detail) */
+"Houses" = "Ēkas";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mazāk par minimālo vērtību";
+
+/* A label for the level of detail picker view. */
+"Level of Detail" = "Detalizācijas pakāpe";
+
+/* The status text when a map area is loading. */
+"Loading" = "Ielādē";
+
+/* The status text when a map area failed to load. */
+"Loading failed" = "Ielāde neizdevās";
+
+/* A title for the offline map areas view. */
+"Map Areas" = "Kartes teritorijas";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maksimāli ^[%lld rakstīzmes](inflect: true)";
@@ -215,6 +324,9 @@ AR experience. */
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Multivide";
+
+/* Metropolitan Area (Level of Detail) */
+"Metropolitan Area" = "Lielpilsēta";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Piekļuve mikrofonam ir atspējota iestatījumos.";
@@ -227,6 +339,9 @@ AR experience. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nosaukums";
+
+/* Neighborhood (Level of Detail) */
+"Neighborhood" = "Apkaime";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Tīkls";
@@ -242,6 +357,15 @@ AR experience. */
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Konfigurācijas nav pieejamas.";
+
+/* An error message explaining that there is no internet connection. */
+"No Internet Connection" = "Nav interneta savienojuma";
+
+/* An error message explaining that there is no internet connection and only downloaded areas are shown. */
+"No internet connection. Showing downloaded areas only." = "Nav interneta savienojuma. Rāda tikai lejupielādētās teritorijas.";
+
+/* A label indicating that there are no map areas. */
+"No Map Areas" = "Nav kartes teritorijas";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Atbilstība netika atrasta.";
@@ -267,8 +391,26 @@ AR experience. */
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Objekta ID: %@";
 
+/* A label indicating that the map is offline disabled. */
+"Offline Disabled" = "Bezsaiste atspējota";
+
 /* A label for button to proceed with an operation. */
 "OK" = "Labi";
+
+/* A message explaining that the online map failed to load. */
+"Online Map Failed to Load" = "Nevarēja ielādēt tiešsaistes karti";
+
+/* A label for a button to open a map area. */
+"Open" = "Atvērt";
+
+/* The status text when a map area is packaging. */
+"Packaging" = "Pakotņu veidošana";
+
+/* The status text when a map area packaging failed. */
+"Packaging failed" = "Pakotņu veidošana neizdevās";
+
+/* A label instructing to pan and zoom the map to define an area. */
+"Pan and zoom to define the area" = "Panoramēt un veikt tālummaiņu, lai definētu teritoriju";
 
 /* A label in reference to a credential password. */
 "Password" = "Parole";
@@ -294,8 +436,14 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Uznirstošais novērtējums neizdevās: %@";
 
+/* The status text when a map area is ready to download. */
+"Ready to download" = "Gatavs lejupielādei";
+
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Ierakstīt tikai video";
+
+/* A label for a button to refresh map area content. */
+"Refresh" = "Atjaunot";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Pārdēvēt";
@@ -314,6 +462,12 @@ current visible extent of the map or scene. */
 /* A label for a button to show utility network trace results. */
 "Results" = "Rezultāti";
 
+/* Room (Level of Detail) */
+"Room" = "Telpa";
+
+/* Rooms (Level of Detail) */
+"Rooms" = "Telpas";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Meklēšanas vaicājums";
 
@@ -323,6 +477,9 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Izvēlieties infrastruktūras objektu";
+
+/* A title for the on demand configuration view. */
+"Select Area" = "Izvēlēties teritoriju";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Izvēlēties tīklu";
@@ -336,6 +493,12 @@ or more levels in a floor-aware map or scene. */
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Vietnes";
 
+/* A label for the file size of the map area. */
+"Size: %@" = "Izmērs: %@";
+
+/* Small Building (Level of Detail) */
+"Small Building" = "Neliela ēka";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Telpiskās atskaites nesaderība.";
@@ -343,6 +506,18 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Sākumpunkti";
+
+/* State/Province (Level of Detail) */
+"State/Province" = "Štats/province";
+
+/* States/Provinces (Level of Detail) */
+"States/Provinces" = "Štati/provinces";
+
+/* Street (Level of Detail) */
+"Street" = "Iela";
+
+/* Streets (Level of Detail) */
+"Streets" = "Ielas";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Uzņemt fotoattēlu vai video";
@@ -378,6 +553,12 @@ match the spatial reference of the map. */
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kartei nav telpiskās atskaites.";
 
+/* A message indicating that the map is not offline enabled. */
+"The map is not enabled for offline use." = "Karte nav iespējota lietošanai bezsaistē.";
+
+/* A message explaining that the map area name must be unique. */
+"The name for the map area must be unique." = "Martes teritorijas nosaukumam ir jābūt unikālam.";
+
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Parole ir nederīga.";
 
@@ -391,8 +572,17 @@ to be imported as an attachment. */
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL nevarēja sasniegt vai tas nesaturēja attēla datus.";
 
+/* A message explaining that there are no map areas for this map. */
+"There are no map areas for this map." = "Šai kartei nav kartes teritoriju.";
+
+/* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
+"There are no map areas for this map. Tap the button below to get started." = "Šai kartei nav kartes teritoriju. Lai sāktu, nospiediet zemāk redzamo pogu.";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Šodien";
+
+/* Town (Level of Detail) */
+"Town" = "Mazpilsēta";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Izsekot";
@@ -406,11 +596,17 @@ to be imported as an attachment. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Mēģināt vēlreiz";
 
+/* The default title of a map area with an unknown title. */
+"Unknown" = "Nezināms";
+
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Nezināma validācijas kļūda";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Nenosaukts aktīva veids";
+
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "Neatbalstīta vērtība";
 
 /* A label in reference to a credential username. */
 "Username" = "Lietotājvārds";
@@ -444,6 +640,18 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Vērtība nedrīkst būt tukša";
+
+/* E.g. Open a hyperlink. */
+"View" = "Skatīt";
+
+/* World (Level of Detail) */
+"World" = "Pasaule";
+
+/* World (Big) (Level of Detail) */
+"World (Big)" = "Pasaule (liela)";
+
+/* World (Small) (Level of Detail) */
+"World (Small)" = "Pasaule (maza)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

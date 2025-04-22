@@ -244,22 +244,22 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***onQueryChangedAction?(viewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(viewModel.selectedResult) { _ in
+***REMOVED******REMOVED***.onChange(of: viewModel.selectedResult) {
 ***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(viewModel.currentSuggestion) { _ in
+***REMOVED******REMOVED***.onChange(of: viewModel.currentSuggestion) {
 ***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(geoViewExtent) { _ in
+***REMOVED******REMOVED***.onChange(of: geoViewExtent) {
 ***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(isGeoViewNavigating) { _ in
+***REMOVED******REMOVED***.onChange(of: isGeoViewNavigating) {
 ***REMOVED******REMOVED******REMOVED***viewModel.isGeoViewNavigating = isGeoViewNavigating
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(queryCenter) { _ in
+***REMOVED******REMOVED***.onChange(of: queryCenter) {
 ***REMOVED******REMOVED******REMOVED***viewModel.queryCenter = queryCenter
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(queryArea) { _ in
+***REMOVED******REMOVED***.onChange(of: queryArea) {
 ***REMOVED******REMOVED******REMOVED***viewModel.queryArea = queryArea
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
@@ -475,13 +475,7 @@ extension ResultRow {
 ***REMOVED******REMOVED******REMOVED***image: AnyView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***(searchSuggestion.isCollection ?
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Image(systemName: "magnifyingglass") :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***uiImage: UIImage(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***named: "pin",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***in: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("pin", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***)
@@ -495,7 +489,7 @@ extension ResultRow {
 ***REMOVED******REMOVED******REMOVED***title: searchResult.displayTitle,
 ***REMOVED******REMOVED******REMOVED***subtitle: searchResult.displaySubtitle,
 ***REMOVED******REMOVED******REMOVED***image: AnyView(
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage.mapPin)
+***REMOVED******REMOVED******REMOVED******REMOVED***Image("MapPin", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaleEffect(0.65)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)

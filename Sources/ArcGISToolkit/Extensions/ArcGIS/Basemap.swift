@@ -1,4 +1,4 @@
-***REMOVED***
+***REMOVED*** Copyright 2025 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -12,22 +12,11 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***/ A category of examples.
-struct Category {
-***REMOVED******REMOVED***/ The name of this category.
-***REMOVED***let name: String
-***REMOVED******REMOVED***/ The examples in this category.
-***REMOVED***let examples: [Example]
 ***REMOVED***
 
-extension Category: Equatable {
-***REMOVED***static func == (lhs: Self, rhs: Self) -> Bool {
-***REMOVED******REMOVED***return lhs.name == rhs.name
-***REMOVED***
-***REMOVED***
-
-extension Category: Hashable {
-***REMOVED***func hash(into hasher: inout Hasher) {
-***REMOVED******REMOVED***hasher.combine(name)
+extension Basemap {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the basemap supports 3D visualization.
+***REMOVED***var is3D: Bool {
+***REMOVED******REMOVED***baseLayers.contains(where: { $0 is ArcGISSceneLayer ***REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -17,7 +17,56 @@ import Combine
 import OSLog
 ***REMOVED***
 
-***REMOVED***/ An object that maintains state for the offline components.
+***REMOVED***/ A utility object that maintains the state of offline map areas and their
+***REMOVED***/ storage on the device.
+***REMOVED***/
+***REMOVED***/ This component provides high-level APIs to manage offline map areas and
+***REMOVED***/ access their data.
+***REMOVED***/ This component manages offline jobs and it utilizes the ``JobManager``
+***REMOVED***/ in order to facilitate jobs continuing to run while the app is backgrounded.
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ The component supports both ahead-of-time(preplanned) and on-demand
+***REMOVED***/ workflows for offline mapping. It allows you to:
+***REMOVED***/
+***REMOVED***/ - Observe job status.
+***REMOVED***/ - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
+***REMOVED***/ - Remove offline map areas from the device.
+***REMOVED***/ - Run download jobs while the app is in the background.
+***REMOVED***/ - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
+***REMOVED***/
+***REMOVED***/ The component is useful both for building custom UI with the provided APIs,
+***REMOVED***/ and for supporting workflows that require retrieving offline map areas
+***REMOVED***/ information from the device. By using the `OfflineManager`, you can create
+***REMOVED***/ an `OfflineMapAreasView` using the ``OfflineMapAreasView/init(offlineMapInfo:selection:)``
+***REMOVED***/ initializer.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The offline manager is not instantiable, you must use the ``shared`` instance.
+***REMOVED***/ Set the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
+***REMOVED***/ modifier at the entry point of your application to add additional setup
+***REMOVED***/ required for the component to use the job manager. For example:
+***REMOVED***/
+***REMOVED***/ ```swift
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ struct ExampleOfflineApp: App {
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/***REMOVED******REMOVED******REMOVED*** ContentView()
+***REMOVED***/ ***REMOVED***
+***REMOVED***/***REMOVED******REMOVED*** ***REMOVED*** Setup the offline toolkit components for the app.
+***REMOVED***/***REMOVED******REMOVED*** .offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
+***REMOVED***/***REMOVED******REMOVED******REMOVED*** ***REMOVED*** Do something after the job completes…
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ```
+***REMOVED***/
+***REMOVED***/ > Note: The `OfflineManager` can be used independently of any UI components,
+***REMOVED***/ > making it suitable for automated workflows or custom implementations.
+***REMOVED***/ - Since: 200.7
 @MainActor
 public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared offline manager.
@@ -32,7 +81,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ The jobs managed by this instance.
 ***REMOVED***var jobs: [any JobProtocol] { jobManager.jobs ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The portal item information for webmaps that have downloaded map areas.
+***REMOVED******REMOVED***/ The portal item information for web maps that have downloaded map areas.
 ***REMOVED***@Published
 ***REMOVED***private(set) public var offlineMapInfos: [OfflineMapInfo] = []
 ***REMOVED***
@@ -42,7 +91,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***private init() {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Initializing OfflineManager")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Retrieves the offline map infos.
+***REMOVED******REMOVED******REMOVED*** Retrieve the offline map infos.
 ***REMOVED******REMOVED***loadOfflineMapInfos()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Observe each job's status.
@@ -58,8 +107,10 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a job that will be managed by this instance.
-***REMOVED******REMOVED***/ - Parameter job: The job to start.
-***REMOVED***func start(job: any JobProtocol, portalItem: PortalItem) {
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - job: The job to start.
+***REMOVED******REMOVED***/   - portalItem: The portal item whose map is being taken offline.
+***REMOVED***func start(job: some JobProtocol, portalItem: PortalItem) {
 ***REMOVED******REMOVED***Logger.offlineManager.debug("Starting Job from offline manager")
 ***REMOVED******REMOVED***jobManager.jobs.append(job)
 ***REMOVED******REMOVED***observeJob(job)
@@ -70,7 +121,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Observes a job for completion.
-***REMOVED***private func observeJob<Job: JobProtocol>(_ job: Job) {
+***REMOVED***private func observeJob(_ job: some JobProtocol) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Observing job completion")
 ***REMOVED******REMOVED******REMOVED***
@@ -97,7 +148,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Figures out and returns the portal item associated with the online map for a particular
 ***REMOVED******REMOVED***/ offline job.
-***REMOVED***private func onlineMapPortalItem<Job: JobProtocol>(for job: Job) -> PortalItem? {
+***REMOVED***private func onlineMapPortalItem(for job: some JobProtocol) -> PortalItem? {
 ***REMOVED******REMOVED***switch job {
 ***REMOVED******REMOVED***case let downloadPreplanned as DownloadPreplannedOfflineMapJob:
 ***REMOVED******REMOVED******REMOVED***downloadPreplanned.onlineMap?.item as? PortalItem
@@ -117,7 +168,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Retrieves the model for a given `OfflineMapInfo`.
 ***REMOVED***private func model(for offlineMapInfo: OfflineMapInfo) -> OfflineMapViewModel {
-***REMOVED******REMOVED***if let model = models[offlineMapInfo.portalItemID] {
+***REMOVED******REMOVED***if let model = models[offlineMapInfo.id] {
 ***REMOVED******REMOVED******REMOVED***return model
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Only create the map here if we don't already have the model in memory.
@@ -131,7 +182,7 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ map areas.
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The portal item ID.
 ***REMOVED***func removeMapInfo(for portalItemID: Item.ID) {
-***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.portalItemID == portalItemID ***REMOVED***)
+***REMOVED******REMOVED***offlineMapInfos.removeAll(where: { $0.id == portalItemID ***REMOVED***)
 ***REMOVED******REMOVED***OfflineMapInfo.remove(from: URL.portalItemDirectory(forPortalItemID: portalItemID))
 ***REMOVED***
 ***REMOVED***
@@ -178,35 +229,36 @@ public class OfflineManager: ObservableObject {
 ***REMOVED******REMOVED***/ folder to its final destination.
 ***REMOVED***private func handlePendingMapInfo<Output>(
 ***REMOVED******REMOVED***for result: Result<Output, Error>,
-***REMOVED******REMOVED***portalItemID: Item.ID) {
-***REMOVED******REMOVED******REMOVED***guard !offlineMapInfos.contains(where: { $0.portalItemID == portalItemID ***REMOVED***) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***switch result {
-***REMOVED******REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Move the pending info into the correct folder.
-***REMOVED******REMOVED******REMOVED******REMOVED***let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
-***REMOVED******REMOVED******REMOVED******REMOVED***let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***for file in contents {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let source = pendingURL.appending(path: file)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let dest = portalItemDir.appending(path: file)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't overwrite if file already exists.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: dest.path()) else { continue ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
-***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let info = OfflineMapInfo.make(from: portalItemDir) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapInfos.append(info)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***portalItemID: Item.ID
+***REMOVED***) {
+***REMOVED******REMOVED***guard !offlineMapInfos.contains(where: { $0.id == portalItemID ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED***switch result {
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Move the pending info into the correct folder.
+***REMOVED******REMOVED******REMOVED***let pendingURL = URL.pendingMapInfoDirectory(forPortalItem: portalItemID)
+***REMOVED******REMOVED******REMOVED***let portalItemDir = URL.portalItemDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED***guard let contents = try? FileManager.default.contentsOfDirectory(atPath: pendingURL.path()) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for file in contents {
+***REMOVED******REMOVED******REMOVED******REMOVED***let source = pendingURL.appending(path: file)
+***REMOVED******REMOVED******REMOVED******REMOVED***let dest = portalItemDir.appending(path: file)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't overwrite if file already exists.
+***REMOVED******REMOVED******REMOVED******REMOVED***guard !FileManager.default.fileExists(atPath: dest.path()) else { continue ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.debug("Moving offline map info for completed job to \(dest.path())")
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.moveItem(atPath: source.path(), toPath: dest.path())
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("Error moving offline map info file \(file): \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If job failed then do nothing. Pending info can stay in the caches directory
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** as it is likely going to be used when then user tries again.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If not, the OS will eventually delete it.
-***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED******REMOVED***if let info = OfflineMapInfo.make(from: portalItemDir) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapInfos.append(info)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED*** If job failed then do nothing. Pending info can stay in the caches directory
+***REMOVED******REMOVED******REMOVED******REMOVED*** as it is likely going to be used when then user tries again.
+***REMOVED******REMOVED******REMOVED******REMOVED*** If not, the OS will eventually delete it.
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Removes all downloads for all offline maps.
@@ -236,11 +288,11 @@ public class OfflineManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Now remove any offline map areas whose model isn't in memory by simply deleting the
 ***REMOVED******REMOVED******REMOVED*** whole portal item directory. This will also delete the map info.
-***REMOVED******REMOVED***let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.portalItemID)
+***REMOVED******REMOVED***let portalItemDirectory = URL.portalItemDirectory(forPortalItemID: offlineMapInfo.id)
 ***REMOVED******REMOVED***try FileManager.default.removeItem(at: portalItemDirectory)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Remove offline map info for this map.
-***REMOVED******REMOVED***offlineMapInfos.removeAll { $0.portalItemID == offlineMapInfo.portalItemID ***REMOVED***
+***REMOVED******REMOVED***offlineMapInfos.removeAll { $0.id == offlineMapInfo.id ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -248,7 +300,7 @@ public extension SwiftUI.Scene {
 ***REMOVED******REMOVED***/ Sets up the offline manager for offline toolkit components.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule. See ``JobManager/preferredBackgroundStatusCheckSchedule`` for more details.
-***REMOVED******REMOVED***/   - jobCompletion: An action to perform when a job completes.
+***REMOVED******REMOVED***/   - jobCompletionAction: An action to perform when a job completes.
 ***REMOVED***@MainActor
 ***REMOVED***func offlineManager(
 ***REMOVED******REMOVED***preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,

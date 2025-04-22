@@ -20,7 +20,7 @@ extension Button<Text> {
 ***REMOVED******REMOVED***/ button.
 ***REMOVED******REMOVED***/ - Returns: A button.
 ***REMOVED***static nonisolated func cancel(action: @escaping @MainActor () -> Void) -> Self {
-***REMOVED******REMOVED***return Button(role: .cancel, action: action) {
+***REMOVED******REMOVED***Button(role: .cancel, action: action) {
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Cancel",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -34,7 +34,7 @@ extension Button<Text> {
 ***REMOVED******REMOVED***/ button.
 ***REMOVED******REMOVED***/ - Returns: A button.
 ***REMOVED***static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
-***REMOVED******REMOVED***return Button(action: action) {
+***REMOVED******REMOVED***Button(action: action) {
 ***REMOVED******REMOVED******REMOVED***Text.done
 ***REMOVED***
 ***REMOVED***
