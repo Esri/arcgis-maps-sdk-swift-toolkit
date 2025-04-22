@@ -146,8 +146,8 @@ public struct FlyoverSceneView: View {
                     session.start(configuration: configuration)
                 }
                 .onDisappear { session.pause() }
-                .onChange(session.currentFrame) { frame in
-                    guard let frame, let interfaceOrientation else { return }
+                .onChange(of: session.currentFrame) {
+                    guard let frame = session.currentFrame, let interfaceOrientation else { return }
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
@@ -155,10 +155,10 @@ public struct FlyoverSceneView: View {
                     )
                 }
 #endif
-                .onChange(initialCamera) { initialCamera in
+                .onChange(of: initialCamera) {
                     cameraController.originCamera = initialCamera
                 }
-                .onChange(translationFactor) { translationFactor in
+                .onChange(of: translationFactor) {
                     cameraController.translationFactor = translationFactor
                 }
                 .observingInterfaceOrientation($interfaceOrientation)

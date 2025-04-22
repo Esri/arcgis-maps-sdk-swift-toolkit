@@ -99,8 +99,8 @@ public struct WorldScaleSceneView: View {
         .onAppear {
             calibrationViewModel.cameraController.clippingDistance = clippingDistance
         }
-        .onChange(clippingDistance) { newClippingDistance in
-            calibrationViewModel.cameraController.clippingDistance = newClippingDistance
+        .onChange(of: clippingDistance) {
+            calibrationViewModel.cameraController.clippingDistance = clippingDistance
         }
         .onDisappear {
             Task { await locationDataSource.stop() }
@@ -157,8 +157,8 @@ public struct WorldScaleSceneView: View {
             }
         }
         .animation(.default.speed(0.25), value: initialCameraIsSet)
-        .onChange(isCalibrating) { value in
-            onCalibratingChangedAction?(value)
+        .onChange(of: isCalibrating) {
+            onCalibratingChangedAction?(isCalibrating)
         }
     }
     

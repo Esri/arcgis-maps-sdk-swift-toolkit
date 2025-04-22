@@ -27,7 +27,7 @@ struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
     /// The content to display once the image loads.
     var loadedContent: (Image) -> LoadedContent
     /// The result of loading the image.
-    @State var result: Result<UIImage, Error>?
+    @State private var result: Result<UIImage, Error>?
     
     /// Creates a `LoadableImageView`.
     /// - Parameters:
