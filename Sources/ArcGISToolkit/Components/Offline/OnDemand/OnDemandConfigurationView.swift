@@ -32,14 +32,8 @@ struct OnDemandConfigurationView: View {
     /// The max scale of the map to take offline.
     @State private var maxScale: CacheScale = .street
     
-    /// The visible area of the map.
-    @State private var visibleArea: Envelope?
-    
     /// The selected map area.
     @State private var selectedRect: CGRect = .zero
-    
-    /// The extent of the selected map area.
-    @State private var selectedExtent: Envelope?
     
     /// A Boolean value indicating that the map is ready.
     @State private var mapIsReady = false
@@ -48,7 +42,7 @@ struct OnDemandConfigurationView: View {
     @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating if the download button is disabled.
-    private var downloadIsDisabled: Bool { selectedExtent == nil || hasNoInternetConnection }
+    private var downloadIsDisabled: Bool { selectedRect == .zero || hasNoInternetConnection }
     
     /// The result of trying to load the map.
     @State private var loadResult: Result<Void, Error>?
@@ -122,9 +116,6 @@ struct OnDemandConfigurationView: View {
                             OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
                         }
                     }
-                    .onChange(selectedRect) { _ in
-                        selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-                    }
             }
             .safeAreaInset(edge: .bottom) {
                 bottomPane(mapView: mapViewProxy)
@@ -163,7 +154,9 @@ struct OnDemandConfigurationView: View {
                     mapIsReady = true
                 }
             }
-            .preventMapInteractionFromMovingSheet()
+            .highPriorityGesture(RotateGesture())
+            .highPriorityGesture(DragGesture())
+            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
@@ -209,7 +202,7 @@ struct OnDemandConfigurationView: View {
                 
                 HStack {
                     Button {
-                        guard let selectedExtent else { return }
+                        guard let selectedExtent = mapView.envelope(fromViewRect: selectedRect) else { return }
                         Task {
                             let image = try? await mapView.exportImage()
                             let thumbnail = image?.crop(to: selectedRect)
@@ -270,23 +263,6 @@ struct OnDemandConfigurationView: View {
     }
 }
 
-private extension View {
-    /// Prevent sheet from moving when interacting with map view.
-    @ViewBuilder
-    func preventMapInteractionFromMovingSheet() -> some View {
-        if #available(iOS 17.0, *) {
-            self
-                .highPriorityGesture(DragGesture())
-                .highPriorityGesture(RotateGesture())
-                .interactiveDismissDisabled()
-        } else {
-            self
-                .highPriorityGesture(DragGesture())
-                .interactiveDismissDisabled()
-        }
-    }
-}
-
 /// A View that allows renaming of a map area.
 private struct RenameButton: View {
     /// The current title.
@@ -333,8 +309,8 @@ private struct RenameButton: View {
                 comment: "A message explaining that the map area name must be unique."
             )
         }
-        .onChange(proposedNewTitle) {
-            proposedTitleIsValid = isValidCheck($0)
+        .onChange(of: proposedNewTitle) {
+            proposedTitleIsValid = isValidCheck(proposedNewTitle)
         }
     }
     

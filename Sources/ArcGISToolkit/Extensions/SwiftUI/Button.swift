@@ -20,7 +20,7 @@ extension Button<Text> {
     /// button.
     /// - Returns: A button.
     static nonisolated func cancel(action: @escaping @MainActor () -> Void) -> Self {
-        return Button(role: .cancel, action: action) {
+        Button(role: .cancel, action: action) {
             Text(
                 "Cancel",
                 bundle: .toolkitModule,
@@ -34,7 +34,7 @@ extension Button<Text> {
     /// button.
     /// - Returns: A button.
     static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
-        return Button(action: action) {
+        Button(action: action) {
             Text.done
         }
     }

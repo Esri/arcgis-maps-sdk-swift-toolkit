@@ -16,7 +16,7 @@ import ArcGIS
 import Foundation
 
 /// Indicates how to display the attachments.
-public enum AttachmentsFeatureElementDisplayType: Sendable {
+enum AttachmentsFeatureElementDisplayType: Sendable {
     /// Show attachments as links.
     case list
     /// Attachments expand to the width of the view.
@@ -26,7 +26,7 @@ public enum AttachmentsFeatureElementDisplayType: Sendable {
 }
 
 /// Common properties for elements which display feature attachments.
-public protocol AttachmentsFeatureElement: Sendable {
+protocol AttachmentsFeatureElement: Sendable {
     /// Indicates how to display the attachments.
     var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get }
     
