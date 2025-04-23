@@ -15,15 +15,6 @@
 import Foundation
 
 extension String {
-***REMOVED******REMOVED***/ A localized string for the word "Cancel".
-***REMOVED***static var cancel: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Cancel",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel an operation."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A localized string for the word "Clear".
 ***REMOVED***static var clear: Self {
 ***REMOVED******REMOVED***.init(
@@ -66,15 +57,6 @@ extension String {
 ***REMOVED******REMOVED******REMOVED***localized: "No Value",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no value has been set for a form field."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A localized string for the word "OK".
-***REMOVED***static var ok: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "OK",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

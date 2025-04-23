@@ -21,11 +21,7 @@ extension Button<Text> {
 ***REMOVED******REMOVED***/ - Returns: A button.
 ***REMOVED***static nonisolated func cancel(action: @escaping @MainActor () -> Void) -> Self {
 ***REMOVED******REMOVED***Button(role: .cancel, action: action) {
-***REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Cancel",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Title for a button that cancels an action."
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***Text(LocalizedStringResource.cancel)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -36,6 +32,17 @@ extension Button<Text> {
 ***REMOVED***static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
 ***REMOVED******REMOVED***Button(action: action) {
 ***REMOVED******REMOVED******REMOVED***Text.done
+***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a button with the title "ok" and the given action.
+***REMOVED******REMOVED***/ - Parameter action: The action to perform when the user triggers the
+***REMOVED******REMOVED***/ button.
+***REMOVED******REMOVED***/ - Returns: A button.
+***REMOVED***static nonisolated func ok(action: @escaping @MainActor () -> Void) -> Self {
+***REMOVED******REMOVED***Button(action: action) {
+***REMOVED******REMOVED******REMOVED***Text(LocalizedStringResource.ok)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
