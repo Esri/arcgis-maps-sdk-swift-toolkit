@@ -36,8 +36,9 @@ struct UtilityAssociationsFormElementView: View {
             }
         })
         .task {
-            try? await element.fetchAssociationsFilterResults()
-            associationsFilterResults = element.associationsFilterResults
+            if let results = try? await element.associationsFilterResults {
+                associationsFilterResults = results
+            }
         }
     }
 }
@@ -59,48 +60,23 @@ private struct UtilityAssociationGroupResultView: View {
     
     var body: some View {
         List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-            if let currentFeatureGlobalID = formViewModel.featureForm.feature.globalID {
-                let associatedElement = utilityAssociationResult.association.displayedElement(for: currentFeatureGlobalID)
-                let title: String = {
-                    if let formDefinitionTitle = associatedElement.networkSource.featureTable.featureFormDefinition?.title {
-                        formDefinitionTitle
-                    } else {
-                        "\(associatedElement.assetGroup.name) - \(associatedElement.objectID)"
+            UtilityAssociationResultView(
+                selectionAction: {
+                    let navigationAction: () -> Void = {
+                        navigationLayerModel.push {
+                            InternalFeatureFormView(
+                                featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+                            )
+                        }
                     }
-                }()
-                let connection: UtilityAssociationView.Association.Connection? = switch utilityAssociationResult.association.kind {
-                case .junctionEdgeObjectConnectivityMidspan:
-                        .middle
-                case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-                    currentFeatureGlobalID == utilityAssociationResult.association.fromElement.globalID ? .left : .right
-                default:
-                    nil
-                }
-                
-                UtilityAssociationView(
-                    association: UtilityAssociationView.Association(
-                        connectionPoint: connection,
-                        description: nil,
-                        fractionAlongEdge: utilityAssociationResult.association.fractionAlongEdge,
-                        name: title,
-                        selectionAction: {
-                            let navigationAction: () -> Void = {
-                                navigationLayerModel.push {
-                                    InternalFeatureFormView(
-                                        featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                                    )
-                                }
-                            }
-                            if formViewModel.featureForm.hasEdits {
-                                setAlertContinuation?(true, navigationAction)
-                            } else {
-                                navigationAction()
-                            }
-                        },
-                        terminalName: associatedElement.terminal?.name
-                    )
-                )
-            }
+                    if formViewModel.featureForm.hasEdits {
+                        setAlertContinuation?(true, navigationAction)
+                    } else {
+                        navigationAction()
+                    }
+                },
+                result: utilityAssociationResult
+            )
         }
         .onAppear {
             // This view is considered the tail end of a navigable FeatureForm.
@@ -123,16 +99,23 @@ private struct UtilityAssociationsFilterResultListRowView: View {
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
-        let listRowTitle = "\(utilityAssociationsFilterResult.filter.filterType)".capitalized
+        let listRowTitle = "\(utilityAssociationsFilterResult.filter.title)".capitalized
         Button {
             navigationLayerModel.push {
                 UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-                    .navigationLayerTitle(formViewModel.title, subtitle: listRowTitle)
+                    .navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
                     .environmentObject(formViewModel)
             }
         } label: {
             HStack {
-                Text(listRowTitle)
+                VStack {
+                    Text(listRowTitle)
+                    if !utilityAssociationsFilterResult.filter.description.isEmpty {
+                        Text(utilityAssociationsFilterResult.filter.description)
+                            .font(.caption)
+                    }
+                }
+                .lineLimit(1)
                 Spacer()
                 Text(utilityAssociationsFilterResult.resultCount.formatted())
                 Image(systemName: "chevron.right")
@@ -154,11 +137,20 @@ private struct UtilityAssociationsFilterResultView: View {
     
     var body: some View {
         List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-            Button(utilityAssociationGroupResult.name) {
+            Button {
                 navigationLayerModel.push {
                     UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
-                        .navigationLayerTitle(formViewModel.title, subtitle: utilityAssociationGroupResult.name)
+                        .navigationLayerTitle(
+                            utilityAssociationGroupResult.name,
+                            subtitle: utilityAssociationsFilterResult.filter.title
+                        )
                         .environmentObject(formViewModel)
+                }
+            } label: {
+                HStack {
+                    Text(utilityAssociationGroupResult.name)
+                    Spacer()
+                    Text(utilityAssociationGroupResult.associationResults.count.formatted())
                 }
             }
         }
@@ -166,41 +158,35 @@ private struct UtilityAssociationsFilterResultView: View {
 }
 
 /// <#Description#>
-private struct UtilityAssociationView: View {
+private struct UtilityAssociationResultView: View {
     /// <#Description#>
-    var association: Association
+    let selectionAction: (() -> Void)
+    
+    /// <#Description#>
+    let result: UtilityAssociationResult
     
     var body: some View {
         Button {
-            association.selectionAction()
+            selectionAction()
         } label: {
             HStack {
-                if let connection = association.connectionPoint {
-                    let image: String = switch connection {
-                    case .left:
-                        "connection-end-left"
-                    case .middle:
-                        "connection-middle"
-                    case .right:
-                        "connection-end-right"
-                    }
-                    Image(image, bundle: .toolkitModule)
+                if let icon {
+                    icon
                 }
-                
                 VStack(alignment: .leading) {
-                    Text(association.name)
-                        .lineLimit(1)
-                    if let description = association.description {
-                        Text(description)
-                            .font(.caption2)
-                    }
+                    Text(title)
+                    Text(description)
+                        .font(.caption2)
                 }
+                .lineLimit(1)
                 Spacer()
                 Group {
-                    if let percent = association.fractionAlongEdge {
-                        Text(percent.formatted(.percent))
-                    } else if let terminal = association.terminalName {
-                        Text("Terminal: \(terminal)")
+                    if let containmentIsVisible {
+                        Text("Containment Visible: \(containmentIsVisible)".capitalized)
+                    } else if let fractionAlongEdge {
+                        Text(fractionAlongEdge.formatted(.percent))
+                    } else if let terminalName {
+                        Text("Terminal: \(terminalName)")
                     }
                 }
                 .padding(2.5)
@@ -212,44 +198,94 @@ private struct UtilityAssociationView: View {
     }
 }
 
-private extension UtilityAssociation {
-    /// Determines whether to show the `fromElement` or `toElement`.
-    /// - Parameter id: <#id description#>
-    /// - Returns: <#description#>
-    func displayedElement(for id: UUID) -> UtilityElement {
-        if id == toElement.globalID {
-            fromElement
+private extension UtilityAssociationResult {
+    /// The utility element for the association.
+    var associatedElement: UtilityElement {
+        if associatedFeature.globalID == association.toElement.globalID {
+            association.toElement
         } else {
-            toElement
+            association.fromElement
         }
     }
 }
 
-private extension UtilityAssociationView {
-    struct Association {
-        /// <#Description#>
-        enum Connection {
-            case left
-            case middle
-            case right
+private extension UtilityAssociationResultView {
+    /// A Boolean value indicating whether the containment is visible if result represents a containment association.
+    var containmentIsVisible: Bool? {
+        guard (result.association.toElement.globalID == result.associatedElement.globalID) else {
+            return nil
         }
-        
-        /// <#Description#>
-        let connectionPoint: Connection?
-        
-        /// <#Description#>
-        let description: String?
-        
-        /// <#Description#>
-        let fractionAlongEdge: Double?
-        
-        /// <#Description#>
-        let name: String
-        
-        /// <#Description#>
-        let selectionAction: (() -> Void)
-        
-        /// <#Description#>
-        let terminalName: String?
+        switch result.association.kind {
+        case .containment:
+            return result.association.containmentIsVisible
+        default:
+            return nil
+        }
+    }
+    
+    /// A description for the result.
+    var description: String {
+        if let table = result.associatedFeature.table as? ArcGISFeatureTable,
+           let description = table.featureFormDefinition?.description {
+            description
+        } else {
+            result.associatedElement.assetGroup.name
+        }
+    }
+    
+    /// The relative location along a non-spatial edge where the junction represented via the association is
+    /// (logically) located.
+    var fractionAlongEdge: Double? {
+        switch result.association.kind {
+        case .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
+            if result.associatedElement.networkSource.kind == .edge {
+                result.association.fractionAlongEdge
+            } else {
+                nil
+            }
+        default:
+            nil
+        }
+    }
+    
+    /// An icon representing the association.
+    var icon: Image? {
+        let imageName: String? = switch result.association.kind {
+        case .junctionEdgeObjectConnectivityMidspan:
+            "connection-middle"
+        case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
+            if result.associatedFeature.globalID == result.association.fromElement.globalID {
+                "connection-end-left"
+            } else {
+                "connection-end-right"
+            }
+        default:
+            nil
+        }
+        return imageName != nil ? Image(imageName!, bundle: .toolkitModule) : nil
+    }
+    
+    /// The UtilityTerminal of the associated utility network feature.
+    var terminalName: String? {
+        switch result.association.kind {
+        case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
+            if result.associatedElement.networkSource.kind == .junction {
+                result.associatedElement.terminal?.name
+            } else {
+                nil
+            }
+        default:
+            nil
+        }
+    }
+    
+    /// A title for the result.
+    var title: String {
+        if let table = result.associatedFeature.table as? ArcGISFeatureTable,
+           let title = table.featureFormDefinition?.title {
+            title
+        } else {
+            "\(result.associatedElement.assetGroup.name) - \(result.associatedElement.objectID)"
+        }
     }
 }
