@@ -28,8 +28,6 @@ public extension View {
     ///   - content: A closure that returns the content of the floating panel.
     /// - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
     /// environments and a popover otherwise.
-    @available(iOS 16.0, *)
-    @available(macCatalyst 16.0, *)
     @available(visionOS, unavailable, message: "Use 'floatingPanel(attributionBarHeight:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
     func floatingPanel<Content>(
         attributionBarHeight: CGFloat = 0,

@@ -72,7 +72,7 @@ struct TrustHostViewModifier: ViewModifier {
                             isPresented = false
                             challenge.resume(with: .cancel)
                         } label: {
-                            Text(String.cancel)
+                            Text.cancel
                                 .padding(.horizontal)
                         }
                         .buttonStyle(.bordered)

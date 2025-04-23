@@ -60,11 +60,7 @@ struct Joyslider: View {
             // Run a loop while the Task is not cancelled.
             while !Task.isCancelled {
                 // Sleep for 50 milliseconds.
-                if #available(iOS 17, *) {
-                    try? await Task.sleep(for: .milliseconds(50))
-                } else {
-                    try? await Task.sleep(nanoseconds: 50_000_000)
-                }
+                try? await Task.sleep(for: .milliseconds(50))
                 // If task is cancelled after sleeping, return.
                 if Task.isCancelled { return }
                 // Otherwise change the value.

@@ -15,65 +15,85 @@
 import SwiftUI
 
 struct Examples: View {
-    /// The categories to display.
-    let categories = makeCategories()
+    /// The list items to display.
+    let listItems = makeListItems()
     
-    /// The category selected by the user.
-    @State private var selectedCategory: Category?
+    /// The visibility of the navigation split view's column.
+    @State private var columnVisibility: NavigationSplitViewVisibility = .all
     /// The example selected by the user.
     @State private var selectedExample: Example?
     
     var body: some View {
-        NavigationSplitView {
-            NavigationStack {
-                List(categories, id: \.name, selection: $selectedCategory) { category in
-                    NavigationLink(category.name) {
-                        List(category.examples, id: \.name, selection: $selectedExample) { example in
+        NavigationSplitView(columnVisibility: $columnVisibility) {
+            List(listItems, id: \.name, selection: $selectedExample) { item in
+                switch item {
+                case .category(let name, let examples):
+                    DisclosureGroup(name) {
+                        ForEach(examples, id: \.name) { example in
                             Text(example.name)
                                 .tag(example)
                         }
-                        .listStyle(.sidebar)
-                        .navigationTitle(category.name)
-                        .navigationBarTitleDisplayMode(.inline)
                     }
-                    .isDetailLink(false)
+                case .example(let example):
+                    Text(example.name)
+                        .tag(example)
                 }
-                .navigationTitle("Toolkit Examples")
             }
+            .navigationTitle("Toolkit Examples")
         } detail: {
-            NavigationStack {
-                if let example = selectedExample {
-                    example.view
-                        .navigationTitle(example.name)
-                        .navigationBarTitleDisplayMode(.inline)
-                } else if selectedCategory != nil {
-                    Text("Select an example")
-                } else {
-                    Text("Select a category")
-                }
+            if let selectedExample {
+                selectedExample.view
+                    .navigationTitle(selectedExample.name)
+                    .navigationBarTitleDisplayMode(.inline)
+            } else {
+                Text("Select an example")
             }
         }
+        // visionOS doesn't provide the column visibility toggle like
+        // iPadOS and Mac Catalyst so conditionally hide the column.
+#if !os(visionOS)
+        .onChange(selectedExample) { _ in
+            columnVisibility = .detailOnly
+        }
+#endif
     }
     
-    static func makeCategories() -> [Category] {
-        let common: [Category] = [
-            .geoview,
-            .views
-        ]
+    static func makeCategories() -> [ListItem] {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-        return [.augmentedReality] + common
+        return [.augmentedRealityCategory]
 #else
-        return common
+        return []
 #endif
+    }
+    
+    static func makeListItems() -> [ListItem] {
+        (makeCategories() + makeUncategorizedExamples())
+            .sorted(by: { $0.name < $1.name })
+    }
+    
+    static func makeUncategorizedExamples() -> [ListItem] {
+        return [
+            .example("Basemap Gallery", content: BasemapGalleryExampleView()),
+            .example("Bookmarks", content: BookmarksExampleView()),
+            .example("Compass", content: CompassExampleView()),
+            .example("Feature Editor", content: FeatureEditorExampleView()),
+            .example("Feature Form", content: FeatureFormExampleView()),
+            .example("Floating Panel", content: FloatingPanelExampleView()),
+            .example("Floor Filter", content: FloorFilterExampleView()),
+            .example("Overview Map", content: OverviewMapExampleView()),
+            .example("Popup", content: PopupExampleView()),
+            .example("Scalebar", content: ScalebarExampleView()),
+            .example("Search", content: SearchExampleView()),
+            .example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+        ]
     }
 }
 
-@MainActor
-extension Category {
 #if os(iOS) && !targetEnvironment(macCatalyst)
-    static var augmentedReality: Self {
-        .init(
-            name: "Augmented Reality",
+extension Examples.ListItem {
+    static var augmentedRealityCategory: Self {
+        .category(
+            "Augmented Reality",
             examples: [
                 Example("Flyover", content: FlyoverExampleView()),
                 Example("Tabletop", content: TableTopExampleView()),
@@ -81,33 +101,5 @@ extension Category {
             ]
         )
     }
-#endif
-    
-    static var geoview: Self {
-        .init(
-            name: "GeoView",
-            examples: [
-                Example("Basemap Gallery", content: BasemapGalleryExampleView()),
-                Example("Bookmarks", content: BookmarksExampleView()),
-                Example("Compass", content: CompassExampleView()),
-                Example("Feature Form", content: FeatureFormExampleView()),
-                Example("Feature Editor", content: FeatureEditorExampleView()),
-                Example("Floor Filter", content: FloorFilterExampleView()),
-                Example("Overview Map", content: OverviewMapExampleView()),
-                Example("Popup", content: PopupExampleView()),
-                Example("Scalebar", content: ScalebarExampleView()),
-                Example("Search", content: SearchExampleView()),
-                Example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-            ]
-        )
-    }
-    
-    static var views: Self {
-        .init(
-            name: "Views",
-            examples: [
-                Example("Floating Panel", content: FloatingPanelExampleView())
-            ]
-        )
-    }
 }
+#endif

@@ -62,7 +62,6 @@ extension XButton {
     }
 }
 
-@available(iOS 17.0, *)
 #Preview {
     @Previewable @State var isPresented = true
     Button {

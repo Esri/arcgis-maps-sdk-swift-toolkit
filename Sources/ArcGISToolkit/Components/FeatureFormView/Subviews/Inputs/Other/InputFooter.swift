@@ -207,9 +207,9 @@ extension InputFooter {
     
     /// A Boolean value which indicates whether or not an error is showing in the footer.
     var isShowingError: Bool {
-        (element.isEditable || element.hasValueExpression)
+        element.isEditable
         && primaryError != nil
-        && (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible || element.hasValueExpression)
+        && (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
     }
     
     /// The allowable number of characters in the input.

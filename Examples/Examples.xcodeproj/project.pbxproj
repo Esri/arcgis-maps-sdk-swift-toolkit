@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1C40F3322B46118800C00ED5 /* WorldScaleExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C40F3312B46118800C00ED5 /* WorldScaleExampleView.swift */; platformFilter = ios; };
 		1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */; platformFilter = ios; };
-		4CD62FAA2D49773000338749 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD62FA92D49773000338749 /* Category.swift */; };
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; };
 		4D591D7C2D80C3E700D6B206 /* FeatureEditorExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D591D7B2D80C3E700D6B206 /* FeatureEditorExampleView.swift */; };
 		4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */; };
@@ -17,8 +16,8 @@
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; };
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; };
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; };
-		79222E152D5008BB005C2ABA /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79222E142D5006EF005C2ABA /* View.swift */; };
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; platformFilter = ios; };
+		8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
 		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; };
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; };
@@ -48,7 +47,6 @@
 /* Begin PBXFileReference section */
 		1C40F3312B46118800C00ED5 /* WorldScaleExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldScaleExampleView.swift; sourceTree = "<group>"; };
 		1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTopExampleView.swift; sourceTree = "<group>"; };
-		4CD62FA92D49773000338749 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupExampleView.swift; sourceTree = "<group>"; };
 		4D591D7B2D80C3E700D6B206 /* FeatureEditorExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureEditorExampleView.swift; sourceTree = "<group>"; };
 		75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityNetworkTraceExampleView.swift; sourceTree = "<group>"; };
@@ -56,8 +54,8 @@
 		75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormExampleView.swift; sourceTree = "<group>"; };
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
-		79222E142D5006EF005C2ABA /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
+		8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Examples+ListItem.swift"; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; };
 		E47ABE402652FE0900FD2FE3 /* Toolkit Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Toolkit Examples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,14 +84,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		79222E132D5006E0005C2ABA /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				79222E142D5006EF005C2ABA /* View.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,10 +129,10 @@
 			isa = PBXGroup;
 			children = (
 				E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */,
-				4CD62FA92D49773000338749 /* Category.swift */,
 				E48A73402658227100F5C118 /* Example.swift */,
 				E48A733F2658227100F5C118 /* Examples.entitlements */,
 				E48A733D2658227000F5C118 /* Examples.swift */,
+				8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */,
 				E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */,
 				E47ABE4C2652FE0C00FD2FE3 /* Info.plist */,
 				E47ABE492652FE0C00FD2FE3 /* Preview Content */,
@@ -162,7 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				E40F58042656E509006F5CB9 /* Examples */,
-				79222E132D5006E0005C2ABA /* Extensions */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -277,7 +266,7 @@
 				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
-				79222E152D5008BB005C2ABA /* View.swift in Sources */,
+				8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
@@ -290,7 +279,6 @@
 				E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */,
 				E4C389D526B8A12C002BC255 /* BasemapGalleryExampleView.swift in Sources */,
 				75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */,
-				4CD62FAA2D49773000338749 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,13 +419,12 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.6.0;
+				MARKETING_VERSION = 200.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -465,13 +452,12 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.6.0;
+				MARKETING_VERSION = 200.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
