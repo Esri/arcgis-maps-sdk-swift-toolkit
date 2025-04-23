@@ -31,8 +31,11 @@ struct NavigationLayer<Content: View>: View {
     /// The root view.
     let root: () -> Content
     
-    /// <#Description#>
-    var backNavigationDisabled: Bool = false
+    /// The optional closure to perform when the back navigation button is pressed.
+    var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
+    
+    /// The closure to perform when model's path changes.
+    var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
     
     @StateObject private var model: NavigationLayerModel
     
@@ -68,9 +71,9 @@ struct NavigationLayer<Content: View>: View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
                 Header(
-                    backNavigationDisabled: backNavigationDisabled,
-                    width: geometryProxy.size.width,
-                    headerTrailing: headerTrailing
+                    backNavigationAction: backNavigationAction,
+                    headerTrailing: headerTrailing,
+                    width: geometryProxy.size.width
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Group {
@@ -105,6 +108,9 @@ struct NavigationLayer<Content: View>: View {
             .environmentObject(model)
             // Apply container width so the animated transitions work correctly.
             .frame(width: geometryProxy.size.width)
+            .onChange(of: model.views.count) {
+                onNavigationChangedAction?(model.presented ?? nil)
+            }
         }
     }
 }
@@ -187,12 +193,23 @@ struct NavigationLayer<Content: View>: View {
 }
 
 extension NavigationLayer {
-    /// <#Description#>
-    /// - Parameter disabled: <#disabled description#>
-    /// - Returns: <#description#>
-    func backNavigationDisabled(_ disabled: Bool) -> Self {
+    /// Sets a closure to perform when the back navigation button is pressed.
+    /// - Parameter action: The closure to perform when the back navigation button is pressed.
+    /// - Note: Use this to interrupt reverse navigation (e.g. to warn a user of unsaved edits). The closure
+    /// provides a reference to the navigation layer module which can be used to trigger the reverse
+    /// navigation when ready.
+    func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
         var copy = self
-        copy.backNavigationDisabled = disabled
+        copy.backNavigationAction = action
+        return copy
+    }
+    
+    /// Sets a closure to perform when the navigation layer's path changed.
+    /// - Parameter action: The closure to perform when the navigation layer's path changed
+    /// - Note: If no item is provided, the root view is presented..
+    func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
+        var copy = self
+        copy.onNavigationChangedAction = action
         return copy
     }
 }
