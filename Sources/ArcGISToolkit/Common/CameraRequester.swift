@@ -52,7 +52,7 @@ private struct CameraRequesterModifier: ViewModifier {
                     Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
                 }
 #endif
-                Button(String.cancel, role: .cancel) {
+                Button.cancel {
                     requester.onAccessDenied?()
                 }
             } message: {

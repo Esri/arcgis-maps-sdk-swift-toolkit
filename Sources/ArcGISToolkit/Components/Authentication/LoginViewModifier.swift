@@ -54,15 +54,15 @@ struct LoginViewModifier: ViewModifier {
                     comment: "A label indicating authentication is required to proceed."
                 ),
                 cancelAction: .init(
-                    title: String.cancel,
+                    title: .cancel,
                     handler: { _, _ in
                         onCancel()
                     }
                 ),
                 continueAction: .init(
-                    title: String(
-                        localized: "Continue",
-                        bundle: .toolkitModule,
+                    title: .init(
+                        "Continue",
+                        bundle: .toolkit,
                         comment: "A label for a button used to continue the authentication operation."
                     ),
                     handler: { username, password in
