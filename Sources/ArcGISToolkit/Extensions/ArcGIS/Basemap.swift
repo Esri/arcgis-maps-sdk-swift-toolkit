@@ -14,25 +14,9 @@
 
 import ArcGIS
 
-<<<<<<<< HEAD:Sources/ArcGISToolkit/Extensions/SwiftUI/AnyTransition.swift
-extension AnyTransition {
-    static var push: Self {
-        .asymmetric(
-            insertion: .move(edge: .trailing),
-            removal: .move(edge: .leading)
-        )
-    }
-    
-    static var pop: Self {
-        .asymmetric(
-            insertion: .move(edge: .leading),
-            removal: .move(edge: .trailing)
-        )
-========
 extension Basemap {
     /// A Boolean value indicating whether the basemap supports 3D visualization.
     var is3D: Bool {
         baseLayers.contains(where: { $0 is ArcGISSceneLayer })
->>>>>>>> v.next:Sources/ArcGISToolkit/Extensions/ArcGIS/Basemap.swift
     }
 }

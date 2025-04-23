@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import ArcGIS
+import SwiftUI
 
-<<<<<<<< HEAD:Sources/ArcGISToolkit/Extensions/SwiftUI/AnyTransition.swift
 extension AnyTransition {
     static var push: Self {
         .asymmetric(
@@ -28,11 +28,5 @@ extension AnyTransition {
             insertion: .move(edge: .leading),
             removal: .move(edge: .trailing)
         )
-========
-extension Basemap {
-    /// A Boolean value indicating whether the basemap supports 3D visualization.
-    var is3D: Bool {
-        baseLayers.contains(where: { $0 is ArcGISSceneLayer })
->>>>>>>> v.next:Sources/ArcGISToolkit/Extensions/ArcGIS/Basemap.swift
     }
 }
