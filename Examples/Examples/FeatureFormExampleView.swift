@@ -23,16 +23,14 @@ struct FeatureFormExampleView: View {
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
-    /// The presented feature form.
-    @State private var featureForm: FeatureForm?
-    
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
-#warning("TO BE UNDONE. For UN testing only.")
     /// The `Map` displayed in the `MapView`.
-    @State private var map = makeMap()
-//    @State private var map = Map(url: .sampleData)!
+    @State private var map = Map(url: .sampleData)!
+    
+    /// The validation error visibility configuration of the form.
+    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var model = Model()
@@ -44,20 +42,18 @@ struct FeatureFormExampleView: View {
                     attributionBarHeight = $0
                 }
                 .onSingleTapGesture { screenPoint, _ in
-                    identifyScreenPoint = screenPoint
+                    switch model.state {
+                    case .idle:
+                        identifyScreenPoint = screenPoint
+                    case let .editing(featureForm):
+                        model.state = .cancellationPending(featureForm)
+                    default:
+                        return
+                    }
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy) {
-                        featureForm = FeatureForm(feature: feature)
-                    }
-                }
-                .task {
-#warning("TO BE REMOVED. Public credential is for UN testing only.")
-                    do {
-                        let publicSample = try await ArcGISCredential.publicSample
-                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
-                    } catch {
-                        print("Error resolving credential: \(error.localizedDescription)")
+                        model.state = .editing(FeatureForm(feature: feature))
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -65,68 +61,79 @@ struct FeatureFormExampleView: View {
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
-                    isPresented: isPresented
+                    isPresented: model.formIsPresented
                 ) {
-                    FeatureFormView(featureForm: $featureForm)
-                        .closeButton(.visible) // Defaults to .automatic
-                        .onFormEditingEvent { action in
-                            print(action)
-                        }
-                        .onChange(featureForm?.feature) { _ in
-                            print(featureForm?.feature.globalID)
-                        }
-                    //                            .padding(.horizontal)
-                    //                            .padding(.top, 16)
-                    //                    }
+                    if let featureForm = model.featureForm {
+                        FeatureFormView(featureForm: featureForm)
+                            .validationErrors(validationErrorVisibility)
+                            .padding(.horizontal)
+                            .padding(.top, 16)
+                    }
                 }
-//                .alert(
-//                    "The form wasn't submitted",
-//                    isPresented: model.alertIsPresented
-//                ) {
-//                    // No actions.
-//                } message: {
-//                    if case let .generalError(_, errorMessage) = model.state {
-//                        errorMessage
-//                    }
-//                }
-//                .overlay {
-//                    switch model.state {
-//                    case .validating, .finishingEdits, .applyingEdits:
-//                        HStack(spacing: 5) {
-//                            ProgressView()
-//                                .progressViewStyle(.circular)
-//                            Text(model.state.label)
-//                        }
-//                        .padding()
-//                        .background(.thinMaterial)
-//                        .clipShape(.rect(cornerRadius: 10))
-//                    default:
-//                        EmptyView()
-//                    }
-//                }
-//                .toolbar {
-//                    if model.formIsPresented.wrappedValue {
-//                        ToolbarItem(placement: .navigationBarTrailing) {
-//                            Button("Submit") {
-//                                Task {
-//                                    await model.submitEdits()
-//                                }
-//                            }
-//                            .disabled(model.formControlsAreDisabled)
-//                        }
-//                    }
-//                }
+                .onChange(of: model.formIsPresented.wrappedValue) {
+                    if !model.formIsPresented.wrappedValue {
+                        validationErrorVisibility = .automatic
+                    }
+                }
+                .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
+                    Button("Discard edits", role: .destructive) {
+                        model.discardEdits()
+                    }
+                    if case let .cancellationPending(featureForm) = model.state {
+                        Button("Continue editing", role: .cancel) {
+                            model.state = .editing(featureForm)
+                        }
+                    }
+                } message: {
+                    Text("Updates to this feature will be lost.")
+                }
+                .alert(
+                    "The form wasn't submitted",
+                    isPresented: model.alertIsPresented
+                ) {
+                    // No actions.
+                } message: {
+                    if case let .generalError(_, errorMessage) = model.state {
+                        errorMessage
+                    }
+                }
+                .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
+                .overlay {
+                    switch model.state {
+                    case .validating, .finishingEdits, .applyingEdits:
+                        HStack(spacing: 5) {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                            Text(model.state.label)
+                        }
+                        .padding()
+                        .background(.thinMaterial)
+                        .clipShape(.rect(cornerRadius: 10))
+                    default:
+                        EmptyView()
+                    }
+                }
+                .toolbar {
+                    if model.formIsPresented.wrappedValue {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel", role: .cancel) {
+                                guard case let .editing(featureForm) = model.state else { return }
+                                model.state = .cancellationPending(featureForm)
+                            }
+                            .disabled(model.formControlsAreDisabled)
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Submit") {
+                                validationErrorVisibility = .visible
+                                Task {
+                                    await model.submitEdits()
+                                }
+                            }
+                            .disabled(model.formControlsAreDisabled)
+                        }
+                    }
+                }
         }
-    }
-    
-#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
-    /// Makes a map from a portal item.
-    static func makeMap() -> Map {
-        let portalItem = PortalItem(
-            portal: .arcGISOnline(connection: .anonymous),
-            id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
-        )
-        return Map(item: portalItem)
     }
 }
 
@@ -146,53 +153,11 @@ extension FeatureFormExampleView {
             }.first
         }.first
     }
-    
-    /// A Boolean value indicating whether the form is presented.
-    private var isPresented: Binding<Bool> {
-        .init {
-            featureForm != nil
-        } set: { newValue in
-            if !newValue {
-                featureForm = nil
-            }
-        }
-    }
-}
-
-extension ArcGISFeature {
-    var globalID: UUID? {
-        if let id = attributes["globalid"] as? UUID {
-            return id
-        } else if let id = attributes["GLOBALID"] as? UUID {
-            return id
-        } else {
-            return nil
-        }
-    }
-}
-
-extension ArcGISFeature: @retroactive Equatable {
-    public static func == (lhs: ArcGIS.ArcGISFeature, rhs: ArcGIS.ArcGISFeature) -> Bool {
-        lhs.globalID == rhs.globalID
-    }
 }
 
 private extension URL {
     static var sampleData: Self {
         .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
-    }
-}
-
-#warning("TO BE REMOVED. FOR UNA DEVELOPMENT ONLY.")
-private extension ArcGISCredential {
-    static var publicSample: ArcGISCredential {
-        get async throws {
-            try await TokenCredential.credential(
-                for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
-                username: "viewer01",
-                password: "I68VGU^nMurF"
-            )
-        }
     }
 }
 

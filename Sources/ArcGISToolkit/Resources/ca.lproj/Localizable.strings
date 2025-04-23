@@ -1,9 +1,18 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld seleccionats";
 
+/* A label indicating the number of results of a utility network trace. */
+"^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Cal un certificat per accedir al contingut a %@.";
+
+/* A message explaining that a map area cannot be downloaded at this time. */
+"A map area cannot be downloaded at this time." = "No es pot baixar cap àrea del mapa en aquests moments.";
+
+/* A label for a button to add a map area. */
+"Add Map Area" = "Afegeix una àrea del mapa";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Afegeix-ne un de nou";
@@ -12,13 +21,22 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Opcions avançades";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Tots els llocs";
+"All Sites" = "Tots els llocs";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Es perdran totes les entrades i els resultats del traçat.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Permet";
+
+/* An error message for when fetching map areas fails. */
+"An error occurred while fetching map areas." = "Hi ha hagut un error en recollir les àrees del mapa.";
+
+/* The title for a map area. */
+"Area %lld" = "Àrea %lld";
+
+/* A hint for the user to enter an area name in the text field. */
+"Area Name" = "Nom de l'àrea";
 
 /* A label in reference to attachments. */
 "Attachments" = "Fitxers adjunts";
@@ -38,6 +56,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Examina";
 
+/* Building (Level of Detail) */
+"Building" = "Edifici";
+
+/* Buildings (Level of Detail) */
+"Buildings" = "Edificis";
+
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Calibra";
 
@@ -48,11 +72,15 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "L'accés a la càmera està inhabilitat.";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Title for a button that cancels an action. */
 "Cancel" = "Cancel·la";
 
 /* A label for a button to cancel the starting point selection operation. */
 "Cancel Starting Point Selection" = "Cancel·la la selecció del punt d'inici";
+
+/* The status text when a map area download is cancelled. */
+"Cancelled" = "Cancel·lat";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificat obligatori";
@@ -66,7 +94,13 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Trieu de la biblioteca";
 
-/* The label of a button that clears a form's input. */
+/* Cities (Level of Detail) */
+"Cities" = "Ciutats";
+
+/* City (Level of Detail) */
+"City" = "Ciutat";
+
+/* E.g. Remove text from a text field. */
 "Clear" = "Esborra";
 
 /* A directive to clear all of the completed utility network traces. */
@@ -81,8 +115,29 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Brúixola, rumb %lld graus %@";
 
+/* Continent (Level of Detail) */
+"Continent" = "Continent";
+
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Continua";
+
+/* An error message explaining that map areas could not be retrieved for this map. */
+"Could not retrieve map areas for this map." = "No s'han pogut recuperar les àrees d'aquest mapa.";
+
+/* Counties (Level of Detail) */
+"Counties" = "Comtats";
+
+/* Countries (Big) (Level of Detail) */
+"Countries (Big)" = "Països (gran)";
+
+/* Countries (Small) (Level of Detail) */
+"Countries (Small)" = "Països (petit)";
+
+/* County (Level of Detail) */
+"County" = "Comtat";
+
+/* The status text for an opened map area. */
+"Currently open" = "Obert actualment";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Perillós: el certificat proporcionat per \"%@\" no està firmat per una autoritat de confiança.";
@@ -102,8 +157,38 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Suprimeix";
 
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "Suprimeix tots els punts d'inici";
+
+/* The title of the dialogue confirming deletion of all points. */
+"Delete all starting points?" = "Voleu suprimir tots els punts d'inici?";
+
+/* A label for a button to delete a map area. */
+"Delete Map Area" = "Suprimeix l'àrea del mapa";
+
+/* A label for the description of the map area. */
+"Description" = "Descripció";
+
+/* E.g. Close/hide a sheet or pop-up. */
+"Dismiss" = "Descarta";
+
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Fet";
+
+/* A label for a button to download a map area. */
+"Download" = "Baixa";
+
+/* The status text when a map area failed to download. */
+"Download failed" = "Error de baixada";
+
+/* A label for a button to download a map area. */
+"Download Map Area" = "Baixa l'àrea del mapa";
+
+/* The status text when a map area is downloaded. */
+"Downloaded" = "Baixat";
+
+/* The status text when a map area is downloading. */
+"Downloading" = "S'està baixant";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -131,6 +216,9 @@ hold the minimum and maximum length respectively. */
 /* Text indicating the user should enter a field's exact number of characters. */
 "Enter ^[%lld characters](inflect: true)" = "Introduïu ^[%lld caràcters](inflect: true)";
 
+/* An instruction to enter a name. */
+"Enter a name" = "Introduïu un nom";
+
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Introduïu un valor";
 
@@ -140,6 +228,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
+
+/* A label indicating that an error occurred while fetching map areas. */
+"Error Fetching Map Areas" = "Error en recollir les àrees del mapa";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -204,8 +295,26 @@ trace operation. */
 AR experience. */
 "heading" = "capçalera";
 
+/* House Property (Level of Detail) */
+"House Property" = "Propietat de la casa";
+
+/* Houses (Level of Detail) */
+"Houses" = "Cases";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Menys que el valor mínim";
+
+/* A label for the level of detail picker view. */
+"Level of Detail" = "Nivell de detall";
+
+/* The status text when a map area is loading. */
+"Loading" = "S'està carregant";
+
+/* The status text when a map area failed to load. */
+"Loading failed" = "No s'ha pogut carregar";
+
+/* A title for the offline map areas view. */
+"Map Areas" = "Àrees del mapa";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Màxim ^[%lld caràcters](inflect: true)";
@@ -215,6 +324,9 @@ AR experience. */
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Contingut multimèdia";
+
+/* Metropolitan Area (Level of Detail) */
+"Metropolitan Area" = "Àrea metropolitana";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "L'accés al micròfon s'ha inhabilitat a la configuració.";
@@ -227,6 +339,9 @@ AR experience. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nom";
+
+/* Neighborhood (Level of Detail) */
+"Neighborhood" = "Barri";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Xarxa";
@@ -242,6 +357,15 @@ AR experience. */
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No hi ha cap configuració disponible.";
+
+/* An error message explaining that there is no internet connection. */
+"No Internet Connection" = "No hi ha connexió a internet";
+
+/* An error message explaining that there is no internet connection and only downloaded areas are shown. */
+"No internet connection. Showing downloaded areas only." = "No hi ha connexió a Internet. Només es mostren les àrees baixades.";
+
+/* A label indicating that there are no map areas. */
+"No Map Areas" = "No hi ha cap àrea del mapa";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "No s'ha trobat cap coincidència.";
@@ -267,8 +391,26 @@ AR experience. */
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID d'objecte: %@";
 
+/* A label indicating that the map is offline disabled. */
+"Offline Disabled" = "S'ha inhabilitat el mode sense connexió";
+
 /* A label for button to proceed with an operation. */
 "OK" = "D'acord";
+
+/* A message explaining that the online map failed to load. */
+"Online Map Failed to Load" = "No s'ha pogut carregar el mapa en línia";
+
+/* A label for a button to open a map area. */
+"Open" = "Obert";
+
+/* The status text when a map area is packaging. */
+"Packaging" = "S'està empaquetant";
+
+/* The status text when a map area packaging failed. */
+"Packaging failed" = "No s'ha pogut empaquetar";
+
+/* A label instructing to pan and zoom the map to define an area. */
+"Pan and zoom to define the area" = "Desplaceu el mapa i apliqueu-hi el zoom per definir l'àrea";
 
 /* A label in reference to a credential password. */
 "Password" = "Contrasenya";
@@ -294,8 +436,14 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "No s'ha pogut avaluar la finestra emergent: %@";
 
+/* The status text when a map area is ready to download. */
+"Ready to download" = "Ja es pot baixar";
+
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Grava només vídeo";
+
+/* A label for a button to refresh map area content. */
+"Refresh" = "Actualitza";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Canvia el nom";
@@ -314,6 +462,12 @@ current visible extent of the map or scene. */
 /* A label for a button to show utility network trace results. */
 "Results" = "Resultats";
 
+/* Room (Level of Detail) */
+"Room" = "Habitació";
+
+/* Rooms (Level of Detail) */
+"Rooms" = "Habitacions";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Consulta de cerca";
 
@@ -323,6 +477,9 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Seleccioneu una instal·lació";
+
+/* A title for the on demand configuration view. */
+"Select Area" = "Seleccioneu l'àrea";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Seleccioneu una xarxa";
@@ -336,6 +493,12 @@ or more levels in a floor-aware map or scene. */
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Llocs";
 
+/* A label for the file size of the map area. */
+"Size: %@" = "Mida: %@";
+
+/* Small Building (Level of Detail) */
+"Small Building" = "Edifici petit";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Discrepància de la referència espacial.";
@@ -343,6 +506,18 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Punts d'inici";
+
+/* State/Province (Level of Detail) */
+"State/Province" = "Estat o província";
+
+/* States/Provinces (Level of Detail) */
+"States/Provinces" = "Estats o províncies";
+
+/* Street (Level of Detail) */
+"Street" = "Carrer";
+
+/* Streets (Level of Detail) */
+"Streets" = "Carrers";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Fes una foto o un vídeo";
@@ -378,6 +553,12 @@ match the spatial reference of the map. */
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "El mapa no té una referència espacial.";
 
+/* A message indicating that the map is not offline enabled. */
+"The map is not enabled for offline use." = "El mapa de la missió no està habilitat per a l'ús sense connexió.";
+
+/* A message explaining that the map area name must be unique. */
+"The name for the map area must be unique." = "El nom de l'àrea del mapa ha de ser únic.";
+
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "La contrasenya no era vàlida.";
 
@@ -391,8 +572,17 @@ to be imported as an attachment. */
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "No s'ha pogut accedir a l'URL o l'URL no contenia dades d'imatge.";
 
+/* A message explaining that there are no map areas for this map. */
+"There are no map areas for this map." = "No hi ha àrees per a aquest mapa.";
+
+/* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
+"There are no map areas for this map. Tap the button below to get started." = "No hi ha àrees per a aquest mapa. Toqueu el botó següent per començar.";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Avui";
+
+/* Town (Level of Detail) */
+"Town" = "Població";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Traçat";
@@ -406,11 +596,17 @@ to be imported as an attachment. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Torna-ho a provar";
 
+/* The default title of a map area with an unknown title. */
+"Unknown" = "Desconegut";
+
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Error de validació desconegut";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Tipus d'actiu sense nom";
+
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "Valor no compatible";
 
 /* A label in reference to a credential username. */
 "Username" = "Nom d'usuari";
@@ -444,6 +640,18 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "El valor no pot ser buit";
+
+/* E.g. Open a hyperlink. */
+"View" = "Mostra";
+
+/* World (Level of Detail) */
+"World" = "Món";
+
+/* World (Big) (Level of Detail) */
+"World (Big)" = "Món (gran)";
+
+/* World (Small) (Level of Detail) */
+"World (Small)" = "Món (petit)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

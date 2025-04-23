@@ -201,17 +201,13 @@ struct CertificatePickerViewModifier: ViewModifier {
                     comment: "A label indicating that a password is required to proceed with an operation."
                 ),
                 cancelAction: .init(
-                    title: String.cancel,
+                    title: .cancel,
                     handler: { _, _ in
                         viewModel.cancel()
                     }
                 ),
                 continueAction: .init(
-                    title: String(
-                        localized: "OK",
-                        bundle: .toolkitModule,
-                        comment: "A label for button to proceed with an operation."
-                    ),
+                    title: .ok,
                     handler: { _, password in
                         viewModel.proceedToUseCertificate(withPassword: password)
                     }
@@ -266,7 +262,7 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.cancel()
                     } label: {
-                        Text(String.cancel)
+                        Text.cancel
                             .padding(.horizontal)
                     }
                     .buttonStyle(.bordered)
@@ -357,7 +353,7 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.cancel()
                     } label: {
-                        Text(String.cancel)
+                        Text.cancel
                             .padding(.horizontal)
                     }
                     .buttonStyle(.bordered)
@@ -366,12 +362,8 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.proceedToPicker()
                     } label: {
-                        Text(
-                            "Try Again",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button allowing the user to retry an operation."
-                        )
-                        .padding(.horizontal)
+                        Text.tryAgain
+                            .padding(.horizontal)
                     }
                     .buttonStyle(.borderedProminent)
                     Spacer()

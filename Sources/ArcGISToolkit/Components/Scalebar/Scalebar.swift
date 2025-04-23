@@ -55,9 +55,6 @@ public struct Scalebar: View {
     /// A timer to allow for the scheduling of the auto-hide animation.
     @State private var autoHideTimer: Timer?
     
-    /// The vertical amount of space used by the scalebar.
-    @State private var height: Double?
-    
     /// Controls the current opacity of the scalebar.
     @State private var opacity: Double
     
@@ -173,10 +170,10 @@ public struct Scalebar: View {
             }
         }
         .opacity(opacity)
-        .onChange(spatialReference) { viewModel.update($0) }
-        .onChange(unitsPerPoint) { viewModel.update($0) }
-        .onChange(viewpoint) {
-            viewModel.update($0)
+        .onChange(of: spatialReference) { viewModel.update(spatialReference) }
+        .onChange(of: unitsPerPoint) { viewModel.update(unitsPerPoint) }
+        .onChange(of: viewpoint) {
+            viewModel.update(viewpoint)
             viewModel.updateScale()
             if settings.autoHide {
                 if opacity != 1 {
@@ -197,15 +194,7 @@ public struct Scalebar: View {
                 }
             }
         }
-        .onGeometryChange(for: CGFloat.self) { proxy in
-            proxy.frame(in: .global).height
-        } action: { newValue in
-            height = newValue
-        }
-        .frame(
-            width: $viewModel.displayLength.wrappedValue,
-            height: height ?? .zero
-        )
+        .frame(width: $viewModel.displayLength.wrappedValue)
         .environment(\.scalebarSettings, settings)
     }
 }

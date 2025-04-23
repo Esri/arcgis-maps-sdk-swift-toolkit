@@ -81,7 +81,11 @@ struct FieldsPopupElementView: View {
                         comment: "E.g. Open a hyperlink."
                     )
                 }
-                .buttonStyle(.bordered)
+#if os(visionOS)
+                    .buttonStyle(.bordered)
+#else
+                    .buttonStyle(.borderless)
+#endif
             } else {
                 Text(formattedValue)
             }

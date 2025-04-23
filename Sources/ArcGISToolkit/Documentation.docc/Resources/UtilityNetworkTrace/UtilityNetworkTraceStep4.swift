@@ -21,8 +21,12 @@ struct UtilityNetworkTraceExampleView: View {
                 self.mapPoint = mapPoint
             }
             .task {
-                let publicSample = try? await ArcGISCredential.publicSample
-                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+                do {
+                    let publicSample = try await ArcGISCredential.publicSample
+                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
+                } catch {
+                    print("Error creating credential:", error.localizedDescription)
+                }
             }
             .floatingPanel(
                     backgroundColor: Color(uiColor: .systemGroupedBackground),
