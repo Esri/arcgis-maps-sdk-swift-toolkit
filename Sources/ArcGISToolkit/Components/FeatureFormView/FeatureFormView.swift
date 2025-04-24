@@ -76,6 +76,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The visibility of the close button.
 ***REMOVED***var closeButtonVisibility: Visibility = .automatic
 ***REMOVED***
+***REMOVED******REMOVED***/ The visibility of the "save" and "discard" buttons.
+***REMOVED***var editingButtonsVisibility: Visibility = .automatic
+
 ***REMOVED******REMOVED***/ The closure to perform when a ``EditingEvent`` occurs.
 ***REMOVED***var onFormEditingEventAction: ((EditingEvent) -> Void)?
 ***REMOVED***
@@ -120,7 +123,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** footer: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   hasEdits,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   editingButtonsVisibility != .hidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: presentedForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction: onFormEditingEventAction,
@@ -219,6 +224,14 @@ public extension FeatureFormView {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of the save and discard buttons on the form.
+***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the save and discard buttons.
+***REMOVED***func editingButtons(_ visibility: Visibility) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.editingButtonsVisibility = visibility
+***REMOVED******REMOVED***return copy
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Sets a closure to perform when a form editing event occurs.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form editing event occurs.
 ***REMOVED***func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
