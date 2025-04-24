@@ -15,15 +15,6 @@
 import Foundation
 
 extension String {
-    /// A localized string for the word "Cancel".
-    static var cancel: Self {
-        .init(
-            localized: "Cancel",
-            bundle: .toolkitModule,
-            comment: "A label for a button to cancel an operation."
-        )
-    }
-    
     /// A localized string for the word "Clear".
     static var clear: Self {
         .init(
@@ -66,15 +57,6 @@ extension String {
             localized: "No Value",
             bundle: .toolkitModule,
             comment: "A string indicating that no value has been set for a form field."
-        )
-    }
-    
-    /// A localized string for the word "OK".
-    static var ok: Self {
-        .init(
-            localized: "OK",
-            bundle: .toolkitModule,
-            comment: "A label for button to proceed with an operation."
         )
     }
     

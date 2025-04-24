@@ -298,7 +298,7 @@ private struct RenameButton: View {
         .fontWeight(.semibold)
         .alert(enterName, isPresented: $alertIsShowing) {
             TextField(text: $proposedNewTitle, prompt: areaName) {}
-            Button(String.ok, action: submitNewTitle)
+            Button.ok(action: submitNewTitle)
                 .disabled(!proposedTitleIsValid)
                 .keyboardShortcut(.defaultAction)
             Button.cancel {}
