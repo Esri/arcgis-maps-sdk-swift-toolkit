@@ -26,11 +26,8 @@ struct MediaDetailView : View {
         VStack {
             HStack {
                 Spacer()
-                Button {
+                Button.done {
                     isShowingDetailView.wrappedValue = false
-                } label: {
-                    Text.done
-                        .fontWeight(.semibold)
                 }
                 .padding([.bottom], 4)
             }
