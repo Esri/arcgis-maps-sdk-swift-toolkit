@@ -78,7 +78,7 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the "save" and "discard" buttons.
 ***REMOVED***var editingButtonsVisibility: Visibility = .automatic
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when a ``EditingEvent`` occurs.
 ***REMOVED***var onFormEditingEventAction: ((EditingEvent) -> Void)?
 ***REMOVED***
@@ -97,6 +97,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***public init(featureForm: Binding<FeatureForm?>) {
 ***REMOVED******REMOVED***self.rootFeatureForm = featureForm.wrappedValue
 ***REMOVED******REMOVED***self.presentedForm = featureForm
@@ -208,16 +209,21 @@ public struct FeatureFormView: View {
 ***REMOVED***
 
 public extension FeatureFormView {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ Represents events that occur during the form editing lifecycle.
+***REMOVED******REMOVED***/ These events notify you when the user has either saved or discarded their edits.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***enum EditingEvent {
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED******REMOVED***/ Indicates that the user has discarded their edits.
+***REMOVED******REMOVED******REMOVED***/ - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
 ***REMOVED******REMOVED***case discardedEdits(willNavigate: Bool)
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED******REMOVED***/ Indicates that the user has saved their edits.
+***REMOVED******REMOVED******REMOVED***/ - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
 ***REMOVED******REMOVED***case savedEdits(willNavigate: Bool)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the close button on the form.
 ***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the close button.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***func closeButton(_ visibility: Visibility) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.closeButtonVisibility = visibility
@@ -226,14 +232,16 @@ public extension FeatureFormView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the save and discard buttons on the form.
 ***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the save and discard buttons.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***func editingButtons(_ visibility: Visibility) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.editingButtonsVisibility = visibility
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets a closure to perform when a form editing event occurs.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form editing event occurs.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.onFormEditingEventAction = action

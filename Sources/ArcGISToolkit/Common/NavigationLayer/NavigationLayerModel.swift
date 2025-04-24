@@ -15,12 +15,16 @@
 ***REMOVED***
 
 class NavigationLayerModel: ObservableObject {
+***REMOVED******REMOVED***/ An item representing a view pushed on the layer.
 ***REMOVED***struct Item {
+***REMOVED******REMOVED******REMOVED***/ The closure which produces the view for the item.
 ***REMOVED******REMOVED***let view: () -> any View
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The transition for the next time a view is appended or removed.
 ***REMOVED***@Published private(set) var transition: AnyTransition = .push
 ***REMOVED***
+***REMOVED******REMOVED***/ The set of views pushed on the layer.
 ***REMOVED***@Published private(set) var views: [Item] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title for the current destination.
@@ -29,6 +33,7 @@ class NavigationLayerModel: ObservableObject {
 ***REMOVED******REMOVED***/ The subtitle for the current destination.
 ***REMOVED***@Published var subtitle: String? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ The currently presented view (the last item).
 ***REMOVED***var presented: Item? {
 ***REMOVED******REMOVED***views.last
 ***REMOVED***

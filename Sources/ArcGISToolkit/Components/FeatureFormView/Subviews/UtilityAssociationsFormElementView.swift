@@ -15,15 +15,15 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility associations form element.
 struct UtilityAssociationsFormElementView: View {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The set of utility associations filter results for the element.
 ***REMOVED***@State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility associations form element.
 ***REMOVED***let element: UtilityAssociationsFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -43,7 +43,7 @@ struct UtilityAssociationsFormElementView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility association group result.
 private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***@Environment(\.formChangedAction) var formChangedAction
 ***REMOVED***
@@ -52,10 +52,10 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility association group result.
 ***REMOVED***let utilityAssociationGroupResult: UtilityAssociationGroupResult
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -87,15 +87,15 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The referenced utility associations filter result.
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -124,15 +124,15 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility associations filter result.
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -157,12 +157,12 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility association result.
 private struct UtilityAssociationResultView: View {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The closure to call when the utility association result is selected.
 ***REMOVED***let selectionAction: (() -> Void)
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility association result.
 ***REMOVED***let result: UtilityAssociationResult
 ***REMOVED***
 ***REMOVED***var body: some View {

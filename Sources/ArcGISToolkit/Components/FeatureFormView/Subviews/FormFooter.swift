@@ -16,6 +16,7 @@
 ***REMOVED***
 
 struct FormFooter: View {
+***REMOVED******REMOVED***/ The backing feature form.
 ***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when a choice is made.
@@ -24,6 +25,7 @@ struct FormFooter: View {
 ***REMOVED******REMOVED***/ to the ``FeatureFormView``.
 ***REMOVED***let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***@Binding var validationErrorVisibility: Visibility
 ***REMOVED***
 ***REMOVED***@Environment(\.setAlertContinuation) var setAlertContinuation
