@@ -76,6 +76,9 @@ public struct FeatureFormView: View {
     /// The visibility of the close button.
     var closeButtonVisibility: Visibility = .automatic
     
+    /// The visibility of the "save" and "discard" buttons.
+    var editingButtonsVisibility: Visibility = .automatic
+
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
@@ -120,7 +123,9 @@ public struct FeatureFormView: View {
                         .font(.title)
                     }
                 } footer: {
-                    if let presentedForm = presentedForm.wrappedValue, hasEdits {
+                    if let presentedForm = presentedForm.wrappedValue,
+                       hasEdits,
+                       editingButtonsVisibility != .hidden {
                         FormFooter(
                             featureForm: presentedForm,
                             formHandlingEventAction: onFormEditingEventAction,
@@ -219,6 +224,14 @@ public extension FeatureFormView {
         return copy
     }
     
+    /// Sets the visibility of the save and discard buttons on the form.
+    /// - Parameter visibility: The visibility of the save and discard buttons.
+    func editingButtons(_ visibility: Visibility) -> Self {
+        var copy = self
+        copy.editingButtonsVisibility = visibility
+        return copy
+    }
+
     /// Sets a closure to perform when a form editing event occurs.
     /// - Parameter action: The closure to perform when the form editing event occurs.
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
