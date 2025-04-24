@@ -19,8 +19,15 @@ extension LocalizedStringResource.BundleDescription {
 ***REMOVED***static let toolkit: Self = .atURL(Bundle.toolkitModule.bundleURL)
 ***REMOVED***
 
-
 extension LocalizedStringResource {
+***REMOVED***static var cancel: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"Cancel",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel an operation."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static var downloaded: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***"Downloaded",
@@ -66,6 +73,15 @@ extension LocalizedStringResource {
 ***REMOVED******REMOVED******REMOVED***"No Internet Connection",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
 ***REMOVED******REMOVED******REMOVED***comment: "An error message explaining that there is no internet connection."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "OK".
+***REMOVED***static var ok: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"OK",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkit,
+***REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
