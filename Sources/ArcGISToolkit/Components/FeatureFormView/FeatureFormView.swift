@@ -78,7 +78,7 @@ public struct FeatureFormView: View {
     
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
-
+    
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
@@ -97,6 +97,7 @@ public struct FeatureFormView: View {
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
+    /// - Since: 200.8
     public init(featureForm: Binding<FeatureForm?>) {
         self.rootFeatureForm = featureForm.wrappedValue
         self.presentedForm = featureForm
@@ -208,16 +209,21 @@ public struct FeatureFormView: View {
 }
 
 public extension FeatureFormView {
-    /// <#Description#>
+    /// Represents events that occur during the form editing lifecycle.
+    /// These events notify you when the user has either saved or discarded their edits.
+    /// - Since: 200.8
     enum EditingEvent {
-        /// <#Description#>
+        /// Indicates that the user has discarded their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
         case discardedEdits(willNavigate: Bool)
-        /// <#Description#>
+        /// Indicates that the user has saved their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
         case savedEdits(willNavigate: Bool)
     }
     
     /// Sets the visibility of the close button on the form.
     /// - Parameter visibility: The visibility of the close button.
+    /// - Since: 200.8
     func closeButton(_ visibility: Visibility) -> Self {
         var copy = self
         copy.closeButtonVisibility = visibility
@@ -226,14 +232,16 @@ public extension FeatureFormView {
     
     /// Sets the visibility of the save and discard buttons on the form.
     /// - Parameter visibility: The visibility of the save and discard buttons.
+    /// - Since: 200.8
     func editingButtons(_ visibility: Visibility) -> Self {
         var copy = self
         copy.editingButtonsVisibility = visibility
         return copy
     }
-
+    
     /// Sets a closure to perform when a form editing event occurs.
     /// - Parameter action: The closure to perform when the form editing event occurs.
+    /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         var copy = self
         copy.onFormEditingEventAction = action

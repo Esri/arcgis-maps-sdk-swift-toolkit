@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 struct FormFooter: View {
+    /// The backing feature form.
     let featureForm: FeatureForm
     
     /// The closure to perform when a choice is made.
@@ -24,6 +25,7 @@ struct FormFooter: View {
     /// to the ``FeatureFormView``.
     let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
+    /// The validation error visibility configuration of the form.
     @Binding var validationErrorVisibility: Visibility
     
     @Environment(\.setAlertContinuation) var setAlertContinuation
