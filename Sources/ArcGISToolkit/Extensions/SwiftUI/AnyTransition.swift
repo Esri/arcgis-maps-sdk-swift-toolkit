@@ -15,6 +15,7 @@
 import SwiftUI
 
 extension AnyTransition {
+    /// An asymmetric transition that inserts on the trailing edge and removes from the leading edge.
     static var push: Self {
         .asymmetric(
             insertion: .move(edge: .trailing),
@@ -22,6 +23,7 @@ extension AnyTransition {
         )
     }
     
+    /// An asymmetric transition that inserts on the leading edge and removes from the trailing edge.
     static var pop: Self {
         .asymmetric(
             insertion: .move(edge: .leading),

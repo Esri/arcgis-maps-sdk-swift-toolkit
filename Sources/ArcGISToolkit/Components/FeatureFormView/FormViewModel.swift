@@ -25,6 +25,7 @@ import SwiftUI
         }
     }
     
+    /// The currently presented feature form view.
     @Published var presentedForm: FeatureFormView?
     
     /// The set of all elements which previously held focus.
