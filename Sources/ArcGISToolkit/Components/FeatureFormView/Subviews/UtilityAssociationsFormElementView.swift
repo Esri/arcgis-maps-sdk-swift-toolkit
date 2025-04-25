@@ -154,8 +154,13 @@ private struct UtilityAssociationsFilterResultView: View {
             } label: {
                 HStack {
                     Text(utilityAssociationGroupResult.name)
+                        .foregroundColor(.primary)
                     Spacer()
-                    Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                    Group {
+                        Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                        Image(systemName: "chevron.right")
+                    }
+                    .foregroundColor(.secondary)
                 }
             }
         }
