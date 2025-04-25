@@ -187,6 +187,7 @@ private struct UtilityAssociationResultView: View {
                     Text(title)
                     Text(description)
                         .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
                 .lineLimit(1)
                 Spacer()
@@ -203,8 +204,12 @@ private struct UtilityAssociationResultView: View {
                 .background(Color(uiColor: .systemBackground))
                 .cornerRadius(5)
                 .font(.caption2)
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.secondary)
             }
+            .contentShape(.rect)
         }
+        .buttonStyle(.plain)
     }
 }
 
