@@ -117,10 +117,15 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 
