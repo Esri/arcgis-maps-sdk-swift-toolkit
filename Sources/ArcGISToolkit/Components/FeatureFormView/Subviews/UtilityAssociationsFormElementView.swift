@@ -117,10 +117,15 @@ private struct UtilityAssociationsFilterResultListRowView: View {
                 }
                 .lineLimit(1)
                 Spacer()
-                Text(utilityAssociationsFilterResult.resultCount.formatted())
-                Image(systemName: "chevron.right")
+                Group {
+                    Text(utilityAssociationsFilterResult.resultCount.formatted())
+                    Image(systemName: "chevron.right")
+                }
+                .foregroundColor(.secondary)
             }
+            .contentShape(.rect)
         }
+        .buttonStyle(.plain)
     }
 }
 
