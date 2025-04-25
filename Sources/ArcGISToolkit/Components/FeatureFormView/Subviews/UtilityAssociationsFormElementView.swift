@@ -187,6 +187,7 @@ private struct UtilityAssociationResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -203,8 +204,12 @@ private struct UtilityAssociationResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 
