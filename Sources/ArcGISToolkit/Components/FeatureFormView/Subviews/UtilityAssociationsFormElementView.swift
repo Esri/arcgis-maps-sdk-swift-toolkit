@@ -123,8 +123,13 @@ private struct UtilityAssociationsFilterResultListRowView: View {
                 }
                 .foregroundColor(.secondary)
             }
+#if os(iOS)
+            // Make the entire row tappable.
             .contentShape(.rect)
+#endif
         }
+        // Disables the blue tint on iOS and allows the button to fill the
+        // entire row on Catalyst and visionOS.
         .buttonStyle(.plain)
     }
 }
@@ -154,7 +159,6 @@ private struct UtilityAssociationsFilterResultView: View {
             } label: {
                 HStack {
                     Text(utilityAssociationGroupResult.name)
-                        .foregroundColor(.primary)
                     Spacer()
                     Group {
                         Text(utilityAssociationGroupResult.associationResults.count.formatted())
@@ -163,6 +167,7 @@ private struct UtilityAssociationsFilterResultView: View {
                     .foregroundColor(.secondary)
                 }
             }
+            .tint(.primary)
         }
     }
 }
@@ -207,9 +212,8 @@ private struct UtilityAssociationResultView: View {
                 Image(systemName: "chevron.right")
                     .foregroundStyle(.secondary)
             }
-            .contentShape(.rect)
         }
-        .buttonStyle(.plain)
+        .tint(.primary)
     }
 }
 
