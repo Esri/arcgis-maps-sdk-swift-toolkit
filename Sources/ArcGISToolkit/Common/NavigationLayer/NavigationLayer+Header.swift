@@ -63,7 +63,7 @@ extension NavigationLayer {
                         VStack(alignment: showsBack ? .leading : .center) {
                             Text(title)
                                 .bold()
-                            if let subtitle = model.subtitle, !subtitle.isEmpty  {
+                            if let subtitle = model.subtitle, !subtitle.isEmpty {
                                 Text(subtitle)
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
