@@ -29,7 +29,7 @@ struct NavigationLayer<Content: View>: View {
     let footer: (() -> any View)?
     
     /// The root view.
-    let root: () -> Content
+    let root: (NavigationLayerModel) -> Content
     
     /// The optional closure to perform when the back navigation button is pressed.
     var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
@@ -40,25 +40,25 @@ struct NavigationLayer<Content: View>: View {
     /// The model for the navigation layer.
     @State private var model = NavigationLayerModel()
     
-    init(_ root: @escaping () -> Content) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content) {
         self.headerTrailing = nil
         self.footer = nil
         self.root = root
     }
     
-    init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View)) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content, headerTrailing: (@escaping () -> any View)) {
         self.headerTrailing = headerTrailing
         self.footer = nil
         self.root = root
     }
     
-    init(_ root: @escaping () -> Content, footer: (@escaping () -> any View)) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content, footer: (@escaping () -> any View)) {
         self.headerTrailing = nil
         self.footer = footer
         self.root = root
     }
     
-    init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View), footer: (@escaping () -> any View)) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content, headerTrailing: (@escaping () -> any View), footer: (@escaping () -> any View)) {
         self.headerTrailing = headerTrailing
         self.footer = footer
         self.root = root
@@ -75,7 +75,7 @@ struct NavigationLayer<Content: View>: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Group {
                     if model.views.isEmpty {
-                        root()
+                        root(model)
                             .transition(model.transition)
                     } else if let presented = model.presented?.view {
                         AnyView(presented())
@@ -142,13 +142,13 @@ struct PreviewList: View {
 }
 
 #Preview("init(_:)") {
-    NavigationLayer {
+    NavigationLayer { _ in
         PreviewList()
     }
 }
 
 #Preview("init(_:headerTrailing:)") {
-    NavigationLayer {
+    NavigationLayer { _ in
         PreviewList()
     } headerTrailing: {
         Button { } label: { Image(systemName: "xmark")  }
@@ -156,7 +156,7 @@ struct PreviewList: View {
 }
 
 #Preview("init(_:footer:)") {
-    NavigationLayer {
+    NavigationLayer { _ in
         PreviewList()
     } footer: {
         Text(verbatim: "Footer")
@@ -164,7 +164,7 @@ struct PreviewList: View {
 }
 
 #Preview("init(_:headerTrailing:footer:)") {
-    NavigationLayer {
+    NavigationLayer { _ in
         PreviewList()
     } headerTrailing: {
         Button { } label: { Image(systemName: "xmark")  }
