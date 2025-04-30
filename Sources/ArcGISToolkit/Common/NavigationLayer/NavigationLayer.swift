@@ -112,79 +112,64 @@ struct NavigationLayer<Content: View>: View {
     }
 }
 
-#Preview {
-    struct SampleList: View {
-        @Environment(NavigationLayerModel.self) private var model
-        @Binding var includeFooter: Bool
-        @Binding var includeHeader: Bool
-        @Binding var rootSubtitle: String
-        @Binding var rootTitle: String
-        
-        var body: some View {
-            List {
-                Section("Configuration") {
-                    Toggle("Include header trailing content", isOn: $includeHeader)
-                    Toggle("Include footer", isOn: $includeFooter)
-                    TextField("Root title", text: $rootTitle)
-                    TextField("Root subtitle", text: $rootSubtitle)
+struct PreviewList: View {
+    @Environment(NavigationLayerModel.self) private var model
+    
+    var body: some View {
+        List {
+            Button("Present a view") {
+                model.push {
+                    PreviewList()
                 }
-                Section("Presentation") {
-                    Button("Present a view") {
-                        model.push {
-                            Text("View")
-                        }
-                    }
-                    Button("Present a view with a title") {
-                        model.push {
-                            Text("View")
-                                .navigationLayerTitle("Title")
-                        }
-                    }
-                    Button("Present a view with a title & subtitle") {
-                        model.push {
-                            Text("View")
-                                .navigationLayerTitle("Title", subtitle: "Subtitle")
-                        }
-                    }
+            }
+            
+            Button("Present a view with a title") {
+                model.push {
+                    PreviewList()
+                        .navigationLayerTitle("Title")
+                }
+            }
+            
+            Button("Present a view with a title and subtitle") {
+                model.push {
+                    PreviewList()
+                        .navigationLayerTitle("Title", subtitle: "Subtitle")
                 }
             }
         }
+        .navigationLayerTitle("Title", subtitle: "Subtitle")
     }
-    
-    @Previewable @State var includeHeader = false
-    @Previewable @State var includeFooter = false
-    @Previewable @State var isPresented = true
-    @Previewable @State var rootSubtitle = ""
-    @Previewable @State var rootTitle = ""
-    
-    return LinearGradient(
-        colors: [.red, .orange, .yellow],
-        startPoint: .topLeading, endPoint: .bottomTrailing
-    )
-    .onTapGesture {
-        isPresented.toggle()
+}
+
+#Preview("init(_:)") {
+    NavigationLayer {
+        PreviewList()
     }
-    .ignoresSafeArea(edges: .all)
-    .floatingPanel(isPresented: $isPresented) {
-        NavigationLayer {
-            SampleList(
-                includeFooter: $includeFooter,
-                includeHeader: $includeHeader,
-                rootSubtitle: $rootSubtitle,
-                rootTitle: $rootTitle
-            )
-            .navigationLayerTitle(rootTitle, subtitle: rootSubtitle)
-        } headerTrailing: {
-            if includeHeader {
-                Button("Done") {
-                    isPresented = false
-                }
-            }
-        } footer: {
-            if includeFooter {
-                Text("Footer")
-            }
-        }
+}
+
+#Preview("init(_:headerTrailing:)") {
+    NavigationLayer {
+        PreviewList()
+    } headerTrailing: {
+        Button { } label: { Image(systemName: "xmark")  }
+    }
+}
+
+#Preview("init(_:footer:)") {
+    NavigationLayer {
+        PreviewList()
+    } footer: {
+        Text(verbatim: "Footer")
+    }
+}
+
+#Preview("init(_:headerTrailing:footer:)") {
+    NavigationLayer {
+        PreviewList()
+    } headerTrailing: {
+        Button { } label: { Image(systemName: "xmark")  }
+    } footer: {
+        Text(verbatim: "Footer")
     }
 }
 
