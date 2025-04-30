@@ -16,8 +16,10 @@ import SwiftUI
 
 extension NavigationLayer {
     struct Header: View {
+        /// The model for the navigation layer.
         @Environment(NavigationLayerModel.self) private var model
         
+        /// The height of the header content.
         @State private var height: CGFloat = .zero
         
         /// The optional closure to perform when the back navigation button is pressed.
@@ -26,6 +28,7 @@ extension NavigationLayer {
         /// The header trailing content.
         let headerTrailing: (() -> any View)?
         
+        /// The width provided to the view.
         let width: CGFloat
         
         var body: some View {
@@ -94,6 +97,8 @@ extension NavigationLayer {
             .padding(showsBack || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil)
         }
         
+        /// A Boolean value indicating whether the back button is visible, *true* when there is at least one
+        /// presented view and *false* otherwise.
         var showsBack: Bool {
             !model.views.isEmpty
         }
@@ -101,6 +106,11 @@ extension NavigationLayer {
 }
 
 fileprivate extension View {
+    /// Optionally positions this view within an invisible frame with the specified size.
+    /// - Parameters:
+    ///   - applied: A Boolean condition indicating whether padding is applied.
+    ///   - width: A fixed width for the resulting view.
+    /// - Returns: A view with a fixed width, if applied.
     @ViewBuilder
     func frame(_ applied: Bool, width: CGFloat) -> some View {
         if applied {
@@ -109,9 +119,10 @@ fileprivate extension View {
             self
         }
     }
+    
     /// Optionally adds an equal padding amount to specific edges of this view.
     /// - Parameter applied: A Boolean condition indicating whether padding is applied.
-    /// - Returns: A view that’s padded if specified.
+    /// - Returns: A view that’s padded, if applied.
     @ViewBuilder
     func padding(_ applied: Bool) -> some View {
         if applied {
