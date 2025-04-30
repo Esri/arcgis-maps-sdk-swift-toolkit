@@ -54,7 +54,7 @@ extension NavigationLayer {
                 }
                 .opacity(showsBack ? 1 : .zero)
                 .frame(!showsBack, width: width / 6)
-                if showsBack {
+                if showsBack && (model.title != nil || model.subtitle != nil) {
                     Divider()
                         .frame(height: height)
                 }
