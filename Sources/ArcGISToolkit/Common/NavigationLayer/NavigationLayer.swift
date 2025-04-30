@@ -119,25 +119,30 @@ struct PreviewList: View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Button("Present a view") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreviewList()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Present a view with a title") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreviewList()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "A view with navigationLayerTitle(_:) applied")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.containerRelativeFrame([.horizontal, .vertical])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Presented View's Title")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Present a view with a title and subtitle") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreviewList()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title", subtitle: "Subtitle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "A view with navigationLayerTitle(_:subtitle:) applied")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.containerRelativeFrame([.horizontal, .vertical])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Presented View's Title",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: "Presented View's Subtitle"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationLayerTitle("Title", subtitle: "Subtitle")
+***REMOVED******REMOVED***.navigationLayerTitle("Navigation Layer", subtitle: "Root View")
 ***REMOVED***
 ***REMOVED***
 
