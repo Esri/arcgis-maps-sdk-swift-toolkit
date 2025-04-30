@@ -42,7 +42,7 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let label = Label("Back", systemImage: "chevron.left")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.title == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if backLabelIsVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
@@ -52,18 +52,15 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(showsBack ? 1 : .zero)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(!showsBack, width: width / 6)
-***REMOVED******REMOVED******REMOVED******REMOVED***if showsBack && (model.title != nil || model.subtitle != nil) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(backButtonIsVisible ? 1 : .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(!backButtonIsVisible, width: width / 6)
+***REMOVED******REMOVED******REMOVED******REMOVED***if backButtonIsVisible && !backLabelIsVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if !showsBack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let title = model.title, !title.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: showsBack ? .leading : .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: backButtonIsVisible ? .leading : .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let subtitle = model.subtitle, !subtitle.isEmpty {
@@ -80,7 +77,7 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: (width / 6) * 4, alignment: showsBack ? .leading : .center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: (width / 6) * 4, alignment: backButtonIsVisible ? .leading : .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let headerTrailing {
@@ -94,13 +91,19 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: width / 6, alignment: .trailing)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(showsBack || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil)
+***REMOVED******REMOVED******REMOVED***.padding(backButtonIsVisible || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the back button is visible, *true* when there is at least one
 ***REMOVED******REMOVED******REMOVED***/ presented view and *false* otherwise.
-***REMOVED******REMOVED***var showsBack: Bool {
-***REMOVED******REMOVED******REMOVED***!model.views.isEmpty
+***REMOVED******REMOVED***var backButtonIsVisible: Bool {
+***REMOVED******REMOVED******REMOVED***model.presented != nil
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the back label is visible, *true* when the back button is
+***REMOVED******REMOVED******REMOVED***/ visible and there is no title to show.
+***REMOVED******REMOVED***var backLabelIsVisible: Bool {
+***REMOVED******REMOVED******REMOVED***backButtonIsVisible && model.title == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
