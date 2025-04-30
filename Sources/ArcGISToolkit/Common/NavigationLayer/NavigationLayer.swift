@@ -112,79 +112,64 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 ***REMOVED***
 
-#Preview {
-***REMOVED***struct SampleList: View {
-***REMOVED******REMOVED***@Environment(NavigationLayerModel.self) private var model
-***REMOVED******REMOVED***@Binding var includeFooter: Bool
-***REMOVED******REMOVED***@Binding var includeHeader: Bool
-***REMOVED******REMOVED***@Binding var rootSubtitle: String
-***REMOVED******REMOVED***@Binding var rootTitle: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Configuration") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle("Include header trailing content", isOn: $includeHeader)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle("Include footer", isOn: $includeFooter)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Root title", text: $rootTitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Root subtitle", text: $rootSubtitle)
+struct PreviewList: View {
+***REMOVED***@Environment(NavigationLayerModel.self) private var model
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***Button("Present a view") {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreviewList()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Presentation") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("View")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view with a title") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("View")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Present a view with a title & subtitle") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("View")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title", subtitle: "Subtitle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Present a view with a title") {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreviewList()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Present a view with a title and subtitle") {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreviewList()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle("Title", subtitle: "Subtitle")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.navigationLayerTitle("Title", subtitle: "Subtitle")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Previewable @State var includeHeader = false
-***REMOVED***@Previewable @State var includeFooter = false
-***REMOVED***@Previewable @State var isPresented = true
-***REMOVED***@Previewable @State var rootSubtitle = ""
-***REMOVED***@Previewable @State var rootTitle = ""
+
+#Preview("init(_:)") {
+***REMOVED***NavigationLayer {
+***REMOVED******REMOVED***PreviewList()
 ***REMOVED***
-***REMOVED***return LinearGradient(
-***REMOVED******REMOVED***colors: [.red, .orange, .yellow],
-***REMOVED******REMOVED***startPoint: .topLeading, endPoint: .bottomTrailing
-***REMOVED***)
-***REMOVED***.onTapGesture {
-***REMOVED******REMOVED***isPresented.toggle()
 ***REMOVED***
-***REMOVED***.ignoresSafeArea(edges: .all)
-***REMOVED***.floatingPanel(isPresented: $isPresented) {
-***REMOVED******REMOVED***NavigationLayer {
-***REMOVED******REMOVED******REMOVED***SampleList(
-***REMOVED******REMOVED******REMOVED******REMOVED***includeFooter: $includeFooter,
-***REMOVED******REMOVED******REMOVED******REMOVED***includeHeader: $includeHeader,
-***REMOVED******REMOVED******REMOVED******REMOVED***rootSubtitle: $rootSubtitle,
-***REMOVED******REMOVED******REMOVED******REMOVED***rootTitle: $rootTitle
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.navigationLayerTitle(rootTitle, subtitle: rootSubtitle)
+
+#Preview("init(_:headerTrailing:)") {
+***REMOVED***NavigationLayer {
+***REMOVED******REMOVED***PreviewList()
 ***REMOVED*** headerTrailing: {
-***REMOVED******REMOVED******REMOVED***if includeHeader {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED*** footer: {
-***REMOVED******REMOVED******REMOVED***if includeFooter {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Footer")
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***Button { ***REMOVED*** label: { Image(systemName: "xmark")  ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+#Preview("init(_:footer:)") {
+***REMOVED***NavigationLayer {
+***REMOVED******REMOVED***PreviewList()
+***REMOVED*** footer: {
+***REMOVED******REMOVED***Text(verbatim: "Footer")
+***REMOVED***
+***REMOVED***
+
+#Preview("init(_:headerTrailing:footer:)") {
+***REMOVED***NavigationLayer {
+***REMOVED******REMOVED***PreviewList()
+***REMOVED*** headerTrailing: {
+***REMOVED******REMOVED***Button { ***REMOVED*** label: { Image(systemName: "xmark")  ***REMOVED***
+***REMOVED*** footer: {
+***REMOVED******REMOVED***Text(verbatim: "Footer")
 ***REMOVED***
 ***REMOVED***
 
