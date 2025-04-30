@@ -54,7 +54,7 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(showsBack ? 1 : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(!showsBack, width: width / 6)
-***REMOVED******REMOVED******REMOVED******REMOVED***if showsBack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if showsBack && (model.title != nil || model.subtitle != nil) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
 ***REMOVED******REMOVED******REMOVED***
