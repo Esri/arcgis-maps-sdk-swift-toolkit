@@ -15,6 +15,7 @@
 ***REMOVED***
 
 extension AnyTransition {
+***REMOVED******REMOVED***/ An asymmetric transition that inserts on the trailing edge and removes from the leading edge.
 ***REMOVED***static var push: Self {
 ***REMOVED******REMOVED***.asymmetric(
 ***REMOVED******REMOVED******REMOVED***insertion: .move(edge: .trailing),
@@ -22,6 +23,7 @@ extension AnyTransition {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ An asymmetric transition that inserts on the leading edge and removes from the trailing edge.
 ***REMOVED***static var pop: Self {
 ***REMOVED******REMOVED***.asymmetric(
 ***REMOVED******REMOVED******REMOVED***insertion: .move(edge: .leading),

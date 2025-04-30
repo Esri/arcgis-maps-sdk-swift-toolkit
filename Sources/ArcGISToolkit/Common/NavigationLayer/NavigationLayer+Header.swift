@@ -16,8 +16,10 @@
 
 extension NavigationLayer {
 ***REMOVED***struct Header: View {
+***REMOVED******REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED******REMOVED***@EnvironmentObject private var model: NavigationLayerModel
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The height of the header content.
 ***REMOVED******REMOVED***@State private var height: CGFloat = .zero
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The optional closure to perform when the back navigation button is pressed.
@@ -26,6 +28,7 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED***/ The header trailing content.
 ***REMOVED******REMOVED***let headerTrailing: (() -> any View)?
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The width provided to the view.
 ***REMOVED******REMOVED***let width: CGFloat
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
@@ -87,6 +90,8 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED***.padding(showsBack || (model.title != nil && !model.title!.isEmpty))
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the back button is visible, *true* when there is at least one
+***REMOVED******REMOVED******REMOVED***/ presented view and *false* otherwise.
 ***REMOVED******REMOVED***var showsBack: Bool {
 ***REMOVED******REMOVED******REMOVED***!model.views.isEmpty
 ***REMOVED***
@@ -94,6 +99,11 @@ extension NavigationLayer {
 ***REMOVED***
 
 fileprivate extension View {
+***REMOVED******REMOVED***/ Optionally positions this view within an invisible frame with the specified size.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - applied: A Boolean condition indicating whether padding is applied.
+***REMOVED******REMOVED***/   - width: A fixed width for the resulting view.
+***REMOVED******REMOVED***/ - Returns: A view with a fixed width, if applied.
 ***REMOVED***@ViewBuilder
 ***REMOVED***func frame(_ applied: Bool, width: CGFloat) -> some View {
 ***REMOVED******REMOVED***if applied {
@@ -104,7 +114,7 @@ fileprivate extension View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Optionally adds an equal padding amount to specific edges of this view.
 ***REMOVED******REMOVED***/ - Parameter applied: A Boolean condition indicating whether padding is applied.
-***REMOVED******REMOVED***/ - Returns: A view that’s padded if specified.
+***REMOVED******REMOVED***/ - Returns: A view that’s padded, if applied.
 ***REMOVED***@ViewBuilder
 ***REMOVED***func padding(_ applied: Bool) -> some View {
 ***REMOVED******REMOVED***if applied {

@@ -25,6 +25,7 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The currently presented feature form view.
 ***REMOVED***@Published var presentedForm: FeatureFormView?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The set of all elements which previously held focus.
