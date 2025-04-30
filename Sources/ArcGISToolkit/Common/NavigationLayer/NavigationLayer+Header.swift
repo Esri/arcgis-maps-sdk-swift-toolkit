@@ -42,7 +42,7 @@ extension NavigationLayer {
                         }
                     } label: {
                         let label = Label("Back", systemImage: "chevron.left")
-                        if model.title == nil {
+                        if backLabelIsVisible {
                             label
                                 .labelStyle(.titleAndIcon)
                         } else {
@@ -52,18 +52,15 @@ extension NavigationLayer {
                         }
                     }
                 }
-                .opacity(showsBack ? 1 : .zero)
-                .frame(!showsBack, width: width / 6)
-                if showsBack && (model.title != nil || model.subtitle != nil) {
+                .opacity(backButtonIsVisible ? 1 : .zero)
+                .frame(!backButtonIsVisible, width: width / 6)
+                if backButtonIsVisible && !backLabelIsVisible {
                     Divider()
                         .frame(height: height)
                 }
-                if !showsBack {
-                    Spacer()
-                }
                 Group {
                     if let title = model.title, !title.isEmpty {
-                        VStack(alignment: showsBack ? .leading : .center) {
+                        VStack(alignment: backButtonIsVisible ? .leading : .center) {
                             Text(title)
                                 .bold()
                             if let subtitle = model.subtitle, !subtitle.isEmpty {
@@ -80,7 +77,7 @@ extension NavigationLayer {
                         }
                     }
                 }
-                .frame(maxWidth: (width / 6) * 4, alignment: showsBack ? .leading : .center)
+                .frame(maxWidth: (width / 6) * 4, alignment: backButtonIsVisible ? .leading : .center)
                 Spacer()
                 Group {
                     if let headerTrailing {
@@ -94,13 +91,19 @@ extension NavigationLayer {
                 }
                 .frame(width: width / 6, alignment: .trailing)
             }
-            .padding(showsBack || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil)
+            .padding(backButtonIsVisible || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil)
         }
         
         /// A Boolean value indicating whether the back button is visible, *true* when there is at least one
         /// presented view and *false* otherwise.
-        var showsBack: Bool {
-            !model.views.isEmpty
+        var backButtonIsVisible: Bool {
+            model.presented != nil
+        }
+        
+        /// A Boolean value indicating whether the back label is visible, *true* when the back button is
+        /// visible and there is no title to show.
+        var backLabelIsVisible: Bool {
+            backButtonIsVisible && model.title == nil
         }
     }
 }
