@@ -41,16 +41,25 @@ extension NavigationLayer {
                             model.pop()
                         }
                     } label: {
-                        let label = Label("Back", systemImage: "chevron.left")
+                        let label = Label {
+                            Text("Back")
+                        } icon: {
+                            Image(systemName: "chevron.left")
+                                .font(.title2.weight(.medium))
+                        }
+                            .padding(5)
+                            .contentShape(.rect)
                         if backLabelIsVisible {
                             label
                                 .labelStyle(.titleAndIcon)
                         } else {
                             label
                                 .labelStyle(.iconOnly)
-                                .font(.title2)
                         }
                     }
+#if targetEnvironment(macCatalyst)
+                    .buttonStyle(.plain)
+#endif
                 }
                 .opacity(backButtonIsVisible ? 1 : .zero)
                 .frame(!backButtonIsVisible, width: width / 6)
