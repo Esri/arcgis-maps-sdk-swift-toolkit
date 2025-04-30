@@ -37,6 +37,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***/ The closure to perform when model's path changes.
 ***REMOVED***var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@State private var model = NavigationLayerModel()
 ***REMOVED***
 ***REMOVED***init(_ root: @escaping () -> Content) {
