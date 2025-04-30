@@ -37,6 +37,7 @@ struct NavigationLayer<Content: View>: View {
     /// The closure to perform when model's path changes.
     var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
     
+    /// The model for the navigation layer.
     @StateObject private var model: NavigationLayerModel
     
     init(_ root: @escaping () -> Content) {

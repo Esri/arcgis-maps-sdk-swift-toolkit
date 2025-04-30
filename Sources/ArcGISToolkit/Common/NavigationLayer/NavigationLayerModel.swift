@@ -15,12 +15,16 @@
 import SwiftUI
 
 class NavigationLayerModel: ObservableObject {
+    /// An item representing a view pushed on the layer.
     struct Item {
+        /// The closure which produces the view for the item.
         let view: () -> any View
     }
     
+    /// The transition for the next time a view is appended or removed.
     @Published private(set) var transition: AnyTransition = .push
     
+    /// The set of views pushed on the layer.
     @Published private(set) var views: [Item] = []
     
     /// The title for the current destination.
@@ -29,6 +33,7 @@ class NavigationLayerModel: ObservableObject {
     /// The subtitle for the current destination.
     @Published var subtitle: String? = nil
     
+    /// The currently presented view (the last item).
     var presented: Item? {
         views.last
     }
