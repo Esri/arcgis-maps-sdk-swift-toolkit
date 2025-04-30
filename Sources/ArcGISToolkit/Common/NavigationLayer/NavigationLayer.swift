@@ -79,6 +79,12 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the title and subtitle preferences each
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** time the presented view is changed to avoid
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** showing a stale value if no title or subtitle
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** was set.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerTitle.self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerSubtitle.self)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
@@ -119,7 +125,8 @@ struct PreviewList: View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Button("Present a view") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "A view")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.containerRelativeFrame([.horizontal, .vertical])
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
