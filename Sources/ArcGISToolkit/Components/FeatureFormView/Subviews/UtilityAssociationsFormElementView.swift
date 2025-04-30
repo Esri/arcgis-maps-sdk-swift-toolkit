@@ -117,10 +117,20 @@ private struct UtilityAssociationsFilterResultListRowView: View {
                 }
                 .lineLimit(1)
                 Spacer()
-                Text(utilityAssociationsFilterResult.resultCount.formatted())
-                Image(systemName: "chevron.right")
+                Group {
+                    Text(utilityAssociationsFilterResult.resultCount.formatted())
+                    Image(systemName: "chevron.right")
+                }
+                .foregroundColor(.secondary)
             }
+#if os(iOS)
+            // Make the entire row tappable.
+            .contentShape(.rect)
+#endif
         }
+        // Disables the blue tint on iOS and allows the button to fill the
+        // entire row on Catalyst and visionOS.
+        .buttonStyle(.plain)
     }
 }
 
@@ -150,9 +160,14 @@ private struct UtilityAssociationsFilterResultView: View {
                 HStack {
                     Text(utilityAssociationGroupResult.name)
                     Spacer()
-                    Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                    Group {
+                        Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                        Image(systemName: "chevron.right")
+                    }
+                    .foregroundColor(.secondary)
                 }
             }
+            .tint(.primary)
         }
     }
 }
@@ -177,6 +192,7 @@ private struct UtilityAssociationResultView: View {
                     Text(title)
                     Text(description)
                         .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
                 .lineLimit(1)
                 Spacer()
@@ -193,8 +209,11 @@ private struct UtilityAssociationResultView: View {
                 .background(Color(uiColor: .systemBackground))
                 .cornerRadius(5)
                 .font(.caption2)
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.secondary)
             }
         }
+        .tint(.primary)
     }
 }
 
