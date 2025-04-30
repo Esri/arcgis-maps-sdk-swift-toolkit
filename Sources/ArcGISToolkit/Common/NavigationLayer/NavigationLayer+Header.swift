@@ -29,7 +29,7 @@ extension NavigationLayer {
         let width: CGFloat
         
         var body: some View {
-            HStack(alignment: .top) {
+            HStack {
                 Group {
                     Button {
                         if let backNavigationAction {
