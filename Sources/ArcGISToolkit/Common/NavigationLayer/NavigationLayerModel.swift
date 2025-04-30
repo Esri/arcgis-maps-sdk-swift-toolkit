@@ -42,6 +42,7 @@
 ***REMOVED***func pop() {
 ***REMOVED******REMOVED***guard !views.isEmpty else { return ***REMOVED***
 ***REMOVED******REMOVED***transition = .pop
+***REMOVED******REMOVED***prepareForTransition()
 ***REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED***_ = views.removeLast()
 ***REMOVED***
@@ -51,8 +52,14 @@
 ***REMOVED******REMOVED***/ - Parameter view: The view to push.
 ***REMOVED***func push(_ view: @escaping () -> any View) {
 ***REMOVED******REMOVED***transition = .push
+***REMOVED******REMOVED***prepareForTransition()
 ***REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED***views.append(.init(view: view))
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func prepareForTransition() {
+***REMOVED******REMOVED***title = nil
+***REMOVED******REMOVED***subtitle = nil
 ***REMOVED***
 ***REMOVED***
