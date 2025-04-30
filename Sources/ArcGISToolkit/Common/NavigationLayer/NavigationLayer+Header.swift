@@ -79,12 +79,19 @@ extension NavigationLayer {
                 }
                 .frame(maxWidth: (width / 6) * 4, alignment: showsBack ? .leading : .center)
                 Spacer()
-                if let headerTrailing {
-                    AnyView(headerTrailing())
-                        .frame(width: width / 6, alignment: .trailing)
+                Group {
+                    if let headerTrailing {
+                        AnyView(headerTrailing())
+                    } else {
+                        // Keep the title and subtitle centered when no
+                        // trailing content is present.
+                        Color.clear
+                            .frame(width: .zero, height: .zero)
+                    }
                 }
+                .frame(width: width / 6, alignment: .trailing)
             }
-            .padding(showsBack || (model.title != nil && !model.title!.isEmpty))
+            .padding(showsBack || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil)
         }
         
         var showsBack: Bool {
