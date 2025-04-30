@@ -21,6 +21,7 @@ struct InternalFeatureFormView: View {
 #warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
     @Environment(\.formElementPadding) var formElementPadding
     
+    /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
     
     /// The view model for the form.

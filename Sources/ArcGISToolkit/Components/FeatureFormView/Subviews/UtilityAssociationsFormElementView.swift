@@ -15,15 +15,15 @@
 import ArcGIS
 import SwiftUI
 
-/// <#Description#>
+/// A view for a utility associations form element.
 struct UtilityAssociationsFormElementView: View {
-    /// <#Description#>
+    /// The view model for the form.
     @EnvironmentObject private var formViewModel: FormViewModel
     
-    /// <#Description#>
+    /// The set of utility associations filter results for the element.
     @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
     
-    /// <#Description#>
+    /// The backing utility associations form element.
     let element: UtilityAssociationsFormElement
     
     var body: some View {
@@ -43,7 +43,7 @@ struct UtilityAssociationsFormElementView: View {
     }
 }
 
-/// <#Description#>
+/// A view for a utility association group result.
 private struct UtilityAssociationGroupResultView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
@@ -52,10 +52,10 @@ private struct UtilityAssociationGroupResultView: View {
     /// The view model for the form.
     @EnvironmentObject private var formViewModel: FormViewModel
     
-    /// <#Description#>
+    /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
     
-    /// <#Description#>
+    /// The backing utility association group result.
     let utilityAssociationGroupResult: UtilityAssociationGroupResult
     
     var body: some View {
@@ -87,15 +87,15 @@ private struct UtilityAssociationGroupResultView: View {
     }
 }
 
-/// <#Description#>
+/// A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
-    /// <#Description#>
+    /// The view model for the form.
     @EnvironmentObject private var formViewModel: FormViewModel
     
-    /// <#Description#>
+    /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
     
-    /// <#Description#>
+    /// The referenced utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
@@ -134,15 +134,15 @@ private struct UtilityAssociationsFilterResultListRowView: View {
     }
 }
 
-/// <#Description#>
+/// A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
-    /// <#Description#>
+    /// The view model for the form.
     @EnvironmentObject private var formViewModel: FormViewModel
     
-    /// <#Description#>
+    /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
     
-    /// <#Description#>
+    /// The backing utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
@@ -172,12 +172,12 @@ private struct UtilityAssociationsFilterResultView: View {
     }
 }
 
-/// <#Description#>
+/// A view for a utility association result.
 private struct UtilityAssociationResultView: View {
-    /// <#Description#>
+    /// The closure to call when the utility association result is selected.
     let selectionAction: (() -> Void)
     
-    /// <#Description#>
+    /// The backing utility association result.
     let result: UtilityAssociationResult
     
     var body: some View {
