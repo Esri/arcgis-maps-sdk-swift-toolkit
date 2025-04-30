@@ -46,19 +46,19 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***self.root = root
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View)) {
+***REMOVED***init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View)) {
 ***REMOVED******REMOVED***self.headerTrailing = headerTrailing
 ***REMOVED******REMOVED***self.footer = nil
 ***REMOVED******REMOVED***self.root = root
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(_ root: @escaping () -> Content, @ViewBuilder footer: (@escaping () -> any View)) {
+***REMOVED***init(_ root: @escaping () -> Content, footer: (@escaping () -> any View)) {
 ***REMOVED******REMOVED***self.headerTrailing = nil
 ***REMOVED******REMOVED***self.footer = footer
 ***REMOVED******REMOVED***self.root = root
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View), @ViewBuilder footer: (@escaping () -> any View)) {
+***REMOVED***init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View), footer: (@escaping () -> any View)) {
 ***REMOVED******REMOVED***self.headerTrailing = headerTrailing
 ***REMOVED******REMOVED***self.footer = footer
 ***REMOVED******REMOVED***self.root = root
