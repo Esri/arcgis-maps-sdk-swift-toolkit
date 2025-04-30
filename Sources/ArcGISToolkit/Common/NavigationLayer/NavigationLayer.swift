@@ -29,7 +29,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***let footer: (() -> any View)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The root view.
-***REMOVED***let root: () -> Content
+***REMOVED***let root: (NavigationLayerModel) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ The optional closure to perform when the back navigation button is pressed.
 ***REMOVED***var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
@@ -40,25 +40,25 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@State private var model = NavigationLayerModel()
 ***REMOVED***
-***REMOVED***init(_ root: @escaping () -> Content) {
+***REMOVED***init(_ root: @escaping (NavigationLayerModel) -> Content) {
 ***REMOVED******REMOVED***self.headerTrailing = nil
 ***REMOVED******REMOVED***self.footer = nil
 ***REMOVED******REMOVED***self.root = root
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View)) {
+***REMOVED***init(_ root: @escaping (NavigationLayerModel) -> Content, headerTrailing: (@escaping () -> any View)) {
 ***REMOVED******REMOVED***self.headerTrailing = headerTrailing
 ***REMOVED******REMOVED***self.footer = nil
 ***REMOVED******REMOVED***self.root = root
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(_ root: @escaping () -> Content, footer: (@escaping () -> any View)) {
+***REMOVED***init(_ root: @escaping (NavigationLayerModel) -> Content, footer: (@escaping () -> any View)) {
 ***REMOVED******REMOVED***self.headerTrailing = nil
 ***REMOVED******REMOVED***self.footer = footer
 ***REMOVED******REMOVED***self.root = root
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View), footer: (@escaping () -> any View)) {
+***REMOVED***init(_ root: @escaping (NavigationLayerModel) -> Content, headerTrailing: (@escaping () -> any View), footer: (@escaping () -> any View)) {
 ***REMOVED******REMOVED***self.headerTrailing = headerTrailing
 ***REMOVED******REMOVED***self.footer = footer
 ***REMOVED******REMOVED***self.root = root
@@ -75,7 +75,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root(model)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
@@ -142,13 +142,13 @@ struct PreviewList: View {
 ***REMOVED***
 
 #Preview("init(_:)") {
-***REMOVED***NavigationLayer {
+***REMOVED***NavigationLayer { _ in
 ***REMOVED******REMOVED***PreviewList()
 ***REMOVED***
 ***REMOVED***
 
 #Preview("init(_:headerTrailing:)") {
-***REMOVED***NavigationLayer {
+***REMOVED***NavigationLayer { _ in
 ***REMOVED******REMOVED***PreviewList()
 ***REMOVED*** headerTrailing: {
 ***REMOVED******REMOVED***Button { ***REMOVED*** label: { Image(systemName: "xmark")  ***REMOVED***
@@ -156,7 +156,7 @@ struct PreviewList: View {
 ***REMOVED***
 
 #Preview("init(_:footer:)") {
-***REMOVED***NavigationLayer {
+***REMOVED***NavigationLayer { _ in
 ***REMOVED******REMOVED***PreviewList()
 ***REMOVED*** footer: {
 ***REMOVED******REMOVED***Text(verbatim: "Footer")
@@ -164,7 +164,7 @@ struct PreviewList: View {
 ***REMOVED***
 
 #Preview("init(_:headerTrailing:footer:)") {
-***REMOVED***NavigationLayer {
+***REMOVED***NavigationLayer { _ in
 ***REMOVED******REMOVED***PreviewList()
 ***REMOVED*** headerTrailing: {
 ***REMOVED******REMOVED***Button { ***REMOVED*** label: { Image(systemName: "xmark")  ***REMOVED***
