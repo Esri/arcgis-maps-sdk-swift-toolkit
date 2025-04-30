@@ -48,9 +48,9 @@ extension NavigationLayer {
                         } else {
                             label
                                 .labelStyle(.iconOnly)
+                                .font(.title2)
                         }
                     }
-                    .font(.title2)
                 }
                 .opacity(showsBack ? 1 : .zero)
                 .frame(!showsBack, width: width / 6)
