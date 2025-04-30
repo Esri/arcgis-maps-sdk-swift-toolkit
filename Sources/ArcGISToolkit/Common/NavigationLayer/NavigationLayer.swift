@@ -79,6 +79,12 @@ struct NavigationLayer<Content: View>: View {
                             .transition(model.transition)
                     } else if let presented = model.presented?.view {
                         AnyView(presented())
+                            // Reset the title and subtitle preferences each
+                            // time the presented view is changed to avoid
+                            // showing a stale value if no title or subtitle
+                            // was set.
+                            .defaultPreference(NavigationLayerTitle.self)
+                            .defaultPreference(NavigationLayerSubtitle.self)
                             // Re-trigger the transition animation when view count changes.
                             .id(model.views.count)
                             .transition(model.transition)
@@ -119,7 +125,8 @@ struct PreviewList: View {
         List {
             Button("Present a view") {
                 model.push {
-                    EmptyView()
+                    Text(verbatim: "A view")
+                        .containerRelativeFrame([.horizontal, .vertical])
                 }
             }
             
