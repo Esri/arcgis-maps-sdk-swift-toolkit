@@ -46,19 +46,19 @@ struct NavigationLayer<Content: View>: View {
         self.root = root
     }
     
-    init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View)) {
+    init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View)) {
         self.headerTrailing = headerTrailing
         self.footer = nil
         self.root = root
     }
     
-    init(_ root: @escaping () -> Content, @ViewBuilder footer: (@escaping () -> any View)) {
+    init(_ root: @escaping () -> Content, footer: (@escaping () -> any View)) {
         self.headerTrailing = nil
         self.footer = footer
         self.root = root
     }
     
-    init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View), @ViewBuilder footer: (@escaping () -> any View)) {
+    init(_ root: @escaping () -> Content, headerTrailing: (@escaping () -> any View), footer: (@escaping () -> any View)) {
         self.headerTrailing = headerTrailing
         self.footer = footer
         self.root = root
