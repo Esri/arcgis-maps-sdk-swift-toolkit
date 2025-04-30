@@ -101,7 +101,7 @@ extension NavigationLayer {
         }
         
         /// A Boolean value indicating whether the back label is visible, *true* when the back button is
-        /// visible and there is no title to show.
+        /// visible and there is no title to show, and *false* otherwise.
         var backLabelIsVisible: Bool {
             backButtonIsVisible && model.title == nil
         }
