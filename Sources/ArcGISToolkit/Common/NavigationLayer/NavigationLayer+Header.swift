@@ -101,7 +101,7 @@ extension NavigationLayer {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the back label is visible, *true* when the back button is
-***REMOVED******REMOVED******REMOVED***/ visible and there is no title to show.
+***REMOVED******REMOVED******REMOVED***/ visible and there is no title to show, and *false* otherwise.
 ***REMOVED******REMOVED***var backLabelIsVisible: Bool {
 ***REMOVED******REMOVED******REMOVED***backButtonIsVisible && model.title == nil
 ***REMOVED***
