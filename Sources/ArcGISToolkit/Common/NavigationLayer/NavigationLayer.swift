@@ -119,25 +119,30 @@ struct PreviewList: View {
         List {
             Button("Present a view") {
                 model.push {
-                    PreviewList()
+                    EmptyView()
                 }
             }
             
             Button("Present a view with a title") {
                 model.push {
-                    PreviewList()
-                        .navigationLayerTitle("Title")
+                    Text(verbatim: "A view with navigationLayerTitle(_:) applied")
+                        .containerRelativeFrame([.horizontal, .vertical])
+                        .navigationLayerTitle("Presented View's Title")
                 }
             }
             
             Button("Present a view with a title and subtitle") {
                 model.push {
-                    PreviewList()
-                        .navigationLayerTitle("Title", subtitle: "Subtitle")
+                    Text(verbatim: "A view with navigationLayerTitle(_:subtitle:) applied")
+                        .containerRelativeFrame([.horizontal, .vertical])
+                        .navigationLayerTitle(
+                            "Presented View's Title",
+                            subtitle: "Presented View's Subtitle"
+                        )
                 }
             }
         }
-        .navigationLayerTitle("Title", subtitle: "Subtitle")
+        .navigationLayerTitle("Navigation Layer", subtitle: "Root View")
     }
 }
 
