@@ -117,10 +117,20 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
+#if os(iOS)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Make the entire row tappable.
+***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
+#endif
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Disables the blue tint on iOS and allows the button to fill the
+***REMOVED******REMOVED******REMOVED*** entire row on Catalyst and visionOS.
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 
@@ -150,9 +160,14 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.associationResults.count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.associationResults.count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.tint(.primary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -177,6 +192,7 @@ private struct UtilityAssociationResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -193,8 +209,11 @@ private struct UtilityAssociationResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.tint(.primary)
 ***REMOVED***
 ***REMOVED***
 
