@@ -42,6 +42,7 @@ import SwiftUI
     func pop() {
         guard !views.isEmpty else { return }
         transition = .pop
+        prepareForTransition()
         withAnimation {
             _ = views.removeLast()
         }
@@ -51,8 +52,14 @@ import SwiftUI
     /// - Parameter view: The view to push.
     func push(_ view: @escaping () -> any View) {
         transition = .push
+        prepareForTransition()
         withAnimation {
             views.append(.init(view: view))
         }
+    }
+    
+    private func prepareForTransition() {
+        title = nil
+        subtitle = nil
     }
 }
