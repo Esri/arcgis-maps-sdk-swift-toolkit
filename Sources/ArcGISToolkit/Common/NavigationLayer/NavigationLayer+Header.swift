@@ -79,12 +79,19 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: (width / 6) * 4, alignment: showsBack ? .leading : .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***if let headerTrailing {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(headerTrailing())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: width / 6, alignment: .trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let headerTrailing {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(headerTrailing())
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Keep the title and subtitle centered when no
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** trailing content is present.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: .zero, height: .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: width / 6, alignment: .trailing)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(showsBack || (model.title != nil && !model.title!.isEmpty))
+***REMOVED******REMOVED******REMOVED***.padding(showsBack || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var showsBack: Bool {
