@@ -15,8 +15,11 @@
 @testable import ArcGISToolkit
 import SwiftUI
 
-/// A view using NavigationLayer where  <#Description#>
+/// A view using NavigationLayer where the current presented item is tracked with
+/// `onNavigationPathChanged(perform:)`.
 struct NavigationLayerTestCase3View: View {
+    @State private var presentedViewType: String?
+    
     var body: some View {
         NavigationLayer { model in
             List {
@@ -26,10 +29,14 @@ struct NavigationLayerTestCase3View: View {
                     }
                 }
             }
+        } footer: {
+            Text(presentedViewType ?? "Root view")
         }
         .onNavigationPathChanged { item in
             if let item {
-                print(type(of: item.view()))
+                presentedViewType = "\(type(of: item.view()))"
+            } else {
+                presentedViewType = nil
             }
         }
     }
@@ -38,7 +45,7 @@ struct NavigationLayerTestCase3View: View {
 extension NavigationLayerTestCase3View {
     struct DemoView: View {
         var body: some View {
-            Text("DemoView")
+            List { }
         }
     }
 }
