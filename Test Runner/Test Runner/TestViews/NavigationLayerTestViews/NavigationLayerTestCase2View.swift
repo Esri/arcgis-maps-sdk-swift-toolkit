@@ -15,7 +15,7 @@
 @testable import ArcGISToolkit
 import SwiftUI
 
-/// A view using NavigationLayer where  <#Description#>
+/// A view using NavigationLayer where navigation is blocked when the back button is pressed.
 struct NavigationLayerTestCase2View: View {
     @State private var alertIsPresented = false
     
