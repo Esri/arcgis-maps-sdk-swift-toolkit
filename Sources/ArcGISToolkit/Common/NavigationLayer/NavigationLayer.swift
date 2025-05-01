@@ -73,32 +73,22 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root(model)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the title and subtitle preferences each
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** time the presented view is changed to avoid
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** showing a stale value if no title or subtitle
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** was set.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerTitle.self)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerSubtitle.self)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerTitle.self) { title in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.title = title
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.subtitle = subtitle
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root(model)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerTitle.self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerSubtitle.self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
+***REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the title and subtitle preferences each
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** time the presented view is changed to avoid
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** showing a stale value if no title or subtitle
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** was set.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerTitle.self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerSubtitle.self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.id(model.views.count)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let footer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(footer())
@@ -113,6 +103,16 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***.frame(width: geometryProxy.size.width)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: model.views.count) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***onNavigationChangedAction?(model.presented ?? nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerTitle.self) { title in
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.title = title
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.subtitle = subtitle
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
