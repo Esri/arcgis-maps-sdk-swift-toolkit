@@ -15,6 +15,8 @@
 @testable ***REMOVED***Toolkit
 ***REMOVED***
 
+***REMOVED***/ A view using NavigationLayer where the root view has no title or subtitle, the first presented view does
+***REMOVED***/ have a title and subtitle, and the second presented view does not have a title or subtitle.
 struct NavigationLayerTestCase1View: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationLayer { model in
