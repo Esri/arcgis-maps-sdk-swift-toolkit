@@ -19,6 +19,7 @@ struct NavigationLayerTestViews: View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***NavigationLink("NavigationLayer Test Case 1", destination: NavigationLayerTestCase1View())
 ***REMOVED******REMOVED******REMOVED***NavigationLink("NavigationLayer Test Case 2", destination: NavigationLayerTestCase2View())
+***REMOVED******REMOVED******REMOVED***NavigationLink("NavigationLayer Test Case 3", destination: NavigationLayerTestCase3View())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
