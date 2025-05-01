@@ -15,6 +15,8 @@
 @testable import ArcGISToolkit
 import SwiftUI
 
+/// A view using NavigationLayer where the root view has no title or subtitle, the first presented view does
+/// have a title and subtitle, and the second presented view does not have a title or subtitle.
 struct NavigationLayerTestCase1View: View {
     var body: some View {
         NavigationLayer { model in
