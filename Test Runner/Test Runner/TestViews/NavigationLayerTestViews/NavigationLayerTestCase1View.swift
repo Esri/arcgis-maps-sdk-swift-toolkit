@@ -34,7 +34,6 @@ struct NavigationLayerTestCase1View: View {
                     }
                 }
             }
-            
         }
     }
 }
