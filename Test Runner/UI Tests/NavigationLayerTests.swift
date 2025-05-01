@@ -40,4 +40,25 @@ final class NavigationLayerTests: XCTestCase {
         XCTAssertFalse(app.staticTexts["1st Destination"].exists)
         XCTAssertFalse(app.staticTexts["Subtitle"].exists)
     }
+    
+    /// Test that back navigation is blocked correctly.
+    func testCase_2() {
+        let app = XCUIApplication()
+        app.launch()
+        
+        app.buttons["NavigationLayer Tests"].tap()
+        app.buttons["NavigationLayer Test Case 2"].tap()
+        
+        app.buttons["Present a view"].tap()
+        
+        XCTAssertTrue(app.staticTexts["Presented view"].exists)
+        
+        app.buttons.matching(identifier: "Back").element(boundBy: 1).tap()
+        
+        XCTAssertTrue(app.staticTexts["Navigation blocked!"].exists)
+        
+        app.buttons["Continue"].tap()
+        
+        XCTAssertTrue(app.staticTexts["Presented view"].exists)
+    }
 }
