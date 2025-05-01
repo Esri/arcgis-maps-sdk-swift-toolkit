@@ -18,6 +18,7 @@ struct NavigationLayerTestViews: View {
     var body: some View {
         List {
             NavigationLink("NavigationLayer Test Case 1", destination: NavigationLayerTestCase1View())
+            NavigationLink("NavigationLayer Test Case 2", destination: NavigationLayerTestCase2View())
         }
     }
 }
