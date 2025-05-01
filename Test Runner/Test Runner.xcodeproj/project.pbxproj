@@ -24,12 +24,15 @@
 		75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */; };
 		75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */; };
 		75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */; };
+		8A0DF2B12DC3E31400418F74 /* NavigationLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0DF2B02DC3E30F00418F74 /* NavigationLayerTests.swift */; };
 		8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */; };
 		8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F42B86896300000DD6 /* UI Tests.xctestplan */; };
 		8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */; };
 		8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */; };
 		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; platformFilters = (ios, maccatalyst, ); };
 		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
+		8AABA2052DC2F36100485C35 /* NavigationLayerTestViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABA2032DC2F36100485C35 /* NavigationLayerTestViews.swift */; };
+		8AABA2062DC2F36100485C35 /* NavigationLayerTestCase1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABA2022DC2F36100485C35 /* NavigationLayerTestCase1View.swift */; };
 		8AEE70482BEEC0B400C9949C /* RepresentedUITextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */; };
 		8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */; };
 /* End PBXBuildFile section */
@@ -65,12 +68,15 @@
 		75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTestView.swift; sourceTree = "<group>"; };
 		75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTests.swift; sourceTree = "<group>"; };
 		75CCCD612A5F691E0098B059 /* Test Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Test Runner.entitlements"; sourceTree = "<group>"; };
+		8A0DF2B02DC3E30F00418F74 /* NavigationLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLayerTests.swift; sourceTree = "<group>"; };
 		8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase6View.swift; sourceTree = "<group>"; };
 		8A1562F42B86896300000DD6 /* UI Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UI Tests.xctestplan"; sourceTree = "<group>"; };
 		8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; };
 		8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTests.swift; sourceTree = "<group>"; };
 		8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTestView.swift; sourceTree = "<group>"; };
 		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
+		8AABA2022DC2F36100485C35 /* NavigationLayerTestCase1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLayerTestCase1View.swift; sourceTree = "<group>"; };
+		8AABA2032DC2F36100485C35 /* NavigationLayerTestViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLayerTestViews.swift; sourceTree = "<group>"; };
 		8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTests.swift; sourceTree = "<group>"; };
 		8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -147,11 +153,12 @@
 		7552A76A2A573DFB0023DA5A /* UI Tests */ = {
 			isa = PBXGroup;
 			children = (
-				75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */,
 				8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */,
+				75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */,
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
-				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
 				75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */,
+				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
+				8A0DF2B02DC3E30F00418F74 /* NavigationLayerTests.swift */,
 				8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */,
 			);
 			path = "UI Tests";
@@ -174,12 +181,13 @@
 		75B236672A5CB32700AEFACE /* TestViews */ = {
 			isa = PBXGroup;
 			children = (
-				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
-				8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */,
-				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
-				8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */,
 				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
+				8AABA2042DC2F36100485C35 /* NavigationLayerTestViews */,
+				8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */,
+				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
+				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
+				8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */,
 			);
 			path = TestViews;
 			sourceTree = "<group>";
@@ -198,6 +206,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8AABA2042DC2F36100485C35 /* NavigationLayerTestViews */ = {
+			isa = PBXGroup;
+			children = (
+				8AABA2022DC2F36100485C35 /* NavigationLayerTestCase1View.swift */,
+				8AABA2032DC2F36100485C35 /* NavigationLayerTestViews.swift */,
+			);
+			path = NavigationLayerTestViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -312,6 +329,8 @@
 				7552A7562A573CBB0023DA5A /* Tests.swift in Sources */,
 				7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */,
 				8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */,
+				8AABA2052DC2F36100485C35 /* NavigationLayerTestViews.swift in Sources */,
+				8AABA2062DC2F36100485C35 /* NavigationLayerTestCase1View.swift in Sources */,
 				7584B7552B1A79DD00772AB7 /* BookmarksTestViews.swift in Sources */,
 				75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */,
 				75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */,
@@ -331,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */,
+				8A0DF2B12DC3E31400418F74 /* NavigationLayerTests.swift in Sources */,
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */,
 				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,
