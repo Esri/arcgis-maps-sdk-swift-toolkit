@@ -62,3 +62,22 @@ final class NavigationLayerTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Presented view"].exists)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test that `onNavigationPathChanged(perform:)` works as expected.
+***REMOVED***func testCase_3() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.buttons["NavigationLayer Tests"].tap()
+***REMOVED******REMOVED***app.buttons["NavigationLayer Test Case 3"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Root view"].exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.buttons["Present a view"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["DemoView"].exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.buttons.matching(identifier: "Back").element(boundBy: 1).tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Root view"].exists)
+***REMOVED***
+***REMOVED***

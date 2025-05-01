@@ -15,8 +15,11 @@
 @testable ***REMOVED***Toolkit
 ***REMOVED***
 
-***REMOVED***/ A view using NavigationLayer where  <#Description#>
+***REMOVED***/ A view using NavigationLayer where the current presented item is tracked with
+***REMOVED***/ `onNavigationPathChanged(perform:)`.
 struct NavigationLayerTestCase3View: View {
+***REMOVED***@State private var presentedViewType: String?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationLayer { model in
 ***REMOVED******REMOVED******REMOVED***List {
@@ -26,10 +29,14 @@ struct NavigationLayerTestCase3View: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED*** footer: {
+***REMOVED******REMOVED******REMOVED***Text(presentedViewType ?? "Root view")
 ***REMOVED***
 ***REMOVED******REMOVED***.onNavigationPathChanged { item in
 ***REMOVED******REMOVED******REMOVED***if let item {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(type(of: item.view()))
+***REMOVED******REMOVED******REMOVED******REMOVED***presentedViewType = "\(type(of: item.view()))"
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***presentedViewType = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -38,7 +45,7 @@ struct NavigationLayerTestCase3View: View {
 extension NavigationLayerTestCase3View {
 ***REMOVED***struct DemoView: View {
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***Text("DemoView")
+***REMOVED******REMOVED******REMOVED***List { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
