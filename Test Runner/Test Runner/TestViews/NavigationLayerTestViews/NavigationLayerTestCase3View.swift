@@ -12,14 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@testable import ArcGISToolkit
 import SwiftUI
 
-struct NavigationLayerTestViews: View {
+/// A view using NavigationLayer where  <#Description#>
+struct NavigationLayerTestCase3View: View {
     var body: some View {
-        List {
-            NavigationLink("NavigationLayer Test Case 1", destination: NavigationLayerTestCase1View())
-            NavigationLink("NavigationLayer Test Case 2", destination: NavigationLayerTestCase2View())
-            NavigationLink("NavigationLayer Test Case 3", destination: NavigationLayerTestCase3View())
+        NavigationLayer { model in
+            List {
+                Button("Present a view") {
+                    model.push {
+                        DemoView()
+                    }
+                }
+            }
+        }
+        .onNavigationPathChanged { item in
+            if let item {
+                print(type(of: item.view()))
+            }
+        }
+    }
+}
+
+extension NavigationLayerTestCase3View {
+    struct DemoView: View {
+        var body: some View {
+            Text("DemoView")
         }
     }
 }
