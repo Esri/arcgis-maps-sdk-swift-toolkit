@@ -73,32 +73,22 @@ struct NavigationLayer<Content: View>: View {
                     width: geometryProxy.size.width
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
-                Group {
-                    if model.views.isEmpty {
-                        root(model)
-                            .transition(model.transition)
-                    } else if let presented = model.presented?.view {
-                        AnyView(presented())
-                            // Reset the title and subtitle preferences each
-                            // time the presented view is changed to avoid
-                            // showing a stale value if no title or subtitle
-                            // was set.
-                            .defaultPreference(NavigationLayerTitle.self)
-                            .defaultPreference(NavigationLayerSubtitle.self)
-                            // Re-trigger the transition animation when view count changes.
-                            .id(model.views.count)
-                            .transition(model.transition)
-                    }
-                }
-                .onPreferenceChange(NavigationLayerTitle.self) { title in
-                    Task { @MainActor in
-                        self.model.title = title
-                    }
-                }
-                .onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
-                    Task { @MainActor in
-                        self.model.subtitle = subtitle
-                    }
+                if model.views.isEmpty {
+                    root(model)
+                        .defaultPreference(NavigationLayerTitle.self)
+                        .defaultPreference(NavigationLayerSubtitle.self)
+                        .transition(model.transition)
+                } else if let presented = model.presented?.view {
+                    AnyView(presented())
+                        // Reset the title and subtitle preferences each
+                        // time the presented view is changed to avoid
+                        // showing a stale value if no title or subtitle
+                        // was set.
+                        .defaultPreference(NavigationLayerTitle.self)
+                        .defaultPreference(NavigationLayerSubtitle.self)
+                        // Re-trigger the transition animation when view count changes.
+                        .id(model.views.count)
+                        .transition(model.transition)
                 }
                 if let footer {
                     AnyView(footer())
@@ -113,6 +103,16 @@ struct NavigationLayer<Content: View>: View {
             .frame(width: geometryProxy.size.width)
             .onChange(of: model.views.count) {
                 onNavigationChangedAction?(model.presented ?? nil)
+            }
+            .onPreferenceChange(NavigationLayerTitle.self) { title in
+                Task { @MainActor in
+                    self.model.title = title
+                }
+            }
+            .onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
+                Task { @MainActor in
+                    self.model.subtitle = subtitle
+                }
             }
         }
     }
