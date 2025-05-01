@@ -15,7 +15,7 @@
 @testable ***REMOVED***Toolkit
 ***REMOVED***
 
-***REMOVED***/ A view using NavigationLayer where  <#Description#>
+***REMOVED***/ A view using NavigationLayer where navigation is blocked when the back button is pressed.
 struct NavigationLayerTestCase2View: View {
 ***REMOVED***@State private var alertIsPresented = false
 ***REMOVED***
