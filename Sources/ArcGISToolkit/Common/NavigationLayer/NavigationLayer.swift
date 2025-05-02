@@ -75,8 +75,6 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if model.views.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***root(model)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerTitle.self)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerSubtitle.self)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
