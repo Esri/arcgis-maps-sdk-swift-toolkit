@@ -80,10 +80,11 @@ struct NavigationLayer<Content: View>: View {
                         .transition(model.transition)
                 } else if let presented = model.presented?.view {
                     AnyView(presented())
-                        // Reset the title and subtitle preferences each
-                        // time the presented view is changed to avoid
-                        // showing a stale value if no title or subtitle
+                        // Reset the title, subtitle and header background color
+                        // preference each time the presented view is changed to
+                        // avoid showing a stale value if no title or subtitle
                         // was set.
+                        .defaultPreference(NavigationLayerHeaderBackground.self)
                         .defaultPreference(NavigationLayerTitle.self)
                         .defaultPreference(NavigationLayerSubtitle.self)
                         // Re-trigger the transition animation when view count changes.
@@ -103,6 +104,11 @@ struct NavigationLayer<Content: View>: View {
             .frame(width: geometryProxy.size.width)
             .onChange(of: model.views.count) {
                 onNavigationChangedAction?(model.presented ?? nil)
+            }
+            .onPreferenceChange(NavigationLayerHeaderBackground.self) { color in
+                Task { @MainActor in
+                    self.model.headerBackgroundColor = color
+                }
             }
             .onPreferenceChange(NavigationLayerTitle.self) { title in
                 Task { @MainActor in
@@ -185,6 +191,25 @@ struct PreviewList: View {
     }
 }
 
+#Preview("navigationLayerHeaderBackground(_:)") {
+    @Previewable @Environment(\.colorScheme) var colorScheme
+    
+    NavigationLayer { model in
+        List {
+            Button("Present a list") {
+                model.push {
+                    List {
+                        Text(verbatim: "Destination")
+                    }
+                    .navigationLayerHeaderBackground(
+                        Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
+                    )
+                }
+            }
+        }
+    }
+}
+
 extension NavigationLayer {
     /// Sets a closure to perform when the back navigation button is pressed.
     /// - Parameter action: The closure to perform when the back navigation button is pressed.
@@ -207,6 +232,14 @@ extension NavigationLayer {
     }
 }
 
+struct NavigationLayerHeaderBackground: PreferenceKey {
+    static let defaultValue: Color? = nil
+    
+    static func reduce(value: inout Color?, nextValue: () -> Color?) {
+        value = nextValue()
+    }
+}
+
 struct NavigationLayerTitle: PreferenceKey {
     static let defaultValue: String? = nil
     
@@ -224,6 +257,12 @@ struct NavigationLayerSubtitle: PreferenceKey {
 }
 
 extension View {
+    /// Sets a header background color for the navigation layer destination.
+    /// - Parameter color: The color for the navigation layer destination.
+    func navigationLayerHeaderBackground(_ color: Color) -> some View {
+        preference(key: NavigationLayerHeaderBackground.self, value: color)
+    }
+    
     /// Sets a title for the navigation layer destination.
     /// - Parameters:
     ///   - title: The title for the navigation layer destination.

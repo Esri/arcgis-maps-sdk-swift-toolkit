@@ -104,6 +104,7 @@ extension NavigationLayer {
                     .frame(width: width / 6, alignment: .trailing)
                 }
                 .padding()
+                .background(model.headerBackgroundColor)
             }
         }
         
