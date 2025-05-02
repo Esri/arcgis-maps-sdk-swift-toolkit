@@ -125,6 +125,8 @@ struct NavigationLayer<Content: View>: View {
 struct PreviewList: View {
     @Environment(NavigationLayerModel.self) private var model
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         List {
             Button("Present a view") {
@@ -153,6 +155,9 @@ struct PreviewList: View {
                 }
             }
         }
+        .navigationLayerHeaderBackground(
+            Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
+        )
         .navigationLayerTitle("Navigation Layer", subtitle: "Root View")
     }
 }
@@ -186,25 +191,6 @@ struct PreviewList: View {
         Button { } label: { Image(systemName: "xmark")  }
     } footer: {
         Text(verbatim: "Footer")
-    }
-}
-
-#Preview("navigationLayerHeaderBackground(_:)") {
-    @Previewable @Environment(\.colorScheme) var colorScheme
-    
-    NavigationLayer { model in
-        List {
-            Button("Present a list") {
-                model.push {
-                    List {
-                        Text(verbatim: "Destination")
-                    }
-                    .navigationLayerHeaderBackground(
-                        Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
-                    )
-                }
-            }
-        }
     }
 }
 
