@@ -80,8 +80,7 @@ struct NavigationLayer<Content: View>: View {
                     AnyView(presented())
                         // Reset the title, subtitle and header background color
                         // preference each time the presented view is changed to
-                        // avoid showing a stale value if no title or subtitle
-                        // was set.
+                        // avoid using a stale preference if none was set.
                         .defaultPreference(NavigationLayerHeaderBackground.self)
                         .defaultPreference(NavigationLayerTitle.self)
                         .defaultPreference(NavigationLayerSubtitle.self)
