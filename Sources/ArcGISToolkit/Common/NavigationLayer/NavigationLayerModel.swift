@@ -21,6 +21,9 @@ import SwiftUI
         let view: () -> any View
     }
     
+    /// A Boolean value indicating whether another view is being pushed.
+    private var isPushing = false
+    
     /// The transition for the next time a view is appended or removed.
     private(set) var transition: AnyTransition = .push
     
@@ -53,9 +56,17 @@ import SwiftUI
     /// Push a view.
     /// - Parameter view: The view to push.
     func push(_ view: @escaping () -> any View) {
+        // Prevent the same view from being pushed multiple times while the
+        // animation is running.
+        guard !isPushing else { return }
+        isPushing = true
+        
         transition = .push
+        
         withAnimation {
             views.append(.init(view: view))
+        } completion: {
+            self.isPushing = false
         }
     }
 }
