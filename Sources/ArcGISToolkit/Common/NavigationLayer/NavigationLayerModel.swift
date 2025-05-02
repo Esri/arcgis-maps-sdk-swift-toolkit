@@ -27,10 +27,13 @@ import SwiftUI
     /// The set of views pushed on the layer.
     private(set) var views: [Item] = []
     
-    /// The title for the current destination.
+    /// The header background color for the current view.
+    var headerBackgroundColor: Color? = nil
+    
+    /// The title for the current view.
     var title: String? = nil
     
-    /// The subtitle for the current destination.
+    /// The subtitle for the current view.
     var subtitle: String? = nil
     
     /// The currently presented view (the last item).
