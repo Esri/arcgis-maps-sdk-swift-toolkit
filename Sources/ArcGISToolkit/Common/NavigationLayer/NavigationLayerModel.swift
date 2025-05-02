@@ -27,10 +27,13 @@
 ***REMOVED******REMOVED***/ The set of views pushed on the layer.
 ***REMOVED***private(set) var views: [Item] = []
 ***REMOVED***
-***REMOVED******REMOVED***/ The title for the current destination.
+***REMOVED******REMOVED***/ The header background color for the current view.
+***REMOVED***var headerBackgroundColor: Color? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ The title for the current view.
 ***REMOVED***var title: String? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The subtitle for the current destination.
+***REMOVED******REMOVED***/ The subtitle for the current view.
 ***REMOVED***var subtitle: String? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently presented view (the last item).

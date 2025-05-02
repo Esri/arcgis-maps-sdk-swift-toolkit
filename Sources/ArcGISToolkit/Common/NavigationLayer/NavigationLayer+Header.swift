@@ -104,6 +104,7 @@ extension NavigationLayer {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: width / 6, alignment: .trailing)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(model.headerBackgroundColor)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***

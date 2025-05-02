@@ -80,10 +80,11 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.transition(model.transition)
 ***REMOVED******REMOVED******REMOVED*** else if let presented = model.presented?.view {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AnyView(presented())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the title and subtitle preferences each
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** time the presented view is changed to avoid
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** showing a stale value if no title or subtitle
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the title, subtitle and header background color
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** preference each time the presented view is changed to
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** avoid showing a stale value if no title or subtitle
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** was set.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerHeaderBackground.self)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerTitle.self)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.defaultPreference(NavigationLayerSubtitle.self)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Re-trigger the transition animation when view count changes.
@@ -103,6 +104,11 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED***.frame(width: geometryProxy.size.width)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: model.views.count) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***onNavigationChangedAction?(model.presented ?? nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerHeaderBackground.self) { color in
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.headerBackgroundColor = color
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerTitle.self) { title in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
@@ -185,6 +191,25 @@ struct PreviewList: View {
 ***REMOVED***
 ***REMOVED***
 
+#Preview("navigationLayerHeaderBackground(_:)") {
+***REMOVED***@Previewable @Environment(\.colorScheme) var colorScheme
+***REMOVED***
+***REMOVED***NavigationLayer { model in
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***Button("Present a list") {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "Destination")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerHeaderBackground(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 extension NavigationLayer {
 ***REMOVED******REMOVED***/ Sets a closure to perform when the back navigation button is pressed.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the back navigation button is pressed.
@@ -207,6 +232,14 @@ extension NavigationLayer {
 ***REMOVED***
 ***REMOVED***
 
+struct NavigationLayerHeaderBackground: PreferenceKey {
+***REMOVED***static let defaultValue: Color? = nil
+***REMOVED***
+***REMOVED***static func reduce(value: inout Color?, nextValue: () -> Color?) {
+***REMOVED******REMOVED***value = nextValue()
+***REMOVED***
+***REMOVED***
+
 struct NavigationLayerTitle: PreferenceKey {
 ***REMOVED***static let defaultValue: String? = nil
 ***REMOVED***
@@ -224,6 +257,12 @@ struct NavigationLayerSubtitle: PreferenceKey {
 ***REMOVED***
 
 extension View {
+***REMOVED******REMOVED***/ Sets a header background color for the navigation layer destination.
+***REMOVED******REMOVED***/ - Parameter color: The color for the navigation layer destination.
+***REMOVED***func navigationLayerHeaderBackground(_ color: Color) -> some View {
+***REMOVED******REMOVED***preference(key: NavigationLayerHeaderBackground.self, value: color)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets a title for the navigation layer destination.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - title: The title for the navigation layer destination.
