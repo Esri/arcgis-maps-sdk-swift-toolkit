@@ -32,80 +32,80 @@ extension NavigationLayer {
         let width: CGFloat
         
         var body: some View {
-            if !headerIsVisible {
-                EmptyView()
-            } else {
-                HStack {
-                    Group {
-                        Button {
-                            if let backNavigationAction {
-                                backNavigationAction(model)
-                            } else {
-                                model.pop()
-                            }
-                        } label: {
-                            let label = Label {
-                                Text("Back")
-                            } icon: {
-                                Image(systemName: "chevron.left")
-                                    .font(.title2.weight(.medium))
-                            }
-                                .padding(5)
-                                .contentShape(.rect)
-                            if backLabelIsVisible {
-                                label
-                                    .labelStyle(.titleAndIcon)
-                            } else {
-                                label
-                                    .labelStyle(.iconOnly)
-                            }
-                        }
-    #if targetEnvironment(macCatalyst)
-                        .buttonStyle(.plain)
-    #endif
-                    }
-                    .opacity(backButtonIsVisible ? 1 : .zero)
-                    .frame(!backButtonIsVisible, width: width / 6)
-                    if backButtonIsVisible && !backLabelIsVisible {
-                        Divider()
-                            .frame(height: height)
-                    }
-                    Group {
-                        if let title = model.title, !title.isEmpty {
-                            VStack(alignment: backButtonIsVisible ? .leading : .center) {
-                                Text(title)
-                                    .bold()
-                                if let subtitle = model.subtitle, !subtitle.isEmpty {
-                                    Text(subtitle)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            .lineLimit(1)
-                            .onGeometryChange(for: CGFloat.self) { proxy in
-                                proxy.size.height
-                            } action: { newValue in
-                                height = newValue
-                            }
-                        }
-                    }
-                    .frame(maxWidth: (width / 6) * 4, alignment: backButtonIsVisible ? .leading : .center)
-                    Spacer()
-                    Group {
-                        if let headerTrailing {
-                            AnyView(headerTrailing())
+            HStack {
+                if backButtonIsVisible {
+                    Button {
+                        if let backNavigationAction {
+                            backNavigationAction(model)
                         } else {
-                            // Keep the title and subtitle centered when no
-                            // trailing content is present.
-                            Color.clear
-                                .frame(width: .zero, height: .zero)
+                            model.pop()
+                        }
+                    } label: {
+                        let label = Label {
+                            Text("Back")
+                        } icon: {
+                            Image(systemName: "chevron.left")
+                                .font(.title2.weight(.medium))
+                        }
+                            .padding(5)
+                            .contentShape(.rect)
+                        if backLabelIsVisible {
+                            label
+                                .labelStyle(.titleAndIcon)
+                        } else {
+                            label
+                                .labelStyle(.iconOnly)
                         }
                     }
-                    .frame(width: width / 6, alignment: .trailing)
+#if targetEnvironment(macCatalyst)
+                    .buttonStyle(.plain)
+#endif
+                    .frame(!backButtonIsVisible, width: width / 6)
+                } else if headerTrailing != nil {
+                    // There's no back button, but there's header trailing
+                    // content, so keep the title centered.
+                    Color.clear
+                        .frame(width: width / 6, height: 1)
                 }
-                .padding()
-                .background(model.headerBackgroundColor)
+                
+                if backButtonIsVisible && !backLabelIsVisible {
+                    Divider()
+                        .frame(height: height)
+                }
+                
+                if let title = model.title, !title.isEmpty {
+                    VStack(alignment: backButtonIsVisible ? .leading : .center) {
+                        Text(title)
+                            .bold()
+                        if let subtitle = model.subtitle, !subtitle.isEmpty {
+                            Text(subtitle)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .frame(
+                        maxWidth: headerTrailing == nil ? .infinity : (width / 6) * 4,
+                        alignment: backButtonIsVisible ? .leading : .center
+                    )
+                    .lineLimit(1)
+                    .onGeometryChange(for: CGFloat.self) { proxy in
+                        proxy.size.height
+                    } action: { newValue in
+                        height = newValue
+                    }
+                } else if headerTrailing != nil {
+                    // There's no title but there's header trailing content,
+                    // so push it to the right.
+                    Spacer()
+                }
+                
+                if let headerTrailing {
+                    AnyView(headerTrailing())
+                        .frame(width: width / 6, alignment: .trailing)
+                }
             }
+            .padding(headerIsVisible)
+            .background(model.headerBackgroundColor)
         }
         
         /// A Boolean value indicating whether the back button is visible, *true* when there is at least one
@@ -140,5 +140,31 @@ fileprivate extension View {
         } else {
             self
         }
+    }
+    
+    /// Optionally adds an equal padding amount to all edges of this view.
+    /// - Parameter applied: A Boolean condition indicating whether padding is applied.
+    /// - Returns: A view that’s padded, if applied.
+    @ViewBuilder
+    func padding(_ applied: Bool) -> some View {
+        if applied {
+            self.padding()
+        } else {
+            self
+        }
+    }
+}
+
+#Preview("Long title") {
+    NavigationLayer { _ in
+        Color.clear
+            .navigationLayerTitle("Looooooooooooooooooooong title")
+    }
+}
+
+#Preview("Long subtitle") {
+    NavigationLayer { _ in
+        Color.clear
+            .navigationLayerTitle("Title", subtitle: "Looooooooooooooooooooong subtitle")
     }
 }
