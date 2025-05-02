@@ -21,6 +21,9 @@
 ***REMOVED******REMOVED***let view: () -> any View
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether another view is being pushed.
+***REMOVED***private var isPushing = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The transition for the next time a view is appended or removed.
 ***REMOVED***private(set) var transition: AnyTransition = .push
 ***REMOVED***
@@ -53,9 +56,17 @@
 ***REMOVED******REMOVED***/ Push a view.
 ***REMOVED******REMOVED***/ - Parameter view: The view to push.
 ***REMOVED***func push(_ view: @escaping () -> any View) {
+***REMOVED******REMOVED******REMOVED*** Prevent the same view from being pushed multiple times while the
+***REMOVED******REMOVED******REMOVED*** animation is running.
+***REMOVED******REMOVED***guard !isPushing else { return ***REMOVED***
+***REMOVED******REMOVED***isPushing = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***transition = .push
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED***views.append(.init(view: view))
+***REMOVED*** completion: {
+***REMOVED******REMOVED******REMOVED***self.isPushing = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
