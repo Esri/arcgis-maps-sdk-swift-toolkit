@@ -125,6 +125,8 @@ struct NavigationLayer<Content: View>: View {
 struct PreviewList: View {
 ***REMOVED***@Environment(NavigationLayerModel.self) private var model
 ***REMOVED***
+***REMOVED***@Environment(\.colorScheme) var colorScheme
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Button("Present a view") {
@@ -153,6 +155,9 @@ struct PreviewList: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.navigationLayerHeaderBackground(
+***REMOVED******REMOVED******REMOVED***Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.navigationLayerTitle("Navigation Layer", subtitle: "Root View")
 ***REMOVED***
 ***REMOVED***
@@ -186,25 +191,6 @@ struct PreviewList: View {
 ***REMOVED******REMOVED***Button { ***REMOVED*** label: { Image(systemName: "xmark")  ***REMOVED***
 ***REMOVED*** footer: {
 ***REMOVED******REMOVED***Text(verbatim: "Footer")
-***REMOVED***
-***REMOVED***
-
-#Preview("navigationLayerHeaderBackground(_:)") {
-***REMOVED***@Previewable @Environment(\.colorScheme) var colorScheme
-***REMOVED***
-***REMOVED***NavigationLayer { model in
-***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***Button("Present a list") {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.push {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "Destination")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerHeaderBackground(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
