@@ -55,11 +55,35 @@ final class NavigationLayerTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.buttons.matching(identifier: "Back").element(boundBy: 1).tap()
 ***REMOVED******REMOVED***
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Navigation blocked!"].exists)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.buttons["Continue"].tap()
+#else
+***REMOVED******REMOVED***wait(
+***REMOVED******REMOVED******REMOVED***for: [
+***REMOVED******REMOVED******REMOVED******REMOVED***expectation(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: NSPredicate(format: "exists == true"),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***evaluatedWith: app.staticTexts["Navigation blocked!"]
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***timeout: 5.0
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Presented view"].exists)
+***REMOVED******REMOVED***app.buttons["action-button--999"].click()
+#endif
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***wait(
+***REMOVED******REMOVED******REMOVED***for: [
+***REMOVED******REMOVED******REMOVED******REMOVED***expectation(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: NSPredicate(format: "exists == true"),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***evaluatedWith: app.buttons["Present a view"]
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***timeout: 5.0
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test that `onNavigationPathChanged(perform:)` works as expected.
