@@ -55,11 +55,35 @@ final class NavigationLayerTests: XCTestCase {
         
         app.buttons.matching(identifier: "Back").element(boundBy: 1).tap()
         
+#if !targetEnvironment(macCatalyst)
         XCTAssertTrue(app.staticTexts["Navigation blocked!"].exists)
         
         app.buttons["Continue"].tap()
+#else
+        wait(
+            for: [
+                expectation(
+                    for: NSPredicate(format: "exists == true"),
+                    evaluatedWith: app.staticTexts["Navigation blocked!"]
+                )
+                
+            ],
+            timeout: 5.0
+        )
         
-        XCTAssertTrue(app.staticTexts["Presented view"].exists)
+        app.buttons["action-button--999"].click()
+#endif
+        
+        wait(
+            for: [
+                expectation(
+                    for: NSPredicate(format: "exists == true"),
+                    evaluatedWith: app.buttons["Present a view"]
+                )
+                
+            ],
+            timeout: 5.0
+        )
     }
     
     /// Test that `onNavigationPathChanged(perform:)` works as expected.
