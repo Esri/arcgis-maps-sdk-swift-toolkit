@@ -75,8 +75,6 @@ struct NavigationLayer<Content: View>: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 if model.views.isEmpty {
                     root(model)
-                        .defaultPreference(NavigationLayerTitle.self)
-                        .defaultPreference(NavigationLayerSubtitle.self)
                         .transition(model.transition)
                 } else if let presented = model.presented?.view {
                     AnyView(presented())
