@@ -121,6 +121,28 @@ struct NavigationLayer<Content: View>: View {
     }
 }
 
+extension NavigationLayer {
+    /// Sets a closure to perform when the back navigation button is pressed.
+    /// - Parameter action: The closure to perform when the back navigation button is pressed.
+    /// - Note: Use this to interrupt reverse navigation (e.g. to warn a user of unsaved edits). The closure
+    /// provides a reference to the navigation layer module which can be used to trigger the reverse
+    /// navigation when ready.
+    func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
+        var copy = self
+        copy.backNavigationAction = action
+        return copy
+    }
+    
+    /// Sets a closure to perform when the navigation layer's path changed.
+    /// - Parameter action: The closure to perform when the navigation layer's path changed
+    /// - Note: If no item is provided, the root view is presented..
+    func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
+        var copy = self
+        copy.onNavigationChangedAction = action
+        return copy
+    }
+}
+
 struct PreviewList: View {
     @Environment(NavigationLayerModel.self) private var model
     
@@ -190,27 +212,5 @@ struct PreviewList: View {
         Button { } label: { Image(systemName: "xmark")  }
     } footer: {
         Text(verbatim: "Footer")
-    }
-}
-
-extension NavigationLayer {
-    /// Sets a closure to perform when the back navigation button is pressed.
-    /// - Parameter action: The closure to perform when the back navigation button is pressed.
-    /// - Note: Use this to interrupt reverse navigation (e.g. to warn a user of unsaved edits). The closure
-    /// provides a reference to the navigation layer module which can be used to trigger the reverse
-    /// navigation when ready.
-    func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
-        var copy = self
-        copy.backNavigationAction = action
-        return copy
-    }
-    
-    /// Sets a closure to perform when the navigation layer's path changed.
-    /// - Parameter action: The closure to perform when the navigation layer's path changed
-    /// - Note: If no item is provided, the root view is presented..
-    func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
-        var copy = self
-        copy.onNavigationChangedAction = action
-        return copy
     }
 }
