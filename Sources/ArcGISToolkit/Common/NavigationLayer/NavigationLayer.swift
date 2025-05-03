@@ -121,6 +121,28 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***
 ***REMOVED***
 
+extension NavigationLayer {
+***REMOVED******REMOVED***/ Sets a closure to perform when the back navigation button is pressed.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the back navigation button is pressed.
+***REMOVED******REMOVED***/ - Note: Use this to interrupt reverse navigation (e.g. to warn a user of unsaved edits). The closure
+***REMOVED******REMOVED***/ provides a reference to the navigation layer module which can be used to trigger the reverse
+***REMOVED******REMOVED***/ navigation when ready.
+***REMOVED***func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.backNavigationAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the navigation layer's path changed.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the navigation layer's path changed
+***REMOVED******REMOVED***/ - Note: If no item is provided, the root view is presented..
+***REMOVED***func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onNavigationChangedAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
 struct PreviewList: View {
 ***REMOVED***@Environment(NavigationLayerModel.self) private var model
 ***REMOVED***
@@ -190,27 +212,5 @@ struct PreviewList: View {
 ***REMOVED******REMOVED***Button { ***REMOVED*** label: { Image(systemName: "xmark")  ***REMOVED***
 ***REMOVED*** footer: {
 ***REMOVED******REMOVED***Text(verbatim: "Footer")
-***REMOVED***
-***REMOVED***
-
-extension NavigationLayer {
-***REMOVED******REMOVED***/ Sets a closure to perform when the back navigation button is pressed.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the back navigation button is pressed.
-***REMOVED******REMOVED***/ - Note: Use this to interrupt reverse navigation (e.g. to warn a user of unsaved edits). The closure
-***REMOVED******REMOVED***/ provides a reference to the navigation layer module which can be used to trigger the reverse
-***REMOVED******REMOVED***/ navigation when ready.
-***REMOVED***func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.backNavigationAction = action
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when the navigation layer's path changed.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the navigation layer's path changed
-***REMOVED******REMOVED***/ - Note: If no item is provided, the root view is presented..
-***REMOVED***func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onNavigationChangedAction = action
-***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
