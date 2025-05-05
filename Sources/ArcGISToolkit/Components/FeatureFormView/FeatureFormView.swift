@@ -89,7 +89,7 @@ public struct FeatureFormView: View {
 ***REMOVED***@State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An error thrown from finish editing.
-***REMOVED***@State private var finishEditingError: String?
+***REMOVED***@State private var finishEditingError: (any Error)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
 ***REMOVED***@State private var hasEdits: Bool = false
@@ -180,7 +180,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = String(describing: error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = error
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -204,13 +204,20 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The form wasn't submitted",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The message shown when a form could not be submitted."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The title shown when a form could not be submitted."
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertForFinishEditingErrorsIsPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***actions: { ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let finishEditingFailed = String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Finish editing failed.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The message shown when a form could not be submitted."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let finishEditingError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(finishEditingError)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(finishEditingFailed + "\n\n" + String(describing: finishEditingError))
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(finishEditingFailed)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)

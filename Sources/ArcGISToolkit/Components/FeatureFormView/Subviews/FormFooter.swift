@@ -29,7 +29,7 @@ struct FormFooter: View {
 ***REMOVED***@Binding var validationErrorVisibility: Visibility
 ***REMOVED***
 ***REMOVED******REMOVED***/ An error thrown from finish editing.
-***REMOVED***@Binding var finishEditingError: String?
+***REMOVED***@Binding var finishEditingError: (any Error)?
 ***REMOVED***
 ***REMOVED***@Environment(\.setAlertContinuation) var setAlertContinuation
 ***REMOVED***
@@ -56,7 +56,7 @@ struct FormFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm.finishEditing()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = String(describing: error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = error
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
