@@ -29,7 +29,7 @@ struct FormFooter: View {
     @Binding var validationErrorVisibility: Visibility
     
     /// An error thrown from finish editing.
-    @Binding var finishEditingError: String?
+    @Binding var finishEditingError: (any Error)?
     
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
@@ -56,7 +56,7 @@ struct FormFooter: View {
                                 try await featureForm.finishEditing()
                                 formHandlingEventAction?(.savedEdits(willNavigate: false))
                             } catch {
-                                finishEditingError = String(describing: error)
+                                finishEditingError = error
                             }
                         }
                     } else {
