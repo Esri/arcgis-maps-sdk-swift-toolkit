@@ -199,6 +199,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Alert for finish editing errors
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The form wasn't submitted",
