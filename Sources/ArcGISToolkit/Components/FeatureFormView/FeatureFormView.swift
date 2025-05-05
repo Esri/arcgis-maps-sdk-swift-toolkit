@@ -89,7 +89,7 @@ public struct FeatureFormView: View {
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
     /// An error thrown from finish editing.
-    @State private var finishEditingError: String?
+    @State private var finishEditingError: (any Error)?
     
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits: Bool = false
@@ -180,7 +180,7 @@ public struct FeatureFormView: View {
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
-                                        finishEditingError = String(describing: error)
+                                        finishEditingError = error
                                     }
                                 }
                             }
@@ -204,13 +204,20 @@ public struct FeatureFormView: View {
                 String(
                     localized: "The form wasn't submitted",
                     bundle: .toolkitModule,
-                    comment: "The message shown when a form could not be submitted."
+                    comment: "The title shown when a form could not be submitted."
                 ),
                 isPresented: alertForFinishEditingErrorsIsPresented,
                 actions: { },
                 message: {
+                    let finishEditingFailed = String(
+                        localized: "Finish editing failed.",
+                        bundle: .toolkitModule,
+                        comment: "The message shown when a form could not be submitted."
+                    )
                     if let finishEditingError {
-                        Text(finishEditingError)
+                        Text(finishEditingFailed + "\n\n" + String(describing: finishEditingError))
+                    } else {
+                        Text(finishEditingFailed)
                     }
                 }
             )
