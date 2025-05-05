@@ -199,6 +199,7 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            // Alert for finish editing errors
             .alert(
                 String(
                     localized: "The form wasn't submitted",
