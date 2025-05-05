@@ -28,6 +28,9 @@ struct FormFooter: View {
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***@Binding var validationErrorVisibility: Visibility
 ***REMOVED***
+***REMOVED******REMOVED***/ An error thrown from finish editing.
+***REMOVED***@Binding var finishEditingError: String?
+***REMOVED***
 ***REMOVED***@Environment(\.setAlertContinuation) var setAlertContinuation
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -49,8 +52,12 @@ struct FormFooter: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if featureForm.validationErrors.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm.finishEditing()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = String(describing: error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible
