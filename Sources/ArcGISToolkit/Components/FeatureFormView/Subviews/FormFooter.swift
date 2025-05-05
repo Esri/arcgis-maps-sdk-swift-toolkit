@@ -28,6 +28,9 @@ struct FormFooter: View {
     /// The validation error visibility configuration of the form.
     @Binding var validationErrorVisibility: Visibility
     
+    /// An error thrown from finish editing.
+    @Binding var finishEditingError: String?
+    
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     var body: some View {
@@ -49,8 +52,12 @@ struct FormFooter: View {
             Button {
                     if featureForm.validationErrors.isEmpty {
                         Task {
-                            try? await featureForm.finishEditing()
-                            formHandlingEventAction?(.savedEdits(willNavigate: false))
+                            do {
+                                try await featureForm.finishEditing()
+                                formHandlingEventAction?(.savedEdits(willNavigate: false))
+                            } catch {
+                                finishEditingError = String(describing: error)
+                            }
                         }
                     } else {
                         validationErrorVisibility = .visible
