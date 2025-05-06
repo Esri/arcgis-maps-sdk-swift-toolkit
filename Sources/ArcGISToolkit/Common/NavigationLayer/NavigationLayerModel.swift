@@ -58,8 +58,14 @@ import SwiftUI
     func push(_ view: @escaping () -> any View) {
         // Prevent the same view from being pushed multiple times while the
         // animation is running.
-        guard !isPushing else { return }
-        isPushing = true
+        // In UI tests we don't need to guard against this condition and the
+        // guard actually becomes harmful, as there is no accepted pattern for
+        // waiting for animations to complete so tests have no reliable way of
+        // determining when to push the next view.
+        if !isUITest {
+            guard !isPushing else { return }
+            isPushing = true
+        }
         
         transition = .push
         
@@ -68,5 +74,10 @@ import SwiftUI
         } completion: {
             self.isPushing = false
         }
+    }
+    
+    /// A Boolean value which indicates whether a UI Test is running.
+    private var isUITest: Bool {
+        CommandLine.arguments.contains("isUITest")
     }
 }
