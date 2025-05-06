@@ -134,8 +134,8 @@ extension NavigationLayer {
     }
     
     /// Sets a closure to perform when the navigation layer's path changed.
-    /// - Parameter action: The closure to perform when the navigation layer's path changed
-    /// - Note: If no item is provided, the root view is presented..
+    /// - Parameter action: The closure to perform when the navigation layer's path changed.
+    /// - Note: If no item is provided, the root view is presented.
     func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
         var copy = self
         copy.onNavigationChangedAction = action
