@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for a utility associations form element.
 struct UtilityAssociationsFormElementView: View {
     /// The view model for the form.
-    @EnvironmentObject private var formViewModel: FormViewModel
+    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
     
     /// The set of utility associations filter results for the element.
     @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
@@ -30,7 +30,7 @@ struct UtilityAssociationsFormElementView: View {
         FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
             if $0.resultCount > 0 {
                 UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                    .environmentObject(formViewModel)
+                    .environment(formViewModel)
             } else {
                 nil
             }
@@ -50,7 +50,7 @@ private struct UtilityAssociationGroupResultView: View {
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// The view model for the form.
-    @EnvironmentObject private var formViewModel: FormViewModel
+    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
     
     /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
@@ -90,7 +90,7 @@ private struct UtilityAssociationGroupResultView: View {
 /// A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
     /// The view model for the form.
-    @EnvironmentObject private var formViewModel: FormViewModel
+    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
     
     /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
@@ -104,7 +104,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
             navigationLayerModel.push {
                 UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
                     .navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
-                    .environmentObject(formViewModel)
+                    .environment(formViewModel)
             }
         } label: {
             HStack {
@@ -137,7 +137,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 /// A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
     /// The view model for the form.
-    @EnvironmentObject private var formViewModel: FormViewModel
+    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
     
     /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
@@ -154,7 +154,7 @@ private struct UtilityAssociationsFilterResultView: View {
                             utilityAssociationGroupResult.name,
                             subtitle: utilityAssociationsFilterResult.filter.title
                         )
-                        .environmentObject(formViewModel)
+                        .environment(formViewModel)
                 }
             } label: {
                 HStack {
