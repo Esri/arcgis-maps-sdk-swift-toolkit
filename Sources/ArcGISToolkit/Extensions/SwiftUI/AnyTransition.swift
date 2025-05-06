@@ -16,14 +16,14 @@ import SwiftUI
 
 extension AnyTransition {
     static var push: Self {
-        .asymmetric(
+        asymmetric(
             insertion: .move(edge: .trailing),
             removal: .move(edge: .leading)
         )
     }
     
     static var pop: Self {
-        .asymmetric(
+        asymmetric(
             insertion: .move(edge: .leading),
             removal: .move(edge: .trailing)
         )
