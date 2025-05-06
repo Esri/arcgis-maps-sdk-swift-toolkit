@@ -23,7 +23,7 @@ struct InputFooter: View {
 ***REMOVED***@Environment(\._validationErrorVisibility) private var validationErrorVisibility
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ An ID regenerated each time the element's value changes.
 ***REMOVED******REMOVED***/
@@ -40,7 +40,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errorMessage
 ***REMOVED******REMOVED******REMOVED*** else if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
+***REMOVED******REMOVED******REMOVED*** else if formViewModel.focusedElement == element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if element.fieldType == .text, let lengthRange {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if lengthRange.lowerBound == lengthRange.upperBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeExactLengthMessage(lengthRange)
@@ -199,7 +199,7 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value which indicates whether or not the character indicator is showing in the footer.
 ***REMOVED***var isShowingCharacterIndicator: Bool {
-***REMOVED******REMOVED***model.focusedElement == element
+***REMOVED******REMOVED***formViewModel.focusedElement == element
 ***REMOVED******REMOVED***&& !(element.fieldType?.isNumeric ?? false)
 ***REMOVED******REMOVED***&& (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
 ***REMOVED******REMOVED***&& (element.description.isEmpty || primaryError != nil)
@@ -209,7 +209,7 @@ extension InputFooter {
 ***REMOVED***var isShowingError: Bool {
 ***REMOVED******REMOVED***element.isEditable
 ***REMOVED******REMOVED***&& primaryError != nil
-***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
+***REMOVED******REMOVED***&& (formViewModel.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable number of characters in the input.
@@ -246,7 +246,7 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED***
-***REMOVED***), model.focusedElement != element {
+***REMOVED***), formViewModel.focusedElement != element {
 ***REMOVED******REMOVED******REMOVED***return requiredError
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return elementErrors?.first(where: {
