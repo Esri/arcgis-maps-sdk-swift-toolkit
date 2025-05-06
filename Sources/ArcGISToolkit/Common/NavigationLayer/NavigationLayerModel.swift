@@ -31,13 +31,13 @@
 ***REMOVED***private(set) var views: [Item] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The header background color for the current view.
-***REMOVED***var headerBackgroundColor: Color? = nil
+***REMOVED***var headerBackgroundColor: Color?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title for the current view.
-***REMOVED***var title: String? = nil
+***REMOVED***var title: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The subtitle for the current view.
-***REMOVED***var subtitle: String? = nil
+***REMOVED***var subtitle: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently presented view (the last item).
 ***REMOVED***var presented: Item? {
