@@ -32,7 +32,7 @@ struct NavigationLayer<Content: View>: View {
     let root: (NavigationLayerModel) -> Content
     
     /// The optional closure to perform when the back navigation button is pressed.
-    var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
+    var backNavigationAction: ((NavigationLayerModel) -> Void)?
     
     /// The closure to perform when model's path changes.
     var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
