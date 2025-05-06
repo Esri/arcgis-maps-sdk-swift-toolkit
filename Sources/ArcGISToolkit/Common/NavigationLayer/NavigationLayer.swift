@@ -32,7 +32,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED***let root: (NavigationLayerModel) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ The optional closure to perform when the back navigation button is pressed.
-***REMOVED***var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
+***REMOVED***var backNavigationAction: ((NavigationLayerModel) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when model's path changes.
 ***REMOVED***var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
