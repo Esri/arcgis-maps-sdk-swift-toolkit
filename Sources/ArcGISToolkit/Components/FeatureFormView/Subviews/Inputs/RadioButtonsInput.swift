@@ -20,7 +20,7 @@
 ***REMOVED***/ This is the preferable input type for short lists of coded value domains.
 struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
 ***REMOVED******REMOVED***/ This will be `true` if the current value doesn't exist as an option in the domain
@@ -97,7 +97,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***value = newValue
@@ -132,7 +132,7 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED***_ action: @escaping () -> Void
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED***formViewModel.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***action()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {

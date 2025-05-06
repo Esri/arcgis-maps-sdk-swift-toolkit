@@ -29,7 +29,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Note: This property is only present when
 ***REMOVED******REMOVED***/ `featureElement` is an `AttachmentsFormElement`.
-***REMOVED***@EnvironmentObject var formViewModel: FormViewModel
+***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false

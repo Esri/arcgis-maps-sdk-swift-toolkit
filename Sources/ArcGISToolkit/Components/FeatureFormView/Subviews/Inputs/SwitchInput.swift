@@ -20,7 +20,7 @@
 ***REMOVED***/ The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the initial element value was received.
 ***REMOVED***@State private var didReceiveInitialValue = false
@@ -82,7 +82,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** defined for `isOn`.
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isOn) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(isOn ? input.onValue.code : input.offValue.code)
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onValueChange(of:action:) is a good signal for user interaction
 ***REMOVED******REMOVED******REMOVED******REMOVED*** because it will reliably run when the view first loads and each
@@ -91,7 +91,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isOn = newFormattedValue == input.onValue.name
 ***REMOVED******REMOVED******REMOVED******REMOVED***if didReceiveInitialValue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.focusedElement = element
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***didReceiveInitialValue = true
 ***REMOVED******REMOVED******REMOVED***

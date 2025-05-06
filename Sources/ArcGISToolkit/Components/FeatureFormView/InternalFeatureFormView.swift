@@ -25,13 +25,13 @@ struct InternalFeatureFormView: View {
 ***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@StateObject private var model: FormViewModel
+***REMOVED***@State private var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
 ***REMOVED***init(featureForm: FeatureForm) {
-***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+***REMOVED******REMOVED***model = FormViewModel(featureForm: featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -63,7 +63,7 @@ struct InternalFeatureFormView: View {
 #if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
-***REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED***.environment(model)
 ***REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
@@ -135,7 +135,7 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED***.padding(.top, formElementPadding)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UtilityAssociationsFormElementView(element: element)
-***REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED******REMOVED***.environment(model)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(element.description)
