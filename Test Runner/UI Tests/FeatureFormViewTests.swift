@@ -1587,13 +1587,17 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+#endif
 ***REMOVED******REMOVED***XCTAssertFalse(clearButton.exists, "The clear button exists.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***fieldValue.typeText("https:***REMOVED***esri.com/this_is_a_string_longer_than_50_count_on_it")
 ***REMOVED******REMOVED***
+#if !os(visionOS)
 ***REMOVED******REMOVED***XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+#endif
 ***REMOVED******REMOVED***XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
 ***REMOVED***
 ***REMOVED***
