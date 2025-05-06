@@ -134,8 +134,8 @@ extension NavigationLayer {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets a closure to perform when the navigation layer's path changed.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the navigation layer's path changed
-***REMOVED******REMOVED***/ - Note: If no item is provided, the root view is presented..
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the navigation layer's path changed.
+***REMOVED******REMOVED***/ - Note: If no item is provided, the root view is presented.
 ***REMOVED***func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.onNavigationChangedAction = action
