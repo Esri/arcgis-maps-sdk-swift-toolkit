@@ -104,17 +104,17 @@ struct NavigationLayer<Content: View>: View {
             }
             .onPreferenceChange(NavigationLayerHeaderBackground.self) { color in
                 Task { @MainActor in
-                    self.model.headerBackgroundColor = color
+                    model.headerBackgroundColor = color
                 }
             }
             .onPreferenceChange(NavigationLayerTitle.self) { title in
                 Task { @MainActor in
-                    self.model.title = title
+                    model.title = title
                 }
             }
             .onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
                 Task { @MainActor in
-                    self.model.subtitle = subtitle
+                    model.subtitle = subtitle
                 }
             }
         }
