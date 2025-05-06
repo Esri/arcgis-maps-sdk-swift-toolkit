@@ -100,7 +100,7 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Apply container width so the animated transitions work correctly.
 ***REMOVED******REMOVED******REMOVED***.frame(width: geometryProxy.size.width)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: model.views.count) {
-***REMOVED******REMOVED******REMOVED******REMOVED***onNavigationChangedAction?(model.presented ?? nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***onNavigationChangedAction?(model.presented)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerHeaderBackground.self) { color in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
