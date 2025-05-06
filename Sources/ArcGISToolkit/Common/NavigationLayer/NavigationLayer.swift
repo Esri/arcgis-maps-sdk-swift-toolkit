@@ -100,7 +100,7 @@ struct NavigationLayer<Content: View>: View {
             // Apply container width so the animated transitions work correctly.
             .frame(width: geometryProxy.size.width)
             .onChange(of: model.views.count) {
-                onNavigationChangedAction?(model.presented ?? nil)
+                onNavigationChangedAction?(model.presented)
             }
             .onPreferenceChange(NavigationLayerHeaderBackground.self) { color in
                 Task { @MainActor in
