@@ -25,13 +25,13 @@ struct InternalFeatureFormView: View {
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
     
     /// The view model for the form.
-    @StateObject private var model: FormViewModel
+    @State private var model: FormViewModel
     
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     init(featureForm: FeatureForm) {
-        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+        model = FormViewModel(featureForm: featureForm)
     }
     
     var body: some View {
@@ -63,7 +63,7 @@ struct InternalFeatureFormView: View {
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
-        .environmentObject(model)
+        .environment(model)
         .padding([.horizontal])
         .task {
             await model.initialEvaluation()
@@ -135,7 +135,7 @@ extension InternalFeatureFormView {
         .padding(.top, formElementPadding)
         
         UtilityAssociationsFormElementView(element: element)
-            .environmentObject(model)
+            .environment(model)
         
         if !element.description.isEmpty {
             Text(element.description)
