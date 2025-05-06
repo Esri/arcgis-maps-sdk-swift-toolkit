@@ -87,27 +87,6 @@ public struct PopupView: View {
     
     public var body: some View {
         VStack(alignment: .leading) {
-            if headerVisibility != .hidden {
-                HStack {
-                    if !popup.title.isEmpty {
-                        Text(popup.title)
-                            .font(.title)
-                            .fontWeight(.bold)
-                    }
-                    Spacer()
-                    if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
-                        || (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
-                        XButton(.dismiss) {
-                            isPresented?.wrappedValue = false
-                        }
-#if !os(visionOS)
-                        .font(.title)
-                        .padding([.top, .bottom, .trailing], 4)
-#endif
-                    }
-                }
-                Divider()
-            }
             Group {
                 if let evaluation {
                     if let error = evaluation.error {
@@ -120,7 +99,10 @@ public struct PopupView: View {
                                      """
                         )
                     } else {
-                        PopupElementList(popupElements: evaluation.elements)
+                        NavigationLayer { model in
+                            PopupElementList(popupElements: evaluation.elements)
+                                .navigationLayerTitle(popup.title)
+                        }
                     }
                 } else {
                     HStack(alignment: .center, spacing: 10) {
@@ -168,25 +150,34 @@ public struct PopupView: View {
 
 extension PopupView {
     private struct PopupElementList: View {
+        @Environment(NavigationLayerModel.self) private var model
+        
         let popupElements: [PopupElement]
         
         var body: some View {
-            List(popupElements) { popupElement in
-                Group {
-                    switch popupElement {
-                    case let popupElement as AttachmentsPopupElement:
-                        AttachmentsFeatureElementView(featureElement: popupElement)
-                    case let popupElement as FieldsPopupElement:
-                        FieldsPopupElementView(popupElement: popupElement)
-                    case let popupElement as MediaPopupElement:
-                        MediaPopupElementView(popupElement: popupElement)
-                    case let popupElement as TextPopupElement:
-                        TextPopupElementView(popupElement: popupElement)
-                    default:
-                        EmptyView()
+            List {
+                Button("Present a view") {
+                    model.push {
+                        Text("Destination view")
+                            .containerRelativeFrame([.horizontal])
                     }
                 }
-                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
+                ForEach(popupElements) { popupElement in
+                    Group {
+                        switch popupElement {
+                        case let popupElement as AttachmentsPopupElement:
+                            AttachmentsFeatureElementView(featureElement: popupElement)
+                        case let popupElement as FieldsPopupElement:
+                            FieldsPopupElementView(popupElement: popupElement)
+                        case let popupElement as MediaPopupElement:
+                            MediaPopupElementView(popupElement: popupElement)
+                        case let popupElement as TextPopupElement:
+                            TextPopupElementView(popupElement: popupElement)
+                        default:
+                            EmptyView()
+                        }
+                    }
+                }
             }
             .listStyle(.plain)
         }
