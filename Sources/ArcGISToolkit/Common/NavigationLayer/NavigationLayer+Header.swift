@@ -88,9 +88,7 @@ extension NavigationLayer {
                         alignment: backButtonIsVisible ? .leading : .center
                     )
                     .lineLimit(1)
-                    .onGeometryChange(for: CGFloat.self) { proxy in
-                        proxy.size.height
-                    } action: { newValue in
+                    .onGeometryChange(for: CGFloat.self, of: \.size.height) { newValue in
                         height = newValue
                     }
                 } else if headerTrailing != nil {
