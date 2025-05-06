@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for text input.
 struct TextInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -61,7 +61,7 @@ struct TextInput: View {
         textWriter
             .onChange(of: text) {
                 element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
+                formViewModel.evaluateExpressions()
             }
             .onTapGesture {
                 if element.isMultiline {
@@ -91,10 +91,10 @@ private extension TextInput {
                         .lineLimit(5)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, model: model)
+                            FullScreenTextInput(text: $text, element: element, model: formViewModel)
                                 .padding()
 #if targetEnvironment(macCatalyst)
-                                .environmentObject(model)
+                                .environment(formViewModel)
 #endif
                         }
                         .frame(minHeight: 100, alignment: .top)
@@ -114,11 +114,11 @@ private extension TextInput {
                     .hoverEffectDisabled()
 #endif
                     .onChange(of: isFocused) {
-                        model.focusedElement = isFocused ? element : nil
+                        formViewModel.focusedElement = isFocused ? element : nil
                     }
-                    .onChange(of: model.focusedElement) {
+                    .onChange(of: formViewModel.focusedElement) {
                         // Another form input took focus.
-                        if model.focusedElement != element {
+                        if formViewModel.focusedElement != element {
                             isFocused  = false
                         }
                     }
@@ -144,8 +144,8 @@ private extension TextInput {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
-                        model.focusedElement = element
-                        model.focusedElement = nil
+                        formViewModel.focusedElement = element
+                        formViewModel.focusedElement = nil
                     }
                     text.removeAll()
                 }
@@ -154,7 +154,7 @@ private extension TextInput {
 #if !os(visionOS)
             if isBarcodeScanner {
                 Button {
-                    model.focusedElement = element
+                    formViewModel.focusedElement = element
                     scannerIsPresented = true
                 } label: {
                     Image(systemName: "barcode.viewfinder")

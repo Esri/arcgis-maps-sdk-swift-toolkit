@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for date/time input.
 struct DateTimeInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
     
     /// The current date selection.
     @State private var date: Date?
@@ -52,13 +52,13 @@ struct DateTimeInput: View {
     
     var body: some View {
         dateEditor
-            .onChange(of: model.focusedElement) {
-                isEditing = model.focusedElement == element
+            .onChange(of: formViewModel.focusedElement) {
+                isEditing = formViewModel.focusedElement == element
             }
             .onChange(of: date) {
                 element.updateValue(date)
                 formattedValue = element.formattedValue
-                model.evaluateExpressions()
+                formViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 if newFormattedValue.isEmpty {
@@ -106,8 +106,8 @@ struct DateTimeInput: View {
                         .foregroundStyle(.secondary)
                 } else if !isRequired {
                     XButton(.clear) {
-                        model.focusedElement = element
-                        defer { model.focusedElement = nil }
+                        formViewModel.focusedElement = element
+                        defer { formViewModel.focusedElement = nil }
                         date = nil
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
@@ -128,7 +128,7 @@ struct DateTimeInput: View {
                     }
                 }
                 isEditing.toggle()
-                model.focusedElement = isEditing ? element : nil
+                formViewModel.focusedElement = isEditing ? element : nil
             }
         }
     }

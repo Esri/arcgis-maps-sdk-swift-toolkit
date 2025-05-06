@@ -15,9 +15,10 @@
 import ArcGIS
 import SwiftUI
 
-@MainActor class FormViewModel: ObservableObject {
+@Observable
+class FormViewModel {
     /// The current focused element, if one exists.
-    @Published var focusedElement: FormElement? {
+    var focusedElement: FormElement? {
         didSet {
             if let focusedElement, !previouslyFocusedElements.contains(focusedElement) {
                 previouslyFocusedElements.append(focusedElement)
@@ -26,16 +27,16 @@ import SwiftUI
     }
     
     /// The currently presented feature form view.
-    @Published var presentedForm: FeatureFormView?
+    var presentedForm: FeatureFormView?
     
     /// The set of all elements which previously held focus.
-    @Published var previouslyFocusedElements = [FormElement]()
+    var previouslyFocusedElements = [FormElement]()
     
     /// The title of the feature form view.
-    @Published var title = ""
+    var title = ""
     
     /// The list of visible form elements.
-    @Published var visibleElements = [FormElement]()
+    var visibleElements = [FormElement]()
     
     /// The expression evaluation task.
     private var evaluateTask: Task<Void, Never>?
@@ -43,8 +44,8 @@ import SwiftUI
     /// The feature form.
     private(set) var featureForm: FeatureForm
     
-    /// The visibility tasks group.
-    private var isVisibleTask: Task<Void, Never>?
+    /// The group of visibility tasks.
+    private var isVisibleTasks = [Task<Void, Never>]()
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
@@ -54,22 +55,22 @@ import SwiftUI
     
     deinit {
         evaluateTask?.cancel()
-        isVisibleTask?.cancel()
+        isVisibleTasks.forEach { task in
+            task.cancel()
+        }
+        isVisibleTasks.removeAll()
     }
     
     /// Kick off tasks to monitor `isVisible` for each element.
+    @MainActor
     private func initializeIsVisibleTasks() {
-        isVisibleTask = Task.detached { [unowned self] in
-            await withTaskGroup(of: Void.self) { group in
-                for element in await self.featureForm.elements {
-                    group.addTask {
-                        for await _ in element.$isVisible {
-                            guard !Task.isCancelled else { return }
-                            await self.updateVisibleElements()
-                        }
-                    }
+        for element in featureForm.elements {
+            let newTask = Task { /*@MainActor [self] in*/
+                for await _ in element.$isVisible {
+                    /*self.*/updateVisibleElements()
                 }
             }
+            isVisibleTasks.append(newTask)
         }
     }
     
@@ -79,12 +80,14 @@ import SwiftUI
     }
     
     /// Performs an initial evaluation of all form expressions.
+    @MainActor
     func initialEvaluation() async {
         _ = try? await featureForm.evaluateExpressions()
         initializeIsVisibleTasks()
     }
     
     /// Performs an evaluation of all form expressions.
+    @MainActor
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {

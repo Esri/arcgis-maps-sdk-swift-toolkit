@@ -29,7 +29,7 @@ struct AttachmentsFeatureElementView: View {
     ///
     /// - Note: This property is only present when
     /// `featureElement` is an `AttachmentsFormElement`.
-    @EnvironmentObject var formViewModel: FormViewModel
+    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
     
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
