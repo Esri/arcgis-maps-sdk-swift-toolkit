@@ -31,13 +31,13 @@ import SwiftUI
     private(set) var views: [Item] = []
     
     /// The header background color for the current view.
-    var headerBackgroundColor: Color? = nil
+    var headerBackgroundColor: Color?
     
     /// The title for the current view.
-    var title: String? = nil
+    var title: String?
     
     /// The subtitle for the current view.
-    var subtitle: String? = nil
+    var subtitle: String?
     
     /// The currently presented view (the last item).
     var presented: Item? {
