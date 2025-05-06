@@ -88,6 +88,9 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
+    /// An error thrown from finish editing.
+    @State private var finishEditingError: (any Error)?
+    
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits: Bool = false
     
@@ -130,7 +133,8 @@ public struct FeatureFormView: View {
                         FormFooter(
                             featureForm: presentedForm,
                             formHandlingEventAction: onFormEditingEventAction,
-                            validationErrorVisibility: $validationErrorVisibility
+                            validationErrorVisibility: $validationErrorVisibility,
+                            finishEditingError: $finishEditingError
                         )
                     }
                 }
@@ -151,9 +155,10 @@ public struct FeatureFormView: View {
                     }
                 }
             }
+            // Alert for abandoning unsaved edits
             .alert(
                 (presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
-                isPresented: alertIsPresented,
+                isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
                     if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
                         Button("Discard Edits", role: .destructive) {
@@ -175,13 +180,13 @@ public struct FeatureFormView: View {
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
-                                        #warning("Handle thrown errors.")
+                                        finishEditingError = error
                                     }
                                 }
                             }
                         }
                         Button("Continue Editing", role: .cancel) {
-                            alertIsPresented.wrappedValue = false
+                            alertForUnsavedEditsIsPresented.wrappedValue = false
                         }
                     }
                 },
@@ -191,6 +196,28 @@ public struct FeatureFormView: View {
                         Text("You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.")
                     } else {
                         Text("Updates to the form will be lost.")
+                    }
+                }
+            )
+            // Alert for finish editing errors
+            .alert(
+                String(
+                    localized: "The form wasn't submitted",
+                    bundle: .toolkitModule,
+                    comment: "The title shown when a form could not be submitted."
+                ),
+                isPresented: alertForFinishEditingErrorsIsPresented,
+                actions: { },
+                message: {
+                    let finishEditingFailed = String(
+                        localized: "Finish editing failed.",
+                        bundle: .toolkitModule,
+                        comment: "The message shown when a form could not be submitted."
+                    )
+                    if let finishEditingError {
+                        Text(finishEditingFailed + "\n\n" + String(describing: finishEditingError))
+                    } else {
+                        Text(finishEditingFailed)
                     }
                 }
             )
@@ -250,8 +277,19 @@ public extension FeatureFormView {
 }
 
 extension FeatureFormView {
-    /// A Boolean value indicating whether the alert is presented.
-    var alertIsPresented: Binding<Bool> {
+    /// A Boolean value indicating whether the finish editing error alert is presented.
+    var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
+        Binding {
+            finishEditingError != nil
+        } set: { newIsPresented in
+            if !newIsPresented {
+                finishEditingError = nil
+            }
+        }
+    }
+    
+    /// A Boolean value indicating whether the unsaved edits alert is presented.
+    var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
             alertContinuation != nil
         } set: { newIsPresented in
