@@ -88,6 +88,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ Continuation information for the alert.
 ***REMOVED***@State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ An error thrown from finish editing.
+***REMOVED***@State private var finishEditingError: (any Error)?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
 ***REMOVED***@State private var hasEdits: Bool = false
 ***REMOVED***
@@ -130,7 +133,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: presentedForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction: onFormEditingEventAction,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility: $validationErrorVisibility
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility: $validationErrorVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError: $finishEditingError
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -151,9 +155,10 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Alert for abandoning unsaved edits
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***(presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertIsPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertForUnsavedEditsIsPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***actions: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard Edits", role: .destructive) {
@@ -175,13 +180,13 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#warning("Handle thrown errors.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = error
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue Editing", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertIsPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertForUnsavedEditsIsPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***,
@@ -191,6 +196,28 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.")
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to the form will be lost.")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Alert for finish editing errors
+***REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The form wasn't submitted",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The title shown when a form could not be submitted."
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertForFinishEditingErrorsIsPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***actions: { ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let finishEditingFailed = String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Finish editing failed.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The message shown when a form could not be submitted."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let finishEditingError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(finishEditingFailed + "\n\n" + String(describing: finishEditingError))
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(finishEditingFailed)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
@@ -250,8 +277,19 @@ public extension FeatureFormView {
 ***REMOVED***
 
 extension FeatureFormView {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the alert is presented.
-***REMOVED***var alertIsPresented: Binding<Bool> {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the finish editing error alert is presented.
+***REMOVED***var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
+***REMOVED******REMOVED***Binding {
+***REMOVED******REMOVED******REMOVED***finishEditingError != nil
+***REMOVED*** set: { newIsPresented in
+***REMOVED******REMOVED******REMOVED***if !newIsPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the unsaved edits alert is presented.
+***REMOVED***var alertForUnsavedEditsIsPresented: Binding<Bool> {
 ***REMOVED******REMOVED***Binding {
 ***REMOVED******REMOVED******REMOVED***alertContinuation != nil
 ***REMOVED*** set: { newIsPresented in
