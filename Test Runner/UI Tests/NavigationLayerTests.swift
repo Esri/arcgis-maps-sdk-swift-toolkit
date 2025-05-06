@@ -23,6 +23,7 @@ final class NavigationLayerTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test that titles and subtitles are shown properly.
 ***REMOVED***func testCase_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***app.launchArguments += ["isUITest"]
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.buttons["NavigationLayer Tests"].tap()

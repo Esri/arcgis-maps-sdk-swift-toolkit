@@ -58,8 +58,14 @@
 ***REMOVED***func push(_ view: @escaping () -> any View) {
 ***REMOVED******REMOVED******REMOVED*** Prevent the same view from being pushed multiple times while the
 ***REMOVED******REMOVED******REMOVED*** animation is running.
-***REMOVED******REMOVED***guard !isPushing else { return ***REMOVED***
-***REMOVED******REMOVED***isPushing = true
+***REMOVED******REMOVED******REMOVED*** In UI tests we don't need to guard against this condition and the
+***REMOVED******REMOVED******REMOVED*** guard actually becomes harmful, as there is no accepted pattern for
+***REMOVED******REMOVED******REMOVED*** waiting for animations to complete so tests have no reliable way of
+***REMOVED******REMOVED******REMOVED*** determining when to push the next view.
+***REMOVED******REMOVED***if !isUITest {
+***REMOVED******REMOVED******REMOVED***guard !isPushing else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***isPushing = true
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***transition = .push
 ***REMOVED******REMOVED***
@@ -68,5 +74,10 @@
 ***REMOVED*** completion: {
 ***REMOVED******REMOVED******REMOVED***self.isPushing = false
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value which indicates whether a UI Test is running.
+***REMOVED***private var isUITest: Bool {
+***REMOVED******REMOVED***CommandLine.arguments.contains("isUITest")
 ***REMOVED***
 ***REMOVED***
