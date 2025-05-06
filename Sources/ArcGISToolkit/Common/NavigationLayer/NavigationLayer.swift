@@ -104,17 +104,17 @@ struct NavigationLayer<Content: View>: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerHeaderBackground.self) { color in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.headerBackgroundColor = color
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.headerBackgroundColor = color
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerTitle.self) { title in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.title = title
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.title = title
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.subtitle = subtitle
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.subtitle = subtitle
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
