@@ -181,39 +181,47 @@ private struct UtilityAssociationResultView: View {
     let result: UtilityAssociationResult
     
     var body: some View {
-        Button {
-            selectionAction()
-        } label: {
-            HStack {
-                if let icon {
-                    icon
-                }
-                VStack(alignment: .leading) {
-                    Text(title)
-                    Text(description)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-                .lineLimit(1)
-                Spacer()
-                Group {
-                    if let containmentIsVisible {
-                        Text("Containment Visible: \(containmentIsVisible)".capitalized)
-                    } else if let fractionAlongEdge {
-                        Text(fractionAlongEdge.formatted(.percent))
-                    } else if let terminalName {
-                        Text("Terminal: \(terminalName)")
+        HStack {
+            Button {
+                selectionAction()
+            } label: {
+                HStack {
+                    if let icon {
+                        icon
                     }
+                    VStack(alignment: .leading) {
+                        Text(title)
+                        Text(description)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .lineLimit(1)
+                    Spacer()
+                    Group {
+                        if let containmentIsVisible {
+                            Text("Containment Visible: \(containmentIsVisible)".capitalized)
+                        } else if let fractionAlongEdge {
+                            Text(fractionAlongEdge.formatted(.percent))
+                        } else if let terminalName {
+                            Text("Terminal: \(terminalName)")
+                        }
+                    }
+                    .padding(2.5)
+                    .background(Color(uiColor: .systemBackground))
+                    .cornerRadius(5)
+                    .font(.caption2)
                 }
-                .padding(2.5)
-                .background(Color(uiColor: .systemBackground))
-                .cornerRadius(5)
-                .font(.caption2)
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.secondary)
+                .contentShape(.rect)
+            }
+            .tint(.primary)
+            Spacer()
+            Button {
+                
+            } label: {
+                Image(systemName: "info.circle")
             }
         }
-        .tint(.primary)
+        .buttonStyle(.borderless)
     }
 }
 
