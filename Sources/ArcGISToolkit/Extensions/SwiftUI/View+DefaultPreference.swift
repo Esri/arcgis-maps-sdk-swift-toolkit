@@ -14,6 +14,7 @@
 
 import SwiftUI
 
+#if swift(>=6.1) || swift(<6.0.3) // Xcode 16.2 (Swift 6.0.3) needs special handling
 /// Applies the preference's default value in the case that a value for the preference was not already specified.
 struct DefaultPreferenceModifier<K>: ViewModifier where K: PreferenceKey, K.Value: Equatable {
     @State private var value: K.Value?
@@ -33,3 +34,26 @@ extension View {
         modifier(DefaultPreferenceModifier<K>())
     }
 }
+#else
+/// Applies the preference's default value in the case that a value for the preference was not already specified.
+struct DefaultPreferenceModifier<K>: ViewModifier where K: PreferenceKey, K.Value: Equatable, K.Value: Sendable /* Xcode 16.2 requires Sendable */ {
+    @State private var value: K.Value?
+    
+    func body(content: Content) -> some View {
+        content
+            .onPreferenceChange(K.self) { value in
+                Task { @MainActor in
+                    self.value = value
+                }
+            }
+            .preference(key: K.self, value: value ?? K.defaultValue)
+    }
+}
+
+extension View {
+    /// Confirms the default value for the given preference is set.
+    func defaultPreference<K>(_: K.Type) -> some View where K: PreferenceKey, K.Value: Equatable, K.Value: Sendable /* Xcode 16.2 requires Sendable */ {
+        modifier(DefaultPreferenceModifier<K>())
+    }
+}
+#endif
