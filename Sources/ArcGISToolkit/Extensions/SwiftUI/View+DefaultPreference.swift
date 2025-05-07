@@ -14,6 +14,7 @@
 
 ***REMOVED***
 
+#if swift(>=6.1) || swift(<6.0.3) ***REMOVED*** Xcode 16.2 (Swift 6.0.3) needs special handling
 ***REMOVED***/ Applies the preference's default value in the case that a value for the preference was not already specified.
 struct DefaultPreferenceModifier<K>: ViewModifier where K: PreferenceKey, K.Value: Equatable {
 ***REMOVED***@State private var value: K.Value?
@@ -33,3 +34,26 @@ extension View {
 ***REMOVED******REMOVED***modifier(DefaultPreferenceModifier<K>())
 ***REMOVED***
 ***REMOVED***
+#else
+***REMOVED***/ Applies the preference's default value in the case that a value for the preference was not already specified.
+struct DefaultPreferenceModifier<K>: ViewModifier where K: PreferenceKey, K.Value: Equatable, K.Value: Sendable /* Xcode 16.2 requires Sendable */ {
+***REMOVED***@State private var value: K.Value?
+***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.onPreferenceChange(K.self) { value in
+***REMOVED******REMOVED******REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.preference(key: K.self, value: value ?? K.defaultValue)
+***REMOVED***
+***REMOVED***
+
+extension View {
+***REMOVED******REMOVED***/ Confirms the default value for the given preference is set.
+***REMOVED***func defaultPreference<K>(_: K.Type) -> some View where K: PreferenceKey, K.Value: Equatable, K.Value: Sendable /* Xcode 16.2 requires Sendable */ {
+***REMOVED******REMOVED***modifier(DefaultPreferenceModifier<K>())
+***REMOVED***
+***REMOVED***
+#endif
