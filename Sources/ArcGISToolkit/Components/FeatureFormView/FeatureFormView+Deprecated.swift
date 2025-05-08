@@ -1,4 +1,4 @@
-// Copyright 2024 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import ArcGIS
 
-public extension FeatureFormView {
+public extension FeatureFormView /* Deprecated */ {
+    /// Initializes a form view.
+    /// - Parameters:
+    ///   - featureForm: The feature form defining the editing experience.
+    /// - Attention: Deprecated at 200.7.
+    @available(*, deprecated, message: "Use init(featureForm:) instead.")
+    init(featureForm: FeatureForm) {
+        self.init(featureForm: .constant(featureForm))
+    }
+    
     /// The validation error visibility configuration of a form.
+    /// - Attention: Deprecated at 200.7.
+    @available(*, deprecated)
     enum ValidationErrorVisibility: Sendable {
         /// Errors may be visible or hidden for a given form field depending on its focus state.
         case automatic
@@ -25,22 +36,10 @@ public extension FeatureFormView {
     
     /// Specifies the visibility of validation errors in the form.
     /// - Parameter visibility: The preferred visibility of validation errors in the form.
+    /// - Attention: Deprecated at 200.7. ``FeatureFormView`` automatically manages
+    /// validation error visibility.
+    @available(*, deprecated)
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
-        var copy = self
-        copy.validationErrorVisibility = visibility
-        return copy
+        self
     }
-}
-
-extension EnvironmentValues {
-    /// The validation error visibility configuration of a form.
-    var validationErrorVisibility: FeatureFormView.ValidationErrorVisibility {
-        get { self[FormViewValidationErrorVisibility.self] }
-        set { self[FormViewValidationErrorVisibility.self] = newValue }
-    }
-}
-
-/// The validation error visibility configuration of a form.
-struct FormViewValidationErrorVisibility: EnvironmentKey {
-    static let defaultValue: FeatureFormView.ValidationErrorVisibility = .automatic
 }
