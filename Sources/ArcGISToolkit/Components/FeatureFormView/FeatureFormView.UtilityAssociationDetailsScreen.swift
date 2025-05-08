@@ -19,7 +19,7 @@ extension FeatureFormView {
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
         var body: some View {
-            NavigationLayer {
+            NavigationLayer { _ in
                 List {
                     Section {
                         Text("From Element")
