@@ -17,7 +17,7 @@ import SwiftUI
 extension NavigationLayer {
     struct Header: View {
         /// The model for the navigation layer.
-        @EnvironmentObject private var model: NavigationLayerModel
+        @Environment(NavigationLayerModel.self) private var model
         
         /// The height of the header content.
         @State private var height: CGFloat = .zero
@@ -32,8 +32,8 @@ extension NavigationLayer {
         let width: CGFloat
         
         var body: some View {
-            HStack(alignment: .top) {
-                Group {
+            HStack {
+                if backButtonIsVisible {
                     Button {
                         if let backNavigationAction {
                             backNavigationAction(model)
@@ -41,8 +41,15 @@ extension NavigationLayer {
                             model.pop()
                         }
                     } label: {
-                        let label = Label("Back", systemImage: "chevron.left")
-                        if model.title == nil {
+                        let label = Label {
+                            Text("Back")
+                        } icon: {
+                            Image(systemName: "chevron.left")
+                                .font(.title2.weight(.medium))
+                        }
+                            .padding(5)
+                            .contentShape(.rect)
+                        if backLabelIsVisible {
                             label
                                 .labelStyle(.titleAndIcon)
                         } else {
@@ -50,50 +57,70 @@ extension NavigationLayer {
                                 .labelStyle(.iconOnly)
                         }
                     }
-                    .font(.title2)
+#if targetEnvironment(macCatalyst)
+                    .buttonStyle(.plain)
+#endif
+                    .frame(!backButtonIsVisible, width: width / 6)
+                } else if headerTrailing != nil {
+                    // There's no back button, but there's header trailing
+                    // content, so keep the title centered.
+                    Color.clear
+                        .frame(width: width / 6, height: 1)
                 }
-                .opacity(showsBack ? 1 : .zero)
-                .frame(!showsBack, width: width / 6)
-                if showsBack {
+                
+                if backButtonIsVisible && !backLabelIsVisible {
                     Divider()
                         .frame(height: height)
                 }
-                if !showsBack {
-                    Spacer()
-                }
-                Group {
-                    if let title = model.title, !title.isEmpty {
-                        VStack(alignment: showsBack ? .leading : .center) {
-                            Text(title)
-                                .bold()
-                            if let subtitle = model.subtitle, !subtitle.isEmpty  {
-                                Text(subtitle)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .lineLimit(1)
-                        .onGeometryChange(for: CGFloat.self) { proxy in
-                            proxy.size.height
-                        } action: { newValue in
-                            height = newValue
+                
+                if let title = model.title, !title.isEmpty {
+                    VStack(alignment: backButtonIsVisible ? .leading : .center) {
+                        Text(title)
+                            .bold()
+                        if let subtitle = model.subtitle, !subtitle.isEmpty {
+                            Text(subtitle)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
                     }
+                    .frame(
+                        maxWidth: headerTrailing == nil ? .infinity : (width / 6) * 4,
+                        alignment: backButtonIsVisible ? .leading : .center
+                    )
+                    .lineLimit(1)
+                    .onGeometryChange(for: CGFloat.self, of: \.size.height) { newValue in
+                        height = newValue
+                    }
+                } else if headerTrailing != nil {
+                    // There's no title but there's header trailing content,
+                    // so push it to the right.
+                    Spacer()
                 }
-                .frame(maxWidth: (width / 6) * 4, alignment: showsBack ? .leading : .center)
-                Spacer()
+                
                 if let headerTrailing {
                     AnyView(headerTrailing())
                         .frame(width: width / 6, alignment: .trailing)
                 }
             }
-            .padding(showsBack || (model.title != nil && !model.title!.isEmpty))
+            .padding(headerIsVisible)
+            .background(model.headerBackgroundColor)
         }
         
         /// A Boolean value indicating whether the back button is visible, *true* when there is at least one
         /// presented view and *false* otherwise.
-        var showsBack: Bool {
-            !model.views.isEmpty
+        var backButtonIsVisible: Bool {
+            model.presented != nil
+        }
+        
+        /// A Boolean value indicating whether the back label is visible, *true* when the back button is
+        /// visible and there is no title to show, and *false* otherwise.
+        var backLabelIsVisible: Bool {
+            backButtonIsVisible && model.title == nil
+        }
+        
+        /// A Boolean value indicating whether any header content is visible.
+        var headerIsVisible: Bool {
+            backButtonIsVisible || (model.title != nil && !model.title!.isEmpty) || headerTrailing != nil
         }
     }
 }
@@ -112,7 +139,8 @@ fileprivate extension View {
             self
         }
     }
-    /// Optionally adds an equal padding amount to specific edges of this view.
+    
+    /// Optionally adds an equal padding amount to all edges of this view.
     /// - Parameter applied: A Boolean condition indicating whether padding is applied.
     /// - Returns: A view that’s padded, if applied.
     @ViewBuilder
@@ -122,5 +150,19 @@ fileprivate extension View {
         } else {
             self
         }
+    }
+}
+
+#Preview("Long title") {
+    NavigationLayer { _ in
+        Color.clear
+            .navigationLayerTitle("Looooooooooooooooooooong title")
+    }
+}
+
+#Preview("Long subtitle") {
+    NavigationLayer { _ in
+        Color.clear
+            .navigationLayerTitle("Title", subtitle: "Looooooooooooooooooooong subtitle")
     }
 }

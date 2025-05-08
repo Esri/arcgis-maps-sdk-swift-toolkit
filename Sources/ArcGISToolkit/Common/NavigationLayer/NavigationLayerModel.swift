@@ -14,24 +14,30 @@
 
 import SwiftUI
 
-class NavigationLayerModel: ObservableObject {
+@Observable class NavigationLayerModel {
     /// An item representing a view pushed on the layer.
     struct Item {
         /// The closure which produces the view for the item.
         let view: () -> any View
     }
     
+    /// A Boolean value indicating whether another view is being pushed.
+    private var isPushing = false
+    
     /// The transition for the next time a view is appended or removed.
-    @Published private(set) var transition: AnyTransition = .push
+    private(set) var transition: AnyTransition = .push
     
     /// The set of views pushed on the layer.
-    @Published private(set) var views: [Item] = []
+    private(set) var views: [Item] = []
     
-    /// The title for the current destination.
-    @Published var title: String? = nil
+    /// The header background color for the current view.
+    var headerBackgroundColor: Color?
     
-    /// The subtitle for the current destination.
-    @Published var subtitle: String? = nil
+    /// The title for the current view.
+    var title: String?
+    
+    /// The subtitle for the current view.
+    var subtitle: String?
     
     /// The currently presented view (the last item).
     var presented: Item? {
@@ -50,9 +56,28 @@ class NavigationLayerModel: ObservableObject {
     /// Push a view.
     /// - Parameter view: The view to push.
     func push(_ view: @escaping () -> any View) {
+        // Prevent the same view from being pushed multiple times while the
+        // animation is running.
+        // In UI tests we don't need to guard against this condition and the
+        // guard actually becomes harmful, as there is no accepted pattern for
+        // waiting for animations to complete so tests have no reliable way of
+        // determining when to push the next view.
+        if !isUITest {
+            guard !isPushing else { return }
+            isPushing = true
+        }
+        
         transition = .push
+        
         withAnimation {
             views.append(.init(view: view))
+        } completion: {
+            self.isPushing = false
         }
+    }
+    
+    /// A Boolean value which indicates whether a UI Test is running.
+    private var isUITest: Bool {
+        CommandLine.arguments.contains("isUITest")
     }
 }
