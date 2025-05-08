@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for a utility associations form element.
 struct UtilityAssociationsFormElementView: View {
     /// The view model for the form.
-    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The set of utility associations filter results for the element.
     @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
@@ -30,7 +30,7 @@ struct UtilityAssociationsFormElementView: View {
         FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
             if $0.resultCount > 0 {
                 UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                    .environment(formViewModel)
+                    .environment(internalFeatureFormViewModel)
             } else {
                 nil
             }
@@ -50,7 +50,7 @@ private struct UtilityAssociationGroupResultView: View {
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// The view model for the form.
-    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
@@ -69,7 +69,7 @@ private struct UtilityAssociationGroupResultView: View {
                             )
                         }
                     }
-                    if formViewModel.featureForm.hasEdits {
+                    if internalFeatureFormViewModel.featureForm.hasEdits {
                         setAlertContinuation?(true, navigationAction)
                     } else {
                         navigationAction()
@@ -82,7 +82,7 @@ private struct UtilityAssociationGroupResultView: View {
             // This view is considered the tail end of a navigable FeatureForm.
             // When a user is backing out of a navigation path, this view
             // appearing is considered a change to the presented FeatureForm.
-            formChangedAction?(formViewModel.featureForm)
+            formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
     }
 }
@@ -90,7 +90,7 @@ private struct UtilityAssociationGroupResultView: View {
 /// A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
     /// The view model for the form.
-    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
@@ -103,8 +103,8 @@ private struct UtilityAssociationsFilterResultListRowView: View {
         Button {
             navigationLayerModel.push {
                 UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-                    .navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
-                    .environment(formViewModel)
+                    .navigationLayerTitle(listRowTitle, subtitle: internalFeatureFormViewModel.title)
+                    .environment(internalFeatureFormViewModel)
             }
         } label: {
             HStack {
@@ -137,7 +137,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 /// A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
     /// The view model for the form.
-    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The model for the navigation layer.
     @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
@@ -154,7 +154,7 @@ private struct UtilityAssociationsFilterResultView: View {
                             utilityAssociationGroupResult.name,
                             subtitle: utilityAssociationsFilterResult.filter.title
                         )
-                        .environment(formViewModel)
+                        .environment(internalFeatureFormViewModel)
                 }
             } label: {
                 HStack {
