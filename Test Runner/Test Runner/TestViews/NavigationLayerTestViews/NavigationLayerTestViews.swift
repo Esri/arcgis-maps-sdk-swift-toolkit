@@ -14,18 +14,12 @@
 
 ***REMOVED***
 
-extension AnyTransition {
-***REMOVED***static var push: Self {
-***REMOVED******REMOVED***asymmetric(
-***REMOVED******REMOVED******REMOVED***insertion: .move(edge: .trailing),
-***REMOVED******REMOVED******REMOVED***removal: .move(edge: .leading)
-***REMOVED******REMOVED***)
+struct NavigationLayerTestViews: View {
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***NavigationLink("NavigationLayer Test Case 1", destination: NavigationLayerTestCase1View())
+***REMOVED******REMOVED******REMOVED***NavigationLink("NavigationLayer Test Case 2", destination: NavigationLayerTestCase2View())
+***REMOVED******REMOVED******REMOVED***NavigationLink("NavigationLayer Test Case 3", destination: NavigationLayerTestCase3View())
 ***REMOVED***
-***REMOVED***
-***REMOVED***static var pop: Self {
-***REMOVED******REMOVED***asymmetric(
-***REMOVED******REMOVED******REMOVED***insertion: .move(edge: .leading),
-***REMOVED******REMOVED******REMOVED***removal: .move(edge: .trailing)
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
