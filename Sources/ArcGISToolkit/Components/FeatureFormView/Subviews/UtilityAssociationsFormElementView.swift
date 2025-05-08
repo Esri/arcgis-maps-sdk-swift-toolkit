@@ -53,7 +53,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the navigation layer.
-***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The backing utility association group result.
 ***REMOVED***let utilityAssociationGroupResult: UtilityAssociationGroupResult
@@ -93,7 +93,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the navigation layer.
-***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The referenced utility associations filter result.
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
@@ -140,7 +140,7 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the navigation layer.
-***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The backing utility associations filter result.
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
