@@ -16,6 +16,8 @@ import Observation
 
 @Observable
 class FeatureFormViewModel {
+    /// A Boolean value indicating whether the add utility association screen is presented.
+    var addUtilityAssociationScreenIsPresented = false
     /// A Boolean value indicating whether the utility association details screen is presented.
     var utilityAssociationDetailsScreenIsPresented = false
 }

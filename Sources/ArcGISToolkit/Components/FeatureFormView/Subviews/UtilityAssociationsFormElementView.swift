@@ -136,6 +136,9 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 
 /// A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
+    /// The view model for the feature form view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
@@ -147,27 +150,44 @@ private struct UtilityAssociationsFilterResultView: View {
     
     var body: some View {
         List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-            Button {
-                navigationLayerModel.push {
-                    UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
-                        .navigationLayerTitle(
-                            utilityAssociationGroupResult.name,
-                            subtitle: utilityAssociationsFilterResult.filter.title
-                        )
-                        .environment(internalFeatureFormViewModel)
-                }
-            } label: {
-                HStack {
-                    Text(utilityAssociationGroupResult.name)
-                    Spacer()
-                    Group {
-                        Text(utilityAssociationGroupResult.associationResults.count.formatted())
-                        Image(systemName: "chevron.right")
+            Section {
+                Button {
+                    navigationLayerModel.push {
+                        UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+                            .navigationLayerTitle(
+                                utilityAssociationGroupResult.name,
+                                subtitle: utilityAssociationsFilterResult.filter.title
+                            )
+                            .environment(internalFeatureFormViewModel)
                     }
-                    .foregroundColor(.secondary)
+                } label: {
+                    HStack {
+                        Text(utilityAssociationGroupResult.name)
+                        Spacer()
+                        Group {
+                            Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                            Image(systemName: "chevron.right")
+                        }
+                        .foregroundColor(.secondary)
+                    }
                 }
+                .tint(.primary)
+            } header: {
+                Button {
+                    withAnimation {
+                        featureFormViewModel.addUtilityAssociationScreenIsPresented = true
+                    }
+                } label: {
+                    Label {
+                        Text.addAssociation
+                            .textCase(.none)
+                    } icon: {
+                        Image(systemName: "plus.circle.fill")
+                    }
+                }
+                .buttonStyle(.borderless)
+                .padding(.bottom)
             }
-            .tint(.primary)
         }
     }
 }
@@ -180,6 +200,7 @@ private struct UtilityAssociationResultView: View {
     /// The backing utility association result.
     let result: UtilityAssociationResult
     
+    /// The view model for the feature form view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
     var body: some View {
@@ -318,5 +339,15 @@ private extension UtilityAssociationResultView {
         } else {
             "\(result.associatedElement.assetGroup.name) - \(result.associatedElement.objectID)"
         }
+    }
+}
+
+private extension Text {
+    static var addAssociation: Self {
+        .init(
+            "Add Association",
+            bundle: .toolkitModule,
+            comment: "A label for a button to add a new utility network association."
+        )
     }
 }

@@ -88,7 +88,7 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
-    /// <#Description#>
+    /// The view model for the feature form view.
     @State private var featureFormViewModel = FeatureFormViewModel()
     
     /// An error thrown from finish editing.
@@ -231,7 +231,9 @@ public struct FeatureFormView: View {
                 }
             )
             .overlay {
-                if featureFormViewModel.utilityAssociationDetailsScreenIsPresented {
+                if featureFormViewModel.addUtilityAssociationScreenIsPresented {
+                    AddUtilityAssociationScreen()
+                } else if featureFormViewModel.utilityAssociationDetailsScreenIsPresented {
                     UtilityAssociationDetailsScreen()
                 }
             }
