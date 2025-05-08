@@ -109,7 +109,7 @@ public struct FeatureFormView: View {
     public var body: some View {
         if let rootFeatureForm {
             VStack(spacing: 0) {
-                NavigationLayer {
+                NavigationLayer { _ in
                     InternalFeatureFormView(
                         featureForm: rootFeatureForm
                     )
@@ -125,6 +125,9 @@ public struct FeatureFormView: View {
                             }
                         }
                         .font(.title)
+                    } else {
+                        // TODO: This is unintended usage of NavigationLayer's headerTrailing. May not render properly.
+                        EmptyView()
                     }
                 } footer: {
                     if let presentedForm = presentedForm.wrappedValue,
@@ -136,6 +139,9 @@ public struct FeatureFormView: View {
                             validationErrorVisibility: $validationErrorVisibility,
                             finishEditingError: $finishEditingError
                         )
+                    } else {
+                        // TODO: This is unintended usage of NavigationLayer's footer. May not render properly.
+                        EmptyView()
                     }
                 }
                 .backNavigationAction { navigationLayerModel in
