@@ -29,43 +29,39 @@ struct NavigationLayer<Content: View>: View {
     let footer: (() -> any View)?
     
     /// The root view.
-    let root: () -> Content
+    let root: (NavigationLayerModel) -> Content
     
     /// The optional closure to perform when the back navigation button is pressed.
-    var backNavigationAction: ((NavigationLayerModel) -> Void)? = nil
+    var backNavigationAction: ((NavigationLayerModel) -> Void)?
     
     /// The closure to perform when model's path changes.
     var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
     
     /// The model for the navigation layer.
-    @StateObject private var model: NavigationLayerModel
+    @State private var model = NavigationLayerModel()
     
-    init(_ root: @escaping () -> Content) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content) {
         self.headerTrailing = nil
         self.footer = nil
         self.root = root
-        _model = StateObject(wrappedValue: NavigationLayerModel())
     }
     
-    init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View)) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content, headerTrailing: (@escaping () -> any View)) {
         self.headerTrailing = headerTrailing
         self.footer = nil
         self.root = root
-        _model = StateObject(wrappedValue: NavigationLayerModel())
     }
     
-    init(_ root: @escaping () -> Content, @ViewBuilder footer: (@escaping () -> any View)) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content, footer: (@escaping () -> any View)) {
         self.headerTrailing = nil
         self.footer = footer
         self.root = root
-        _model = StateObject(wrappedValue: NavigationLayerModel())
     }
     
-    init(_ root: @escaping () -> Content, @ViewBuilder headerTrailing: (@escaping () -> any View), @ViewBuilder footer: (@escaping () -> any View)) {
+    init(_ root: @escaping (NavigationLayerModel) -> Content, headerTrailing: (@escaping () -> any View), footer: (@escaping () -> any View)) {
         self.headerTrailing = headerTrailing
         self.footer = footer
         self.root = root
-        _model = StateObject(wrappedValue: NavigationLayerModel())
     }
     
     var body: some View {
@@ -77,26 +73,20 @@ struct NavigationLayer<Content: View>: View {
                     width: geometryProxy.size.width
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
-                Group {
-                    if model.views.isEmpty {
-                        root()
-                            .transition(model.transition)
-                    } else if let presented = model.presented?.view {
-                        AnyView(presented())
-                            // Re-trigger the transition animation when view count changes.
-                            .id(model.views.count)
-                            .transition(model.transition)
-                    }
-                }
-                .onPreferenceChange(NavigationLayerTitle.self) { title in
-                    Task { @MainActor in
-                        self.model.title = title
-                    }
-                }
-                .onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
-                    Task { @MainActor in
-                        self.model.subtitle = subtitle
-                    }
+                if model.views.isEmpty {
+                    root(model)
+                        .transition(model.transition)
+                } else if let presented = model.presented?.view {
+                    AnyView(presented())
+                        // Reset the title, subtitle and header background color
+                        // preference each time the presented view is changed to
+                        // avoid using a stale preference if none was set.
+                        .defaultPreference(NavigationLayerHeaderBackground.self)
+                        .defaultPreference(NavigationLayerTitle.self)
+                        .defaultPreference(NavigationLayerSubtitle.self)
+                        // Re-trigger the transition animation when view count changes.
+                        .id(model.views.count)
+                        .transition(model.transition)
                 }
                 if let footer {
                     AnyView(footer())
@@ -106,88 +96,26 @@ struct NavigationLayer<Content: View>: View {
                         .transition(.move(edge: .bottom))
                 }
             }
-            .environmentObject(model)
+            .environment(model)
             // Apply container width so the animated transitions work correctly.
             .frame(width: geometryProxy.size.width)
             .onChange(of: model.views.count) {
-                onNavigationChangedAction?(model.presented ?? nil)
+                onNavigationChangedAction?(model.presented)
             }
-        }
-    }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    struct SampleList: View {
-        @EnvironmentObject private var model: NavigationLayerModel
-        @Binding var includeFooter: Bool
-        @Binding var includeHeader: Bool
-        @Binding var rootSubtitle: String
-        @Binding var rootTitle: String
-        
-        var body: some View {
-            List {
-                Section("Configuration") {
-                    Toggle("Include header trailing content", isOn: $includeHeader)
-                    Toggle("Include footer", isOn: $includeFooter)
-                    TextField("Root title", text: $rootTitle)
-                    TextField("Root subtitle", text: $rootSubtitle)
-                }
-                Section("Presentation") {
-                    Button("Present a view") {
-                        model.push {
-                            Text("View")
-                        }
-                    }
-                    Button("Present a view with a title") {
-                        model.push {
-                            Text("View")
-                                .navigationLayerTitle("Title")
-                        }
-                    }
-                    Button("Present a view with a title & subtitle") {
-                        model.push {
-                            Text("View")
-                                .navigationLayerTitle("Title", subtitle: "Subtitle")
-                        }
-                    }
+            .onPreferenceChange(NavigationLayerHeaderBackground.self) { color in
+                Task { @MainActor in
+                    model.headerBackgroundColor = color
                 }
             }
-        }
-    }
-    
-    @Previewable @State var includeHeader = false
-    @Previewable @State var includeFooter = false
-    @Previewable @State var isPresented = true
-    @Previewable @State var rootSubtitle = ""
-    @Previewable @State var rootTitle = ""
-    
-    return LinearGradient(
-        colors: [.red, .orange, .yellow],
-        startPoint: .topLeading, endPoint: .bottomTrailing
-    )
-    .onTapGesture {
-        isPresented.toggle()
-    }
-    .ignoresSafeArea(edges: .all)
-    .floatingPanel(isPresented: $isPresented) {
-        NavigationLayer {
-            SampleList(
-                includeFooter: $includeFooter,
-                includeHeader: $includeHeader,
-                rootSubtitle: $rootSubtitle,
-                rootTitle: $rootTitle
-            )
-            .navigationLayerTitle(rootTitle, subtitle: rootSubtitle)
-        } headerTrailing: {
-            if includeHeader {
-                Button("Done") {
-                    isPresented = false
+            .onPreferenceChange(NavigationLayerTitle.self) { title in
+                Task { @MainActor in
+                    model.title = title
                 }
             }
-        } footer: {
-            if includeFooter {
-                Text("Footer")
+            .onPreferenceChange(NavigationLayerSubtitle.self) { subtitle in
+                Task { @MainActor in
+                    model.subtitle = subtitle
+                }
             }
         }
     }
@@ -206,8 +134,8 @@ extension NavigationLayer {
     }
     
     /// Sets a closure to perform when the navigation layer's path changed.
-    /// - Parameter action: The closure to perform when the navigation layer's path changed
-    /// - Note: If no item is provided, the root view is presented..
+    /// - Parameter action: The closure to perform when the navigation layer's path changed.
+    /// - Note: If no item is provided, the root view is presented.
     func onNavigationPathChanged(perform action: @escaping (NavigationLayerModel.Item?) -> Void) -> Self {
         var copy = self
         copy.onNavigationChangedAction = action
@@ -215,36 +143,74 @@ extension NavigationLayer {
     }
 }
 
-struct NavigationLayerTitle: PreferenceKey {
-    static let defaultValue: String? = nil
+struct PreviewList: View {
+    @Environment(NavigationLayerModel.self) private var model
     
-    static func reduce(value: inout String?, nextValue: () -> String?) {
-        value = nextValue()
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        List {
+            Button("Present a view") {
+                model.push {
+                    Text(verbatim: "A view")
+                        .containerRelativeFrame([.horizontal, .vertical])
+                }
+            }
+            
+            Button("Present a view with a title") {
+                model.push {
+                    Text(verbatim: "A view with navigationLayerTitle(_:) applied")
+                        .containerRelativeFrame([.horizontal, .vertical])
+                        .navigationLayerTitle("Presented View's Title")
+                }
+            }
+            
+            Button("Present a view with a title and subtitle") {
+                model.push {
+                    Text(verbatim: "A view with navigationLayerTitle(_:subtitle:) applied")
+                        .containerRelativeFrame([.horizontal, .vertical])
+                        .navigationLayerTitle(
+                            "Presented View's Title",
+                            subtitle: "Presented View's Subtitle"
+                        )
+                }
+            }
+        }
+        .navigationLayerHeaderBackground(
+            Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
+        )
+        .navigationLayerTitle("Navigation Layer", subtitle: "Root View")
     }
 }
 
-struct NavigationLayerSubtitle: PreferenceKey {
-    static let defaultValue: String? = nil
-    
-    static func reduce(value: inout String?, nextValue: () -> String?) {
-        value = nextValue()
+#Preview("init(_:)") {
+    NavigationLayer { _ in
+        PreviewList()
     }
 }
 
-extension View {
-    /// Sets a title for the navigation layer destination.
-    /// - Parameters:
-    ///   - title: The title for the navigation layer destination.
-    func navigationLayerTitle(_ title: String) -> some View {
-        preference(key: NavigationLayerTitle.self, value: title)
+#Preview("init(_:headerTrailing:)") {
+    NavigationLayer { _ in
+        PreviewList()
+    } headerTrailing: {
+        Button { } label: { Image(systemName: "xmark")  }
     }
-    
-    /// Sets a title and subtitle for the navigation layer destination.
-    /// - Parameters:
-    ///   - title: The title for the navigation layer destination.
-    ///   - subtitle: The subtitle for the navigation layer destination.
-    func navigationLayerTitle(_ title: String, subtitle: String) -> some View {
-        preference(key: NavigationLayerTitle.self, value: title)
-            .preference(key: NavigationLayerSubtitle.self, value: subtitle)
+}
+
+#Preview("init(_:footer:)") {
+    NavigationLayer { _ in
+        PreviewList()
+    } footer: {
+        Text(verbatim: "Footer")
+    }
+}
+
+#Preview("init(_:headerTrailing:footer:)") {
+    NavigationLayer { _ in
+        PreviewList()
+    } headerTrailing: {
+        Button { } label: { Image(systemName: "xmark")  }
+    } footer: {
+        Text(verbatim: "Footer")
     }
 }
