@@ -89,7 +89,7 @@ public struct FeatureFormView: View {
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
     /// The view model for the feature form view.
-    @State private var featureFormViewModel = FeatureFormViewModel()
+    @State private var featureFormViewModel: FeatureFormViewModel
     
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
@@ -104,7 +104,8 @@ public struct FeatureFormView: View {
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     /// - Since: 200.8
-    public init(featureForm: Binding<FeatureForm?>) {
+    public init(featureForm: Binding<FeatureForm?>, _ utilityNetwork: UtilityNetwork? = nil) {
+        self.featureFormViewModel = FeatureFormViewModel(utilityNetwork: utilityNetwork)
         self.rootFeatureForm = featureForm.wrappedValue
         self.presentedForm = featureForm
     }
