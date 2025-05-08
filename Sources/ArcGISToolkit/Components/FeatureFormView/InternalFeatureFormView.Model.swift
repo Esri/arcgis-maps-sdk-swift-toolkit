@@ -13,10 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
-import SwiftUI
+import Observation
 
 @Observable
-class FormViewModel {
+class InternalFeatureFormViewModel {
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {
