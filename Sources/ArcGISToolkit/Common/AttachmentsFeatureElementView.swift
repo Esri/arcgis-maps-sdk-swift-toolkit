@@ -29,7 +29,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Note: This property is only present when
 ***REMOVED******REMOVED***/ `featureElement` is an `AttachmentsFormElement`.
-***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
@@ -166,7 +166,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
 ***REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
-***REMOVED******REMOVED***formViewModel.evaluateExpressions()
+***REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***scrollToNewAttachmentAction?()
 ***REMOVED***
 ***REMOVED***
@@ -178,7 +178,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***if let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
 ***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModel.sync() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -192,7 +192,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 === attachmentModel ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
-***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

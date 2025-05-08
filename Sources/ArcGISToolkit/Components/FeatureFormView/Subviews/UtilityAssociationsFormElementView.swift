@@ -18,7 +18,7 @@
 ***REMOVED***/ A view for a utility associations form element.
 struct UtilityAssociationsFormElementView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The set of utility associations filter results for the element.
 ***REMOVED***@State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
@@ -30,7 +30,7 @@ struct UtilityAssociationsFormElementView: View {
 ***REMOVED******REMOVED***FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
 ***REMOVED******REMOVED******REMOVED***if $0.resultCount > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(formViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
@@ -50,7 +50,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***@Environment(\.setAlertContinuation) var setAlertContinuation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
@@ -69,7 +69,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if formViewModel.featureForm.hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if internalFeatureFormViewModel.featureForm.hasEdits {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setAlertContinuation?(true, navigationAction)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationAction()
@@ -82,7 +82,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This view is considered the tail end of a navigable FeatureForm.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** When a user is backing out of a navigation path, this view
 ***REMOVED******REMOVED******REMOVED******REMOVED*** appearing is considered a change to the presented FeatureForm.
-***REMOVED******REMOVED******REMOVED***formChangedAction?(formViewModel.featureForm)
+***REMOVED******REMOVED******REMOVED***formChangedAction?(internalFeatureFormViewModel.featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -90,7 +90,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***/ A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
@@ -103,8 +103,8 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(formViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(listRowTitle, subtitle: internalFeatureFormViewModel.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
@@ -137,7 +137,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED***/ A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
@@ -154,7 +154,7 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationGroupResult.name,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: utilityAssociationsFilterResult.filter.title
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(formViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
