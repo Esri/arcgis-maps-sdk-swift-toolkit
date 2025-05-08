@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for date/time input.
 struct DateTimeInput: View {
     /// The view model for the form.
-    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The current date selection.
     @State private var date: Date?
@@ -52,13 +52,13 @@ struct DateTimeInput: View {
     
     var body: some View {
         dateEditor
-            .onChange(of: formViewModel.focusedElement) {
-                isEditing = formViewModel.focusedElement == element
+            .onChange(of: internalFeatureFormViewModel.focusedElement) {
+                isEditing = internalFeatureFormViewModel.focusedElement == element
             }
             .onChange(of: date) {
                 element.updateValue(date)
                 formattedValue = element.formattedValue
-                formViewModel.evaluateExpressions()
+                internalFeatureFormViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 if newFormattedValue.isEmpty {
@@ -106,8 +106,8 @@ struct DateTimeInput: View {
                         .foregroundStyle(.secondary)
                 } else if !isRequired {
                     XButton(.clear) {
-                        formViewModel.focusedElement = element
-                        defer { formViewModel.focusedElement = nil }
+                        internalFeatureFormViewModel.focusedElement = element
+                        defer { internalFeatureFormViewModel.focusedElement = nil }
                         date = nil
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
@@ -128,7 +128,7 @@ struct DateTimeInput: View {
                     }
                 }
                 isEditing.toggle()
-                formViewModel.focusedElement = isEditing ? element : nil
+                internalFeatureFormViewModel.focusedElement = isEditing ? element : nil
             }
         }
     }
