@@ -48,8 +48,15 @@ extension FeatureFormView {
                     }
                     
                     Section {
-                        TextField(text: $networkSourceNameQuery) {
-                            Text.searchNetworkSource
+                        HStack {
+                            TextField(text: $networkSourceNameQuery) {
+                                Text.searchNetworkSource
+                            }
+                            if !networkSourceNameQuery.isEmpty {
+                                XButton(.clear) {
+                                    networkSourceNameQuery.removeAll()
+                                }
+                            }
                         }
                     } header: {
                         Text.selectFeatureFromTheNetworkSourceGroup
