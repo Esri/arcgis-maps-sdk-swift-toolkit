@@ -88,6 +88,9 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
+    /// <#Description#>
+    @State private var featureFormViewModel = FeatureFormViewModel()
+    
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
@@ -221,6 +224,7 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .environment(featureFormViewModel)
             .environment(\.formChangedAction, onFormChangedAction)
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\._validationErrorVisibility, validationErrorVisibility)
