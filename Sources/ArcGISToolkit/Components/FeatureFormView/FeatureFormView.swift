@@ -224,6 +224,11 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .overlay {
+                if featureFormViewModel.utilityAssociationDetailsScreenIsPresented {
+                    UtilityAssociationDetailsScreen()
+                }
+            }
             .environment(featureFormViewModel)
             .environment(\.formChangedAction, onFormChangedAction)
             .environment(\.setAlertContinuation, setAlertContinuation)
