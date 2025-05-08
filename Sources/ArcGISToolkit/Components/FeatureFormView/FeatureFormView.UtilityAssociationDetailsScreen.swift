@@ -46,6 +46,7 @@ extension FeatureFormView {
                 }
                 .font(.title)
             }
+            // TODO: Combine with similar code in FeatureFormView.AddUtilityAssociationScreen.swift
             #if os(visionOS)
             .background(Color(uiColor: .tertiarySystemGroupedBackground))
             #else
