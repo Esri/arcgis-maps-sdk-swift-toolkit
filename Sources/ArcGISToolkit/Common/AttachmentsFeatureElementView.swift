@@ -29,7 +29,7 @@ struct AttachmentsFeatureElementView: View {
     ///
     /// - Note: This property is only present when
     /// `featureElement` is an `AttachmentsFormElement`.
-    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
@@ -166,7 +166,7 @@ struct AttachmentsFeatureElementView: View {
         newModel.load()
         models.insert(newModel, at: 0)
         withAnimation { attachmentModelsState = .initialized(models) }
-        formViewModel.evaluateExpressions()
+        internalFeatureFormViewModel.evaluateExpressions()
         scrollToNewAttachmentAction?()
     }
     
@@ -178,7 +178,7 @@ struct AttachmentsFeatureElementView: View {
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
             withAnimation { attachmentModel.sync() }
-            formViewModel.evaluateExpressions()
+            internalFeatureFormViewModel.evaluateExpressions()
         }
     }
     
@@ -192,7 +192,7 @@ struct AttachmentsFeatureElementView: View {
             guard case .initialized(var models) = attachmentModelsState else { return }
             models.removeAll { $0 === attachmentModel }
             withAnimation { attachmentModelsState = .initialized(models) }
-            formViewModel.evaluateExpressions()
+            internalFeatureFormViewModel.evaluateExpressions()
         }
     }
 }

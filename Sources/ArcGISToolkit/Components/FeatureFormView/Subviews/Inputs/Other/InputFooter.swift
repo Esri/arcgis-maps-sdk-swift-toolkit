@@ -23,7 +23,7 @@ struct InputFooter: View {
     @Environment(\._validationErrorVisibility) private var validationErrorVisibility
     
     /// The view model for the form.
-    @Environment(FormViewModel.self) private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// An ID regenerated each time the element's value changes.
     ///
@@ -40,7 +40,7 @@ struct InputFooter: View {
                     errorMessage
                 } else if !element.description.isEmpty {
                     Text(element.description)
-                } else if formViewModel.focusedElement == element {
+                } else if internalFeatureFormViewModel.focusedElement == element {
                     if element.fieldType == .text, let lengthRange {
                         if lengthRange.lowerBound == lengthRange.upperBound {
                             makeExactLengthMessage(lengthRange)
@@ -199,7 +199,7 @@ extension InputFooter {
     
     /// A Boolean value which indicates whether or not the character indicator is showing in the footer.
     var isShowingCharacterIndicator: Bool {
-        formViewModel.focusedElement == element
+        internalFeatureFormViewModel.focusedElement == element
         && !(element.fieldType?.isNumeric ?? false)
         && (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
         && (element.description.isEmpty || primaryError != nil)
@@ -209,7 +209,7 @@ extension InputFooter {
     var isShowingError: Bool {
         element.isEditable
         && primaryError != nil
-        && (formViewModel.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
+        && (internalFeatureFormViewModel.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
     }
     
     /// The allowable number of characters in the input.
@@ -246,7 +246,7 @@ extension InputFooter {
             default:
                 return false
             }
-        }), formViewModel.focusedElement != element {
+        }), internalFeatureFormViewModel.focusedElement != element {
             return requiredError
         } else {
             return elementErrors?.first(where: {
