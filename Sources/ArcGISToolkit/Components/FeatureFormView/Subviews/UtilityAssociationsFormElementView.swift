@@ -180,6 +180,8 @@ private struct UtilityAssociationResultView: View {
     /// The backing utility association result.
     let result: UtilityAssociationResult
     
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    
     var body: some View {
         HStack {
             Button {
@@ -216,7 +218,9 @@ private struct UtilityAssociationResultView: View {
             .tint(.primary)
             Spacer()
             Button {
-                
+                withAnimation {
+                    featureFormViewModel.utilityAssociationDetailsScreenIsPresented = true
+                }
             } label: {
                 Image(systemName: "info.circle")
             }
