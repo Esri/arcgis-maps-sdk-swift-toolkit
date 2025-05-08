@@ -22,7 +22,7 @@ struct InternalFeatureFormView: View {
     @Environment(\.formElementPadding) var formElementPadding
     
     /// The model for the navigation layer.
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
     /// The view model for the form.
     @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel

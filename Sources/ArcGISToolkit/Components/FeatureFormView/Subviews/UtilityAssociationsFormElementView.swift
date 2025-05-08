@@ -53,7 +53,7 @@ private struct UtilityAssociationGroupResultView: View {
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The model for the navigation layer.
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
     /// The backing utility association group result.
     let utilityAssociationGroupResult: UtilityAssociationGroupResult
@@ -93,7 +93,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The model for the navigation layer.
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
     /// The referenced utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
@@ -140,7 +140,7 @@ private struct UtilityAssociationsFilterResultView: View {
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The model for the navigation layer.
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
     /// The backing utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
