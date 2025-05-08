@@ -13,10 +13,10 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
+import Observation
 
 @Observable
-class FormViewModel {
+class InternalFeatureFormViewModel {
 ***REMOVED******REMOVED***/ The current focused element, if one exists.
 ***REMOVED***var focusedElement: FormElement? {
 ***REMOVED******REMOVED***didSet {

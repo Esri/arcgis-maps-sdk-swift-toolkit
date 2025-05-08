@@ -20,7 +20,7 @@
 ***REMOVED***/ This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@Environment(FormViewModel.self) private var formViewModel: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
 ***REMOVED***@State private var filterPhrase = ""
@@ -89,8 +89,8 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
 ***REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { formViewModel.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { internalFeatureFormViewModel.focusedElement = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
@@ -117,7 +117,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***formViewModel.focusedElement = element
+***REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
@@ -235,7 +235,7 @@ extension ComboBoxInput {
 ***REMOVED***
 ***REMOVED***private func updateValue(_ value: (any Sendable)?) {
 ***REMOVED******REMOVED***element.updateValue(value)
-***REMOVED******REMOVED***formViewModel.evaluateExpressions()
+***REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 
