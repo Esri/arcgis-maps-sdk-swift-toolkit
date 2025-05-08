@@ -31,8 +31,22 @@ extension FeatureFormView {
                     }
                     Section {
                         Button("Remove Association", role: .destructive) {
-                            
+                            if let association = featureFormViewModel.selectedAssociation {
+                                Task {
+                                    do {
+#warning("API NOT YET IMPLEMENTED")
+//                                        try await featureFormViewModel.utilityNetwork?.delete(association)
+                                        withAnimation {
+                                            featureFormViewModel.utilityAssociationDetailsScreenIsPresented = false
+                                        }
+                                    } catch {
+#warning("Present failure to user.")
+                                        print(String(reflecting: error))
+                                    }
+                                }
+                            }
                         }
+                        .disabled(featureFormViewModel.selectedAssociation == nil || !(featureFormViewModel.utilityNetwork?.canDeleteAssociations ?? false))
                     } footer: {
                         Text("Only removes the association. The feature remains.")
                     }

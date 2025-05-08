@@ -239,6 +239,7 @@ private struct UtilityAssociationResultView: View {
             .tint(.primary)
             Spacer()
             Button {
+                featureFormViewModel.selectedAssociation = result.association
                 withAnimation {
                     featureFormViewModel.utilityAssociationDetailsScreenIsPresented = true
                 }

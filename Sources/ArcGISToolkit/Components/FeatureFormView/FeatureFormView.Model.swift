@@ -12,17 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Observation
-
-#warning("Temporary import for UtilityNetwork access")
+#warning("Temporary ArcGIS import for direct UtilityNetwork access")
 import ArcGIS
+import Observation
 
 @Observable
 class FeatureFormViewModel {
+    /// A utility network the root feature form view feature may belong to.
     let utilityNetwork: UtilityNetwork?
     
     /// A Boolean value indicating whether the add utility association screen is presented.
     var addUtilityAssociationScreenIsPresented = false
+    
+    /// The selected utility association.
+    var selectedAssociation: UtilityAssociation?
+    
     /// A Boolean value indicating whether the utility association details screen is presented.
     var utilityAssociationDetailsScreenIsPresented = false
     
