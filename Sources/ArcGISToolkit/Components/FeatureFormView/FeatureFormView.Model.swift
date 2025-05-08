@@ -14,10 +14,19 @@
 
 import Observation
 
+#warning("Temporary import for UtilityNetwork access")
+import ArcGIS
+
 @Observable
 class FeatureFormViewModel {
+    let utilityNetwork: UtilityNetwork?
+    
     /// A Boolean value indicating whether the add utility association screen is presented.
     var addUtilityAssociationScreenIsPresented = false
     /// A Boolean value indicating whether the utility association details screen is presented.
     var utilityAssociationDetailsScreenIsPresented = false
+    
+    init(utilityNetwork: UtilityNetwork? = nil) {
+        self.utilityNetwork = utilityNetwork
+    }
 }

@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import SwiftUI
 
 extension FeatureFormView {
     struct AddUtilityAssociationScreen: View {
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+        
+        /// The filter phrase for the network source name.
+        @State private var networkSourceNameQuery = ""
         
         var body: some View {
             NavigationLayer { _ in
@@ -44,7 +48,7 @@ extension FeatureFormView {
                     }
                     
                     Section {
-                        TextField(text: .constant("")) {
+                        TextField(text: $networkSourceNameQuery) {
                             Text.searchNetworkSource
                         }
                     } header: {
@@ -53,10 +57,19 @@ extension FeatureFormView {
                     }
                     
                     Section {
-#warning("Placeholders only.")
-                        Text("Electric Distribution Device")
-                        Text("Electric Distribution Assembly")
-                        Text("Electric Distribution Junction")
+                        ForEach(filteredSources, id: \.name) { layer in
+                            Button {
+                                
+                            } label: {
+                                HStack {
+                                    Text(layer.name)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                }
+                                .contentShape(.rect)
+                                .tint(.primary)
+                            }
+                        }
                     }
                 }
                 .navigationLayerTitle("Add Associations")
@@ -75,6 +88,20 @@ extension FeatureFormView {
             .background(Color(uiColor: .systemGroupedBackground))
             #endif
             .transition(.move(edge: .bottom))
+        }
+    }
+}
+
+private extension FeatureFormView.AddUtilityAssociationScreen {
+    /// The set of network sources matching the query, sorted in alphabetical order.
+    var filteredSources: [Layer] {
+        let allLayers = (featureFormViewModel.utilityNetwork?.layers ?? [])
+            .sorted { $0.name < $1.name }
+        if networkSourceNameQuery.isEmpty {
+            return allLayers
+        } else {
+            return allLayers
+                .filter { $0.name.localizedStandardContains(networkSourceNameQuery) }
         }
     }
 }
