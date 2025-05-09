@@ -25,8 +25,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***let attributionBarHeight: CGFloat
 ***REMOVED******REMOVED***/ The background color of the floating panel.
 ***REMOVED***let backgroundColor: Color?
-***REMOVED******REMOVED***/ A binding to the currently selected detent.
-***REMOVED***@Binding var selectedDetent: FloatingPanelDetent
+***REMOVED******REMOVED***/ A binding to the current active detent.
+***REMOVED***@Binding var activeDetent: FloatingPanelDetent
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
@@ -52,6 +52,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The detent that was the active detent until a FloatingPanelDetentPreference was set.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ When the FloatingPanelDetentPreference is unset, this detent should be restored to the active detent..
+***REMOVED***@State private var overriddenDetent: FloatingPanelDetent?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
@@ -64,6 +69,24 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isPortraitOrientation ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(FloatingPanelDetent.Preference.self) { preference in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let preference {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only update the overridden detent if one
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** wasn't already saved. This prevents a
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** FloatingPanelDetentPreference from being
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** saved as the overridden detent.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if overriddenDetent == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overriddenDetent = activeDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = preference
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let overriddenDetent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** When the FloatingPanelDetentPreference is
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** unset, restore the overridden detent as the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** active detent.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = overriddenDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.overriddenDetent = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isPortraitOrientation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
@@ -98,7 +121,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent) {
+***REMOVED******REMOVED******REMOVED***.onChange(of: activeDetent) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onKeyboardStateChanged { state, height in
@@ -138,10 +161,17 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let predictedEndLocation = $0.predictedEndLocation.y
 ***REMOVED******REMOVED******REMOVED******REMOVED***let inferredHeight = isPortraitOrientation ? maximumHeight - predictedEndLocation : predictedEndLocation
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = [.summary, .half, .full]
+***REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = [.summary, .half, .full]
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map { (detent: $0, height: heightFor(detent: $0)) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.min { abs(inferredHeight - $0.height) < abs(inferredHeight - $1.height) ***REMOVED***!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.detent
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if overriddenDetent != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update the overridden detent with the user's choice to
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** prevent the user's choice from being unset when the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** FloatingPanelDetentPreference is unset.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overriddenDetent = activeDetent
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if $0.translation.height.magnitude > 100 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -180,7 +210,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED*** else if keyboardState == .opening || keyboardState == .open {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return heightFor(detent: .full)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return heightFor(detent: selectedDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED***return heightFor(detent: activeDetent)
 ***REMOVED******REMOVED***
 ***REMOVED***()
 ***REMOVED******REMOVED***withAnimation { height = max(0, (newHeight - .handleFrameHeight)) ***REMOVED***

@@ -125,7 +125,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: boundDetent ?? $managedDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent: boundDetent ?? $managedDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: panelContent
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
