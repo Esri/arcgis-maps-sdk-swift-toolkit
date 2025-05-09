@@ -149,29 +149,31 @@ private struct UtilityAssociationsFilterResultView: View {
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
-        List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+        List {
             Section {
-                Button {
-                    navigationLayerModel.push {
-                        UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
-                            .navigationLayerTitle(
-                                utilityAssociationGroupResult.name,
-                                subtitle: utilityAssociationsFilterResult.filter.title
-                            )
-                            .environment(internalFeatureFormViewModel)
-                    }
-                } label: {
-                    HStack {
-                        Text(utilityAssociationGroupResult.name)
-                        Spacer()
-                        Group {
-                            Text(utilityAssociationGroupResult.associationResults.count.formatted())
-                            Image(systemName: "chevron.right")
+                ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+                    Button {
+                        navigationLayerModel.push {
+                            UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+                                .navigationLayerTitle(
+                                    utilityAssociationGroupResult.name,
+                                    subtitle: utilityAssociationsFilterResult.filter.title
+                                )
+                                .environment(internalFeatureFormViewModel)
                         }
-                        .foregroundColor(.secondary)
+                    } label: {
+                        HStack {
+                            Text(utilityAssociationGroupResult.name)
+                            Spacer()
+                            Group {
+                                Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                                Image(systemName: "chevron.right")
+                            }
+                            .foregroundColor(.secondary)
+                        }
                     }
+                    .tint(.primary)
                 }
-                .tint(.primary)
             } header: {
                 Button {
                     withAnimation {
