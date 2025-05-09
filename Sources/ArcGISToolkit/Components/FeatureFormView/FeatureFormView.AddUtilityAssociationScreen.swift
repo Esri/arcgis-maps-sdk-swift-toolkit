@@ -20,6 +20,9 @@ extension FeatureFormView {
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
+        /// A Boolean value indicating whether the feature selection view is presented.
+        @State private var featureSelectionViewIsPresented = false
+        
         /// The filter phrase for the network source name.
         @State private var networkSourceNameQuery = ""
         
@@ -28,7 +31,9 @@ extension FeatureFormView {
                 List {
                     Section {
                         Button {
-                            
+                            withAnimation {
+                                featureSelectionViewIsPresented = true
+                            }
                         } label: {
                             HStack {
                                 Image(systemName: "mappin.circle.fill")
@@ -95,6 +100,38 @@ extension FeatureFormView {
             .background(Color(uiColor: .systemGroupedBackground))
             #endif
             .transition(.move(edge: .bottom))
+            .overlay {
+                if featureSelectionViewIsPresented {
+                    VStack {
+                        Text.tapTheMapToSelectFeatures
+                        HStack {
+                            // TODO: Match design spec color and size
+                            Button.cancel {
+                                withAnimation {
+                                    featureSelectionViewIsPresented = false
+                                }
+                            }
+                            Button.done {
+                                withAnimation {
+                                    featureSelectionViewIsPresented = false
+                                }
+                            }
+//                            .disabled(/* When no features have been selected */)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    // TODO: Combine with similar code above and in FeatureFormView.UtilityAssociationDetailsScreen.swift
+#if os(visionOS)
+                    .background(Color(uiColor: .tertiarySystemGroupedBackground))
+#else
+                    .background(Color(uiColor: .systemGroupedBackground))
+#endif
+                    .transition(.move(edge: .bottom))
+                }
+            }
         }
     }
 }
@@ -146,6 +183,14 @@ private extension Text {
             "Tap, select area, or draw polygon",
             bundle: .toolkitModule,
             comment: ""
+        )
+    }
+    
+    static var tapTheMapToSelectFeatures: Self {
+        .init(
+            "Tap the map to select features",
+            bundle: .toolkitModule,
+            comment: "A label instructing the user to tap a feature on the map."
         )
     }
 }
