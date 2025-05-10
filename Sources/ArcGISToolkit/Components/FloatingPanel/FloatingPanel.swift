@@ -52,9 +52,10 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ The detent that was the active detent until a FloatingPanelDetentPreference was set.
+***REMOVED******REMOVED***/ Stores the detent that was active before a `FloatingPanelDetent.Preference` was applied.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ When the FloatingPanelDetentPreference is unset, this detent should be restored to the active detent..
+***REMOVED******REMOVED***/ This value allows the panel to restore the previous state when the preference is cleared.
+***REMOVED******REMOVED***/ It is only set when a new preference is first applied and cleared when the preference is removed.
 ***REMOVED***@State private var overriddenDetent: FloatingPanelDetent?
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -71,18 +72,16 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(FloatingPanelDetent.Preference.self) { preference in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let preference {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only update the overridden detent if one
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** wasn't already saved. This prevents a
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** FloatingPanelDetentPreference from being
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** saved as the overridden detent.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only set the overridden detent if it's `nil`.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This prevents a preference from being saved
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** as the overridden detent.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if overriddenDetent == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overriddenDetent = activeDetent
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = preference
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let overriddenDetent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** When the FloatingPanelDetentPreference is
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** unset, restore the overridden detent as the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** active detent.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** When the preference is unset, restore the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** overridden detent as the active detent.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = overriddenDetent
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.overriddenDetent = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
