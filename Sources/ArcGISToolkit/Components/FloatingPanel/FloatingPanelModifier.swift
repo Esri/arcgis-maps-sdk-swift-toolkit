@@ -125,7 +125,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
                 FloatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     backgroundColor: backgroundColor,
-                    selectedDetent: boundDetent ?? $managedDetent,
+                    activeDetent: boundDetent ?? $managedDetent,
                     isPresented: isPresented,
                     content: panelContent
                 )
