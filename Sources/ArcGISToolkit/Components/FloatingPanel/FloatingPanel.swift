@@ -52,9 +52,10 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .zero
     
-    /// The detent that was the active detent until a FloatingPanelDetentPreference was set.
+    /// Stores the detent that was active before a `FloatingPanelDetent.Preference` was applied.
     ///
-    /// When the FloatingPanelDetentPreference is unset, this detent should be restored to the active detent..
+    /// This value allows the panel to restore the previous state when the preference is cleared.
+    /// It is only set when a new preference is first applied and cleared when the preference is removed.
     @State private var overriddenDetent: FloatingPanelDetent?
     
     var body: some View {
@@ -71,18 +72,16 @@ struct FloatingPanel<Content>: View where Content: View {
                         .clipped()
                         .onPreferenceChange(FloatingPanelDetent.Preference.self) { preference in
                             if let preference {
-                                // Only update the overridden detent if one
-                                // wasn't already saved. This prevents a
-                                // FloatingPanelDetentPreference from being
-                                // saved as the overridden detent.
+                                // Only set the overridden detent if it's `nil`.
+                                // This prevents a preference from being saved
+                                // as the overridden detent.
                                 if overriddenDetent == nil {
                                     overriddenDetent = activeDetent
                                 }
                                 activeDetent = preference
                             } else if let overriddenDetent {
-                                // When the FloatingPanelDetentPreference is
-                                // unset, restore the overridden detent as the
-                                // active detent.
+                                // When the preference is unset, restore the
+                                // overridden detent as the active detent.
                                 activeDetent = overriddenDetent
                                 self.overriddenDetent = nil
                             }
