@@ -136,6 +136,9 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 
 /// A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
+    /// The view model for the feature form view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
@@ -146,28 +149,47 @@ private struct UtilityAssociationsFilterResultView: View {
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
-        List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-            Button {
-                navigationLayerModel.push {
-                    UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
-                        .navigationLayerTitle(
-                            utilityAssociationGroupResult.name,
-                            subtitle: utilityAssociationsFilterResult.filter.title
-                        )
-                        .environment(internalFeatureFormViewModel)
-                }
-            } label: {
-                HStack {
-                    Text(utilityAssociationGroupResult.name)
-                    Spacer()
-                    Group {
-                        Text(utilityAssociationGroupResult.associationResults.count.formatted())
-                        Image(systemName: "chevron.right")
+        List {
+            Section {
+                ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+                    Button {
+                        navigationLayerModel.push {
+                            UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+                                .navigationLayerTitle(
+                                    utilityAssociationGroupResult.name,
+                                    subtitle: utilityAssociationsFilterResult.filter.title
+                                )
+                                .environment(internalFeatureFormViewModel)
+                        }
+                    } label: {
+                        HStack {
+                            Text(utilityAssociationGroupResult.name)
+                            Spacer()
+                            Group {
+                                Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                                Image(systemName: "chevron.right")
+                            }
+                            .foregroundColor(.secondary)
+                        }
                     }
-                    .foregroundColor(.secondary)
+                    .tint(.primary)
                 }
+            } header: {
+                Button {
+                    withAnimation {
+                        featureFormViewModel.addUtilityAssociationScreenIsPresented = true
+                    }
+                } label: {
+                    Label {
+                        Text.addAssociation
+                            .textCase(.none)
+                    } icon: {
+                        Image(systemName: "plus.circle.fill")
+                    }
+                }
+                .buttonStyle(.borderless)
+                .padding(.bottom)
             }
-            .tint(.primary)
         }
     }
 }
@@ -180,40 +202,54 @@ private struct UtilityAssociationResultView: View {
     /// The backing utility association result.
     let result: UtilityAssociationResult
     
+    /// The view model for the feature form view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    
     var body: some View {
-        Button {
-            selectionAction()
-        } label: {
-            HStack {
-                if let icon {
-                    icon
-                }
-                VStack(alignment: .leading) {
-                    Text(title)
-                    Text(description)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-                .lineLimit(1)
-                Spacer()
-                Group {
-                    if let containmentIsVisible {
-                        Text("Containment Visible: \(containmentIsVisible)".capitalized)
-                    } else if let fractionAlongEdge {
-                        Text(fractionAlongEdge.formatted(.percent))
-                    } else if let terminalName {
-                        Text("Terminal: \(terminalName)")
+        HStack {
+            Button {
+                selectionAction()
+            } label: {
+                HStack {
+                    if let icon {
+                        icon
                     }
+                    VStack(alignment: .leading) {
+                        Text(title)
+                        Text(description)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .lineLimit(1)
+                    Spacer()
+                    Group {
+                        if let containmentIsVisible {
+                            Text("Containment Visible: \(containmentIsVisible)".capitalized)
+                        } else if let fractionAlongEdge {
+                            Text(fractionAlongEdge.formatted(.percent))
+                        } else if let terminalName {
+                            Text("Terminal: \(terminalName)")
+                        }
+                    }
+                    .padding(2.5)
+                    .background(Color(uiColor: .systemBackground))
+                    .cornerRadius(5)
+                    .font(.caption2)
                 }
-                .padding(2.5)
-                .background(Color(uiColor: .systemBackground))
-                .cornerRadius(5)
-                .font(.caption2)
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.secondary)
+                .contentShape(.rect)
+            }
+            .tint(.primary)
+            Spacer()
+            Button {
+                featureFormViewModel.selectedAssociation = result.association
+                withAnimation {
+                    featureFormViewModel.utilityAssociationDetailsScreenIsPresented = true
+                }
+            } label: {
+                Image(systemName: "info.circle")
             }
         }
-        .tint(.primary)
+        .buttonStyle(.borderless)
     }
 }
 
@@ -306,5 +342,15 @@ private extension UtilityAssociationResultView {
         } else {
             "\(result.associatedElement.assetGroup.name) - \(result.associatedElement.objectID)"
         }
+    }
+}
+
+private extension Text {
+    static var addAssociation: Self {
+        .init(
+            "Add Association",
+            bundle: .toolkitModule,
+            comment: "A label for a button to add a new utility network association."
+        )
     }
 }

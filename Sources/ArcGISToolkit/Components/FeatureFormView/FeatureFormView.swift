@@ -88,6 +88,9 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
+    /// The view model for the feature form view.
+    @State private var featureFormViewModel: FeatureFormViewModel
+    
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
@@ -101,7 +104,8 @@ public struct FeatureFormView: View {
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     /// - Since: 200.8
-    public init(featureForm: Binding<FeatureForm?>) {
+    public init(featureForm: Binding<FeatureForm?>, _ utilityNetwork: UtilityNetwork? = nil) {
+        self.featureFormViewModel = FeatureFormViewModel(utilityNetwork: utilityNetwork)
         self.rootFeatureForm = featureForm.wrappedValue
         self.presentedForm = featureForm
     }
@@ -227,6 +231,14 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .overlay {
+                if featureFormViewModel.addUtilityAssociationScreenIsPresented {
+                    AddUtilityAssociationScreen()
+                } else if featureFormViewModel.utilityAssociationDetailsScreenIsPresented {
+                    UtilityAssociationDetailsScreen()
+                }
+            }
+            .environment(featureFormViewModel)
             .environment(\.formChangedAction, onFormChangedAction)
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\._validationErrorVisibility, validationErrorVisibility)
