@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#warning("Temporary ArcGIS import for direct UtilityNetwork access")
 import ArcGIS
 import Observation
 
 @Observable
 class FeatureFormViewModel {
+#warning("The UtilityNetwork property is temporary only.")
     /// A utility network the root feature form view feature may belong to.
     let utilityNetwork: UtilityNetwork?
     
@@ -31,6 +31,7 @@ class FeatureFormViewModel {
     var utilityAssociationDetailsScreenIsPresented = false
     
     init(utilityNetwork: UtilityNetwork? = nil) {
+#warning("The UtilityNetwork parameter is temporary only.")
         self.utilityNetwork = utilityNetwork
     }
 }
