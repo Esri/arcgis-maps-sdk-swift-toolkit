@@ -194,12 +194,4 @@ private extension Text {
             comment: ""
         )
     }
-    
-    static var tapTheMapToSelectFeatures: Self {
-        .init(
-            "Tap the map to select features",
-            bundle: .toolkitModule,
-            comment: "A label instructing the user to tap a feature on the map."
-        )
-    }
 }
