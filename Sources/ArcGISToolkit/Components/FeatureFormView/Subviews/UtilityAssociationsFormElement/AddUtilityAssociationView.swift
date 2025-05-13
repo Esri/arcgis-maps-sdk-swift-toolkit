@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 extension FeatureFormView {
-    struct AddUtilityAssociationScreen: View {
+    struct AddUtilityAssociationView: View {
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
@@ -114,7 +114,7 @@ extension FeatureFormView {
     }
 }
 
-private extension FeatureFormView.AddUtilityAssociationScreen {
+private extension FeatureFormView.AddUtilityAssociationView {
     /// The set of network sources matching the query, sorted in alphabetical order.
     var filteredSources: [Layer] {
         let allLayers = (featureFormViewModel.utilityNetwork?.layers ?? [])

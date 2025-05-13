@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-extension FeatureFormView.AddUtilityAssociationScreen {
+extension FeatureFormView.AddUtilityAssociationView {
     struct FeatureSelectionView: View {
         @Environment(\.isPortraitOrientation) private var isPortraitOrientation
         
