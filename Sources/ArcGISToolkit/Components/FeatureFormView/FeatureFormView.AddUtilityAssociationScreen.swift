@@ -25,6 +25,9 @@ extension FeatureFormView {
         /// A Boolean value indicating whether the feature selection view is presented.
         @State private var featureSelectionViewIsPresented = false
         
+        /// The set of identified/selected features.
+        @State private var identifiedFeatures = [ArcGISFeature]()
+        
         /// The filter phrase for the network source name.
         @State private var networkSourceNameQuery = ""
         
@@ -105,40 +108,10 @@ extension FeatureFormView {
             .transition(.move(edge: .bottom))
             .overlay {
                 if featureSelectionViewIsPresented {
-                    VStack {
-                        Text.tapTheMapToSelectFeatures
-                        HStack {
-                            // TODO: Match design spec color and size
-                            Button.cancel {
-                                withAnimation {
-                                    featureSelectionViewIsPresented = false
-                                }
-                            }
-                            Button.done {
-                                withAnimation {
-                                    featureSelectionViewIsPresented = false
-                                }
-                            }
-//                            .disabled(/* When no features have been selected */)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .preference(
-                        key: FloatingPanelDetent.Preference.self,
-                        // If presented in a Floating Panel and the map view is
-                        // hidden because of portrait orientation, reveal it.
-                        value: isPortraitOrientation ? .fraction(0.2) : nil
+                    FeatureSelectionView(
+                        identifiedFeatures: $identifiedFeatures,
+                        isPresented: $featureSelectionViewIsPresented
                     )
-                    // TODO: Combine with similar code above and in FeatureFormView.UtilityAssociationDetailsScreen.swift
-#if os(visionOS)
-                    .background(Color(uiColor: .tertiarySystemGroupedBackground))
-#else
-                    .background(Color(uiColor: .systemGroupedBackground))
-#endif
-                    .transition(.move(edge: .bottom))
                 }
             }
         }
