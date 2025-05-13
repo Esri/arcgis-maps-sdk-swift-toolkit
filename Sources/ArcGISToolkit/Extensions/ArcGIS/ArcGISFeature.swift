@@ -28,4 +28,17 @@ extension ArcGISFeature {
             return nil
         }
     }
+    
+    /// The object ID of the feature.
+    ///
+    /// This property is `nil` if there is no object ID.
+    var objectID: Int64? {
+        if let id = attributes["objectid"] as? Int64 {
+            return id
+        } else if let id = attributes["OBJECTID"] as? Int64 {
+            return id
+        } else {
+            return nil
+        }
+    }
 }
