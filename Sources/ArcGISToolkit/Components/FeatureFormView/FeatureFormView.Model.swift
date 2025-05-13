@@ -24,14 +24,27 @@ class FeatureFormViewModel {
     /// A Boolean value indicating whether the add utility association screen is presented.
     var addUtilityAssociationScreenIsPresented = false
     
+    /// The point at which to run feature identification when adding utility associations.
+    var mapPoint: Point?
+    
+    /// The proxy to provide access to map view operations.
+    var mapViewProxy: MapViewProxy?
+    
     /// The selected utility association.
     var selectedAssociation: UtilityAssociation?
     
     /// A Boolean value indicating whether the utility association details screen is presented.
     var utilityAssociationDetailsScreenIsPresented = false
     
-    init(utilityNetwork: UtilityNetwork? = nil) {
 #warning("The UtilityNetwork parameter is temporary only.")
+    /// Creates a view model for a feature form view.
+    /// - Parameters:
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
+    init(
+        mapViewProxy: MapViewProxy? = nil,
+        utilityNetwork: UtilityNetwork? = nil /* Temporary parameter only */
+    ) {
+        self.mapViewProxy = mapViewProxy
         self.utilityNetwork = utilityNetwork
     }
 }

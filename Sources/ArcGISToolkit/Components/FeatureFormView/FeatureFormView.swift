@@ -116,6 +116,10 @@ public struct FeatureFormView: View {
         mapViewProxy: MapViewProxy? = nil,
         _ utilityNetwork: UtilityNetwork? = nil /* Temporary parameter only */
     ) {
+        self.featureFormViewModel = FeatureFormViewModel(
+            mapViewProxy: mapViewProxy,
+            utilityNetwork: utilityNetwork
+        )
         self.mapPoint = mapPoint
         self.presentedForm = featureForm
         self.rootFeatureForm = featureForm.wrappedValue
@@ -242,6 +246,9 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .onChange(of: mapPoint) { _, newValue in
+                featureFormViewModel.mapPoint = newValue
+            }
             .overlay {
                 if featureFormViewModel.addUtilityAssociationScreenIsPresented {
                     AddUtilityAssociationScreen()
