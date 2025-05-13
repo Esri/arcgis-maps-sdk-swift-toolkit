@@ -67,6 +67,9 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// The point at which to run feature identification when adding utility associations.
+    private let mapPoint: Point?
+    
     /// The feature form currently visible in the navigation layer.
     private let presentedForm: Binding<FeatureForm?>
     
@@ -104,11 +107,18 @@ public struct FeatureFormView: View {
     /// Creates a feature form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
+    ///   - mapPoint: The point at which to run feature identification when adding utility associations.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     /// - Since: 200.8
-    public init(featureForm: Binding<FeatureForm?>, _ utilityNetwork: UtilityNetwork? = nil) {
-        self.featureFormViewModel = FeatureFormViewModel(utilityNetwork: utilityNetwork)
-        self.rootFeatureForm = featureForm.wrappedValue
+    public init(
+        featureForm: Binding<FeatureForm?>,
+        mapPoint: Point? = nil,
+        mapViewProxy: MapViewProxy? = nil,
+        _ utilityNetwork: UtilityNetwork? = nil /* Temporary parameter only */
+    ) {
+        self.mapPoint = mapPoint
         self.presentedForm = featureForm
+        self.rootFeatureForm = featureForm.wrappedValue
     }
     
     public var body: some View {
