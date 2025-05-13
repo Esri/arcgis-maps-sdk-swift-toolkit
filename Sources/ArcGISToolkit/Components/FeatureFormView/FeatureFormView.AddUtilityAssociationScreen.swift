@@ -17,10 +17,11 @@ import SwiftUI
 
 extension FeatureFormView {
     struct AddUtilityAssociationScreen: View {
-        @Environment(\.isPortraitOrientation) private var isPortraitOrientation
-        
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+        
+        /// A Boolean value that indicates if a feature query is running.
+        @State private var featureQueryIsRunning = false
         
         /// A Boolean value indicating whether the feature selection view is presented.
         @State private var featureSelectionViewIsPresented = false
@@ -75,20 +76,15 @@ extension FeatureFormView {
                     
                     Section {
                         ForEach(filteredSources, id: \.name) { layer in
-                            Button {
-                                
-                            } label: {
-                                HStack {
-                                    Text(layer.name)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }
-                                .contentShape(.rect)
-                                .tint(.primary)
-                            }
+                            NetworkSourceListRow(
+                                layer: layer,
+                                featureQueryIsRunning: $featureQueryIsRunning,
+                                identifiedFeatures: $identifiedFeatures
+                            )
                         }
                     }
                 }
+                .disabled(featureQueryIsRunning)
                 .navigationLayerTitle("Add Associations")
             } headerTrailing: {
                 XButton(.dismiss) {
