@@ -251,7 +251,7 @@ public struct FeatureFormView: View {
             }
             .overlay {
                 if featureFormViewModel.addUtilityAssociationScreenIsPresented {
-                    AddUtilityAssociationScreen()
+                    AddUtilityAssociationView()
                 } else if featureFormViewModel.utilityAssociationDetailsScreenIsPresented {
                     UtilityAssociationDetailsScreen()
                 }

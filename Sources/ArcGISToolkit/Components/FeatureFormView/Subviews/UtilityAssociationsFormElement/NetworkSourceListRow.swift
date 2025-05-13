@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-extension FeatureFormView.AddUtilityAssociationScreen {
+extension FeatureFormView.AddUtilityAssociationView {
     struct NetworkSourceListRow: View {
         let layer: Layer
         
