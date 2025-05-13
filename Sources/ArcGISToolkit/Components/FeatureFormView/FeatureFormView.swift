@@ -100,7 +100,7 @@ public struct FeatureFormView: View {
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility: Visibility = .hidden
     
-    /// Initializes a form view.
+    /// Creates a feature form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     /// - Since: 200.8
