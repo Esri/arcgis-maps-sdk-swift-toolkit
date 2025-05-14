@@ -17,6 +17,8 @@ import SwiftUI
 
 extension FeatureFormView.AddUtilityAssociationView {
     struct TabularFeatureSelectionView: View {
+        @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+        
         @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
         
         /// The set of all possible features to add as an association.
@@ -26,6 +28,21 @@ extension FeatureFormView.AddUtilityAssociationView {
         ///
         /// If the features were selected via spatial means, no name is provided.
         let sourceName: String?
+        
+        struct InspectedFeature: Equatable {
+            static func == (lhs: Self, rhs: Self) -> Bool {
+                lhs.id == rhs.id
+            }
+            
+            let id = UUID()
+            let feature: ArcGISFeature
+        }
+        
+        /// The feature row that was last inspected.
+        ///
+        /// A row is inspected when the magnifying glass is pressed. The map is panned to the feature's
+        /// center and the feature is selected. If there was a previously inspected feature, it is deselected.
+        @State private var inspectedFeature: InspectedFeature?
         
         /// The filter phrase for the available features.
         @State private var searchTerm = ""
@@ -60,7 +77,7 @@ extension FeatureFormView.AddUtilityAssociationView {
                 
                 Section {
                     ForEach(Array(filteredFeatures.enumerated()), id: \.offset) { _, feature in
-                        Row(feature: feature)
+                        Row(feature: feature, inspectedFeature: $inspectedFeature)
                     }
                 } header: {
                     Text.makeCountText(count: filteredFeatures.count)
@@ -68,6 +85,24 @@ extension FeatureFormView.AddUtilityAssociationView {
                 }
             }
             .navigationLayerTitle(sourceName ?? "Add Association")
+            .onChange(of: inspectedFeature, initial: false) { oldValue, newValue in
+                if let feature = oldValue?.feature, let layer = feature.featureLayer {
+                    layer.unselectFeature(feature)
+                }
+                if let feature = newValue?.feature, let layer = feature.featureLayer {
+                    layer.selectFeature(feature)
+                    if let center = feature.geometry?.extent.center {
+                        Task {
+                            await featureFormViewModel.mapViewProxy?.setViewpointCenter(center)
+                        }
+                    }
+                }
+            }
+            .onDisappear {
+                if let feature = inspectedFeature?.feature, let layer = feature.featureLayer {
+                    layer.unselectFeature(feature)
+                }
+            }
         }
     }
 }

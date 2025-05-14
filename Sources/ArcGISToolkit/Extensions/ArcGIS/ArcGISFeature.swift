@@ -16,6 +16,11 @@ import ArcGIS
 import Foundation
 
 extension ArcGISFeature {
+    /// The feature's feature layer.
+    var featureLayer: FeatureLayer? {
+        table?.layer as? FeatureLayer
+    }
+    
     /// The global ID of the feature.
     ///
     /// This property is `nil` if there is no global ID.
