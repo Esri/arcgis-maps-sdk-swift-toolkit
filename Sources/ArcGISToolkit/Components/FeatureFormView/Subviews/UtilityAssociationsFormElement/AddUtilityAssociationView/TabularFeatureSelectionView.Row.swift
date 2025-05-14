@@ -34,7 +34,7 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
                     ProgressView()
                         .progressViewStyle(.circular)
                         .task {
-                            image = try? await (feature.table?.layer as? FeatureLayer)?.renderer?.symbol(for: feature)?.makeSwatch(scale: 1.0)
+                            image = try? await feature.featureLayer?.renderer?.symbol(for: feature)?.makeSwatch(scale: 1.0)
                         }
                 }
                 if let objectID = feature.objectID {
