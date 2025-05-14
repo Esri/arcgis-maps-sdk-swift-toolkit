@@ -17,13 +17,13 @@ import SwiftUI
 
 extension FeatureFormView.AddUtilityAssociationView {
     struct NetworkSourceListRow: View {
+        /// The model for the navigation layer.
+        @Environment(NavigationLayerModel.self) private var navigationLayerModel
+        
         let layer: Layer
         
         /// A Boolean value that indicates if a feature query is running.
         @Binding var featureQueryIsRunning: Bool
-        
-        /// The set of identified/selected features.
-        @Binding var identifiedFeatures: [ArcGISFeature]
         
         /// A Boolean value that indicates if the layer represented by this row is being queried.
         @State private var rowIsQuerying = false
@@ -43,7 +43,13 @@ extension FeatureFormView.AddUtilityAssociationView {
                             let queryParameters = QueryParameters()
                             queryParameters.whereClause = "1=1"
                             let featureQueryResult = try await table.queryFeatures(using: queryParameters)
-                            identifiedFeatures = Array(featureQueryResult.features()).compactMap { $0 as? ArcGISFeature }
+                            let identifiedFeatures = Array(featureQueryResult.features()).compactMap { $0 as? ArcGISFeature }
+                            navigationLayerModel.push {
+                                TabularFeatureSelectionView(
+                                    features: identifiedFeatures,
+                                    sourceName: layer.name
+                                )
+                            }
                         } catch {
 #warning("Present errors to user.")
                             print(String(reflecting: error))
