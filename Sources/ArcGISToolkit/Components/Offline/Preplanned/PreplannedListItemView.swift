@@ -23,11 +23,8 @@ struct PreplannedListItemView: View {
     /// The currently selected map.
     @Binding var selectedMap: Map?
     
-    /// A Boolean value indicating whether the metadata view is presented.
-    @State private var metadataViewIsPresented = false
-    
     /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss: DismissAction
+    @Environment(\.dismiss) private var dismiss
     
     /// A Boolean value indicating whether the selected map area is the same
     /// as the map area from this model.

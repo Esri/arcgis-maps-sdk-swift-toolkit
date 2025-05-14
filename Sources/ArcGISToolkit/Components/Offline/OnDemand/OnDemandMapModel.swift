@@ -38,7 +38,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// The title of the map area.
     let title: String
     
-    /// The action to perform when an on demand map area is deleted.
+    /// The action to perform when an on-demand map area is deleted.
     private let onRemoveDownloadAction: (OnDemandMapModel) -> Void
     
     /// A thumbnail for the map area.
@@ -179,7 +179,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     /// Downloads the on-demand map area.
     /// - Precondition: `allowsDownload == true`
     /// - Precondition: `configuration != nil`
-    /// - Precondition: `configurofflineMapTaskation != nil`
+    /// - Precondition: `offlineMapTask != nil`
     func downloadOnDemandMapArea() async {
         precondition(status.allowsDownload)
         guard let configuration, let offlineMapTask else { preconditionFailure() }
@@ -410,7 +410,7 @@ struct OnDemandAreaID: CustomStringConvertible, Equatable {
     }
 }
 
-// A value that carries configuration for an on-demand map area.
+/// A value that carries configuration for an on-demand map area.
 struct OnDemandMapAreaConfiguration {
     /// A unique ID for the on-demand map area.
     let areaID = OnDemandAreaID()

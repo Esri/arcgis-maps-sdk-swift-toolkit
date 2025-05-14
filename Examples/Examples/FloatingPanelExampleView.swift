@@ -179,18 +179,10 @@ private struct FloatingPanelTextFieldDemoContent: View {
             Spacer()
         }
         .padding()
-        #if os(visionOS)
-        .onChange(of: selectedDetent) { _, newDetent in
-            if newDetent != .full {
+        .onChange(of: selectedDetent) {
+            if selectedDetent != .full {
                 isFocused = false
             }
         }
-        #else
-        .onChange(of: selectedDetent) { newDetent in
-            if newDetent != .full {
-                isFocused = false
-            }
-        }
-        #endif
     }
 }

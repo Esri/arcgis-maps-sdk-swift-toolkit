@@ -21,26 +21,27 @@ struct InternalFeatureFormView: View {
 #warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
     @Environment(\.formElementPadding) var formElementPadding
     
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    /// The model for the navigation layer.
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
     /// The view model for the form.
-    @StateObject private var model: FormViewModel
+    @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
     
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     init(featureForm: FeatureForm) {
-        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+        internalFeatureFormViewModel = InternalFeatureFormViewModel(featureForm: featureForm)
     }
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(model.visibleElements, id: \.self) { element in
+                    ForEach(internalFeatureFormViewModel.visibleElements, id: \.self) { element in
                         makeElement(element)
                     }
-                    if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+                    if let attachmentsElement = internalFeatureFormViewModel.featureForm.defaultAttachmentsElement {
                         // The Toolkit currently only supports AttachmentsFormElements via the
                         // default attachments element. Once AttachmentsFormElements can be authored
                         // this can call makeElement(_:) instead and makeElement(_:) should have a
@@ -49,26 +50,26 @@ struct InternalFeatureFormView: View {
                     }
                 }
             }
-            .onChange(model.focusedElement) { _ in
-                if let focusedElement = model.focusedElement {
+            .onChange(of: internalFeatureFormViewModel.focusedElement) {
+                if let focusedElement = internalFeatureFormViewModel.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
-            .onTitleChange(of: model.featureForm) { newTitle in
-                model.title = newTitle
+            .onTitleChange(of: internalFeatureFormViewModel.featureForm) { newTitle in
+                internalFeatureFormViewModel.title = newTitle
             }
-            .navigationLayerTitle(model.title)
+            .navigationLayerTitle(internalFeatureFormViewModel.title)
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
-        .environmentObject(model)
+        .environment(internalFeatureFormViewModel)
         .padding([.horizontal])
         .task {
-            await model.initialEvaluation()
+            await internalFeatureFormViewModel.initialEvaluation()
         }
         .onAppear {
-            formChangedAction?(model.featureForm)
+            formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
     }
 }
@@ -134,7 +135,7 @@ extension InternalFeatureFormView {
         .padding(.top, formElementPadding)
         
         UtilityAssociationsFormElementView(element: element)
-            .environmentObject(model)
+            .environment(internalFeatureFormViewModel)
         
         if !element.description.isEmpty {
             Text(element.description)

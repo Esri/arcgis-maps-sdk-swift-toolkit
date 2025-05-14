@@ -15,12 +15,77 @@
 import SwiftUI
 import ArcGIS
 
-/// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
+/// The `OfflineMapAreasView` allows users to take a web map offline by
+/// downloading map areas.
+///
+/// **Features**
+///
+/// The view supports both ahead-of-time(preplanned) and on-demand map areas
+/// for an offline enabled web map. The view:
+///
+/// - Displays a list of map areas.
+/// - Shows download progress and status for map areas.
+/// - Opens a map area for viewing when selected.
+/// - Provides options to view details about downloaded map areas.
+/// - Supports removing downloaded offline map areas files from the device.
+///
+/// For preplanned workflows, the view:
+///
+/// - Displays a list of available preplanned map areas from an offline-enabled
+/// web map that contains preplanned map areas when the network is connected.
+/// - Downloads preplanned map areas in the list.
+/// - Displays a list of downloaded preplanned map areas on the device
+/// when the network is disconnected.
+///
+/// For on-demand workflows, the view:
+///
+/// - Allows users to add and download on-demand map areas to the device by
+/// specifying an area of interest and level of detail.
+/// - Displays a list of on-demand map areas available on the device that are
+/// tied to a specific web map.
+///
+/// **Behavior**
+///
+/// Depending on whether the `OfflineMapAreasView` is presented modally or
+/// embedded in a navigation stack, you can use the ``doneButton(_:)`` modifier
+/// to set the visibility of the done button. The done button dismisses the
+/// view. The button hides when its visibility is set to `.hidden`. The default
+/// visibility is `.automatic`.
+///
+/// The view can be initialized with a web map or an offline map info.
+/// Therefore, the view can be used either when the device is connected to
+/// or disconnected from the network. In other words, the view can be used
+/// in the following situations:
+///
+/// - When the device is connected to the network…
+///     - The view displays preplanned map areas from a web map that are
+///     available for download.
+///     - When the web map doesn't contain preplanned map areas, users can add
+///     and download on-demand map areas by specifying a geographic area and
+///     level of detail.
+///     - Use ``init(onlineMap:selection:)`` to initialize the view.
+/// - When the device is disconnected from the network…
+///     - The view displays only downloaded map areas by retrieving
+///     offline map info from the device.
+///     - Use ``init(offlineMapInfo:selection:)`` to initialize the view.
+///
+/// **Associated Types**
+///
+/// `OfflineMapAreasView` has the following associated types:
+///
+/// - ``OfflineManager``
+/// - ``OfflineMapInfo``
+///
+/// To learn more about the offline manager that downloads and manages offline
+/// map areas without the integrated UI, see the the API doc for `OfflineManager`.
+///
+/// To learn more about using the `OfflineMapAreasView` see the <doc:OfflineMapAreasViewTutorial>.
+/// - Since: 200.7
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: OfflineMapViewModel
     /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss: DismissAction
+    @Environment(\.dismiss) private var dismiss
     /// The web map to be taken offline.
     private let onlineMap: Map
     /// The currently selected map.
@@ -46,7 +111,7 @@ public struct OfflineMapAreasView: View {
         portalItem.id!
     }
     
-    /// Creates a view with a given web map.
+    /// Creates a view with an offline-enabled web map.
     /// - Parameters:
     ///   - onlineMap: The web map to be taken offline.
     ///   - selection: A binding to the currently selected offline map.
@@ -64,6 +129,7 @@ public struct OfflineMapAreasView: View {
     /// - Parameters:
     ///   - offlineMapInfo: The offline map info for which to create the view.
     ///   - selection: A binding to the currently selected offline map.
+    /// - SeeAlso: ``OfflineManager/offlineMapInfos``.
     public init(offlineMapInfo: OfflineMapInfo, selection: Binding<Map?>) {
         let item = PortalItem(url: offlineMapInfo.portalItemURL)!
         let onlineMap = Map(item: item)
@@ -348,32 +414,14 @@ enum Backported {
         }
         
         var body: some View {
-            if #available(iOS 17, *) {
-                SwiftUI.ContentUnavailableView {
-                    Label(title.key, systemImage: systemImage)
-                } description: {
-                    if let description {
-                        Text(description)
-                    }
-                } actions: {
-                    actions()
+            SwiftUI.ContentUnavailableView {
+                Label(title.key, systemImage: systemImage)
+            } description: {
+                if let description {
+                    Text(description)
                 }
-            } else {
-                VStack(alignment: .center) {
-                    Image(systemName: systemImage)
-                        .imageScale(.large)
-                        .foregroundStyle(.secondary)
-                    Text(title)
-                        .font(.headline)
-                    if let description {
-                        Text(description)
-                            .font(.subheadline)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.secondary)
-                    }
-                    actions()
-                }
-                .padding()
+            } actions: {
+                actions()
             }
         }
     }

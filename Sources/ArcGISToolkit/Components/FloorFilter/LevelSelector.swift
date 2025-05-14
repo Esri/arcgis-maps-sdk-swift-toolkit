@@ -137,7 +137,7 @@ extension LevelSelector {
             }
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
-            .onChange(isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
+            .onChange(of: isCollapsed) { scrollToSelectedLevel(with: proxy) }
         }
         if #available (iOS 18.0, *) {
             scrollView

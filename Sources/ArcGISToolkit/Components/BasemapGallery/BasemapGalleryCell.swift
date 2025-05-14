@@ -38,9 +38,8 @@ struct BasemapGalleryCell: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .clipShape(.rect(cornerRadius: 8))
-                                .overlay(
-                                    makeOverlay()
-                                )
+                                .overlay(make3DBadge(), alignment: .topLeading)
+                                .overlay(makeOverlay())
                         }
                         .padding(.all, 4)
                     }
@@ -53,7 +52,7 @@ struct BasemapGalleryCell: View {
                 
                 // Display the name of the item.
                 Text(item.name ?? "")
-                    .font(Font.custom("AvenirNext-Regular", fixedSize: 12))
+                    .font(.basemapGallery)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(item.hasError ? .secondary : .primary)
             }
@@ -66,32 +65,48 @@ struct BasemapGalleryCell: View {
         .disabled(item.isBasemapLoading)
     }
     
+    /// Creates a badge which indicates the basemap supports 3D visualization.
+    /// - Returns: A 3D badge overlay view.
+    @ViewBuilder private func make3DBadge() -> some View {
+        if item.basemap.is3D {
+            Text(
+                "3D",
+                bundle: .toolkitModule,
+                comment: "A reference to 3D content."
+            )
+            .font(.basemapGallery)
+            .foregroundStyle(item.hasError ? .secondary : .primary)
+            .padding(2.5)
+            .background(Material.regular)
+            .cornerRadius(5)
+            .padding(2.5)
+        }
+    }
+    
     /// Creates an overlay which is either a selection outline or an error icon.
     /// - Returns: A thumbnail overlay view.
-    private func makeOverlay() -> some View {
-        Group {
-            if item.hasError {
-                HStack {
-                    Spacer()
-                    VStack {
-                        ZStack {
-                            // For a white background behind the exclamation mark.
-                            Circle()
-                                .foregroundStyle(.white)
-                                .frame(width: 16, height: 16)
-                            Image(systemName: "exclamationmark.circle.fill")
-                                .foregroundStyle(.red)
-                                .frame(width: 32, height: 32)
-                        }
-                        Spacer()
+    @ViewBuilder private func makeOverlay() -> some View {
+        if item.hasError {
+            HStack {
+                Spacer()
+                VStack {
+                    ZStack {
+                        // For a white background behind the exclamation mark.
+                        Circle()
+                            .foregroundStyle(.white)
+                            .frame(width: 16, height: 16)
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .foregroundStyle(.red)
+                            .frame(width: 32, height: 32)
                     }
+                    Spacer()
                 }
-                .padding(.all, -10)
-            } else {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(lineWidth: isSelected ? 2 : 0)
-                    .foregroundStyle(Color.accentColor)
             }
+            .padding(.all, -10)
+        } else {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(lineWidth: isSelected ? 2 : 0)
+                .foregroundStyle(Color.accentColor)
         }
     }
     
@@ -116,5 +131,11 @@ extension BasemapGalleryItem {
     var hasError: Bool {
         loadBasemapError != nil ||
         spatialReferenceStatus == .noMatch
+    }
+}
+
+private extension Font {
+    static var basemapGallery: Self {
+        custom("AvenirNext-Regular", fixedSize: 12)
     }
 }

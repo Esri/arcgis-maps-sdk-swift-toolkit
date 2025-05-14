@@ -33,7 +33,9 @@ import Combine
         
         if items.isEmpty {
             // We have no basemap items, so fetch the
-            // developer basemaps from AGOL.
+            // developer basemaps from AGOL. Developer
+            // basemaps are used because they're
+            // API-key metered.
             fetchBasemaps(
                 from: Portal.arcGISOnline(connection: .anonymous),
                 useDeveloperBasemaps: true
@@ -174,14 +176,19 @@ private extension BasemapGalleryViewModel {
             do {
                 try await portal.load()
                 
-                let basemaps: [Basemap]
+                var basemaps = [Basemap]()
+                
+                if geoModel is Scene {
+                    basemaps += try await portal.basemaps3D
+                }
+                
                 if useDeveloperBasemaps {
-                    basemaps = try await portal.developerBasemaps
+                    basemaps += try await portal.developerBasemaps
                 } else if let portalInfo = portal.info,
                           portalInfo.usesVectorBasemaps {
-                    basemaps = try await portal.vectorBasemaps
+                    basemaps += try await portal.vectorBasemaps
                 } else {
-                    basemaps = try await portal.basemaps
+                    basemaps += try await portal.basemaps
                 }
                 items += basemaps.map { BasemapGalleryItem(basemap: $0) }
             } catch {

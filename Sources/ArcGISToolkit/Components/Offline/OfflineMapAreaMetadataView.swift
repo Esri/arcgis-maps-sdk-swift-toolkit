@@ -103,14 +103,14 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                         .imageScale(.large)
                         .foregroundStyle(.secondary)
                         .padding()
-                        .background(Color(uiColor: UIColor.systemGroupedBackground))
+                        .background(Color(uiColor: .systemGroupedBackground))
                 }
             }
             .clipShape(.rect(cornerRadius: 10, style: .continuous))
             .shadow(radius: 5)
             .overlay {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color(uiColor: UIColor.systemBackground), lineWidth: 2)
+                    .stroke(Color(uiColor: .systemBackground), lineWidth: 2)
             }
             .padding()
             

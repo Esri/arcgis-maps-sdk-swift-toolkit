@@ -16,6 +16,7 @@ import ArcGIS
 import SwiftUI
 
 struct FormFooter: View {
+    /// The backing feature form.
     let featureForm: FeatureForm
     
     /// The closure to perform when a choice is made.
@@ -24,7 +25,11 @@ struct FormFooter: View {
     /// to the ``FeatureFormView``.
     let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
+    /// The validation error visibility configuration of the form.
     @Binding var validationErrorVisibility: Visibility
+    
+    /// An error thrown from finish editing.
+    @Binding var finishEditingError: (any Error)?
     
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
@@ -47,8 +52,12 @@ struct FormFooter: View {
             Button {
                     if featureForm.validationErrors.isEmpty {
                         Task {
-                            try? await featureForm.finishEditing()
-                            formHandlingEventAction?(.savedEdits(willNavigate: false))
+                            do {
+                                try await featureForm.finishEditing()
+                                formHandlingEventAction?(.savedEdits(willNavigate: false))
+                            } catch {
+                                finishEditingError = error
+                            }
                         }
                     } else {
                         validationErrorVisibility = .visible

@@ -48,11 +48,8 @@ struct BookmarksHeader: View {
                 alignment: .leading
             )
             Spacer()
-            Button {
+            Button.done {
                 isPresented = false
-            } label: {
-                Text.done
-                    .fontWeight(.semibold)
             }
 #if !os(visionOS)
             .buttonStyle(.plain)

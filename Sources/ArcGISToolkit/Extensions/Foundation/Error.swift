@@ -20,9 +20,9 @@ extension Error {
     var isNoInternetConnectionError: Bool {
         switch self {
         case let urlError as URLError:
-            return urlError.code == .notConnectedToInternet
+            urlError.code == .notConnectedToInternet
         default:
-            return false
+            false
         }
     }
 }

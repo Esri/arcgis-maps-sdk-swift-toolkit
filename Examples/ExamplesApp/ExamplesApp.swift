@@ -13,16 +13,27 @@
 // limitations under the License.
 
 import ArcGIS
+import ArcGISToolkit
 import SwiftUI
 
 @main
-struct ExamplesApp: App {
+struct ExamplesApp: App {    
+    @StateObject private var authenticator = Authenticator(
+        promptForUntrustedHosts: true
+        // If you want to use OAuth, uncomment this code:
+        //      oAuthUserConfigurations: [.arcgisDotCom]
+    )
+
     var body: some SwiftUI.Scene {
         WindowGroup {
             Examples()
+                .authenticator(authenticator)
+                .task {
+                    ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+                }
         }
     }
-    
+
     init() {
         #warning("You must set your API Key or request that the user signs in with an ArcGIS account")
         /*
@@ -37,5 +48,147 @@ struct ExamplesApp: App {
          */
         // Uncomment the following line to access ArcGIS location services using an API key.
 //         ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
+//        ArcGISEnvironment.apiKey = APIKey("AAPK83fdb937974a43fda5dcc544a4d2c831Kt05knTmR1dZSbizfPRt-8xC9ieZqaew87pYsuESt1kK2GrhUpOSeDlkVqoCQgho")
+        // Uncomment the following line to access Esri location services using an API key.
+        Task {
+            do {
+                //                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .rtPublisher1)
+                //                print("rt_publisher1 Done.")
+//                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .nitroTest)
+//                print("popupDev Done.")
+//                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .mapsqaTest)
+//                print("mapsqaTest Done.")
+                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .cAPI)
+                print("c_api Done.")
+//                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .apolloUser)
+//                print("apolloUser Done.")
+                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .devext)
+                print("devext Done.")
+//                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .d)
+//                print("d Done.")
+                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .rtPublisher1)
+                print("rtPublisher1 Done.")
+            } catch {
+                print("cred error: \(error)")
+            }
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var nitroTest: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://nitrotest.mapsqa.arcgis.com")!,
+                username: "fmuser200",
+                password: "fmuser1234"
+                //                username: "PopDev",
+                //                password: "I68VGU^PopupElements930"
+            )
+        }
+    }
+    static var mapsqaTest: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://qaext.arcgis.com")!,
+                username: "sharing",
+                password: "ago.test"
+                //                username: "PopDev",
+                //                password: "I68VGU^PopupElements930"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var popupDev: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://nitrotest.mapsqa.arcgis.com")!,
+                username: "PopDev",
+                password: "I68VGU^PopupElements930"
+            )
+        }
+    }
+    static var d: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://geo-dev.sbb.ch/portal")!,
+                username: "fxesrid@sbb.ch",
+                password: ";BBDQIoenXbTy^1`NOdn"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var rtPublisher1: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://rt-server11.esri.com/portal/home/")!,
+                username: "publisher1",
+                password: "test.publisher01"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var rtPublisher2: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://runtimecoretest.maps.arcgis.com")!,
+                username: "rt_publisher2",
+                password: "rt_password01"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var cAPI: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://runtimecoretest.maps.arcgis.com")!,
+                username: "c_api_publisher",
+                password: "c_api_pub1"
+            )
+        }
+    }
+}
+
+public extension ArcGISCredential {
+    static var apolloUser: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://runtimecoretest.maps.arcgis.com")!,
+                username: "apollo_user",
+                password: "apollo_user.1234"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var nitro: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://nitrotest.mapsqa.arcgis.com")!,
+                username: "nitroadmin",
+                password: "neonmusiclittle4"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var devext: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://pulsars.mapsdevext.arcgis.com")!,
+                username: "rt_publisher1",
+                password: "rt_password01"
+            )
+        }
     }
 }

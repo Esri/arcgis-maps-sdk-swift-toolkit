@@ -18,12 +18,12 @@ import ArcGIS
 /// A view that shows information for an offline area for use in a List.
 @MainActor
 struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingContent: View>: View {
-    /// Creates an `OfflineMapAreaItemView`.
+    /// Creates an `OfflineMapAreaListItemView`.
     init(
         model: Model,
         isSelected: Bool,
-        @ViewBuilder trailingContent: @escaping () -> TrailingContent)
-    {
+        @ViewBuilder trailingContent: @escaping () -> TrailingContent
+    ) {
         self.model = model
         self.isSelected = isSelected
         self.trailingContent = trailingContent
@@ -33,10 +33,10 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
     @ObservedObject var model: Model
     
     /// A Boolean value indicating if the map is currently selected.
-    let isSelected: Bool
+    private let isSelected: Bool
     
     /// The content to display in the card.
-    let trailingContent: () -> TrailingContent
+    private let trailingContent: () -> TrailingContent
     
     /// A Boolean value indicating if the metadata view is presented.
     @State private var metadataViewIsPresented = false
@@ -145,8 +145,7 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
             Image(systemName: "arrow.down.circle")
                 .imageScale(.large)
         }
-        // Have to apply a style or it won't be tappable
-        // because of the button the parent view.
+        // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
     }
 }
@@ -207,7 +206,7 @@ struct OpenOfflineMapAreaButton: View {
 }
 
 /// A button for downloading a map area.
-/// This button is meant to be used in the `OfflineMapAreaItemView`.
+/// This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
     /// The view model for the item view.
     @ObservedObject var model: Model
@@ -219,15 +218,14 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
             Image(systemName: "arrow.down.circle")
                 .imageScale(.large)
         }
-        // Have to apply a style or it won't be tappable
-        // because of the button the parent view.
+        // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
         .disabled(!model.allowsDownload)
     }
 }
 
 /// A view for displaying the progress of an offline job.
-/// This button is meant to be used in the `OfflineMapAreaItemView`.
+/// This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
     /// The view model for the item view.
     @ObservedObject var model: Model
@@ -240,8 +238,7 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
                 ProgressView(progress)
                     .progressViewStyle(.cancelGauge)
             }
-            // Have to apply a style or it won't be tappable
-            // because of the button the parent view.
+            // Have to apply a style or it won't be tappable.
             .buttonStyle(.plain)
         }
     }

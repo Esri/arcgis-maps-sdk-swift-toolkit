@@ -76,6 +76,9 @@ public struct FeatureFormView: View {
     /// The visibility of the close button.
     var closeButtonVisibility: Visibility = .automatic
     
+    /// The visibility of the "save" and "discard" buttons.
+    var editingButtonsVisibility: Visibility = .automatic
+    
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
@@ -84,6 +87,9 @@ public struct FeatureFormView: View {
     
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
+    
+    /// An error thrown from finish editing.
+    @State private var finishEditingError: (any Error)?
     
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits: Bool = false
@@ -94,6 +100,7 @@ public struct FeatureFormView: View {
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
+    /// - Since: 200.8
     public init(featureForm: Binding<FeatureForm?>) {
         self.rootFeatureForm = featureForm.wrappedValue
         self.presentedForm = featureForm
@@ -102,7 +109,7 @@ public struct FeatureFormView: View {
     public var body: some View {
         if let rootFeatureForm {
             VStack(spacing: 0) {
-                NavigationLayer {
+                NavigationLayer { _ in
                     InternalFeatureFormView(
                         featureForm: rootFeatureForm
                     )
@@ -118,14 +125,23 @@ public struct FeatureFormView: View {
                             }
                         }
                         .font(.title)
+                    } else {
+                        // TODO: This is unintended usage of NavigationLayer's headerTrailing. May not render properly.
+                        EmptyView()
                     }
                 } footer: {
-                    if let presentedForm = presentedForm.wrappedValue, hasEdits {
+                    if let presentedForm = presentedForm.wrappedValue,
+                       hasEdits,
+                       editingButtonsVisibility != .hidden {
                         FormFooter(
                             featureForm: presentedForm,
                             formHandlingEventAction: onFormEditingEventAction,
-                            validationErrorVisibility: $validationErrorVisibility
+                            validationErrorVisibility: $validationErrorVisibility,
+                            finishEditingError: $finishEditingError
                         )
+                    } else {
+                        // TODO: This is unintended usage of NavigationLayer's footer. May not render properly.
+                        EmptyView()
                     }
                 }
                 .backNavigationAction { navigationLayerModel in
@@ -145,9 +161,10 @@ public struct FeatureFormView: View {
                     }
                 }
             }
+            // Alert for abandoning unsaved edits
             .alert(
                 (presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
-                isPresented: alertIsPresented,
+                isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
                     if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
                         Button("Discard Edits", role: .destructive) {
@@ -169,13 +186,13 @@ public struct FeatureFormView: View {
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
-                                        #warning("Handle thrown errors.")
+                                        finishEditingError = error
                                     }
                                 }
                             }
                         }
                         Button("Continue Editing", role: .cancel) {
-                            alertIsPresented.wrappedValue = false
+                            alertForUnsavedEditsIsPresented.wrappedValue = false
                         }
                     }
                 },
@@ -185,6 +202,28 @@ public struct FeatureFormView: View {
                         Text("You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.")
                     } else {
                         Text("Updates to the form will be lost.")
+                    }
+                }
+            )
+            // Alert for finish editing errors
+            .alert(
+                String(
+                    localized: "The form wasn't submitted",
+                    bundle: .toolkitModule,
+                    comment: "The title shown when a form could not be submitted."
+                ),
+                isPresented: alertForFinishEditingErrorsIsPresented,
+                actions: { },
+                message: {
+                    let finishEditingFailed = String(
+                        localized: "Finish editing failed.",
+                        bundle: .toolkitModule,
+                        comment: "The message shown when a form could not be submitted."
+                    )
+                    if let finishEditingError {
+                        Text(finishEditingFailed + "\n\n" + String(describing: finishEditingError))
+                    } else {
+                        Text(finishEditingFailed)
                     }
                 }
             )
@@ -203,24 +242,39 @@ public struct FeatureFormView: View {
 }
 
 public extension FeatureFormView {
-    /// <#Description#>
+    /// Represents events that occur during the form editing lifecycle.
+    /// These events notify you when the user has either saved or discarded their edits.
+    /// - Since: 200.8
     enum EditingEvent {
-        /// <#Description#>
+        /// Indicates that the user has discarded their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
         case discardedEdits(willNavigate: Bool)
-        /// <#Description#>
+        /// Indicates that the user has saved their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
         case savedEdits(willNavigate: Bool)
     }
     
     /// Sets the visibility of the close button on the form.
     /// - Parameter visibility: The visibility of the close button.
+    /// - Since: 200.8
     func closeButton(_ visibility: Visibility) -> Self {
         var copy = self
         copy.closeButtonVisibility = visibility
         return copy
     }
     
+    /// Sets the visibility of the save and discard buttons on the form.
+    /// - Parameter visibility: The visibility of the save and discard buttons.
+    /// - Since: 200.8
+    func editingButtons(_ visibility: Visibility) -> Self {
+        var copy = self
+        copy.editingButtonsVisibility = visibility
+        return copy
+    }
+    
     /// Sets a closure to perform when a form editing event occurs.
     /// - Parameter action: The closure to perform when the form editing event occurs.
+    /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         var copy = self
         copy.onFormEditingEventAction = action
@@ -229,8 +283,19 @@ public extension FeatureFormView {
 }
 
 extension FeatureFormView {
-    /// A Boolean value indicating whether the alert is presented.
-    var alertIsPresented: Binding<Bool> {
+    /// A Boolean value indicating whether the finish editing error alert is presented.
+    var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
+        Binding {
+            finishEditingError != nil
+        } set: { newIsPresented in
+            if !newIsPresented {
+                finishEditingError = nil
+            }
+        }
+    }
+    
+    /// A Boolean value indicating whether the unsaved edits alert is presented.
+    var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
             alertContinuation != nil
         } set: { newIsPresented in

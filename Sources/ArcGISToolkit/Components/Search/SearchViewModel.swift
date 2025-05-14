@@ -428,15 +428,19 @@ private extension Graphic {
 private extension Symbol {
     /// A search result marker symbol.
     static func searchResult() -> MarkerSymbol {
-        let image = UIImage.mapPin
-        let symbol = PictureMarkerSymbol(image: image)
-        symbol.offsetY = image.size.height / 2.0
+        var symbol: MarkerSymbol
+        if let image = UIImage.mapPin {
+            symbol = PictureMarkerSymbol(image: image)
+            symbol.offsetY = image.size.height / 2.0
+        } else {
+            symbol = SimpleMarkerSymbol()
+        }
         return symbol
     }
 }
 
 extension UIImage {
-    static var mapPin: UIImage {
-        return UIImage(named: "MapPin", in: .toolkitModule, with: nil)!
+    static var mapPin: UIImage? {
+        UIImage(named: "MapPin", in: .toolkitModule, with: nil)
     }
 }

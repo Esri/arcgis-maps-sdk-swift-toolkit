@@ -87,10 +87,10 @@ public struct Compass: View {
                 .opacity(opacity)
                 .frame(width: size, height: size)
                 .onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 }
-                .onChange(heading) { newHeading in
-                    let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
+                .onChange(of: heading) {
+                    let newOpacity: Double = shouldHide(forHeading: heading) ? .zero : 1
                     guard opacity != newOpacity else { return }
-                    withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {
+                    withAnimation(.default.delay(shouldHide(forHeading: heading) ? 0.25 : 0)) {
                         opacity = newOpacity
                     }
                 }
@@ -131,21 +131,12 @@ private extension View {
     @available(visionOS, unavailable)
     @ViewBuilder
     func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
-        if #available(iOS 17.0, *) {
-            if enabled {
-                sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
-                    if (!oldValue.isZero && newValue.isZero) ||
-                        (oldValue.isZero && !newValue.isZero) {
-                        return true
-                    } else {
-                        return false
-                    }
-                }
-            } else {
-                self
+        if enabled {
+            sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+                (!oldValue.isZero && newValue.isZero) ||
+                (oldValue.isZero && !newValue.isZero)
             }
         } else {
-            // Fallback on earlier versions
             self
         }
     }
@@ -204,7 +195,6 @@ public extension Compass {
     }
     
     /// Enables sensory feedback when the heading snaps to `zero`.
-    @available(iOS 17, *)
     func snapToZeroSensoryFeedback() -> Self {
         var copy = self
         copy.snapToZeroSensoryFeedbackEnabled = true
