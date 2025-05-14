@@ -170,10 +170,10 @@ public struct Scalebar: View {
             }
         }
         .opacity(opacity)
-        .onChange(spatialReference) { viewModel.update($0) }
-        .onChange(unitsPerPoint) { viewModel.update($0) }
-        .onChange(viewpoint) {
-            viewModel.update($0)
+        .onChange(of: spatialReference) { viewModel.update(spatialReference) }
+        .onChange(of: unitsPerPoint) { viewModel.update(unitsPerPoint) }
+        .onChange(of: viewpoint) {
+            viewModel.update(viewpoint)
             viewModel.updateScale()
             if settings.autoHide {
                 if opacity != 1 {

@@ -1,4 +1,4 @@
-// Copyright 2021 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// A category of examples.
-struct Category {
-    /// The name of this category.
-    let name: String
-    /// The examples in this category.
-    let examples: [Example]
-}
+import SwiftUI
 
-extension Category: Equatable {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.name == rhs.name
-    }
-}
-
-extension Category: Hashable {
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
+struct NavigationLayerTestViews: View {
+    var body: some View {
+        List {
+            NavigationLink("NavigationLayer Test Case 1", destination: NavigationLayerTestCase1View())
+            NavigationLink("NavigationLayer Test Case 2", destination: NavigationLayerTestCase2View())
+            NavigationLink("NavigationLayer Test Case 3", destination: NavigationLayerTestCase3View())
+        }
     }
 }

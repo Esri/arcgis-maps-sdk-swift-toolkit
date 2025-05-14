@@ -48,12 +48,7 @@ struct SiteAndFacilitySelector: View {
                 .padding([.leading, .top, .trailing])
             if (facilityListIsVisible && matchingFacilities.isEmpty) || (!facilityListIsVisible && matchingSites.isEmpty) {
                 Spacer()
-                if #available(iOS 17, *) {
-                    ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
-                } else {
-                    Text(String.noMatchesFound)
-                        .frame(maxHeight: .infinity)
-                }
+                ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
                 Spacer()
             } else if facilityListIsVisible {
                 facilityList
@@ -101,7 +96,7 @@ struct SiteAndFacilitySelector: View {
 #if !os(visionOS)
             .listStyle(.plain)
 #endif
-            .onChange(viewModel.selection) { _ in
+            .onChange(of: viewModel.selection) {
                 if let floorFacility = viewModel.selection?.facility {
                     withAnimation {
                         proxy.scrollTo(
@@ -134,7 +129,7 @@ struct SiteAndFacilitySelector: View {
                     .disableAutocorrection(true)
                     .focused($textFieldIsFocused)
                     .keyboardType(.alphabet)
-                    .onChange(facilityListIsVisible) { _ in
+                    .onChange(of: facilityListIsVisible) {
                         query.removeAll()
                         textFieldIsFocused = false
                     }
@@ -148,7 +143,7 @@ struct SiteAndFacilitySelector: View {
             .background(.quinary)
             .clipShape(.rect(cornerRadius: 10))
             if textFieldIsFocused {
-                Button(String.cancel) {
+                Button.cancel {
                     query.removeAll()
                     textFieldIsFocused = false
                 }

@@ -15,46 +15,47 @@
 import ArcGIS
 import SwiftUI
 
-/// <#Description#>
+/// A view for a utility associations form element.
 struct UtilityAssociationsFormElementView: View {
-    /// <#Description#>
-    @EnvironmentObject private var formViewModel: FormViewModel
+    /// The view model for the form.
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// <#Description#>
+    /// The set of utility associations filter results for the element.
     @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
     
-    /// <#Description#>
+    /// The backing utility associations form element.
     let element: UtilityAssociationsFormElement
     
     var body: some View {
         FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
             if $0.resultCount > 0 {
                 UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                    .environmentObject(formViewModel)
+                    .environment(internalFeatureFormViewModel)
             } else {
                 nil
             }
         })
         .task {
-            try? await element.fetchAssociationsFilterResults()
-            associationsFilterResults = element.associationsFilterResults
+            if let results = try? await element.associationsFilterResults {
+                associationsFilterResults = results
+            }
         }
     }
 }
 
-/// <#Description#>
+/// A view for a utility association group result.
 private struct UtilityAssociationGroupResultView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// The view model for the form.
-    @EnvironmentObject private var formViewModel: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// <#Description#>
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    /// The model for the navigation layer.
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
-    /// <#Description#>
+    /// The backing utility association group result.
     let utilityAssociationGroupResult: UtilityAssociationGroupResult
     
     var body: some View {
@@ -68,7 +69,7 @@ private struct UtilityAssociationGroupResultView: View {
                             )
                         }
                     }
-                    if formViewModel.featureForm.hasEdits {
+                    if internalFeatureFormViewModel.featureForm.hasEdits {
                         setAlertContinuation?(true, navigationAction)
                     } else {
                         navigationAction()
@@ -81,20 +82,20 @@ private struct UtilityAssociationGroupResultView: View {
             // This view is considered the tail end of a navigable FeatureForm.
             // When a user is backing out of a navigation path, this view
             // appearing is considered a change to the presented FeatureForm.
-            formChangedAction?(formViewModel.featureForm)
+            formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
     }
 }
 
-/// <#Description#>
+/// A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
-    /// <#Description#>
-    @EnvironmentObject private var formViewModel: FormViewModel
+    /// The view model for the form.
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// <#Description#>
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    /// The model for the navigation layer.
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
-    /// <#Description#>
+    /// The referenced utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
@@ -102,8 +103,8 @@ private struct UtilityAssociationsFilterResultListRowView: View {
         Button {
             navigationLayerModel.push {
                 UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-                    .navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
-                    .environmentObject(formViewModel)
+                    .navigationLayerTitle(listRowTitle, subtitle: internalFeatureFormViewModel.title)
+                    .environment(internalFeatureFormViewModel)
             }
         } label: {
             HStack {
@@ -116,22 +117,32 @@ private struct UtilityAssociationsFilterResultListRowView: View {
                 }
                 .lineLimit(1)
                 Spacer()
-                Text(utilityAssociationsFilterResult.resultCount.formatted())
-                Image(systemName: "chevron.right")
+                Group {
+                    Text(utilityAssociationsFilterResult.resultCount.formatted())
+                    Image(systemName: "chevron.right")
+                }
+                .foregroundColor(.secondary)
             }
+#if os(iOS)
+            // Make the entire row tappable.
+            .contentShape(.rect)
+#endif
         }
+        // Disables the blue tint on iOS and allows the button to fill the
+        // entire row on Catalyst and visionOS.
+        .buttonStyle(.plain)
     }
 }
 
-/// <#Description#>
+/// A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
-    /// <#Description#>
-    @EnvironmentObject private var formViewModel: FormViewModel
+    /// The view model for the form.
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// <#Description#>
-    @EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+    /// The model for the navigation layer.
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
-    /// <#Description#>
+    /// The backing utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
@@ -143,25 +154,30 @@ private struct UtilityAssociationsFilterResultView: View {
                             utilityAssociationGroupResult.name,
                             subtitle: utilityAssociationsFilterResult.filter.title
                         )
-                        .environmentObject(formViewModel)
+                        .environment(internalFeatureFormViewModel)
                 }
             } label: {
                 HStack {
                     Text(utilityAssociationGroupResult.name)
                     Spacer()
-                    Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                    Group {
+                        Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                        Image(systemName: "chevron.right")
+                    }
+                    .foregroundColor(.secondary)
                 }
             }
+            .tint(.primary)
         }
     }
 }
 
-/// <#Description#>
+/// A view for a utility association result.
 private struct UtilityAssociationResultView: View {
-    /// <#Description#>
+    /// The closure to call when the utility association result is selected.
     let selectionAction: (() -> Void)
     
-    /// <#Description#>
+    /// The backing utility association result.
     let result: UtilityAssociationResult
     
     var body: some View {
@@ -176,6 +192,7 @@ private struct UtilityAssociationResultView: View {
                     Text(title)
                     Text(description)
                         .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
                 .lineLimit(1)
                 Spacer()
@@ -192,8 +209,11 @@ private struct UtilityAssociationResultView: View {
                 .background(Color(uiColor: .systemBackground))
                 .cornerRadius(5)
                 .font(.caption2)
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.secondary)
             }
         }
+        .tint(.primary)
     }
 }
 

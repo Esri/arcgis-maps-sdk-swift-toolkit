@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for text input.
 struct TextInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -59,27 +59,13 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onChange(isFocused) { isFocused in
-                if isFocused {
-                    model.focusedElement = element
-                } else if model.focusedElement == element {
-                    model.focusedElement = nil
-                }
-            }
-            .onChange(model.focusedElement) { focusedElement in
-                // Another form input took focus
-                if focusedElement != element {
-                    isFocused  = false
-                }
-            }
-            .onChange(text) { text in
+            .onChange(of: text) {
                 element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
+                internalFeatureFormViewModel.evaluateExpressions()
             }
             .onTapGesture {
                 if element.isMultiline {
                     fullScreenTextInputIsPresented = true
-                    model.focusedElement = element
                 }
             }
 #if !os(visionOS)
@@ -105,10 +91,10 @@ private extension TextInput {
                         .lineLimit(5)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, model: model)
+                            FullScreenTextInput(text: $text, element: element, internalFeatureFormViewModel: internalFeatureFormViewModel)
                                 .padding()
 #if targetEnvironment(macCatalyst)
-                                .environmentObject(model)
+                                .environment(internalFeatureFormViewModel)
 #endif
                         }
                         .frame(minHeight: 100, alignment: .top)
@@ -120,20 +106,30 @@ private extension TextInput {
                         axis: .horizontal
                     )
                     .accessibilityIdentifier("\(element.label) Text Input")
+                    .focused($isFocused)
                     .keyboardType(keyboardType)
 #if os(visionOS)
                     // No need for hover effect since it will be applied
                     // properly at 'formInputStyle'.
                     .hoverEffectDisabled()
 #endif
+                    .onChange(of: isFocused) {
+                        internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    }
+                    .onChange(of: internalFeatureFormViewModel.focusedElement) {
+                        // Another form input took focus.
+                        if internalFeatureFormViewModel.focusedElement != element {
+                            isFocused  = false
+                        }
+                    }
                 }
             }
-            .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
+                        // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
                         positiveNegativeButton
                         Spacer()
                     }
@@ -148,8 +144,8 @@ private extension TextInput {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
-                        model.focusedElement = element
-                        model.focusedElement = nil
+                        internalFeatureFormViewModel.focusedElement = element
+                        internalFeatureFormViewModel.focusedElement = nil
                     }
                     text.removeAll()
                 }
@@ -158,7 +154,7 @@ private extension TextInput {
 #if !os(visionOS)
             if isBarcodeScanner {
                 Button {
-                    model.focusedElement = element
+                    internalFeatureFormViewModel.focusedElement = element
                     scannerIsPresented = true
                 } label: {
                     Image(systemName: "barcode.viewfinder")
@@ -221,13 +217,13 @@ private extension TextInput {
         @Environment(\.dismiss) private var dismiss
         
         /// A Boolean value indicating whether the text field is focused.
-        @FocusState private var textFieldIsFocused: Bool
+        @FocusState private var isFocused: Bool
         
         /// The element the input belongs to.
         let element: FieldFormElement
         
         /// The view model for the form.
-        let model: FormViewModel
+        let internalFeatureFormViewModel: InternalFeatureFormViewModel
         
         var body: some View {
             HStack {
@@ -242,13 +238,16 @@ private extension TextInput {
             }
             RepresentedUITextView(initialText: text) { text in
                 element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
+                internalFeatureFormViewModel.evaluateExpressions()
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }
-            .focused($textFieldIsFocused, equals: true)
+            .focused($isFocused)
             .onAppear {
-                textFieldIsFocused = true
+                isFocused = true
+            }
+            .onChange(of: isFocused) {
+                internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
             }
             Spacer()
             InputFooter(element: element)

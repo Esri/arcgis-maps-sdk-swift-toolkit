@@ -20,12 +20,8 @@ extension Button<Text> {
     /// button.
     /// - Returns: A button.
     static nonisolated func cancel(action: @escaping @MainActor () -> Void) -> Self {
-        return Button(role: .cancel, action: action) {
-            Text(
-                "Cancel",
-                bundle: .toolkitModule,
-                comment: "Title for a button that cancels an action."
-            )
+        Button(role: .cancel, action: action) {
+            Text(LocalizedStringResource.cancel)
         }
     }
     
@@ -34,8 +30,19 @@ extension Button<Text> {
     /// button.
     /// - Returns: A button.
     static nonisolated func done(action: @escaping @MainActor () -> Void) -> Self {
-        return Button(action: action) {
+        Button(action: action) {
             Text.done
+                .fontWeight(.semibold)
+        }
+    }
+    
+    /// Returns a button with the title "ok" and the given action.
+    /// - Parameter action: The action to perform when the user triggers the
+    /// button.
+    /// - Returns: A button.
+    static nonisolated func ok(action: @escaping @MainActor () -> Void) -> Self {
+        Button(action: action) {
+            Text(LocalizedStringResource.ok)
         }
     }
 }
