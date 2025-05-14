@@ -25,7 +25,7 @@ struct FeatureQueryConditionsView: View {
                 if conditions.isEmpty {
                     NoConditionsAddedView(conditions: $conditions)
                 } else {
-                    ConditionsForm()
+                    ConditionsForm(conditions: $conditions)
                 }
             }
             .navigationLayerTitle("Filter Features")
