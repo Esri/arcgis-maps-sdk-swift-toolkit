@@ -18,6 +18,9 @@ extension FeatureFormView.AddUtilityAssociationView {
     /// A model to hold properties common to the views in the "add utility association" workflow.
     @Observable
     class Model {
+        /// The conditions used to query features to add as an association.
+        var featureQueryConditions = [String]()
+        
         /// The model for the navigation layer.
         var navigationLayerModel: NavigationLayerModel? = nil
         

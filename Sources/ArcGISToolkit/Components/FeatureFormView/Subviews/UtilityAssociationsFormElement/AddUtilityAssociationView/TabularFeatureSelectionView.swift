@@ -34,10 +34,13 @@ extension FeatureFormView.AddUtilityAssociationView {
             List {
                 Section {
                     HStack {
-                        Image(systemName: "magnifyingglass")
-                        TextField(text: $searchTerm) {
-                            Text.searchFeatures
+                        Group {
+                            Image(systemName: "magnifyingglass")
+                            TextField(text: $searchTerm) {
+                                Text.searchFeatures
+                            }
                         }
+                        .foregroundStyle(.secondary)
                         Spacer()
                         Button {
                             withAnimation {
@@ -49,10 +52,10 @@ extension FeatureFormView.AddUtilityAssociationView {
                             } icon: {
                                 Image(systemName: "line.3.horizontal.decrease.circle.fill")
                             }
+                            .tint(addUtilityAssociationViewModel.featureQueryConditions.isEmpty ? .secondary : .accentColor)
                             .labelStyle(.iconOnly)
                         }
                     }
-                    .foregroundStyle(.secondary)
                 }
                 
                 Section {

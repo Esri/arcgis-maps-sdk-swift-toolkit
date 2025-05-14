@@ -16,7 +16,7 @@ import SwiftUI
 
 extension FeatureQueryConditionsView {
     struct NoConditionsAddedView: View {
-        @Binding var conditions: [String]
+        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
         
         var body: some View {
             ContentUnavailableView {
@@ -37,7 +37,9 @@ extension FeatureQueryConditionsView {
                 )
             } actions: {
                 Button {
-                    conditions.append("")
+                    withAnimation {
+                        addUtilityAssociationViewModel.featureQueryConditions.append("")
+                    }
                 } label: {
                     Label {
                         Text(
@@ -54,10 +56,4 @@ extension FeatureQueryConditionsView {
             }
         }
     }
-}
-
-#Preview {
-    @Previewable @State var conditions = [String]()
-    
-    FeatureQueryConditionsView.NoConditionsAddedView(conditions: $conditions)
 }

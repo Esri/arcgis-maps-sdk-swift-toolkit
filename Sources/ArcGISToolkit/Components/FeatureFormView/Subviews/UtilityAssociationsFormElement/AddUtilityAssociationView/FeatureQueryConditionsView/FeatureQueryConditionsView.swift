@@ -17,18 +17,17 @@ import SwiftUI
 struct FeatureQueryConditionsView: View {
     @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
     
-    @State private var conditions = [String]()
-    
     var body: some View {
         NavigationLayer { _ in
             Group {
-                if conditions.isEmpty {
-                    NoConditionsAddedView(conditions: $conditions)
+                if addUtilityAssociationViewModel.featureQueryConditions.isEmpty {
+                    NoConditionsAddedView()
                 } else {
-                    ConditionsForm(conditions: $conditions)
+                    ConditionsForm()
                 }
             }
             .navigationLayerTitle("Filter Features")
+            .transition(.scale)
         } headerTrailing: {
             Button {
                 withAnimation {
