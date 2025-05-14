@@ -24,6 +24,7 @@ struct TestRunnerApp: App {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***init() {
-***REMOVED******REMOVED***ArcGISEnvironment.apiKey = APIKey("<#APIKey#>")
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.apiKey = APIKey("AAPK83fdb937974a43fda5dcc544a4d2c831Kt05knTmR1dZSbizfPRt-8xC9ieZqaew87pYsuESt1kK2GrhUpOSeDlkVqoCQgho")
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = APIKey("AAPK64f41d7ae01a4c64b8acbb63a830b592D0LE_PN47pvnwe9B9BObfw99iNYjbeKCJLOcEJKnToAS-C_hG-FMdjneelPvWXQ7")
 ***REMOVED***
 ***REMOVED***

@@ -76,6 +76,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The visibility of the close button.
 ***REMOVED***var closeButtonVisibility: Visibility = .automatic
 ***REMOVED***
+***REMOVED******REMOVED***/ The visibility of the "save" and "discard" buttons.
+***REMOVED***var editingButtonsVisibility: Visibility = .automatic
+***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when a ``EditingEvent`` occurs.
 ***REMOVED***var onFormEditingEventAction: ((EditingEvent) -> Void)?
 ***REMOVED***
@@ -84,6 +87,9 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Continuation information for the alert.
 ***REMOVED***@State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ An error thrown from finish editing.
+***REMOVED***@State private var finishEditingError: (any Error)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the presented feature form has edits.
 ***REMOVED***@State private var hasEdits: Bool = false
@@ -94,6 +100,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***public init(featureForm: Binding<FeatureForm?>) {
 ***REMOVED******REMOVED***self.rootFeatureForm = featureForm.wrappedValue
 ***REMOVED******REMOVED***self.presentedForm = featureForm
@@ -102,7 +109,7 @@ public struct FeatureFormView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***if let rootFeatureForm {
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLayer {
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLayer { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InternalFeatureFormView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: rootFeatureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -118,14 +125,23 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: This is unintended usage of NavigationLayer's headerTrailing. May not render properly.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** footer: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   hasEdits,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   editingButtonsVisibility != .hidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormFooter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm: presentedForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction: onFormEditingEventAction,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility: $validationErrorVisibility
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility: $validationErrorVisibility,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError: $finishEditingError
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: This is unintended usage of NavigationLayer's footer. May not render properly.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.backNavigationAction { navigationLayerModel in
@@ -145,9 +161,10 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Alert for abandoning unsaved edits
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***(presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertIsPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertForUnsavedEditsIsPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***actions: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard Edits", role: .destructive) {
@@ -169,13 +186,13 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#warning("Handle thrown errors.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = error
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue Editing", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertIsPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertForUnsavedEditsIsPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***,
@@ -185,6 +202,28 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.")
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to the form will be lost.")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Alert for finish editing errors
+***REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The form wasn't submitted",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The title shown when a form could not be submitted."
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: alertForFinishEditingErrorsIsPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***actions: { ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let finishEditingFailed = String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Finish editing failed.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "The message shown when a form could not be submitted."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let finishEditingError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(finishEditingFailed + "\n\n" + String(describing: finishEditingError))
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(finishEditingFailed)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
@@ -203,24 +242,39 @@ public struct FeatureFormView: View {
 ***REMOVED***
 
 public extension FeatureFormView {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ Represents events that occur during the form editing lifecycle.
+***REMOVED******REMOVED***/ These events notify you when the user has either saved or discarded their edits.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***enum EditingEvent {
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED******REMOVED***/ Indicates that the user has discarded their edits.
+***REMOVED******REMOVED******REMOVED***/ - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
 ***REMOVED******REMOVED***case discardedEdits(willNavigate: Bool)
-***REMOVED******REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED******REMOVED***/ Indicates that the user has saved their edits.
+***REMOVED******REMOVED******REMOVED***/ - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
 ***REMOVED******REMOVED***case savedEdits(willNavigate: Bool)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the close button on the form.
 ***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the close button.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***func closeButton(_ visibility: Visibility) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.closeButtonVisibility = visibility
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of the save and discard buttons on the form.
+***REMOVED******REMOVED***/ - Parameter visibility: The visibility of the save and discard buttons.
+***REMOVED******REMOVED***/ - Since: 200.8
+***REMOVED***func editingButtons(_ visibility: Visibility) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.editingButtonsVisibility = visibility
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets a closure to perform when a form editing event occurs.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the form editing event occurs.
+***REMOVED******REMOVED***/ - Since: 200.8
 ***REMOVED***func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.onFormEditingEventAction = action
@@ -229,8 +283,19 @@ public extension FeatureFormView {
 ***REMOVED***
 
 extension FeatureFormView {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the alert is presented.
-***REMOVED***var alertIsPresented: Binding<Bool> {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the finish editing error alert is presented.
+***REMOVED***var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
+***REMOVED******REMOVED***Binding {
+***REMOVED******REMOVED******REMOVED***finishEditingError != nil
+***REMOVED*** set: { newIsPresented in
+***REMOVED******REMOVED******REMOVED***if !newIsPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the unsaved edits alert is presented.
+***REMOVED***var alertForUnsavedEditsIsPresented: Binding<Bool> {
 ***REMOVED******REMOVED***Binding {
 ***REMOVED******REMOVED******REMOVED***alertContinuation != nil
 ***REMOVED*** set: { newIsPresented in

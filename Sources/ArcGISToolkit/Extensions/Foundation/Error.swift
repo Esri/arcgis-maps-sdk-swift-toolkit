@@ -20,9 +20,9 @@ extension Error {
 ***REMOVED***var isNoInternetConnectionError: Bool {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case let urlError as URLError:
-***REMOVED******REMOVED******REMOVED***return urlError.code == .notConnectedToInternet
+***REMOVED******REMOVED******REMOVED***urlError.code == .notConnectedToInternet
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED******REMOVED***false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

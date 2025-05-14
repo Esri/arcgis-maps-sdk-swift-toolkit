@@ -21,26 +21,27 @@ struct InternalFeatureFormView: View {
 #warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
 ***REMOVED***@Environment(\.formElementPadding) var formElementPadding
 ***REMOVED***
-***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED******REMOVED***/ The model for the navigation layer.
+***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@StateObject private var model: FormViewModel
+***REMOVED***@State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
 ***REMOVED***init(featureForm: FeatureForm) {
-***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+***REMOVED******REMOVED***internalFeatureFormViewModel = InternalFeatureFormViewModel(featureForm: featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(internalFeatureFormViewModel.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentsElement = internalFeatureFormViewModel.featureForm.defaultAttachmentsElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The Toolkit currently only supports AttachmentsFormElements via the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** default attachments element. Once AttachmentsFormElements can be authored
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this can call makeElement(_:) instead and makeElement(_:) should have a
@@ -49,26 +50,26 @@ struct InternalFeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
+***REMOVED******REMOVED******REMOVED***.onChange(of: internalFeatureFormViewModel.focusedElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = internalFeatureFormViewModel.focusedElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
-***REMOVED******REMOVED******REMOVED******REMOVED***model.title = newTitle
+***REMOVED******REMOVED******REMOVED***.onTitleChange(of: internalFeatureFormViewModel.featureForm) { newTitle in
+***REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.title = newTitle
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationLayerTitle(model.title)
+***REMOVED******REMOVED******REMOVED***.navigationLayerTitle(internalFeatureFormViewModel.title)
 ***REMOVED***
 #if os(iOS)
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 #endif
-***REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
+***REMOVED******REMOVED******REMOVED***await internalFeatureFormViewModel.initialEvaluation()
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***formChangedAction?(model.featureForm)
+***REMOVED******REMOVED******REMOVED***formChangedAction?(internalFeatureFormViewModel.featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -134,7 +135,7 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED***.padding(.top, formElementPadding)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UtilityAssociationsFormElementView(element: element)
-***REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(element.description)

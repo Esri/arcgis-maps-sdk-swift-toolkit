@@ -19,7 +19,7 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Note: Currently, ``AttachmentsFormElement`` only supports
 ***REMOVED******REMOVED***/ ``AttachmentsFeatureElementDisplayType/preview``.
-***REMOVED***public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
+***REMOVED***var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType.preview
 ***REMOVED***
 ***REMOVED***
@@ -27,14 +27,14 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ The feature attachments associated with this element.
 ***REMOVED******REMOVED***/ This property will be empty if the element has not yet been evaluated.
-***REMOVED***public var featureAttachments: [FeatureAttachment] {
+***REMOVED***var featureAttachments: [FeatureAttachment] {
 ***REMOVED******REMOVED***get async throws {
 ***REMOVED******REMOVED******REMOVED***try await attachments
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A descriptive label that appears with the element. Can be an empty string.
-***REMOVED***public var title: String {
+***REMOVED***var title: String {
 ***REMOVED******REMOVED***get {
 ***REMOVED******REMOVED******REMOVED***label
 ***REMOVED***

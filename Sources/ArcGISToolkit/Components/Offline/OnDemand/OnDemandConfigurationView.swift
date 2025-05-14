@@ -32,14 +32,8 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED***/ The max scale of the map to take offline.
 ***REMOVED***@State private var maxScale: CacheScale = .street
 ***REMOVED***
-***REMOVED******REMOVED***/ The visible area of the map.
-***REMOVED***@State private var visibleArea: Envelope?
-***REMOVED***
 ***REMOVED******REMOVED***/ The selected map area.
 ***REMOVED***@State private var selectedRect: CGRect = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ The extent of the selected map area.
-***REMOVED***@State private var selectedExtent: Envelope?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating that the map is ready.
 ***REMOVED***@State private var mapIsReady = false
@@ -48,7 +42,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the download button is disabled.
-***REMOVED***private var downloadIsDisabled: Bool { selectedExtent == nil || hasNoInternetConnection ***REMOVED***
+***REMOVED***private var downloadIsDisabled: Bool { selectedRect == .zero || hasNoInternetConnection ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of trying to load the map.
 ***REMOVED***@State private var loadResult: Result<Void, Error>?
@@ -122,9 +116,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OnDemandMapAreaSelectorView(selectedRect: $selectedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(selectedRect) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedExtent = mapViewProxy.envelope(fromViewRect: selectedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.safeAreaInset(edge: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***bottomPane(mapView: mapViewProxy)
@@ -163,7 +154,9 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsReady = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.preventMapInteractionFromMovingSheet()
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
+***REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
@@ -209,7 +202,7 @@ struct OnDemandConfigurationView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let selectedExtent = mapView.envelope(fromViewRect: selectedRect) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await mapView.exportImage()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = image?.crop(to: selectedRect)
@@ -270,23 +263,6 @@ struct OnDemandConfigurationView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension View {
-***REMOVED******REMOVED***/ Prevent sheet from moving when interacting with map view.
-***REMOVED***@ViewBuilder
-***REMOVED***func preventMapInteractionFromMovingSheet() -> some View {
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(RotateGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.highPriorityGesture(DragGesture())
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 ***REMOVED***/ A View that allows renaming of a map area.
 private struct RenameButton: View {
 ***REMOVED******REMOVED***/ The current title.
@@ -322,7 +298,7 @@ private struct RenameButton: View {
 ***REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED***.alert(enterName, isPresented: $alertIsShowing) {
 ***REMOVED******REMOVED******REMOVED***TextField(text: $proposedNewTitle, prompt: areaName) {***REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(String.ok, action: submitNewTitle)
+***REMOVED******REMOVED******REMOVED***Button.ok(action: submitNewTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!proposedTitleIsValid)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardShortcut(.defaultAction)
 ***REMOVED******REMOVED******REMOVED***Button.cancel {***REMOVED***
@@ -333,8 +309,8 @@ private struct RenameButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A message explaining that the map area name must be unique."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(proposedNewTitle) {
-***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck($0)
+***REMOVED******REMOVED***.onChange(of: proposedNewTitle) {
+***REMOVED******REMOVED******REMOVED***proposedTitleIsValid = isValidCheck(proposedNewTitle)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

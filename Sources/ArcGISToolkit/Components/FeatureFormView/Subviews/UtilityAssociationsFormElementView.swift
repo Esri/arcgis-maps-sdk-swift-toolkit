@@ -15,46 +15,47 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility associations form element.
 struct UtilityAssociationsFormElementView: View {
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The set of utility associations filter results for the element.
 ***REMOVED***@State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility associations form element.
 ***REMOVED***let element: UtilityAssociationsFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
 ***REMOVED******REMOVED******REMOVED***if $0.resultCount > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***nil
 ***REMOVED******REMOVED***
 ***REMOVED***)
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await element.fetchAssociationsFilterResults()
-***REMOVED******REMOVED******REMOVED***associationsFilterResults = element.associationsFilterResults
+***REMOVED******REMOVED******REMOVED***if let results = try? await element.associationsFilterResults {
+***REMOVED******REMOVED******REMOVED******REMOVED***associationsFilterResults = results
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility association group result.
 private struct UtilityAssociationGroupResultView: View {
 ***REMOVED***@Environment(\.formChangedAction) var formChangedAction
 ***REMOVED***
 ***REMOVED***@Environment(\.setAlertContinuation) var setAlertContinuation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED******REMOVED***/ The model for the navigation layer.
+***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility association group result.
 ***REMOVED***let utilityAssociationGroupResult: UtilityAssociationGroupResult
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -68,7 +69,7 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if formViewModel.featureForm.hasEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if internalFeatureFormViewModel.featureForm.hasEdits {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setAlertContinuation?(true, navigationAction)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***navigationAction()
@@ -81,20 +82,20 @@ private struct UtilityAssociationGroupResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This view is considered the tail end of a navigable FeatureForm.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** When a user is backing out of a navigation path, this view
 ***REMOVED******REMOVED******REMOVED******REMOVED*** appearing is considered a change to the presented FeatureForm.
-***REMOVED******REMOVED******REMOVED***formChangedAction?(formViewModel.featureForm)
+***REMOVED******REMOVED******REMOVED***formChangedAction?(internalFeatureFormViewModel.featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED******REMOVED***/ The model for the navigation layer.
+***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The referenced utility associations filter result.
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -102,8 +103,8 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***navigationLayerModel.push {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(listRowTitle, subtitle: formViewModel.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationLayerTitle(listRowTitle, subtitle: internalFeatureFormViewModel.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
@@ -116,22 +117,32 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationsFilterResult.resultCount.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
+#if os(iOS)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Make the entire row tappable.
+***REMOVED******REMOVED******REMOVED***.contentShape(.rect)
+#endif
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Disables the blue tint on iOS and allows the button to fill the
+***REMOVED******REMOVED******REMOVED*** entire row on Catalyst and visionOS.
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@EnvironmentObject private var formViewModel: FormViewModel
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@EnvironmentObject private var navigationLayerModel: NavigationLayerModel
+***REMOVED******REMOVED***/ The model for the navigation layer.
+***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility associations filter result.
 ***REMOVED***let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -143,25 +154,30 @@ private struct UtilityAssociationsFilterResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityAssociationGroupResult.name,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***subtitle: utilityAssociationsFilterResult.filter.title
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.associationResults.count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(utilityAssociationGroupResult.associationResults.count.formatted())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.tint(.primary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ <#Description#>
+***REMOVED***/ A view for a utility association result.
 private struct UtilityAssociationResultView: View {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The closure to call when the utility association result is selected.
 ***REMOVED***let selectionAction: (() -> Void)
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The backing utility association result.
 ***REMOVED***let result: UtilityAssociationResult
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -176,6 +192,7 @@ private struct UtilityAssociationResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -192,8 +209,11 @@ private struct UtilityAssociationResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.right")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.tint(.primary)
 ***REMOVED***
 ***REMOVED***
 

@@ -27,7 +27,7 @@ struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
 ***REMOVED******REMOVED***/ The content to display once the image loads.
 ***REMOVED***var loadedContent: (Image) -> LoadedContent
 ***REMOVED******REMOVED***/ The result of loading the image.
-***REMOVED***@State var result: Result<UIImage, Error>?
+***REMOVED***@State private var result: Result<UIImage, Error>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `LoadableImageView`.
 ***REMOVED******REMOVED***/ - Parameters:

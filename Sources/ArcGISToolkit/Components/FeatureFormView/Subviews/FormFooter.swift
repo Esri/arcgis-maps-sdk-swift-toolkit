@@ -16,6 +16,7 @@
 ***REMOVED***
 
 struct FormFooter: View {
+***REMOVED******REMOVED***/ The backing feature form.
 ***REMOVED***let featureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to perform when a choice is made.
@@ -24,7 +25,11 @@ struct FormFooter: View {
 ***REMOVED******REMOVED***/ to the ``FeatureFormView``.
 ***REMOVED***let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
 ***REMOVED***@Binding var validationErrorVisibility: Visibility
+***REMOVED***
+***REMOVED******REMOVED***/ An error thrown from finish editing.
+***REMOVED***@Binding var finishEditingError: (any Error)?
 ***REMOVED***
 ***REMOVED***@Environment(\.setAlertContinuation) var setAlertContinuation
 ***REMOVED***
@@ -47,8 +52,12 @@ struct FormFooter: View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if featureForm.validationErrors.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm.finishEditing()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm.finishEditing()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formHandlingEventAction?(.savedEdits(willNavigate: false))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finishEditingError = error
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible

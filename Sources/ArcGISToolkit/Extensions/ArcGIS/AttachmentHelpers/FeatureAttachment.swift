@@ -16,7 +16,7 @@
 import UIKit
 
 ***REMOVED***/ The type of an attachment in a FeatureAttachment.
-public enum FeatureAttachmentKind: Sendable {
+enum FeatureAttachmentKind: Sendable {
 ***REMOVED******REMOVED***/ An attachment of another type.
 ***REMOVED***case other
 ***REMOVED******REMOVED***/ An image.
@@ -29,7 +29,7 @@ public enum FeatureAttachmentKind: Sendable {
 ***REMOVED***case audio
 ***REMOVED***
 
-public protocol FeatureAttachment: Loadable {
+protocol FeatureAttachment: Loadable {
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***var featureAttachmentKind: FeatureAttachmentKind { get ***REMOVED***
 ***REMOVED***

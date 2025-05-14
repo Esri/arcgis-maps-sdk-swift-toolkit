@@ -18,7 +18,7 @@
 ***REMOVED***/ A view for text input.
 struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
@@ -59,27 +59,13 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED******REMOVED***.onChange(isFocused) { isFocused in
-***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
-***REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(text) { text in
+***REMOVED******REMOVED******REMOVED***.onChange(of: text) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fullScreenTextInputIsPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 #if !os(visionOS)
@@ -105,10 +91,10 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element, model: model)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element, internalFeatureFormViewModel: internalFeatureFormViewModel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 #if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
 #endif
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: 100, alignment: .top)
@@ -120,20 +106,30 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: .horizontal
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
 #if os(visionOS)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** No need for hover effect since it will be applied
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** properly at 'formInputStyle'.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hoverEffectDisabled()
 #endif
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: internalFeatureFormViewModel.focusedElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if internalFeatureFormViewModel.focusedElement != element {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -148,8 +144,8 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** instantaneous focus to enable validation.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text.removeAll()
 ***REMOVED******REMOVED******REMOVED***
@@ -158,7 +154,7 @@ private extension TextInput {
 #if !os(visionOS)
 ***REMOVED******REMOVED******REMOVED***if isBarcodeScanner {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = element
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scannerIsPresented = true
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "barcode.viewfinder")
@@ -221,13 +217,13 @@ private extension TextInput {
 ***REMOVED******REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the text field is focused.
-***REMOVED******REMOVED***@FocusState private var textFieldIsFocused: Bool
+***REMOVED******REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED******REMOVED***let element: FieldFormElement
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model for the form.
-***REMOVED******REMOVED***let model: FormViewModel
+***REMOVED******REMOVED***let internalFeatureFormViewModel: InternalFeatureFormViewModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
@@ -242,13 +238,16 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***RepresentedUITextView(initialText: text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
 ***REMOVED******REMOVED*** onTextViewDidEndEditing: { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
+***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
+***REMOVED******REMOVED******REMOVED******REMOVED***isFocused = true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) {
+***REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)

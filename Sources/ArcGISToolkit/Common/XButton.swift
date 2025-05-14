@@ -62,7 +62,6 @@ extension XButton {
 ***REMOVED***
 ***REMOVED***
 
-@available(iOS 17.0, *)
 #Preview {
 ***REMOVED***@Previewable @State var isPresented = true
 ***REMOVED***Button {

@@ -17,20 +17,20 @@ import Foundation
 
 extension FormAttachment: FeatureAttachment {
 ***REMOVED******REMOVED***/ The type of the attachment.
-***REMOVED***public var featureAttachmentKind: FeatureAttachmentKind {
+***REMOVED***var featureAttachmentKind: FeatureAttachmentKind {
 ***REMOVED******REMOVED***FeatureAttachmentKind(kind: kind)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The size of the attachment.
-***REMOVED***public var measuredSize: Measurement<UnitInformationStorage> {
+***REMOVED***var measuredSize: Measurement<UnitInformationStorage> {
 ***REMOVED******REMOVED***size
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func _load() async throws {
+***REMOVED***func _load() async throws {
 ***REMOVED******REMOVED***try await load()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public var _loadStatus: LoadStatus {
+***REMOVED***var _loadStatus: LoadStatus {
 ***REMOVED******REMOVED***loadStatus
 ***REMOVED***
 ***REMOVED***

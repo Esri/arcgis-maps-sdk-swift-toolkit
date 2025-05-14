@@ -28,8 +28,6 @@ public extension View {
 ***REMOVED******REMOVED***/   - content: A closure that returns the content of the floating panel.
 ***REMOVED******REMOVED***/ - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
 ***REMOVED******REMOVED***/ environments and a popover otherwise.
-***REMOVED***@available(iOS 16.0, *)
-***REMOVED***@available(macCatalyst 16.0, *)
 ***REMOVED***@available(visionOS, unavailable, message: "Use 'floatingPanel(attributionBarHeight:selectedDetent:horizontalAlignment:isPresented:maxWidth:_:)' instead.")
 ***REMOVED***func floatingPanel<Content>(
 ***REMOVED******REMOVED***attributionBarHeight: CGFloat = 0,

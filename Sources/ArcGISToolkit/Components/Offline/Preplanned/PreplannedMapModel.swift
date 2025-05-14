@@ -215,7 +215,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
+***REMOVED******REMOVED******REMOVED***if error is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset status to packaged if the job was cancelled.
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.info("DownloadPreplannedOfflineMapJob job cancelled.")
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .packaged
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Logger.offlineManager.error("DownloadPreplannedOfflineMapJob job failed with error: \(error).")
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Remove contents of mmpk directory when download fails.
 ***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectoryURL)
 ***REMOVED***

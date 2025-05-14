@@ -15,6 +15,11 @@
 ***REMOVED***
 
 extension Text {
+***REMOVED******REMOVED***/ Localized text for the word "Cancel".
+***REMOVED***static var cancel: Self {
+***REMOVED******REMOVED***.init(LocalizedStringResource.cancel)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Localized text for the word "Done".
 ***REMOVED***static var done: Self {
 ***REMOVED******REMOVED***.init(

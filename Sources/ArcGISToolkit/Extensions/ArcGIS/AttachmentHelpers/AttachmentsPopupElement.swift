@@ -16,12 +16,12 @@
 
 extension AttachmentsPopupElement: AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED***public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
+***REMOVED***var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType(kind: displayType)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The feature attachments associated with this element. This property will be empty if the element has not yet been evaluated.
-***REMOVED***public var featureAttachments: [FeatureAttachment] {
+***REMOVED***var featureAttachments: [FeatureAttachment] {
 ***REMOVED******REMOVED***get async throws {
 ***REMOVED******REMOVED******REMOVED***try await attachments.map { $0 as FeatureAttachment ***REMOVED***
 ***REMOVED***

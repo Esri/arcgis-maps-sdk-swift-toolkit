@@ -16,14 +16,14 @@
 
 extension AnyTransition {
 ***REMOVED***static var push: Self {
-***REMOVED******REMOVED***.asymmetric(
+***REMOVED******REMOVED***asymmetric(
 ***REMOVED******REMOVED******REMOVED***insertion: .move(edge: .trailing),
 ***REMOVED******REMOVED******REMOVED***removal: .move(edge: .leading)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static var pop: Self {
-***REMOVED******REMOVED***.asymmetric(
+***REMOVED******REMOVED***asymmetric(
 ***REMOVED******REMOVED******REMOVED***insertion: .move(edge: .leading),
 ***REMOVED******REMOVED******REMOVED***removal: .move(edge: .trailing)
 ***REMOVED******REMOVED***)

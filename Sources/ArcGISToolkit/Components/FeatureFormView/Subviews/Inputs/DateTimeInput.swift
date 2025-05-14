@@ -18,7 +18,7 @@
 ***REMOVED***/ A view for date/time input.
 struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
@@ -52,13 +52,13 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***dateEditor
-***REMOVED******REMOVED******REMOVED***.onChange(model.focusedElement) { focusedElement in
-***REMOVED******REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
+***REMOVED******REMOVED******REMOVED***.onChange(of: internalFeatureFormViewModel.focusedElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditing = internalFeatureFormViewModel.focusedElement == element
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(date) { date in
+***REMOVED******REMOVED******REMOVED***.onChange(of: date) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(date)
 ***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if newFormattedValue.isEmpty {
@@ -106,8 +106,8 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED*** else if !isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***XButton(.clear) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { internalFeatureFormViewModel.focusedElement = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
@@ -128,7 +128,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isEditing ? element : nil
+***REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = isEditing ? element : nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
