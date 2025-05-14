@@ -23,22 +23,22 @@ extension FeatureFormView {
         /// A Boolean value that indicates if a feature query is running.
         @State private var featureQueryIsRunning = false
         
-        /// A Boolean value indicating whether the feature selection view is presented.
-        @State private var featureSelectionViewIsPresented = false
-        
-        /// The set of identified/selected features.
-        @State private var identifiedFeatures = [ArcGISFeature]()
+        /// The model for the navigation layer.
+        @State private var navigationLayerModel: NavigationLayerModel? = nil
         
         /// The filter phrase for the network source name.
         @State private var networkSourceNameQuery = ""
         
+        /// A Boolean value indicating whether the spatial feature selection view is presented.
+        @State private var spatialFeatureSelectionViewIsPresented = false
+        
         var body: some View {
-            NavigationLayer { _ in
+            NavigationLayer { navigationLayerModel in
                 List {
                     Section {
                         Button {
                             withAnimation {
-                                featureSelectionViewIsPresented = true
+                                spatialFeatureSelectionViewIsPresented = true
                             }
                         } label: {
                             HStack {
@@ -60,6 +60,8 @@ extension FeatureFormView {
                     
                     Section {
                         HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundStyle(.secondary)
                             TextField(text: $networkSourceNameQuery) {
                                 Text.searchNetworkSource
                             }
@@ -79,13 +81,15 @@ extension FeatureFormView {
                             NetworkSourceListRow(
                                 layer: layer,
                                 featureQueryIsRunning: $featureQueryIsRunning,
-                                identifiedFeatures: $identifiedFeatures
                             )
                         }
                     }
                 }
                 .disabled(featureQueryIsRunning)
-                .navigationLayerTitle("Add Associations")
+                .navigationLayerTitle("Add Association")
+                .onAppear {
+                    self.navigationLayerModel = navigationLayerModel
+                }
             } headerTrailing: {
                 XButton(.dismiss) {
                     withAnimation {
@@ -103,10 +107,10 @@ extension FeatureFormView {
             #endif
             .transition(.move(edge: .bottom))
             .overlay {
-                if featureSelectionViewIsPresented {
-                    FeatureSelectionView(
-                        identifiedFeatures: $identifiedFeatures,
-                        isPresented: $featureSelectionViewIsPresented
+                if let navigationLayerModel, spatialFeatureSelectionViewIsPresented {
+                    SpatialFeatureSelectionView(
+                        navigationLayerViewModel: navigationLayerModel,
+                        isPresented: $spatialFeatureSelectionViewIsPresented
                     )
                 }
             }
@@ -131,7 +135,7 @@ private extension FeatureFormView.AddUtilityAssociationView {
 private extension Text {
     static var searchNetworkSource: Self {
         .init(
-            "\(Image(systemName: "magnifyingglass")) Search Network Source",
+            "Search Network Source",
             bundle: .toolkitModule,
             comment: "A label for a utility network source search field."
         )
