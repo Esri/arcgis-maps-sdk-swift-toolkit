@@ -22,11 +22,7 @@ extension FeatureFormView.AddUtilityAssociationView {
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
-        /// The model for the navigation layer.
-        let navigationLayerViewModel: NavigationLayerModel
-        
-        /// A Boolean value which indicates whether this view is presented.
-        @Binding var isPresented: Bool
+        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
         
         /// The set of identified/selected features.
         @State private var identifiedFeatures = [ArcGISFeature]()
@@ -79,14 +75,14 @@ extension FeatureFormView.AddUtilityAssociationView {
                     // TODO: Match design spec color and size
                     Button.cancel {
                         withAnimation {
-                            isPresented = false
+                            addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented = false
                         }
                     }
                     Button.done {
                         withAnimation {
-                            isPresented = false
+                            addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented = false
                         }
-                        navigationLayerViewModel.push {
+                        addUtilityAssociationViewModel.navigationLayerModel?.push {
                             TabularFeatureSelectionView(
                                 features: identifiedFeatures,
                                 sourceName: nil
