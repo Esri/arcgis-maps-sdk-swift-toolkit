@@ -17,6 +17,8 @@ import SwiftUI
 
 extension FeatureFormView.AddUtilityAssociationView {
     struct TabularFeatureSelectionView: View {
+        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+        
         /// The set of all possible features to add as an association.
         let features: [ArcGISFeature]
         
@@ -38,7 +40,9 @@ extension FeatureFormView.AddUtilityAssociationView {
                         }
                         Spacer()
                         Button {
-                            
+                            withAnimation {
+                                addUtilityAssociationViewModel.featureQueryConditionsViewIsPresented = true
+                            }
                         } label: {
                             Label {
                                 Text.filter
