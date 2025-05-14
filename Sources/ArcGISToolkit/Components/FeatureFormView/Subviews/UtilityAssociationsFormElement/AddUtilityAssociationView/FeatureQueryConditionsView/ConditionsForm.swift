@@ -16,60 +16,96 @@ import SwiftUI
 
 extension FeatureQueryConditionsView {
     struct ConditionsForm: View {
-        @Binding var conditions: [String]
+        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
         
         var body: some View {
+            addConditionButton
             Form {
-                Section {
-                    Picker(LocalizedStringResource.field.key, selection: .constant(1)) {
-                        
-                    }
-                    Picker(LocalizedStringResource.condition.key, selection: .constant(1)) {
-                        
-                    }
-                    TextField(LocalizedStringResource.value.key, text: .constant(""))
-                } header: {
-                    HStack {
-                        Text(
-                            "Condition 1",
-                            bundle: .toolkitModule,
-                            comment: "A label for the nth feature filtering condition."
-                        )
-                        .textCase(.none)
-                        Spacer()
-                        Button {
-                            
-                        } label: {
-                            Label {
-                                Text(
-                                    "Condition 1 options",
-                                    bundle: .toolkitModule,
-                                    comment: "Options for the nth condition"
-                                )
-                            } icon: {
-                                Image(systemName: "ellipsis")
-                            }
-                            .labelStyle(.iconOnly)
-                        }
-                        .foregroundStyle(.secondary)
-                        .contextMenu {
-                            Button(role: .destructive) {
-                                conditions.removeAll() /* TODO: Remove only current condition */
-                            } label: {
-                                Label {
-                                    Text(
-                                        "Remove condition",
-                                        bundle: .toolkitModule,
-                                        comment: "Remove the feature filtering condition."
-                                    )
-                                } icon: {
-                                    Image(systemName: "trash")
-                                }
-                            }
-                        }
-                    }
+                ForEach(Array(addUtilityAssociationViewModel.featureQueryConditions.enumerated()), id: \.offset) { offset, _ in
+                    ConditionConfigurationSection(sectionNumber: offset + 1)
                 }
             }
+        }
+        
+        var addConditionButton: some View {
+            Button {
+                withAnimation {
+                    addUtilityAssociationViewModel.featureQueryConditions.append("")
+                }
+            } label: {
+                Label {
+                    Text(
+                        "Add Condition",
+                        bundle: .toolkitModule,
+                        comment: "Label for a button to add a new query condition."
+                    )
+                    .textCase(.none)
+                } icon: {
+                    Image(systemName: "plus.circle.fill")
+                }
+                .padding(.leading)
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+}
+
+struct ConditionConfigurationSection: View {
+    let sectionNumber: Int
+    
+    @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+    
+    var body: some View {
+        Section {
+            Picker(LocalizedStringResource.field.key, selection: .constant(1)) {
+                
+            }
+            Picker(LocalizedStringResource.condition.key, selection: .constant(1)) {
+                
+            }
+            TextField(LocalizedStringResource.value.key, text: .constant(""))
+        } header: {
+            HStack {
+                Text(
+                    "Condition \(sectionNumber)",
+                    bundle: .toolkitModule,
+                    comment: "A label for the nth feature filtering condition."
+                )
+                Spacer()
+                Menu {
+                    Button(role: .destructive) {
+                        withAnimation {
+                            var conditions = addUtilityAssociationViewModel.featureQueryConditions
+                            conditions.remove(at: sectionNumber - 1)
+                            addUtilityAssociationViewModel.featureQueryConditions = conditions
+                        }
+                    } label: {
+                        Label {
+                            Text(
+                                "Remove condition",
+                                bundle: .toolkitModule,
+                                comment: "Remove the feature filtering condition."
+                            )
+                        } icon: {
+                            Image(systemName: "trash")
+                        }
+                    }
+                } label: {
+                    Label {
+                        Text(
+                            "Condition \(sectionNumber) options",
+                            bundle: .toolkitModule,
+                            comment: "Options for the nth condition"
+                        )
+                    } icon: {
+                        Image(systemName: "ellipsis")
+                    }
+                    .tint(.secondary)
+                    .labelStyle(.iconOnly)
+                }
+            }
+            .textCase(.none)
         }
     }
 }
