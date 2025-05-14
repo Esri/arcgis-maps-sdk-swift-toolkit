@@ -17,9 +17,11 @@ import SwiftUI
 
 extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView {
     struct Row: View {
-        
         /// The feature represented by the row.
         let feature: ArcGISFeature
+        
+        /// The feature row that was last inspected.
+        @Binding var inspectedFeature: InspectedFeature?
         
         /// The feature's symbol
         @State private var image: UIImage?
@@ -39,7 +41,21 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
                     Text(objectID, format: .number.grouping(.never))
                 }
                 Spacer()
-                Image(systemName: "plus.magnifyingglass")
+                Button {
+                    inspectedFeature = InspectedFeature(feature: feature)
+                } label: {
+                    Label {
+                        if let objectID = feature.objectID {
+                            Text(
+                                "Zoom to \(objectID)"
+                            )
+                        }
+                    } icon: {
+                        Image(systemName: "plus.magnifyingglass")
+                    }
+                    .labelStyle(.iconOnly)
+                    .tint(.secondary)
+                }
             }
         }
     }
