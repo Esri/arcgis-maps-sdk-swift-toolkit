@@ -20,17 +20,13 @@ extension FeatureFormView {
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
+        @State private var addUtilityAssociationViewModel = Model()
+        
         /// A Boolean value that indicates if a feature query is running.
         @State private var featureQueryIsRunning = false
         
-        /// The model for the navigation layer.
-        @State private var navigationLayerModel: NavigationLayerModel? = nil
-        
         /// The filter phrase for the network source name.
         @State private var networkSourceNameQuery = ""
-        
-        /// A Boolean value indicating whether the spatial feature selection view is presented.
-        @State private var spatialFeatureSelectionViewIsPresented = false
         
         var body: some View {
             NavigationLayer { navigationLayerModel in
@@ -38,7 +34,7 @@ extension FeatureFormView {
                     Section {
                         Button {
                             withAnimation {
-                                spatialFeatureSelectionViewIsPresented = true
+                                addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented = true
                             }
                         } label: {
                             HStack {
@@ -88,7 +84,7 @@ extension FeatureFormView {
                 .disabled(featureQueryIsRunning)
                 .navigationLayerTitle("Add Association")
                 .onAppear {
-                    self.navigationLayerModel = navigationLayerModel
+                    addUtilityAssociationViewModel.navigationLayerModel = navigationLayerModel
                 }
             } headerTrailing: {
                 XButton(.dismiss) {
@@ -107,13 +103,13 @@ extension FeatureFormView {
             #endif
             .transition(.move(edge: .bottom))
             .overlay {
-                if let navigationLayerModel, spatialFeatureSelectionViewIsPresented {
-                    SpatialFeatureSelectionView(
-                        navigationLayerViewModel: navigationLayerModel,
-                        isPresented: $spatialFeatureSelectionViewIsPresented
-                    )
+                if addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented {
+                    SpatialFeatureSelectionView()
+                } else if addUtilityAssociationViewModel.featureQueryConditionsViewIsPresented {
+                    FeatureQueryConditionsView()
                 }
             }
+            .environment(addUtilityAssociationViewModel)
         }
     }
 }
