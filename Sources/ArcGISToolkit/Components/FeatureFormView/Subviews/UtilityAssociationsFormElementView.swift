@@ -28,12 +28,8 @@ struct UtilityAssociationsFormElementView: View {
     
     var body: some View {
         FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
-            if $0.resultCount > 0 {
-                UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                    .environment(internalFeatureFormViewModel)
-            } else {
-                nil
-            }
+            UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+                .environment(internalFeatureFormViewModel)
         })
         .task {
             if let results = try? await element.associationsFilterResults {
