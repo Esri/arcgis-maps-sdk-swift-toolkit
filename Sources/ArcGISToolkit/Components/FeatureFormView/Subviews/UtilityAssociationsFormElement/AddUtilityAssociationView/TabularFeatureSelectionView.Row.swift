@@ -46,6 +46,7 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
                     }
                     if let objectID = feature.objectID {
                         Text(objectID, format: .number.grouping(.never))
+                            .tint(.primary)
                     }
                     Spacer()
                     Button {
@@ -53,6 +54,7 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
                     } label: {
                         Label {
                             if let objectID = feature.objectID {
+#warning("Localization needed.")
                                 Text(
                                     "Zoom to \(objectID)"
                                 )
