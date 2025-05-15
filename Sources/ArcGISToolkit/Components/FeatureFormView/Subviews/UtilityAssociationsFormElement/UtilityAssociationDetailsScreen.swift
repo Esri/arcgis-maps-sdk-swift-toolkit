@@ -44,6 +44,16 @@ extension FeatureFormView {
     struct UtilityAssociationDetailsCore: View {
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
+        /// The view model for the add utility association workflow. If no model was provided to the view,
+        /// the view is being used to view an existing utility association.
+        ///
+        /// Also see `FeatureFormViewModel.selectedAssociation`.
+        let addUtilityAssociationViewModel: AddUtilityAssociationView.Model?
+        
+        init(addUtilityAssociationViewModel: AddUtilityAssociationView.Model? = nil) {
+            self.addUtilityAssociationViewModel = addUtilityAssociationViewModel
+        }
+        
         var body: some View {
             List {
                 Section {
@@ -79,6 +89,16 @@ extension FeatureFormView {
                 }
             }
             .navigationLayerTitle("Association Settings")
+            .onAppear {
+                if let addUtilityAssociationViewModel {
+                    addUtilityAssociationViewModel.utilityAssociationDetailsCoreIsPresented = true
+                }
+            }
+            .onDisappear {
+                if let addUtilityAssociationViewModel {
+                    addUtilityAssociationViewModel.utilityAssociationDetailsCoreIsPresented = false
+                }
+            }
         }
     }
 }
