@@ -61,6 +61,7 @@ extension FeatureFormView.AddUtilityAssociationView {
                         Spacer()
                         Button {
                             withAnimation {
+                                addUtilityAssociationViewModel.featureIsBeingInspected = false
                                 addUtilityAssociationViewModel.featureQueryConditionsViewIsPresented = true
                             }
                         } label: {
@@ -96,9 +97,11 @@ extension FeatureFormView.AddUtilityAssociationView {
                             await featureFormViewModel.mapViewProxy?.setViewpointCenter(center)
                         }
                     }
+                    addUtilityAssociationViewModel.featureIsBeingInspected = true
                 }
             }
             .onDisappear {
+                addUtilityAssociationViewModel.featureIsBeingInspected = false
                 if let feature = inspectedFeature?.feature, let layer = feature.featureLayer {
                     layer.unselectFeature(feature)
                 }

@@ -18,6 +18,9 @@ extension FeatureFormView.AddUtilityAssociationView {
     /// A model to hold properties common to the views in the "add utility association" workflow.
     @Observable
     class Model {
+        /// A Boolean value which indicates if the user has inspected a feature to possibly use in the new association.
+        var featureIsBeingInspected = false
+        
         /// The conditions used to query features to add as an association.
         var featureQueryConditions = [String]()
         
@@ -28,5 +31,15 @@ extension FeatureFormView.AddUtilityAssociationView {
         
         var featureQueryConditionsViewIsPresented = false
         var spatialFeatureSelectionViewIsPresented = false
+        
+        var floatingPanelDetent: FloatingPanelDetent? {
+            if spatialFeatureSelectionViewIsPresented {
+                return .fraction(0.2)
+            } else if featureIsBeingInspected && !featureQueryConditionsViewIsPresented {
+                return .half
+            } else {
+                return nil
+            }
+        }
     }
 }
