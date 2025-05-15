@@ -17,6 +17,8 @@ import SwiftUI
 
 extension FeatureFormView {
     struct AddUtilityAssociationView: View {
+        @Environment(\.isPortraitOrientation) private var isPortraitOrientation
+        
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
@@ -94,7 +96,6 @@ extension FeatureFormView {
                 }
                 .font(.title)
             }
-            .defaultPreference(FloatingPanelDetent.Preference.self)
             // TODO: Combine with similar code in FeatureFormView.UtilityAssociationDetailsScreen.swift
             #if os(visionOS)
             .background(Color(uiColor: .tertiarySystemGroupedBackground))
@@ -110,6 +111,12 @@ extension FeatureFormView {
                 }
             }
             .environment(addUtilityAssociationViewModel)
+            .preference(
+                key: FloatingPanelDetent.Preference.self,
+                // If presented in a Floating Panel and the map view is
+                // hidden because of portrait orientation, reveal it.
+                value: isPortraitOrientation ? addUtilityAssociationViewModel.floatingPanelDetent : nil
+            )
         }
     }
 }
