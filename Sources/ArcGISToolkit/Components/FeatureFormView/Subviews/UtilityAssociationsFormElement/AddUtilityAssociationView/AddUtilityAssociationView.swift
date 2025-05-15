@@ -89,12 +89,29 @@ extension FeatureFormView {
                     addUtilityAssociationViewModel.navigationLayerModel = navigationLayerModel
                 }
             } headerTrailing: {
-                XButton(.dismiss) {
-                    withAnimation {
-                        featureFormViewModel.addUtilityAssociationScreenIsPresented = false
+                Group {
+                    if addUtilityAssociationViewModel.utilityAssociationDetailsCoreIsPresented {
+                        Button {
+#warning("ADD API NOT IMPLEMENTED")
+                            withAnimation {
+                                featureFormViewModel.addUtilityAssociationScreenIsPresented = false
+                            }
+                        } label: {
+                            Text(
+                                "Add",
+                                bundle: .toolkitModule,
+                                comment: "Label for a button to add a configured utility association."
+                            )
+                        }
+                    } else {
+                        XButton(.dismiss) {
+                            withAnimation {
+                                featureFormViewModel.addUtilityAssociationScreenIsPresented = false
+                            }
+                        }
+                        .font(.title)
                     }
                 }
-                .font(.title)
             }
             // TODO: Combine with similar code in FeatureFormView.UtilityAssociationDetailsScreen.swift
             #if os(visionOS)
