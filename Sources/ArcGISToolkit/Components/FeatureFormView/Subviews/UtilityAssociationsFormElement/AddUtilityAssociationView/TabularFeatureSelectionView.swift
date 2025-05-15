@@ -48,34 +48,42 @@ extension FeatureFormView.AddUtilityAssociationView {
         @State private var searchTerm = ""
         
         var body: some View {
-            List {
-                Section {
-                    HStack {
-                        Group {
-                            Image(systemName: "magnifyingglass")
-                            TextField(text: $searchTerm) {
-                                Text.searchFeatures
-                            }
-                        }
-                        .foregroundStyle(.secondary)
-                        Spacer()
-                        Button {
-                            withAnimation {
-                                addUtilityAssociationViewModel.featureIsBeingInspected = false
-                                addUtilityAssociationViewModel.featureQueryConditionsViewIsPresented = true
-                            }
-                        } label: {
-                            Label {
-                                Text.filter
-                            } icon: {
-                                Image(systemName: "line.3.horizontal.decrease.circle.fill")
-                            }
-                            .tint(addUtilityAssociationViewModel.featureQueryConditions.isEmpty ? .secondary : .accentColor)
-                            .labelStyle(.iconOnly)
+            HStack {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField(text: $searchTerm) {
+                        Text.searchFeatures
+                    }
+                    if !searchTerm.isEmpty {
+                        XButton(.clear) {
+                            searchTerm.removeAll()
                         }
                     }
                 }
-                
+                .padding(5)
+                .padding(.vertical, 5)
+                .background(Color(uiColor: .secondarySystemGroupedBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                .foregroundStyle(.secondary)
+                Spacer()
+                Button {
+                    withAnimation {
+                        addUtilityAssociationViewModel.featureIsBeingInspected = false
+                        addUtilityAssociationViewModel.featureQueryConditionsViewIsPresented = true
+                    }
+                } label: {
+                    Label {
+                        Text.filter
+                    } icon: {
+                        Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                    }
+                    .tint(addUtilityAssociationViewModel.featureQueryConditions.isEmpty ? .secondary : .accentColor)
+                    .labelStyle(.iconOnly)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical)
+            List {
                 Section {
                     ForEach(Array(filteredFeatures.enumerated()), id: \.offset) { _, feature in
                         Row(feature: feature, inspectedFeature: $inspectedFeature)
