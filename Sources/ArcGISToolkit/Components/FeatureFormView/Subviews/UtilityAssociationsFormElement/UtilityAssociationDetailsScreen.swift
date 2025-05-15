@@ -20,38 +20,7 @@ extension FeatureFormView {
         
         var body: some View {
             NavigationLayer { _ in
-                List {
-                    Section {
-                        Text("From Element")
-                        Text("To Element")
-                    }
-                    Section {
-                        Text("Association Type")
-                        Text("Content Visible")
-                    }
-                    Section {
-                        Button("Remove Association", role: .destructive) {
-                            if let association = featureFormViewModel.selectedAssociation {
-                                Task {
-                                    do {
-#warning("API NOT YET IMPLEMENTED")
-//                                        try await featureFormViewModel.utilityNetwork?.delete(association)
-                                        withAnimation {
-                                            featureFormViewModel.utilityAssociationDetailsScreenIsPresented = false
-                                        }
-                                    } catch {
-#warning("Present failure to user.")
-                                        print(String(reflecting: error))
-                                    }
-                                }
-                            }
-                        }
-                        .disabled(featureFormViewModel.selectedAssociation == nil || !(featureFormViewModel.utilityNetwork?.canDeleteAssociations ?? false))
-                    } footer: {
-                        Text("Only removes the association. The feature remains.")
-                    }
-                }
-                .navigationLayerTitle("Association Settings")
+                UtilityAssociationDetailsCore()
             } headerTrailing: {
                 XButton(.dismiss) {
                     withAnimation {
@@ -61,12 +30,62 @@ extension FeatureFormView {
                 .font(.title)
             }
             // TODO: Combine with similar code in FeatureFormView.AddUtilityAssociationScreen.swift
-            #if os(visionOS)
+#if os(visionOS)
             .background(Color(uiColor: .tertiarySystemGroupedBackground))
-            #else
+#else
             .background(Color(uiColor: .systemGroupedBackground))
-            #endif
+#endif
             .transition(.move(edge: .bottom))
+        }
+    }
+    
+    struct UtilityAssociationDetailsCore: View {
+        @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+        
+        var body: some View {
+            List {
+                Section {
+                    Text("From Element")
+                    Text("To Element")
+                }
+                Section {
+                    Text("Association Type")
+                    Text("Content Visible")
+                }
+                
+                if let existingAssociation = featureFormViewModel.selectedAssociation {
+                    Section {
+#warning("Localization needed")
+                        Button("Remove Association", role: .destructive) {
+                            Task {
+                                do {
+#warning("API NOT YET IMPLEMENTED")
+//                                    try await featureFormViewModel.utilityNetwork?.delete(existingAssociation)
+                                    withAnimation {
+                                        featureFormViewModel.utilityAssociationDetailsScreenIsPresented = false
+                                    }
+                                } catch {
+#warning("Present failure to user.")
+                                    print(String(reflecting: error))
+                                }
+                            }
+                        }
+                        .disabled(featureFormViewModel.selectedAssociation == nil || !(featureFormViewModel.utilityNetwork?.canDeleteAssociations ?? false))
+                    } footer: {
+                        Text("Only removes the association. The feature remains.")
+                    }
+                } else {
+                    Section {
+#warning("Localization needed")
+                        Button("Add Association") {
+                            withAnimation {
+                                featureFormViewModel.addUtilityAssociationScreenIsPresented = false
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationLayerTitle("Association Settings")
         }
     }
 }

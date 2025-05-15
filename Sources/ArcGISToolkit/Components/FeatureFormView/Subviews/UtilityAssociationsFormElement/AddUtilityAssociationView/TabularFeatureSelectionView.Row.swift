@@ -17,6 +17,8 @@ import SwiftUI
 
 extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView {
     struct Row: View {
+        @Environment(NavigationLayerModel.self) private var navigationLayerModel
+        
         /// The feature represented by the row.
         let feature: ArcGISFeature
         
@@ -27,34 +29,40 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
         @State private var image: UIImage?
         
         var body: some View {
-            HStack {
-                if let image {
-                    Image(uiImage: image)
-                } else {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .task {
-                            image = try? await feature.featureLayer?.renderer?.symbol(for: feature)?.makeSwatch(scale: 1.0)
-                        }
+            Button {
+                navigationLayerModel.push {
+                    FeatureFormView.UtilityAssociationDetailsCore()
                 }
-                if let objectID = feature.objectID {
-                    Text(objectID, format: .number.grouping(.never))
-                }
-                Spacer()
-                Button {
-                    inspectedFeature = InspectedFeature(feature: feature)
-                } label: {
-                    Label {
-                        if let objectID = feature.objectID {
-                            Text(
-                                "Zoom to \(objectID)"
-                            )
-                        }
-                    } icon: {
-                        Image(systemName: "plus.magnifyingglass")
+            } label: {
+                HStack {
+                    if let image {
+                        Image(uiImage: image)
+                    } else {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .task {
+                                image = try? await feature.featureLayer?.renderer?.symbol(for: feature)?.makeSwatch(scale: 1.0)
+                            }
                     }
-                    .labelStyle(.iconOnly)
-                    .tint(.secondary)
+                    if let objectID = feature.objectID {
+                        Text(objectID, format: .number.grouping(.never))
+                    }
+                    Spacer()
+                    Button {
+                        inspectedFeature = InspectedFeature(feature: feature)
+                    } label: {
+                        Label {
+                            if let objectID = feature.objectID {
+                                Text(
+                                    "Zoom to \(objectID)"
+                                )
+                            }
+                        } icon: {
+                            Image(systemName: "plus.magnifyingglass")
+                        }
+                        .labelStyle(.iconOnly)
+                        .tint(.secondary)
+                    }
                 }
             }
         }
