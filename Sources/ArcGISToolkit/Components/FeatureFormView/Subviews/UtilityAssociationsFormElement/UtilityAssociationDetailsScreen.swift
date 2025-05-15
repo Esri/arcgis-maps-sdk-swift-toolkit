@@ -24,6 +24,8 @@ extension FeatureFormView {
             } headerTrailing: {
                 XButton(.dismiss) {
                     withAnimation {
+#warning("Look to merge these two properties.")
+                        featureFormViewModel.selectedAssociation = nil
                         featureFormViewModel.utilityAssociationDetailsScreenIsPresented = false
                     }
                 }
