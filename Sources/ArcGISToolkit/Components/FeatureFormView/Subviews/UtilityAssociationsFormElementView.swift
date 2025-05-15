@@ -89,6 +89,8 @@ private struct UtilityAssociationGroupResultView: View {
 
 /// A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
@@ -103,6 +105,9 @@ private struct UtilityAssociationsFilterResultListRowView: View {
         Button {
             navigationLayerModel.push {
                 UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
+                    .navigationLayerHeaderBackground(
+                        Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
+                    )
                     .navigationLayerTitle(listRowTitle, subtitle: internalFeatureFormViewModel.title)
                     .environment(internalFeatureFormViewModel)
             }
@@ -136,6 +141,8 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 
 /// A view for a utility associations filter result.
 private struct UtilityAssociationsFilterResultView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     /// The view model for the feature form view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
@@ -155,6 +162,9 @@ private struct UtilityAssociationsFilterResultView: View {
                     Button {
                         navigationLayerModel.push {
                             UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+                                .navigationLayerHeaderBackground(
+                                    Color(uiColor: colorScheme == .dark ? .systemBackground : .secondarySystemBackground)
+                                )
                                 .navigationLayerTitle(
                                     utilityAssociationGroupResult.name,
                                     subtitle: utilityAssociationsFilterResult.filter.title
