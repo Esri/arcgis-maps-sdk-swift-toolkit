@@ -39,50 +39,6 @@ struct UtilityAssociationsFormElementView: View {
     }
 }
 
-/// A view for a utility association group result.
-private struct UtilityAssociationGroupResultView: View {
-    @Environment(\.formChangedAction) var formChangedAction
-    
-    @Environment(\.setAlertContinuation) var setAlertContinuation
-    
-    /// The view model for the form.
-    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
-    
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
-    /// The backing utility association group result.
-    let utilityAssociationGroupResult: UtilityAssociationGroupResult
-    
-    var body: some View {
-        List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-            UtilityAssociationResultView(
-                selectionAction: {
-                    let navigationAction: () -> Void = {
-                        navigationLayerModel.push {
-                            InternalFeatureFormView(
-                                featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                            )
-                        }
-                    }
-                    if internalFeatureFormViewModel.featureForm.hasEdits {
-                        setAlertContinuation?(true, navigationAction)
-                    } else {
-                        navigationAction()
-                    }
-                },
-                result: utilityAssociationResult
-            )
-        }
-        .onAppear {
-            // This view is considered the tail end of a navigable FeatureForm.
-            // When a user is backing out of a navigation path, this view
-            // appearing is considered a change to the presented FeatureForm.
-            formChangedAction?(internalFeatureFormViewModel.featureForm)
-        }
-    }
-}
-
 /// A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -196,6 +152,50 @@ private struct UtilityAssociationsFilterResultView: View {
                 .buttonStyle(.borderless)
                 .padding(.bottom)
             }
+        }
+    }
+}
+
+/// A view for a utility association group result.
+private struct UtilityAssociationGroupResultView: View {
+    @Environment(\.formChangedAction) var formChangedAction
+    
+    @Environment(\.setAlertContinuation) var setAlertContinuation
+    
+    /// The view model for the form.
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+    
+    /// The model for the navigation layer.
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
+    
+    /// The backing utility association group result.
+    let utilityAssociationGroupResult: UtilityAssociationGroupResult
+    
+    var body: some View {
+        List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+            UtilityAssociationResultView(
+                selectionAction: {
+                    let navigationAction: () -> Void = {
+                        navigationLayerModel.push {
+                            InternalFeatureFormView(
+                                featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+                            )
+                        }
+                    }
+                    if internalFeatureFormViewModel.featureForm.hasEdits {
+                        setAlertContinuation?(true, navigationAction)
+                    } else {
+                        navigationAction()
+                    }
+                },
+                result: utilityAssociationResult
+            )
+        }
+        .onAppear {
+            // This view is considered the tail end of a navigable FeatureForm.
+            // When a user is backing out of a navigation path, this view
+            // appearing is considered a change to the presented FeatureForm.
+            formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
     }
 }
