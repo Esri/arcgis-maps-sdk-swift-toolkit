@@ -27,8 +27,11 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
         /// The feature row that was last inspected.
         @Binding var inspectedFeature: InspectedFeature?
         
-        /// The feature's symbol
+        /// The feature's symbol.
         @State private var image: UIImage?
+        
+        /// A Boolean value indicating whether a fallback is used for the feature's symbol.
+        @State private var imageIsFallback = false
         
         var body: some View {
             Button {
@@ -41,11 +44,21 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
                 HStack {
                     if let image {
                         Image(uiImage: image)
+                            .renderingMode(imageIsFallback ? .template : .original)
+                            .foregroundStyle(imageIsFallback ? .red.opacity(0.5) : .primary)
                     } else {
                         ProgressView()
                             .progressViewStyle(.circular)
                             .task {
-                                image = try? await feature.featureLayer?.renderer?.symbol(for: feature)?.makeSwatch(scale: 1.0)
+#warning("TODO: Handle SubtypeFeatureLayer and the absence of a renderer here.")
+                                if let renderer = feature.featureLayer?.renderer,
+                                   let symbol = renderer.symbol(for: feature),
+                                   let swatch = try? await symbol.makeSwatch(scale: 1.0) {
+                                    image = swatch
+                                } else {
+                                    image = UIImage(systemName: "questionmark")
+                                    imageIsFallback = true
+                                }
                             }
                     }
                     if let objectID = feature.objectID {
