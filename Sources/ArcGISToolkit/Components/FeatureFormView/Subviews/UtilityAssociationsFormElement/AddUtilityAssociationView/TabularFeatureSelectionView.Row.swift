@@ -17,6 +17,9 @@ import SwiftUI
 
 extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView {
     struct Row: View {
+        /// The display scale of the environment.
+        @Environment(\.displayScale) private var displayScale
+        
         @Environment(NavigationLayerModel.self) private var navigationLayerModel
         
         @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
@@ -53,7 +56,7 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
 #warning("TODO: Handle SubtypeFeatureLayer and the absence of a renderer here.")
                                 if let renderer = feature.featureLayer?.renderer,
                                    let symbol = renderer.symbol(for: feature),
-                                   let swatch = try? await symbol.makeSwatch(scale: 1.0) {
+                                   let swatch = try? await symbol.makeSwatch(scale: displayScale) {
                                     image = swatch
                                 } else {
                                     image = UIImage(systemName: "questionmark")
