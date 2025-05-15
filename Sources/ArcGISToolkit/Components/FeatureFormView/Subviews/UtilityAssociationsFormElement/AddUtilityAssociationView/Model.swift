@@ -29,6 +29,7 @@ extension FeatureFormView.AddUtilityAssociationView {
         
         // MARK: Presentation properties
         
+        var utilityAssociationDetailsCoreIsPresented = false
         var featureQueryConditionsViewIsPresented = false
         var spatialFeatureSelectionViewIsPresented = false
         
