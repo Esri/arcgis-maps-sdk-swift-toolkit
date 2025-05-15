@@ -19,6 +19,8 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
     struct Row: View {
         @Environment(NavigationLayerModel.self) private var navigationLayerModel
         
+        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+        
         /// The feature represented by the row.
         let feature: ArcGISFeature
         
@@ -31,7 +33,9 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
         var body: some View {
             Button {
                 navigationLayerModel.push {
-                    FeatureFormView.UtilityAssociationDetailsCore()
+                    FeatureFormView.UtilityAssociationDetailsCore(
+                        addUtilityAssociationViewModel: addUtilityAssociationViewModel
+                    )
                 }
             } label: {
                 HStack {
