@@ -76,15 +76,6 @@ extension FeatureFormView {
                     } footer: {
                         Text("Only removes the association. The feature remains.")
                     }
-                } else {
-                    Section {
-#warning("Localization needed")
-                        Button("Add Association") {
-                            withAnimation {
-                                featureFormViewModel.addUtilityAssociationScreenIsPresented = false
-                            }
-                        }
-                    }
                 }
             }
             .navigationLayerTitle("Association Settings")
