@@ -28,6 +28,14 @@ extension LocalizedStringResource {
         )
     }
     
+    static var condition: Self {
+        .init(
+            "Condition",
+            bundle: .toolkit,
+            comment: "A condition by which to compare the value of a feature's attribute."
+        )
+    }
+    
     static var downloaded: Self {
         .init(
             "Downloaded",
@@ -49,6 +57,14 @@ extension LocalizedStringResource {
             "Downloading",
             bundle: .toolkit,
             comment: "The status text when a map area is downloading."
+        )
+    }
+    
+    static var field: Self {
+        .init(
+            "Field",
+            bundle: .toolkit,
+            comment: "A field in a feature's attribute table."
         )
     }
     
@@ -82,6 +98,14 @@ extension LocalizedStringResource {
             "OK",
             bundle: .toolkit,
             comment: "A label for button to proceed with an operation."
+        )
+    }
+    
+    static var value: Self {
+        .init(
+            "Value",
+            bundle: .toolkit,
+            comment: "A value of a feature's attribute."
         )
     }
 }
