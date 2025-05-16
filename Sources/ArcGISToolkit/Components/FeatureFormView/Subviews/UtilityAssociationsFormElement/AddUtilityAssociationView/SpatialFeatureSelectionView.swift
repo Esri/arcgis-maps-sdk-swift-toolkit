@@ -70,13 +70,16 @@ extension FeatureFormView.AddUtilityAssociationView {
                     }
                 }
                 HStack {
-                    // TODO: Match design spec color and size
-                    Button.cancel {
+                    Button {
                         withAnimation {
                             addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented = false
                         }
+                    } label: {
+                        Text.cancel
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
-                    Button.done {
+                    .buttonStyle(.bordered)
+                    Button {
                         withAnimation {
                             addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented = false
                         }
@@ -86,7 +89,11 @@ extension FeatureFormView.AddUtilityAssociationView {
                                 sourceName: nil
                             )
                         }
+                    } label: {
+                        Text.done
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .buttonStyle(.borderedProminent)
                     .disabled(identifiedFeatures.isEmpty)
                 }
                 .buttonStyle(.borderedProminent)
