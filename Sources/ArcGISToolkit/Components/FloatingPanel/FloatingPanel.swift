@@ -70,7 +70,7 @@ struct FloatingPanel<Content>: View where Content: View {
                         .frame(height: height)
                         .clipped()
                         .onPreferenceChange(FloatingPanelDetent.Preference.self) { preference in
-#if swift(<6.0.3) || swift(>=6.1)  // Xcode 16.2 (Swift 6.0.3) needs special handling
+#if swift(<6.0.3) || swift(>=6.1) // Xcode 16.2 (Swift 6.0.3) needs special handling
                             if let preference {
                                 // Only update the overridden detent if one
                                 // wasn't already saved. This prevents a
