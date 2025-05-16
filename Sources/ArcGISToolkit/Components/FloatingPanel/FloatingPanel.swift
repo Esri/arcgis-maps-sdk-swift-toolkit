@@ -70,6 +70,7 @@ struct FloatingPanel<Content>: View where Content: View {
                         .frame(height: height)
                         .clipped()
                         .onPreferenceChange(FloatingPanelDetent.Preference.self) { preference in
+#if swift(<6.0.3) || swift(>=6.1)  // Xcode 16.2 (Swift 6.0.3) needs special handling
                             if let preference {
                                 // Only update the overridden detent if one
                                 // wasn't already saved. This prevents a
@@ -86,6 +87,26 @@ struct FloatingPanel<Content>: View where Content: View {
                                 activeDetent = overriddenDetent
                                 self.overriddenDetent = nil
                             }
+#else
+                            Task { @MainActor in
+                                if let preference {
+                                    // Only update the overridden detent if one
+                                    // wasn't already saved. This prevents a
+                                    // FloatingPanelDetentPreference from being
+                                    // saved as the overridden detent.
+                                    if overriddenDetent == nil {
+                                        overriddenDetent = activeDetent
+                                    }
+                                    activeDetent = preference
+                                } else if let overriddenDetent {
+                                    // When the FloatingPanelDetentPreference is
+                                    // unset, restore the overridden detent as the
+                                    // active detent.
+                                    activeDetent = overriddenDetent
+                                    self.overriddenDetent = nil
+                                }
+                            }
+#endif
                         }
                     if !isPortraitOrientation {
                         Divider()
