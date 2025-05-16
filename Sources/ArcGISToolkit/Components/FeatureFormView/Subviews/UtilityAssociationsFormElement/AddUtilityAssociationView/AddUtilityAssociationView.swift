@@ -78,7 +78,7 @@ extension FeatureFormView {
                         ForEach(filteredSources, id: \.name) { layer in
                             NetworkSourceListRow(
                                 layer: layer,
-                                featureQueryIsRunning: $featureQueryIsRunning,
+                                featureQueryIsRunning: $featureQueryIsRunning
                             )
                         }
                     }
