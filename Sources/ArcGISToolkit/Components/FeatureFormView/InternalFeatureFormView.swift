@@ -46,7 +46,10 @@ struct InternalFeatureFormView: View {
                         // default attachments element. Once AttachmentsFormElements can be authored
                         // this can call makeElement(_:) instead and makeElement(_:) should have a
                         // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(featureElement: attachmentsElement)
+                        AttachmentsFeatureElementView(
+                            formElement: attachmentsElement,
+                            formViewModel: internalFeatureFormViewModel
+                        )
                     }
                 }
             }
