@@ -29,7 +29,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Note: This property is only present when
 ***REMOVED******REMOVED***/ `featureElement` is an `AttachmentsFormElement`.
-***REMOVED***@Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+***REMOVED***private var internalFeatureFormViewModel: InternalFeatureFormViewModel?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
@@ -57,10 +57,19 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ The current state of the attachment models.
 ***REMOVED***@State private var attachmentModelsState: AttachmentModelsState = .notInitialized
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a new `AttachmentsFeatureElementView`.
-***REMOVED******REMOVED***/ - Parameter featureElement: The `AttachmentsFeatureElement`.
-***REMOVED***init(featureElement: AttachmentsFeatureElement) {
-***REMOVED******REMOVED***self.featureElement = featureElement
+***REMOVED******REMOVED***/ Creates a new `AttachmentsFeatureElementView` for a Feature Form.
+***REMOVED******REMOVED***/ - Parameter formElement: The `AttachmentsFeatureElement`.
+***REMOVED******REMOVED***/ - Parameter formViewModel: The model for the feature form containing the element.
+***REMOVED***init(formElement: AttachmentsFormElement, formViewModel: InternalFeatureFormViewModel) {
+***REMOVED******REMOVED***self.featureElement = formElement
+***REMOVED******REMOVED***self.internalFeatureFormViewModel = formViewModel
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a new `AttachmentsFeatureElementView` for a Popup.
+***REMOVED******REMOVED***/ - Parameter popupElement: The `AttachmentsFeatureElement`.
+***REMOVED***init(popupElement: AttachmentsPopupElement) {
+***REMOVED******REMOVED***self.featureElement = popupElement
+***REMOVED******REMOVED***self.internalFeatureFormViewModel = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting whether the Disclosure Group is expanded.
@@ -166,7 +175,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
 ***REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
-***REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
+***REMOVED******REMOVED***internalFeatureFormViewModel?.evaluateExpressions()
 ***REMOVED******REMOVED***scrollToNewAttachmentAction?()
 ***REMOVED***
 ***REMOVED***
@@ -178,7 +187,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***if let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
 ***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModel.sync() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel?.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -192,7 +201,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 === attachmentModel ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***withAnimation { attachmentModelsState = .initialized(models) ***REMOVED***
-***REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel?.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
