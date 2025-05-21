@@ -16,7 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the top of a field element in a form.
-struct InputHeader: View {
+struct FormElementHeader: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.

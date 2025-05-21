@@ -28,7 +28,7 @@ struct InputWrapper: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***if isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch element.input {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
