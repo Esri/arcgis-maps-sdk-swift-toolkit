@@ -18,9 +18,6 @@
 struct InternalFeatureFormView: View {
 ***REMOVED***@Environment(\.formChangedAction) var formChangedAction
 ***REMOVED***
-#warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
-***REMOVED***@Environment(\.formElementPadding) var formElementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ The model for the navigation layer.
 ***REMOVED***@Environment(NavigationLayerModel.self) private var navigationLayerModel
 ***REMOVED***
@@ -129,13 +126,7 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a utility associations element including a divider beneath it.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(element.label)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
-***REMOVED******REMOVED***.padding(.top, formElementPadding)
+***REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UtilityAssociationsFormElementView(element: element)
 ***REMOVED******REMOVED******REMOVED***.environment(internalFeatureFormViewModel)
