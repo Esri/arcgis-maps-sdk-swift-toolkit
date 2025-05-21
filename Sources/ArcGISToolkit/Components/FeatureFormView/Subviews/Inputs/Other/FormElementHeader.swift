@@ -19,6 +19,7 @@
 struct FormElementHeader: View {
 ***REMOVED***@Environment(\.formElementPadding) var formElementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ The form element the header belongs to.
 ***REMOVED***let element: FormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
