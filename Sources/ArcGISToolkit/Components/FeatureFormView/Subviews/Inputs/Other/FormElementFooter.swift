@@ -17,7 +17,7 @@ import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
 struct FormElementFooter: View {
-    @Environment(\.formElementPadding) var elementPadding
+    @Environment(\.formElementPadding) var formElementPadding
     
     /// The validation error visibility configuration of a form.
     @Environment(\._validationErrorVisibility) private var validationErrorVisibility
@@ -64,7 +64,7 @@ struct FormElementFooter: View {
         .font(.footnote)
         .foregroundStyle(isShowingError ? .red : .secondary)
         .id(id)
-        .padding(.vertical, elementPadding / 2)
+        .padding(.vertical, formElementPadding / 2)
         .task {
             for await _ in element.$value {
                 id = UUID()
