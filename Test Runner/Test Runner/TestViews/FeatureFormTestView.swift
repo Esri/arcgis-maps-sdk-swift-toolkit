@@ -92,17 +92,7 @@ private extension FeatureFormTestView {
                     if !initialDrawCompleted, drawStatus == .completed {
                         initialDrawCompleted = true
                         testSetupTask = Task {
-                            if let point = testCase.point {
-                                await mapView.setViewpoint(Viewpoint(center: point, scale: 1000))
-                                guard let screenPoint = mapView.screenPoint(fromLocation: point) else { return }
-                                do {
-                                    identifyLayerResults = try await mapView.identifyLayers(screenPoint: screenPoint, tolerance: 10)
-                                } catch {
-                                    alertError = error.localizedDescription
-                                }
-                            } else if let objectID = testCase.objectID {
-                                await selectObjectID(objectID, on: map)
-                            }
+                            await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
                         }
                     }
                 }
@@ -115,9 +105,6 @@ private extension FeatureFormTestView {
                     message: { Text(alertError ?? "Unknown error") }
                 )
                 .ignoresSafeArea(.keyboard)
-                .sheet(isPresented: Binding(get: { !identifyLayerResults.isEmpty }, set: { _ in })) {
-                    identifyLayerResultsList
-                }
                 .task {
                     do {
                         try await map.load()
@@ -136,8 +123,19 @@ private extension FeatureFormTestView {
         }
     }
     
-    func selectObjectID(_ objectID: Int, on map: Map) async {
-        guard let featureLayer = map.operationalLayers.first as? FeatureLayer else {
+    func selectObjectID(_ objectID: Int, on map: Map, for layerName: String) async {
+        let featureLayer: FeatureLayer?
+        if !layerName.isEmpty {
+            // This could be expanded to find any operational layer OR operational layer sublayer
+            // Currently, searching for the layer in the first operational layer's sublayerContents
+            // is the only requirement. This is the case for the Utility Network Association test cases.
+            featureLayer = map.operationalLayers.first?.subLayerContents.first(where: { layer in
+                layer.name == layerName
+            }) as? FeatureLayer
+        } else {
+            featureLayer = map.operationalLayers.first as? FeatureLayer
+        }
+        guard let featureLayer else {
             alertError = "Can't resolve layer"
             return
         }
@@ -154,21 +152,6 @@ private extension FeatureFormTestView {
             featureForm = FeatureForm(feature: feature)
         } catch {
             alertError = error.localizedDescription
-        }
-    }
-    
-    /// The list of identify layer results.
-    var identifyLayerResultsList: some View {
-        List {
-            Section("ArcGIS Features") {
-                let features = identifyLayerResults.flatMap { $0.geoElements.compactMap { $0 as? ArcGISFeature } }
-                ForEach(features.enumerated().map{ $0 }, id: \.0) { _, feature in
-                    Button(feature.displayName) {
-                        featureForm = FeatureForm(feature: feature)
-                        self.identifyLayerResults.removeAll()
-                    }
-                }
-            }
         }
     }
     
@@ -204,9 +187,9 @@ private extension FeatureFormTestView {
         /// The name of the test case.
         let id: String
         /// The object ID of the feature being tested.
-        let objectID: Int?
-        /// The map location of the feature under test.
-        let point: Point?
+        let objectID: Int
+        /// The name of the layer to identify.
+        let layerName: String
         /// The test data location.
         let url: URL
         
@@ -214,26 +197,20 @@ private extension FeatureFormTestView {
         /// - Parameters:
         ///   - name: The name of the test case.
         ///   - objectID: The object ID of the feature being tested.
-        ///   - portalID: The portal ID of the test data.
-        init(_ name: String, objectID: Int, portalID: String) {
-            self.init(credentialInfo: nil, id: name, objectID: objectID, point: nil, portalID: portalID)
-        }
-        
-        /// Creates a FeatureFormView test case.
-        /// - Parameters:
-        ///   - name: The name of the test case.
-        ///   - point: The map location of the feature under test.
+        ///   - layerName: The name of the layer to identify.
         ///   - portalID: The portal ID of the test data.
         ///   - credentialInfo: Optional ArcGIS credential info for the test data.
-        init(_ name: String, point: Point, portalID: String, credentialInfo: CredentialInfo) {
-            self.init(credentialInfo: credentialInfo, id: name, objectID: nil, point: point, portalID: portalID)
-        }
-        
-        private init(credentialInfo: CredentialInfo?, id: String, objectID: Int?, point: Point?, portalID: String) {
+        init(
+            _ name: String,
+            objectID: Int,
+            layerName: String = "",
+            portalID: String,
+            credentialInfo: CredentialInfo? = nil
+        ) {
             self.credentialInfo = credentialInfo
-            self.id = id
+            self.id = name
             self.objectID = objectID
-            self.point = point
+            self.layerName = layerName
             self.url = .init(
                 string: String("https://arcgis.com/home/item.html?id=\(portalID)")
             )!
@@ -272,7 +249,10 @@ private extension FeatureFormTestView {
         .init("testCase_10_1", objectID: 1, portalID: .testCase10),
         .init("testCase_10_2", objectID: 1, portalID: .testCase10),
         .init("testCase_11_1", objectID: 2, portalID: .testCase11),
-        .init("testCase_12_1", point: Point(x: -9815314.206573399, y: 5130328.983696212, spatialReference: .webMercator), portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_1", objectID: 5050, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_3", objectID: 2, layerName: "Structure Boundary", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_4", objectID: 2584, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_5", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
     ]}
 }
 
