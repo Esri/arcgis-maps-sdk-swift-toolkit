@@ -16,5 +16,5 @@ import ArcGIS
 
 extension APIKey {
     /// The default API key.
-    static let `default` = APIKey("AAPK64f41d7ae01a4c64b8acbb63a830b592D0LE_PN47pvnwe9B9BObfw99iNYjbeKCJLOcEJKnToAS-C_hG-FMdjneelPvWXQ7")
+    static let `default` = APIKey("<#API Key#>")
 }
