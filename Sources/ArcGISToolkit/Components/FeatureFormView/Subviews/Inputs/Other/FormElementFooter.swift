@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
-struct InputFooter: View {
+struct FormElementFooter: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The validation error visibility configuration of a form.
@@ -73,7 +73,7 @@ struct InputFooter: View {
     }
 }
 
-extension InputFooter {
+extension FormElementFooter {
     /// Localized error text to be shown to a user depending on the type of error information available.
     var errorMessage: Text? {
         guard let error = primaryError else { return nil }

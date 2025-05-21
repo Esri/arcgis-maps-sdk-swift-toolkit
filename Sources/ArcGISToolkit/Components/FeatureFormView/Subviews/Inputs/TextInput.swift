@@ -250,7 +250,7 @@ private extension TextInput {
                 internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
             }
             Spacer()
-            InputFooter(element: element)
+            FormElementFooter(element: element)
         }
     }
 }

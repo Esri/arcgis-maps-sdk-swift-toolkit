@@ -47,7 +47,7 @@ struct InputWrapper: View {
             } else {
                 ReadOnlyInput(element: element)
             }
-            InputFooter(element: element)
+            FormElementFooter(element: element)
         }
         .onIsEditableChange(of: element) { newIsEditable in
             isEditable = newIsEditable
