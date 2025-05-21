@@ -172,7 +172,7 @@ extension FeatureFormExampleView {
 ***REMOVED******REMOVED******REMOVED***submitButtonVisibility = .hidden
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***let databases = editedTables.compactMap { $0.serviceGeodatabase ***REMOVED***
+***REMOVED******REMOVED***let databases = editedTables.compactMap(\.serviceGeodatabase)
 ***REMOVED******REMOVED***if databases.contains(where: \.hasLocalEdits) {
 ***REMOVED******REMOVED******REMOVED***submitButtonVisibility = .visible
 ***REMOVED*** else {
