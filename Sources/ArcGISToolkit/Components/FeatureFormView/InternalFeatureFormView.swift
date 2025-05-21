@@ -82,7 +82,7 @@ extension InternalFeatureFormView {
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
-            GroupView(element: element, viewCreator: { internalMakeElement($0) })
+            GroupView(element: element) { internalMakeElement($0) }
         case let element as TextFormElement:
             makeTextElement(element)
         case let element as UtilityAssociationsFormElement:
