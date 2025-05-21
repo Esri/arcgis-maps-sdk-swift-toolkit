@@ -250,7 +250,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED******REMOVED***FormElementFooter(element: element)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

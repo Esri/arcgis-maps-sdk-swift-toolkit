@@ -16,7 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the bottom of a field element in a form.
-struct InputFooter: View {
+struct FormElementFooter: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
@@ -73,7 +73,7 @@ struct InputFooter: View {
 ***REMOVED***
 ***REMOVED***
 
-extension InputFooter {
+extension FormElementFooter {
 ***REMOVED******REMOVED***/ Localized error text to be shown to a user depending on the type of error information available.
 ***REMOVED***var errorMessage: Text? {
 ***REMOVED******REMOVED***guard let error = primaryError else { return nil ***REMOVED***

@@ -47,7 +47,7 @@ struct InputWrapper: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ReadOnlyInput(element: element)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED******REMOVED***FormElementFooter(element: element)
 ***REMOVED***
 ***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
 ***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
