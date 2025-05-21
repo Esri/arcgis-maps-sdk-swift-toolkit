@@ -19,6 +19,7 @@ import SwiftUI
 struct FormElementHeader: View {
     @Environment(\.formElementPadding) var formElementPadding
     
+    /// The form element the header belongs to.
     let element: FormElement
     
     var body: some View {
