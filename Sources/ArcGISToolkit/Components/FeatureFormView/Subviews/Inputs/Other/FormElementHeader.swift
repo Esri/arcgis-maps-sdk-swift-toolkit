@@ -24,7 +24,7 @@ struct FormElementHeader: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***makeTitleForElement(element: element)
+***REMOVED******REMOVED******REMOVED***titleTextForElement
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -33,7 +33,7 @@ struct FormElementHeader: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder
-***REMOVED***func makeTitleForElement(element: FormElement) -> some View {
+***REMOVED***var titleTextForElement: some View {
 ***REMOVED******REMOVED***switch element {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***FieldFormElementTitle(element: element)
