@@ -18,9 +18,6 @@ import SwiftUI
 struct InternalFeatureFormView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
-#warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
-    @Environment(\.formElementPadding) var formElementPadding
-    
     /// The model for the navigation layer.
     @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
@@ -129,13 +126,7 @@ extension InternalFeatureFormView {
     /// Makes UI for a utility associations element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-        HStack {
-            Text(element.label)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Spacer()
-        }
-        .padding(.top, formElementPadding)
+        FormElementHeader(element: element)
         
         UtilityAssociationsFormElementView(element: element)
             .environment(internalFeatureFormViewModel)
