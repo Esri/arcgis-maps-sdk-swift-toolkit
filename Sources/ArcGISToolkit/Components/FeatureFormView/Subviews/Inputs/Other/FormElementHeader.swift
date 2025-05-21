@@ -24,7 +24,7 @@ struct FormElementHeader: View {
     
     var body: some View {
         HStack {
-            makeTitleForElement(element: element)
+            titleTextForElement
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Spacer()
@@ -33,7 +33,7 @@ struct FormElementHeader: View {
     }
     
     @ViewBuilder
-    func makeTitleForElement(element: FormElement) -> some View {
+    var titleTextForElement: some View {
         switch element {
         case let element as FieldFormElement:
             FieldFormElementTitle(element: element)
