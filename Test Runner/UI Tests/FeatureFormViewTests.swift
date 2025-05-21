@@ -1401,18 +1401,258 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_12_1() {
         let app = XCUIApplication()
+        let elementTitle = app.staticTexts["Associations"]
+        let featureTitle = app.buttons["Object ID: 5050"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let filterResults1 = app.staticTexts["Connected"]
+        let filterResults2 = app.staticTexts["Structure"]
+        let filterResults3 = app.staticTexts["Container"]
+
+        let networkSourceGroup1 = app.staticTexts["Electric Distribution Junction"]
+        let networkSourceGroup2 = app.buttons["Electric Distribution Device, 2"]
+
+        let utilityElement1 = app.buttons["Fuse - 3907, Fuse, Terminal: Single Terminal"]
+        let utilityElement2 = app.buttons["Fuse - 1392, Fuse, Terminal: Single Terminal"]
+
+        let assetGroup = app.staticTexts["Asset group"]
+        let fieldValue = app.staticTexts["Asset group Read Only Input"]
+
+        openTestCase()
+        XCTAssertTrue(
+            featureTitle.waitForExistence(timeout: 30),
+            "The list of available features failed to appear after 30 seconds."
+        )
+
+        // Tap the feature to open the form
+        featureTitle.tap()
+        assertFormOpened(titleElement: formTitle)
+
+        XCTAssertTrue(
+            elementTitle.exists,
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            filterResults1.exists,
+            "The filter result \"Connected\" doesn't exist."
+        )
+
+        XCTAssertTrue(
+            filterResults2.exists,
+            "The filter result \"Structure\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            filterResults3.exists,
+            "The filter result \"Container\" doesn't exist."
+        )
+        
+        filterResults1.tap()
+
+        XCTAssertTrue(
+            networkSourceGroup1.exists,
+            "The network source group \"Electric Distribution Junction\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            networkSourceGroup2.exists,
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+
+        // Needed to wait a bit so that the tap is successful
+        sleep(2)
+        networkSourceGroup2.tap()
+
+        XCTAssertTrue(
+            utilityElement1.waitForExistence(timeout: 30),
+            "Feature \"Fuse - 3097\" failed to appear after 30 seconds."
+        )
+        
+        XCTAssertTrue(
+            utilityElement2.exists,
+            "The utility element \"Fuse - 1392\" doesn't exist."
+        )
+
+        utilityElement1.tap()
+        
+        // Open new form
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            assetGroup.exists,
+            "The asset group \"Asset group\" doesn't exist."
+        )
+
+        XCTAssertEqual(
+            fieldValue.label,
+            "Fuse"
+        )
+    }
+    
+    // Test case 12.2: Associations show fraction along edge - NEEDS DATA
+//    func testCase_12_2() {
+//    }
+    
+    func testCase_12_3() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Structure Boundary"]
+        let elementTitle = app.staticTexts["Associations"]
+
+        let filterResults1 = app.staticTexts["Content"]
+        let networkSourceGroup1 = app.staticTexts["Electric Distribution Device"]
+        let utilityElement1 = app.buttons["Circuit Breaker - 2584, Circuit Breaker, Containment Visible: False"]
+
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+
+        XCTAssertTrue(
+            elementTitle.exists,
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            filterResults1.exists,
+            "The filter result \"Content\" doesn't exist."
+        )
+        
+        filterResults1.tap()
+
+        XCTAssertTrue(
+            networkSourceGroup1.exists,
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+
+        // Needed to wait a bit so that the tap is successful
+        sleep(2)
+        networkSourceGroup1.tap()
+
+        // Expectation: a list of one utility elements with "Containment Visible: False"
+        XCTAssertTrue(
+            utilityElement1.exists,
+            "The utility element \"Circuit Breaker - 2584\" doesn't exist."
+        )
+    }
+    
+    func testCase_12_4() {
+        let app = XCUIApplication()
+        let elementTitle = app.staticTexts["Associations"]
         let featureTitle = app.buttons["Object ID: 5050"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         
+        let filterResults1 = app.staticTexts["Container"]
+
+        let networkSourceGroup1 = app.staticTexts["Structure Boundary"]
+
+        let utilityElement1 = app.buttons["Substation - 2, Substation"]
+
         openTestCase()
-        
-        XCTAssertTrue(featureTitle.waitForExistence(timeout: 10), "The feature title wasn't found.")
-        featureTitle.tap()
-        
         assertFormOpened(titleElement: formTitle)
         
-        app.buttons["Container, 1"].exists
-        app.buttons["Connected, 7"].exists
+        XCTAssertTrue(
+            elementTitle.exists,
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            filterResults1.exists,
+            "The filter result \"Container\" doesn't exist."
+        )
+        
+        filterResults1.tap()
+
+        XCTAssertTrue(
+            networkSourceGroup1.exists,
+            "The network source group \"Structure Boundary\" doesn't exist."
+        )
+
+        sleep(2)
+        networkSourceGroup1.tap()
+        
+        // Expectation: a list of one utility elements with no "Containment Visible" label
+        XCTAssertTrue(
+            utilityElement1.exists,
+            "The utility element \"Substation - 2\" doesn't exist."
+        )
+    }
+    
+    func testCase_12_5() {
+        let app = XCUIApplication()
+        let elementTitle = app.staticTexts["Associations"]
+        let featureTitle = app.buttons["Object ID: 5050"]
+        let formTitle = app.staticTexts["Structure Boundary"]
+        let formTitle2 = app.staticTexts["Structure Boundary"]
+
+        let filterResults1 = app.staticTexts["Connected"]
+
+        let networkSourceGroup1 = app.staticTexts["Electric Distribution Device"]
+
+        let utilityElement1 = app.staticTexts["Transformer - 2552"]
+        
+        let assetType = app.staticTexts["Asset type *"]
+        let fieldValue = app.staticTexts["Asset type Combo Box Value"]
+
+        let firstOptionButton = app.buttons["Unknown"]
+        let doneButton = app.buttons["Done"]
+
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            elementTitle.exists,
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            filterResults1.exists,
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        filterResults1.tap()
+
+        XCTAssertTrue(
+            networkSourceGroup1.exists,
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+
+        networkSourceGroup1.tap()
+
+        XCTAssertTrue(
+            utilityElement1.exists,
+            "The utility element \"Transformer - 2552\" doesn't exist."
+        )
+        
+        utilityElement1.tap()
+        
+        // Need new title
+        assertFormOpened(titleElement: formTitle2)
+
+        XCTAssertTrue(
+            assetType.exists,
+            "The field form element \"Asset type *\"doesn't exist."
+        )
+
+        fieldValue.tap()
+        
+        XCTAssertTrue(
+            firstOptionButton.isHittable,
+            "The first option \"Unknown\" isn't hittable."
+        )
+        
+        firstOptionButton.tap()
+        
+        XCTAssertTrue(
+            doneButton.isHittable,
+            "The done button isn't hittable."
+        )
+        
+        doneButton.tap()
+
+        // Tap the "Back" button
+        //* Expection: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
+        //* tap the "Discard" option. Note that some platforms may use "Discard Edits".
+        //* Access the new `FeatureForm`
+        //* Expection: the form title should be "Electric Distribution Junction"
+        //* Expectation: a list of one utility elements entitled "Transformer - 2552"
     }
 }
 
