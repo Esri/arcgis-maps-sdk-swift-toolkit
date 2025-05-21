@@ -111,7 +111,7 @@ extension InternalFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         if !(element.input is UnsupportedFormInput) {
-            InputWrapper(element: element)
+            FormElementWrapper(element: element)
             Divider()
         }
     }
