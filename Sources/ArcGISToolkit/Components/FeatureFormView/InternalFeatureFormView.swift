@@ -127,14 +127,9 @@ extension InternalFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
         FormElementHeader(element: element)
-        
         UtilityAssociationsFormElementView(element: element)
             .environment(internalFeatureFormViewModel)
-        
-        if !element.description.isEmpty {
-            Text(element.description)
-                .font(.footnote)
-        }
+        FormElementFooter(element: element)
         Divider()
     }
 }
