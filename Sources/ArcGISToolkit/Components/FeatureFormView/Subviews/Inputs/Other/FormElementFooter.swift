@@ -17,7 +17,7 @@
 
 ***REMOVED***/ A view shown at the bottom of a field element in a form.
 struct FormElementFooter: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***@Environment(\.formElementPadding) var formElementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
 ***REMOVED***@Environment(\._validationErrorVisibility) private var validationErrorVisibility
@@ -64,7 +64,7 @@ struct FormElementFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundStyle(isShowingError ? .red : .secondary)
 ***REMOVED******REMOVED***.id(id)
-***REMOVED******REMOVED***.padding(.vertical, elementPadding / 2)
+***REMOVED******REMOVED***.padding(.vertical, formElementPadding / 2)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***for await _ in element.$value {
 ***REMOVED******REMOVED******REMOVED******REMOVED***id = UUID()
