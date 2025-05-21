@@ -82,7 +82,7 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
-***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { internalMakeElement($0) ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***GroupView(element: element) { internalMakeElement($0) ***REMOVED***
 ***REMOVED******REMOVED***case let element as TextFormElement:
 ***REMOVED******REMOVED******REMOVED***makeTextElement(element)
 ***REMOVED******REMOVED***case let element as UtilityAssociationsFormElement:
