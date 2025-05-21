@@ -15,7 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view shown at the top of a form element.
+***REMOVED***/ A header for elements in a feature form.
 struct FormElementHeader: View {
 ***REMOVED***@Environment(\.formElementPadding) var formElementPadding
 ***REMOVED***
