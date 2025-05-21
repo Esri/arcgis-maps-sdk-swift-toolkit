@@ -19,7 +19,7 @@
 ***REMOVED***/
 ***REMOVED***/ This view injects a header and footer. It also monitors whether a field form element is editable and
 ***REMOVED***/ chooses the correct input view based on the input type.
-struct InputWrapper: View {
+struct FormElementWrapper: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
 ***REMOVED***
