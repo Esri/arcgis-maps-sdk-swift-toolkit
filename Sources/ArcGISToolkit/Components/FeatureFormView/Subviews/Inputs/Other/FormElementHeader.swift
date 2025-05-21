@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view shown at the top of a field element in a form.
-struct InputHeader: View {
+struct FormElementHeader: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// A Boolean value indicating whether the input is editable.

@@ -227,7 +227,7 @@ private extension TextInput {
         
         var body: some View {
             HStack {
-                InputHeader(element: element)
+                FormElementHeader(element: element)
                 Button("Done") {
                     dismiss()
                 }
