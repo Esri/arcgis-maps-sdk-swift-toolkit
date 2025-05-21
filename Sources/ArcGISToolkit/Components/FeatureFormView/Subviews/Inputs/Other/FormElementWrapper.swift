@@ -20,37 +20,21 @@ import SwiftUI
 /// This view injects a header and footer. It also monitors whether a field form element is editable and
 /// chooses the correct input view based on the input type.
 struct FormElementWrapper: View {
-    /// A Boolean value indicating whether the input is editable.
-    @State private var isEditable = false
-    
-    /// The element the input belongs to.
-    let element: FieldFormElement
+    /// The wrapped form element.
+    let element: FormElement
     
     var body: some View {
         VStack(alignment: .leading) {
             FormElementHeader(element: element)
-            if isEditable {
-                switch element.input {
-                case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
-                    TextInput(element: element)
-                case is ComboBoxFormInput:
-                    ComboBoxInput(element: element)
-                case is DateTimePickerFormInput:
-                    DateTimeInput(element: element)
-                case is RadioButtonsFormInput:
-                    RadioButtonsInput(element: element)
-                case is SwitchFormInput:
-                    SwitchInput(element: element)
-                default:
-                    EmptyView()
-                }
-            } else {
-                ReadOnlyInput(element: element)
+            switch element {
+            case let element as FieldFormElement:
+                FieldFormElementView(element: element)
+            case let element as UtilityAssociationsFormElement:
+                UtilityAssociationsFormElementView(element: element)
+            default:
+                EmptyView()
             }
             FormElementFooter(element: element)
-        }
-        .onIsEditableChange(of: element) { newIsEditable in
-            isEditable = newIsEditable
         }
     }
 }
