@@ -79,16 +79,10 @@ extension InternalFeatureFormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
 ***REMOVED******REMOVED***switch element {
-***REMOVED******REMOVED***case let element as FieldFormElement:
-***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
 ***REMOVED******REMOVED******REMOVED***GroupView(element: element) { internalMakeElement($0) ***REMOVED***
-***REMOVED******REMOVED***case let element as TextFormElement:
-***REMOVED******REMOVED******REMOVED***makeTextElement(element)
-***REMOVED******REMOVED***case let element as UtilityAssociationsFormElement:
-***REMOVED******REMOVED******REMOVED***makeUtilityAssociationsFormElement(element)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***internalMakeElement(element)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
