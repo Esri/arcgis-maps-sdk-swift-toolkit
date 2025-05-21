@@ -24,7 +24,6 @@ struct TestRunnerApp: App {
     }
     
     init() {
-//        ArcGISEnvironment.apiKey = APIKey("AAPK83fdb937974a43fda5dcc544a4d2c831Kt05knTmR1dZSbizfPRt-8xC9ieZqaew87pYsuESt1kK2GrhUpOSeDlkVqoCQgho")
-        ArcGISEnvironment.apiKey = APIKey("AAPK64f41d7ae01a4c64b8acbb63a830b592D0LE_PN47pvnwe9B9BObfw99iNYjbeKCJLOcEJKnToAS-C_hG-FMdjneelPvWXQ7")
+        ArcGISEnvironment.apiKey = APIKey("<#APIKey#>")
     }
 }
