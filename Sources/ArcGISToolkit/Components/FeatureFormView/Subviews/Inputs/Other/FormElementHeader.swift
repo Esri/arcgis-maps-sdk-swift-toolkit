@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A view shown at the top of a form element.
+/// A header for elements in a feature form.
 struct FormElementHeader: View {
     @Environment(\.formElementPadding) var formElementPadding
     
