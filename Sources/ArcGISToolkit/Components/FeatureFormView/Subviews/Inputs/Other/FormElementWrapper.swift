@@ -20,37 +20,21 @@
 ***REMOVED***/ This view injects a header and footer. It also monitors whether a field form element is editable and
 ***REMOVED***/ chooses the correct input view based on the input type.
 struct FormElementWrapper: View {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
-***REMOVED***@State private var isEditable = false
-***REMOVED***
-***REMOVED******REMOVED***/ The element the input belongs to.
-***REMOVED***let element: FieldFormElement
+***REMOVED******REMOVED***/ The wrapped form element.
+***REMOVED***let element: FormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED******REMOVED***if isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch element.input {
-***REMOVED******REMOVED******REMOVED******REMOVED***case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextInput(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***case is ComboBoxFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***case is DateTimePickerFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DateTimeInput(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***case is RadioButtonsFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***case is SwitchFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ReadOnlyInput(element: element)
+***REMOVED******REMOVED******REMOVED***switch element {
+***REMOVED******REMOVED******REMOVED***case let element as FieldFormElement:
+***REMOVED******REMOVED******REMOVED******REMOVED***FieldFormElementView(element: element)
+***REMOVED******REMOVED******REMOVED***case let element as UtilityAssociationsFormElement:
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityAssociationsFormElementView(element: element)
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***FormElementFooter(element: element)
-***REMOVED***
-***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
