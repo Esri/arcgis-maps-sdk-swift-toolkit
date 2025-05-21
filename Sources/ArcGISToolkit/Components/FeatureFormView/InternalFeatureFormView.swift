@@ -79,16 +79,10 @@ extension InternalFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
-        case let element as FieldFormElement:
-            makeFieldElement(element)
         case let element as GroupFormElement:
             GroupView(element: element) { internalMakeElement($0) }
-        case let element as TextFormElement:
-            makeTextElement(element)
-        case let element as UtilityAssociationsFormElement:
-            makeUtilityAssociationsFormElement(element)
         default:
-            EmptyView()
+            internalMakeElement(element)
         }
     }
     
