@@ -15,32 +15,53 @@
 import ArcGIS
 import SwiftUI
 
-/// A view shown at the top of a field element in a form.
+/// A view shown at the top of a form element.
 struct FormElementHeader: View {
-    @Environment(\.formElementPadding) var elementPadding
+    @Environment(\.formElementPadding) var formElementPadding
     
-    /// A Boolean value indicating whether the input is editable.
-    @State private var isEditable = false
-    
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
-    
-    /// The element the input belongs to.
-    let element: FieldFormElement
+    let element: FormElement
     
     var body: some View {
         HStack {
-            Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
+            makeTitleForElement(element: element)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Spacer()
         }
-        .padding(.top, elementPadding)
-        .onIsEditableChange(of: element) { newIsEditable in
-            isEditable = newIsEditable
+        .padding(.top, formElementPadding)
+    }
+    
+    @ViewBuilder
+    func makeTitleForElement(element: FormElement) -> some View {
+        switch element {
+        case let element as FieldFormElement:
+            FieldFormElementTitle(element: element)
+        case let element as UtilityAssociationsFormElement:
+            Text(element.label)
+        default:
+            EmptyView()
         }
-        .onIsRequiredChange(of: element) { newIsRequired in
-            isRequired = newIsRequired
+    }
+}
+
+extension FormElementHeader {
+    struct FieldFormElementTitle: View {
+        let element: FieldFormElement
+        
+        /// A Boolean value indicating whether the input is editable.
+        @State private var isEditable = false
+        
+        /// A Boolean value indicating whether a value for the input is required.
+        @State private var isRequired = false
+        
+        var body: some View {
+            Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
+                .onIsEditableChange(of: element) { newIsEditable in
+                    isEditable = newIsEditable
+                }
+                .onIsRequiredChange(of: element) { newIsRequired in
+                    isRequired = newIsRequired
+                }
         }
     }
 }
