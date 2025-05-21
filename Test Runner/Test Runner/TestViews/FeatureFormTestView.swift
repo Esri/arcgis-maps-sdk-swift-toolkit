@@ -92,17 +92,7 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !initialDrawCompleted, drawStatus == .completed {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialDrawCompleted = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***testSetupTask = Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let point = testCase.point {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await mapView.setViewpoint(Viewpoint(center: point, scale: 1000))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let screenPoint = mapView.screenPoint(fromLocation: point) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyLayerResults = try await mapView.identifyLayers(screenPoint: screenPoint, tolerance: 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let objectID = testCase.objectID {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await selectObjectID(objectID, on: map)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -115,9 +105,6 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: { Text(alertError ?? "Unknown error") ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: Binding(get: { !identifyLayerResults.isEmpty ***REMOVED***, set: { _ in ***REMOVED***)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyLayerResultsList
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
@@ -136,8 +123,19 @@ private extension FeatureFormTestView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func selectObjectID(_ objectID: Int, on map: Map) async {
-***REMOVED******REMOVED***guard let featureLayer = map.operationalLayers.first as? FeatureLayer else {
+***REMOVED***func selectObjectID(_ objectID: Int, on map: Map, for layerName: String) async {
+***REMOVED******REMOVED***let featureLayer: FeatureLayer?
+***REMOVED******REMOVED***if !layerName.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED*** This could be expanded to find any operational layer OR operational layer sublayer
+***REMOVED******REMOVED******REMOVED******REMOVED*** Currently, searching for the layer in the first operational layer's sublayerContents
+***REMOVED******REMOVED******REMOVED******REMOVED*** is the only requirement. This is the case for the Utility Network Association test cases.
+***REMOVED******REMOVED******REMOVED***featureLayer = map.operationalLayers.first?.subLayerContents.first(where: { layer in
+***REMOVED******REMOVED******REMOVED******REMOVED***layer.name == layerName
+***REMOVED******REMOVED***) as? FeatureLayer
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***featureLayer = map.operationalLayers.first as? FeatureLayer
+***REMOVED***
+***REMOVED******REMOVED***guard let featureLayer else {
 ***REMOVED******REMOVED******REMOVED***alertError = "Can't resolve layer"
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -154,21 +152,6 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***alertError = error.localizedDescription
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The list of identify layer results.
-***REMOVED***var identifyLayerResultsList: some View {
-***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***Section("ArcGIS Features") {
-***REMOVED******REMOVED******REMOVED******REMOVED***let features = identifyLayerResults.flatMap { $0.geoElements.compactMap { $0 as? ArcGISFeature ***REMOVED*** ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(features.enumerated().map{ $0 ***REMOVED***, id: \.0) { _, feature in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(feature.displayName) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.identifyLayerResults.removeAll()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -204,9 +187,9 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED***/ The name of the test case.
 ***REMOVED******REMOVED***let id: String
 ***REMOVED******REMOVED******REMOVED***/ The object ID of the feature being tested.
-***REMOVED******REMOVED***let objectID: Int?
-***REMOVED******REMOVED******REMOVED***/ The map location of the feature under test.
-***REMOVED******REMOVED***let point: Point?
+***REMOVED******REMOVED***let objectID: Int
+***REMOVED******REMOVED******REMOVED***/ The name of the layer to identify.
+***REMOVED******REMOVED***let layerName: String
 ***REMOVED******REMOVED******REMOVED***/ The test data location.
 ***REMOVED******REMOVED***let url: URL
 ***REMOVED******REMOVED***
@@ -214,26 +197,20 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED******REMOVED***/   - name: The name of the test case.
 ***REMOVED******REMOVED******REMOVED***/   - objectID: The object ID of the feature being tested.
-***REMOVED******REMOVED******REMOVED***/   - portalID: The portal ID of the test data.
-***REMOVED******REMOVED***init(_ name: String, objectID: Int, portalID: String) {
-***REMOVED******REMOVED******REMOVED***self.init(credentialInfo: nil, id: name, objectID: objectID, point: nil, portalID: portalID)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates a FeatureFormView test case.
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - name: The name of the test case.
-***REMOVED******REMOVED******REMOVED***/   - point: The map location of the feature under test.
+***REMOVED******REMOVED******REMOVED***/   - layerName: The name of the layer to identify.
 ***REMOVED******REMOVED******REMOVED***/   - portalID: The portal ID of the test data.
 ***REMOVED******REMOVED******REMOVED***/   - credentialInfo: Optional ArcGIS credential info for the test data.
-***REMOVED******REMOVED***init(_ name: String, point: Point, portalID: String, credentialInfo: CredentialInfo) {
-***REMOVED******REMOVED******REMOVED***self.init(credentialInfo: credentialInfo, id: name, objectID: nil, point: point, portalID: portalID)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***private init(credentialInfo: CredentialInfo?, id: String, objectID: Int?, point: Point?, portalID: String) {
+***REMOVED******REMOVED***init(
+***REMOVED******REMOVED******REMOVED***_ name: String,
+***REMOVED******REMOVED******REMOVED***objectID: Int,
+***REMOVED******REMOVED******REMOVED***layerName: String = "",
+***REMOVED******REMOVED******REMOVED***portalID: String,
+***REMOVED******REMOVED******REMOVED***credentialInfo: CredentialInfo? = nil
+***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***self.credentialInfo = credentialInfo
-***REMOVED******REMOVED******REMOVED***self.id = id
+***REMOVED******REMOVED******REMOVED***self.id = name
 ***REMOVED******REMOVED******REMOVED***self.objectID = objectID
-***REMOVED******REMOVED******REMOVED***self.point = point
+***REMOVED******REMOVED******REMOVED***self.layerName = layerName
 ***REMOVED******REMOVED******REMOVED***self.url = .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: String("https:***REMOVED***arcgis.com/home/item.html?id=\(portalID)")
 ***REMOVED******REMOVED******REMOVED***)!
@@ -272,7 +249,10 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_10_1", objectID: 1, portalID: .testCase10),
 ***REMOVED******REMOVED***.init("testCase_10_2", objectID: 1, portalID: .testCase10),
 ***REMOVED******REMOVED***.init("testCase_11_1", objectID: 2, portalID: .testCase11),
-***REMOVED******REMOVED***.init("testCase_12_1", point: Point(x: -9815314.206573399, y: 5130328.983696212, spatialReference: .webMercator), portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+***REMOVED******REMOVED***.init("testCase_12_1", objectID: 5050, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+***REMOVED******REMOVED***.init("testCase_12_3", objectID: 2, layerName: "Structure Boundary", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+***REMOVED******REMOVED***.init("testCase_12_4", objectID: 2584, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+***REMOVED******REMOVED***.init("testCase_12_5", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
 ***REMOVED***]***REMOVED***
 ***REMOVED***
 

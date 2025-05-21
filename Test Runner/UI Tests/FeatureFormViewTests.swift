@@ -1401,30 +1401,19 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_12_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let assetGroup = app.staticTexts["Asset group"]
 ***REMOVED******REMOVED***let elementTitle = app.staticTexts["Associations"]
-***REMOVED******REMOVED***let featureTitle = app.buttons["Object ID: 5050"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Asset group Read Only Input"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Electric Distribution Device"]
 ***REMOVED******REMOVED***let filterResults1 = app.staticTexts["Connected"]
 ***REMOVED******REMOVED***let filterResults2 = app.staticTexts["Structure"]
 ***REMOVED******REMOVED***let filterResults3 = app.staticTexts["Container"]
-
 ***REMOVED******REMOVED***let networkSourceGroup1 = app.staticTexts["Electric Distribution Junction"]
-***REMOVED******REMOVED***let networkSourceGroup2 = app.buttons["Electric Distribution Device, 2"]
-
-***REMOVED******REMOVED***let utilityElement1 = app.buttons["Fuse - 3907, Fuse, Terminal: Single Terminal"]
-***REMOVED******REMOVED***let utilityElement2 = app.buttons["Fuse - 1392, Fuse, Terminal: Single Terminal"]
-
-***REMOVED******REMOVED***let assetGroup = app.staticTexts["Asset group"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Asset group Read Only Input"]
+***REMOVED******REMOVED***let networkSourceGroup2Button = app.buttons["Electric Distribution Device, 2"]
+***REMOVED******REMOVED***let utilityElement1Button = app.buttons["Fuse - 3907, Fuse, Terminal: Single Terminal"]
+***REMOVED******REMOVED***let utilityElement2Button = app.buttons["Fuse - 1392, Fuse, Terminal: Single Terminal"]
 
 ***REMOVED******REMOVED***openTestCase()
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***featureTitle.waitForExistence(timeout: 30),
-***REMOVED******REMOVED******REMOVED***"The list of available features failed to appear after 30 seconds."
-***REMOVED******REMOVED***)
-
-***REMOVED******REMOVED******REMOVED*** Tap the feature to open the form
-***REMOVED******REMOVED***featureTitle.tap()
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -1455,25 +1444,23 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***networkSourceGroup2.exists,
+***REMOVED******REMOVED******REMOVED***networkSourceGroup2Button.waitForExistence(timeout: 5),
 ***REMOVED******REMOVED******REMOVED***"The network source group \"Electric Distribution Device\" doesn't exist."
 ***REMOVED******REMOVED***)
 
-***REMOVED******REMOVED******REMOVED*** Needed to wait a bit so that the tap is successful
-***REMOVED******REMOVED***sleep(2)
-***REMOVED******REMOVED***networkSourceGroup2.tap()
+***REMOVED******REMOVED***networkSourceGroup2Button.tap()
 
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***utilityElement1.waitForExistence(timeout: 30),
+***REMOVED******REMOVED******REMOVED***utilityElement1Button.waitForExistence(timeout: 30),
 ***REMOVED******REMOVED******REMOVED***"Feature \"Fuse - 3097\" failed to appear after 30 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***utilityElement2.exists,
+***REMOVED******REMOVED******REMOVED***utilityElement2Button.exists,
 ***REMOVED******REMOVED******REMOVED***"The utility element \"Fuse - 1392\" doesn't exist."
 ***REMOVED******REMOVED***)
 
-***REMOVED******REMOVED***utilityElement1.tap()
+***REMOVED******REMOVED***utilityElement1Button.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open new form
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
@@ -1495,12 +1482,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_12_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formTitle = app.staticTexts["Structure Boundary"]
 ***REMOVED******REMOVED***let elementTitle = app.staticTexts["Associations"]
-
-***REMOVED******REMOVED***let filterResults1 = app.staticTexts["Content"]
-***REMOVED******REMOVED***let networkSourceGroup1 = app.staticTexts["Electric Distribution Device"]
-***REMOVED******REMOVED***let utilityElement1 = app.buttons["Circuit Breaker - 2584, Circuit Breaker, Containment Visible: False"]
+***REMOVED******REMOVED***let filterResults = app.staticTexts["Content"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Structure Boundary"]
+***REMOVED******REMOVED***let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
+***REMOVED******REMOVED***let utilityElementButton = app.buttons["Circuit Breaker - 2584, Circuit Breaker, Containment Visible: False"]
 
 ***REMOVED******REMOVED***openTestCase()
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
@@ -1511,24 +1497,22 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***filterResults1.exists,
+***REMOVED******REMOVED******REMOVED***filterResults.waitForExistence(timeout: 5),
 ***REMOVED******REMOVED******REMOVED***"The filter result \"Content\" doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***filterResults1.tap()
+***REMOVED******REMOVED***filterResults.tap()
 
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***networkSourceGroup1.exists,
+***REMOVED******REMOVED******REMOVED***networkSourceGroupButton.waitForExistence(timeout: 5),
 ***REMOVED******REMOVED******REMOVED***"The network source group \"Electric Distribution Device\" doesn't exist."
 ***REMOVED******REMOVED***)
 
-***REMOVED******REMOVED******REMOVED*** Needed to wait a bit so that the tap is successful
-***REMOVED******REMOVED***sleep(2)
-***REMOVED******REMOVED***networkSourceGroup1.tap()
+***REMOVED******REMOVED***networkSourceGroupButton.tap()
 
 ***REMOVED******REMOVED******REMOVED*** Expectation: a list of one utility elements with "Containment Visible: False"
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***utilityElement1.exists,
+***REMOVED******REMOVED******REMOVED***utilityElementButton.exists,
 ***REMOVED******REMOVED******REMOVED***"The utility element \"Circuit Breaker - 2584\" doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -1536,14 +1520,10 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_12_4() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let elementTitle = app.staticTexts["Associations"]
-***REMOVED******REMOVED***let featureTitle = app.buttons["Object ID: 5050"]
+***REMOVED******REMOVED***let filterResults = app.staticTexts["Container"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Electric Distribution Device"]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let filterResults1 = app.staticTexts["Container"]
-
-***REMOVED******REMOVED***let networkSourceGroup1 = app.staticTexts["Structure Boundary"]
-
-***REMOVED******REMOVED***let utilityElement1 = app.buttons["Substation - 2, Substation"]
+***REMOVED******REMOVED***let networkSourceGroup = app.staticTexts["Structure Boundary"]
+***REMOVED******REMOVED***let utilityElementButton = app.buttons["Substation - 2, Substation"]
 
 ***REMOVED******REMOVED***openTestCase()
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
@@ -1554,46 +1534,41 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***filterResults1.exists,
+***REMOVED******REMOVED******REMOVED***filterResults.exists,
 ***REMOVED******REMOVED******REMOVED***"The filter result \"Container\" doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***filterResults1.tap()
+***REMOVED******REMOVED***filterResults.tap()
 
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***networkSourceGroup1.exists,
+***REMOVED******REMOVED******REMOVED***networkSourceGroup.waitForExistence(timeout: 5),
 ***REMOVED******REMOVED******REMOVED***"The network source group \"Structure Boundary\" doesn't exist."
 ***REMOVED******REMOVED***)
 
-***REMOVED******REMOVED***sleep(2)
-***REMOVED******REMOVED***networkSourceGroup1.tap()
+***REMOVED******REMOVED***networkSourceGroup.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Expectation: a list of one utility elements with no "Containment Visible" label
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***utilityElement1.exists,
+***REMOVED******REMOVED******REMOVED***utilityElementButton.exists,
 ***REMOVED******REMOVED******REMOVED***"The utility element \"Substation - 2\" doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_12_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let elementTitle = app.staticTexts["Associations"]
-***REMOVED******REMOVED***let featureTitle = app.buttons["Object ID: 5050"]
-***REMOVED******REMOVED***let formTitle = app.staticTexts["Structure Boundary"]
-***REMOVED******REMOVED***let formTitle2 = app.staticTexts["Structure Boundary"]
-
-***REMOVED******REMOVED***let filterResults1 = app.staticTexts["Connected"]
-
-***REMOVED******REMOVED***let networkSourceGroup1 = app.staticTexts["Electric Distribution Device"]
-
-***REMOVED******REMOVED***let utilityElement1 = app.staticTexts["Transformer - 2552"]
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let assetType = app.staticTexts["Asset type *"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Asset type Combo Box Value"]
-
-***REMOVED******REMOVED***let firstOptionButton = app.buttons["Unknown"]
+***REMOVED******REMOVED***let backButton = app.buttons["Back"]
+***REMOVED******REMOVED***let discardEditsButton = app.buttons["Discard Edits"]
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
-
+***REMOVED******REMOVED***let elementTitle = app.staticTexts["Associations"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Asset type Combo Box Value"]
+***REMOVED******REMOVED***let filterResults = app.staticTexts["Connected"]
+***REMOVED******REMOVED***let firstOptionButton = app.buttons["Unknown"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Electric Distribution Device"]
+***REMOVED******REMOVED***let formTitle2 = app.staticTexts["Electric Distribution Device"]
+***REMOVED******REMOVED***let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
+***REMOVED******REMOVED***let utilityElementButton = app.buttons["Transformer - 2552, Transformer, Terminal: High"]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***openTestCase()
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle)
 ***REMOVED******REMOVED***
@@ -1603,27 +1578,26 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***filterResults1.exists,
+***REMOVED******REMOVED******REMOVED***filterResults.exists,
 ***REMOVED******REMOVED******REMOVED***"The filter result \"Connected\" doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***filterResults1.tap()
+***REMOVED******REMOVED***filterResults.tap()
 
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***networkSourceGroup1.exists,
+***REMOVED******REMOVED******REMOVED***networkSourceGroupButton.waitForExistence(timeout: 5),
 ***REMOVED******REMOVED******REMOVED***"The network source group \"Electric Distribution Device\" doesn't exist."
 ***REMOVED******REMOVED***)
 
-***REMOVED******REMOVED***networkSourceGroup1.tap()
+***REMOVED******REMOVED***networkSourceGroupButton.tap()
 
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***utilityElement1.exists,
+***REMOVED******REMOVED******REMOVED***utilityElementButton.waitForExistence(timeout: 5),
 ***REMOVED******REMOVED******REMOVED***"The utility element \"Transformer - 2552\" doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***utilityElement1.tap()
+***REMOVED******REMOVED***utilityElementButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Need new title
 ***REMOVED******REMOVED***assertFormOpened(titleElement: formTitle2)
 
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -1648,11 +1622,24 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***doneButton.tap()
 
 ***REMOVED******REMOVED******REMOVED*** Tap the "Back" button
-***REMOVED******REMOVED******REMOVED**** Expection: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
-***REMOVED******REMOVED******REMOVED**** tap the "Discard" option. Note that some platforms may use "Discard Edits".
-***REMOVED******REMOVED******REMOVED**** Access the new `FeatureForm`
-***REMOVED******REMOVED******REMOVED**** Expection: the form title should be "Electric Distribution Junction"
-***REMOVED******REMOVED******REMOVED**** Expectation: a list of one utility elements entitled "Transformer - 2552"
+***REMOVED******REMOVED***backButton.tap()
+
+***REMOVED******REMOVED******REMOVED*** Expection: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***discardEditsButton.exists,
+***REMOVED******REMOVED******REMOVED***"The alert \"Discard Edits\" doesn't exist."
+***REMOVED******REMOVED***)
+
+***REMOVED******REMOVED******REMOVED*** tap the "Discard" option. Note that some platforms may use "Discard Edits".
+***REMOVED******REMOVED***discardEditsButton.tap()
+
+***REMOVED******REMOVED******REMOVED*** Access the new `FeatureForm`
+***REMOVED******REMOVED******REMOVED*** Expection: the form title should be "Electric Distribution Junction"
+***REMOVED******REMOVED******REMOVED*** Expectation: a list of one utility elements entitled "Transformer - 2552"
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***utilityElementButton.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The utility element \"Transformer - 2552\" doesn't exist."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
