@@ -126,10 +126,7 @@ extension InternalFeatureFormView {
     /// Makes UI for a utility associations element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-        FormElementHeader(element: element)
-        UtilityAssociationsFormElementView(element: element)
-            .environment(internalFeatureFormViewModel)
-        FormElementFooter(element: element)
+        FormElementWrapper(element: element)
         Divider()
     }
 }
