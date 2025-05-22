@@ -1476,9 +1476,9 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    // Test case 12.2: Associations show fraction along edge - NEEDS DATA
-//    func testCase_12_2() {
-//    }
+    // Test case 12.2: Associations show fraction along edge
+    // It has been determined that with the currently-available public test data
+    // this is no longer feasible. So this functionality will be ad-hoc tested only.
     
     func testCase_12_3() {
         let app = XCUIApplication()
