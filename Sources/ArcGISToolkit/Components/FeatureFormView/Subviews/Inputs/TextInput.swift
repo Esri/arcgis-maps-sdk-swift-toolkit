@@ -227,7 +227,7 @@ private extension TextInput {
         
         var body: some View {
             HStack {
-                InputHeader(element: element)
+                FormElementHeader(element: element)
                 Button("Done") {
                     dismiss()
                 }
@@ -250,7 +250,7 @@ private extension TextInput {
                 internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
             }
             Spacer()
-            InputFooter(element: element)
+            FormElementFooter(element: element)
         }
     }
 }
