@@ -80,7 +80,7 @@ extension InternalFeatureFormView {
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
         case let element as GroupFormElement:
-            GroupView(element: element) { internalMakeElement($0) }
+            GroupFormElementView(element: element) { internalMakeElement($0) }
         default:
             internalMakeElement(element)
         }
