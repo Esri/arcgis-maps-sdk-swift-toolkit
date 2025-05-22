@@ -1476,9 +1476,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** Test case 12.2: Associations show fraction along edge - NEEDS DATA
-***REMOVED******REMOVED***func testCase_12_2() {
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** Test case 12.2: Associations show fraction along edge
+***REMOVED******REMOVED*** It has been determined that with the currently-available public test data
+***REMOVED******REMOVED*** this is no longer feasible. So this functionality will be ad-hoc tested only.
 ***REMOVED***
 ***REMOVED***func testCase_12_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
