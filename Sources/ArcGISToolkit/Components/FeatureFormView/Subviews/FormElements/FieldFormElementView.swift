@@ -1,4 +1,4 @@
-// Copyright 2024 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,20 +15,15 @@
 import ArcGIS
 import SwiftUI
 
-/// A view which wraps the creation of a view for the underlying field form element.
-///
-/// This view injects a header and footer. It also monitors whether a field form element is editable and
-/// chooses the correct input view based on the input type.
-struct InputWrapper: View {
+struct FieldFormElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
-    /// The element the input belongs to.
+    /// The field form element the view belongs to.
     let element: FieldFormElement
     
     var body: some View {
-        VStack(alignment: .leading) {
-            InputHeader(element: element)
+        Group {
             if isEditable {
                 switch element.input {
                 case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
@@ -47,7 +42,6 @@ struct InputWrapper: View {
             } else {
                 ReadOnlyInput(element: element)
             }
-            InputFooter(element: element)
         }
         .onIsEditableChange(of: element) { newIsEditable in
             isEditable = newIsEditable

@@ -172,7 +172,7 @@ extension FeatureFormExampleView {
             submitButtonVisibility = .hidden
             return
         }
-        let databases = editedTables.compactMap { $0.serviceGeodatabase }
+        let databases = editedTables.compactMap(\.serviceGeodatabase)
         if databases.contains(where: \.hasLocalEdits) {
             submitButtonVisibility = .visible
         } else {
