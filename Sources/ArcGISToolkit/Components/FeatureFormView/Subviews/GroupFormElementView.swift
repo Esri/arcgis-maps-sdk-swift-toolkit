@@ -16,7 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ Displays a group form element and manages the visibility of the elements within the group.
-struct GroupView<Content>: View where Content: View {
+struct GroupFormElementView<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the group is expanded or collapsed.
 ***REMOVED***@State private var isExpanded = false
 ***REMOVED***
@@ -75,7 +75,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 
-extension GroupView {
+extension GroupFormElementView {
 ***REMOVED******REMOVED***/ A view displaying a label and description of a `GroupFormElement`.
 ***REMOVED***struct Header: View {
 ***REMOVED******REMOVED***let element: GroupFormElement

@@ -80,7 +80,7 @@ extension InternalFeatureFormView {
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
 ***REMOVED******REMOVED***switch element {
 ***REMOVED******REMOVED***case let element as GroupFormElement:
-***REMOVED******REMOVED******REMOVED***GroupView(element: element) { internalMakeElement($0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***GroupFormElementView(element: element) { internalMakeElement($0) ***REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***internalMakeElement(element)
 ***REMOVED***
