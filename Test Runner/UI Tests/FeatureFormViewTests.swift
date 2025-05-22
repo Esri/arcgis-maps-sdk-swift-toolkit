@@ -1624,7 +1624,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Tap the "Back" button
 ***REMOVED******REMOVED***backButton.tap()
 
-***REMOVED******REMOVED******REMOVED*** Expection: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
+***REMOVED******REMOVED******REMOVED*** Expectation: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***discardEditsButton.exists,
 ***REMOVED******REMOVED******REMOVED***"The alert \"Discard Edits\" doesn't exist."
@@ -1634,7 +1634,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***discardEditsButton.tap()
 
 ***REMOVED******REMOVED******REMOVED*** Access the new `FeatureForm`
-***REMOVED******REMOVED******REMOVED*** Expection: the form title should be "Electric Distribution Junction"
+***REMOVED******REMOVED******REMOVED*** Expectation: the form title should be "Electric Distribution Junction"
 ***REMOVED******REMOVED******REMOVED*** Expectation: a list of one utility elements entitled "Transformer - 2552"
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***utilityElementButton.waitForExistence(timeout: 5),
