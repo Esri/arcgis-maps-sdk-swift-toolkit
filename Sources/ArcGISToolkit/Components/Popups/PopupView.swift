@@ -21,7 +21,7 @@ import ArcGIS
 /// `PopupView` will support the display of popup elements created by the Map Viewer, including:
 /// Text, Fields, Attachments, and Media (Images and Charts).
 ///
-/// Thanks to the backwards compatibility support in the API, it will also work with the legacy
+/// Thanks to the backward compatibility support in the API, it will also work with the legacy
 /// popup definitions created by the classic Map Viewer. It does not support editing.
 ///
 /// | iPhone | iPad |
@@ -35,22 +35,23 @@ import ArcGIS
 /// - Display a popup for a feature based on the popup definition defined in a web map.
 /// - Supports image refresh intervals on image popup media, refreshing the image at a given
 /// interval defined in the popup element.
-/// - Supports elements containing Arcade expression and automatically evaluates expressions.
+/// - Supports elements containing Arcade expressions and automatically evaluates expressions.
 /// - Displays media (images and charts) full-screen.
-/// - Supports hyperlinks in text, media, and fields elements.
+/// - Supports hyperlinks in text, media, and field elements.
 /// - Fully supports dark mode, as do all Toolkit components.
 /// - Supports auto-refresh for popups where the geo element is a dynamic entity.
+/// - Supports navigating through associations in a utility network.
 ///
 /// **Behavior**
 ///
 /// The popup view can display an optional "close" button, allowing the user to dismiss the view.
-/// The popup view can be embedded in any type of container view including, as demonstrated in the
+/// The popup view can be embedded in any type of container view, including, as demonstrated in the
 /// example, the Toolkit's `FloatingPanel`.
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
-/// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
+/// in the project. To learn more about using the `PopupView`, see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
     /// A binding to the popup currently being presented in the navigation layer.
     @Binding private var presentedPopup: Popup?
