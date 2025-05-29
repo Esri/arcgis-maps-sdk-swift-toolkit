@@ -35,9 +35,7 @@ struct PopupExampleView: View {
     @State private var identifyScreenPoint: CGPoint?
     
     /// The popup to be shown as the result of the layer identify operation.
-    @State private var popup: Popup? {
-        didSet { showPopup = popup != nil }
-    }
+    @State private var popup: Popup?
     
     /// A Boolean value specifying whether the popup view should be shown or not.
     @State private var showPopup = false
@@ -68,10 +66,16 @@ struct PopupExampleView: View {
                     selectedDetent: $floatingPanelDetent,
                     horizontalAlignment: .leading,
                     isPresented: $showPopup
-                ) { [popup] in
-                    PopupView(popup: popup!, isPresented: $showPopup)
-                        .padding()
+                ) {
+                    PopupView(popup: $popup)
+                }
+                .onChange(of: popup == nil) {
+                    showPopup = popup != nil
                 }
         }
     }
+}
+
+#Preview {
+    PopupExampleView()
 }
