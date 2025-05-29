@@ -17,8 +17,8 @@ import SwiftUI
 @Observable class NavigationLayerModel {
     /// An item representing a view pushed on the layer.
     struct Item {
-        /// The closure which produces the view for the item.
-        let view: () -> any View
+        /// The view for the item.
+        let view: any View
     }
     
     /// A Boolean value indicating whether another view is being pushed.
@@ -53,6 +53,16 @@ import SwiftUI
         }
     }
     
+    /// Pops all of the views in the stack.
+    func popAll() {
+        guard !views.isEmpty else { return }
+        
+        transition = .pop
+        withAnimation {
+            views.removeAll()
+        }
+    }
+    
     /// Push a view.
     /// - Parameter view: The view to push.
     func push(_ view: @escaping () -> any View) {
@@ -70,7 +80,7 @@ import SwiftUI
         transition = .push
         
         withAnimation {
-            views.append(.init(view: view))
+            views.append(.init(view: view()))
         } completion: {
             self.isPushing = false
         }
