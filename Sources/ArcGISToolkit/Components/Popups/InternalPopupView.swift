@@ -78,7 +78,7 @@ struct InternalPopupView: View {
     private func evaluateExpressions() async {
         do {
             _ = try await popup.evaluateExpressions()
-            evaluation = Evaluation(elements: popup.evaluatedElements.reversed())
+            evaluation = Evaluation(elements: popup.evaluatedElements)
         } catch {
             evaluation = Evaluation(error: error)
         }

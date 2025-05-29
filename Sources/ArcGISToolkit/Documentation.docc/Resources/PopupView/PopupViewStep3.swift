@@ -17,8 +17,6 @@ struct PopupExampleView: View {
     
     @State private var popup: Popup?
     
-    @State private var showPopup = false
-    
     var body: some View {
         MapViewReader { proxy in
             MapView(map: map)
