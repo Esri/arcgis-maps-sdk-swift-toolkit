@@ -18,9 +18,6 @@ import SwiftUI
 struct InternalFeatureFormView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
-#warning("elementPadding to be removed when makeUtilityAssociationsFormElement is revised")
-    @Environment(\.formElementPadding) var formElementPadding
-    
     /// The model for the navigation layer.
     @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
@@ -82,16 +79,10 @@ extension InternalFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
-        case let element as FieldFormElement:
-            makeFieldElement(element)
         case let element as GroupFormElement:
-            GroupView(element: element, viewCreator: { internalMakeElement($0) })
-        case let element as TextFormElement:
-            makeTextElement(element)
-        case let element as UtilityAssociationsFormElement:
-            makeUtilityAssociationsFormElement(element)
+            GroupFormElementView(element: element) { internalMakeElement($0) }
         default:
-            EmptyView()
+            internalMakeElement(element)
         }
     }
     
@@ -114,7 +105,7 @@ extension InternalFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         if !(element.input is UnsupportedFormInput) {
-            InputWrapper(element: element)
+            FormElementWrapper(element: element)
             Divider()
         }
     }
@@ -129,21 +120,7 @@ extension InternalFeatureFormView {
     /// Makes UI for a utility associations element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-        HStack {
-            Text(element.label)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Spacer()
-        }
-        .padding(.top, formElementPadding)
-        
-        UtilityAssociationsFormElementView(element: element)
-            .environment(internalFeatureFormViewModel)
-        
-        if !element.description.isEmpty {
-            Text(element.description)
-                .font(.footnote)
-        }
+        FormElementWrapper(element: element)
         Divider()
     }
 }
