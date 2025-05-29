@@ -85,13 +85,12 @@ private struct UtilityAssociationsFilterResultLink: View {
             navigationLayerModel.push {
                 List(filterResult.groupResults, id: \.name) { groupResult in
                     UtilityAssociationGroupResultView(groupResult: groupResult)
-                        .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 12))
+#if targetEnvironment(macCatalyst)
+                        .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
+#endif
                 }
                 .listStyle(.inset)
-#if os(iOS)
-                .padding()
-                .safeAreaPadding(.bottom)
-#endif
+                .phoneBottomPadding()
                 .navigationLayerTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
                 .environment(\.popupTitle, popupTitle)
                 .environment(\.associationDisplayCount, associationDisplayCount)
@@ -201,13 +200,12 @@ private struct SearchUtilityAssociationResultsView: View {
                 UtilityAssociationResultLink(result.displayTitle, result: result) {
                     InternalPopupView(popup: result.associatedFeature.toPopup())
                 }
-                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 12))
+#if targetEnvironment(macCatalyst)
+                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
+#endif
             }
             .listStyle(.inset)
-#if os(iOS)
-            .padding()
-            .safeAreaPadding(.bottom)
-#endif
+            .phoneBottomPadding()
         }
     }
 }
