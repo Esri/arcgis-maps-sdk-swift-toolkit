@@ -98,7 +98,7 @@ public struct PopupView: View {
                     .font(.title)
                     // This is a workaround for a NavigationLayer issue where
                     // the navigation title is not centered when the
-                    // headerTrailing content is empty.
+                    // `headerTrailing` content is empty.
                     .disabled(closeButtonVisibility == .hidden)
                     .opacity(closeButtonVisibility == .hidden ? 0 : 1)
                 }
@@ -124,7 +124,7 @@ public struct PopupView: View {
             }
         }
         .onChange(of: presentedPopup?.id, initial: true) {
-            // If presentedPopups does not contain the new popup, the binding
+            // If `presentedPopups` does not contain the new popup, the binding
             // was set upstream, and the navigation stack needs reset.
             guard !presentedPopups.contains(where: { $0.id == presentedPopup?.id }) else {
                 return
@@ -132,6 +132,12 @@ public struct PopupView: View {
             
             navigationLayerModel?.popAll()
             presentedPopups = presentedPopup.map { [$0] } ?? []
+        }
+        .onDisappear {
+            // Resets the state if the presentation was dismissed not using
+            // `isPresented` or `presentedPopup`.
+            isPresented?.wrappedValue = false
+            presentedPopup = nil
         }
     }
 }
