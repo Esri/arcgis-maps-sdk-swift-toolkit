@@ -52,162 +52,103 @@ import ArcGIS
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 /// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
-    /// Creates a `PopupView` with the given popup.
-    /// - Parameters:
-    ///   - popup: The popup to display.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
-        self.popup = popup
-        self.isPresented = isPresented
-    }
+    /// A binding to the popup currently being presented in the navigation layer.
+    @Binding private var presentedPopup: Popup?
     
-    /// The `Popup` to display.
-    private let popup: Popup
-    
-    /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
-    /// button is shown, you should pass in the `isPresented` argument to the initializer,
-    /// so that the the "close" button can close the view.
-    var showCloseButton = false
-    
-    /// A Boolean value indicating whether the deprecated `PopupView.showCloseButton(_:)`
-    /// modifier is applied.
+    /// The popups that have been presented in the navigation layer.
     ///
-    /// Once the modifier is removed this property can be removed and the presence or lack of a value for
-    /// `isPresented` should be the sole criteria to show or hide the close button.
-    var showCloseButtonDeprecatedModifierIsApplied = false
+    /// There is one popup for every `InternalPopupView` in the current
+    /// navigation stack.
+    @State private var presentedPopups: [Popup] = []
     
-    /// The visibility of the popup header.
-    var headerVisibility: Visibility = .automatic
+    /// The model for the navigation layer.
+    @State private var navigationLayerModel: NavigationLayerModel?
     
-    /// The result of evaluating the popup expressions.
-    @State private var evaluation: Evaluation?
+    /// The visibility of the close button.
+    var closeButtonVisibility: Visibility = .automatic
     
     /// A binding to a Boolean value that determines whether the view is presented.
-    private var isPresented: Binding<Bool>?
+    ///
+    /// This property can be removed once the deprecated
+    /// `init(popup:isPresented:)` initializer is removed.
+    var isPresented: Binding<Bool>?
+    
+    /// Creates a `PopupView` to display a given popup.
+    /// - Parameters:
+    ///   - popup: A binding to the popup that view displays. When `popup` is non-`nil`, the `PopupView` is displayed.
+    /// - Since: 200.8
+    public init(popup: Binding<Popup?>) {
+        self._presentedPopup = popup
+    }
     
     public var body: some View {
-        VStack(alignment: .leading) {
-            if headerVisibility != .hidden {
-                HStack {
-                    if !popup.title.isEmpty {
-                        Text(popup.title)
-                            .font(.title)
-                            .fontWeight(.bold)
-                    }
-                    Spacer()
-                    if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
-                        || (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
-                        XButton(.dismiss) {
-                            isPresented?.wrappedValue = false
+        VStack(spacing: 0) {
+            if let popup = presentedPopups.first {
+                NavigationLayer { model in
+                    InternalPopupView(popup: popup)
+                        .onAppear {
+                            navigationLayerModel = model
                         }
-#if !os(visionOS)
-                        .font(.title)
-                        .padding([.top, .bottom, .trailing], 4)
-#endif
+                } headerTrailing: {
+                    XButton(.dismiss) {
+                        isPresented?.wrappedValue = false
+                        presentedPopup = nil
                     }
+                    .font(.title)
+                    // This is a workaround for a NavigationLayer issue where
+                    // the navigation title is not centered when the
+                    // headerTrailing content is empty.
+                    .disabled(closeButtonVisibility == .hidden)
+                    .opacity(closeButtonVisibility == .hidden ? 0 : 1)
                 }
-                Divider()
-            }
-            Group {
-                if let evaluation {
-                    if let error = evaluation.error {
-                        Text(
-                            "Popup evaluation failed: \(error.localizedDescription)",
-                            bundle: .toolkitModule,
-                            comment: """
-                                     An error message shown when a popup cannot be displayed. The
-                                     variable provides additional data.
-                                     """
-                        )
-                    } else {
-                        PopupElementList(popupElements: evaluation.elements)
+                .backNavigationAction { navigationLayerModel in
+                    // If an InternalPopupView is disappearing, the binding is
+                    // set to the last InternalPopupView's popup.
+                    if navigationLayerModel.presented?.view is InternalPopupView {
+                        presentedPopups.removeLast()
+                        presentedPopup = presentedPopups.last
                     }
-                } else {
-                    HStack(alignment: .center, spacing: 10) {
-                        Text(
-                            "Evaluating popup expressions",
-                            bundle: .toolkitModule,
-                            comment: "A label indicating popup expressions are being evaluated."
-                        )
-                        ProgressView()
+                    
+                    navigationLayerModel.pop()
+                }
+                .onNavigationPathChanged { item in
+                    // If an InternalPopupView is appearing for the first time,
+                    // the binding is set to the new view's popup.
+                    if let internalPopupView = item?.view as? InternalPopupView,
+                       internalPopupView.popup.id != presentedPopups.last?.id {
+                        presentedPopups.append(internalPopupView.popup)
+                        presentedPopup = internalPopupView.popup
                     }
-                    .frame(maxWidth: .infinity)
                 }
             }
         }
-        .task(id: ObjectIdentifier(popup)) {
-            // Initial evaluation for a newly assigned popup.
-            evaluation = nil
-            await evaluateExpressions()
-        }
-        .task(id: ObjectIdentifier(popup)) {
-            // If the popup is showing for a dynamic entity, then observe
-            // the changes and update the popup accordingly.
-            guard let dynamicEntity = popup.geoElement as? DynamicEntity else { return }
-            for await changes in dynamicEntity.changes {
-                if changes.dynamicEntityWasPurged {
-                    break
-                }
-                if changes.receivedObservation != nil {
-                    await evaluateExpressions()
-                }
+        .onChange(of: presentedPopup?.id, initial: true) {
+            // If presentedPopups does not contain the new popup, the binding
+            // was set upstream, and the navigation stack needs reset.
+            guard !presentedPopups.contains(where: { $0.id == presentedPopup?.id }) else {
+                return
             }
-        }
-    }
-    
-    /// Evaluates the arcade expressions and updates the evaluation property.
-    private func evaluateExpressions() async {
-        do {
-            _ = try await popup.evaluateExpressions()
-            evaluation = Evaluation(elements: popup.evaluatedElements)
-        } catch {
-            evaluation = Evaluation(error: error)
+            
+            navigationLayerModel?.popAll()
+            presentedPopups = presentedPopup.map { [$0] } ?? []
         }
     }
 }
 
-extension PopupView {
-    private struct PopupElementList: View {
-        let popupElements: [PopupElement]
-        
-        var body: some View {
-            List(popupElements) { popupElement in
-                Group {
-                    switch popupElement {
-                    case let popupElement as AttachmentsPopupElement:
-                        AttachmentsFeatureElementView(featureElement: popupElement)
-                    case let popupElement as FieldsPopupElement:
-                        FieldsPopupElementView(popupElement: popupElement)
-                    case let popupElement as MediaPopupElement:
-                        MediaPopupElementView(popupElement: popupElement)
-                    case let popupElement as TextPopupElement:
-                        TextPopupElementView(popupElement: popupElement)
-                    default:
-                        EmptyView()
-                    }
-                }
-                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
-            }
-            .listStyle(.plain)
-        }
+public extension PopupView {
+    /// Sets the visibility of the close button on the popup.
+    /// - Parameter visibility: The visibility of the close button.
+    /// - Since: 200.8
+    func closeButton(_ visibility: Visibility) -> Self {
+        var copy = self
+        copy.closeButtonVisibility = visibility
+        return copy
     }
 }
 
-extension PopupView {
-    /// An object used to hold the result of evaluating the expressions of a popup.
-    private final class Evaluation {
-        /// The evaluated elements.
-        let elements: [PopupElement]
-        /// The error that occurred during evaluation, if any.
-        let error: Error?
-        
-        /// Creates an evaluation.
-        /// - Parameters:
-        ///   - elements: The evaluated elements.
-        ///   - error: The error that occurred during evaluation, if any.
-        init(elements: [PopupElement] = [], error: Error? = nil) {
-            self.elements = elements
-            self.error = error
-        }
+private extension Popup {
+    /// The identifier for the popup object.
+    var id: ObjectIdentifier {
+        ObjectIdentifier(self)
     }
 }
