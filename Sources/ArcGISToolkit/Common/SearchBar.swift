@@ -23,7 +23,7 @@ struct SearchBar: View {
     @Binding var text: String
     
     /// The prompt of the search field which provides users with guidance on what to search for.
-    let prompt: String
+    let prompt: LocalizedStringKey
     
     /// A Boolean value indicating whether the text field is focused.
     @FocusState private var textFieldIsFocused: Bool
