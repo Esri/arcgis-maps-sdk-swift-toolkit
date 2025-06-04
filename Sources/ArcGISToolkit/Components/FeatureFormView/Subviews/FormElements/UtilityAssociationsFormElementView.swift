@@ -50,6 +50,9 @@ private struct UtilityAssociationGroupResultView: View {
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// The view model for the form.
+    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+    
+    /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// The model for the navigation layer.
@@ -69,7 +72,7 @@ private struct UtilityAssociationGroupResultView: View {
                             )
                         }
                     }
-                    if internalFeatureFormViewModel.featureForm.hasEdits {
+                    if internalFeatureFormViewModel.featureForm.hasEdits || featureFormViewModel.currentFeatureHasGeometryEdits {
                         setAlertContinuation?(true, navigationAction)
                     } else {
                         navigationAction()
