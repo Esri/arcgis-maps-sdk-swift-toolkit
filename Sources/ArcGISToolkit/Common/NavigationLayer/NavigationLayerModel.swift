@@ -53,6 +53,16 @@ import SwiftUI
         }
     }
     
+    /// Pops all of the views in the stack.
+    func popAll() {
+        guard !views.isEmpty else { return }
+        
+        transition = .pop
+        withAnimation {
+            views.removeAll()
+        }
+    }
+    
     /// Push a view.
     /// - Parameter view: The view to push.
     func push(_ view: @escaping () -> any View) {
