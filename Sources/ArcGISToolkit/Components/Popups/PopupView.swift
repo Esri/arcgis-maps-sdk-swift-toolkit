@@ -75,8 +75,7 @@ public struct PopupView: View {
     var isPresented: Binding<Bool>?
     
     /// Creates a `PopupView` to display a given popup.
-    /// - Parameters:
-    ///   - popup: A binding to the popup that view displays. When `popup` is non-`nil`, the `PopupView` is displayed.
+    /// - Parameter popup: A binding to the popup that view displays. When `popup` is non-`nil`, the `PopupView` is displayed.
     /// - Since: 200.8
     public init(popup: Binding<Popup?>) {
         self._presentedPopup = popup

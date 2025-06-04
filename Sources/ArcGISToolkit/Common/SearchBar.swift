@@ -74,7 +74,7 @@ struct SearchBar: View {
             .animation(.default, value: text.isEmpty)
             
             if cancelButtonIsPresented {
-                Button("Cancel") {
+                Button.cancel {
                     textFieldIsFocused = false
                     text = ""
                 }
