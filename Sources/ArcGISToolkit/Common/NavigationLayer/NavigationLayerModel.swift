@@ -17,8 +17,8 @@ import SwiftUI
 @Observable class NavigationLayerModel {
     /// An item representing a view pushed on the layer.
     struct Item {
-        /// The closure which produces the view for the item.
-        let view: () -> any View
+        /// The view for the item.
+        let view: any View
     }
     
     /// A Boolean value indicating whether another view is being pushed.
@@ -80,7 +80,7 @@ import SwiftUI
         transition = .push
         
         withAnimation {
-            views.append(.init(view: view))
+            views.append(.init(view: view()))
         } completion: {
             self.isPushing = false
         }
