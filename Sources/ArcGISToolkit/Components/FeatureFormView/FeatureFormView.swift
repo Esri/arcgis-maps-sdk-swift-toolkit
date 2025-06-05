@@ -67,6 +67,9 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// The point at which to run feature identification when adding utility associations.
+    private let mapPoint: Point?
+    
     /// The feature form currently visible in the navigation layer.
     private let presentedForm: Binding<FeatureForm?>
     
@@ -88,6 +91,9 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
+    /// The view model for the feature form view.
+    @State private var featureFormViewModel: FeatureFormViewModel
+    
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
@@ -97,13 +103,26 @@ public struct FeatureFormView: View {
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility: Visibility = .hidden
     
-    /// Initializes a form view.
+#warning("The UtilityNetwork parameter is temporary only.")
+    /// Creates a feature form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
+    ///   - mapPoint: The point at which to run feature identification when adding utility associations.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     /// - Since: 200.8
-    public init(featureForm: Binding<FeatureForm?>) {
-        self.rootFeatureForm = featureForm.wrappedValue
+    public init(
+        featureForm: Binding<FeatureForm?>,
+        mapPoint: Point? = nil,
+        mapViewProxy: MapViewProxy? = nil,
+        _ utilityNetwork: UtilityNetwork? = nil /* Temporary parameter only */
+    ) {
+        self.featureFormViewModel = FeatureFormViewModel(
+            mapViewProxy: mapViewProxy,
+            utilityNetwork: utilityNetwork
+        )
+        self.mapPoint = mapPoint
         self.presentedForm = featureForm
+        self.rootFeatureForm = featureForm.wrappedValue
     }
     
     public var body: some View {
@@ -227,6 +246,17 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .onChange(of: mapPoint) { _, newValue in
+                featureFormViewModel.mapPoint = newValue
+            }
+            .overlay {
+                if featureFormViewModel.addUtilityAssociationScreenIsPresented {
+                    AddUtilityAssociationView()
+                } else if featureFormViewModel.utilityAssociationDetailsScreenIsPresented {
+                    UtilityAssociationDetailsScreen()
+                }
+            }
+            .environment(featureFormViewModel)
             .environment(\.formChangedAction, onFormChangedAction)
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\._validationErrorVisibility, validationErrorVisibility)
