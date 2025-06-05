@@ -34,7 +34,7 @@ struct NavigationLayerTestCase3View: View {
         }
         .onNavigationPathChanged { item in
             if let item {
-                presentedViewType = "\(type(of: item.view()))"
+                presentedViewType = "\(type(of: item.view))"
             } else {
                 presentedViewType = nil
             }
