@@ -88,6 +88,9 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
+    /// The view model for the feature form view.
+    @State private var featureFormViewModel: FeatureFormViewModel
+    
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
@@ -102,8 +105,9 @@ public struct FeatureFormView: View {
     ///   - featureForm: The feature form defining the editing experience.
     /// - Since: 200.8
     public init(featureForm: Binding<FeatureForm?>) {
-        self.rootFeatureForm = featureForm.wrappedValue
+        self.featureFormViewModel = FeatureFormViewModel()
         self.presentedForm = featureForm
+        self.rootFeatureForm = featureForm.wrappedValue
     }
     
     public var body: some View {
@@ -145,7 +149,7 @@ public struct FeatureFormView: View {
                     }
                 }
                 .backNavigationAction { navigationLayerModel in
-                    if aFeatureFormIsPresented && hasEdits {
+                    if aFeatureFormIsPresented && (hasEdits || featureFormViewModel.currentFeatureHasGeometryEdits) {
                         alertContinuation = (true, { navigationLayerModel.pop() })
                     } else {
                         navigationLayerModel.pop()
@@ -183,6 +187,7 @@ public struct FeatureFormView: View {
                                 Task {
                                     do {
                                         try await presentedForm.finishEditing()
+                                        featureFormViewModel.resetGeometryChangeMonitoring(for: presentedForm.feature)
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
@@ -227,14 +232,15 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .environment(featureFormViewModel)
             .environment(\.formChangedAction, onFormChangedAction)
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\._validationErrorVisibility, validationErrorVisibility)
             .task(id: presentedForm.wrappedValue?.feature.globalID) {
-                if let presentedForm = presentedForm.wrappedValue {
-                    for await hasEdits in presentedForm.$hasEdits {
-                        withAnimation { self.hasEdits = hasEdits }
-                    }
+                guard let presentedForm = presentedForm.wrappedValue else { return }
+                featureFormViewModel.resetGeometryChangeMonitoring(for: presentedForm.feature)
+                for await hasEdits in presentedForm.$hasEdits {
+                    withAnimation { self.hasEdits = hasEdits }
                 }
             }
         }

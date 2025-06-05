@@ -31,6 +31,9 @@ struct FormFooter: View {
     /// An error thrown from finish editing.
     @Binding var finishEditingError: (any Error)?
     
+    /// The view model for the form.
+    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+    
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     var body: some View {
@@ -54,6 +57,7 @@ struct FormFooter: View {
                         Task {
                             do {
                                 try await featureForm.finishEditing()
+                                featureFormViewModel.resetGeometryChangeMonitoring(for: featureForm.feature)
                                 formHandlingEventAction?(.savedEdits(willNavigate: false))
                             } catch {
                                 finishEditingError = error
