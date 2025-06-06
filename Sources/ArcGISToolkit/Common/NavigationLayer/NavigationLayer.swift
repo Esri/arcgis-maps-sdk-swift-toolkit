@@ -77,7 +77,7 @@ struct NavigationLayer<Content: View>: View {
                     root(model)
                         .transition(model.transition)
                 } else if let presented = model.presented?.view {
-                    AnyView(presented())
+                    AnyView(presented)
                         // Reset the title, subtitle and header background color
                         // preference each time the presented view is changed to
                         // avoid using a stale preference if none was set.
