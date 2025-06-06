@@ -16,6 +16,4 @@ struct PopupExampleView: View {
     @State private var identifyScreenPoint: CGPoint?
     
     @State private var popup: Popup?
-    
-    @State private var showPopup = false
 }

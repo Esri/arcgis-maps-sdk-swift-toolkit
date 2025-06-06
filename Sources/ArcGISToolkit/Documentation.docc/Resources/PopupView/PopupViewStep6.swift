@@ -15,9 +15,7 @@ struct PopupExampleView: View {
     
     @State private var identifyScreenPoint: CGPoint?
     
-    @State private var popup: Popup? {
-        didSet { showPopup = popup != nil }
-    }
+    @State private var popup: Popup?
     
     @State private var showPopup = false
     
@@ -42,9 +40,11 @@ struct PopupExampleView: View {
                     selectedDetent: $floatingPanelDetent,
                     horizontalAlignment: .leading,
                     isPresented: $showPopup
-                ) { [popup] in
-                    PopupView(popup: popup!, isPresented: $showPopup)
-                        .padding()
+                ) {
+                    PopupView(popup: $popup)
+                }
+                .onChange(of: popup == nil) {
+                    showPopup = popup != nil
                 }
         }
     }
