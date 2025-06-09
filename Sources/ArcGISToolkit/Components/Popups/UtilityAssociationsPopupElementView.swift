@@ -43,7 +43,11 @@ struct UtilityAssociationsPopupElementView: View {
                     }
             } else if filterResults.isEmpty {
                 Label {
-                    Text("No Associations")
+                    Text(
+                        "No Associations",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating that no associations are available for the popup element."
+                    )
                 } icon: {
                     Image(systemName: "exclamationmark.triangle")
                         .foregroundStyle(.gray)
@@ -159,10 +163,18 @@ private struct UtilityAssociationGroupResultView: View {
                 } label: {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("Show all")
-                            Text("Total: \(groupResult.associationResults.count)")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
+                            Text(
+                                "Show all",
+                                bundle: .toolkitModule,
+                                comment: "A label for a button to show all the association results."
+                            )
+                            Text(
+                                "Total: \(groupResult.associationResults.count)",
+                                bundle: .toolkitModule,
+                                comment: "Text indicating the total count of association results."
+                            )
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
                         }
                         .lineLimit(1)
                         Spacer()
