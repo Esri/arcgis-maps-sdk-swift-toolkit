@@ -15,9 +15,9 @@
 import ArcGIS
 import SwiftUI
 
-/// A view that displays a `UtilityAssociationResult` and allows navigating
-/// to an associated view.
-struct UtilityAssociationResultLink: View {
+/// A view that displays a `UtilityAssociationResult` and performs an action
+/// when it is tapped.
+struct UtilityAssociationResultButton: View {
     /// The model for the navigation layer.
     @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
@@ -27,24 +27,22 @@ struct UtilityAssociationResultLink: View {
     /// The utility association result to display.
     private let result: UtilityAssociationResult
     
-    /// The view to present when the button is pressed.
-    private let destination: () -> any View
+    /// The action to perform when the user triggers the button.
+    private let action: () -> Void
     
-    /// Creates a `UtilityAssociationResultLink`.
+    /// Creates a `UtilityAssociationResultButton`.
     /// - Parameters:
     ///   - title: A title describing the utility association result.
     ///   - result: A utility association result to display.
-    ///   - destination: A view to present when the link is pressed.
-    init(_ title: String, result: UtilityAssociationResult, destination: @escaping () -> any View) {
+    ///   - action: The action to perform when the user triggers the button.
+    init(_ title: String, result: UtilityAssociationResult, action: @escaping () -> Void) {
         self.title = title
         self.result = result
-        self.destination = destination
+        self.action = action
     }
     
     var body: some View {
-        Button {
-            navigationLayerModel.push(destination)
-        } label: {
+        Button(action: action) {
             HStack {
                 if let icon = result.association.kind.icon {
                     icon

@@ -143,8 +143,10 @@ private struct UtilityAssociationGroupResultView: View {
         DisclosureGroup(isExpanded: $isExpanded) {
             let associationResults = groupResult.associationResults.prefix(associationDisplayCount)
             ForEach(associationResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultLink(result.displayTitle, result: result) {
-                    InternalPopupView(popup: result.associatedFeature.toPopup())
+                UtilityAssociationResultButton(result.displayTitle, result: result) {
+                    navigationLayerModel.push {
+                        InternalPopupView(popup: result.associatedFeature.toPopup())
+                    }
                 }
             }
             
@@ -180,6 +182,9 @@ private struct UtilityAssociationGroupResultView: View {
 
 /// A view for searching through a list of utility association results.
 private struct SearchUtilityAssociationResultsView: View {
+    /// The model for the navigation layer.
+    @Environment(NavigationLayerModel.self) private var navigationLayerModel
+    
     /// The utility association results to search through.
     let results: [UtilityAssociationResult]
     
@@ -197,8 +202,10 @@ private struct SearchUtilityAssociationResultsView: View {
                 .padding(.horizontal)
             
             List(filteredResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultLink(result.displayTitle, result: result) {
-                    InternalPopupView(popup: result.associatedFeature.toPopup())
+                UtilityAssociationResultButton(result.displayTitle, result: result) {
+                    navigationLayerModel.push {
+                        InternalPopupView(popup: result.associatedFeature.toPopup())
+                    }
                 }
 #if targetEnvironment(macCatalyst)
                 .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
