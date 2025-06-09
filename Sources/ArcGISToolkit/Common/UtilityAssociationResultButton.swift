@@ -21,9 +21,6 @@ struct UtilityAssociationResultButton: View {
     /// The model for the navigation layer.
     @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
-    /// The title describing the utility association result.
-    private let title: String
-    
     /// The utility association result to display.
     private let result: UtilityAssociationResult
     
@@ -32,11 +29,9 @@ struct UtilityAssociationResultButton: View {
     
     /// Creates a `UtilityAssociationResultButton`.
     /// - Parameters:
-    ///   - title: A title describing the utility association result.
     ///   - result: A utility association result to display.
     ///   - action: The action to perform when the user triggers the button.
-    init(_ title: String, result: UtilityAssociationResult, action: @escaping () -> Void) {
-        self.title = title
+    init(_ result: UtilityAssociationResult, action: @escaping () -> Void) {
         self.result = result
         self.action = action
     }
@@ -48,7 +43,7 @@ struct UtilityAssociationResultButton: View {
                     icon
                 }
                 VStack(alignment: .leading) {
-                    Text(title)
+                    Text(result.title)
                     if let description = result.details {
                         Text(description)
                             .font(.caption2)

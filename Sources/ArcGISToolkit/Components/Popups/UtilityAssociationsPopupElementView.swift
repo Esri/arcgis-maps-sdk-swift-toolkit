@@ -143,7 +143,7 @@ private struct UtilityAssociationGroupResultView: View {
         DisclosureGroup(isExpanded: $isExpanded) {
             let associationResults = groupResult.associationResults.prefix(associationDisplayCount)
             ForEach(associationResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultButton(result.displayTitle, result: result) {
+                UtilityAssociationResultButton(result) {
                     navigationLayerModel.push {
                         InternalPopupView(popup: result.associatedFeature.toPopup())
                     }
@@ -193,7 +193,7 @@ private struct SearchUtilityAssociationResultsView: View {
     
     /// The results filtered by the search text.
     private var filteredResults: [UtilityAssociationResult] {
-        text.isEmpty ? results : results.filter { $0.displayTitle.contains(text) }
+        text.isEmpty ? results : results.filter { $0.title.contains(text) }
     }
     
     var body: some View {
@@ -202,7 +202,7 @@ private struct SearchUtilityAssociationResultsView: View {
                 .padding(.horizontal)
             
             List(filteredResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultButton(result.displayTitle, result: result) {
+                UtilityAssociationResultButton(result) {
                     navigationLayerModel.push {
                         InternalPopupView(popup: result.associatedFeature.toPopup())
                     }
@@ -262,13 +262,5 @@ private extension UtilityAssociationsPopupElement {
             bundle: .toolkitModule,
             comment: "A label in reference to utility associations elements contained within a popup."
         ) : title
-    }
-}
-
-private extension UtilityAssociationResult {
-    /// A title for the result.
-    var displayTitle: String {
-        let popup = associatedFeature.toPopup()
-        return popup.title.isEmpty ? "Unknown" : popup.title
     }
 }
