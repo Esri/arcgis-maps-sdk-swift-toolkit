@@ -205,7 +205,7 @@ private struct SearchUtilityAssociationResultsView: View {
     
     /// The results filtered by the search text.
     private var filteredResults: [UtilityAssociationResult] {
-        text.isEmpty ? results : results.filter { $0.title.contains(text) }
+        text.isEmpty ? results : results.filter { $0.title.localizedStandardContains(text) }
     }
     
     var body: some View {
