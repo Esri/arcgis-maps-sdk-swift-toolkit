@@ -21,7 +21,7 @@ public extension PopupView /* Deprecated */ {
     ///   - popup: The popup to display.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Attention: Deprecated at 200.8.
-    @available(*, deprecated, message: "Use 'init(popup:)' instead.")
+    @available(*, deprecated, message: "Use 'init(popup: Binding<Popup?>)' instead.")
     init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.init(popup: .constant(popup))
         self.isPresented = isPresented
