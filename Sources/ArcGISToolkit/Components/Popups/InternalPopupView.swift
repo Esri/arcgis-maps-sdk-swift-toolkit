@@ -138,17 +138,3 @@ extension EnvironmentValues {
     /// The title of the popup associated with the view.
     @Entry var popupTitle = ""
 }
-
-extension View {
-    /// Adds padding to the bottom of this view when presented on a phone.
-    /// - Returns: A new `View`.
-    @ViewBuilder
-    func phoneBottomPadding() -> some View {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            self.padding(.bottom)
-                .safeAreaPadding(.bottom)
-        } else {
-            self
-        }
-    }
-}
