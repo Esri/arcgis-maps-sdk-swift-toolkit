@@ -51,7 +51,7 @@ struct UtilityAssociationResultLink: View {
                 }
                 VStack(alignment: .leading) {
                     Text(title)
-                    if let description = result.description {
+                    if let description = result.details {
                         Text(description)
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -79,8 +79,8 @@ private extension UtilityAssociationResult {
         associatedFeature.globalID == association.toElement.globalID
     }
     
-    /// The description of the result's association.
-    var description: String? {
+    /// The details describing the result's association.
+    var details: String? {
         switch association.kind {
         case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
             associatedElement.terminal?.name
