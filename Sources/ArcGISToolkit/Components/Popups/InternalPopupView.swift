@@ -25,7 +25,7 @@ struct InternalPopupView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if let evaluation = evaluation {
+            if let evaluation {
                 if let error = evaluation.error {
                     Text(
                         "Popup evaluation failed: \(error.localizedDescription)",

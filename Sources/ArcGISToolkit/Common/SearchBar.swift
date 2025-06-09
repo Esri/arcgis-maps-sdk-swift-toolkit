@@ -30,7 +30,7 @@ struct SearchBar: View {
     
     /// A Boolean value indicating whether the cancel button is showing.
     ///
-    /// This is needed instead of `textFieldIsFocused` directly, so
+    /// This is needed in addition to `textFieldIsFocused`, so
     /// that the button will animate when appearing.
     @State private var cancelButtonIsPresented = false
     
