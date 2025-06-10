@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view that display a `Popup` and its evaluated elements.
-struct InternalPopupView: View {
+struct EmbeddedPopupView: View {
     /// The `Popup` to display.
     let popup: Popup
     
@@ -85,7 +85,7 @@ struct InternalPopupView: View {
     }
 }
 
-extension InternalPopupView {
+extension EmbeddedPopupView {
     private struct PopupElementList: View {
         let popupElements: [PopupElement]
         

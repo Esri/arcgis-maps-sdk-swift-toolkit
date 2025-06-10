@@ -58,7 +58,7 @@ public struct PopupView: View {
     
     /// The popups that have been presented in the navigation layer.
     ///
-    /// There is one popup for every `InternalPopupView` in the current
+    /// There is one popup for every `EmbeddedPopupView` in the current
     /// navigation stack.
     @State private var presentedPopups: [Popup] = []
     
@@ -85,7 +85,7 @@ public struct PopupView: View {
         VStack(spacing: 0) {
             if let popup = presentedPopups.first {
                 NavigationLayer { model in
-                    InternalPopupView(popup: popup)
+                    EmbeddedPopupView(popup: popup)
                         .onAppear {
                             navigationLayerModel = model
                         }
@@ -102,9 +102,9 @@ public struct PopupView: View {
                     .opacity(closeButtonVisibility == .hidden ? 0 : 1)
                 }
                 .backNavigationAction { navigationLayerModel in
-                    // If an InternalPopupView is disappearing, the binding is
-                    // set to the last InternalPopupView's popup.
-                    if navigationLayerModel.presented?.view is InternalPopupView {
+                    // If an EmbeddedPopupView is disappearing, the binding is
+                    // set to the last EmbeddedPopupView's popup.
+                    if navigationLayerModel.presented?.view is EmbeddedPopupView {
                         presentedPopups.removeLast()
                         presentedPopup = presentedPopups.last
                     }
@@ -112,12 +112,12 @@ public struct PopupView: View {
                     navigationLayerModel.pop()
                 }
                 .onNavigationPathChanged { item in
-                    // If an InternalPopupView is appearing for the first time,
+                    // If an EmbeddedPopupView is appearing for the first time,
                     // the binding is set to the new view's popup.
-                    if let internalPopupView = item?.view as? InternalPopupView,
-                       internalPopupView.popup.id != presentedPopups.last?.id {
-                        presentedPopups.append(internalPopupView.popup)
-                        presentedPopup = internalPopupView.popup
+                    if let embeddedPopupView = item?.view as? EmbeddedPopupView,
+                       embeddedPopupView.popup.id != presentedPopups.last?.id {
+                        presentedPopups.append(embeddedPopupView.popup)
+                        presentedPopup = embeddedPopupView.popup
                     }
                 }
             }

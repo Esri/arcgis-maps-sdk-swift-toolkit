@@ -148,7 +148,7 @@ private struct UtilityAssociationGroupResultView: View {
             ForEach(associationResults, id: \.associatedFeature.globalID) { result in
                 UtilityAssociationResultButton(result) {
                     navigationLayerModel.push {
-                        InternalPopupView(popup: result.associatedFeature.toPopup())
+                        EmbeddedPopupView(popup: result.associatedFeature.toPopup())
                     }
                 }
             }
@@ -215,7 +215,7 @@ private struct SearchUtilityAssociationResultsView: View {
             List(filteredResults, id: \.associatedFeature.globalID) { result in
                 UtilityAssociationResultButton(result) {
                     navigationLayerModel.push {
-                        InternalPopupView(popup: result.associatedFeature.toPopup())
+                        EmbeddedPopupView(popup: result.associatedFeature.toPopup())
                     }
                 }
 #if targetEnvironment(macCatalyst)
