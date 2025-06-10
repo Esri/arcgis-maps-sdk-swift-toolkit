@@ -36,7 +36,7 @@ struct SearchBar: View {
     
     var body: some View {
         HStack {
-            HStack(spacing: 5) {
+            HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
                 
@@ -56,11 +56,7 @@ struct SearchBar: View {
                         cancelButtonIsPresented = textFieldIsFocused
                     }
                 }
-            }
-            .padding(7)
-            .background(Color(.tertiarySystemFill))
-            .clipShape(.rect(cornerRadius: 8))
-            .overlay(alignment: .trailing) {
+                
                 if !text.isEmpty {
                     Button("Clear", systemImage: "multiply.circle.fill") {
                         text = ""
@@ -68,9 +64,11 @@ struct SearchBar: View {
                     .labelStyle(.iconOnly)
                     .buttonStyle(.plain)
                     .foregroundColor(.secondary)
-                    .padding(5)
                 }
             }
+            .padding(7)
+            .background(Color(.tertiarySystemFill))
+            .clipShape(.rect(cornerRadius: 8))
             .animation(.default, value: text.isEmpty)
             
             if cancelButtonIsPresented {
