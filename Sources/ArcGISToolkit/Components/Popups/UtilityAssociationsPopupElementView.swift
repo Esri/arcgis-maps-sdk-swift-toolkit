@@ -24,6 +24,9 @@ struct UtilityAssociationsPopupElementView: View {
     /// The popup element's associations filter results.
     @State private var filterResults: [UtilityAssociationsFilterResult] = []
     
+    /// The error thrown while fetching the element's associations filter results.
+    @State private var error: Error?
+    
     /// A Boolean value indicating whether the disclosure group is expanded.
     @State private var isExpanded = true
     
@@ -36,11 +39,25 @@ struct UtilityAssociationsPopupElementView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity)
                     .task {
-                        let filterResults = try? await popupElement.associationsFilterResults
-                        self.filterResults = filterResults?.filter { $0.resultCount > 0 } ?? []
+                        do {
+                            let filterResults = try await popupElement.associationsFilterResults
+                            self.filterResults = filterResults.filter { $0.resultCount > 0 }
+                        } catch {
+                            self.error = error
+                        }
                         
                         isLoading = false
                     }
+            } else if let error {
+                Text(
+                    "Error fetching filter results: \(error.localizedDescription)",
+                    bundle: .toolkitModule,
+                    comment: """
+                             An error message shown when the element's
+                             associations filter results cannot be displayed.
+                             The variable provides additional data.
+                             """
+                )
             } else if filterResults.isEmpty {
                 Label {
                     Text(
