@@ -16,6 +16,9 @@ import ArcGIS
 import SwiftUI
 
 /// A view that display a `Popup` and its evaluated elements.
+///
+/// This is used by the `PopupView` to display its initial popup and the
+/// following ones resulting from navigating through utility associations.
 struct EmbeddedPopupView: View {
     /// The `Popup` to display.
     let popup: Popup
