@@ -96,17 +96,3 @@ extension View {
         }
     }
 }
-
-extension View {
-    /// Adds padding to the bottom of this view it is when presented on a phone.
-    /// - Returns: A new `View`.
-    @ViewBuilder
-    func phoneBottomPadding() -> some View {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            self.padding(.bottom)
-                .safeAreaPadding(.bottom)
-        } else {
-            self
-        }
-    }
-}

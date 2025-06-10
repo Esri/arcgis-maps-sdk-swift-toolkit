@@ -94,7 +94,6 @@ private struct UtilityAssociationsFilterResultLink: View {
 #endif
                 }
                 .listStyle(.inset)
-                .phoneBottomPadding()
                 .navigationLayerTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
                 .environment(\.popupTitle, popupTitle)
                 .environment(\.associationDisplayCount, associationDisplayCount)
@@ -224,7 +223,6 @@ private struct SearchUtilityAssociationResultsView: View {
 #endif
             }
             .listStyle(.inset)
-            .phoneBottomPadding()
         }
     }
 }

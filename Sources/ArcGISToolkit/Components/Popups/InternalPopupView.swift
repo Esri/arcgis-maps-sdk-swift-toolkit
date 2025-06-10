@@ -112,7 +112,6 @@ extension InternalPopupView {
 #endif
             }
             .listStyle(.plain)
-            .phoneBottomPadding()
         }
     }
     
