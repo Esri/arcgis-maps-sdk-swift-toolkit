@@ -16,17 +16,6 @@ import ArcGIS
 import SwiftUI
 
 public extension PopupView /* Deprecated */ {
-    /// Creates a `PopupView` with the given popup.
-    /// - Parameters:
-    ///   - popup: The popup to display.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    /// - Attention: Deprecated at 200.8.
-    @available(*, deprecated, message: "Use 'init(popup: Binding<Popup?>)' instead.")
-    init(popup: Popup, isPresented: Binding<Bool>? = nil) {
-        self.init(popup: .constant(popup))
-        self.isPresented = isPresented
-    }
-    
     /// Specifies the visibility of the popup header.
     /// - Parameter visibility: The preferred visibility of the popup header.
     /// - Attention: Deprecated at 200.8.

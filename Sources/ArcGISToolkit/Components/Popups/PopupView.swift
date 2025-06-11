@@ -53,8 +53,8 @@ import ArcGIS
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
 /// in the project. To learn more about using the `PopupView`, see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
-    /// A binding to the popup currently being presented in the navigation layer.
-    @Binding private var presentedPopup: Popup?
+    /// The `Popup` to display in the root `EmbeddedPopupView`.
+    private let rootPopup: Popup
     
     /// The popups that have been presented in the navigation layer.
     ///
@@ -69,85 +69,83 @@ public struct PopupView: View {
     var closeButtonVisibility: Visibility = .automatic
     
     /// A binding to a Boolean value that determines whether the view is presented.
-    ///
-    /// This property can be removed once the deprecated
-    /// `init(popup:isPresented:)` initializer is removed.
     var isPresented: Binding<Bool>?
     
-    /// Creates a `PopupView` to display a given popup.
-    /// - Parameter popup: A binding to the popup that view displays. When `popup` is non-`nil`, the `PopupView` is displayed.
-    /// - Since: 200.8
-    public init(popup: Binding<Popup?>) {
-        self._presentedPopup = popup
+    /// The closure to perform when a new popup is shown in the `NavigationLayer`.
+    var onPopupChanged: ((Popup) -> Void)?
+    
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters:
+    ///   - popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
+        self.rootPopup = popup
+        self.isPresented = isPresented
     }
     
     public var body: some View {
-        VStack(spacing: 0) {
-            if let popup = presentedPopups.first {
-                NavigationLayer { model in
-                    EmbeddedPopupView(popup: popup)
-                        .onAppear {
-                            navigationLayerModel = model
-                        }
-                } headerTrailing: {
-                    XButton(.dismiss) {
-                        isPresented?.wrappedValue = false
-                        presentedPopup = nil
-                    }
-                    .font(.title)
-                    // This is a workaround for a NavigationLayer issue where
-                    // the navigation title is not centered when the
-                    // `headerTrailing` content is empty.
-                    .disabled(closeButtonVisibility == .hidden)
-                    .opacity(closeButtonVisibility == .hidden ? 0 : 1)
+        NavigationLayer { model in
+            EmbeddedPopupView(popup: rootPopup)
+                .onAppear {
+                    navigationLayerModel = model
                 }
-                .backNavigationAction { navigationLayerModel in
-                    // If an EmbeddedPopupView is disappearing, the binding is
-                    // set to the last EmbeddedPopupView's popup.
-                    if navigationLayerModel.presented?.view is EmbeddedPopupView {
-                        presentedPopups.removeLast()
-                        presentedPopup = presentedPopups.last
-                    }
-                    
-                    navigationLayerModel.pop()
-                }
-                .onNavigationPathChanged { item in
-                    // If an EmbeddedPopupView is appearing for the first time,
-                    // the binding is set to the new view's popup.
-                    if let embeddedPopupView = item?.view as? EmbeddedPopupView,
-                       embeddedPopupView.popup.id != presentedPopups.last?.id {
-                        presentedPopups.append(embeddedPopupView.popup)
-                        presentedPopup = embeddedPopupView.popup
-                    }
-                }
+        } headerTrailing: {
+            XButton(.dismiss) {
+                isPresented?.wrappedValue = false
             }
+            .font(.title)
+            // This is a workaround for a NavigationLayer issue where
+            // the navigation title is not centered when the
+            // `headerTrailing` content is empty.
+            .disabled(closeButtonVisibility == .hidden)
+            .opacity(closeButtonVisibility == .hidden ? 0 : 1)
         }
-        .onChange(of: presentedPopup?.id, initial: true) {
-            // If `presentedPopups` does not contain the new popup, the binding
-            // was set upstream, and the navigation stack needs reset.
-            guard !presentedPopups.contains(where: { $0.id == presentedPopup?.id }) else {
-                return
+        .backNavigationAction { navigationLayerModel in
+            // If an `EmbeddedPopupView` is disappearing, the last
+            // `EmbeddedPopupView`'s popup is passed to `onPopupChanged`.
+            if navigationLayerModel.presented?.view is EmbeddedPopupView {
+                presentedPopups.removeLast()
+                presentedPopups.last.map { onPopupChanged?($0) }
             }
             
-            navigationLayerModel?.popAll()
-            presentedPopups = presentedPopup.map { [$0] } ?? []
+            navigationLayerModel.pop()
         }
-        .onDisappear {
-            // Resets the state if the presentation was dismissed not using
-            // `isPresented` or `presentedPopup`.
-            isPresented?.wrappedValue = false
-            presentedPopup = nil
+        .onNavigationPathChanged { item in
+            // If an `EmbeddedPopupView` is appearing for the first time,
+            // the new view's popup is passed to `onPopupChanged`.
+            if let embeddedPopupView = item?.view as? EmbeddedPopupView,
+               embeddedPopupView.popup.id != presentedPopups.last?.id {
+                presentedPopups.append(embeddedPopupView.popup)
+                onPopupChanged?(embeddedPopupView.popup)
+            }
+        }
+        .onChange(of: rootPopup.id, initial: true) {
+            // Resets the navigation stack when a new popup is passed to the view.
+            navigationLayerModel?.popAll()
+            presentedPopups = [rootPopup]
+            onPopupChanged?(rootPopup)
         }
     }
 }
 
 public extension PopupView {
-    /// Sets the visibility of the close button on the popup.
+    /// Sets the visibility of the close button on the popup view.
     /// - Parameter visibility: The visibility of the close button.
     /// - Since: 200.8
     func closeButton(_ visibility: Visibility) -> Self {
         var copy = self
         copy.closeButtonVisibility = visibility
+        return copy
+    }
+    
+    /// Sets a closure to perform when a new popup is shown in the view.
+    ///
+    /// This can happen when navigating through the associations in a `UtilityAssociationsPopupElement`.
+    /// - Parameter action: The closure to perform when the new popup is shown.
+    /// - Since: 200.8
+    func onPopupChanged(perform action: @escaping (Popup) -> Void) -> Self {
+        var copy = self
+        copy.onPopupChanged = action
         return copy
     }
 }

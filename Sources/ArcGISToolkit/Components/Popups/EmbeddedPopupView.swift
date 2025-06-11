@@ -76,7 +76,7 @@ struct EmbeddedPopupView: View {
         }
     }
     
-    /// Evaluates the arcade expressions and updates the evaluation property.
+    /// Evaluates the arcade expressions and updates the evaluation result property.
     private func evaluateExpressions() async {
         evaluationResult = await Result {
             _ = try await popup.evaluateExpressions()

@@ -15,7 +15,11 @@ struct PopupExampleView: View {
     
     @State private var identifyScreenPoint: CGPoint?
     
-    @State private var popup: Popup?
+    @State private var popup: Popup? {
+        didSet { showPopup = popup != nil }
+    }
+    
+    @State private var showPopup = false
     
     var body: some View {
         MapViewReader { proxy in
