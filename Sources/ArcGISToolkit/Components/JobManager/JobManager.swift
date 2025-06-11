@@ -269,11 +269,17 @@ public class JobManager: ObservableObject {
     /// Load any jobs that have been saved to UserDefaults.
     private func loadState() {
         Logger.jobManager.debug("Loading state.")
-        guard let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] else {
-            return
+        let data: [Data]? = if let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] {
+            // Prior to 200.8 the job json was saved as an array of strings.
+            strings.map { Data($0.utf8) }
+        } else {
+            // At 200.8 and beyond, the job json was saved as an array of data.
+            UserDefaults.standard.array(forKey: defaultsKey) as? [Data]
         }
         
-        jobs = strings.compactMap {
+        guard let data else { return }
+        
+        jobs = data.compactMap {
             try? Job.fromJSON($0) as? any JobProtocol
         }
     }
