@@ -21,34 +21,34 @@ struct UtilityAssociationsPopupElementView: View {
     /// The popup element to display.
     let popupElement: UtilityAssociationsPopupElement
     
-    /// The popup element's associations filter results.
-    @State private var filterResults: [UtilityAssociationsFilterResult] = []
-    
-    /// The error thrown while fetching the element's associations filter results.
-    @State private var error: Error?
+    /// The result of fetching the element's associations filter results.
+    @State private var filterResultsResult: Result<[UtilityAssociationsFilterResult], Error>?
     
     /// A Boolean value indicating whether the disclosure group is expanded.
     @State private var isExpanded = true
     
-    /// A Boolean value indicating whether the associations filter results are being loaded.
-    @State private var isLoading = true
-    
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
-            if isLoading {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .task {
-                        do {
-                            let filterResults = try await popupElement.associationsFilterResults
-                            self.filterResults = filterResults.filter { $0.resultCount > 0 }
-                        } catch {
-                            self.error = error
-                        }
-                        
-                        isLoading = false
+            switch filterResultsResult {
+            case .success(let associationsFilterResults):
+                if associationsFilterResults.isEmpty {
+                    Label {
+                        Text(
+                            "No Associations",
+                            bundle: .toolkitModule,
+                            comment: "A label indicating that no associations are available for the popup element."
+                        )
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundStyle(.gray)
                     }
-            } else if let error {
+                } else {
+                    ForEach(associationsFilterResults, id: \.id) {
+                        UtilityAssociationsFilterResultLink(filterResult: $0)
+                    }
+                    .environment(\.associationDisplayCount, popupElement.displayCount)
+                }
+            case .failure(let error):
                 Text(
                     "Error fetching filter results: \(error.localizedDescription)",
                     bundle: .toolkitModule,
@@ -58,22 +58,15 @@ struct UtilityAssociationsPopupElementView: View {
                              The variable provides additional data.
                              """
                 )
-            } else if filterResults.isEmpty {
-                Label {
-                    Text(
-                        "No Associations",
-                        bundle: .toolkitModule,
-                        comment: "A label indicating that no associations are available for the popup element."
-                    )
-                } icon: {
-                    Image(systemName: "exclamationmark.triangle")
-                        .foregroundStyle(.gray)
-                }
-            } else {
-                ForEach(filterResults, id: \.id) {
-                    UtilityAssociationsFilterResultLink(filterResult: $0)
-                }
-                .environment(\.associationDisplayCount, popupElement.displayCount)
+            case nil:
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .task {
+                        filterResultsResult = await Result {
+                            try await popupElement.associationsFilterResults
+                                .filter { $0.resultCount > 0 }
+                        }
+                    }
             }
         } label: {
             PopupElementHeader(
