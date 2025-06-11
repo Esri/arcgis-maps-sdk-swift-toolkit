@@ -24,25 +24,24 @@ struct EmbeddedPopupView: View {
     let popup: Popup
     
     /// The result of evaluating the popup expressions.
-    @State private var evaluation: Evaluation?
+    @State private var evaluationResult: Result<[PopupElement], Error>?
     
     var body: some View {
         VStack(spacing: 0) {
-            if let evaluation {
-                if let error = evaluation.error {
-                    Text(
-                        "Popup evaluation failed: \(error.localizedDescription)",
-                        bundle: .toolkitModule,
-                        comment: """
-                                 An error message shown when a popup cannot be displayed. The
-                                 variable provides additional data.
-                                 """
-                    )
-                } else {
-                    PopupElementList(popupElements: evaluation.elements)
-                        .environment(\.popupTitle, popup.title)
-                }
-            } else {
+            switch evaluationResult {
+            case .success(let evaluatedElements):
+                PopupElementList(popupElements: evaluatedElements)
+                    .environment(\.popupTitle, popup.title)
+            case .failure(let error):
+                Text(
+                    "Popup evaluation failed: \(error.localizedDescription)",
+                    bundle: .toolkitModule,
+                    comment: """
+                             An error message shown when a popup cannot be displayed.
+                             The variable provides additional data.
+                             """
+                )
+            case nil:
                 HStack(alignment: .center, spacing: 10) {
                     Text(
                         "Evaluating popup expressions",
@@ -59,7 +58,7 @@ struct EmbeddedPopupView: View {
             // Initial evaluation for a newly assigned popup.
             guard !Task.isCancelled else { return }
             
-            evaluation = nil
+            evaluationResult = nil
             await evaluateExpressions()
         }
         .task(id: ObjectIdentifier(popup)) {
@@ -79,11 +78,9 @@ struct EmbeddedPopupView: View {
     
     /// Evaluates the arcade expressions and updates the evaluation property.
     private func evaluateExpressions() async {
-        do {
+        evaluationResult = await Result {
             _ = try await popup.evaluateExpressions()
-            evaluation = Evaluation(elements: popup.evaluatedElements)
-        } catch {
-            evaluation = Evaluation(error: error)
+            return popup.evaluatedElements
         }
     }
 }
@@ -115,23 +112,6 @@ extension EmbeddedPopupView {
 #endif
             }
             .listStyle(.plain)
-        }
-    }
-    
-    /// An object used to hold the result of evaluating the expressions of a popup.
-    private final class Evaluation {
-        /// The evaluated elements.
-        let elements: [PopupElement]
-        /// The error that occurred during evaluation, if any.
-        let error: Error?
-        
-        /// Creates an evaluation.
-        /// - Parameters:
-        ///   - elements: The evaluated elements.
-        ///   - error: The error that occurred during evaluation, if any.
-        init(elements: [PopupElement] = [], error: Error? = nil) {
-            self.elements = elements
-            self.error = error
         }
     }
 }
