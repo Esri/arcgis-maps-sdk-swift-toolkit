@@ -36,4 +36,40 @@ final class PopupViewTests: XCTestCase {
         app.launch()
         popupTestsButton.tap()
     }
+    
+    /// Verifies "No Associations" is displayed for an element with no filter results.
+    func testNoAssociations() async throws {
+        let app = XCUIApplication()
+        let associationsElements = app.buttons.matching(identifier: "Associations Popup Element")
+        let evaluationText = app.staticTexts["Evaluating popup expressions"]
+        let fetchingFilterResultsIndicator = app.activityIndicators["Fetching filter results"]
+        let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
+        let noAssociationsText = app.staticTexts["No Associations"]
+        let popupViewTitle = app.staticTexts["Electric Distribution Line: Medium Voltage"]
+        
+        // Opens the popup and waits for everything to load.
+        openPopup(with: 513, on: .electricDistributionLine)
+        XCTAssertTrue(
+            popupViewTitle.waitForExistence(timeout: 30),
+            "The popup view failed to open after 30 seconds."
+        )
+        XCTAssertTrue(
+            evaluationText.waitForNonExistence(timeout: 15),
+            "The expressions evaluation didn't finish after 15 seconds."
+        )
+        XCTAssertTrue(
+            fetchingFilterResultsIndicator.waitForNonExistence(timeout: 15),
+            "The filer results didn't finish fetching after 15 seconds."
+        )
+        
+        // Expectation: There is only one associations element with no filter results.
+        XCTAssertEqual(associationsElements.count, 1)
+        XCTAssertEqual(filterResults.count, 0)
+        
+        // Expectation: "No Associations" is shown.
+        XCTAssertTrue(
+            noAssociationsText.waitForExistence(timeout: 5),
+            "The \"No Associations\" text doesn't exist."
+        )
+    }
 }

@@ -83,6 +83,7 @@ struct UtilityAssociationsPopupElementView: View {
                 description: popupElement.description
             )
             .catalystPadding(4)
+            .accessibilityIdentifier("Associations Popup Element")
         }
         .disclosureGroupPadding()
     }
@@ -158,6 +159,7 @@ private struct UtilityAssociationsFilterResultLink: View {
             }
             .lineLimit(1)
         }
+        .accessibilityIdentifier("Associations Filter Result")
     }
 }
 
