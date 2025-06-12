@@ -37,11 +37,58 @@ final class PopupViewTests: XCTestCase {
         popupTestsButton.tap()
     }
     
+    /// Verifies the correct default titles are shown for an associations element with no titles specified.
+    func testDefaultTitles() async throws {
+        let app = XCUIApplication()
+        let associationsElement = app.staticTexts["Associations"]
+        let connectivityFilterResult = app.staticTexts["Connectivity"]
+        let containerFilterResult = app.staticTexts["Container"]
+        let evaluatingExpressionsText = app.staticTexts["Evaluating popup expressions"]
+        let fetchingFilterResultsIndicator = app.activityIndicators["Fetching filter results"]
+        let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
+        let popupViewTitle = app.staticTexts["Electric Distribution Device: Arrester"]
+        let structureFilterResult = app.staticTexts["Structure"]
+        
+        // Opens the popup and waits for everything to load.
+        openPopup(with: 3216, on: .electricDistributionDevice)
+        XCTAssertTrue(
+            popupViewTitle.waitForExistence(timeout: 30),
+            "The popup view failed to open after 30 seconds."
+        )
+        XCTAssertTrue(
+            evaluatingExpressionsText.waitForNonExistence(timeout: 15),
+            "The expressions evaluation didn't finish after 15 seconds."
+        )
+        XCTAssertTrue(
+            fetchingFilterResultsIndicator.waitForNonExistence(timeout: 15),
+            "The filer results didn't finish fetching after 15 seconds."
+        )
+        
+        XCTAssertTrue(
+            associationsElement.exists,
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertEqual(filterResults.count, 3)
+        XCTAssertTrue(
+            connectivityFilterResult.exists,
+            "The filter result \"Connectivity\" doesn't exist."
+        )
+        XCTAssertTrue(
+            containerFilterResult.exists,
+            "The filter result \"Container\" doesn't exist."
+        )
+        XCTAssertTrue(
+            structureFilterResult.exists,
+            "The filter result \"Structure\" doesn't exist."
+        )
+    }
+    
     /// Verifies "No Associations" is displayed for an element with no filter results.
     func testNoAssociations() async throws {
         let app = XCUIApplication()
         let associationsElements = app.buttons.matching(identifier: "Associations Popup Element")
-        let evaluationText = app.staticTexts["Evaluating popup expressions"]
+        let evaluatingExpressionsText = app.staticTexts["Evaluating popup expressions"]
         let fetchingFilterResultsIndicator = app.activityIndicators["Fetching filter results"]
         let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
         let noAssociationsText = app.staticTexts["No Associations"]
@@ -54,7 +101,7 @@ final class PopupViewTests: XCTestCase {
             "The popup view failed to open after 30 seconds."
         )
         XCTAssertTrue(
-            evaluationText.waitForNonExistence(timeout: 15),
+            evaluatingExpressionsText.waitForNonExistence(timeout: 15),
             "The expressions evaluation didn't finish after 15 seconds."
         )
         XCTAssertTrue(
