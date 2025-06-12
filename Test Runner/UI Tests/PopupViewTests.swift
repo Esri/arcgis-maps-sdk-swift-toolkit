@@ -19,4 +19,21 @@ final class PopupViewTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
     }
+    
+    /// Opens a popup in the `PopupTestView`.
+    /// - Parameters:
+    ///   - objectID: The object ID of the feature that will be used to create the `Popup`.
+    ///   - layerName: The name of the `FeatureLayer` containing the feature.
+    func openPopup(with objectID: Int, on layerName: String) {
+        let app = XCUIApplication()
+        let popupTestsButton = app.buttons["Popup Tests"]
+        
+        // Adds the launch arguments that will be read in the popup test view.
+        let openPopupArguments = ["-objectID", "\(objectID)", "-layerName", "\(layerName)"]
+        app.launchArguments.append(contentsOf: openPopupArguments)
+        
+        // Opens the popup test view.
+        app.launch()
+        popupTestsButton.tap()
+    }
 }
