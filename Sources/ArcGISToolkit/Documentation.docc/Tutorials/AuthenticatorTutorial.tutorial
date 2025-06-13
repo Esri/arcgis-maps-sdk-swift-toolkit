@@ -13,8 +13,6 @@
         @Steps {
             @Step {
                 Declare and initialize an `Authenticator` member in your app.
-                
-                For OAuth implementations use `Authenticator(oAuthUserConfigurations:)`.
                 @Code(name: "ExampleApp.swift", file: AuthenticatorStep1.swift)
             }
             
@@ -24,6 +22,7 @@
             }
             
             @Step {
+                Configure the `Authenticator` with OAuth and IAP configurations if required. 
                 Set the `Authenticator` to handle challenges.
                 Set up credential persistence.
                 @Code(name: "ExampleApp.swift", file: AuthenticatorStep3.swift)
