@@ -158,12 +158,12 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
-				8A5BAC792DFC8E7200266E7A /* Shared */,
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
-				E47ABE412652FE0900FD2FE3 /* Products */,
 				E47ABE5A2652FF1200FD2FE3 /* Frameworks */,
+				E47ABE412652FE0900FD2FE3 /* Products */,
+				8A5BAC792DFC8E7200266E7A /* Shared */,
 			);
 			sourceTree = "<group>";
 		};
