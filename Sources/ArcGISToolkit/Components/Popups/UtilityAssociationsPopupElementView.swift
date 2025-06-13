@@ -68,6 +68,7 @@ struct UtilityAssociationsPopupElementView: View {
                     if progressViewIsShowing {
                         ProgressView()
                             .frame(maxWidth: .infinity)
+                            .accessibilityIdentifier("Fetching filter results")
                     }
                 }
                 .onAppear {
