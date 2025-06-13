@@ -34,6 +34,7 @@ struct UtilityAssociationResultLabel: View {
             }
             .lineLimit(1)
         }
+        .accessibilityIdentifier("Association Result")
     }
 }
 

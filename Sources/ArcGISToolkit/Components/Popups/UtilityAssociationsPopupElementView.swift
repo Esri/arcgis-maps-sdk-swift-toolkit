@@ -223,6 +223,7 @@ private struct UtilityAssociationGroupResultView: View {
                 Text(groupResult.associationResults.count, format: .number)
             }
             .catalystPadding(4)
+            .accessibilityIdentifier("Association Group Result")
         }
         .disclosureGroupPadding()
     }

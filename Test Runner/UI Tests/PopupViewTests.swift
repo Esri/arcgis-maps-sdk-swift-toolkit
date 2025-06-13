@@ -129,16 +129,62 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
+    /// Verifies that the `UtilityAssociationsPopupElement.displayCount` is respected.
+    func testDisplayCount() async {
+        let app = XCUIApplication()
+        let associationResults = app.buttons.matching(identifier: "Association Result")
+        let contentFilterResult = app.buttons["Content, 3"]
+        let popupTitle = app.staticTexts["Electric Distribution Assembly: Switch Bank"]
+        let groupResult = app.buttons["Electric Distribution Device, 3"]
+        let groupResults = app.buttons.matching(identifier: "Association Group Result")
+        let showAllButton = app.buttons["Show all, Total: 3"]
+        let titleField = app.textFields["Title"]
+        
+        openPopup(316, on: "Electric Distribution Assembly")
+        assertAssociationsElementsLoad(popupTitle: popupTitle)
+        
+        // Opens the filter result.
+        XCTAssertTrue(
+            contentFilterResult.exists,
+            "The filter result \"Content, 3\" doesn't exist."
+        )
+        contentFilterResult.tap()
+        
+        XCTAssertTrue(
+            groupResult.waitForExistence(timeout: 3),
+            "The group result \"Electric Distribution Device, 3\" doesn't exist."
+        )
+        
+        // Expectation: The group result has only 1 result, same as the `displayCount`.
+        XCTAssertEqual(groupResults.count, 1)
+        XCTAssertEqual(associationResults.count, 1)
+        
+        // Opens the search results view.
+        XCTAssertTrue(
+            showAllButton.exists,
+            "The \"Show all, Total: 3\" button doesn't exist."
+        )
+        showAllButton.tap()
+        
+        XCTAssertTrue(
+            titleField.waitForExistence(timeout: 3),
+            "The \"Show all\" view failed to open."
+        )
+        
+        // Expectation: All of the results are now shown.
+        XCTAssertEqual(associationResults.count, 3)
+    }
+    
     /// Verifies that the searching filters the association results as expected.
     func testSearchResults() async throws {
         let app = XCUIApplication()
-        let associationResults = app.buttons.matching(identifier: "Association Result Button")
+        let associationResults = app.buttons.matching(identifier: "Association Result")
         let cancelButton = app.buttons["Cancel"]
         let filterResult = app.buttons["Content, 6"]
         let popupTitle = app.staticTexts["Electric Distribution Assembly: Fuse Bank"]
         let groupResult = app.buttons["Electric Distribution Device, 6"]
-        let titleField = app.textFields["Title"]
         let showAllButton = app.buttons["Show all, Total: 6"]
+        let titleField = app.textFields["Title"]
         
         openPopup(475, on: "Electric Distribution Assembly")
         assertAssociationsElementsLoad(popupTitle: popupTitle)
@@ -164,7 +210,7 @@ final class PopupViewTests: XCTestCase {
         
         XCTAssertTrue(
             titleField.waitForExistence(timeout: 3),
-            "The \"Title\" field doesn't exist."
+            "The \"Show all\" view failed to open."
         )
         
         // Expectation: There are 6 results to begin with.
@@ -190,8 +236,8 @@ final class PopupViewTests: XCTestCase {
         cancelButton.tap()
         
         XCTAssertTrue(
-            cancelButton.waitForNonExistence(timeout: 3),
-            "The \"Cancel\" button failed to disappear."
+            app.wait(for: \.keyboards.count, toEqual: 0, timeout: 3),
+            "The keyboard failed to disappear."
         )
         
         XCTAssertEqual(associationResults.count, 6)
