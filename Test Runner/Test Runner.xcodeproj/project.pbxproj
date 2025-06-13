@@ -291,6 +291,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7552A75E2A573CBD0023DA5A /* Build configuration list for PBXNativeTarget "Test Runner" */;
 			buildPhases = (
+				8A1ED3322DFCE4FD0025C731 /* Create .secrets File If It Does Not Exist */,
 				7552A74C2A573CBB0023DA5A /* Sources */,
 				7552A74D2A573CBB0023DA5A /* Frameworks */,
 				7552A74E2A573CBB0023DA5A /* Resources */,
@@ -394,6 +395,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8A1ED3322DFCE4FD0025C731 /* Create .secrets File If It Does Not Exist */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Create .secrets File If It Does Not Exist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ! -e \"$SRCROOT/../.secrets\" ]\nthen\n    touch \"$SRCROOT/../.secrets\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7552A74C2A573CBB0023DA5A /* Sources */ = {

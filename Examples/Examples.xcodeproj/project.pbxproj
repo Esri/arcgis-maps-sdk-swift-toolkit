@@ -220,6 +220,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Toolkit Examples" */;
 			buildPhases = (
+				8AC75EB62DFCE61300A5CC90 /* Create .secrets File If It Does Not Exist */,
 				E47ABE3C2652FE0900FD2FE3 /* Sources */,
 				E47ABE3D2652FE0900FD2FE3 /* Frameworks */,
 				E47ABE3E2652FE0900FD2FE3 /* Resources */,
@@ -306,6 +307,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint --config ../.swiftlint.yml\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		8AC75EB62DFCE61300A5CC90 /* Create .secrets File If It Does Not Exist */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Create .secrets File If It Does Not Exist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ! -e \"$SRCROOT/../.secrets\" ]\nthen\n    touch \"$SRCROOT/../.secrets\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
