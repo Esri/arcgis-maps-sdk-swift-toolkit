@@ -48,7 +48,7 @@ struct UtilityAssociationsPopupElementView: View {
                     }
                     .environment(\.associationDisplayCount, popupElement.displayCount)
                 }
-            case .failure(let error):
+            case .failure(let error) where !(error is CancellationError):
                 Text(
                     "Error fetching filter results: \(error.localizedDescription)",
                     bundle: .toolkitModule,
@@ -58,7 +58,7 @@ struct UtilityAssociationsPopupElementView: View {
                              The variable provides additional data.
                              """
                 )
-            case nil:
+            case .failure, nil:
                 ProgressView()
                     .frame(maxWidth: .infinity)
                     .task {
