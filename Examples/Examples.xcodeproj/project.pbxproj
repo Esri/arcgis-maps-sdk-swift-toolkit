@@ -37,7 +37,7 @@
 			filePatterns = "*.masque";
 			fileType = pattern.proxy;
 			inputFiles = (
-				"$(SRCROOT)/.secrets",
+				"$(SRCROOT)/../.secrets",
 			);
 			isEditable = 1;
 			name = "Generate Swift Code from Secrets";
