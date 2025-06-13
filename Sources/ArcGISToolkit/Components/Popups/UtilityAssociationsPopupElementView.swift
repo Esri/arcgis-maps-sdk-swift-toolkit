@@ -62,9 +62,12 @@ struct UtilityAssociationsPopupElementView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity)
                     .task {
-                        filterResultsResult = await Result {
+                        let filterResultsResult = await Result {
                             try await popupElement.associationsFilterResults
                                 .filter { $0.resultCount > 0 }
+                        }
+                        withAnimation {
+                            self.filterResultsResult = filterResultsResult
                         }
                     }
             }
