@@ -88,4 +88,27 @@ public extension AuthenticationManager {
             return await group.allSatisfy { $0 == true }
         }
     }
+    
+    /// Initiates a logout request, invalidating the user's identity within the
+    /// web session and removing all associated tokens for all IAP credentials.
+    /// - Returns: `true` if all IAP credentials are invalidated, otherwise `false`.
+    @discardableResult
+    func invalidateIAPCredentials() async -> Bool {
+        let iapCredentials = arcGISCredentialStore.credentials.compactMap {
+            $0 as? IAPCredential
+        }
+        return await withTaskGroup(of: Bool.self, returning: Bool.self) { group in
+            for credential in iapCredentials {
+                group.addTask {
+                    do {
+                        return try await credential.invalidate()
+                    } catch {
+                        return false
+                    }
+                }
+            }
+
+            return await group.allSatisfy(\.self)
+        }
+    }
 }

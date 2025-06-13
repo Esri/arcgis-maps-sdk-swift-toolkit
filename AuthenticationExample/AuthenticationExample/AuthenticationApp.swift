@@ -18,10 +18,7 @@ import SwiftUI
 
 @main
 struct AuthenticationApp: App {
-    @StateObject private var authenticator = Authenticator(
-        // If you want to use OAuth, uncomment this code:
-//      oAuthUserConfigurations: [.arcgisDotCom]
-    )
+    @StateObject private var authenticator = Authenticator()
     
     @State private var isSettingUp = true
     
@@ -43,6 +40,10 @@ struct AuthenticationApp: App {
             .authenticator(authenticator)
             .task {
                 isSettingUp = true
+                // If you want to use OAuth, uncomment this code:
+//                authenticator.oAuthUserConfigurations.append(.oAuthUserConfiguration)
+                // If you want to use Identity-Aware Proxy (IAP), uncomment this code:
+//                try? await authenticator.iapConfigurations.append(.iapConfiguration)
                 ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
                 // Here we setup credential stores to be persistent, which means that it will
                 // synchronize with the keychain for storing credentials.
@@ -58,7 +59,7 @@ struct AuthenticationApp: App {
 
 private extension OAuthUserConfiguration {
     // If you want to use OAuth, uncomment this code:
-//    static let arcgisDotCom = OAuthUserConfiguration(
+//    static let oAuthUserConfiguration = OAuthUserConfiguration(
 //        portalURL: .portal,
 //        clientID: "<#Your client ID goes here#>",
 //        // Note: You must have the same redirect URL used here
@@ -66,6 +67,17 @@ private extension OAuthUserConfiguration {
 //        // The scheme of the redirect URL is also specified in the Info.plist file.
 //        redirectURL: URL(string: "authexample://auth")!
 //    )
+}
+
+private extension IAPConfiguration {
+    // If you want to use Identity-Aware Proxy (IAP), uncomment this code:
+//    static var iapConfiguration: IAPConfiguration {
+//        get async throws {
+//            try await .configuration(
+//                from: URL(filePath: "/path/to/IAP configuration/file.json")!
+//            )
+//        }
+//    }
 }
 
 extension URL {
