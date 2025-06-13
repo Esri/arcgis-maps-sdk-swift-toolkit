@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import CryptoTokenKit
 
 /// The `Authenticator` is a configurable object that handles authentication challenges. It will
@@ -54,17 +53,36 @@ import CryptoTokenKit
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
     let promptForUntrustedHosts: Bool
-    /// The OAuth configurations that this authenticator can work with.
-    public var oAuthUserConfigurations: [OAuthUserConfiguration]
+    /// The OAuth user configurations that this authenticator can work with.
+    /// - Since: 200.8
+    public var oAuthUserConfigurations: [OAuthUserConfiguration] = []
     /// The IAP configurations that this authenticator can work with.
-    public var iapConfigurations: [IAPConfiguration]
+    /// - Since: 200.8
+    public var iapConfigurations: [IAPConfiguration] = []
     
     /// Creates an authenticator.
     /// - Parameters:
     ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
     ///   encountering an untrusted host.
     ///   - oAuthUserConfigurations: The OAuth configurations that this authenticator can work with.
-    ///   - iapConfiguration: The IAP configurations that this authenticator can work with.
+    /// - Attention: Deprecated at 200.8.
+    @_disfavoredOverload
+    @available(*, deprecated, message: "Use 'init(promptForUntrustedHosts:oAuthUserConfigurations:iapConfigurations:)' instead")
+    public init(
+        promptForUntrustedHosts: Bool = false,
+        oAuthUserConfigurations: [OAuthUserConfiguration] = []
+    ) {
+        self.promptForUntrustedHosts = promptForUntrustedHosts
+        self.oAuthUserConfigurations = oAuthUserConfigurations
+    }
+    
+    /// Creates an authenticator.
+    /// - Parameters:
+    ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
+    ///   encountering an untrusted host.
+    ///   - oAuthUserConfigurations: The OAuth user configurations that this authenticator can work with.
+    ///   - iapConfigurations: The IAP configurations that this authenticator can work with.
+    /// - Since: 200.8
     public init(
         promptForUntrustedHosts: Bool = false,
         oAuthUserConfigurations: [OAuthUserConfiguration] = [],
