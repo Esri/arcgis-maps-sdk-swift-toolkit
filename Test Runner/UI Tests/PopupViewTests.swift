@@ -128,4 +128,89 @@ final class PopupViewTests: XCTestCase {
             "The \"No Associations\" text doesn't exist."
         )
     }
+    
+    /// Verifies that the searching filters the association results as expected.
+    func testSearchResults() async throws {
+        let app = XCUIApplication()
+        let associationResults = app.buttons.matching(identifier: "Association Result Button")
+        let cancelButton = app.buttons["Cancel"]
+        let filterResult = app.buttons["Content, 6"]
+        let popupTitle = app.staticTexts["Electric Distribution Assembly: Fuse Bank"]
+        let groupResult = app.buttons["Electric Distribution Device, 6"]
+        let titleField = app.textFields["Title"]
+        let showAllButton = app.buttons["Show all, Total: 6"]
+        
+        openPopup(475, on: "Electric Distribution Assembly")
+        assertAssociationsElementsLoad(popupTitle: popupTitle)
+        
+        // Opens the filter result.
+        XCTAssertTrue(
+            filterResult.exists,
+            "The filter result \"Content, 6\" doesn't exist."
+        )
+        filterResult.tap()
+        
+        XCTAssertTrue(
+            groupResult.waitForExistence(timeout: 3),
+            "The group result \"Electric Distribution Device, 6\" doesn't exist."
+        )
+        
+        // Opens the "Show all" view.
+        XCTAssertTrue(
+            showAllButton.exists,
+            "The \"Show all, Total: 6\" button doesn't exist."
+        )
+        showAllButton.tap()
+        
+        XCTAssertTrue(
+            titleField.waitForExistence(timeout: 3),
+            "The \"Title\" field doesn't exist."
+        )
+        
+        // Expectation: There are 6 results to begin with.
+        XCTAssertEqual(associationResults.count, 6)
+        
+        // Expectation: Searching filters the results to only those with the query in their title.
+        titleField.tap()
+        titleField.typeText("Arrester")
+        
+        XCTAssertEqual(associationResults.count, 3)
+        XCTAssertTrue(
+            associationResults.allElementsBoundByIndex.allSatisfy {
+                $0.label.contains("Arrester")
+            },
+            "There are filter results that do not contain \"Arrester\" in their title."
+        )
+        
+        // Expectation: The cancel button brings back all the results.
+        XCTAssertTrue(
+            cancelButton.exists,
+            "The \"Cancel\" button doesn't exist."
+        )
+        cancelButton.tap()
+        
+        XCTAssertTrue(
+            cancelButton.waitForNonExistence(timeout: 3),
+            "The \"Cancel\" button failed to disappear."
+        )
+        
+        XCTAssertEqual(associationResults.count, 6)
+        
+        // Expectation: The search is case insensitive.
+        titleField.tap()
+        titleField.typeText("fuse")
+        
+        XCTAssertEqual(associationResults.count, 3)
+        XCTAssertTrue(
+            associationResults.allElementsBoundByIndex.allSatisfy {
+                $0.label.localizedStandardContains("fuse")
+            },
+            "There are filter results that do not contain \"fuse\" in their title."
+        )
+        
+        // Expectation: Invalid search queries have no results.
+        titleField.typeText("!")
+        
+        XCTAssertEqual(associationResults.count, 0)
+    }
 }
