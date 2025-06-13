@@ -30,6 +30,25 @@
 		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		8A5BAC672DFC846400266E7A /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.masque";
+			fileType = pattern.proxy;
+			inputFiles = (
+				"$(SRCROOT)/.secrets",
+			);
+			isEditable = 1;
+			name = "Generate Swift Code from Secrets";
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
+			);
+			runOncePerArchitecture = 0;
+			script = "\"${SRCROOT}/Scriptz/masquerade\" -i \"${INPUT_FILE_PATH}\" -o \"${SCRIPT_OUTPUT_FILE_0}\" -s \"${SCRIPT_INPUT_FILE_0}\" -f\n";
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		E47ABE5E2652FF1300FD2FE3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -70,6 +89,39 @@
 		E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8A5BAC7D2DFC916F00266E7A /* Exceptions for "Shared" folder in "Toolkit Examples" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppSecrets.swift.masque,
+			);
+			target = E47ABE3F2652FE0900FD2FE3 /* Toolkit Examples */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		8A5BAC7F2DFC917400266E7A /* Exceptions for "Shared" folder in "Compile Sources" phase from "Toolkit Examples" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = E47ABE3C2652FE0900FD2FE3 /* Sources */;
+			membershipExceptions = (
+				AppSecrets.swift.masque,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8A5BAC792DFC8E7200266E7A /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8A5BAC7D2DFC916F00266E7A /* Exceptions for "Shared" folder in "Toolkit Examples" target */,
+				8A5BAC7F2DFC917400266E7A /* Exceptions for "Shared" folder in "Compile Sources" phase from "Toolkit Examples" target */,
+			);
+			name = Shared;
+			path = ../Shared;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		E47ABE3D2652FE0900FD2FE3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -106,6 +158,7 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
+				8A5BAC792DFC8E7200266E7A /* Shared */,
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
@@ -174,8 +227,12 @@
 				4DFDB9BB29367B7F00A0AC42 /* Lint Sources */,
 			);
 			buildRules = (
+				8A5BAC672DFC846400266E7A /* PBXBuildRule */,
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8A5BAC792DFC8E7200266E7A /* Shared */,
 			);
 			name = "Toolkit Examples";
 			packageProductDependencies = (
