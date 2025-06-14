@@ -13,7 +13,7 @@ struct MasqueradePlugin: BuildToolPlugin {
         let inputFile = context.package.directoryURL.appending(path: "Shared/AppSecrets.swift.masque")
         return [
             .buildCommand(
-                displayName: "Generating Secrets",
+                displayName: "Running masquerade",
                 executable: scriptPath,
                 arguments: [
                     "-i", inputFile.path(),
