@@ -18,9 +18,6 @@ import SwiftUI
 struct InternalFeatureFormView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The view model for the form.
     @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
     
@@ -58,7 +55,7 @@ struct InternalFeatureFormView: View {
             .onTitleChange(of: internalFeatureFormViewModel.featureForm) { newTitle in
                 internalFeatureFormViewModel.title = newTitle
             }
-            .navigationLayerTitle(internalFeatureFormViewModel.title)
+            .navigationTitle(internalFeatureFormViewModel.title)
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)

@@ -108,59 +108,57 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         if let rootFeatureForm {
-            VStack(spacing: 0) {
-                NavigationLayer { _ in
-                    InternalFeatureFormView(
-                        featureForm: rootFeatureForm
-                    )
-                } headerTrailing: {
+            NavigationStack {
+                InternalFeatureFormView(
+                    featureForm: rootFeatureForm
+                )
+                .toolbar {
                     if closeButtonVisibility != .hidden {
-                        XButton(.dismiss) {
-                            if hasEdits {
-                                alertContinuation = (false, {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            XButton(.dismiss) {
+                                if hasEdits {
+                                    alertContinuation = (false, {
+                                        presentedForm.wrappedValue = nil
+                                    })
+                                } else {
                                     presentedForm.wrappedValue = nil
-                                })
-                            } else {
-                                presentedForm.wrappedValue = nil
+                                }
                             }
+                            .font(.title)
                         }
-                        .font(.title)
-                    } else {
-                        // TODO: This is unintended usage of NavigationLayer's headerTrailing. May not render properly.
-                        EmptyView()
                     }
-                } footer: {
                     if let presentedForm = presentedForm.wrappedValue,
                        hasEdits,
                        editingButtonsVisibility != .hidden {
-                        FormFooter(
-                            featureForm: presentedForm,
-                            formHandlingEventAction: onFormEditingEventAction,
-                            validationErrorVisibility: $validationErrorVisibility,
-                            finishEditingError: $finishEditingError
-                        )
-                    } else {
-                        // TODO: This is unintended usage of NavigationLayer's footer. May not render properly.
-                        EmptyView()
-                    }
-                }
-                .backNavigationAction { navigationLayerModel in
-                    if aFeatureFormIsPresented && hasEdits {
-                        alertContinuation = (true, { navigationLayerModel.pop() })
-                    } else {
-                        navigationLayerModel.pop()
-                    }
-                }
-                .onNavigationPathChanged { item in
-                    if let item {
-                        if type(of: item.view()) == InternalFeatureFormView.self {
-                            aFeatureFormIsPresented = true
-                        } else {
-                            aFeatureFormIsPresented = false
+                        ToolbarItem(placement: .bottomBar) {
+                            FormFooter(
+                                featureForm: presentedForm,
+                                formHandlingEventAction: onFormEditingEventAction,
+                                validationErrorVisibility: $validationErrorVisibility,
+                                finishEditingError: $finishEditingError
+                            )
                         }
                     }
                 }
             }
+            /*
+            .backNavigationAction { navigationLayerModel in
+                if aFeatureFormIsPresented && hasEdits {
+                    alertContinuation = (true, { navigationLayerModel.pop() })
+                } else {
+                    navigationLayerModel.pop()
+                }
+            }
+            .onNavigationPathChanged { item in
+                if let item {
+                    if type(of: item.view()) == InternalFeatureFormView.self {
+                        aFeatureFormIsPresented = true
+                    } else {
+                        aFeatureFormIsPresented = false
+                    }
+                }
+            }
+            */
             // Alert for abandoning unsaved edits
             .alert(
                 (presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",

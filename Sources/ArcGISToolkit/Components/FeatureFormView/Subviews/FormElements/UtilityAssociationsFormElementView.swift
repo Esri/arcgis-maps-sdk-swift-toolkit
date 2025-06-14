@@ -52,8 +52,8 @@ private struct UtilityAssociationGroupResultView: View {
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
+    /// A Boolean value indicating whether the associated form is presented.
+    @State private var associatedFormIsPresented = false
     
     /// The backing utility association group result.
     let utilityAssociationGroupResult: UtilityAssociationGroupResult
@@ -63,11 +63,7 @@ private struct UtilityAssociationGroupResultView: View {
             UtilityAssociationResultView(
                 selectionAction: {
                     let navigationAction: () -> Void = {
-                        navigationLayerModel.push {
-                            InternalFeatureFormView(
-                                featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                            )
-                        }
+                        associatedFormIsPresented = true
                     }
                     if internalFeatureFormViewModel.featureForm.hasEdits {
                         setAlertContinuation?(true, navigationAction)
@@ -77,12 +73,19 @@ private struct UtilityAssociationGroupResultView: View {
                 },
                 result: utilityAssociationResult
             )
+            .navigationDestination(isPresented: $associatedFormIsPresented) {
+                InternalFeatureFormView(
+                    featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
+                )
+            }
         }
-        .onAppear {
+        .onChange(of: associatedFormIsPresented) { wasPresented, isPresented in
             // This view is considered the tail end of a navigable FeatureForm.
             // When a user is backing out of a navigation path, this view
             // appearing is considered a change to the presented FeatureForm.
-            formChangedAction?(internalFeatureFormViewModel.featureForm)
+            if wasPresented && !isPresented {
+                formChangedAction?(internalFeatureFormViewModel.featureForm)
+            }
         }
     }
 }
@@ -92,20 +95,15 @@ private struct UtilityAssociationsFilterResultListRowView: View {
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The referenced utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
         let listRowTitle = "\(utilityAssociationsFilterResult.filter.title)".capitalized
-        Button {
-            navigationLayerModel.push {
-                UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
-                    .navigationLayerTitle(listRowTitle, subtitle: internalFeatureFormViewModel.title)
-                    .environment(internalFeatureFormViewModel)
-            }
+        NavigationLink {
+            UtilityAssociationsFilterResultView(utilityAssociationsFilterResult: utilityAssociationsFilterResult)
+                .navigationTitle(listRowTitle)
+                .environment(internalFeatureFormViewModel)
         } label: {
             HStack {
                 VStack {
@@ -139,23 +137,15 @@ private struct UtilityAssociationsFilterResultView: View {
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The backing utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
     var body: some View {
         List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-            Button {
-                navigationLayerModel.push {
-                    UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
-                        .navigationLayerTitle(
-                            utilityAssociationGroupResult.name,
-                            subtitle: utilityAssociationsFilterResult.filter.title
-                        )
-                        .environment(internalFeatureFormViewModel)
-                }
+            NavigationLink {
+                UtilityAssociationGroupResultView(utilityAssociationGroupResult: utilityAssociationGroupResult)
+                    .navigationTitle(utilityAssociationGroupResult.name)
+                    .environment(internalFeatureFormViewModel)
             } label: {
                 HStack {
                     Text(utilityAssociationGroupResult.name)
