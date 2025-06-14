@@ -49,7 +49,7 @@ let package = Package(
             ],
             path: "Sources/GeneratedSecrets",
             plugins: [
-                .plugin(name: "SecretsGenerator")
+                .plugin(name: "MasqueradePlugin")
             ]
         ),
         .testTarget(
@@ -60,9 +60,9 @@ let package = Package(
             ]
         ),
         .plugin(
-            name: "SecretsGenerator",
+            name: "MasqueradePlugin",
             capability: .buildTool(),
-            path: "Plugins/SecretsGenerator"
+            path: "Plugins/MasqueradePlugin"
         )
     ]
 )

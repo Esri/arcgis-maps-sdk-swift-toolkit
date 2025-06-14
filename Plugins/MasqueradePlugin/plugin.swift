@@ -2,7 +2,7 @@ import PackagePlugin
 import Foundation
 
 @main
-struct SecretsManager: BuildToolPlugin {
+struct MasqueradePlugin: BuildToolPlugin {
     func createBuildCommands(
         context: PluginContext,
         target: Target
