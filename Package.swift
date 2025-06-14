@@ -40,14 +40,14 @@ let package = Package(
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
                 .product(name: "Markdown", package: "swift-markdown")
-            ],
-            plugins: [
-                .plugin(name: "MasqueradePlugin")
             ]
         ),
         .testTarget(
             name: "ArcGISToolkitTests",
-            dependencies: ["ArcGISToolkit"]
+            dependencies: ["ArcGISToolkit"],
+            plugins: [
+                .plugin(name: "MasqueradePlugin")
+            ]
         ),
         .plugin(
             name: "MasqueradePlugin",
