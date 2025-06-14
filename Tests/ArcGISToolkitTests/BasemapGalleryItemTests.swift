@@ -15,6 +15,7 @@
 
 import ArcGIS
 @testable import ArcGISToolkit
+@testable import GeneratedSecrets
 @preconcurrency import Combine
 import Foundation
 import SwiftUI
@@ -27,7 +28,7 @@ import XCTest
 // test design have been added to accommodate those differences.
 final class BasemapGalleryItemTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = .default
+        ArcGISEnvironment.apiKey = .iOS
     }
     
     override func tearDown() {

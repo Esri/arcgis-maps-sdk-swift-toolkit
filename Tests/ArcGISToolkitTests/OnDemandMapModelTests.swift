@@ -16,10 +16,11 @@ import XCTest
 import ArcGIS
 import Combine
 @testable import ArcGISToolkit
+@testable import GeneratedSecrets
 
 class OnDemandMapModelTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = .default
+        ArcGISEnvironment.apiKey = .iOS
     }
     
     override func tearDown() {

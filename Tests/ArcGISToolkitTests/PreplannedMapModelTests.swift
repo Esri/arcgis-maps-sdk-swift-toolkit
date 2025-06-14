@@ -17,6 +17,7 @@ import ArcGIS
 import Combine
 import os
 @testable import ArcGISToolkit
+@testable import GeneratedSecrets
 
 private extension PreplannedMapAreaProtocol {
     var mapArea: PreplannedMapArea? { nil }
@@ -33,7 +34,7 @@ private extension PreplannedMapAreaProtocol {
 
 class PreplannedMapModelTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = .default
+        ArcGISEnvironment.apiKey = .iOS
     }
     
     override func tearDown() {
