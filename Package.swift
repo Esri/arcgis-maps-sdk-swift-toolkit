@@ -44,7 +44,15 @@ let package = Package(
         ),
         .testTarget(
             name: "ArcGISToolkitTests",
-            dependencies: ["ArcGISToolkit"]
+            dependencies: ["ArcGISToolkit"],
+            plugins: [
+                .plugin(name: "MasqueradePlugin")
+            ]
+        ),
+        .plugin(
+            name: "MasqueradePlugin",
+            capability: .buildTool(),
+            path: "Plugins/MasqueradePlugin"
         )
     ]
 )
