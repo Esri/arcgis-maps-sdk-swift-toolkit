@@ -54,7 +54,11 @@ let package = Package(
         ),
         .testTarget(
             name: "ArcGISToolkitTests",
-            dependencies: ["ArcGISToolkit"]
+            dependencies: [
+                "ArcGISToolkit",
+                "GeneratedSecrets"
+            ]
+        ),
         .plugin(
             name: "SecretsGenerator",
             capability: .buildTool(),
