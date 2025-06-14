@@ -42,6 +42,16 @@ let package = Package(
                 .product(name: "Markdown", package: "swift-markdown")
             ]
         ),
+        .target(
+            name: "GeneratedSecrets",
+            dependencies: [
+                .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
+            ],
+            path: "Sources/GeneratedSecrets",
+            plugins: [
+                .plugin(name: "SecretsGenerator")
+            ]
+        ),
         .testTarget(
             name: "ArcGISToolkitTests",
             dependencies: ["ArcGISToolkit"]
