@@ -1,5 +1,6 @@
 import PackagePlugin
 
+/// Runs Masquerade on the secrets file and exposes AppSecrets.swift to the plugin's working directory.
 @main
 struct MasqueradePlugin: BuildToolPlugin {
     func createBuildCommands(
