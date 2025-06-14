@@ -1,5 +1,4 @@
 import PackagePlugin
-import Foundation
 
 @main
 struct MasqueradePlugin: BuildToolPlugin {
