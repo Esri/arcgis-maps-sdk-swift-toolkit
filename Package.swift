@@ -43,11 +43,11 @@ let package = Package(
             ]
         ),
         .target(
-            name: "GeneratedSecrets",
+            name: "ArcGISToolkitSecretsProvider",
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
             ],
-            path: "Sources/GeneratedSecrets",
+            path: "Sources/ArcGISToolkitSecretsProvider",
             plugins: [
                 .plugin(name: "MasqueradePlugin")
             ]
@@ -56,7 +56,7 @@ let package = Package(
             name: "ArcGISToolkitTests",
             dependencies: [
                 "ArcGISToolkit",
-                "GeneratedSecrets"
+                "ArcGISToolkitSecretsProvider"
             ]
         ),
         .plugin(

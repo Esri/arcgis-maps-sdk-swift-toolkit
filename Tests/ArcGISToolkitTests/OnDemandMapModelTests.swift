@@ -16,7 +16,7 @@ import XCTest
 import ArcGIS
 import Combine
 @testable import ArcGISToolkit
-@testable import GeneratedSecrets
+@testable import ArcGISToolkitSecretsProvider
 
 class OnDemandMapModelTests: XCTestCase {
     override func setUp() async throws {
