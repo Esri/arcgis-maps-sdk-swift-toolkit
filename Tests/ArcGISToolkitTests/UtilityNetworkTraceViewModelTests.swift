@@ -14,7 +14,6 @@
 
 import ArcGIS
 @testable import ArcGISToolkit
-@testable import ArcGISToolkitSecretsProvider
 import XCTest
 
 final class UtilityNetworkTraceViewModelTests: XCTestCase {

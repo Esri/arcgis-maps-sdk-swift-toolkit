@@ -17,7 +17,6 @@ import ArcGIS
 import Combine
 import os
 @testable import ArcGISToolkit
-@testable import ArcGISToolkitSecretsProvider
 
 private extension PreplannedMapAreaProtocol {
     var mapArea: PreplannedMapArea? { nil }
