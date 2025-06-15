@@ -80,9 +80,9 @@ struct InternalFeatureFormView: View {
         .onAppear {
             formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
-        .navigationBarBackButtonHidden(navigateBackButtonIsOverridden)
+        .navigationBarBackButtonHidden(navigationBarBackButtonIsHidden)
         .toolbar {
-            if navigateBackButtonIsOverridden {
+            if navigationBarBackButtonIsHidden {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
                         setAlertContinuation?(true) {
@@ -103,10 +103,6 @@ struct InternalFeatureFormView: View {
             }
         }
     }
-    
-    var navigateBackButtonIsOverridden: Bool {
-        !isRootForm && internalFeatureFormViewModel.featureForm.hasEdits
-    }
 }
 
 extension InternalFeatureFormView {
@@ -119,6 +115,14 @@ extension InternalFeatureFormView {
         default:
             internalMakeElement(element)
         }
+    }
+    
+    /// A Boolean value indicating whether the navigation bar's back button is hidden.
+    ///
+    /// In certain cases the platform default button is hidden to support blocking back navigation with an
+    /// alert for unsaved edits.
+    var navigationBarBackButtonIsHidden: Bool {
+        !isRootForm && internalFeatureFormViewModel.featureForm.hasEdits
     }
     
     /// Makes UI for a field form element or a text form element.
