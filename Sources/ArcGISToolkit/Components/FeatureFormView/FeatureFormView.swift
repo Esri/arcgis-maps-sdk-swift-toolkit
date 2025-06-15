@@ -88,9 +88,6 @@ public struct FeatureFormView: View {
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
-    /// A Boolean value indicating whether the presented feature form has edits.
-    @State private var hasEdits: Bool = false
-    
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility: Visibility = .hidden
     
@@ -110,34 +107,6 @@ public struct FeatureFormView: View {
                     featureForm: rootFeatureForm,
                     isRootForm: true
                 )
-                .toolbar {
-                    if closeButtonVisibility != .hidden {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            XButton(.dismiss) {
-                                if hasEdits {
-                                    alertContinuation = (false, {
-                                        presentedForm.wrappedValue = nil
-                                    })
-                                } else {
-                                    presentedForm.wrappedValue = nil
-                                }
-                            }
-                            .font(.title)
-                        }
-                    }
-                    if let presentedForm = presentedForm.wrappedValue,
-                       hasEdits,
-                       editingButtonsVisibility != .hidden {
-                        ToolbarItem(placement: .bottomBar) {
-                            FormFooter(
-                                featureForm: presentedForm,
-                                formHandlingEventAction: onFormEditingEventAction,
-                                validationErrorVisibility: $validationErrorVisibility,
-                                finishEditingError: $finishEditingError
-                            )
-                        }
-                    }
-                }
             }
             // Alert for abandoning unsaved edits
             .alert(
@@ -205,16 +174,14 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .environment(\.closeButtonVisibility, closeButtonVisibility)
+            .environment(\.editingButtonVisibility, editingButtonsVisibility)
+            .environment(\.finishEditingError, $finishEditingError)
             .environment(\.formChangedAction, onFormChangedAction)
+            .environment(\.onFormEditingEventAction, onFormEditingEventAction)
+            .environment(\.presentedForm, presentedForm)
             .environment(\.setAlertContinuation, setAlertContinuation)
-            .environment(\._validationErrorVisibility, validationErrorVisibility)
-            .task(id: presentedForm.wrappedValue?.feature.globalID) {
-                if let presentedForm = presentedForm.wrappedValue {
-                    for await hasEdits in presentedForm.$hasEdits {
-                        withAnimation { self.hasEdits = hasEdits }
-                    }
-                }
-            }
+            .environment(\._validationErrorVisibility, $validationErrorVisibility)
         }
     }
 }
@@ -311,12 +278,27 @@ extension FeatureFormView {
 }
 
 extension EnvironmentValues {
+    /// The visibility of the close button.
+    @Entry var closeButtonVisibility: Visibility = .automatic
+    
+    /// The visibility of the "save" and "discard" buttons.
+    @Entry var editingButtonVisibility: Visibility = .automatic
+    
+    /// An error thrown from finish editing.
+    @Entry var finishEditingError: Binding<(any Error)?> = .constant(nil)
+    
     /// The environment value to access the closure to call when the presented feature form changes.
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
+    
+    /// The closure to perform when a ``EditingEvent`` occurs.
+    @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
+    
+    /// The feature form currently visible in the navigation layer.
+    @Entry var presentedForm: Binding<FeatureForm?>?
     
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
     
     /// The environment value to access the validation error visibility.
-    @Entry var _validationErrorVisibility: Visibility = .hidden
+    @Entry var _validationErrorVisibility: Binding<Visibility> = .constant(.hidden)
 }

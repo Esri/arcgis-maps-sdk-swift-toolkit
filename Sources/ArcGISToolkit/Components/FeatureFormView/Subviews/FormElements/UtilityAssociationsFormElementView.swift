@@ -87,6 +87,7 @@ private struct UtilityAssociationGroupResultView: View {
                 formChangedAction?(internalFeatureFormViewModel.featureForm)
             }
         }
+        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
     }
 }
 
@@ -159,6 +160,7 @@ private struct UtilityAssociationsFilterResultView: View {
             }
             .tint(.primary)
         }
+        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
     }
 }
 

@@ -102,6 +102,7 @@ struct InternalFeatureFormView: View {
                 }
             }
         }
+        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
     }
 }
 

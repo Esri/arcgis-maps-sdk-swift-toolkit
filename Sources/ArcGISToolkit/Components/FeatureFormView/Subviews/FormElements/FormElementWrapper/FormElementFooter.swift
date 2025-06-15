@@ -228,7 +228,7 @@ extension FormElementFooter {
         var isShowingError: Bool {
             element.isEditable
             && primaryError != nil
-            && (internalFeatureFormViewModel.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
+            && (internalFeatureFormViewModel.previouslyFocusedElements.contains(element) || validationErrorVisibility.wrappedValue == .visible)
         }
         
         /// The allowable number of characters in the input.
