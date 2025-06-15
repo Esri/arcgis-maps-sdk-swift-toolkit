@@ -18,6 +18,10 @@ import SwiftUI
 struct InternalFeatureFormView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
+    @Environment(\.setAlertContinuation) var setAlertContinuation
+    
+    @Environment(\.dismiss) private var dismiss
+    
     /// The view model for the form.
     @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
     
@@ -76,6 +80,32 @@ struct InternalFeatureFormView: View {
         .onAppear {
             formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
+        .navigationBarBackButtonHidden(navigateBackButtonIsOverridden)
+        .toolbar {
+            if navigateBackButtonIsOverridden {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        setAlertContinuation?(true) {
+                            dismiss()
+                        }
+                    } label: {
+                        Label {
+                            Text(
+                                "Back",
+                                bundle: .toolkitModule,
+                                comment: "A generic label for navigating to the previous screen or returning to the previous context."
+                            )
+                        } icon: {
+                            Image(systemName: "chevron.backward")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    var navigateBackButtonIsOverridden: Bool {
+        !isRootForm && internalFeatureFormViewModel.featureForm.hasEdits
     }
 }
 
