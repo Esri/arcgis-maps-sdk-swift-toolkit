@@ -21,11 +21,19 @@ struct InternalFeatureFormView: View {
     /// The view model for the form.
     @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
     
+    /// A Boolean value indicating if the associated feature form is the root form.
+    ///
+    /// This property is only relevant when browsing associated feature forms via
+    /// utility network associations.
+    private let isRootForm: Bool
+    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    init(featureForm: FeatureForm) {
-        internalFeatureFormViewModel = InternalFeatureFormViewModel(featureForm: featureForm)
+    ///   - isRootForm: A Boolean value indicating if the provided feature form is the root form.
+    init(featureForm: FeatureForm, isRootForm: Bool = false) {
+        self.internalFeatureFormViewModel = InternalFeatureFormViewModel(featureForm: featureForm)
+        self.isRootForm = isRootForm
     }
     
     var body: some View {

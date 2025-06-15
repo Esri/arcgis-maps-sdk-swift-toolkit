@@ -110,7 +110,8 @@ public struct FeatureFormView: View {
         if let rootFeatureForm {
             NavigationStack {
                 InternalFeatureFormView(
-                    featureForm: rootFeatureForm
+                    featureForm: rootFeatureForm,
+                    isRootForm: true
                 )
                 .toolbar {
                     if closeButtonVisibility != .hidden {
