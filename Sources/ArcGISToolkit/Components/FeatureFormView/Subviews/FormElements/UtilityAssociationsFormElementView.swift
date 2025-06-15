@@ -52,8 +52,8 @@ private struct UtilityAssociationGroupResultView: View {
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
-    /// A Boolean value indicating whether the associated form is presented.
-    @State private var associatedFormIsPresented = false
+    /// The feature for the presented association.
+    @State private var associatedFeature: ArcGISFeature?
     
     /// The backing utility association group result.
     let utilityAssociationGroupResult: UtilityAssociationGroupResult
@@ -63,7 +63,7 @@ private struct UtilityAssociationGroupResultView: View {
             UtilityAssociationResultView(
                 selectionAction: {
                     let navigationAction: () -> Void = {
-                        associatedFormIsPresented = true
+                        associatedFeature = utilityAssociationResult.associatedFeature
                     }
                     if internalFeatureFormViewModel.featureForm.hasEdits {
                         setAlertContinuation?(true, navigationAction)
@@ -73,21 +73,32 @@ private struct UtilityAssociationGroupResultView: View {
                 },
                 result: utilityAssociationResult
             )
-            .navigationDestination(isPresented: $associatedFormIsPresented) {
-                InternalFeatureFormView(
-                    featureForm: FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                )
-            }
         }
-        .onChange(of: associatedFormIsPresented) { wasPresented, isPresented in
+        .navigationDestination(item: $associatedFeature) { associatedFeature in
+            InternalFeatureFormView(
+                featureForm: FeatureForm(feature: associatedFeature)
+            )
+        }
+        .onChange(of: associatedFeature) { oldValue, newValue in
             // This view is considered the tail end of a navigable FeatureForm.
             // When a user is backing out of a navigation path, this view
             // appearing is considered a change to the presented FeatureForm.
-            if wasPresented && !isPresented {
+            if oldValue != nil && newValue == nil {
                 formChangedAction?(internalFeatureFormViewModel.featureForm)
             }
         }
         .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+    }
+}
+
+#warning("Review the correctness of this conformance.")
+extension ArcGISFeature: @retroactive Hashable {
+    public static func == (lhs: ArcGIS.ArcGISFeature, rhs: ArcGIS.ArcGISFeature) -> Bool {
+        ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
     }
 }
 
