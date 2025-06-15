@@ -80,29 +80,7 @@ struct InternalFeatureFormView: View {
         .onAppear {
             formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
-        .navigationBarBackButtonHidden(navigationBarBackButtonIsHidden)
-        .toolbar {
-            if navigationBarBackButtonIsHidden {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        setAlertContinuation?(true) {
-                            dismiss()
-                        }
-                    } label: {
-                        Label {
-                            Text(
-                                "Back",
-                                bundle: .toolkitModule,
-                                comment: "A generic label for navigating to the previous screen or returning to the previous context."
-                            )
-                        } icon: {
-                            Image(systemName: "chevron.backward")
-                        }
-                    }
-                }
-            }
-        }
-        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+        .featureFormToolbar(internalFeatureFormViewModel.featureForm, isRootForm: isRootForm)
     }
 }
 
@@ -116,14 +94,6 @@ extension InternalFeatureFormView {
         default:
             internalMakeElement(element)
         }
-    }
-    
-    /// A Boolean value indicating whether the navigation bar's back button is hidden.
-    ///
-    /// In certain cases the platform default button is hidden to support blocking back navigation with an
-    /// alert for unsaved edits.
-    var navigationBarBackButtonIsHidden: Bool {
-        !isRootForm && internalFeatureFormViewModel.featureForm.hasEdits
     }
     
     /// Makes UI for a field form element or a text form element.

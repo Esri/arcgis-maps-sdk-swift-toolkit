@@ -16,13 +16,15 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm) -> some View {
-        self.modifier(FeatureFormToolbar(featureForm: featureForm))
+    func featureFormToolbar(_ featureForm: FeatureForm, isRootForm: Bool = false) -> some View {
+        self.modifier(FeatureFormToolbar(featureForm: featureForm, isRootForm: isRootForm))
     }
 }
 
 struct FeatureFormToolbar: ViewModifier {
     @Environment(\.closeButtonVisibility) var closeButtonVisibility
+    
+    @Environment(\.dismiss) var dismiss
     
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
@@ -40,14 +42,36 @@ struct FeatureFormToolbar: ViewModifier {
     
     let featureForm: FeatureForm
     
+    let isRootForm: Bool
+    
     func body(content: Content) -> some View {
         content
+            .navigationBarBackButtonHidden(navigationBarBackButtonIsHidden)
             .task(id: featureForm.feature.globalID) {
                 for await hasEdits in featureForm.$hasEdits {
                     withAnimation { self.hasEdits = hasEdits }
                 }
             }
             .toolbar {
+                if navigationBarBackButtonIsHidden {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            setAlertContinuation?(true) {
+                                dismiss()
+                            }
+                        } label: {
+                            Label {
+                                Text(
+                                    "Back",
+                                    bundle: .toolkitModule,
+                                    comment: "A generic label for navigating to the previous screen or returning to the previous context."
+                                )
+                            } icon: {
+                                Image(systemName: "chevron.backward")
+                            }
+                        }
+                    }
+                }
                 if closeButtonVisibility != .hidden {
                     ToolbarItem(placement: .topBarTrailing) {
                         XButton(.dismiss) {
@@ -73,5 +97,15 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
             }
+    }
+}
+
+extension FeatureFormToolbar {
+    /// A Boolean value indicating whether the navigation bar's back button is hidden.
+    ///
+    /// In certain cases the platform default button is hidden to support blocking back navigation with an
+    /// alert for unsaved edits.
+    var navigationBarBackButtonIsHidden: Bool {
+        !isRootForm && hasEdits
     }
 }
