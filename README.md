@@ -60,7 +60,7 @@ Production deployment of applications built with the ArcGIS Maps SDK for Swift r
 * Location services > Basemaps
 * Location services > Routing
 
-2. Create a hidden secrets file in the project file's directory.
+2. Create a hidden secrets file in the toolkit's root directory.
 
   ```sh
   touch .secrets
