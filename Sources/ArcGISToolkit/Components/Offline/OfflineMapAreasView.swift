@@ -360,7 +360,7 @@ public struct OfflineMapAreasView: View {
         ContentUnavailableView(
             offlineDisabled.key,
             systemImage: "exclamationmark.triangle",
-            description:  Text(offlineDisabledMessage)
+            description: Text(offlineDisabledMessage)
         )
     }
 }
