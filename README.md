@@ -53,7 +53,7 @@ Use of ArcGIS location services, such as basemap styles, geocoding, and routing 
 Production deployment of applications built with the ArcGIS Maps SDK for Swift requires that you license your app. For more information, see [License and deployment](https://developers.arcgis.com/swift/license-and-deployment).
 
 > [!IMPORTANT]
-> To run the example apps and access ArcGIS Location Services, follow these steps to obtain an **API key** access token and store it in a secrets file stored in the project file's directory, `$(SRCROOT)/.secrets`.
+> To run the example apps and access ArcGIS Location Services, follow these steps to obtain an **API key** access token and store it in a secrets file stored in the toolkit's root directory, `/.secrets`.
 
 1. Go to the [Create an API key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) tutorial to obtain the API key access token. Ensure that the following privileges are enabled:
 
