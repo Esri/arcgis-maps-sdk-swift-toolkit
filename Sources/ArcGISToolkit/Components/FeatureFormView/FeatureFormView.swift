@@ -67,6 +67,41 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+
+#warning("Review these conformances and enum naming.")
+    enum ItemType: Equatable, Hashable {
+        case form(FeatureForm)
+        case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, InternalFeatureFormViewModel)
+        case utilityAssociationGroupResultView(UtilityAssociationGroupResult, InternalFeatureFormViewModel)
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            switch (lhs, rhs) {
+            case let (.form(a), .form(b)):
+                ObjectIdentifier(a) == ObjectIdentifier(b)
+            case let (.utilityAssociationFilterResultView(a, _), .utilityAssociationFilterResultView(b, _)):
+                ObjectIdentifier(a) == ObjectIdentifier(b)
+            case let (.utilityAssociationGroupResultView(a, _), .utilityAssociationGroupResultView(b, _)):
+                ObjectIdentifier(a) == ObjectIdentifier(b)
+            default:
+                false
+            }
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            switch self {
+            case .form(let form):
+                hasher.combine(0)
+                hasher.combine(ObjectIdentifier(form))
+            case .utilityAssociationFilterResultView(let result, _):
+                hasher.combine(1)
+                hasher.combine(ObjectIdentifier(result))
+            case .utilityAssociationGroupResultView(let result, _):
+                hasher.combine(2)
+                hasher.combine(ObjectIdentifier(result))
+            }
+        }
+    }
+    
     /// The feature form currently visible in the navigation layer.
     private let presentedForm: Binding<FeatureForm?>
     
@@ -91,6 +126,8 @@ public struct FeatureFormView: View {
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility: Visibility = .hidden
     
+    @State private var navigationPath = NavigationPath()
+    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
@@ -102,11 +139,29 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         if let rootFeatureForm {
-            NavigationStack {
+            NavigationStack(path: $navigationPath) {
                 InternalFeatureFormView(
                     featureForm: rootFeatureForm,
                     isRootForm: true
                 )
+                .navigationDestination(for: ItemType.self) { itemType in
+                    switch itemType {
+                    case let .form(form):
+                        InternalFeatureFormView(featureForm: form)
+                    case let .utilityAssociationFilterResultView(result, internalFeatureFormViewModel):
+                        UtilityAssociationsFilterResultView(
+                            internalFeatureFormViewModel: internalFeatureFormViewModel,
+                            utilityAssociationsFilterResult: result
+                        )
+                        .navigationTitle(result.filter.title.capitalized)
+                    case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
+                        UtilityAssociationGroupResultView(
+                            internalFeatureFormViewModel: internalFeatureFormViewModel,
+                            utilityAssociationGroupResult: result
+                        )
+                        .navigationTitle(result.name)
+                    }
+                }
             }
             // Alert for abandoning unsaved edits
             .alert(
@@ -178,6 +233,7 @@ public struct FeatureFormView: View {
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.formChangedAction, onFormChangedAction)
+            .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
             .environment(\.presentedForm, presentedForm)
             .environment(\.setAlertContinuation, setAlertContinuation)
@@ -289,6 +345,8 @@ extension EnvironmentValues {
     
     /// The environment value to access the closure to call when the presented feature form changes.
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
+    
+    @Entry var navigationPath: Binding<NavigationPath>?
     
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
