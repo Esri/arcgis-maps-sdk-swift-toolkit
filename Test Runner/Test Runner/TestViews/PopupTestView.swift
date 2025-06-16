@@ -46,46 +46,39 @@ struct PopupTestView: View {
             .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
                 Text(errorDescription ?? "Unknown")
             }
-            .task {
-                // Sets up the map and opens a popup when the view appears.
-                do {
-                    try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
-                        .viewer01
-                    )
-                    
-                    let map = Map(url: .napervilleElectricMap)!
-                    try await map.load()
-                    self.map = map
-                    
-                    try await openPopup(usingValuesIn: .standard, on: map)
-                } catch {
-                    errorDescription = error.localizedDescription
-                }
-            }
+            .task(setUpTest)
     }
     
-    /// Identifies a feature matching launch argument values and uses it to
-    /// create and open a popup.
+    /// Sets up the map and popup for the test.
+    private func setUpTest() async {
+        do {
+            try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
+                .viewer01
+            )
+            
+            let map = Map(url: .napervilleElectricMap)!
+            try await map.load()
+            self.map = map
+            
+            guard let objectID = UserDefaults.standard.objectID,
+                  let layerName = UserDefaults.standard.layerName,
+                  let layer = map.operationalLayers.first(where: { $0.name == layerName }),
+                  let featureLayer = layer as? FeatureLayer else {
+                errorDescription = "Invalid or missing launch arguments."
+                return
+            }
+            
+            try await openPopup(objectID, on: featureLayer)
+        } catch {
+            errorDescription = error.localizedDescription
+        }
+    }
+    
+    /// Identifies a feature with a given object ID and uses it to create and open a popup.
     /// - Parameters:
-    ///   - userDefaults: The user defaults containing the `-objectID` and
-    ///   `-layerName` launch argument values of the feature to be identified.
-    ///   - map: The map with the feature layer to identify on.
-    private func openPopup(usingValuesIn userDefaults: UserDefaults, on map: Map) async throws {
-        // Gets the object ID from the launch arguments.
-        guard let objectIDText = userDefaults.string(forKey: "objectID"),
-              let objectID = Int(objectIDText) else {
-            errorDescription = "Missing or invalid \"-objectID\" argument."
-            return
-        }
-        
-        // Gets feature layer from the map using the launch argument.
-        guard let layerName = userDefaults.string(forKey: "layerName"),
-              let layer = map.operationalLayers.first(where: { $0.name == layerName }),
-              let featureLayer = layer as? FeatureLayer else {
-            errorDescription = "Missing or invalid \"-layerName\" argument."
-            return
-        }
-        
+    ///   - objectID: The object ID of the feature to identify.
+    ///   - featureLayer: The feature layer containing the feature.
+    private func openPopup(_ objectID: Int, on featureLayer: FeatureLayer) async throws {
         // Gets the feature table from the layer.
         try await featureLayer.load()
         guard let featureTable = featureLayer.featureTable else {
@@ -114,6 +107,8 @@ struct PopupTestView: View {
     }
 }
 
+// MARK: - Extensions
+
 private extension ArcGISCredential {
     /// The "viewer01" user credentials for the Naperville Electric Map.
     static var viewer01: ArcGISCredential {
@@ -139,6 +134,19 @@ private extension Binding where Value == Bool {
         } set: { _ in
             optionalValue.wrappedValue = nil
         }
+    }
+}
+
+private extension UserDefaults {
+    /// The value `-layerName`  launch argument.
+    var layerName: String? {
+        string(forKey: "layerName")
+    }
+    
+    /// The value `-layerName`  launch argument.
+    var objectID: Int? {
+        guard let objectIDString = string(forKey: "objectID") else { return nil }
+        return Int(objectIDString)
     }
 }
 
