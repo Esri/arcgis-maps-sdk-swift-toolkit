@@ -150,12 +150,14 @@ public struct FeatureFormView: View {
                             internalFeatureFormViewModel: internalFeatureFormViewModel,
                             utilityAssociationsFilterResult: result
                         )
+                        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
                         .navigationTitle(result.filter.title.capitalized)
                     case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
                         UtilityAssociationGroupResultView(
                             internalFeatureFormViewModel: internalFeatureFormViewModel,
                             utilityAssociationGroupResult: result
                         )
+                        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
                         .navigationTitle(result.name)
                     }
                 }

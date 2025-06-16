@@ -54,9 +54,6 @@ struct UtilityAssociationGroupResultView: View {
     /// The view model for the form.
     let internalFeatureFormViewModel: InternalFeatureFormViewModel
     
-    /// The feature for the presented association.
-    @State private var associatedFeature: ArcGISFeature?
-    
     /// The backing utility association group result.
     let utilityAssociationGroupResult: UtilityAssociationGroupResult
     
@@ -80,15 +77,9 @@ struct UtilityAssociationGroupResultView: View {
                 result: utilityAssociationResult
             )
         }
-        .onChange(of: associatedFeature) { oldValue, newValue in
-            // This view is considered the tail end of a navigable FeatureForm.
-            // When a user is backing out of a navigation path, this view
-            // appearing is considered a change to the presented FeatureForm.
-            if oldValue != nil && newValue == nil {
-                formChangedAction?(internalFeatureFormViewModel.featureForm)
-            }
+        .onAppear {
+            formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
-        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
     }
 }
 
@@ -157,6 +148,8 @@ struct UtilityAssociationsFilterResultView: View {
     /// The backing utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
+    @Environment(\.formChangedAction) var formChangedAction
+    
     @Environment(\.navigationPath) var navigationPath
     
     var body: some View {
@@ -181,7 +174,9 @@ struct UtilityAssociationsFilterResultView: View {
             }
             .tint(.primary)
         }
-        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+        .onAppear {
+            formChangedAction?(internalFeatureFormViewModel.featureForm)
+        }
     }
 }
 
