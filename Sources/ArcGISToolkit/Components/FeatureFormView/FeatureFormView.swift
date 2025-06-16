@@ -90,13 +90,10 @@ public struct FeatureFormView: View {
         func hash(into hasher: inout Hasher) {
             switch self {
             case .form(let form):
-                hasher.combine(0)
                 hasher.combine(ObjectIdentifier(form))
             case .utilityAssociationFilterResultView(let result, _):
-                hasher.combine(1)
                 hasher.combine(ObjectIdentifier(result))
             case .utilityAssociationGroupResultView(let result, _):
-                hasher.combine(2)
                 hasher.combine(ObjectIdentifier(result))
             }
         }
