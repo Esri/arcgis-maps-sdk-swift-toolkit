@@ -23,6 +23,7 @@ struct UtilityAssociationResultLabel: View {
     var body: some View {
         HStack {
             result.association.kind.icon
+                .accessibilityIdentifier("Association Result Icon")
             
             VStack(alignment: .leading) {
                 Text(result.title)

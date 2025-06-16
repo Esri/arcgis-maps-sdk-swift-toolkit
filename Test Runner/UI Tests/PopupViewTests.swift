@@ -230,6 +230,67 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
+    /// Verifies that association results display an icon when applicable.
+    ///
+    /// - Note: Only the "connection-to-connection" is tested since the data
+    /// doesn't contain any junction-edge-object-connectivity associations.
+    func testAssociationResultIcons() async {
+        let app = XCUIApplication()
+        let associationResults = app.buttons.matching(identifier: "Association Result")
+        let associationResultIcons = app.images.matching(identifier: "Association Result Icon")
+        let backButton = app.buttons.matching(identifier: "Back").element(boundBy: 1)
+        let connectivityFilterResult = app.buttons["Connectivity, 1"]
+        let containerFilterResult = app.buttons["Container, 1"]
+        let popupTitle = app.staticTexts["Electric Distribution Device: Fuse"]
+        let transformerBankResult = app.staticTexts["Electric Distribution Assembly: Transformer Bank"]
+        let transformerResult = app.staticTexts["Electric Distribution Device: Transformer"]
+        
+        openPopup(2672, on: "Electric Distribution Device")
+        assertPopupOpened(popupTitle: popupTitle)
+        
+        // Opens the "Connectivity" filter result.
+        XCTAssertTrue(
+            connectivityFilterResult.exists,
+            "The filter result \"Connectivity, 1\" doesn't exist."
+        )
+        connectivityFilterResult.tap()
+        
+        // Expectation: The one result has a "connection-to-connection" icon.
+        XCTAssertTrue(
+            transformerResult.waitForExistence(timeout: 3),
+            "The result \"Electric Distribution Device: Transformer\" failed to appear."
+        )
+        XCTAssertEqual(associationResults.count, 1)
+        
+        XCTAssertEqual(associationResultIcons.count, 1)
+        XCTAssertEqual(associationResultIcons.firstMatch.label, "connection-to-connection")
+        
+        // Navigates back to the parent popup.
+        XCTAssertTrue(
+            backButton.exists,
+            "The \"Back\" button doesn't exist."
+        )
+        backButton.tap()
+        
+        assertPopupOpened(popupTitle: popupTitle)
+        
+        // Opens the "Container" filter result.
+        XCTAssertTrue(
+            containerFilterResult.exists,
+            "The filter result \"Container, 1\" doesn't exist."
+        )
+        containerFilterResult.tap()
+        
+        // Expectation: The one result has a no icon.
+        XCTAssertTrue(
+            transformerBankResult.waitForExistence(timeout: 3),
+            "The result \"Electric Distribution Assembly: Transformer Bank\" failed to appear."
+        )
+        XCTAssertEqual(associationResults.count, 1)
+        
+        XCTAssertEqual(associationResultIcons.count, 0)
+    }
+    
     /// Verifies that the `UtilityAssociationsPopupElement.displayCount` is respected.
     func testDisplayCount() {
         let app = XCUIApplication()
