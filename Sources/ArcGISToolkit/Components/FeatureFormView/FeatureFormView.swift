@@ -67,7 +67,6 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-
 #warning("Review conformance implementations.")
     enum NavigationPathItem: Equatable, Hashable {
         case form(FeatureForm)
