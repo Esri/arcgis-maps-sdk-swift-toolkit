@@ -152,6 +152,9 @@ public struct FeatureFormView: View {
                         )
                         .featureFormToolbar(internalFeatureFormViewModel.featureForm)
                         .navigationTitle(result.filter.title.capitalized)
+                        .onAppear {
+                            formChangedAction(internalFeatureFormViewModel.featureForm)
+                        }
                     case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
                         UtilityAssociationGroupResultView(
                             internalFeatureFormViewModel: internalFeatureFormViewModel,
@@ -159,6 +162,9 @@ public struct FeatureFormView: View {
                         )
                         .featureFormToolbar(internalFeatureFormViewModel.featureForm)
                         .navigationTitle(result.name)
+                        .onAppear {
+                            formChangedAction(internalFeatureFormViewModel.featureForm)
+                        }
                     }
                 }
             }
@@ -231,7 +237,7 @@ public struct FeatureFormView: View {
             .environment(\.closeButtonVisibility, closeButtonVisibility)
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
-            .environment(\.formChangedAction, onFormChangedAction)
+            .environment(\.formChangedAction, formChangedAction)
             .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
             .environment(\.presentedForm, presentedForm)
@@ -313,7 +319,7 @@ extension FeatureFormView {
     /// (which can also happen during forward or reverse navigation). Because those two views (and the
     /// intermediate ``UtilityAssociationsFilterResultView`` are all considered to be apart of
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
-    var onFormChangedAction: (FeatureForm) -> Void {
+    var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
             if let presentedForm = presentedForm.wrappedValue {
                 if featureForm.feature.globalID != presentedForm.feature.globalID {

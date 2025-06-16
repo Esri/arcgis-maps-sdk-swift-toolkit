@@ -45,8 +45,6 @@ struct UtilityAssociationsFormElementView: View {
 
 /// A view for a utility association group result.
 struct UtilityAssociationGroupResultView: View {
-    @Environment(\.formChangedAction) var formChangedAction
-    
     @Environment(\.navigationPath) var navigationPath
     
     @Environment(\.setAlertContinuation) var setAlertContinuation
@@ -76,9 +74,6 @@ struct UtilityAssociationGroupResultView: View {
                 },
                 result: utilityAssociationResult
             )
-        }
-        .onAppear {
-            formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
     }
 }
@@ -148,8 +143,6 @@ struct UtilityAssociationsFilterResultView: View {
     /// The backing utility associations filter result.
     let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
     
-    @Environment(\.formChangedAction) var formChangedAction
-    
     @Environment(\.navigationPath) var navigationPath
     
     var body: some View {
@@ -173,9 +166,6 @@ struct UtilityAssociationsFilterResultView: View {
                 }
             }
             .tint(.primary)
-        }
-        .onAppear {
-            formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
     }
 }
