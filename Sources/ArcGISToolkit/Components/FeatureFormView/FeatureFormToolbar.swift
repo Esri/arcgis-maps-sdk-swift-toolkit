@@ -16,8 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm, isRootForm: Bool = false) -> some View {
-        self.modifier(FeatureFormToolbar(featureForm: featureForm, isRootForm: isRootForm))
+    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false, isRootForm: Bool = false) -> some View {
+        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm, isRootForm: isRootForm))
     }
 }
 
@@ -41,6 +41,8 @@ struct FeatureFormToolbar: ViewModifier {
     @State private var hasEdits: Bool = false
     
     let featureForm: FeatureForm
+    
+    let isAForm: Bool
     
     let isRootForm: Bool
     
@@ -105,6 +107,6 @@ extension FeatureFormToolbar {
     /// In certain cases the platform default button is hidden to support blocking back navigation with an
     /// alert for unsaved edits.
     var navigationBarBackButtonIsHidden: Bool {
-        !isRootForm && hasEdits
+        isAForm && !isRootForm && hasEdits
     }
 }

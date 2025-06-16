@@ -80,7 +80,7 @@ struct InternalFeatureFormView: View {
         .onAppear {
             formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
-        .featureFormToolbar(internalFeatureFormViewModel.featureForm, isRootForm: isRootForm)
+        .featureFormToolbar(internalFeatureFormViewModel.featureForm, isAForm: true, isRootForm: isRootForm)
     }
 }
 
