@@ -67,37 +67,6 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-#warning("Review conformance implementations.")
-    enum NavigationPathItem: Equatable, Hashable {
-        case form(FeatureForm)
-        case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, InternalFeatureFormViewModel)
-        case utilityAssociationGroupResultView(UtilityAssociationGroupResult, InternalFeatureFormViewModel)
-        
-        static func == (lhs: Self, rhs: Self) -> Bool {
-            switch (lhs, rhs) {
-            case let (.form(a), .form(b)):
-                ObjectIdentifier(a) == ObjectIdentifier(b)
-            case let (.utilityAssociationFilterResultView(a, _), .utilityAssociationFilterResultView(b, _)):
-                ObjectIdentifier(a) == ObjectIdentifier(b)
-            case let (.utilityAssociationGroupResultView(a, _), .utilityAssociationGroupResultView(b, _)):
-                ObjectIdentifier(a) == ObjectIdentifier(b)
-            default:
-                false
-            }
-        }
-        
-        func hash(into hasher: inout Hasher) {
-            switch self {
-            case .form(let form):
-                hasher.combine(ObjectIdentifier(form))
-            case .utilityAssociationFilterResultView(let result, _):
-                hasher.combine(ObjectIdentifier(result))
-            case .utilityAssociationGroupResultView(let result, _):
-                hasher.combine(ObjectIdentifier(result))
-            }
-        }
-    }
-    
     /// The feature form currently visible in the navigation layer.
     private let presentedForm: Binding<FeatureForm?>
     
