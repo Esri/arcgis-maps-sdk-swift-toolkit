@@ -84,6 +84,7 @@ struct UtilityAssociationsPopupElementView: View {
                 description: popupElement.description
             )
             .catalystPadding(4)
+            .accessibilityElement(children: .combine)
             .accessibilityIdentifier("Associations Popup Element")
         }
         .disclosureGroupPadding()

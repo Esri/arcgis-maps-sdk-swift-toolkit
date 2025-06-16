@@ -71,8 +71,7 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
-    /// Verifies that the correct default titles are shown for an associations
-    /// element with no titles specified in the web definition.
+    /// Verifies that the correct default titles are shown for an associations element with no titles specified.
     func testDefaultTitles() {
         let app = XCUIApplication()
         let associationsElement = app.staticTexts["Associations"]
@@ -85,11 +84,13 @@ final class PopupViewTests: XCTestCase {
         openPopup(3216, on: "Electric Distribution Device")
         assertPopupOpened(popupTitle: popupTitle)
         
+        // Expectation: The default title is "Associations".
         XCTAssertTrue(
             associationsElement.exists,
             "The element \"Associations\" doesn't exist."
         )
         
+        // Expectation: Filter elements use their type name as their default title.
         XCTAssertEqual(filterResults.count, 3)
         XCTAssertTrue(
             connectivityFilterResult.exists,
@@ -102,6 +103,57 @@ final class PopupViewTests: XCTestCase {
         XCTAssertTrue(
             structureFilterResult.exists,
             "The filter result \"Structure\" doesn't exist."
+        )
+    }
+    
+    /// Verifies that custom titles and descriptions are honored.
+    func testCustomTitlesAndDescriptions() async {
+        let app = XCUIApplication()
+        let connectivityDescription = app.staticTexts[
+            "Associations between two network features that are not coincident."
+        ]
+        let connectivityTitle = app.staticTexts["Junction Connectivity"]
+        let elementTitle = app.staticTexts["Connectivity and Attachment"]
+        let elementDescription = app.staticTexts["Line End"]
+        let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
+        let popupTitle = app.staticTexts["Electric Distribution Junction: Line End"]
+        let structureDescription = app.staticTexts[
+            "Features that have network features attached to them."
+        ]
+        let structureTitle = app.staticTexts["Junction Structure"]
+        
+        openPopup(2473, on: "Electric Distribution Junction")
+        assertPopupOpened(popupTitle: popupTitle)
+        
+        // Expectation: The custom popup element title and description are displayed.
+        XCTAssertTrue(
+            elementTitle.exists,
+            "The element \"Connectivity and Attachment\" doesn't exist."
+        )
+        XCTAssertTrue(
+            elementDescription.exists,
+            "The element description \"Line End\" doesn't exist."
+        )
+        
+        // Expectation: The custom filter result titles are displayed.
+        XCTAssertEqual(filterResults.count, 2)
+        XCTAssertTrue(
+            connectivityTitle.exists,
+            "The filter result \"Junction Connectivity\" doesn't exist."
+        )
+        XCTAssertTrue(
+            structureTitle.exists,
+            "The filter result \"Junction Structure\" doesn't exist."
+        )
+        
+        // Expectation: The custom filer result descriptions are displayed.
+        XCTAssertTrue(
+            connectivityDescription.exists,
+            "The filter result description doesn't exist."
+        )
+        XCTAssertTrue(
+            structureDescription.exists,
+            "The filter result description doesn't exist."
         )
     }
     
@@ -131,7 +183,7 @@ final class PopupViewTests: XCTestCase {
     func testNavigation() {
         let app = XCUIApplication()
         let backButton = app.buttons.matching(identifier: "Back").element(boundBy: 1)
-        let filterResult = app.buttons["Content, 3"]
+        let filterResultTitle = app.staticTexts["Content"]
         let fuseText = app.staticTexts["Electric Distribution Device: Fuse"]
         let groupResult = app.buttons["Electric Distribution Device, 3"]
         let showAllButton = app.buttons["Show all, Total: 3"]
@@ -143,14 +195,25 @@ final class PopupViewTests: XCTestCase {
         
         // Expectation: A filter result opens the group result list.
         XCTAssertTrue(
-            filterResult.exists,
-            "The filter result \"Content, 3\" doesn't exist."
+            filterResultTitle.exists,
+            "The filter result \"Content\" doesn't exist."
         )
-        filterResult.tap()
+        filterResultTitle.tap()
         
         XCTAssertTrue(
             groupResult.waitForExistence(timeout: 3),
             "The group result \"Electric Distribution Device, 3\" failed to appear."
+        )
+        
+        // Expectation: The filter result's title is displayed as the navigation title
+        // and parent popup's title is displayed as the navigation description.
+        XCTAssertTrue(
+            filterResultTitle.exists,
+            "The \"Content\" text doesn't exist."
+        )
+        XCTAssertTrue(
+            switchgearText.exists,
+            "The \"Structure Junction: Switchgear\" text doesn't exist."
         )
         
         // Expectation: A result opens new popup with the result's label as the title.
