@@ -68,8 +68,8 @@ import SwiftUI
 /// - Since: 200.4
 public struct FeatureFormView: View {
 
-#warning("Review these conformances and enum naming.")
-    enum ItemType: Equatable, Hashable {
+#warning("Review conformance implementations.")
+    enum NavigationPathItem: Equatable, Hashable {
         case form(FeatureForm)
         case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, InternalFeatureFormViewModel)
         case utilityAssociationGroupResultView(UtilityAssociationGroupResult, InternalFeatureFormViewModel)
@@ -141,7 +141,7 @@ public struct FeatureFormView: View {
                     featureForm: rootFeatureForm,
                     isRootForm: true
                 )
-                .navigationDestination(for: ItemType.self) { itemType in
+                .navigationDestination(for: NavigationPathItem.self) { itemType in
                     switch itemType {
                     case let .form(form):
                         InternalFeatureFormView(featureForm: form)

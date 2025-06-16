@@ -61,7 +61,7 @@ struct UtilityAssociationGroupResultView: View {
                 selectionAction: {
                     let navigationAction: () -> Void = {
                         navigationPath?.wrappedValue.append(
-                            FeatureFormView.ItemType.form(
+                            FeatureFormView.NavigationPathItem.form(
                                 FeatureForm(feature: utilityAssociationResult.associatedFeature)
                             )
                         )
@@ -102,7 +102,7 @@ private struct UtilityAssociationsFilterResultListRowView: View {
     var body: some View {
         Button {
             navigationPath?.wrappedValue.append(
-                FeatureFormView.ItemType.utilityAssociationFilterResultView(
+                FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
                     utilityAssociationsFilterResult,
                     internalFeatureFormViewModel
                 )
@@ -149,7 +149,7 @@ struct UtilityAssociationsFilterResultView: View {
         List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
              Button {
                  navigationPath?.wrappedValue.append(
-                    FeatureFormView.ItemType.utilityAssociationGroupResultView(
+                    FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                         utilityAssociationGroupResult,
                         internalFeatureFormViewModel
                     )
