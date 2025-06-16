@@ -83,7 +83,6 @@ struct FeatureFormToolbar: ViewModifier {
                                 presentedForm?.wrappedValue = nil
                             }
                         }
-                        .font(.title)
                     }
                 }
                 if hasEdits, editingButtonsVisibility != .hidden {
