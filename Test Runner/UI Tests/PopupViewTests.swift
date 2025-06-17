@@ -28,7 +28,7 @@ final class PopupViewTests: XCTestCase {
         let app = XCUIApplication()
         let popupTestsButton = app.buttons["Popup Tests"]
         
-        // Adds the launch arguments that will be read in the popup test view.
+        // Adds the launch arguments that will be read in the test view.
         let openPopupArguments = ["-objectID", "\(objectID)", "-layerName", "\(layerName)"]
         app.launchArguments.append(contentsOf: openPopupArguments)
         
@@ -157,10 +157,10 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
-    /// Verifies that "No Associations" is displayed for an element with no filter results.
+    /// Verifies that "No Associations" is displayed for an associations element with no filter results.
     func testNoAssociations() {
         let app = XCUIApplication()
-        let associationsElements = app.buttons.matching(identifier: "Associations Popup Element")
+        let associationsElements = app.staticTexts.matching(identifier: "Associations Popup Element")
         let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
         let noAssociationsText = app.staticTexts["No Associations"]
         let popupTitle = app.staticTexts["Electric Distribution Line: Medium Voltage"]
@@ -221,14 +221,14 @@ final class PopupViewTests: XCTestCase {
         let app = XCUIApplication()
         let backButton = app.buttons.matching(identifier: "Back").element(boundBy: 1)
         let filterResultTitle = app.staticTexts["Content"]
-        let fuseText = app.staticTexts["Electric Distribution Device: Fuse"]
-        let groupResult = app.buttons["Electric Distribution Device, 3"]
+        let fusePopupTitle = app.staticTexts["Electric Distribution Device: Fuse"]
+        let groupResult = app.staticTexts["Electric Distribution Device, 3"]
         let showAllButton = app.buttons["Show all, Total: 3"]
-        let switchgearText = app.staticTexts["Structure Junction: Switchgear"]
+        let switchgearPopupTitle = app.staticTexts["Structure Junction: Switchgear"]
         let titleField = app.textFields["Title"]
         
-        assertPopupOpened(popupTitle: switchgearText)
         openPopup(1464, on: .structureJunction)
+        assertPopupOpened(popupTitle: switchgearPopupTitle)
         
         // Expectation: A filter result opens the group result list.
         XCTAssertTrue(
@@ -249,18 +249,17 @@ final class PopupViewTests: XCTestCase {
             "The \"Content\" text doesn't exist."
         )
         XCTAssertTrue(
-            switchgearText.exists,
+            switchgearPopupTitle.exists,
             "The \"Structure Junction: Switchgear\" text doesn't exist."
         )
         
         // Expectation: A result opens new popup with the result's label as the title.
         XCTAssertTrue(
-            fuseText.exists,
+            fusePopupTitle.exists,
             "The result \"Electric Distribution Device: Fuse\" doesn't exist."
         )
-        fuseText.tap()
-        
-        assertPopupOpened(popupTitle: fuseText)
+        fusePopupTitle.tap()
+        assertPopupOpened(popupTitle: fusePopupTitle)
         
         // Expectation: The popup back button opens the group result list again.
         XCTAssertTrue(
@@ -274,7 +273,7 @@ final class PopupViewTests: XCTestCase {
             "The group result \"Electric Distribution Device, 3\" failed to appear."
         )
         
-        // Expectation: The show all button opens the "Show all" view.
+        // Expectation: The "Show all" button opens the "Show all" view.
         XCTAssertTrue(
             showAllButton.exists,
             "The \"Show all, Total: 3\" button doesn't exist."
@@ -288,12 +287,11 @@ final class PopupViewTests: XCTestCase {
         
         // Expectation: A result from the "Show all" view also opens a new popup.
         XCTAssertTrue(
-            fuseText.exists,
+            fusePopupTitle.exists,
             "The result \"Electric Distribution Device: Fuse\" doesn't exist."
         )
-        fuseText.firstMatch.tap()
-        
-        assertPopupOpened(popupTitle: fuseText)
+        fusePopupTitle.firstMatch.tap()
+        assertPopupOpened(popupTitle: fusePopupTitle)
         
         // Expectation: The popup back button opens the "Show all" view again.
         XCTAssertTrue(
@@ -321,8 +319,7 @@ final class PopupViewTests: XCTestCase {
         
         // Expectation: The group result list back button opens the original popup.
         backButton.tap()
-        
-        assertPopupOpened(popupTitle: switchgearText)
+        assertPopupOpened(popupTitle: switchgearPopupTitle)
         
         XCTAssertFalse(
             backButton.exists,
@@ -335,13 +332,13 @@ final class PopupViewTests: XCTestCase {
         let app = XCUIApplication()
         let backButton = app.buttons.matching(identifier: "Back").element(boundBy: 1)
         let filterResult = app.buttons["Structure, 1"]
-        let polePopupText = app.staticTexts["Structure Junction: Pole"]
+        let polePopupTitle = app.staticTexts["Structure Junction: Pole"]
         let poleObjectIDText = app.staticTexts["Selected Popup Object ID, 1158"]
-        let switchPopupText = app.staticTexts["Electric Distribution Device: Switch"]
+        let switchPopupTitle = app.staticTexts["Electric Distribution Device: Switch"]
         let switchObjectIDText = app.staticTexts["Selected Popup Object ID, 4361"]
         
         openPopup(4361, on: .electricDistributionDevice)
-        assertPopupOpened(popupTitle: switchPopupText)
+        assertPopupOpened(popupTitle: switchPopupTitle)
         
         // Expectation: The first provided popup's object ID matches the opened popup's.
         XCTAssertTrue(
@@ -357,7 +354,7 @@ final class PopupViewTests: XCTestCase {
         filterResult.tap()
         
         XCTAssertTrue(
-            polePopupText.waitForExistence(timeout: 3),
+            polePopupTitle.waitForExistence(timeout: 3),
             "The result \"Structure Junction: Pole\" doesn't exist."
         )
         XCTAssertTrue(
@@ -366,8 +363,8 @@ final class PopupViewTests: XCTestCase {
         )
         
         // Expectation: Navigating to a new popup provides that popup.
-        polePopupText.tap()
-        assertPopupOpened(popupTitle: polePopupText)
+        polePopupTitle.tap()
+        assertPopupOpened(popupTitle: polePopupTitle)
         
         XCTAssertTrue(
             poleObjectIDText.waitForExistence(timeout: 3),
@@ -427,7 +424,6 @@ final class PopupViewTests: XCTestCase {
             "The \"Back\" button doesn't exist."
         )
         backButton.tap()
-        
         assertPopupOpened(popupTitle: popupTitle)
         
         // Opens the "Container" filter result.
@@ -437,7 +433,7 @@ final class PopupViewTests: XCTestCase {
         )
         containerFilterResult.tap()
         
-        // Expectation: The one result has a no icon.
+        // Expectation: The one result has no icon.
         XCTAssertTrue(
             transformerBankResult.waitForExistence(timeout: 3),
             "The result \"Electric Distribution Assembly: Transformer Bank\" failed to appear."
@@ -450,7 +446,7 @@ final class PopupViewTests: XCTestCase {
     /// Verifies that association results display the correct description when applicable.
     /// - Note: The fraction-along-edge description is not tested as the data does not have any
     /// `junctionEdgeObjectConnectivityMidspan` associations.
-    func testAssociationDescription() async {
+    func testAssociationDescriptions() async {
         let app = XCUIApplication()
         let associationResultDescription = app.staticTexts["Association Result Description"]
         let connectivityFilterResult = app.staticTexts["Connectivity"]
@@ -493,7 +489,7 @@ final class PopupViewTests: XCTestCase {
         
         // Expectation: The fuse results have a "Single Terminal" description.
         XCTAssertTrue(
-            fusePopupTitle.exists,
+            fusePopupTitle.waitForExistence(timeout: 3),
             "The result \"Electric Distribution Device: Fuse\" doesn't exist."
         )
         XCTAssertTrue(
@@ -546,8 +542,8 @@ final class PopupViewTests: XCTestCase {
         let associationResults = app.buttons.matching(identifier: "Association Result")
         let contentFilterResult = app.buttons["Content, 3"]
         let popupTitle = app.staticTexts["Electric Distribution Assembly: Switch Bank"]
-        let groupResult = app.buttons["Electric Distribution Device, 3"]
-        let groupResults = app.buttons.matching(identifier: "Association Group Result")
+        let groupResult = app.staticTexts["Electric Distribution Device, 3"]
+        let groupResults = app.staticTexts.matching(identifier: "Association Group Result")
         let showAllButton = app.buttons["Show all, Total: 3"]
         let titleField = app.textFields["Title"]
         
@@ -586,14 +582,14 @@ final class PopupViewTests: XCTestCase {
         XCTAssertEqual(associationResults.count, 3)
     }
     
-    /// Verifies that the searching filters the association results as expected.
+    /// Verifies that using the search bar filters the association results as expected.
     func testSearchResults() {
         let app = XCUIApplication()
         let associationResults = app.buttons.matching(identifier: "Association Result")
         let cancelButton = app.buttons["Cancel"]
         let filterResult = app.buttons["Content, 6"]
         let popupTitle = app.staticTexts["Electric Distribution Assembly: Fuse Bank"]
-        let groupResult = app.buttons["Electric Distribution Device, 6"]
+        let groupResult = app.staticTexts["Electric Distribution Device, 6"]
         let showAllButton = app.buttons["Show all, Total: 6"]
         let titleField = app.textFields["Title"]
         
@@ -676,5 +672,4 @@ private extension String {
     static let electricDistributionAssembly = "Electric Distribution Assembly"
     static let electricDistributionDevice = "Electric Distribution Device"
     static let structureJunction = "Structure Junction"
-}
 }

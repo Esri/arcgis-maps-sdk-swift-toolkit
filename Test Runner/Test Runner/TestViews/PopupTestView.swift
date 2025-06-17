@@ -43,6 +43,7 @@ struct PopupTestView: View {
                     "Selected Popup Object ID",
                     value: selectedPopup?.objectID?.description ?? "nil"
                 )
+                .frame(maxWidth: .infinity)
                 .padding(8)
                 .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
             }
@@ -78,9 +79,7 @@ struct PopupTestView: View {
     /// Sets up the map and popup for the test.
     private func setUpTest() async {
         do {
-            try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
-                .viewer01
-            )
+            try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.viewer01)
             
             let map = Map(url: .napervilleElectricMap)!
             try await map.load()
@@ -90,7 +89,7 @@ struct PopupTestView: View {
                   let layerName = UserDefaults.standard.layerName,
                   let layer = map.operationalLayers.first(where: { $0.name == layerName }),
                   let featureLayer = layer as? FeatureLayer else {
-                errorDescription = "Invalid or missing launch arguments."
+                errorDescription = "Missing or invalid launch arguments."
                 return
             }
             
