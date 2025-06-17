@@ -107,7 +107,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that custom titles and descriptions are honored.
-    func testCustomTitlesAndDescriptions() async {
+    func testCustomTitlesAndDescriptions() {
         let app = XCUIApplication()
         let connectivityDescription = app.staticTexts[
             "Associations between two network features that are not coincident."
@@ -293,11 +293,68 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
+    /// Verifies that `onPopupChanged(perform:)` provides the correct popup when a new one is shown in the view.
+    func testOnPopupChangedModifier() {
+        let app = XCUIApplication()
+        let backButton = app.buttons.matching(identifier: "Back").element(boundBy: 1)
+        let filterResult = app.buttons["Structure, 1"]
+        let polePopupText = app.staticTexts["Structure Junction: Pole"]
+        let poleObjectIDText = app.staticTexts["Selected Popup Object ID, 1158"]
+        let switchPopupText = app.staticTexts["Electric Distribution Device: Switch"]
+        let switchObjectIDText = app.staticTexts["Selected Popup Object ID, 4361"]
+        
+        openPopup(4361, on: "Electric Distribution Device")
+        assertPopupOpened(popupTitle: switchPopupText)
+        
+        // Expectation: The first provided popup's object ID matches the opened popup's.
+        XCTAssertTrue(
+            switchObjectIDText.waitForExistence(timeout: 3),
+            "The text \"Selected Popup Object ID, 4361\" doesn't exist."
+        )
+        
+        // Expectation: Opening a filter result does not provide a new popup.
+        XCTAssertTrue(
+            filterResult.exists,
+            "The filter result \"Structure, 1\" doesn't exist."
+        )
+        filterResult.tap()
+        
+        XCTAssertTrue(
+            polePopupText.waitForExistence(timeout: 3),
+            "The result \"Structure Junction: Pole\" doesn't exist."
+        )
+        XCTAssertTrue(
+            switchObjectIDText.exists,
+            "The text \"Selected Popup Object ID, 4361\" doesn't exist."
+        )
+        
+        // Expectation: Navigating to a new popup provides that popup.
+        polePopupText.tap()
+        assertPopupOpened(popupTitle: polePopupText)
+        
+        XCTAssertTrue(
+            poleObjectIDText.waitForExistence(timeout: 3),
+            "The text \"Selected Popup Object ID, 1158\" doesn't exist."
+        )
+        
+        // Expectation: Navigating back to the group results list provides the last popup.
+        XCTAssertTrue(
+            backButton.exists,
+            "The \"Back\" button doesn't exist."
+        )
+        backButton.tap()
+        
+        XCTAssertTrue(
+            switchObjectIDText.waitForExistence(timeout: 3),
+            "The text \"Selected Popup Object ID, 4361\" doesn't exist."
+        )
+    }
+    
     /// Verifies that association results display an icon when applicable.
     ///
     /// - Note: Only the "connection-to-connection" is tested since the data
     /// doesn't contain any junction-edge-object-connectivity associations.
-    func testAssociationResultIcons() async {
+    func testAssociationResultIcons() {
         let app = XCUIApplication()
         let associationResults = app.buttons.matching(identifier: "Association Result")
         let associationResultIcons = app.images.matching(identifier: "Association Result Icon")

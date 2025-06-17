@@ -26,8 +26,11 @@ struct PopupTestView: View {
     /// The floating panel's currently selected detent.
     @State private var floatingPanelDetent: FloatingPanelDetent = .full
     
-    /// The popup to be shown in the `PopupView`.
+    /// The popup to show in the `PopupView`.
     @State private var popup: Popup?
+    
+    /// The popup currently being displayed in the `PopupView`.
+    @State private var selectedPopup: Popup?
     
     /// A message describing an error thrown during test view setup.
     @State private var errorDescription: String?
@@ -35,6 +38,14 @@ struct PopupTestView: View {
     var body: some View {
         MapView(map: map)
             .onAttributionBarHeightChanged { attributionBarHeight = $0 }
+            .overlay(alignment: .top) {
+                LabeledContent(
+                    "Selected Popup Object ID",
+                    value: selectedPopup?.objectID?.description ?? "nil"
+                )
+                .padding(8)
+                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+            }
             .floatingPanel(
                 attributionBarHeight: attributionBarHeight,
                 selectedDetent: $floatingPanelDetent,
@@ -42,6 +53,21 @@ struct PopupTestView: View {
                 isPresented: .init(optionalValue: $popup)
             ) { [popup] in
                 PopupView(popup: popup!, isPresented: .init(optionalValue: $popup))
+                    .onPopupChanged { popup in
+                        selectedPopup = popup
+                        
+                        // Clears the current layer selections.
+                        let featureLayers = map.operationalLayers.compactMap { $0 as? FeatureLayer }
+                        for featureLayer in featureLayers {
+                            featureLayer.clearSelection()
+                        }
+                        
+                        // Selects the new popup on its feature layer.
+                        if let feature = popup.geoElement as? Feature,
+                           let featureLayer = feature.table?.layer as? FeatureLayer {
+                            featureLayer.selectFeature(feature)
+                        }
+                    }
             }
             .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
                 Text(errorDescription ?? "Unknown")
@@ -99,7 +125,6 @@ struct PopupTestView: View {
         }
         
         try await feature.load()
-        featureLayer.selectFeature(feature)
         
         // Creates and opens a popup using the identified feature.
         let popupDefinition = featureTable.popupDefinition(for: feature)
@@ -137,15 +162,27 @@ private extension Binding where Value == Bool {
     }
 }
 
+private extension Popup {
+    /// The `objectid` attribute of the popup's geo element.
+    var objectID: Int64? {
+        guard let feature = geoElement as? Feature else {
+            return nil
+        }
+        return feature.attributes["objectid"] as? Int64
+    }
+}
+
 private extension UserDefaults {
     /// The value `-layerName`  launch argument.
     var layerName: String? {
         string(forKey: "layerName")
     }
     
-    /// The value `-layerName`  launch argument.
+    /// The value `-objectID`  launch argument.
     var objectID: Int? {
-        guard let objectIDString = string(forKey: "objectID") else { return nil }
+        guard let objectIDString = string(forKey: "objectID") else {
+            return nil
+        }
         return Int(objectIDString)
     }
 }
