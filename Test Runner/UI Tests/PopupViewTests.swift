@@ -81,7 +81,7 @@ final class PopupViewTests: XCTestCase {
         let popupTitle = app.staticTexts["Electric Distribution Device: Arrester"]
         let structureFilterResult = app.staticTexts["Structure"]
         
-        openPopup(3216, on: "Electric Distribution Device")
+        openPopup(3216, on: .electricDistributionDevice)
         assertPopupOpened(popupTitle: popupTitle)
         
         // Expectation: The default title is "Associations".
@@ -303,7 +303,7 @@ final class PopupViewTests: XCTestCase {
         let switchPopupText = app.staticTexts["Electric Distribution Device: Switch"]
         let switchObjectIDText = app.staticTexts["Selected Popup Object ID, 4361"]
         
-        openPopup(4361, on: "Electric Distribution Device")
+        openPopup(4361, on: .electricDistributionDevice)
         assertPopupOpened(popupTitle: switchPopupText)
         
         // Expectation: The first provided popup's object ID matches the opened popup's.
@@ -350,8 +350,7 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
-    /// Verifies that association results display an icon when applicable.
-    ///
+    /// Verifies that association results display the correct icon when applicable.
     /// - Note: Only the "connection-to-connection" is tested since the data
     /// doesn't contain any junction-edge-object-connectivity associations.
     func testAssociationResultIcons() {
@@ -365,7 +364,7 @@ final class PopupViewTests: XCTestCase {
         let transformerBankResult = app.staticTexts["Electric Distribution Assembly: Transformer Bank"]
         let transformerResult = app.staticTexts["Electric Distribution Device: Transformer"]
         
-        openPopup(2672, on: "Electric Distribution Device")
+        openPopup(2672, on: .electricDistributionDevice)
         assertPopupOpened(popupTitle: popupTitle)
         
         // Opens the "Connectivity" filter result.
@@ -411,6 +410,99 @@ final class PopupViewTests: XCTestCase {
         XCTAssertEqual(associationResultIcons.count, 0)
     }
     
+    /// Verifies that association results display the correct description when applicable.
+    /// - Note: The fraction-along-edge description is not tested as the data does not have any
+    /// `junctionEdgeObjectConnectivityMidspan` associations.
+    func testAssociationDescription() async {
+        let app = XCUIApplication()
+        let associationResultDescription = app.staticTexts["Association Result Description"]
+        let connectivityFilterResult = app.staticTexts["Connectivity"]
+        let containerFilterResult = app.staticTexts["Container"]
+        let contentFilterResult = app.staticTexts["Content"]
+        let fusePopupTitle = app.staticTexts["Electric Distribution Device: Fuse"]
+        let transformerPopupTitle = app.staticTexts["Electric Distribution Device: Transformer"]
+        let transformerBankPopupTitle = app.staticTexts["Electric Distribution Assembly: Transformer Bank"]
+        
+        openPopup(4567, on: .electricDistributionDevice)
+        assertPopupOpened(popupTitle: fusePopupTitle)
+        
+        // Opens the "Connectivity" filter result.
+        XCTAssertTrue(
+            connectivityFilterResult.exists,
+            "The filter result \"Connectivity\" doesn't exist."
+        )
+        connectivityFilterResult.tap()
+        
+        // Expectations: The transformer result has a "High" description.
+        XCTAssertTrue(
+            transformerPopupTitle.waitForExistence(timeout: 3),
+            "The result \"Electric Distribution Device: Transformer\" doesn't exist."
+        )
+        XCTAssertTrue(
+            associationResultDescription.exists,
+            "The result description doesn't exist."
+        )
+        XCTAssertEqual(associationResultDescription.label, "High")
+        
+        // Opens the transformer popup and "Connectivity" filter result.
+        transformerPopupTitle.tap()
+        assertPopupOpened(popupTitle: transformerPopupTitle)
+        
+        XCTAssertTrue(
+            connectivityFilterResult.exists,
+            "The filter result \"Connectivity\" doesn't exist."
+        )
+        connectivityFilterResult.tap()
+        
+        // Expectation: The fuse results have a "Single Terminal" description.
+        XCTAssertTrue(
+            fusePopupTitle.exists,
+            "The result \"Electric Distribution Device: Fuse\" doesn't exist."
+        )
+        XCTAssertTrue(
+            associationResultDescription.exists,
+            "The result description doesn't exist."
+        )
+        XCTAssertEqual(associationResultDescription.firstMatch.label, "Single Terminal")
+        
+        // Opens the first fuse popup and the "Container" filter result.
+        fusePopupTitle.firstMatch.tap()
+        assertPopupOpened(popupTitle: fusePopupTitle)
+        
+        XCTAssertTrue(
+            containerFilterResult.exists,
+            "The filter result \"Container\" doesn't exist."
+        )
+        containerFilterResult.tap()
+        
+        // Expectation: The transformer bank result does not have a description.
+        XCTAssertTrue(
+            transformerBankPopupTitle.waitForExistence(timeout: 3),
+            "The result \"Electric Distribution Assembly: Transformer Bank\" doesn't exist."
+        )
+        XCTAssertFalse(
+            associationResultDescription.exists,
+            "The result description exists."
+        )
+        
+        // Opens the transformer bank popup and the "Content" filter result.
+        transformerBankPopupTitle.tap()
+        assertPopupOpened(popupTitle: transformerBankPopupTitle)
+        
+        XCTAssertTrue(
+            contentFilterResult.exists,
+            "The filter result \"Content\" doesn't exist."
+        )
+        contentFilterResult.tap()
+        
+        // Expectation: The results have a "Containment Visible: False" description.
+        XCTAssertTrue(
+            associationResultDescription.exists,
+            "The result description doesn't exist."
+        )
+        XCTAssertEqual(associationResultDescription.firstMatch.label, "Containment Visible: False")
+    }
+    
     /// Verifies that the `UtilityAssociationsPopupElement.displayCount` is respected.
     func testDisplayCount() {
         let app = XCUIApplication()
@@ -422,7 +514,7 @@ final class PopupViewTests: XCTestCase {
         let showAllButton = app.buttons["Show all, Total: 3"]
         let titleField = app.textFields["Title"]
         
-        openPopup(316, on: "Electric Distribution Assembly")
+        openPopup(316, on: .electricDistributionAssembly)
         assertPopupOpened(popupTitle: popupTitle)
         
         // Opens the filter result.
@@ -468,7 +560,7 @@ final class PopupViewTests: XCTestCase {
         let showAllButton = app.buttons["Show all, Total: 6"]
         let titleField = app.textFields["Title"]
         
-        openPopup(475, on: "Electric Distribution Assembly")
+        openPopup(475, on: .electricDistributionAssembly)
         assertPopupOpened(popupTitle: popupTitle)
         
         // Opens the filter result.
@@ -541,4 +633,9 @@ final class PopupViewTests: XCTestCase {
         
         XCTAssertEqual(associationResults.count, 0)
     }
+}
+
+private extension String {
+    static let electricDistributionAssembly = "Electric Distribution Assembly"
+    static let electricDistributionDevice = "Electric Distribution Device"
 }

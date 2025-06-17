@@ -31,6 +31,7 @@ struct UtilityAssociationResultLabel: View {
                     Text(details)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("Association Result Description")
                 }
             }
             .lineLimit(1)
