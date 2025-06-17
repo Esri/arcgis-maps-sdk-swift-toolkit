@@ -179,6 +179,43 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
+    /// Verifies that `PopupView` supports definitions with multiple associations elements.
+    func testMultipleElements() {
+        let app = XCUIApplication()
+        let associationsElements = app.staticTexts.matching(identifier: "Associations Popup Element")
+        let attachmentElement = app.staticTexts["Attachment"]
+        let containerElement = app.staticTexts["Container"]
+        let contentFilterResult = app.staticTexts["Content"]
+        let popupTitle = app.staticTexts["Structure Junction: Switchgear"]
+        let structureFilterResult = app.staticTexts["Structure"]
+        
+        openPopup(2339, on: .structureJunction)
+        assertPopupOpened(popupTitle: popupTitle)
+        
+        // Expectation: There are 2 associations popup elements.
+        XCTAssertEqual(associationsElements.count, 2)
+        
+        // Expectation: There is an "Attachment" element with a "Structure" filter result.
+        XCTAssertTrue(
+            attachmentElement.exists,
+            "The element \"Attachment\" doesn't exist."
+        )
+        XCTAssertTrue(
+            structureFilterResult.exists,
+            "The filter result \"Structure\" doesn't exist."
+        )
+        
+        // Expectation: There is an "Container" element with a "Content" filter result.
+        XCTAssertTrue(
+            containerElement.exists,
+            "The element \"Container\" doesn't exist."
+        )
+        XCTAssertTrue(
+            contentFilterResult.exists,
+            "The filter result \"Content\" doesn't exist."
+        )
+    }
+    
     /// Verifies that navigating through associations results works as expected.
     func testNavigation() {
         let app = XCUIApplication()
@@ -190,8 +227,8 @@ final class PopupViewTests: XCTestCase {
         let switchgearText = app.staticTexts["Structure Junction: Switchgear"]
         let titleField = app.textFields["Title"]
         
-        openPopup(1464, on: "Structure Junction")
         assertPopupOpened(popupTitle: switchgearText)
+        openPopup(1464, on: .structureJunction)
         
         // Expectation: A filter result opens the group result list.
         XCTAssertTrue(
@@ -638,4 +675,6 @@ final class PopupViewTests: XCTestCase {
 private extension String {
     static let electricDistributionAssembly = "Electric Distribution Assembly"
     static let electricDistributionDevice = "Electric Distribution Device"
+    static let structureJunction = "Structure Junction"
+}
 }
