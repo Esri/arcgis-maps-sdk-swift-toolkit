@@ -101,10 +101,10 @@ public extension AuthenticationManager {
         return await withTaskGroup(of: Bool.self, returning: Bool.self) { group in
             for credential in iapCredentials {
                 group.addTask {
-                    return try? await credential.invalidate() ?? false
+                    return (try? await credential.invalidate()) ?? false
                 }
             }
-
+            
             return await group.allSatisfy(\.self)
         }
     }
