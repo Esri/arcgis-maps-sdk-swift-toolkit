@@ -24,7 +24,7 @@ struct MasqueradePlugin: BuildToolPlugin {
         let outputFile = context.pluginWorkDirectoryURL.appending(path: "AppSecrets.swift")
         let scriptPath = context.package.directoryURL.appending(path: "Scripts/masquerade")
         let secretsPath = context.package.directoryURL.appending(path: ".secrets")
-        let inputFile = context.package.directoryURL.appending(path: "Shared/AppSecrets.swift.masque")
+        let inputFile = context.package.directoryURL.appending(path: "AppSecrets.swift.masque")
         return [
             .buildCommand(
                 displayName: "Running masquerade",

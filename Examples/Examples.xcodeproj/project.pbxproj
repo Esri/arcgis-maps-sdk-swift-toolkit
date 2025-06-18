@@ -89,39 +89,6 @@
 		E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8A5BAC7D2DFC916F00266E7A /* Exceptions for "Shared" folder in "Toolkit Examples" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AppSecrets.swift.masque,
-			);
-			target = E47ABE3F2652FE0900FD2FE3 /* Toolkit Examples */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		8A5BAC7F2DFC917400266E7A /* Exceptions for "Shared" folder in "Compile Sources" phase from "Toolkit Examples" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = E47ABE3C2652FE0900FD2FE3 /* Sources */;
-			membershipExceptions = (
-				AppSecrets.swift.masque,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		8A5BAC792DFC8E7200266E7A /* Shared */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				8A5BAC7D2DFC916F00266E7A /* Exceptions for "Shared" folder in "Toolkit Examples" target */,
-				8A5BAC7F2DFC917400266E7A /* Exceptions for "Shared" folder in "Compile Sources" phase from "Toolkit Examples" target */,
-			);
-			name = Shared;
-			path = ../Shared;
-			sourceTree = SOURCE_ROOT;
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		E47ABE3D2652FE0900FD2FE3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -163,7 +130,6 @@
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
 				E47ABE5A2652FF1200FD2FE3 /* Frameworks */,
 				E47ABE412652FE0900FD2FE3 /* Products */,
-				8A5BAC792DFC8E7200266E7A /* Shared */,
 			);
 			sourceTree = "<group>";
 		};
@@ -231,9 +197,6 @@
 				8A5BAC672DFC846400266E7A /* PBXBuildRule */,
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				8A5BAC792DFC8E7200266E7A /* Shared */,
 			);
 			name = "Toolkit Examples";
 			packageProductDependencies = (
