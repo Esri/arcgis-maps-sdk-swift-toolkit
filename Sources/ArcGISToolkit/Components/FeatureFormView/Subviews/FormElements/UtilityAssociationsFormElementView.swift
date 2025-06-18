@@ -145,27 +145,46 @@ struct UtilityAssociationsFilterResultView: View {
     
     @Environment(\.navigationPath) var navigationPath
     
+    @Namespace private var namespace
+    
     var body: some View {
-        List(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-             Button {
-                 navigationPath?.wrappedValue.append(
-                    FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                        utilityAssociationGroupResult,
-                        internalFeatureFormViewModel
-                    )
-                 )
-            } label: {
-                HStack {
-                    Text(utilityAssociationGroupResult.name)
-                    Spacer()
-                    Group {
-                        Text(utilityAssociationGroupResult.associationResults.count.formatted())
-                        Image(systemName: "chevron.right")
+        List {
+            Section {
+                ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+                    Button {
+                        navigationPath?.wrappedValue.append(
+                           FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                               utilityAssociationGroupResult,
+                               internalFeatureFormViewModel
+                           )
+                        )
+                   } label: {
+                       HStack {
+                           Text(utilityAssociationGroupResult.name)
+                           Spacer()
+                           Group {
+                               Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                               Image(systemName: "chevron.right")
+                           }
+                           .foregroundColor(.secondary)
+                       }
+                   }
+                   .tint(.primary)
+                }
+            } footer: {
+                if #available(iOS 18.0, *) {
+                    NavigationLink("Add Association") {
+                        ContentUnavailableView("Add Association", systemImage: "link")
+                            .navigationTransition(.zoom(sourceID: "world", in: namespace))
                     }
-                    .foregroundColor(.secondary)
+                    .buttonStyle(.borderedProminent)
+                } else {
+                    NavigationLink("Add Association") {
+                        ContentUnavailableView("Add Association", systemImage: "link")
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
             }
-            .tint(.primary)
         }
     }
 }
