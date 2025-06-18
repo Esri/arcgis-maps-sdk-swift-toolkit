@@ -12,31 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
 import Observation
 
 @Observable
 class FeatureFormViewModel {
-    /// A Boolean value indicating whether the current feature has geometry edits.
-    private(set) var currentFeatureHasGeometryEdits = false
-    
-    private var geometryChangedMonitoringTask: Task<Void, Never>?
-    
-    /// Creates a view model for a feature form view.
-    init() {
-    }
-    
-    @MainActor
-    func resetGeometryChangeMonitoring(for feature: Feature) {
-        currentFeatureHasGeometryEdits = false
-        geometryChangedMonitoringTask = Task {
-            for await _ in feature.$geometry.dropFirst() {
-                currentFeatureHasGeometryEdits = true
-            }
-        }
-    }
-    
-    deinit {
-        geometryChangedMonitoringTask?.cancel()
-    }
+    /// A Boolean value indicating whether navigation into associated features is disabled.
+    var navigationIsDisabled = false
 }

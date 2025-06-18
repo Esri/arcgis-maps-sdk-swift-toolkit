@@ -25,6 +25,9 @@ extension NavigationLayer {
         /// The optional closure to perform when the back navigation button is pressed.
         let backNavigationAction: ((NavigationLayerModel) -> Void)?
         
+        /// A Boolean value indicating whether back navigation is disabled.
+        let backNavigationDisabled: Bool
+        
         /// The header trailing content.
         let headerTrailing: (() -> any View)?
         
@@ -57,6 +60,7 @@ extension NavigationLayer {
                                 .labelStyle(.iconOnly)
                         }
                     }
+                    .disabled(backNavigationDisabled)
 #if targetEnvironment(macCatalyst)
                     .buttonStyle(.plain)
 #endif

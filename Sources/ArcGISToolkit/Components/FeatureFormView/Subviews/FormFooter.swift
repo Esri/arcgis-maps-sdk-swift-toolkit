@@ -57,7 +57,6 @@ struct FormFooter: View {
                         Task {
                             do {
                                 try await featureForm.finishEditing()
-                                featureFormViewModel.resetGeometryChangeMonitoring(for: featureForm.feature)
                                 formHandlingEventAction?(.savedEdits(willNavigate: false))
                             } catch {
                                 finishEditingError = error

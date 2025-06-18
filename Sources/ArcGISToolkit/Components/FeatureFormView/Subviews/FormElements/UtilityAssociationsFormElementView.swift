@@ -64,6 +64,7 @@ private struct UtilityAssociationGroupResultView: View {
     var body: some View {
         List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
             UtilityAssociationResultView(
+                isDisabled: featureFormViewModel.navigationIsDisabled,
                 selectionAction: {
                     let navigationAction: () -> Void = {
                         navigationLayerModel.push {
@@ -72,7 +73,7 @@ private struct UtilityAssociationGroupResultView: View {
                             )
                         }
                     }
-                    if internalFeatureFormViewModel.featureForm.hasEdits || featureFormViewModel.currentFeatureHasGeometryEdits {
+                    if internalFeatureFormViewModel.featureForm.hasEdits {
                         setAlertContinuation?(true, navigationAction)
                     } else {
                         navigationAction()
@@ -177,6 +178,9 @@ private struct UtilityAssociationsFilterResultView: View {
 
 /// A view for a utility association result.
 private struct UtilityAssociationResultView: View {
+    /// A Boolean value indicating whether the button to open the association is disabled.
+    let isDisabled: Bool
+    
     /// The closure to call when the utility association result is selected.
     let selectionAction: (() -> Void)
     
@@ -216,6 +220,7 @@ private struct UtilityAssociationResultView: View {
                     .foregroundStyle(.secondary)
             }
         }
+        .disabled(isDisabled)
         .tint(.primary)
     }
 }

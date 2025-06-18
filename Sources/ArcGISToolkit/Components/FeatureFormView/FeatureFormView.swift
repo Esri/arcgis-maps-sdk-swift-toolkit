@@ -149,12 +149,13 @@ public struct FeatureFormView: View {
                     }
                 }
                 .backNavigationAction { navigationLayerModel in
-                    if aFeatureFormIsPresented && (hasEdits || featureFormViewModel.currentFeatureHasGeometryEdits) {
+                    if aFeatureFormIsPresented && hasEdits {
                         alertContinuation = (true, { navigationLayerModel.pop() })
                     } else {
                         navigationLayerModel.pop()
                     }
                 }
+                .backNavigationDisabled(aFeatureFormIsPresented && featureFormViewModel.navigationIsDisabled)
                 .onNavigationPathChanged { item in
                     if let item {
                         if type(of: item.view()) == InternalFeatureFormView.self {
@@ -187,7 +188,6 @@ public struct FeatureFormView: View {
                                 Task {
                                     do {
                                         try await presentedForm.finishEditing()
-                                        featureFormViewModel.resetGeometryChangeMonitoring(for: presentedForm.feature)
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
@@ -238,7 +238,6 @@ public struct FeatureFormView: View {
             .environment(\._validationErrorVisibility, validationErrorVisibility)
             .task(id: presentedForm.wrappedValue?.feature.globalID) {
                 guard let presentedForm = presentedForm.wrappedValue else { return }
-                featureFormViewModel.resetGeometryChangeMonitoring(for: presentedForm.feature)
                 for await hasEdits in presentedForm.$hasEdits {
                     withAnimation { self.hasEdits = hasEdits }
                 }
