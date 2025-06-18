@@ -24,6 +24,6 @@ struct TestRunnerApp: App {
     }
     
     init() {
-        ArcGISEnvironment.apiKey = .iOS
+        ArcGISEnvironment.apiKey = .development
     }
 }

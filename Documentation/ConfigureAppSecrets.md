@@ -15,7 +15,7 @@ Note: License strings are not required for development. When no license or an in
 2. Add your **API Key** access token to the secrets file.
 
   ```sh
-  echo ARCGIS_API_KEY_IOS=your-api-key >> .secrets
+  echo ARCGIS_API_KEY_DEVELOPMENT=your-api-key >> .secrets
   ```
 
   > Replace 'your-license-key', 'your-extension-license-key' and 'your-api-key' with your keys.

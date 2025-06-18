@@ -33,7 +33,7 @@ private extension PreplannedMapAreaProtocol {
 
 class PreplannedMapModelTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = .iOS
+        ArcGISEnvironment.apiKey = .development
     }
     
     override func tearDown() {

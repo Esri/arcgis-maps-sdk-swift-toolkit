@@ -69,7 +69,7 @@ Production deployment of applications built with the ArcGIS Maps SDK for Swift r
 3. Add your API key to the aforementioned secrets file. Adding an API key allows you to access ArcGIS location services, such as the basemap styles service.
 
   ```sh
-  echo ARCGIS_API_KEY_IOS=your-api-key >> .secrets
+  echo ARCGIS_API_KEY_DEVELOPMENT=your-api-key >> .secrets
   ```
 
   > Replace 'your-api-key' with your API Key access token.
