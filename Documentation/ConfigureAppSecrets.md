@@ -18,7 +18,7 @@ Note: License strings are not required for development. When no license or an in
   echo ARCGIS_API_KEY_DEVELOPMENT=your-api-key >> .secrets
   ```
 
-  > Replace 'your-license-key', 'your-extension-license-key' and 'your-api-key' with your keys.
+  > Replace 'your-api-key' with your keys.
 
 Visit the developer's website to learn more about [Deployment](https://developers.arcgis.com/swift/license-and-deployment/) and [Security and authentication](https://developers.arcgis.com/documentation/security-and-authentication/).
 
