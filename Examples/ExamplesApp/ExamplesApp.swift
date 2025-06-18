@@ -34,6 +34,6 @@ struct ExamplesApp: App {
          
         Production deployment of applications built with the ArcGIS Maps SDK for Swift requires that you license your app. For more information see https://developers.arcgis.com/swift/license-and-deployment/.
          */
-        ArcGISEnvironment.apiKey = .iOS
+        ArcGISEnvironment.apiKey = .development
     }
 }
