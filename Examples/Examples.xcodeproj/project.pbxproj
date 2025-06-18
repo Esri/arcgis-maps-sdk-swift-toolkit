@@ -16,6 +16,7 @@
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; };
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; };
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; platformFilter = ios; };
+		8A9419622E035F1D003C7D10 /* AppSecrets.swift.masque in Sources */ = {isa = PBXBuildFile; fileRef = 8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */; };
 		8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
 		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; };
@@ -29,6 +30,25 @@
 		E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E4E57DC5265D8EB00077A093 /* ArcGISToolkit */; };
 		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		8A5BAC672DFC846400266E7A /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.masque";
+			fileType = pattern.proxy;
+			inputFiles = (
+				"$(SRCROOT)/../.secrets",
+			);
+			isEditable = 1;
+			name = "Generate Swift Code from Secrets";
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
+			);
+			runOncePerArchitecture = 0;
+			script = "\"${SRCROOT}/../Scripts/masquerade\" -i \"${INPUT_FILE_PATH}\" -o \"${SCRIPT_OUTPUT_FILE_0}\" -s \"${SCRIPT_INPUT_FILE_0}\" -f\n";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		E47ABE5E2652FF1300FD2FE3 /* Embed Frameworks */ = {
@@ -53,6 +73,7 @@
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
+		8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */ = {isa = PBXFileReference; lastKnownFileType = text; name = AppSecrets.swift.masque; path = ../AppSecrets.swift.masque; sourceTree = "<group>"; };
 		8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Examples+ListItem.swift"; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; };
@@ -106,11 +127,12 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
+				8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */,
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
-				E47ABE412652FE0900FD2FE3 /* Products */,
 				E47ABE5A2652FF1200FD2FE3 /* Frameworks */,
+				E47ABE412652FE0900FD2FE3 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -167,6 +189,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Toolkit Examples" */;
 			buildPhases = (
+				8AC75EB62DFCE61300A5CC90 /* Create .secrets File If It Does Not Exist */,
 				E47ABE3C2652FE0900FD2FE3 /* Sources */,
 				E47ABE3D2652FE0900FD2FE3 /* Frameworks */,
 				E47ABE3E2652FE0900FD2FE3 /* Resources */,
@@ -174,6 +197,7 @@
 				4DFDB9BB29367B7F00A0AC42 /* Lint Sources */,
 			);
 			buildRules = (
+				8A5BAC672DFC846400266E7A /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -250,6 +274,26 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint --config ../.swiftlint.yml\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		8AC75EB62DFCE61300A5CC90 /* Create .secrets File If It Does Not Exist */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Create .secrets File If It Does Not Exist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/../.secrets",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ! -e \"$SRCROOT/../.secrets\" ]\nthen\n    touch \"$SRCROOT/../.secrets\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -257,6 +301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A9419622E035F1D003C7D10 /* AppSecrets.swift.masque in Sources */,
 				4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */,
 				1C40F3322B46118800C00ED5 /* WorldScaleExampleView.swift in Sources */,
 				1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */,
