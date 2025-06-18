@@ -100,7 +100,7 @@ private struct UtilityAssociationsFilterResultLink: View {
     var body: some View {
         Button {
             navigationLayerModel.push {
-                List(filterResult.groupResults, id: \.name) { groupResult in
+                List(filterResult.groupResults, id: \.id) { groupResult in
                     UtilityAssociationGroupResultView(groupResult: groupResult)
 #if targetEnvironment(macCatalyst)
                         .listRowInsets(.toolkitDefault)
@@ -271,7 +271,14 @@ private extension UtilityAssociationsFilter {
 }
 
 private extension UtilityAssociationsFilterResult {
-    /// The ID of the utility associations filter result.
+    /// The ID of the utility associations filter result object.
+    var id: ObjectIdentifier {
+        ObjectIdentifier(self)
+    }
+}
+
+private extension UtilityAssociationGroupResult {
+    /// The ID of the utility associations group result object.
     var id: ObjectIdentifier {
         ObjectIdentifier(self)
     }
