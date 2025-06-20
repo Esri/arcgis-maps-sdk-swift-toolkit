@@ -79,6 +79,10 @@ public struct FeatureFormView: View {
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
     
+    /// A Boolean which declares whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    var navigationIsDisabled = false
+    
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
@@ -87,9 +91,6 @@ public struct FeatureFormView: View {
     
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
-    
-    /// The view model for the feature form view.
-    @State private var featureFormViewModel: FeatureFormViewModel
     
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
@@ -105,7 +106,6 @@ public struct FeatureFormView: View {
     ///   - featureForm: The feature form defining the editing experience.
     /// - Since: 200.8
     public init(featureForm: Binding<FeatureForm?>) {
-        self.featureFormViewModel = FeatureFormViewModel()
         self.presentedForm = featureForm
         self.rootFeatureForm = featureForm.wrappedValue
     }
@@ -155,7 +155,7 @@ public struct FeatureFormView: View {
                         navigationLayerModel.pop()
                     }
                 }
-                .backNavigationDisabled(aFeatureFormIsPresented && featureFormViewModel.navigationIsDisabled)
+                .backNavigationDisabled(aFeatureFormIsPresented && navigationIsDisabled)
                 .onNavigationPathChanged { item in
                     if let item {
                         if type(of: item.view()) == InternalFeatureFormView.self {
@@ -232,8 +232,8 @@ public struct FeatureFormView: View {
                     }
                 }
             )
-            .environment(featureFormViewModel)
             .environment(\.formChangedAction, onFormChangedAction)
+            .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\._validationErrorVisibility, validationErrorVisibility)
             .task(id: presentedForm.wrappedValue?.feature.globalID) {
@@ -274,6 +274,18 @@ public extension FeatureFormView {
     func editingButtons(_ visibility: Visibility) -> Self {
         var copy = self
         copy.editingButtonsVisibility = visibility
+        return copy
+    }
+    
+    /// Sets whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    ///
+    /// Use this modifier to conditionally disable navigation into other forms.
+    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled. Pass `true` to disable navigation; otherwise, pass `false`.
+    /// - Since: 200.8
+    func navigationDisabled(_ disabled: Bool) -> Self {
+        var copy = self
+        copy.navigationIsDisabled = disabled
         return copy
     }
     
@@ -340,6 +352,10 @@ extension FeatureFormView {
 extension EnvironmentValues {
     /// The environment value to access the closure to call when the presented feature form changes.
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
+    
+    /// The environment value which declares whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    @Entry var navigationIsDisabled: Bool = false
     
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?

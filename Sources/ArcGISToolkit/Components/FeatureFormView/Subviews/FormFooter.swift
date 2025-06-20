@@ -31,9 +31,6 @@ struct FormFooter: View {
     /// An error thrown from finish editing.
     @Binding var finishEditingError: (any Error)?
     
-    /// The view model for the form.
-    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
-    
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     var body: some View {

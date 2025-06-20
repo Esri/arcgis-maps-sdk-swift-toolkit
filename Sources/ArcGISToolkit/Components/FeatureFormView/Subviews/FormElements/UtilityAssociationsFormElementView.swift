@@ -47,10 +47,11 @@ struct UtilityAssociationsFormElementView: View {
 private struct UtilityAssociationGroupResultView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
-    @Environment(\.setAlertContinuation) var setAlertContinuation
+    /// A Boolean which declares whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    @Environment(\.navigationIsDisabled) var navigationIsDisabled
     
-    /// The view model for the form.
-    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+    @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// The view model for the form.
     @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
@@ -64,7 +65,6 @@ private struct UtilityAssociationGroupResultView: View {
     var body: some View {
         List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
             UtilityAssociationResultView(
-                isDisabled: featureFormViewModel.navigationIsDisabled,
                 selectionAction: {
                     let navigationAction: () -> Void = {
                         navigationLayerModel.push {
@@ -82,6 +82,7 @@ private struct UtilityAssociationGroupResultView: View {
                 result: utilityAssociationResult
             )
         }
+        .disabled(navigationIsDisabled)
         .onAppear {
             // This view is considered the tail end of a navigable FeatureForm.
             // When a user is backing out of a navigation path, this view
@@ -178,9 +179,6 @@ private struct UtilityAssociationsFilterResultView: View {
 
 /// A view for a utility association result.
 private struct UtilityAssociationResultView: View {
-    /// A Boolean value indicating whether the button to open the association is disabled.
-    let isDisabled: Bool
-    
     /// The closure to call when the utility association result is selected.
     let selectionAction: (() -> Void)
     
@@ -220,7 +218,6 @@ private struct UtilityAssociationResultView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .disabled(isDisabled)
         .tint(.primary)
     }
 }
