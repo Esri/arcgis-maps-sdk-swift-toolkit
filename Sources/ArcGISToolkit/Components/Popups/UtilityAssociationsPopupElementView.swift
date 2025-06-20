@@ -85,9 +85,6 @@ struct UtilityAssociationsPopupElementView: View {
 /// A view that displays a `UtilityAssociationsFilterResult` and allows
 /// navigating to its group results.
 private struct UtilityAssociationsFilterResultLink: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The title of the popup the filter result was derived from.
     @Environment(\.popupTitle) private var popupTitle
     
@@ -98,41 +95,28 @@ private struct UtilityAssociationsFilterResultLink: View {
     let filterResult: UtilityAssociationsFilterResult
     
     var body: some View {
-        Button {
-            navigationLayerModel.push {
-                List(filterResult.groupResults, id: \.id) { groupResult in
-                    UtilityAssociationGroupResultView(groupResult: groupResult)
+        NavigationLink {
+            List(filterResult.groupResults, id: \.id) { groupResult in
+                UtilityAssociationGroupResultView(groupResult: groupResult)
 #if targetEnvironment(macCatalyst)
-                        .listRowInsets(.toolkitDefault)
+                    .listRowInsets(.toolkitDefault)
 #endif
-                }
-                .listStyle(.inset)
-                .navigationLayerTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
-                .environment(\.popupTitle, popupTitle)
-                .environment(\.associationDisplayCount, associationDisplayCount)
             }
+            .listStyle(.inset)
+            .popupViewToolbar(title: filterResult.filter.displayTitle, subtitle: popupTitle)
+            .environment(\.popupTitle, popupTitle)
+            .environment(\.associationDisplayCount, associationDisplayCount)
         } label: {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(filterResult.filter.displayTitle)
-                    if !filterResult.filter.description.isEmpty {
-                        Text(filterResult.filter.description)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+            LabeledContent {
+                Text(filterResult.resultCount, format: .number)
+            } label: {
+                Text(filterResult.filter.displayTitle)
+                if !filterResult.filter.description.isEmpty {
+                    Text(filterResult.filter.description)
+                        .font(.caption)
                 }
-                .lineLimit(1)
-                Spacer()
-                Group {
-                    Text(filterResult.resultCount, format: .number)
-                    Image(systemName: "chevron.right")
-                }
-                .foregroundColor(.secondary)
             }
-#if os(iOS)
-            // Make the entire row tappable.
-            .contentShape(.rect)
-#endif
+            .lineLimit(1)
         }
     }
 }
@@ -140,9 +124,6 @@ private struct UtilityAssociationsFilterResultLink: View {
 /// A view that displays a `UtilityAssociationGroupResult` and allows
 /// navigating through its association results.
 private struct UtilityAssociationGroupResultView: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The title of the popup the group result was derived from.
     @Environment(\.popupTitle) private var popupTitle
     
@@ -159,19 +140,17 @@ private struct UtilityAssociationGroupResultView: View {
         DisclosureGroup(isExpanded: $isExpanded) {
             let associationResults = groupResult.associationResults.prefix(associationDisplayCount)
             ForEach(associationResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultButton(result) {
-                    navigationLayerModel.push {
-                        EmbeddedPopupView(popup: result.associatedFeature.toPopup())
-                    }
+                NavigationLink {
+                    EmbeddedPopupView(popup: result.associatedFeature.toPopup())
+                } label: {
+                    UtilityAssociationResultLabel(result: result)
                 }
             }
             
             if groupResult.associationResults.count > associationDisplayCount {
-                Button {
-                    navigationLayerModel.push {
-                        SearchUtilityAssociationResultsView(results: groupResult.associationResults)
-                            .navigationLayerTitle(groupResult.name, subtitle: popupTitle)
-                    }
+                NavigationLink {
+                    SearchUtilityAssociationResultsView(results: groupResult.associationResults)
+                        .popupViewToolbar(title: groupResult.name, subtitle: popupTitle)
                 } label: {
                     HStack {
                         VStack(alignment: .leading) {
@@ -206,9 +185,6 @@ private struct UtilityAssociationGroupResultView: View {
 
 /// A view for searching through a list of utility association results.
 private struct SearchUtilityAssociationResultsView: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The utility association results to search through.
     let results: [UtilityAssociationResult]
     
@@ -226,10 +202,10 @@ private struct SearchUtilityAssociationResultsView: View {
                 .padding(.horizontal)
             
             List(filteredResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultButton(result) {
-                    navigationLayerModel.push {
-                        EmbeddedPopupView(popup: result.associatedFeature.toPopup())
-                    }
+                NavigationLink {
+                    EmbeddedPopupView(popup: result.associatedFeature.toPopup())
+                } label: {
+                    UtilityAssociationResultLabel(result: result)
                 }
 #if targetEnvironment(macCatalyst)
                 .listRowInsets(.toolkitDefault)

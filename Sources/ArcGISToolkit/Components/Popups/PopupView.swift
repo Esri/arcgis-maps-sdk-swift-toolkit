@@ -54,24 +54,15 @@ import ArcGIS
 /// in the project. To learn more about using the `PopupView`, see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
     /// The `Popup` to display in the root `EmbeddedPopupView`.
-    private let rootPopup: Popup
+    private let popup: Popup
     
-    /// The popups that have been presented in the navigation layer.
-    ///
-    /// There is one popup for every `EmbeddedPopupView` in the current
-    /// navigation stack.
-    @State private var presentedPopups: [Popup] = []
-    
-    /// The model for the navigation layer.
-    @State private var navigationLayerModel: NavigationLayerModel?
+    /// A binding to a Boolean value that determines whether the view is presented.
+    private let isPresented: Binding<Bool>?
     
     /// The visibility of the close button.
     var closeButtonVisibility: Visibility = .automatic
     
-    /// A binding to a Boolean value that determines whether the view is presented.
-    var isPresented: Binding<Bool>?
-    
-    /// The closure to perform when a new popup is shown in the `NavigationLayer`.
+    /// The closure to perform when a new popup is shown in the navigation stack.
     var onPopupChanged: ((Popup) -> Void)?
     
     /// Creates a `PopupView` with the given popup.
@@ -79,53 +70,29 @@ public struct PopupView: View {
     ///   - popup: The popup to display.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
-        self.rootPopup = popup
+        self.popup = popup
         self.isPresented = isPresented
     }
     
     public var body: some View {
-        NavigationLayer { model in
-            EmbeddedPopupView(popup: rootPopup)
-                .onAppear {
-                    navigationLayerModel = model
-                }
-        } headerTrailing: {
-            XButton(.dismiss) {
-                isPresented?.wrappedValue = false
-            }
-            .font(.title)
-            // This is a workaround for a NavigationLayer issue where
-            // the navigation title is not centered when the
-            // `headerTrailing` content is empty.
-            .disabled(closeButtonVisibility == .hidden)
-            .opacity(closeButtonVisibility == .hidden ? 0 : 1)
+        NavigationStack {
+            EmbeddedPopupView(popup: popup)
         }
-        .backNavigationAction { navigationLayerModel in
-            // If an `EmbeddedPopupView` is disappearing, the last
-            // `EmbeddedPopupView`'s popup is passed to `onPopupChanged`.
-            if navigationLayerModel.presented?.view is EmbeddedPopupView {
-                presentedPopups.removeLast()
-                presentedPopups.last.map { onPopupChanged?($0) }
-            }
-            
-            navigationLayerModel.pop()
-        }
-        .onNavigationPathChanged { item in
-            // If an `EmbeddedPopupView` is appearing for the first time,
-            // the new view's popup is passed to `onPopupChanged`.
-            if let embeddedPopupView = item?.view as? EmbeddedPopupView,
-               embeddedPopupView.popup.id != presentedPopups.last?.id {
-                presentedPopups.append(embeddedPopupView.popup)
-                onPopupChanged?(embeddedPopupView.popup)
-            }
-        }
-        .onChange(of: rootPopup.id, initial: true) {
-            // Resets the navigation stack when a new popup is passed to the view.
-            navigationLayerModel?.popAll()
-            presentedPopups = [rootPopup]
-            onPopupChanged?(rootPopup)
+        .environment(\.popupCloseButtonVisibility, closeButtonVisibility)
+        .environment(\.popupIsPresented, isPresented)
+        .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
+            guard let wrappedPopup else { return }
+            onPopupChanged?(wrappedPopup.popup)
         }
     }
+}
+
+extension EnvironmentValues {
+    /// The visibility of the popup view's close button.
+    @Entry var popupCloseButtonVisibility: Visibility = .automatic
+    
+    /// A binding to a Boolean value that determines whether a popup view is presented.
+    @Entry var popupIsPresented: Binding<Bool>?
 }
 
 public extension PopupView {
@@ -150,9 +117,23 @@ public extension PopupView {
     }
 }
 
-private extension Popup {
-    /// The identifier for the popup object.
-    var id: ObjectIdentifier {
-        ObjectIdentifier(self)
+/// A preference key that specifies the popup currently presented in the `PopupView` navigation stack.
+struct PresentedPopupPreferenceKey: PreferenceKey {
+    /// A wrapper for making a popup equatable.
+    struct EquatablePopup: Equatable {
+        let popup: Popup
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.popup === rhs.popup
+        }
+    }
+    
+    // MARK: PreferenceKey Conformance
+    
+    static let defaultValue: EquatablePopup? = nil
+    
+    static func reduce(value: inout EquatablePopup?, nextValue: () -> EquatablePopup?) {
+        guard let nextValue = nextValue() else { return }
+        value = nextValue
     }
 }
