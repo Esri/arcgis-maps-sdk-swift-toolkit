@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Combine
 import CryptoTokenKit
 
 /// The `Authenticator` is a configurable object that handles authentication challenges. It will
