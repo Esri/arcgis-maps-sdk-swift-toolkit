@@ -32,16 +32,11 @@ struct UtilityAssociationsPopupElementView: View {
             switch filterResultsResult {
             case .success(let associationsFilterResults):
                 if associationsFilterResults.isEmpty {
-                    Label {
-                        Text(
-                            "No Associations",
-                            bundle: .toolkitModule,
-                            comment: "A label indicating that no associations are available for the popup element."
-                        )
-                    } icon: {
-                        Image(systemName: "exclamationmark.triangle")
-                            .foregroundStyle(.gray)
-                    }
+                    Text(
+                        "No Associations",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating that no associations are available for the popup element."
+                    )
                 } else {
                     ForEach(associationsFilterResults, id: \.id) {
                         UtilityAssociationsFilterResultLink(filterResult: $0)
