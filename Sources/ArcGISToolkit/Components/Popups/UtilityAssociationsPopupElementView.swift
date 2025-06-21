@@ -197,22 +197,30 @@ private struct SearchUtilityAssociationResultsView: View {
     }
     
     var body: some View {
-        VStack {
-            SearchBar(text: $text, prompt: "Title")
-                .padding(.horizontal)
-            
-            List(filteredResults, id: \.associatedFeature.globalID) { result in
-                NavigationLink {
-                    EmbeddedPopupView(popup: result.associatedFeature.toPopup())
-                } label: {
-                    UtilityAssociationResultLabel(result: result)
-                }
-#if targetEnvironment(macCatalyst)
-                .listRowInsets(.toolkitDefault)
-#endif
+        List(filteredResults, id: \.associatedFeature.globalID) { result in
+            NavigationLink {
+                EmbeddedPopupView(popup: result.associatedFeature.toPopup())
+            } label: {
+                UtilityAssociationResultLabel(result: result)
             }
-            .listStyle(.inset)
+#if targetEnvironment(macCatalyst)
+            .listRowInsets(.toolkitDefault)
+#endif
         }
+        .listStyle(.inset)
+        .searchable(
+            text: $text,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: titleText
+        )
+    }
+    
+    private var titleText: Text {
+        .init(
+            "Title",
+            bundle: .toolkitModule,
+            comment: "A label for a text entry field that allows the user to filter a list of association results by title."
+        )
     }
 }
 
