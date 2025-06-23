@@ -67,3 +67,17 @@ private struct PopupViewToolbar: ViewModifier {
             .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+#Preview("Title Only") {
+    NavigationStack {
+        Color.clear
+            .popupViewToolbar(title: "Title")
+    }
+}
+
+#Preview("Title and Subtitle") {
+    NavigationStack {
+        Color.clear
+            .popupViewToolbar(title: "Title", subtitle: "Subtitle")
+    }
+}
