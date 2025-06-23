@@ -11,8 +11,6 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @State private var detent: FloatingPanelDetent = .full
-    
     @State private var identifyScreenPoint: CGPoint?
     
     @State private var map = makeMap()
@@ -39,15 +37,9 @@ struct FeatureFormExampleView: View {
                         }
                     }
                     .ignoresSafeArea(.keyboard)
-                    .floatingPanel(
-                        selectedDetent: $detent,
-                        horizontalAlignment: .leading,
-                        isPresented: model.formIsPresented
-                    ) {
+                    .sheet(isPresented: model.formIsPresented) {
                         if let featureForm = model.featureForm {
                             FeatureFormView(featureForm: featureForm)
-                                .padding(.horizontal)
-                                .padding(.top, 16)
                         }
                     }
             }
