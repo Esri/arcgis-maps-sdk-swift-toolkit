@@ -126,6 +126,9 @@ private struct UtilityAssociationsFilterResultListRowView: View {
 
 /// A view for a utility associations filter result.
 struct UtilityAssociationsFilterResultView: View {
+    /// Add association support is not yet currently supported.
+    let futureAddAssociationSupportIsEnabled = false
+    
     /// The view model for the form.
     let internalFeatureFormViewModel: InternalFeatureFormViewModel
     
@@ -161,17 +164,19 @@ struct UtilityAssociationsFilterResultView: View {
                    .tint(.primary)
                 }
             } footer: {
-                if #available(iOS 18.0, *) {
-                    NavigationLink("Add Association") {
-                        ContentUnavailableView("Add Association", systemImage: "link")
-                            .navigationTransition(.zoom(sourceID: "world", in: namespace))
+                if futureAddAssociationSupportIsEnabled {
+                    if #available(iOS 18.0, *) {
+                        NavigationLink("Add Association") {
+                            ContentUnavailableView("Add Association", systemImage: "link")
+                                .navigationTransition(.zoom(sourceID: "world", in: namespace))
+                        }
+                        .buttonStyle(.borderedProminent)
+                    } else {
+                        NavigationLink("Add Association") {
+                            ContentUnavailableView("Add Association", systemImage: "link")
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
-                } else {
-                    NavigationLink("Add Association") {
-                        ContentUnavailableView("Add Association", systemImage: "link")
-                    }
-                    .buttonStyle(.borderedProminent)
                 }
             }
         }
