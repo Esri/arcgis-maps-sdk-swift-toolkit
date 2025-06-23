@@ -22,9 +22,6 @@ struct FeatureFormTestView: View {
     /// A message describing an error during test view setup.
     @State private var alertError: String?
     
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
-    
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
     
@@ -85,9 +82,6 @@ private extension FeatureFormTestView {
     func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
         MapViewReader { mapView in
             MapView(map: map)
-                .onAttributionBarHeightChanged {
-                    attributionBarHeight = $0
-                }
                 .onDrawStatusChanged { drawStatus in
                     if !initialDrawCompleted, drawStatus == .completed {
                         initialDrawCompleted = true
@@ -112,12 +106,7 @@ private extension FeatureFormTestView {
                         alertError = error.localizedDescription
                     }
                 }
-                .floatingPanel(
-                    attributionBarHeight: attributionBarHeight,
-                    selectedDetent: .constant(.full),
-                    horizontalAlignment: .leading,
-                    isPresented: Binding(get: { featureForm != nil }, set: { _ in })
-                ) {
+                .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
                     FeatureFormView(featureForm: $featureForm)
                 }
         }
