@@ -38,12 +38,22 @@ struct FeatureFormToolbar: ViewModifier {
     
     @Environment(\._validationErrorVisibility) var _validationErrorVisibility
     
-    @State private var hasEdits: Bool = false
+    /// A Boolean value indicating whether the presented feature form has edits.
+    @State private var hasEdits = false
     
+    /// The currently presented feature form.
     let featureForm: FeatureForm
     
+    /// A Boolean value indicating whether the modified view is a feature form view or another type of
+    /// associated view such as a `UtilityAssociationsFilterResultView` or
+    /// `UtilityAssociationGroupResultView`.
     let isAForm: Bool
     
+    /// A Boolean value indicating whether the modified view is apart of the root feature form or an
+    /// associated feature.
+    ///
+    /// The root feature form is the form used to initialize the FeatureFormView. Associated forms are
+    /// opened via `UtilityAssociationResultView`s by the user.
     let isRootForm: Bool
     
     func body(content: Content) -> some View {
