@@ -15,7 +15,6 @@
 import ArcGIS
 
 extension FeatureFormView {
-#warning("Review conformance implementations.")
     enum NavigationPathItem: Equatable, Hashable {
         case form(FeatureForm)
         case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, InternalFeatureFormViewModel)
@@ -24,11 +23,11 @@ extension FeatureFormView {
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
-                ObjectIdentifier(a) == ObjectIdentifier(b)
+                a === b
             case let (.utilityAssociationFilterResultView(a, _), .utilityAssociationFilterResultView(b, _)):
-                ObjectIdentifier(a) == ObjectIdentifier(b)
+                a === b
             case let (.utilityAssociationGroupResultView(a, _), .utilityAssociationGroupResultView(b, _)):
-                ObjectIdentifier(a) == ObjectIdentifier(b)
+                a === b
             default:
                 false
             }
