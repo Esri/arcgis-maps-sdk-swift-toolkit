@@ -78,17 +78,6 @@ struct UtilityAssociationGroupResultView: View {
     }
 }
 
-#warning("Review the correctness of this conformance.")
-extension ArcGISFeature: @retroactive Hashable {
-    public static func == (lhs: ArcGIS.ArcGISFeature, rhs: ArcGIS.ArcGISFeature) -> Bool {
-        ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self))
-    }
-}
-
 /// A view referencing a utility associations filter result.
 private struct UtilityAssociationsFilterResultListRowView: View {
     /// The view model for the form.
