@@ -88,11 +88,11 @@ public struct FeatureFormView: View {
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
-    /// The validation error visibility configuration of the form.
-    @State private var validationErrorVisibility: Visibility = .hidden
-    
     /// The navigation path used by the navigation stack in the root feature form view.
     @State private var navigationPath = NavigationPath()
+    
+    /// The validation error visibility configuration of the form.
+    @State private var validationErrorVisibility: Visibility = .hidden
     
     /// Initializes a form view.
     /// - Parameters:
