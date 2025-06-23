@@ -91,6 +91,7 @@ public struct FeatureFormView: View {
     /// The validation error visibility configuration of the form.
     @State private var validationErrorVisibility: Visibility = .hidden
     
+    /// The navigation path used by the navigation stack in the root feature form view.
     @State private var navigationPath = NavigationPath()
     
     /// Initializes a form view.
@@ -319,6 +320,7 @@ extension EnvironmentValues {
     /// The environment value to access the closure to call when the presented feature form changes.
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
     
+    /// The navigation path for the navigation stack presenting this view.
     @Entry var navigationPath: Binding<NavigationPath>?
     
     /// The closure to perform when a ``EditingEvent`` occurs.
