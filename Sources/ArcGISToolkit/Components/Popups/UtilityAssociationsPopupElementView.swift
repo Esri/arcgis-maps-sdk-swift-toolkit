@@ -21,15 +21,23 @@ struct UtilityAssociationsPopupElementView: View {
     /// The popup element to display.
     let popupElement: UtilityAssociationsPopupElement
     
-    /// The result of fetching the element's associations filter results.
-    @State private var filterResultsResult: Result<[UtilityAssociationsFilterResult], Error>?
+    /// The model for fetching the popup element's associations filter results.
+    @State private var associationsFilterResultsModel: AssociationsFilterResultsModel
     
     /// A Boolean value indicating whether the disclosure group is expanded.
     @State private var isExpanded = true
     
+    /// A Boolean value indicating whether the progress view is showing.
+    @State private var progressViewIsShowing = true
+    
+    init(popupElement: UtilityAssociationsPopupElement) {
+        self.popupElement = popupElement
+        self._associationsFilterResultsModel = .init(wrappedValue: .init(popupElement: popupElement))
+    }
+    
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
-            switch filterResultsResult {
+            switch associationsFilterResultsModel.result {
             case .success(let associationsFilterResults):
                 if associationsFilterResults.isEmpty {
                     Text(
@@ -43,7 +51,7 @@ struct UtilityAssociationsPopupElementView: View {
                     }
                     .environment(\.associationDisplayCount, popupElement.displayCount)
                 }
-            case .failure(let error) where !(error is CancellationError):
+            case .failure(let error):
                 Text(
                     "Error fetching filter results: \(error.localizedDescription)",
                     bundle: .toolkitModule,
@@ -53,18 +61,21 @@ struct UtilityAssociationsPopupElementView: View {
                              The variable provides additional data.
                              """
                 )
-            case .failure, nil:
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .task {
-                        let filterResultsResult = await Result {
-                            try await popupElement.associationsFilterResults
-                                .filter { $0.resultCount > 0 }
-                        }
-                        withAnimation {
-                            self.filterResultsResult = filterResultsResult
-                        }
+            case nil:
+                VStack {
+                    // This check and the enclosing stack/modifiers workaround an issue where the
+                    // ProgressView doesn't reappear after scrolling away from it in the list.
+                    if progressViewIsShowing {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
                     }
+                }
+                .onAppear {
+                    progressViewIsShowing = true
+                }
+                .onDisappear {
+                    progressViewIsShowing = false
+                }
             }
         } label: {
             PopupElementHeader(
@@ -74,6 +85,38 @@ struct UtilityAssociationsPopupElementView: View {
             .catalystPadding(4)
         }
         .disclosureGroupPadding()
+    }
+}
+
+/// A view model for fetching associations filter results.
+@Observable
+private final class AssociationsFilterResultsModel {
+    /// The result of fetching the associations filter results.
+    private(set) var result: Result<[UtilityAssociationsFilterResult], Error>?
+    
+    /// The task for fetching the associations filter results.
+    @ObservationIgnored private var task: Task<Void, Never>?
+    
+    /// Fetches the associations filter results from a given popup element.
+    /// - Parameter popupElement: The popup element containing the associations filter results.
+    @MainActor
+    init(popupElement: UtilityAssociationsPopupElement) {
+        task = Task { [weak self] in
+            guard !Task.isCancelled, let self else {
+                return
+            }
+            
+            let result = await Result {
+                try await popupElement.associationsFilterResults.filter { $0.resultCount > 0 }
+            }
+            withAnimation {
+                self.result = result
+            }
+        }
+    }
+    
+    deinit {
+        task?.cancel()
     }
 }
 

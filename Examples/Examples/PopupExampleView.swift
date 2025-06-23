@@ -56,7 +56,6 @@ struct PopupExampleView: View {
                 }
                 .sheet(isPresented: $showPopup) { [popup] in
                     PopupView(popup: popup!, isPresented: $showPopup)
-                        .presentationDetents([.large, .medium])
                 }
         }
     }
