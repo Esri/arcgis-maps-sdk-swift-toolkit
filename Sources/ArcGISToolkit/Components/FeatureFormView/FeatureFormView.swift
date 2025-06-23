@@ -120,7 +120,8 @@ public struct FeatureFormView: View {
                             utilityAssociationsFilterResult: result
                         )
                         .featureFormToolbar(internalFeatureFormViewModel.featureForm)
-                        .navigationTitle(result.filter.title.capitalized)
+                        .navigationTitle(result.filter.title)
+                        ._navigationSubtitle(internalFeatureFormViewModel.title)
                         .onAppear {
                             formChangedAction(internalFeatureFormViewModel.featureForm)
                         }
@@ -131,6 +132,7 @@ public struct FeatureFormView: View {
                         )
                         .featureFormToolbar(internalFeatureFormViewModel.featureForm)
                         .navigationTitle(result.name)
+                        ._navigationSubtitle(internalFeatureFormViewModel.title)
                         .onAppear {
                             formChangedAction(internalFeatureFormViewModel.featureForm)
                         }
