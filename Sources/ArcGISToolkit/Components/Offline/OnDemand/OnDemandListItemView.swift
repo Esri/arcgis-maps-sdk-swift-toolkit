@@ -75,6 +75,7 @@ extension OnDemandMapModel: OfflineMapAreaMetadata {
     var allowsDownload: Bool { false }
     var dismissMetadataViewOnDelete: Bool { true }
     var mapMode: OfflineMapViewModel.Mode { .onDemand }
+    var removeDownloadString: LocalizedStringResource { .deleteDownload }
     func startDownload() { fatalError() }
 }
 

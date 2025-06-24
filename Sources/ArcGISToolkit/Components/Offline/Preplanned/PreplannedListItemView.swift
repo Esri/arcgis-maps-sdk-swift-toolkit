@@ -104,7 +104,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
     var isDownloaded: Bool { status.isDownloaded }
     var allowsDownload: Bool { status.allowsDownload }
     var dismissMetadataViewOnDelete: Bool { false }
-    var mapMode: OfflineMapViewModel.Mode { .preplanned }
+    var removeDownloadString: LocalizedStringResource { .removeDownload }
     
     func startDownload() {
         Task { await downloadPreplannedMapArea() }

@@ -54,20 +54,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                         }
                         model.removeDownloadedArea()
                     } label: {
-                        switch model.mapMode {
-                        case .preplanned, .undetermined:
-                            Text(
-                                "Remove Download",
-                                bundle: .toolkitModule,
-                                comment: "A label for a button to remove a map area download."
-                            )
-                        case .onDemand:
-                            Text(
-                                "Delete Download",
-                                bundle: .toolkitModule,
-                                comment: "A label for a button to delete a map area download."
-                            )
-                        }
+                        Text(model.removeDownloadString)
                     }
                 }
             }
@@ -156,8 +143,8 @@ protocol OfflineMapAreaMetadata: ObservableObject {
     var directorySize: Int { get }
     /// A Boolean value indicating whether the metadata view should be dismissed when the map area is deleted.
     var dismissMetadataViewOnDelete: Bool { get }
-    /// The map mode that determines if the map is preplanned or on-demand.
-    var mapMode: OfflineMapViewModel.Mode { get }
+    /// The localized string for the button to remove a download.
+    var removeDownloadString: LocalizedStringResource { get }
     /// Removes the downloaded area.
     func removeDownloadedArea()
     /// Starts downloading the area.
@@ -190,7 +177,7 @@ private class MockMetadata: OfflineMapAreaMetadata {
     var allowsDownload: Bool { true }
     var directorySize: Int { 1_000_000_000 }
     var dismissMetadataViewOnDelete: Bool { false }
-    var mapMode: OfflineMapViewModel.Mode { .preplanned }
+    var removeDownloadString: LocalizedStringResource { .removeDownload }
     
     func removeDownloadedArea() {}
     func startDownload() {}
