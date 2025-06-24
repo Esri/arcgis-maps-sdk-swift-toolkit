@@ -162,7 +162,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
     var statusSystemImage: String { "exclamationmark.circle" }
     var jobProgress: Progress? { nil }
     var dismissMetadataViewOnDelete: Bool { false }
-    var removeDownloadString: LocalizedStringResource { .removeDownload }
+    var removeDownloadButtonText: LocalizedStringResource { .removeDownload }
     
     func removeDownloadedArea() {}
     func startDownload() {}

@@ -74,7 +74,7 @@ extension OnDemandMapModel: OfflineMapAreaMetadata {
     var thumbnailImage: UIImage? { thumbnail }
     var allowsDownload: Bool { false }
     var dismissMetadataViewOnDelete: Bool { true }
-    var removeDownloadString: LocalizedStringResource { .deleteDownload }
+    var removeDownloadButtonText: LocalizedStringResource { .deleteDownload }
     func startDownload() { fatalError() }
 }
 
