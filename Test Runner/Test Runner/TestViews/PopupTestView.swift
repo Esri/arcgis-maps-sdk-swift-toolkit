@@ -20,12 +20,6 @@ struct PopupTestView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map()
     
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
-    
-    /// The floating panel's currently selected detent.
-    @State private var floatingPanelDetent: FloatingPanelDetent = .full
-    
     /// The popup to show in the `PopupView`.
     @State private var popup: Popup?
     
@@ -37,7 +31,6 @@ struct PopupTestView: View {
     
     var body: some View {
         MapView(map: map)
-            .onAttributionBarHeightChanged { attributionBarHeight = $0 }
             .overlay(alignment: .top) {
                 LabeledContent(
                     "Selected Popup Object ID",
@@ -47,19 +40,12 @@ struct PopupTestView: View {
                 .padding(8)
                 .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
             }
-            .floatingPanel(
-                attributionBarHeight: attributionBarHeight,
-                selectedDetent: $floatingPanelDetent,
-                horizontalAlignment: .leading,
-                isPresented: .init(optionalValue: $popup)
-            ) { [popup] in
+            .sheet(isPresented: .init(optionalValue: $popup)) {
                 PopupView(popup: popup!, isPresented: .init(optionalValue: $popup))
                     .onPopupChanged { popup in
-                        selectedPopup = popup
-                        
-                        // Clears the current layer selections.
-                        let featureLayers = map.operationalLayers.compactMap { $0 as? FeatureLayer }
-                        for featureLayer in featureLayers {
+                        // Clears the current popup selection.
+                        if let feature = selectedPopup?.geoElement as? Feature,
+                           let featureLayer = feature.table?.layer as? FeatureLayer {
                             featureLayer.clearSelection()
                         }
                         
@@ -68,6 +54,8 @@ struct PopupTestView: View {
                            let featureLayer = feature.table?.layer as? FeatureLayer {
                             featureLayer.selectFeature(feature)
                         }
+                        
+                        selectedPopup = popup
                     }
             }
             .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {

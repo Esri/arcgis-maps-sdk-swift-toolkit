@@ -36,6 +36,7 @@ struct UtilityAssociationResultLabel: View {
             }
             .lineLimit(1)
         }
+        .accessibilityElement(children: .combine)
         .accessibilityIdentifier("Association Result")
     }
 }
