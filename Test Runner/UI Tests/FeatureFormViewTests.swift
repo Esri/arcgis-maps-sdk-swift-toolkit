@@ -1453,12 +1453,12 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(
             utilityElement1Button.waitForExistence(timeout: 30),
-            "Feature \"Fuse - 3097\" failed to appear after 30 seconds."
+            "Feature \"Fuse\" failed to appear after 30 seconds."
         )
         
         XCTAssertTrue(
             utilityElement2Button.exists,
-            "The utility element \"Fuse - 1392\" doesn't exist."
+            "The utility element \"Fuse\" doesn't exist."
         )
         
         utilityElement1Button.tap()
