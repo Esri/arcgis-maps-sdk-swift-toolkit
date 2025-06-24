@@ -153,7 +153,7 @@ public struct FeatureFormView: View {
                 }
                 .onNavigationPathChanged { item in
                     if let item {
-                        if type(of: item.view()) == InternalFeatureFormView.self {
+                        if type(of: item.view) == InternalFeatureFormView.self {
                             aFeatureFormIsPresented = true
                         } else {
                             aFeatureFormIsPresented = false
