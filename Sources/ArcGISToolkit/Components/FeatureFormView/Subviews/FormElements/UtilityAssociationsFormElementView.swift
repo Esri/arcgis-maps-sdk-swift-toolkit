@@ -44,7 +44,7 @@ struct UtilityAssociationsFormElementView: View {
 }
 
 /// A view for a utility association group result.
-struct UtilityAssociationGroupResultView: View {
+struct FeatureFormUtilityAssociationGroupResultView: View {
     @Environment(\.navigationPath) var navigationPath
     
     @Environment(\.setAlertContinuation) var setAlertContinuation
