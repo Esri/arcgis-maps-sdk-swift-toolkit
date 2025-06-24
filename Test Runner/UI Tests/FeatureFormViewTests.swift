@@ -1568,7 +1568,7 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let formTitle2 = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Transformer - 2552, Transformer, Terminal: High"]
+        let utilityElementButton = app.buttons["Transformer, High"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1579,7 +1579,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            filterResults.exists,
+            filterResults.waitForExistence(timeout: 5),
             "The filter result \"Connected\" doesn't exist."
         )
         
@@ -1594,7 +1594,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(
             utilityElementButton.waitForExistence(timeout: 5),
-            "The utility element \"Transformer - 2552\" doesn't exist."
+            "The utility element \"Transformer\" doesn't exist."
         )
         
         utilityElementButton.tap()
@@ -1631,7 +1631,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The alert \"Discard Edits\" doesn't exist."
         )
         
-        // tap the "Discard" option. Note that some platforms may use "Discard Edits".
+        // Tap the "Discard" option. Note that some platforms may use "Discard Edits".
         discardEditsButton.tap()
         
         // Access the new `FeatureForm`
