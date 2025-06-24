@@ -1422,7 +1422,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            filterResults1.exists,
+            filterResults1.waitForExistence(timeout: 5),
             "The filter result \"Connected\" doesn't exist."
         )
         
