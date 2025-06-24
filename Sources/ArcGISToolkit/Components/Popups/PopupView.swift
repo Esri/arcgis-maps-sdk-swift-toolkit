@@ -45,7 +45,7 @@ import ArcGIS
 /// **Behavior**
 ///
 /// As of 200.8, PopupView uses a NavigationStack internally to support browsing utility network
-/// associations. As a result, a PopupView now requires a navigation context isolated from any
+/// associations. As a result, a PopupView requires a navigation context isolated from any
 /// app-level navigation. Basic apps without navigation can continue to place a PopupView where
 /// desired. More complex apps using NavigationStack or NavigationSplitView will need to relocate
 /// the PopupView outside of that navigation context. If the PopupView can be presented modally (no
