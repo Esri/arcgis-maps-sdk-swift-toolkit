@@ -1410,8 +1410,9 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults3 = app.staticTexts["Container"]
         let networkSourceGroup1 = app.staticTexts["Electric Distribution Junction"]
         let networkSourceGroup2Button = app.buttons["Electric Distribution Device, 2"]
-        let utilityElement1Button = app.buttons["Fuse - 3907, Fuse, Terminal: Single Terminal"]
-        let utilityElement2Button = app.buttons["Fuse - 1392, Fuse, Terminal: Single Terminal"]
+        let fuses = app.buttons.matching(identifier: "Fuse, Single Terminal")
+        let utilityElement1Button = fuses.element(boundBy: 0)
+        let utilityElement2Button = fuses.element(boundBy: 1)
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
