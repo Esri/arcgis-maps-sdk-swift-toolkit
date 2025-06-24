@@ -44,9 +44,17 @@ import ArcGIS
 ///
 /// **Behavior**
 ///
+/// As of 200.8, PopupView uses a NavigationStack internally to support browsing utility network
+/// associations. As a result, a PopupView now requires a navigation context isolated from any
+/// app-level navigation. Basic apps without navigation can continue to place a PopupView where
+/// desired. More complex apps using NavigationStack or NavigationSplitView will need to relocate
+/// the PopupView outside of that navigation context. If the PopupView can be presented modally (no
+/// background interaction with the map is needed), consider using a Sheet. If a non-modal
+/// presentation is needed, consider placing the PopupView in a Floating Panel or Inspector, on the
+/// app-level navigation container. On supported platforms, WindowGroups are another alternative to
+/// consider as a PopupView container.
+///
 /// The popup view can display an optional "close" button, allowing the user to dismiss the view.
-/// The popup view can be embedded in any type of container view, including, as demonstrated in the
-/// example, the Toolkit's `FloatingPanel`.
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to
