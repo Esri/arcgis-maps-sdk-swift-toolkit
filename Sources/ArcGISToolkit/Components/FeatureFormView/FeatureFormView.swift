@@ -132,7 +132,7 @@ public struct FeatureFormView: View {
                             formChangedAction(internalFeatureFormViewModel.featureForm)
                         }
                     case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
-                        FeatureFormUtilityAssociationGroupResultView(
+                        UtilityAssociationGroupResultView(
                             internalFeatureFormViewModel: internalFeatureFormViewModel,
                             utilityAssociationGroupResult: result
                         )

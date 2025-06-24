@@ -101,7 +101,7 @@ private struct UtilityAssociationsFilterResultLink: View {
         Button {
             navigationLayerModel.push {
                 List(filterResult.groupResults, id: \.name) { groupResult in
-                    PopupUtilityAssociationGroupResultView(groupResult: groupResult)
+                    UtilityAssociationGroupResultView(groupResult: groupResult)
 #if targetEnvironment(macCatalyst)
                         .listRowInsets(.toolkitDefault)
 #endif
@@ -139,7 +139,7 @@ private struct UtilityAssociationsFilterResultLink: View {
 
 /// A view that displays a `UtilityAssociationGroupResult` and allows
 /// navigating through its association results.
-private struct PopupUtilityAssociationGroupResultView: View {
+private struct UtilityAssociationGroupResultView: View {
     /// The model for the navigation layer.
     @Environment(NavigationLayerModel.self) private var navigationLayerModel
     

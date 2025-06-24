@@ -15,216 +15,218 @@
 import ArcGIS
 import SwiftUI
 
-/// A view for a utility associations form element.
-struct UtilityAssociationsFormElementView: View {
-    /// The view model for the form.
-    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
-    
-    /// The set of utility associations filter results for the element.
-    @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
-    
-    /// The backing utility associations form element.
-    let element: UtilityAssociationsFormElement
-    
-    var body: some View {
-        FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
-            if $0.resultCount > 0 {
-                UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                    .environment(internalFeatureFormViewModel)
-            } else {
-                nil
-            }
-        })
-        .task {
-            if let results = try? await element.associationsFilterResults {
-                associationsFilterResults = results
+extension FeatureFormView {
+    /// A view for a utility associations form element.
+    struct UtilityAssociationsFormElementView: View {
+        /// The view model for the form.
+        @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+        
+        /// The set of utility associations filter results for the element.
+        @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
+        
+        /// The backing utility associations form element.
+        let element: UtilityAssociationsFormElement
+        
+        var body: some View {
+            FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
+                if $0.resultCount > 0 {
+                    UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+                        .environment(internalFeatureFormViewModel)
+                } else {
+                    nil
+                }
+            })
+            .task {
+                if let results = try? await element.associationsFilterResults {
+                    associationsFilterResults = results
+                }
             }
         }
     }
-}
-
-/// A view for a utility association group result.
-struct FeatureFormUtilityAssociationGroupResultView: View {
-    @Environment(\.navigationPath) var navigationPath
     
-    @Environment(\.setAlertContinuation) var setAlertContinuation
-    
-    /// The view model for the form.
-    let internalFeatureFormViewModel: InternalFeatureFormViewModel
-    
-    /// The backing utility association group result.
-    let utilityAssociationGroupResult: UtilityAssociationGroupResult
-    
-    var body: some View {
-        List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-            UtilityAssociationResultView(
-                selectionAction: {
-                    let navigationAction: () -> Void = {
-                        navigationPath?.wrappedValue.append(
-                            FeatureFormView.NavigationPathItem.form(
-                                FeatureForm(feature: utilityAssociationResult.associatedFeature)
+    /// A view for a utility association group result.
+    struct UtilityAssociationGroupResultView: View {
+        @Environment(\.navigationPath) var navigationPath
+        
+        @Environment(\.setAlertContinuation) var setAlertContinuation
+        
+        /// The view model for the form.
+        let internalFeatureFormViewModel: InternalFeatureFormViewModel
+        
+        /// The backing utility association group result.
+        let utilityAssociationGroupResult: UtilityAssociationGroupResult
+        
+        var body: some View {
+            List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+                UtilityAssociationResultView(
+                    selectionAction: {
+                        let navigationAction: () -> Void = {
+                            navigationPath?.wrappedValue.append(
+                                FeatureFormView.NavigationPathItem.form(
+                                    FeatureForm(feature: utilityAssociationResult.associatedFeature)
+                                )
                             )
-                        )
-                    }
-                    if internalFeatureFormViewModel.featureForm.hasEdits {
-                        setAlertContinuation?(true, navigationAction)
-                    } else {
-                        navigationAction()
-                    }
-                },
-                result: utilityAssociationResult
-            )
-        }
-    }
-}
-
-/// A view referencing a utility associations filter result.
-private struct UtilityAssociationsFilterResultListRowView: View {
-    /// The view model for the form.
-    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
-    
-    @Environment(\.navigationPath) var navigationPath
-    
-    /// The referenced utility associations filter result.
-    let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
-    
-    var body: some View {
-        Button {
-            navigationPath?.wrappedValue.append(
-                FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
-                    utilityAssociationsFilterResult,
-                    internalFeatureFormViewModel
+                        }
+                        if internalFeatureFormViewModel.featureForm.hasEdits {
+                            setAlertContinuation?(true, navigationAction)
+                        } else {
+                            navigationAction()
+                        }
+                    },
+                    result: utilityAssociationResult
                 )
-            )
-        } label: {
-            HStack {
-                VStack {
-                    Text(utilityAssociationsFilterResult.filter.title.capitalized)
-                    if !utilityAssociationsFilterResult.filter.description.isEmpty {
-                        Text(utilityAssociationsFilterResult.filter.description)
-                            .font(.caption)
-                    }
-                }
-                .lineLimit(1)
-                Spacer()
-                Group {
-                    Text(utilityAssociationsFilterResult.resultCount.formatted())
-                    Image(systemName: "chevron.right")
-                }
-                .foregroundColor(.secondary)
             }
-#if os(iOS)
-            // Make the entire row tappable.
-            .contentShape(.rect)
-#endif
         }
-        // Disables the blue tint on iOS and allows the button to fill the
-        // entire row on Catalyst and visionOS.
-        .buttonStyle(.plain)
     }
-}
-
-/// A view for a utility associations filter result.
-struct UtilityAssociationsFilterResultView: View {
-    /// Add association support is not yet currently supported.
-    let futureAddAssociationSupportIsEnabled = false
     
-    /// The view model for the form.
-    let internalFeatureFormViewModel: InternalFeatureFormViewModel
+    /// A view referencing a utility associations filter result.
+    struct UtilityAssociationsFilterResultListRowView: View {
+        /// The view model for the form.
+        @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+        
+        @Environment(\.navigationPath) var navigationPath
+        
+        /// The referenced utility associations filter result.
+        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+        
+        var body: some View {
+            Button {
+                navigationPath?.wrappedValue.append(
+                    FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
+                        utilityAssociationsFilterResult,
+                        internalFeatureFormViewModel
+                    )
+                )
+            } label: {
+                HStack {
+                    VStack {
+                        Text(utilityAssociationsFilterResult.filter.title.capitalized)
+                        if !utilityAssociationsFilterResult.filter.description.isEmpty {
+                            Text(utilityAssociationsFilterResult.filter.description)
+                                .font(.caption)
+                        }
+                    }
+                    .lineLimit(1)
+                    Spacer()
+                    Group {
+                        Text(utilityAssociationsFilterResult.resultCount.formatted())
+                        Image(systemName: "chevron.right")
+                    }
+                    .foregroundColor(.secondary)
+                }
+    #if os(iOS)
+                // Make the entire row tappable.
+                .contentShape(.rect)
+    #endif
+            }
+            // Disables the blue tint on iOS and allows the button to fill the
+            // entire row on Catalyst and visionOS.
+            .buttonStyle(.plain)
+        }
+    }
     
-    /// The backing utility associations filter result.
-    let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
-    
-    @Environment(\.navigationPath) var navigationPath
-    
-    @Namespace private var namespace
-    
-    var body: some View {
-        List {
-            Section {
-                ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-                    Button {
-                        navigationPath?.wrappedValue.append(
-                           FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                               utilityAssociationGroupResult,
-                               internalFeatureFormViewModel
-                           )
-                        )
-                   } label: {
-                       HStack {
-                           Text(utilityAssociationGroupResult.name)
-                           Spacer()
-                           Group {
-                               Text(utilityAssociationGroupResult.associationResults.count.formatted())
-                               Image(systemName: "chevron.right")
+    /// A view for a utility associations filter result.
+    struct UtilityAssociationsFilterResultView: View {
+        /// Add association support is not yet currently supported.
+        let futureAddAssociationSupportIsEnabled = false
+        
+        /// The view model for the form.
+        let internalFeatureFormViewModel: InternalFeatureFormViewModel
+        
+        /// The backing utility associations filter result.
+        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+        
+        @Environment(\.navigationPath) var navigationPath
+        
+        @Namespace private var namespace
+        
+        var body: some View {
+            List {
+                Section {
+                    ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+                        Button {
+                            navigationPath?.wrappedValue.append(
+                               FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                                   utilityAssociationGroupResult,
+                                   internalFeatureFormViewModel
+                               )
+                            )
+                       } label: {
+                           HStack {
+                               Text(utilityAssociationGroupResult.name)
+                               Spacer()
+                               Group {
+                                   Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                                   Image(systemName: "chevron.right")
+                               }
+                               .foregroundColor(.secondary)
                            }
-                           .foregroundColor(.secondary)
                        }
-                   }
-                   .tint(.primary)
-                }
-            } footer: {
-                if futureAddAssociationSupportIsEnabled {
-                    if #available(iOS 18.0, *) {
-                        NavigationLink("Add Association") {
-                            ContentUnavailableView("Add Association", systemImage: "link")
-                                .navigationTransition(.zoom(sourceID: "world", in: namespace))
+                       .tint(.primary)
+                    }
+                } footer: {
+                    if futureAddAssociationSupportIsEnabled {
+                        if #available(iOS 18.0, *) {
+                            NavigationLink("Add Association") {
+                                ContentUnavailableView("Add Association", systemImage: "link")
+                                    .navigationTransition(.zoom(sourceID: "world", in: namespace))
+                            }
+                            .buttonStyle(.borderedProminent)
+                        } else {
+                            NavigationLink("Add Association") {
+                                ContentUnavailableView("Add Association", systemImage: "link")
+                            }
+                            .buttonStyle(.borderedProminent)
                         }
-                        .buttonStyle(.borderedProminent)
-                    } else {
-                        NavigationLink("Add Association") {
-                            ContentUnavailableView("Add Association", systemImage: "link")
-                        }
-                        .buttonStyle(.borderedProminent)
                     }
                 }
             }
         }
     }
-}
-
-/// A view for a utility association result.
-private struct UtilityAssociationResultView: View {
-    /// The closure to call when the utility association result is selected.
-    let selectionAction: (() -> Void)
     
-    /// The backing utility association result.
-    let result: UtilityAssociationResult
-    
-    var body: some View {
-        Button {
-            selectionAction()
-        } label: {
-            HStack {
-                if let icon {
-                    icon
-                }
-                VStack(alignment: .leading) {
-                    Text(title)
-                    Text(description)
-                        .font(.caption2)
+    /// A view for a utility association result.
+    struct UtilityAssociationResultView: View {
+        /// The closure to call when the utility association result is selected.
+        let selectionAction: (() -> Void)
+        
+        /// The backing utility association result.
+        let result: UtilityAssociationResult
+        
+        var body: some View {
+            Button {
+                selectionAction()
+            } label: {
+                HStack {
+                    if let icon {
+                        icon
+                    }
+                    VStack(alignment: .leading) {
+                        Text(title)
+                        Text(description)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .lineLimit(1)
+                    Spacer()
+                    Group {
+                        if let containmentIsVisible {
+                            Text("Containment Visible: \(containmentIsVisible)".capitalized)
+                        } else if let fractionAlongEdge {
+                            Text(fractionAlongEdge.formatted(.percent))
+                        } else if let terminalName {
+                            Text("Terminal: \(terminalName)")
+                        }
+                    }
+                    .padding(2.5)
+                    .background(Color(uiColor: .systemBackground))
+                    .cornerRadius(5)
+                    .font(.caption2)
+                    Image(systemName: "chevron.right")
                         .foregroundStyle(.secondary)
                 }
-                .lineLimit(1)
-                Spacer()
-                Group {
-                    if let containmentIsVisible {
-                        Text("Containment Visible: \(containmentIsVisible)".capitalized)
-                    } else if let fractionAlongEdge {
-                        Text(fractionAlongEdge.formatted(.percent))
-                    } else if let terminalName {
-                        Text("Terminal: \(terminalName)")
-                    }
-                }
-                .padding(2.5)
-                .background(Color(uiColor: .systemBackground))
-                .cornerRadius(5)
-                .font(.caption2)
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.secondary)
             }
+            .tint(.primary)
         }
-        .tint(.primary)
     }
 }
 
@@ -239,7 +241,7 @@ private extension UtilityAssociationResult {
     }
 }
 
-private extension UtilityAssociationResultView {
+extension FeatureFormView.UtilityAssociationResultView {
     /// A Boolean value indicating whether the containment is visible if result represents a containment association.
     var containmentIsVisible: Bool? {
         guard (result.association.toElement.globalID == result.associatedElement.globalID) else {
