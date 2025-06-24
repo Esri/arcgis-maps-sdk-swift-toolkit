@@ -28,6 +28,14 @@ extension LocalizedStringResource {
         )
     }
     
+    static var deleteDownload: Self {
+        .init(
+            "Delete Download",
+            bundle: .toolkit,
+            comment: "A label for a button to delete a map area download."
+        )
+    }
+    
     static var downloaded: Self {
         .init(
             "Downloaded",
@@ -82,6 +90,14 @@ extension LocalizedStringResource {
             "OK",
             bundle: .toolkit,
             comment: "A label for button to proceed with an operation."
+        )
+    }
+    
+    static var removeDownload: Self {
+        .init(
+            "Remove Download",
+            bundle: .toolkit,
+            comment: "A label for a button to remove a map area download."
         )
     }
 }
