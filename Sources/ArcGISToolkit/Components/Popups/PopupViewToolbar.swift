@@ -16,11 +16,8 @@ import SwiftUI
 
 extension View {
     /// Populates the toolbar with items used by the `PopupView`.
-    /// - Parameters:
-    ///   - title: The text to display as the navigation title.
-    ///   - subtitle: The text to display as the optional navigation subtitle.
-    func popupViewToolbar(title: String, subtitle: String? = nil) -> some View {
-        modifier(PopupViewToolbar(title: title, subtitle: subtitle))
+    func popupViewToolbar() -> some View {
+        modifier(PopupViewToolbar())
     }
 }
 
@@ -32,29 +29,9 @@ private struct PopupViewToolbar: ViewModifier {
     /// A binding to a Boolean value that determines whether a popup view is presented.
     @Environment(\.popupIsPresented) private var isPresented
     
-    /// The text to display as the navigation title.
-    let title: String
-    
-    /// The text to display as the optional navigation subtitle.
-    let subtitle: String?
-    
     func body(content: Content) -> some View {
         content
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    VStack {
-                        Text(title)
-                            .fontWeight(.semibold)
-                            .font(subtitle != nil ? .subheadline : .headline)
-                        
-                        if let subtitle {
-                            Text(subtitle)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-                
                 if closeButtonVisibility != .hidden {
                     ToolbarItem(placement: .topBarTrailing) {
                         XButton(.dismiss) {
@@ -64,20 +41,12 @@ private struct PopupViewToolbar: ViewModifier {
                     }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-#Preview("Title Only") {
+#Preview {
     NavigationStack {
         Color.clear
-            .popupViewToolbar(title: "Title")
-    }
-}
-
-#Preview("Title and Subtitle") {
-    NavigationStack {
-        Color.clear
-            .popupViewToolbar(title: "Title", subtitle: "Subtitle")
+            .popupViewToolbar()
     }
 }

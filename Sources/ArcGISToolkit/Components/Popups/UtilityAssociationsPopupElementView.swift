@@ -141,7 +141,9 @@ private struct UtilityAssociationsFilterResultLink: View {
 #endif
             }
             .listStyle(.inset)
-            .popupViewToolbar(title: filterResult.filter.displayTitle, subtitle: popupTitle)
+            .navigationTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .popupViewToolbar()
             .environment(\.popupTitle, popupTitle)
             .environment(\.associationDisplayCount, associationDisplayCount)
         } label: {
@@ -188,7 +190,9 @@ private struct UtilityAssociationGroupResultView: View {
             if groupResult.associationResults.count > associationDisplayCount {
                 NavigationLink {
                     SearchUtilityAssociationResultsView(results: groupResult.associationResults)
-                        .popupViewToolbar(title: groupResult.name, subtitle: popupTitle)
+                        .navigationTitle(groupResult.name, subtitle: popupTitle)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .popupViewToolbar()
                 } label: {
                     HStack {
                         VStack(alignment: .leading) {
