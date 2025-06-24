@@ -54,8 +54,14 @@ import SwiftUI
 ///
 /// **Behavior**
 ///
-/// The feature form view can be embedded in any type of container view including, as demonstrated in the
-/// example, the Toolkit's `FloatingPanel`.
+/// As of 200.8, FeatureFormView uses a NavigationStack internally to support browsing utility network
+/// associations. As a result, a FeatureFormView requires a navigation context isolated from any app-level
+/// navigation. Basic apps without navigation can continue to place a FeatureFormView where desired.
+/// More complex apps using NavigationStack or NavigationSplitView will need to relocate the FeatureFormView
+/// outside of that navigation context. If the FeatureFormView can be presented modally (no background
+/// interaction with the map is needed), consider using a Sheet. If a non-modal presentation is needed,
+/// consider placing the FeatureFormView in a Floating Panel or Inspector, on the app-level navigation container.
+/// On supported platforms, WindowGroups are another alternative to consider as a FeatureFormView container.
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FeatureFormExampleView.swift)
