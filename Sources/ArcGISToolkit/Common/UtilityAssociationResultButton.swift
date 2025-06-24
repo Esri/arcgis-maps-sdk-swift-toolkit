@@ -18,9 +18,6 @@ import SwiftUI
 /// A view that displays a `UtilityAssociationResult` and performs an action
 /// when it is tapped.
 struct UtilityAssociationResultButton: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The utility association result to display.
     private let result: UtilityAssociationResult
     
