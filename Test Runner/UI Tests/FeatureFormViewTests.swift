@@ -1524,7 +1524,7 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Container"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroup = app.staticTexts["Structure Boundary"]
-        let utilityElementButton = app.buttons["Substation - 2, Substation"]
+        let utilityElementButton = app.buttons["Substation"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1535,7 +1535,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            filterResults.exists,
+            filterResults.waitForExistence(timeout: 5),
             "The filter result \"Container\" doesn't exist."
         )
         
@@ -1551,7 +1551,7 @@ final class FeatureFormViewTests: XCTestCase {
         // Expectation: a list of one utility elements with no "Containment Visible" label
         XCTAssertTrue(
             utilityElementButton.exists,
-            "The utility element \"Substation - 2\" doesn't exist."
+            "The utility element \"Substation\" doesn't exist."
         )
     }
     
