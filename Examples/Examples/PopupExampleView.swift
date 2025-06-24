@@ -70,8 +70,11 @@ struct PopupExampleView: View {
                     isPresented: $showPopup
                 ) { [popup] in
                     PopupView(popup: popup!, isPresented: $showPopup)
-                        .padding()
                 }
         }
     }
+}
+
+#Preview {
+    PopupExampleView()
 }

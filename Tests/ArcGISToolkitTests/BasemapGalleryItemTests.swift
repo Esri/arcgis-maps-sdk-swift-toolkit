@@ -20,14 +20,14 @@ import Foundation
 import SwiftUI
 import XCTest
 
-// Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
+// Note: The iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the 'BasemapGalleryItem' (such
 // as the 'loadBasemapError' and 'spatialReferenceStatus' properties than
 // the 'BasemapGallery' design specifies. Tests not present in the
 // test design have been added to accommodate those differences.
 final class BasemapGalleryItemTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = .default
+        ArcGISEnvironment.apiKey = .development
     }
     
     override func tearDown() {

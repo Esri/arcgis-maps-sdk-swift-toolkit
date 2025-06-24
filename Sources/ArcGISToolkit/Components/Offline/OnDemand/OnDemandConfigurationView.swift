@@ -239,16 +239,16 @@ struct OnDemandConfigurationView: View {
     @ViewBuilder private var failedToLoadView: some View {
         VStack {
             if hasNoInternetConnection {
-                Backported.ContentUnavailableView(
-                    .noInternetConnectionErrorMessage,
+                ContentUnavailableView(
+                    LocalizedStringResource.noInternetConnectionErrorMessage.key,
                     systemImage: "wifi.exclamationmark",
-                    description: cannotDownloadMessage
+                    description: Text(cannotDownloadMessage)
                 )
             } else {
-                Backported.ContentUnavailableView(
-                    failedToLoadMessage,
+                ContentUnavailableView(
+                    failedToLoadMessage.key,
                     systemImage: "exclamationmark.triangle",
-                    description: cannotDownloadMessage
+                    description: Text(cannotDownloadMessage)
                 )
             }
             Button {
