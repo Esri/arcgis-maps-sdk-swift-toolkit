@@ -130,12 +130,10 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
         switch status {
         case .notLoaded, .loading, .packaged, .downloaded, .downloading:
             ""
-        case .loadFailure, .mmpkLoadFailure, .downloadFailure:
+        case .loadFailure, .packageFailure, .mmpkLoadFailure, .downloadFailure:
             "exclamationmark.circle"
         case .packaging:
             "clock.badge.xmark"
-        case .packageFailure:
-            "exclamationmark.circle"
         }
     }
     

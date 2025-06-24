@@ -24,7 +24,7 @@ import XCTest
 // accommodate those differences.
 class BasemapGalleryViewModelTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = .default
+        ArcGISEnvironment.apiKey = .development
     }
     
     override func tearDown() {
