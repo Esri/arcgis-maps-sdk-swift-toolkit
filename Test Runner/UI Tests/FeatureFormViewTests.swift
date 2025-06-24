@@ -1412,10 +1412,10 @@ final class FeatureFormViewTests: XCTestCase {
         let networkSourceGroup2Button = app.buttons["Electric Distribution Device, 2"]
         let utilityElement1Button = app.buttons["Fuse - 3907, Fuse, Terminal: Single Terminal"]
         let utilityElement2Button = app.buttons["Fuse - 1392, Fuse, Terminal: Single Terminal"]
-
+        
         openTestCase()
         assertFormOpened(titleElement: formTitle)
-
+        
         XCTAssertTrue(
             elementTitle.exists,
             "The element \"Associations\" doesn't exist."
@@ -1425,7 +1425,7 @@ final class FeatureFormViewTests: XCTestCase {
             filterResults1.exists,
             "The filter result \"Connected\" doesn't exist."
         )
-
+        
         XCTAssertTrue(
             filterResults2.exists,
             "The filter result \"Structure\" doesn't exist."
@@ -1437,7 +1437,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         filterResults1.tap()
-
+        
         XCTAssertTrue(
             networkSourceGroup1.exists,
             "The network source group \"Electric Distribution Junction\" doesn't exist."
@@ -1447,9 +1447,9 @@ final class FeatureFormViewTests: XCTestCase {
             networkSourceGroup2Button.waitForExistence(timeout: 5),
             "The network source group \"Electric Distribution Device\" doesn't exist."
         )
-
+        
         networkSourceGroup2Button.tap()
-
+        
         XCTAssertTrue(
             utilityElement1Button.waitForExistence(timeout: 30),
             "Feature \"Fuse - 3097\" failed to appear after 30 seconds."
@@ -1459,7 +1459,7 @@ final class FeatureFormViewTests: XCTestCase {
             utilityElement2Button.exists,
             "The utility element \"Fuse - 1392\" doesn't exist."
         )
-
+        
         utilityElement1Button.tap()
         
         // Open new form
@@ -1469,7 +1469,7 @@ final class FeatureFormViewTests: XCTestCase {
             assetGroup.exists,
             "The asset group \"Asset group\" doesn't exist."
         )
-
+        
         XCTAssertEqual(
             fieldValue.label,
             "Fuse"
