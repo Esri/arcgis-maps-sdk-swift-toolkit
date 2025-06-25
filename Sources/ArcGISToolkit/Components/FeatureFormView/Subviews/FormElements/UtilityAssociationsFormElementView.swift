@@ -168,14 +168,14 @@ extension FeatureFormView {
                 } footer: {
                     if futureAddAssociationSupportIsEnabled {
                         if #available(iOS 18.0, *) {
-                            NavigationLink("Add Association") {
-                                ContentUnavailableView("Add Association", systemImage: "link")
+                            NavigationLink(String.addAssociation) {
+                                ContentUnavailableView(String.addAssociation, systemImage: "link")
                                     .navigationTransition(.zoom(sourceID: "world", in: namespace))
                             }
                             .buttonStyle(.borderedProminent)
                         } else {
-                            NavigationLink("Add Association") {
-                                ContentUnavailableView("Add Association", systemImage: "link")
+                            NavigationLink(String.addAssociation) {
+                                ContentUnavailableView(String.addAssociation, systemImage: "link")
                             }
                             .buttonStyle(.borderedProminent)
                         }
@@ -183,6 +183,16 @@ extension FeatureFormView {
                 }
             }
         }
+    }
+}
+
+private extension String {
+    static var addAssociation: Self {
+        .init(
+            localized: "Add Association",
+            bundle: .toolkitModule,
+            comment: "A label for an option to add a new utility association."
+        )
     }
 }
 
