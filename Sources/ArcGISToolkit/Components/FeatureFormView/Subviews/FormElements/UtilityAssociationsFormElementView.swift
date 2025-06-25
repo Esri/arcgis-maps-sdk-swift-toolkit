@@ -109,7 +109,7 @@ extension FeatureFormView {
                     .lineLimit(1)
                     Spacer()
                     Group {
-                        Text(utilityAssociationsFilterResult.resultCount.formatted())
+                        Text(utilityAssociationsFilterResult.resultCount, format: .number)
                         Image(systemName: "chevron.right")
                     }
                     .foregroundColor(.secondary)
