@@ -60,7 +60,7 @@ extension FeatureFormView {
         
         var body: some View {
             List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-                UtilityAssociationResultButton(utilityAssociationResult) {
+                Button {
                     let navigationAction: () -> Void = {
                         navigationPath?.wrappedValue.append(
                             FeatureFormView.NavigationPathItem.form(
@@ -73,6 +73,8 @@ extension FeatureFormView {
                     } else {
                         navigationAction()
                     }
+                } label: {
+                    UtilityAssociationResultLabel(result: utilityAssociationResult)
                 }
             }
         }
