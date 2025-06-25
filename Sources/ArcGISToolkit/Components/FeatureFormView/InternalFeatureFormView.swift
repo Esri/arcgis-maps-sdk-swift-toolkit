@@ -60,6 +60,7 @@ struct InternalFeatureFormView: View {
             .onTitleChange(of: internalFeatureFormViewModel.featureForm) { newTitle in
                 internalFeatureFormViewModel.title = newTitle
             }
+            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(internalFeatureFormViewModel.title)
         }
 #if os(iOS)
