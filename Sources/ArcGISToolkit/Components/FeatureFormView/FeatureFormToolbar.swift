@@ -16,8 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false, isRootForm: Bool = false) -> some View {
-        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm, isRootForm: isRootForm))
+    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false) -> some View {
+        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm))
     }
 }
 
@@ -32,6 +32,9 @@ struct FeatureFormToolbar: ViewModifier {
     
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Environment(\.finishEditingError) var finishEditingError
+    
+    /// The navigation path for the navigation stack presenting this view.
+    @Environment(\.navigationPath) var navigationPath
     
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
@@ -55,13 +58,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// associated view such as a `UtilityAssociationsFilterResultView` or
     /// `UtilityAssociationGroupResultView`.
     let isAForm: Bool
-    
-    /// A Boolean value indicating whether the modified view is apart of the root feature form or an
-    /// associated feature.
-    ///
-    /// The root feature form is the form used to initialize the FeatureFormView. Associated forms are
-    /// opened via `UtilityAssociationResultView`s by the user.
-    let isRootForm: Bool
     
     func body(content: Content) -> some View {
         content
@@ -119,11 +115,16 @@ struct FeatureFormToolbar: ViewModifier {
 }
 
 extension FeatureFormToolbar {
+    /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
+    var isRootView: Bool {
+        navigationPath?.wrappedValue.isEmpty ?? true
+    }
+    
     /// A Boolean value indicating whether the navigation bar's back button is hidden.
     ///
     /// In certain cases the platform default button is hidden to support blocking back navigation with an
     /// alert for unsaved edits.
     var navigationBarBackButtonIsHidden: Bool {
-        isAForm && !isRootForm && hasEdits
+        isAForm && !isRootView && hasEdits
     }
 }

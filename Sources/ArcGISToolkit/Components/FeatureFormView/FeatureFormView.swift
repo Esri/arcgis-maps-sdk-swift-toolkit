@@ -112,38 +112,35 @@ public struct FeatureFormView: View {
     public var body: some View {
         if let rootFeatureForm {
             NavigationStack(path: $navigationPath) {
-                InternalFeatureFormView(
-                    featureForm: rootFeatureForm,
-                    isRootForm: true
-                )
-                .navigationDestination(for: NavigationPathItem.self) { itemType in
-                    switch itemType {
-                    case let .form(form):
-                        InternalFeatureFormView(featureForm: form)
-                    case let .utilityAssociationFilterResultView(result, internalFeatureFormViewModel):
-                        UtilityAssociationsFilterResultView(
-                            internalFeatureFormViewModel: internalFeatureFormViewModel,
-                            utilityAssociationsFilterResult: result
-                        )
-                        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
-                        .navigationTitle(result.filter.title)
-                        ._navigationSubtitle(internalFeatureFormViewModel.title)
-                        .onAppear {
-                            formChangedAction(internalFeatureFormViewModel.featureForm)
-                        }
-                    case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
-                        UtilityAssociationGroupResultView(
-                            internalFeatureFormViewModel: internalFeatureFormViewModel,
-                            utilityAssociationGroupResult: result
-                        )
-                        .featureFormToolbar(internalFeatureFormViewModel.featureForm)
-                        .navigationTitle(result.name)
-                        ._navigationSubtitle(internalFeatureFormViewModel.title)
-                        .onAppear {
-                            formChangedAction(internalFeatureFormViewModel.featureForm)
+                InternalFeatureFormView(featureForm: rootFeatureForm)
+                    .navigationDestination(for: NavigationPathItem.self) { itemType in
+                        switch itemType {
+                        case let .form(form):
+                            InternalFeatureFormView(featureForm: form)
+                        case let .utilityAssociationFilterResultView(result, internalFeatureFormViewModel):
+                            UtilityAssociationsFilterResultView(
+                                internalFeatureFormViewModel: internalFeatureFormViewModel,
+                                utilityAssociationsFilterResult: result
+                            )
+                            .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+                            .navigationTitle(result.filter.title)
+                            ._navigationSubtitle(internalFeatureFormViewModel.title)
+                            .onAppear {
+                                formChangedAction(internalFeatureFormViewModel.featureForm)
+                            }
+                        case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
+                            UtilityAssociationGroupResultView(
+                                internalFeatureFormViewModel: internalFeatureFormViewModel,
+                                utilityAssociationGroupResult: result
+                            )
+                            .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+                            .navigationTitle(result.name)
+                            ._navigationSubtitle(internalFeatureFormViewModel.title)
+                            .onAppear {
+                                formChangedAction(internalFeatureFormViewModel.featureForm)
+                            }
                         }
                     }
-                }
             }
             // Alert for abandoning unsaved edits
             .alert(
