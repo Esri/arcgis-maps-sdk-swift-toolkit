@@ -157,7 +157,7 @@ extension FeatureFormView {
                                Text(utilityAssociationGroupResult.name)
                                Spacer()
                                Group {
-                                   Text(utilityAssociationGroupResult.associationResults.count.formatted())
+                                   Text(utilityAssociationGroupResult.associationResults.count, format: .number)
                                    Image(systemName: "chevron.right")
                                }
                                .foregroundColor(.secondary)
