@@ -46,8 +46,10 @@ extension FeatureFormView {
     
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
+        /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
+        /// The environment value to set the continuation to use when the user responds to the alert.
         @Environment(\.setAlertContinuation) var setAlertContinuation
         
         /// The view model for the form.
@@ -81,6 +83,7 @@ extension FeatureFormView {
         /// The view model for the form.
         @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
         
+        /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
         /// The referenced utility associations filter result.
@@ -133,6 +136,7 @@ extension FeatureFormView {
         /// The backing utility associations filter result.
         let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
         
+        /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
         @Namespace private var namespace

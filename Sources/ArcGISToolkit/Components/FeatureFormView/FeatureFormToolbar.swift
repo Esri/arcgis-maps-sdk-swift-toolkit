@@ -22,20 +22,27 @@ extension View {
 }
 
 struct FeatureFormToolbar: ViewModifier {
+    /// The visibility of the close button in the presented view.
     @Environment(\.closeButtonVisibility) var closeButtonVisibility
     
     @Environment(\.dismiss) var dismiss
     
+    /// The visibility of the "save" and "discard" buttons.
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
+    /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Environment(\.finishEditingError) var finishEditingError
     
+    /// The closure to perform when a ``EditingEvent`` occurs.
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
     
+    /// The feature form currently visible in the Navigation Stack.
     @Environment(\.presentedForm) var presentedForm
     
+    /// The environment value to set the continuation to use when the user responds to the alert.
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
+    /// The environment value to access the validation error visibility.
     @Environment(\._validationErrorVisibility) var _validationErrorVisibility
     
     /// A Boolean value indicating whether the presented feature form has edits.

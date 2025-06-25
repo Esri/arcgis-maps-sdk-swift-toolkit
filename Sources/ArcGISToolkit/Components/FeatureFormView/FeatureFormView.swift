@@ -314,32 +314,3 @@ extension FeatureFormView {
         }
     }
 }
-
-extension EnvironmentValues {
-    /// The visibility of the close button.
-    @Entry var closeButtonVisibility: Visibility = .automatic
-    
-    /// The visibility of the "save" and "discard" buttons.
-    @Entry var editingButtonVisibility: Visibility = .automatic
-    
-    /// An error thrown from finish editing.
-    @Entry var finishEditingError: Binding<(any Error)?> = .constant(nil)
-    
-    /// The environment value to access the closure to call when the presented feature form changes.
-    @Entry var formChangedAction: ((FeatureForm) -> Void)?
-    
-    /// The navigation path for the navigation stack presenting this view.
-    @Entry var navigationPath: Binding<NavigationPath>?
-    
-    /// The closure to perform when a ``EditingEvent`` occurs.
-    @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
-    
-    /// The feature form currently visible in the navigation layer.
-    @Entry var presentedForm: Binding<FeatureForm?>?
-    
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
-    
-    /// The environment value to access the validation error visibility.
-    @Entry var _validationErrorVisibility: Binding<Visibility> = .constant(.hidden)
-}

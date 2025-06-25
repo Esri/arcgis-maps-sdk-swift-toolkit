@@ -28,9 +28,10 @@ struct FormFooter: View {
     /// The validation error visibility configuration of the form.
     @Binding var validationErrorVisibility: Visibility
     
-    /// An error thrown from finish editing.
+    /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Binding var finishEditingError: (any Error)?
     
+    /// The environment value to set the continuation to use when the user responds to the alert.
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     var body: some View {
