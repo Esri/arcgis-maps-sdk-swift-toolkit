@@ -82,6 +82,9 @@ public struct FeatureFormView: View {
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
+    /// The developer configurable validation error visibility.
+    var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
+    
     /// A Boolean value that indicates whether a FeatureForm is the presented view in the NavigationLayer.
     @State private var aFeatureFormIsPresented = true
     
@@ -94,8 +97,8 @@ public struct FeatureFormView: View {
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits: Bool = false
     
-    /// The validation error visibility configuration of the form.
-    @State private var validationErrorVisibility: Visibility = .hidden
+    /// The internally managed validation error visibility.
+    @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
     /// Initializes a form view.
     /// - Parameters:
@@ -136,7 +139,7 @@ public struct FeatureFormView: View {
                         FormFooter(
                             featureForm: presentedForm,
                             formHandlingEventAction: onFormEditingEventAction,
-                            validationErrorVisibility: $validationErrorVisibility,
+                            validationErrorVisibilityInternal: $validationErrorVisibilityInternal,
                             finishEditingError: $finishEditingError
                         )
                     } else {
@@ -170,12 +173,12 @@ public struct FeatureFormView: View {
                         Button("Discard Edits", role: .destructive) {
                             presentedForm.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
-                            validationErrorVisibility = .hidden
+                            validationErrorVisibilityInternal = .automatic
                             continuation()
                         }
                         .onAppear {
                             if !presentedForm.validationErrors.isEmpty {
-                                validationErrorVisibility = .visible
+                                validationErrorVisibilityInternal = .visible
                             }
                         }
                         if (presentedForm.validationErrors.isEmpty) {
@@ -229,7 +232,8 @@ public struct FeatureFormView: View {
             )
             .environment(\.formChangedAction, onFormChangedAction)
             .environment(\.setAlertContinuation, setAlertContinuation)
-            .environment(\._validationErrorVisibility, validationErrorVisibility)
+            .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
+            .environment(\.validationErrorVisibilityInternal, validationErrorVisibilityInternal)
             .task(id: presentedForm.wrappedValue?.feature.globalID) {
                 if let presentedForm = presentedForm.wrappedValue {
                     for await hasEdits in presentedForm.$hasEdits {
@@ -318,7 +322,7 @@ extension FeatureFormView {
             if let presentedForm = presentedForm.wrappedValue {
                 if featureForm.feature.globalID != presentedForm.feature.globalID {
                     self.presentedForm.wrappedValue = featureForm
-                    validationErrorVisibility = .hidden
+                    validationErrorVisibilityInternal = .automatic
                 }
             }
         }
@@ -339,6 +343,9 @@ extension EnvironmentValues {
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
     
-    /// The environment value to access the validation error visibility.
-    @Entry var _validationErrorVisibility: Visibility = .hidden
+    /// The developer configurable validation error visibility.
+    @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
+    
+    /// The internally managed validation error visibility.
+    @Entry var validationErrorVisibilityInternal: FeatureFormView.ValidationErrorVisibility = .automatic
 }

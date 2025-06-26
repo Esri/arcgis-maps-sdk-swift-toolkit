@@ -27,20 +27,7 @@ public extension FeatureFormView {
     /// - Parameter visibility: The preferred visibility of validation errors in the form.
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
         var copy = self
-//        copy.validationErrorVisibility = visibility
+        copy.validationErrorVisibilityExternal = visibility
         return copy
     }
-}
-
-extension EnvironmentValues {
-    /// The validation error visibility configuration of a form.
-    var validationErrorVisibility: FeatureFormView.ValidationErrorVisibility {
-        get { self[FormViewValidationErrorVisibility.self] }
-        set { self[FormViewValidationErrorVisibility.self] = newValue }
-    }
-}
-
-/// The validation error visibility configuration of a form.
-struct FormViewValidationErrorVisibility: EnvironmentKey {
-    static let defaultValue: FeatureFormView.ValidationErrorVisibility = .automatic
 }
