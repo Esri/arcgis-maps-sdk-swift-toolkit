@@ -61,7 +61,7 @@ extension FeatureFormView {
         var body: some View {
             List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                 Button {
-                    let navigationAction: () -> Void = {
+                    let navigationAction = {
                         navigationPath?.wrappedValue.append(
                             FeatureFormView.NavigationPathItem.form(
                                 FeatureForm(feature: utilityAssociationResult.associatedFeature)
@@ -69,7 +69,9 @@ extension FeatureFormView {
                         )
                     }
                     if internalFeatureFormViewModel.featureForm.hasEdits {
-                        setAlertContinuation?(true, navigationAction)
+                        setAlertContinuation?(true) {
+                            navigationAction()
+                        }
                     } else {
                         navigationAction()
                     }
