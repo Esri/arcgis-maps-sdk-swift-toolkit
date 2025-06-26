@@ -224,6 +224,23 @@ struct FeatureEditorToolbar: View {
             }
             Divider()
             Group {
+                HStack {
+                    Text("Geometry Editor")
+                    Spacer()
+                    Button(action: {
+                        geometryEditor.undo()
+                    }, label: {
+                        Image(systemName: "arrow.uturn.backward")
+                    })
+                    .disabled(!geometryEditor.canUndo)
+                    Button(action: {
+                        geometryEditor.redo()
+                    }, label: {
+                        Image(systemName: "arrow.uturn.forward")
+                    })
+                    .disabled(!geometryEditor.canRedo)
+                    Spacer()
+                }
                 if geometryChanged {
                     Text("The geometry has changed")
                         .foregroundStyle(.red)
@@ -297,6 +314,8 @@ struct FeatureEditorToolbar: View {
                             equivalentTo: oldGeometry
                         )
                     } else if oldGeometry == nil, let geometry {
+                        self.geometryChanged = false
+                    } else if geometry == nil {
                         self.geometryChanged = false
                     } else {
                         self.geometryChanged = true
