@@ -23,8 +23,18 @@ public extension FeatureFormView {
         case visible
     }
     
-    /// Specifies the visibility of validation errors in the form.
+    /// Sets the visibility of validation errors on the form.
     /// - Parameter visibility: The preferred visibility of validation errors in the form.
+    ///
+    /// `FeatureFormView` will automatically show validation errors on fields once they've received
+    /// user interaction or the user has attempted to save the form with the built-in "Save" buttons.
+    ///
+    /// If it's preferred that validation errors are always shown, override the default behavior with this
+    /// modifier, passing `.visible`.
+    ///
+    /// If the built-in "Save" button in the form footer has been hidden with
+    /// ``FeatureFormView.editingButtons(_:)``,  use this modifier to make any validation
+    /// errors visible when the user attempts to save the form with a custom save button.
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
         var copy = self
         copy.validationErrorVisibilityExternal = visibility
