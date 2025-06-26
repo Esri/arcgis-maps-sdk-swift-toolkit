@@ -23,23 +23,4 @@ public extension FeatureFormView /* Deprecated */ {
     init(featureForm: FeatureForm) {
         self.init(featureForm: .constant(featureForm))
     }
-    
-    /// The validation error visibility configuration of a form.
-    /// - Attention: Deprecated at 200.7.
-    @available(*, deprecated)
-    enum ValidationErrorVisibility: Sendable {
-        /// Errors may be visible or hidden for a given form field depending on its focus state.
-        case automatic
-        /// Errors will always be visible for a given form field.
-        case visible
-    }
-    
-    /// Specifies the visibility of validation errors in the form.
-    /// - Parameter visibility: The preferred visibility of validation errors in the form.
-    /// - Attention: Deprecated at 200.7. ``FeatureFormView`` automatically manages
-    /// validation error visibility.
-    @available(*, deprecated)
-    func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
-        self
-    }
 }
