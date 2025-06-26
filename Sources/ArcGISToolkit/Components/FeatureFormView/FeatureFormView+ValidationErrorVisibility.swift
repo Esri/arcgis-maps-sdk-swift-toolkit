@@ -33,7 +33,7 @@ public extension FeatureFormView {
     /// modifier, passing `.visible`.
     ///
     /// If the built-in "Save" button in the form footer has been hidden with
-    /// ``FeatureFormView.editingButtons(_:)``,  use this modifier to make any validation
+    /// ``FeatureFormView.editingButtons(_:)``, use this modifier to make any validation
     /// errors visible when the user attempts to save the form with a custom save button.
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
         var copy = self
