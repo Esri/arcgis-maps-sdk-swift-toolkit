@@ -52,9 +52,11 @@ struct InternalFeatureFormView: View {
                     }
                 }
             }
-            .onChange(of: internalFeatureFormViewModel.featureForm.hasEdits) { hadEdits, hasEdits in
-                if hadEdits && !hasEdits {
-                    internalFeatureFormViewModel.previouslyFocusedElements.removeAll()
+            .task {
+                for await hasEdits in internalFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
+                    if !hasEdits {
+                        internalFeatureFormViewModel.previouslyFocusedElements.removeAll()
+                    }
                 }
             }
             .onChange(of: internalFeatureFormViewModel.focusedElement) {
