@@ -37,6 +37,9 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
     
-    /// The environment value to access the validation error visibility.
-    @Entry var _validationErrorVisibility: Binding<Visibility> = .constant(.hidden)
+    /// The developer configurable validation error visibility.
+    @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
+    
+    /// The internally managed validation error visibility.
+    @Entry var validationErrorVisibilityInternal: Binding<FeatureFormView.ValidationErrorVisibility> = .constant(.automatic)
 }

@@ -45,9 +45,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
-    /// The environment value to access the validation error visibility.
-    @Environment(\._validationErrorVisibility) var _validationErrorVisibility
-    
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
@@ -105,7 +102,6 @@ struct FeatureFormToolbar: ViewModifier {
                         FormFooter(
                             featureForm: featureForm,
                             formHandlingEventAction: onFormEditingEventAction,
-                            validationErrorVisibility: _validationErrorVisibility,
                             finishEditingError: finishEditingError
                         )
                     }

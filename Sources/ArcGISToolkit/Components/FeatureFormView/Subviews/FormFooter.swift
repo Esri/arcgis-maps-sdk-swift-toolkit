@@ -26,7 +26,7 @@ struct FormFooter: View {
     let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
     /// The internally managed validation error visibility.
-    @Binding var validationErrorVisibilityInternal: FeatureFormView.ValidationErrorVisibility
+    @Environment(\.validationErrorVisibilityInternal) var validationErrorVisibilityInternal
     
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Binding var finishEditingError: (any Error)?
@@ -39,7 +39,7 @@ struct FormFooter: View {
             Button {
                 featureForm.discardEdits()
                 formHandlingEventAction?(.discardedEdits(willNavigate: false))
-                validationErrorVisibilityInternal = .automatic
+                validationErrorVisibilityInternal.wrappedValue = .automatic
             } label: {
                 Text(
                     "Discard",
@@ -61,7 +61,7 @@ struct FormFooter: View {
                             }
                         }
                     } else {
-                        validationErrorVisibilityInternal = .visible
+                        validationErrorVisibilityInternal.wrappedValue = .visible
                         setAlertContinuation?(false, {})
                     }
             } label: {
