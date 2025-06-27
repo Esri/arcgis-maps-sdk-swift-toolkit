@@ -1410,22 +1410,23 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults3 = app.staticTexts["Container"]
         let networkSourceGroup1 = app.staticTexts["Electric Distribution Junction"]
         let networkSourceGroup2Button = app.buttons["Electric Distribution Device, 2"]
-        let utilityElement1Button = app.buttons["Fuse - 3907, Fuse, Terminal: Single Terminal"]
-        let utilityElement2Button = app.buttons["Fuse - 1392, Fuse, Terminal: Single Terminal"]
-
+        let fuses = app.buttons.matching(identifier: "Fuse, Single Terminal")
+        let utilityElement1Button = fuses.element(boundBy: 0)
+        let utilityElement2Button = fuses.element(boundBy: 1)
+        
         openTestCase()
         assertFormOpened(titleElement: formTitle)
-
+        
         XCTAssertTrue(
             elementTitle.exists,
             "The element \"Associations\" doesn't exist."
         )
         
         XCTAssertTrue(
-            filterResults1.exists,
+            filterResults1.waitForExistence(timeout: 5),
             "The filter result \"Connected\" doesn't exist."
         )
-
+        
         XCTAssertTrue(
             filterResults2.exists,
             "The filter result \"Structure\" doesn't exist."
@@ -1437,7 +1438,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         filterResults1.tap()
-
+        
         XCTAssertTrue(
             networkSourceGroup1.exists,
             "The network source group \"Electric Distribution Junction\" doesn't exist."
@@ -1447,19 +1448,19 @@ final class FeatureFormViewTests: XCTestCase {
             networkSourceGroup2Button.waitForExistence(timeout: 5),
             "The network source group \"Electric Distribution Device\" doesn't exist."
         )
-
+        
         networkSourceGroup2Button.tap()
-
+        
         XCTAssertTrue(
             utilityElement1Button.waitForExistence(timeout: 30),
-            "Feature \"Fuse - 3097\" failed to appear after 30 seconds."
+            "Feature \"Fuse\" failed to appear after 30 seconds."
         )
         
         XCTAssertTrue(
             utilityElement2Button.exists,
-            "The utility element \"Fuse - 1392\" doesn't exist."
+            "The utility element \"Fuse\" doesn't exist."
         )
-
+        
         utilityElement1Button.tap()
         
         // Open new form
@@ -1469,7 +1470,7 @@ final class FeatureFormViewTests: XCTestCase {
             assetGroup.exists,
             "The asset group \"Asset group\" doesn't exist."
         )
-
+        
         XCTAssertEqual(
             fieldValue.label,
             "Fuse"
@@ -1486,11 +1487,11 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Content"]
         let formTitle = app.staticTexts["Structure Boundary"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Circuit Breaker - 2584, Circuit Breaker, Containment Visible: False"]
-
+        let utilityElementButton = app.buttons["Circuit Breaker, Containment Visible: False"]
+        
         openTestCase()
         assertFormOpened(titleElement: formTitle)
-
+        
         XCTAssertTrue(
             elementTitle.exists,
             "The element \"Associations\" doesn't exist."
@@ -1502,18 +1503,18 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         filterResults.tap()
-
+        
         XCTAssertTrue(
             networkSourceGroupButton.waitForExistence(timeout: 5),
             "The network source group \"Electric Distribution Device\" doesn't exist."
         )
-
+        
         networkSourceGroupButton.tap()
-
+        
         // Expectation: a list of one utility elements with "Containment Visible: False"
         XCTAssertTrue(
             utilityElementButton.exists,
-            "The utility element \"Circuit Breaker - 2584\" doesn't exist."
+            "The utility element \"Circuit Breaker\" doesn't exist."
         )
     }
     
@@ -1523,8 +1524,8 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Container"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroup = app.staticTexts["Structure Boundary"]
-        let utilityElementButton = app.buttons["Substation - 2, Substation"]
-
+        let utilityElementButton = app.buttons["Substation"]
+        
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
@@ -1534,23 +1535,23 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            filterResults.exists,
+            filterResults.waitForExistence(timeout: 5),
             "The filter result \"Container\" doesn't exist."
         )
         
         filterResults.tap()
-
+        
         XCTAssertTrue(
             networkSourceGroup.waitForExistence(timeout: 5),
             "The network source group \"Structure Boundary\" doesn't exist."
         )
-
+        
         networkSourceGroup.tap()
         
         // Expectation: a list of one utility elements with no "Containment Visible" label
         XCTAssertTrue(
             utilityElementButton.exists,
-            "The utility element \"Substation - 2\" doesn't exist."
+            "The utility element \"Substation\" doesn't exist."
         )
     }
     
@@ -1567,7 +1568,7 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let formTitle2 = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Transformer - 2552, Transformer, Terminal: High"]
+        let utilityElementButton = app.buttons["Transformer, High"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1578,33 +1579,33 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            filterResults.exists,
+            filterResults.waitForExistence(timeout: 5),
             "The filter result \"Connected\" doesn't exist."
         )
         
         filterResults.tap()
-
+        
         XCTAssertTrue(
             networkSourceGroupButton.waitForExistence(timeout: 5),
             "The network source group \"Electric Distribution Device\" doesn't exist."
         )
-
+        
         networkSourceGroupButton.tap()
-
+        
         XCTAssertTrue(
             utilityElementButton.waitForExistence(timeout: 5),
-            "The utility element \"Transformer - 2552\" doesn't exist."
+            "The utility element \"Transformer\" doesn't exist."
         )
         
         utilityElementButton.tap()
         
         assertFormOpened(titleElement: formTitle2)
-
+        
         XCTAssertTrue(
             assetType.exists,
             "The field form element \"Asset type *\"doesn't exist."
         )
-
+        
         fieldValue.tap()
         
         XCTAssertTrue(
@@ -1620,19 +1621,19 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         doneButton.tap()
-
+        
         // Tap the "Back" button
         backButton.tap()
-
+        
         // Expectation: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
         XCTAssertTrue(
             discardEditsButton.exists,
             "The alert \"Discard Edits\" doesn't exist."
         )
-
-        // tap the "Discard" option. Note that some platforms may use "Discard Edits".
+        
+        // Tap the "Discard" option. Note that some platforms may use "Discard Edits".
         discardEditsButton.tap()
-
+        
         // Access the new `FeatureForm`
         // Expectation: the form title should be "Electric Distribution Junction"
         // Expectation: a list of one utility elements entitled "Transformer - 2552"

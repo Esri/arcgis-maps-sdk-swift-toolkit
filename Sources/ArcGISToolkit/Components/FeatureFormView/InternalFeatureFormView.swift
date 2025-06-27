@@ -52,6 +52,11 @@ struct InternalFeatureFormView: View {
                     }
                 }
             }
+            .onChange(of: internalFeatureFormViewModel.featureForm.hasEdits) { hadEdits, hasEdits in
+                if hadEdits && !hasEdits {
+                    internalFeatureFormViewModel.previouslyFocusedElements.removeAll()
+                }
+            }
             .onChange(of: internalFeatureFormViewModel.focusedElement) {
                 if let focusedElement = internalFeatureFormViewModel.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
