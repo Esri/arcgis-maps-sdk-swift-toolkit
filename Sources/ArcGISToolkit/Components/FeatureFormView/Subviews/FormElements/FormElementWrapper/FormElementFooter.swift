@@ -46,8 +46,11 @@ extension FormElementFooter {
         /// The view model for the form.
         @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
         
-        /// The validation error visibility configuration of a form.
-        @Environment(\._validationErrorVisibility) private var validationErrorVisibility
+        /// The developer configurable validation error visibility.
+        @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
+        
+        /// The internally managed validation error visibility.
+        @Environment(\.validationErrorVisibilityInternal) private var validationErrorVisibilityInternal
         
         let element: FieldFormElement
         
@@ -228,7 +231,12 @@ extension FormElementFooter {
         var isShowingError: Bool {
             element.isEditable
             && primaryError != nil
-            && (internalFeatureFormViewModel.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
+            &&
+            (
+                internalFeatureFormViewModel.previouslyFocusedElements.contains(element)
+                || validationErrorVisibilityExternal == .visible
+                || validationErrorVisibilityInternal == .visible
+            )
         }
         
         /// The allowable number of characters in the input.
