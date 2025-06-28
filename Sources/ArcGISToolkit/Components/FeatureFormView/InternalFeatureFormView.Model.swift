@@ -65,9 +65,9 @@ class InternalFeatureFormViewModel {
     @MainActor
     private func initializeIsVisibleTasks() {
         for element in featureForm.elements {
-            let newTask = Task { /*@MainActor [self] in*/
+            let newTask = Task {
                 for await _ in element.$isVisible {
-                    /*self.*/updateVisibleElements()
+                    updateVisibleElements()
                 }
             }
             isVisibleTasks.append(newTask)
