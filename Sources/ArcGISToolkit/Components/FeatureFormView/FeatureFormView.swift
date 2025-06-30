@@ -166,15 +166,17 @@ public struct FeatureFormView: View {
             }
             // Alert for abandoning unsaved edits
             .alert(
-                (presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? "Discard Edits?" : "Validation Errors",
+                (presentedForm.wrappedValue?.validationErrors.isEmpty ?? true) ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
                     if let presentedForm = presentedForm.wrappedValue, let (willNavigate, continuation) = alertContinuation {
-                        Button("Discard Edits", role: .destructive) {
+                        Button(role: .destructive) {
                             presentedForm.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                             validationErrorVisibilityInternal = .automatic
                             continuation()
+                        } label: {
+                            discardEdits
                         }
                         .onAppear {
                             if !presentedForm.validationErrors.isEmpty {
@@ -182,7 +184,7 @@ public struct FeatureFormView: View {
                             }
                         }
                         if (presentedForm.validationErrors.isEmpty) {
-                            Button("Save Edits") {
+                            Button {
                                 Task {
                                     do {
                                         try await presentedForm.finishEditing()
@@ -192,41 +194,73 @@ public struct FeatureFormView: View {
                                         finishEditingError = error
                                     }
                                 }
+                            } label: {
+                                saveEdits
                             }
                         }
-                        Button("Continue Editing", role: .cancel) {
+                        Button(role: .cancel) {
                             alertForUnsavedEditsIsPresented.wrappedValue = false
+                        } label: {
+                            continueEditing
                         }
                     }
                 },
                 message: {
                     if let validationErrors = presentedForm.wrappedValue?.validationErrors,
                        !validationErrors.isEmpty {
-                        Text("You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.")
+                        Text(
+                            "You have ^[\(validationErrors.count) error](inflect: true) that must be fixed before saving.",
+                            bundle: .toolkitModule,
+                            comment:
+                                """
+                                A message explaining that the indicated number
+                                of validation errors must be resolved before
+                                saving the feature form.
+                                """
+                        )
                     } else {
-                        Text("Updates to the form will be lost.")
+                        Text(
+                            "Updates to the form will be lost.",
+                            bundle: .toolkitModule,
+                            comment:
+                                """
+                                A message explaining that unsaved edits will be
+                                lost if the user continues to dismiss the form
+                                without saving.
+                                """
+                        )
                     }
                 }
             )
             // Alert for finish editing errors
             .alert(
-                String(
-                    localized: "The form wasn't submitted",
+                Text(
+                    "The form wasn't submitted",
                     bundle: .toolkitModule,
-                    comment: "The title shown when a form could not be submitted."
+                    comment: "The tile shown when the feature form failed to save."
                 ),
                 isPresented: alertForFinishEditingErrorsIsPresented,
                 actions: { },
                 message: {
-                    let finishEditingFailed = String(
-                        localized: "Finish editing failed.",
-                        bundle: .toolkitModule,
-                        comment: "The message shown when a form could not be submitted."
-                    )
                     if let finishEditingError {
-                        Text(finishEditingFailed + "\n\n" + String(describing: finishEditingError))
+                        Text(
+                            """
+                            Finish editing failed.
+                            \(String(describing: finishEditingError))
+                            """,
+                            bundle: .toolkitModule,
+                            comment:
+                                """
+                                The message shown when a form could not be 
+                                submitted with additional details.
+                                """
+                        )
                     } else {
-                        Text(finishEditingFailed)
+                        Text(
+                            "Finish editing failed.",
+                            bundle: .toolkitModule,
+                            comment: "The message shown when a form could not be submitted."
+                        )
                     }
                 }
             )
@@ -333,6 +367,48 @@ extension FeatureFormView {
         { willNavigate, continuation in
             alertContinuation = (willNavigate: willNavigate, action: continuation)
         }
+    }
+    
+    // MARK: Localized text
+    
+    var continueEditing: Text {
+        .init(
+            "Continue Editing",
+            bundle: .toolkitModule,
+            comment: "A label for a button to continue editing the feature form."
+        )
+    }
+    
+    var discardEdits: Text {
+        .init(
+            "Discard Edits",
+            bundle: .toolkitModule,
+            comment: "A label for a button to discard unsaved edits."
+        )
+    }
+    
+    var discardEditsQuestion: Text {
+        .init(
+            "Discard Edits?",
+            bundle: .toolkitModule,
+            comment: "A question asking if the user would like to discard their unsaved edits."
+        )
+    }
+    
+    var saveEdits: Text {
+        .init(
+            "Save Edits",
+            bundle: .toolkitModule,
+            comment: "A label for a button to save edits."
+        )
+    }
+    
+    var validationErrors: Text {
+        .init(
+            "Validation Errors",
+            bundle: .toolkitModule,
+            comment: "A label indicating the feature form has validation errors."
+        )
     }
 }
 
