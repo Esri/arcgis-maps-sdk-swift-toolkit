@@ -60,7 +60,7 @@ private struct UtilityAssociationGroupResultView: View {
     
     var body: some View {
         List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-            UtilityAssociationResultButton(utilityAssociationResult) {
+            Button {
                 let navigationAction: () -> Void = {
                     navigationLayerModel.push {
                         InternalFeatureFormView(
@@ -73,6 +73,8 @@ private struct UtilityAssociationGroupResultView: View {
                 } else {
                     navigationAction()
                 }
+            } label: {
+                UtilityAssociationResultLabel(result: utilityAssociationResult)
             }
         }
         .onAppear {
