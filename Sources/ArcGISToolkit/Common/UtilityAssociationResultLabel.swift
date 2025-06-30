@@ -15,47 +15,24 @@
 import ArcGIS
 import SwiftUI
 
-/// A view that displays a `UtilityAssociationResult` and performs an action
-/// when it is tapped.
-struct UtilityAssociationResultButton: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
+/// A view that displays the title, details, and icon of a `UtilityAssociationResult`.
+struct UtilityAssociationResultLabel: View {
     /// The utility association result to display.
-    private let result: UtilityAssociationResult
-    
-    /// The action to perform when the user triggers the button.
-    private let action: () -> Void
-    
-    /// Creates a `UtilityAssociationResultButton`.
-    /// - Parameters:
-    ///   - result: A utility association result to display.
-    ///   - action: The action to perform when the user triggers the button.
-    init(_ result: UtilityAssociationResult, action: @escaping () -> Void) {
-        self.result = result
-        self.action = action
-    }
+    let result: UtilityAssociationResult
     
     var body: some View {
-        Button(action: action) {
-            HStack {
-                if let icon = result.association.kind.icon {
-                    icon
+        HStack {
+            result.association.kind.icon
+            
+            VStack(alignment: .leading) {
+                Text(result.title)
+                if let details = result.details {
+                    Text(details)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
-                VStack(alignment: .leading) {
-                    Text(result.title)
-                    if let description = result.details {
-                        Text(description)
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .lineLimit(1)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.secondary)
             }
-            .contentShape(.rect)
+            .lineLimit(1)
         }
     }
 }

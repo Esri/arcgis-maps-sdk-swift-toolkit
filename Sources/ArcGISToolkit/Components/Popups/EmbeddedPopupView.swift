@@ -53,7 +53,10 @@ struct EmbeddedPopupView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .navigationLayerTitle(popup.title)
+        .preference(key: PresentedPopupPreferenceKey.self, value: .init(popup: popup))
+        .navigationTitle(popup.title)
+        .navigationBarTitleDisplayMode(.inline)
+        .popupViewToolbar()
         .task(id: ObjectIdentifier(popup)) {
             // Initial evaluation for a newly assigned popup.
             guard !Task.isCancelled else { return }
