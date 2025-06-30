@@ -15,7 +15,7 @@
 import ArcGIS
 
 extension FeatureFormView {
-    enum NavigationPathItem: Equatable, Hashable {
+    enum NavigationPathItem: Hashable {
         case form(FeatureForm)
         case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, InternalFeatureFormViewModel)
         case utilityAssociationGroupResultView(UtilityAssociationGroupResult, InternalFeatureFormViewModel)
