@@ -34,6 +34,9 @@ struct NavigationLayer<Content: View>: View {
     /// The optional closure to perform when the back navigation button is pressed.
     var backNavigationAction: ((NavigationLayerModel) -> Void)?
     
+    /// A Boolean value indicating whether back navigation is disabled.
+    var backNavigationDisabled: Bool = false
+    
     /// The closure to perform when model's path changes.
     var onNavigationChangedAction: ((NavigationLayerModel.Item?) -> Void)?
     
@@ -69,6 +72,7 @@ struct NavigationLayer<Content: View>: View {
             VStack(spacing: 0) {
                 Header(
                     backNavigationAction: backNavigationAction,
+                    backNavigationDisabled: backNavigationDisabled,
                     headerTrailing: headerTrailing,
                     width: geometryProxy.size.width
                 )
@@ -130,6 +134,14 @@ extension NavigationLayer {
     func backNavigationAction(perform action: @escaping (NavigationLayerModel) -> Void) -> Self {
         var copy = self
         copy.backNavigationAction = action
+        return copy
+    }
+    
+    /// Disables the back navigation button.
+    /// - Parameter disabled: Whether back navigation is disabled or not.
+    func backNavigationDisabled(_ disabled: Bool) -> Self {
+        var copy = self
+        copy.backNavigationDisabled = disabled
         return copy
     }
     

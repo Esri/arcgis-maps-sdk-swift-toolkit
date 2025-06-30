@@ -47,6 +47,10 @@ struct UtilityAssociationsFormElementView: View {
 private struct UtilityAssociationGroupResultView: View {
     @Environment(\.formChangedAction) var formChangedAction
     
+    /// A Boolean which declares whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    @Environment(\.navigationIsDisabled) var navigationIsDisabled
+    
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// The view model for the form.
@@ -77,6 +81,7 @@ private struct UtilityAssociationGroupResultView: View {
                 UtilityAssociationResultLabel(result: utilityAssociationResult)
             }
         }
+        .disabled(navigationIsDisabled)
         .onAppear {
             // This view is considered the tail end of a navigable FeatureForm.
             // When a user is backing out of a navigation path, this view
