@@ -54,11 +54,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                         }
                         model.removeDownloadedArea()
                     } label: {
-                        Text(
-                            "Delete Map Area",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button to delete a map area."
-                        )
+                        Text(model.removeDownloadButtonText)
                     }
                 }
             }
@@ -147,7 +143,8 @@ protocol OfflineMapAreaMetadata: ObservableObject {
     var directorySize: Int { get }
     /// A Boolean value indicating whether the metadata view should be dismissed when the map area is deleted.
     var dismissMetadataViewOnDelete: Bool { get }
-    
+    /// The localized text for the button to remove a download.
+    var removeDownloadButtonText: LocalizedStringResource { get }
     /// Removes the downloaded area.
     func removeDownloadedArea()
     /// Starts downloading the area.
@@ -180,6 +177,7 @@ private class MockMetadata: OfflineMapAreaMetadata {
     var allowsDownload: Bool { true }
     var directorySize: Int { 1_000_000_000 }
     var dismissMetadataViewOnDelete: Bool { false }
+    var removeDownloadButtonText: LocalizedStringResource { .removeDownload }
     
     func removeDownloadedArea() {}
     func startDownload() {}

@@ -21,34 +21,37 @@ struct UtilityAssociationsPopupElementView: View {
     /// The popup element to display.
     let popupElement: UtilityAssociationsPopupElement
     
-    /// The result of fetching the element's associations filter results.
-    @State private var filterResultsResult: Result<[UtilityAssociationsFilterResult], Error>?
+    /// The model for fetching the popup element's associations filter results.
+    @State private var associationsFilterResultsModel: AssociationsFilterResultsModel
     
     /// A Boolean value indicating whether the disclosure group is expanded.
     @State private var isExpanded = true
     
+    /// A Boolean value indicating whether the progress view is showing.
+    @State private var progressViewIsShowing = true
+    
+    init(popupElement: UtilityAssociationsPopupElement) {
+        self.popupElement = popupElement
+        self._associationsFilterResultsModel = .init(wrappedValue: .init(popupElement: popupElement))
+    }
+    
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
-            switch filterResultsResult {
+            switch associationsFilterResultsModel.result {
             case .success(let associationsFilterResults):
                 if associationsFilterResults.isEmpty {
-                    Label {
-                        Text(
-                            "No Associations",
-                            bundle: .toolkitModule,
-                            comment: "A label indicating that no associations are available for the popup element."
-                        )
-                    } icon: {
-                        Image(systemName: "exclamationmark.triangle")
-                            .foregroundStyle(.gray)
-                    }
+                    Text(
+                        "No Associations",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating that no associations are available for the popup element."
+                    )
                 } else {
                     ForEach(associationsFilterResults, id: \.id) {
                         UtilityAssociationsFilterResultLink(filterResult: $0)
                     }
                     .environment(\.associationDisplayCount, popupElement.displayCount)
                 }
-            case .failure(let error) where !(error is CancellationError):
+            case .failure(let error):
                 Text(
                     "Error fetching filter results: \(error.localizedDescription)",
                     bundle: .toolkitModule,
@@ -58,18 +61,21 @@ struct UtilityAssociationsPopupElementView: View {
                              The variable provides additional data.
                              """
                 )
-            case .failure, nil:
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .task {
-                        let filterResultsResult = await Result {
-                            try await popupElement.associationsFilterResults
-                                .filter { $0.resultCount > 0 }
-                        }
-                        withAnimation {
-                            self.filterResultsResult = filterResultsResult
-                        }
+            case nil:
+                VStack {
+                    // This check and the enclosing stack/modifiers workaround an issue where the
+                    // ProgressView doesn't reappear after scrolling away from it in the list.
+                    if progressViewIsShowing {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
                     }
+                }
+                .onAppear {
+                    progressViewIsShowing = true
+                }
+                .onDisappear {
+                    progressViewIsShowing = false
+                }
             }
         } label: {
             PopupElementHeader(
@@ -82,12 +88,41 @@ struct UtilityAssociationsPopupElementView: View {
     }
 }
 
+/// A view model for fetching associations filter results.
+@Observable
+private final class AssociationsFilterResultsModel {
+    /// The result of fetching the associations filter results.
+    private(set) var result: Result<[UtilityAssociationsFilterResult], Error>?
+    
+    /// The task for fetching the associations filter results.
+    @ObservationIgnored private var task: Task<Void, Never>?
+    
+    /// Fetches the associations filter results from a given popup element.
+    /// - Parameter popupElement: The popup element containing the associations filter results.
+    @MainActor
+    init(popupElement: UtilityAssociationsPopupElement) {
+        task = Task { [weak self] in
+            guard !Task.isCancelled, let self else {
+                return
+            }
+            
+            let result = await Result {
+                try await popupElement.associationsFilterResults.filter { $0.resultCount > 0 }
+            }
+            withAnimation {
+                self.result = result
+            }
+        }
+    }
+    
+    deinit {
+        task?.cancel()
+    }
+}
+
 /// A view that displays a `UtilityAssociationsFilterResult` and allows
 /// navigating to its group results.
 private struct UtilityAssociationsFilterResultLink: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The title of the popup the filter result was derived from.
     @Environment(\.popupTitle) private var popupTitle
     
@@ -98,41 +133,30 @@ private struct UtilityAssociationsFilterResultLink: View {
     let filterResult: UtilityAssociationsFilterResult
     
     var body: some View {
-        Button {
-            navigationLayerModel.push {
-                List(filterResult.groupResults, id: \.name) { groupResult in
-                    UtilityAssociationGroupResultView(groupResult: groupResult)
+        NavigationLink {
+            List(filterResult.groupResults, id: \.id) { groupResult in
+                UtilityAssociationGroupResultView(groupResult: groupResult)
 #if targetEnvironment(macCatalyst)
-                        .listRowInsets(.toolkitDefault)
+                    .listRowInsets(.toolkitDefault)
 #endif
-                }
-                .listStyle(.inset)
-                .navigationLayerTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
-                .environment(\.popupTitle, popupTitle)
-                .environment(\.associationDisplayCount, associationDisplayCount)
             }
+            .listStyle(.inset)
+            .navigationTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .popupViewToolbar()
+            .environment(\.popupTitle, popupTitle)
+            .environment(\.associationDisplayCount, associationDisplayCount)
         } label: {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(filterResult.filter.displayTitle)
-                    if !filterResult.filter.description.isEmpty {
-                        Text(filterResult.filter.description)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+            LabeledContent {
+                Text(filterResult.resultCount, format: .number)
+            } label: {
+                Text(filterResult.filter.displayTitle)
+                if !filterResult.filter.description.isEmpty {
+                    Text(filterResult.filter.description)
+                        .font(.caption)
                 }
-                .lineLimit(1)
-                Spacer()
-                Group {
-                    Text(filterResult.resultCount, format: .number)
-                    Image(systemName: "chevron.right")
-                }
-                .foregroundColor(.secondary)
             }
-#if os(iOS)
-            // Make the entire row tappable.
-            .contentShape(.rect)
-#endif
+            .lineLimit(1)
         }
     }
 }
@@ -140,9 +164,6 @@ private struct UtilityAssociationsFilterResultLink: View {
 /// A view that displays a `UtilityAssociationGroupResult` and allows
 /// navigating through its association results.
 private struct UtilityAssociationGroupResultView: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The title of the popup the group result was derived from.
     @Environment(\.popupTitle) private var popupTitle
     
@@ -159,19 +180,19 @@ private struct UtilityAssociationGroupResultView: View {
         DisclosureGroup(isExpanded: $isExpanded) {
             let associationResults = groupResult.associationResults.prefix(associationDisplayCount)
             ForEach(associationResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultButton(result) {
-                    navigationLayerModel.push {
-                        EmbeddedPopupView(popup: result.associatedFeature.toPopup())
-                    }
+                NavigationLink {
+                    EmbeddedPopupView(popup: result.associatedFeature.toPopup())
+                } label: {
+                    UtilityAssociationResultLabel(result: result)
                 }
             }
             
             if groupResult.associationResults.count > associationDisplayCount {
-                Button {
-                    navigationLayerModel.push {
-                        SearchUtilityAssociationResultsView(results: groupResult.associationResults)
-                            .navigationLayerTitle(groupResult.name, subtitle: popupTitle)
-                    }
+                NavigationLink {
+                    SearchUtilityAssociationResultsView(results: groupResult.associationResults)
+                        .navigationTitle(groupResult.name, subtitle: popupTitle)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .popupViewToolbar()
                 } label: {
                     HStack {
                         VStack(alignment: .leading) {
@@ -206,9 +227,6 @@ private struct UtilityAssociationGroupResultView: View {
 
 /// A view for searching through a list of utility association results.
 private struct SearchUtilityAssociationResultsView: View {
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
-    
     /// The utility association results to search through.
     let results: [UtilityAssociationResult]
     
@@ -221,22 +239,30 @@ private struct SearchUtilityAssociationResultsView: View {
     }
     
     var body: some View {
-        VStack {
-            SearchBar(text: $text, prompt: "Title")
-                .padding(.horizontal)
-            
-            List(filteredResults, id: \.associatedFeature.globalID) { result in
-                UtilityAssociationResultButton(result) {
-                    navigationLayerModel.push {
-                        EmbeddedPopupView(popup: result.associatedFeature.toPopup())
-                    }
-                }
-#if targetEnvironment(macCatalyst)
-                .listRowInsets(.toolkitDefault)
-#endif
+        List(filteredResults, id: \.associatedFeature.globalID) { result in
+            NavigationLink {
+                EmbeddedPopupView(popup: result.associatedFeature.toPopup())
+            } label: {
+                UtilityAssociationResultLabel(result: result)
             }
-            .listStyle(.inset)
+#if targetEnvironment(macCatalyst)
+            .listRowInsets(.toolkitDefault)
+#endif
         }
+        .listStyle(.inset)
+        .searchable(
+            text: $text,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: titleText
+        )
+    }
+    
+    private var titleText: Text {
+        .init(
+            "Title",
+            bundle: .toolkitModule,
+            comment: "A label for a text entry field that allows the user to filter a list of association results by title."
+        )
     }
 }
 
@@ -271,7 +297,14 @@ private extension UtilityAssociationsFilter {
 }
 
 private extension UtilityAssociationsFilterResult {
-    /// The ID of the utility associations filter result.
+    /// The ID of the utility associations filter result object.
+    var id: ObjectIdentifier {
+        ObjectIdentifier(self)
+    }
+}
+
+private extension UtilityAssociationGroupResult {
+    /// The ID of the utility associations group result object.
     var id: ObjectIdentifier {
         ObjectIdentifier(self)
     }

@@ -36,14 +36,14 @@ struct FeatureFormGroupedContentView<Content: View>: View {
     ScrollView {
         FeatureFormGroupedContentView(content: [
             Button { } label: {
-                Text("A Button")
+                Text(verbatim: "A Button")
                 Spacer()
                 Image(systemName: "chevron.right")
             }
         ])
         
         FeatureFormGroupedContentView(content: [
-            Text("Text 1"), Text("Text 2")
+            Text(verbatim: "Text 1"), Text(verbatim: "Text 2")
         ])
         
         FeatureFormGroupedContentView(content: [

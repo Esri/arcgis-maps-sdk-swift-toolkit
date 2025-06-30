@@ -165,8 +165,8 @@ east, etc.). */
 /* The title of the dialogue confirming deletion of all points. */
 "Delete all starting points?" = "Delete all starting points?";
 
-/* A label for a button to delete a map area. */
-"Delete Map Area" = "Delete Map Area";
+/* A label for a button to delete a map area download. */
+"Delete Download" = "Delete Download";
 
 /* A label for the description of the map area. */
 "Description" = "Description";
@@ -443,6 +443,9 @@ variable provides additional data. */
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Record video only";
+
+/* A label for a button to remove a map area download. */
+"Remove Download" = "Remove Download";
 
 /* A label for a button to refresh map area content. */
 "Refresh" = "Refresh";
