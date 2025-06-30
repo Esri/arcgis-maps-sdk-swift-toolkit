@@ -118,10 +118,10 @@ extension FeatureFormView {
                     }
                     .foregroundColor(.secondary)
                 }
-    #if os(iOS)
+#if os(iOS)
                 // Make the entire row tappable.
                 .contentShape(.rect)
-    #endif
+#endif
             }
             // Disables the blue tint on iOS and allows the button to fill the
             // entire row on Catalyst and visionOS.
@@ -151,23 +151,23 @@ extension FeatureFormView {
                     ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
                         Button {
                             navigationPath?.wrappedValue.append(
-                               FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                   utilityAssociationGroupResult,
-                                   internalFeatureFormViewModel
-                               )
+                                FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                                    utilityAssociationGroupResult,
+                                    internalFeatureFormViewModel
+                                )
                             )
-                       } label: {
-                           HStack {
-                               Text(utilityAssociationGroupResult.name)
-                               Spacer()
-                               Group {
-                                   Text(utilityAssociationGroupResult.associationResults.count, format: .number)
-                                   Image(systemName: "chevron.right")
-                               }
-                               .foregroundColor(.secondary)
-                           }
-                       }
-                       .tint(.primary)
+                        } label: {
+                            HStack {
+                                Text(utilityAssociationGroupResult.name)
+                                Spacer()
+                                Group {
+                                    Text(utilityAssociationGroupResult.associationResults.count, format: .number)
+                                    Image(systemName: "chevron.right")
+                                }
+                                .foregroundColor(.secondary)
+                            }
+                        }
+                        .tint(.primary)
                     }
                 } footer: {
                     if futureAddAssociationSupportIsEnabled {
