@@ -85,6 +85,10 @@ public struct FeatureFormView: View {
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
     
+    /// A Boolean which declares whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    var navigationIsDisabled = false
+    
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     
@@ -108,8 +112,8 @@ public struct FeatureFormView: View {
     ///   - featureForm: The feature form defining the editing experience.
     /// - Since: 200.8
     public init(featureForm: Binding<FeatureForm?>) {
-        self.rootFeatureForm = featureForm.wrappedValue
         self.presentedForm = featureForm
+        self.rootFeatureForm = featureForm.wrappedValue
     }
     
     public var body: some View {
@@ -249,6 +253,7 @@ public struct FeatureFormView: View {
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.formChangedAction, formChangedAction)
+            .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
             .environment(\.presentedForm, presentedForm)
@@ -287,6 +292,18 @@ public extension FeatureFormView {
     func editingButtons(_ visibility: Visibility) -> Self {
         var copy = self
         copy.editingButtonsVisibility = visibility
+        return copy
+    }
+    
+    /// Sets whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    ///
+    /// Use this modifier to conditionally disable navigation into other forms.
+    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled. Pass `true` to disable navigation; otherwise, pass `false`.
+    /// - Since: 200.8
+    func navigationDisabled(_ disabled: Bool) -> Self {
+        var copy = self
+        copy.navigationIsDisabled = disabled
         return copy
     }
     
