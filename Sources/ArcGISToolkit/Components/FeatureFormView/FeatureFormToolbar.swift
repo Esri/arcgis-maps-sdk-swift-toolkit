@@ -33,6 +33,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Environment(\.finishEditingError) var finishEditingError
     
+    /// The environment value which declares whether navigation to forms for features associated via utility association form elements is disabled.
+    @Environment(\.navigationIsDisabled) var navigationIsDisabled
+    
     /// The navigation path for the navigation stack presenting this view.
     @Environment(\.navigationPath) var navigationPath
     
@@ -82,6 +85,7 @@ struct FeatureFormToolbar: ViewModifier {
                                 Image(systemName: "chevron.backward")
                             }
                         }
+                        .disabled(navigationIsDisabled)
                     }
                 }
                 if closeButtonVisibility != .hidden {
@@ -121,6 +125,6 @@ extension FeatureFormToolbar {
     /// In certain cases the platform default button is hidden to support blocking back navigation with an
     /// alert for unsaved edits.
     var navigationBarBackButtonIsHidden: Bool {
-        isAForm && !isRootView && hasEdits
+        isAForm && !isRootView && (hasEdits || navigationIsDisabled)
     }
 }

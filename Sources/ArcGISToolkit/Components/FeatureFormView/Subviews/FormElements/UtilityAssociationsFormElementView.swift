@@ -46,6 +46,10 @@ extension FeatureFormView {
     
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
+        /// A Boolean which declares whether navigation to forms for features associated via utility
+        /// association form elements is disabled.
+        @Environment(\.navigationIsDisabled) var navigationIsDisabled
+        
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
@@ -78,6 +82,7 @@ extension FeatureFormView {
                 } label: {
                     UtilityAssociationResultLabel(result: utilityAssociationResult)
                 }
+                .disabled(navigationIsDisabled)
             }
         }
     }
