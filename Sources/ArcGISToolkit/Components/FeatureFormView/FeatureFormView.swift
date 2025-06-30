@@ -237,7 +237,7 @@ public struct FeatureFormView: View {
                 Text(
                     "The form wasn't submitted",
                     bundle: .toolkitModule,
-                    comment: "The tile shown when the feature form failed to save."
+                    comment: "The title shown when the feature form failed to save."
                 ),
                 isPresented: alertForFinishEditingErrorsIsPresented,
                 actions: { },
