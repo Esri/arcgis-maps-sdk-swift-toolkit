@@ -19,11 +19,6 @@ struct InternalFeatureFormView: View {
     /// The environment value to access the closure to call when the presented feature form changes.
     @Environment(\.formChangedAction) var formChangedAction
     
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Environment(\.setAlertContinuation) var setAlertContinuation
-    
-    @Environment(\.dismiss) private var dismiss
-    
     /// The view model for the form.
     @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
     
