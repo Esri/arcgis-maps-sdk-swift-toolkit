@@ -80,9 +80,7 @@ private struct UtilityAssociationGroupResultView: View {
             } label: {
                 UtilityAssociationResultLabel(result: utilityAssociationResult)
             }
-#if !os(visionOS)
-            .buttonStyle(.plain)
-#endif
+            .tint(.primary)
         }
         .disabled(navigationIsDisabled)
         .onAppear {
@@ -135,9 +133,9 @@ private struct UtilityAssociationsFilterResultListRowView: View {
             .contentShape(.rect)
 #endif
         }
-        // Disables the blue tint on iOS and allows the button to fill the
-        // entire row on Catalyst and visionOS.
-        .buttonStyle(.plain)
+#if !os(visionOS)
+        .tint(.primary)
+#endif
     }
 }
 
