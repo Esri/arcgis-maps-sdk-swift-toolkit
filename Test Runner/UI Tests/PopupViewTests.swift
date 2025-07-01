@@ -106,7 +106,7 @@ final class PopupViewTests: XCTestCase {
         )
     }
     
-    /// Verifies that custom titles and descriptions are honored.
+    /// Verifies that custom titles and descriptions for an associations element are honored.
     func testCustomTitlesAndDescriptions() {
         let app = XCUIApplication()
         let connectivityDescription = app.staticTexts[
