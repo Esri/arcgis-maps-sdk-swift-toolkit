@@ -73,6 +73,7 @@
 		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
 		8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTests.swift; sourceTree = "<group>"; };
 		8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTestView.swift; sourceTree = "<group>"; };
+		97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestRunner.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +104,7 @@
 				7552A76A2A573DFB0023DA5A /* UI Tests */,
 				7552A7512A573CBB0023DA5A /* Products */,
 				8A836B072C7D4335004EC961 /* Frameworks */,
+				97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -352,6 +354,7 @@
 /* Begin XCBuildConfiguration section */
 		7552A75C2A573CBD0023DA5A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -419,6 +422,7 @@
 		};
 		7552A75D2A573CBD0023DA5A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -480,6 +484,7 @@
 		};
 		7552A75F2A573CBD0023DA5A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -514,6 +519,7 @@
 		};
 		7552A7602A573CBD0023DA5A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -548,6 +554,7 @@
 		};
 		7552A7722A573DFB0023DA5A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -565,6 +572,7 @@
 		};
 		7552A7732A573DFB0023DA5A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97E45D7D2E145DBB0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
