@@ -80,6 +80,9 @@ private struct UtilityAssociationGroupResultView: View {
             } label: {
                 UtilityAssociationResultLabel(result: utilityAssociationResult)
             }
+#if !os(visionOS)
+            .buttonStyle(.plain)
+#endif
         }
         .disabled(navigationIsDisabled)
         .onAppear {
