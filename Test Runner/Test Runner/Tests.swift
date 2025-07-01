@@ -25,8 +25,8 @@ struct Tests: View {
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
                 NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-                NavigationLink("Popup Tests", destination: PopupTestView())
                 NavigationLink("NavigationLayer Tests", destination: NavigationLayerTestViews())
+                NavigationLink("Popup Tests", destination: PopupTestView())
                 NavigationLink("RepresentedUITextView Tests", destination: RepresentedUITextViewTestView())
             }
         }

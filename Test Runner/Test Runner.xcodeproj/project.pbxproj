@@ -216,9 +216,9 @@
 				8AABA2042DC2F36100485C35 /* NavigationLayerTestViews */,
 				8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */,
 				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
-				D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */,
 				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
+				D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */,
 				8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */,
 			);
 			path = TestViews;
