@@ -72,7 +72,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that the correct default titles are shown for an associations element with no titles specified.
-    func testDefaultTitles() {
+    func testUNADefaultTitles() {
         let app = XCUIApplication()
         let associationsElement = app.staticTexts["Associations"]
         let connectivityFilterResult = app.staticTexts["Connectivity"]
@@ -107,7 +107,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that custom titles and descriptions for an associations element are honored.
-    func testCustomTitlesAndDescriptions() {
+    func testUNACustomTitlesAndDescriptions() {
         let app = XCUIApplication()
         let connectivityDescription = app.staticTexts[
             "Associations between two network features that are not coincident."
@@ -158,7 +158,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that "No Associations" is displayed for an associations element with no filter results.
-    func testNoAssociations() {
+    func testUNANoAssociations() {
         let app = XCUIApplication()
         let associationsElements = app.staticTexts.matching(identifier: "Associations Popup Element")
         let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
@@ -180,7 +180,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that `PopupView` supports definitions with multiple associations elements.
-    func testMultipleElements() {
+    func testMultipleUNAElements() {
         let app = XCUIApplication()
         let associationsElements = app.staticTexts.matching(identifier: "Associations Popup Element")
         let attachmentElement = app.staticTexts["Attachment"]
@@ -217,7 +217,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that navigating through associations results works as expected.
-    func testNavigation() {
+    func testUNANavigation() {
         let app = XCUIApplication()
         let backButton = app.navigationBars.element(boundBy: 1).buttons.firstMatch
         let filterResultTitle = app.staticTexts["Content"]
@@ -382,7 +382,7 @@ final class PopupViewTests: XCTestCase {
     /// Verifies that association results display the correct icon when applicable.
     /// - Note: Only the "connection-to-connection" is tested since the data
     /// doesn't contain any junction-edge-object-connectivity associations.
-    func testAssociationResultIcons() {
+    func testUNAAssociationResultIcons() {
         let app = XCUIApplication()
         let associationResults = app.staticTexts.matching(identifier: "Association Result")
         let associationResultIcons = app.images.matching(identifier: "Association Result Icon")
@@ -441,7 +441,7 @@ final class PopupViewTests: XCTestCase {
     /// Verifies that association results display the correct description when applicable.
     /// - Note: The fraction-along-edge description is not tested as the data does not have any
     /// `junctionEdgeObjectConnectivityMidspan` associations.
-    func testAssociationDescriptions() async {
+    func testUNAAssociationDescriptions() async {
         let app = XCUIApplication()
         let associationResultDescription = app.staticTexts["Association Result Description"]
         let connectivityFilterResult = app.staticTexts["Connectivity"]
@@ -532,7 +532,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that the `UtilityAssociationsPopupElement.displayCount` is respected.
-    func testDisplayCount() {
+    func testUNADisplayCount() {
         let app = XCUIApplication()
         let associationResults = app.staticTexts.matching(identifier: "Association Result")
         let contentFilterResult = app.buttons["Content, 3"]
@@ -578,7 +578,7 @@ final class PopupViewTests: XCTestCase {
     }
     
     /// Verifies that using the search bar filters the association results as expected.
-    func testSearchResults() {
+    func testUNASearchResults() {
         let app = XCUIApplication()
         let associationResults = app.staticTexts.matching(identifier: "Association Result")
         let cancelButton = app.buttons["Cancel"]
