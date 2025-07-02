@@ -20,12 +20,6 @@ struct FeatureFormExampleView: View {
     /// The error to be presented in the alert.
     @State private var alertError: String?
     
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
-    
-    /// The height to present the form at.
-    @State private var detent: FloatingPanelDetent = .full
-    
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     
@@ -47,9 +41,6 @@ struct FeatureFormExampleView: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
-                .onAttributionBarHeightChanged {
-                    attributionBarHeight = $0
-                }
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
@@ -59,14 +50,8 @@ struct FeatureFormExampleView: View {
                     }
                 }
                 .ignoresSafeArea(.keyboard)
-                .floatingPanel(
-                    attributionBarHeight: attributionBarHeight,
-                    selectedDetent: $detent,
-                    horizontalAlignment: .leading,
-                    isPresented: featureFormViewIsPresented
-                ) {
+                .sheet(isPresented: featureFormViewIsPresented) {
                     FeatureFormView(featureForm: $featureForm)
-                        .closeButton(.visible) // Defaults to .automatic
                         .onFormEditingEvent { editingEvent in
                             if case .savedEdits = editingEvent,
                                let table = featureForm?.feature.table as? ServiceFeatureTable,

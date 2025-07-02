@@ -27,7 +27,7 @@ struct UtilityAssociationResultLabel: View {
             VStack(alignment: .leading) {
                 Text(result.title)
                 if let details = result.details {
-                    Text(details)
+                    details
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -50,20 +50,36 @@ private extension UtilityAssociationResult {
     }
     
     /// The details describing the result's association.
-    var details: String? {
+    var details: Text? {
         switch association.kind {
         case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-            associatedElement.terminal?.name
+            if let terminal = associatedElement.terminal {
+                return Text(terminal.name)
+            } else {
+                return nil
+            }
         case .containment:
-            associatedFeatureIsToElement
-            ? "Containment Visible: \(association.containmentIsVisible)".capitalized
+            return associatedFeatureIsToElement
+            ? Text(
+                "Containment Visible: \(association.containmentIsVisible.description)",
+                bundle: .toolkitModule,
+                comment:
+                    """
+                    A label indicating whether a utility association's 
+                    containment is visible or not.
+                    """
+            )
             : nil
         case .junctionEdgeObjectConnectivityMidspan:
-            associatedFeatureIsToElement && association.toElement.networkSource.kind == .edge
-            ? association.fractionAlongEdge.formatted(.percent)
-            : associatedElement.terminal?.name
+            if associatedFeatureIsToElement && association.toElement.networkSource.kind == .edge {
+                return Text(association.fractionAlongEdge, format: .percent)
+            } else if let terminal = associatedElement.terminal {
+                return Text(terminal.name)
+            } else {
+                return nil
+            }
         default:
-            nil
+            return nil
         }
     }
 }

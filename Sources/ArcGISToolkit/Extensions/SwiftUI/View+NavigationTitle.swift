@@ -59,7 +59,7 @@ extension View {
     func navigationTitle<T, S>(
         _ title: T,
         subtitle: S
-    )-> some View where T: StringProtocol, S: StringProtocol {
+    ) -> some View where T: StringProtocol, S: StringProtocol {
 #if swift(>=6.2) && !os(visionOS)
         if #available(iOS 26.0, *) {
             self.navigationTitle(title)
@@ -67,9 +67,6 @@ extension View {
         } else {
             self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
         }
-#elseif targetEnvironment(macCatalyst)
-        self.navigationTitle(title)
-            .navigationSubtitle(subtitle)
 #else
         self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
 #endif

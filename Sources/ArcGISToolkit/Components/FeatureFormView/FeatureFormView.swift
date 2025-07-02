@@ -54,8 +54,14 @@ import SwiftUI
 ///
 /// **Behavior**
 ///
-/// The feature form view can be embedded in any type of container view including, as demonstrated in the
-/// example, the Toolkit's `FloatingPanel`.
+/// As of 200.8, FeatureFormView uses a NavigationStack internally to support browsing utility network
+/// associations. As a result, a FeatureFormView requires a navigation context isolated from any app-level
+/// navigation. Basic apps without navigation can continue to place a FeatureFormView where desired.
+/// More complex apps using NavigationStack or NavigationSplitView will need to relocate the FeatureFormView
+/// outside of that navigation context. If the FeatureFormView can be presented modally (no background
+/// interaction with the map is needed), consider using a Sheet. If a non-modal presentation is needed,
+/// consider placing the FeatureFormView in a Floating Panel or Inspector, on the app-level navigation container.
+/// On supported platforms, WindowGroups are another alternative to consider as a FeatureFormView container.
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FeatureFormExampleView.swift)
@@ -89,17 +95,14 @@ public struct FeatureFormView: View {
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
     
-    /// A Boolean value that indicates whether a FeatureForm is the presented view in the NavigationLayer.
-    @State private var aFeatureFormIsPresented = true
-    
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
-    /// A Boolean value indicating whether the presented feature form has edits.
-    @State private var hasEdits: Bool = false
+    /// The navigation path used by the navigation stack in the root feature form view.
+    @State private var navigationPath = NavigationPath()
     
     /// The internally managed validation error visibility.
     @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
@@ -115,59 +118,36 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         if let rootFeatureForm {
-            VStack(spacing: 0) {
-                NavigationLayer { _ in
-                    InternalFeatureFormView(
-                        featureForm: rootFeatureForm
-                    )
-                } headerTrailing: {
-                    if closeButtonVisibility != .hidden {
-                        XButton(.dismiss) {
-                            if hasEdits {
-                                alertContinuation = (false, {
-                                    presentedForm.wrappedValue = nil
-                                })
-                            } else {
-                                presentedForm.wrappedValue = nil
+            NavigationStack(path: $navigationPath) {
+                InternalFeatureFormView(featureForm: rootFeatureForm)
+                    .navigationDestination(for: NavigationPathItem.self) { itemType in
+                        switch itemType {
+                        case let .form(form):
+                            InternalFeatureFormView(featureForm: form)
+                        case let .utilityAssociationFilterResultView(result, internalFeatureFormViewModel):
+                            UtilityAssociationsFilterResultView(
+                                internalFeatureFormViewModel: internalFeatureFormViewModel,
+                                utilityAssociationsFilterResult: result
+                            )
+                            .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(result.filter.title, subtitle: internalFeatureFormViewModel.title)
+                            .onAppear {
+                                formChangedAction(internalFeatureFormViewModel.featureForm)
+                            }
+                        case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
+                            UtilityAssociationGroupResultView(
+                                internalFeatureFormViewModel: internalFeatureFormViewModel,
+                                utilityAssociationGroupResult: result
+                            )
+                            .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(result.name, subtitle: internalFeatureFormViewModel.title)
+                            .onAppear {
+                                formChangedAction(internalFeatureFormViewModel.featureForm)
                             }
                         }
-                        .font(.title)
-                    } else {
-                        // TODO: This is unintended usage of NavigationLayer's headerTrailing. May not render properly.
-                        EmptyView()
                     }
-                } footer: {
-                    if let presentedForm = presentedForm.wrappedValue,
-                       hasEdits,
-                       editingButtonsVisibility != .hidden {
-                        FormFooter(
-                            featureForm: presentedForm,
-                            formHandlingEventAction: onFormEditingEventAction,
-                            validationErrorVisibilityInternal: $validationErrorVisibilityInternal,
-                            finishEditingError: $finishEditingError
-                        )
-                    } else {
-                        // TODO: This is unintended usage of NavigationLayer's footer. May not render properly.
-                        EmptyView()
-                    }
-                }
-                .backNavigationAction { navigationLayerModel in
-                    if aFeatureFormIsPresented && hasEdits {
-                        alertContinuation = (true, { navigationLayerModel.pop() })
-                    } else {
-                        navigationLayerModel.pop()
-                    }
-                }
-                .backNavigationDisabled(aFeatureFormIsPresented && navigationIsDisabled)
-                .onNavigationPathChanged { item in
-                    if let item {
-                        if type(of: item.view) == InternalFeatureFormView.self {
-                            aFeatureFormIsPresented = true
-                        } else {
-                            aFeatureFormIsPresented = false
-                        }
-                    }
-                }
             }
             // Alert for abandoning unsaved edits
             .alert(
@@ -269,17 +249,17 @@ public struct FeatureFormView: View {
                     }
                 }
             )
-            .environment(\.formChangedAction, onFormChangedAction)
+            .environment(\.closeButtonVisibility, closeButtonVisibility)
+            .environment(\.editingButtonVisibility, editingButtonsVisibility)
+            .environment(\.finishEditingError, $finishEditingError)
+            .environment(\.formChangedAction, formChangedAction)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
+            .environment(\.navigationPath, $navigationPath)
+            .environment(\.onFormEditingEventAction, onFormEditingEventAction)
+            .environment(\.presentedForm, presentedForm)
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
-            .environment(\.validationErrorVisibilityInternal, validationErrorVisibilityInternal)
-            .task(id: presentedForm.wrappedValue?.feature.globalID) {
-                guard let presentedForm = presentedForm.wrappedValue else { return }
-                for await hasEdits in presentedForm.$hasEdits {
-                    withAnimation { self.hasEdits = hasEdits }
-                }
-            }
+            .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
         }
     }
 }
@@ -368,7 +348,7 @@ extension FeatureFormView {
     /// (which can also happen during forward or reverse navigation). Because those two views (and the
     /// intermediate ``UtilityAssociationsFilterResultView`` are all considered to be apart of
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
-    var onFormChangedAction: (FeatureForm) -> Void {
+    var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
             if let presentedForm = presentedForm.wrappedValue {
                 if featureForm.feature.globalID != presentedForm.feature.globalID {
@@ -427,22 +407,4 @@ extension FeatureFormView {
             comment: "A label indicating the feature form has validation errors."
         )
     }
-}
-
-extension EnvironmentValues {
-    /// The environment value to access the closure to call when the presented feature form changes.
-    @Entry var formChangedAction: ((FeatureForm) -> Void)?
-    
-    /// The environment value which declares whether navigation to forms for features associated via utility association form
-    /// elements is disabled.
-    @Entry var navigationIsDisabled: Bool = false
-    
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
-    
-    /// The developer configurable validation error visibility.
-    @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
-    
-    /// The internally managed validation error visibility.
-    @Entry var validationErrorVisibilityInternal: FeatureFormView.ValidationErrorVisibility = .automatic
 }

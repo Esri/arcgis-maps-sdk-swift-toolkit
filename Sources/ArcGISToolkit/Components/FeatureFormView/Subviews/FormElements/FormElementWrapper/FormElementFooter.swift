@@ -235,7 +235,7 @@ extension FormElementFooter {
             (
                 internalFeatureFormViewModel.previouslyFocusedElements.contains(element)
                 || validationErrorVisibilityExternal == .visible
-                || validationErrorVisibilityInternal == .visible
+                || validationErrorVisibilityInternal.wrappedValue == .visible
             )
         }
         

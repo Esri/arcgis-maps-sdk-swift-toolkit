@@ -16,19 +16,16 @@ import ArcGIS
 import SwiftUI
 
 struct InternalFeatureFormView: View {
+    /// The environment value to access the closure to call when the presented feature form changes.
     @Environment(\.formChangedAction) var formChangedAction
-    
-    /// The model for the navigation layer.
-    @Environment(NavigationLayerModel.self) private var navigationLayerModel
     
     /// The view model for the form.
     @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
     
     /// Initializes a form view.
-    /// - Parameters:
-    ///   - featureForm: The feature form defining the editing experience.
+    /// - Parameter featureForm: The feature form defining the editing experience.
     init(featureForm: FeatureForm) {
-        internalFeatureFormViewModel = InternalFeatureFormViewModel(featureForm: featureForm)
+        self.internalFeatureFormViewModel = InternalFeatureFormViewModel(featureForm: featureForm)
     }
     
     var body: some View {
@@ -50,9 +47,11 @@ struct InternalFeatureFormView: View {
                     }
                 }
             }
-            .onChange(of: internalFeatureFormViewModel.featureForm.hasEdits) { hadEdits, hasEdits in
-                if hadEdits && !hasEdits {
-                    internalFeatureFormViewModel.previouslyFocusedElements.removeAll()
+            .task {
+                for await hasEdits in internalFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
+                    if !hasEdits {
+                        internalFeatureFormViewModel.previouslyFocusedElements.removeAll()
+                    }
                 }
             }
             .onChange(of: internalFeatureFormViewModel.focusedElement) {
@@ -63,7 +62,8 @@ struct InternalFeatureFormView: View {
             .onTitleChange(of: internalFeatureFormViewModel.featureForm) { newTitle in
                 internalFeatureFormViewModel.title = newTitle
             }
-            .navigationLayerTitle(internalFeatureFormViewModel.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(internalFeatureFormViewModel.title)
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
@@ -76,6 +76,7 @@ struct InternalFeatureFormView: View {
         .onAppear {
             formChangedAction?(internalFeatureFormViewModel.featureForm)
         }
+        .featureFormToolbar(internalFeatureFormViewModel.featureForm, isAForm: true)
     }
 }
 
