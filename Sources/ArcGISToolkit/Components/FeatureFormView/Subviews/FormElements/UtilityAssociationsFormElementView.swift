@@ -83,6 +83,7 @@ extension FeatureFormView {
                     UtilityAssociationResultLabel(result: utilityAssociationResult)
                 }
                 .disabled(navigationIsDisabled)
+                .tint(.primary)
             }
         }
     }
