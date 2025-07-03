@@ -17,8 +17,13 @@ import ArcGIS
 extension FormInput {
     /// A Boolean value indicating whether keyboards can be used with this input.
     var supportsKeyboard: Bool {
-        self is BarcodeScannerFormInput
-        || self is TextAreaFormInput
-        || self is TextBoxFormInput
+        switch self {
+        case is BarcodeScannerFormInput,
+            is TextAreaFormInput,
+            is TextBoxFormInput:
+            true
+        default:
+            false
+        }
     }
 }
