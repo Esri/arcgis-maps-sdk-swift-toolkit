@@ -107,7 +107,7 @@ private extension FeatureFormTestView {
                     }
                 }
                 .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
-                    FeatureFormView(featureForm: $featureForm)
+                    FeatureFormView(root: featureForm!)
                 }
         }
     }
