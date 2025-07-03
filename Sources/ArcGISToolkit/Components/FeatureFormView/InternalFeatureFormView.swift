@@ -93,32 +93,6 @@ struct InternalFeatureFormView: View {
     }
 }
 
-private extension View {
-    @ViewBuilder
-    func navigationBarTitleDisplayMode(
-        _ displayMode: NavigationBarItem.TitleDisplayMode,
-        isApplied: Bool
-    ) -> some View {
-        if isApplied {
-            self.navigationBarTitleDisplayMode(displayMode)
-        } else {
-            self
-        }
-    }
-    
-    @ViewBuilder
-    func navigationTitle<S>(
-        _ title: S,
-        isApplied: Bool
-    ) -> some View where S : StringProtocol {
-        if isApplied {
-            self.navigationTitle(title)
-        } else {
-            self
-        }
-    }
-}
-
 extension InternalFeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.

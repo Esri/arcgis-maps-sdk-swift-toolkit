@@ -71,6 +71,22 @@ extension View {
         self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
 #endif
     }
+    
+    /// Conditionally configures the view’s title for purposes of navigation, using a string.
+    /// - Parameters:
+    ///   - title: The string to display.
+    ///   - isApplied: A Boolean value indicating whether the title is applied to the view or not.
+    @ViewBuilder
+    func navigationTitle<S>(
+        _ title: S,
+        isApplied: Bool
+    ) -> some View where S : StringProtocol {
+        if isApplied {
+            self.navigationTitle(title)
+        } else {
+            self
+        }
+    }
 }
 
 #Preview {
