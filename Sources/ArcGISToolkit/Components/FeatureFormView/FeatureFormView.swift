@@ -446,7 +446,7 @@ extension FeatureFormView {
 }
 
 extension Logger {
-    /// A logger for the offline manager.
+    /// A logger for the feature form view.
     static var featureFormView: Logger {
         Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormView")
     }
