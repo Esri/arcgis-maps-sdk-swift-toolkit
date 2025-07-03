@@ -23,6 +23,7 @@ struct UtilityAssociationResultLabel: View {
     var body: some View {
         HStack {
             result.association.kind.icon
+                .accessibilityIdentifier("Association Result Icon")
             
             VStack(alignment: .leading) {
                 Text(result.title)
@@ -30,10 +31,13 @@ struct UtilityAssociationResultLabel: View {
                     Text(details)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("Association Result Description")
                 }
             }
             .lineLimit(1)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("Association Result")
     }
 }
 

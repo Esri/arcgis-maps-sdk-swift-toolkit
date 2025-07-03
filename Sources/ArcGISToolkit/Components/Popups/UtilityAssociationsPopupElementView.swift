@@ -68,6 +68,7 @@ struct UtilityAssociationsPopupElementView: View {
                     if progressViewIsShowing {
                         ProgressView()
                             .frame(maxWidth: .infinity)
+                            .accessibilityIdentifier("Fetching filter results")
                     }
                 }
                 .onAppear {
@@ -83,6 +84,8 @@ struct UtilityAssociationsPopupElementView: View {
                 description: popupElement.description
             )
             .catalystPadding(4)
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier("Associations Popup Element")
         }
         .disclosureGroupPadding()
     }
@@ -158,6 +161,7 @@ private struct UtilityAssociationsFilterResultLink: View {
             }
             .lineLimit(1)
         }
+        .accessibilityIdentifier("Associations Filter Result")
     }
 }
 
@@ -220,6 +224,7 @@ private struct UtilityAssociationGroupResultView: View {
                 Text(groupResult.associationResults.count, format: .number)
             }
             .catalystPadding(4)
+            .accessibilityIdentifier("Association Group Result")
         }
         .disclosureGroupPadding()
     }
