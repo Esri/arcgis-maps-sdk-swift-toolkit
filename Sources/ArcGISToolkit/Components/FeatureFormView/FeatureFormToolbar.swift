@@ -22,9 +22,6 @@ extension View {
 }
 
 struct FeatureFormToolbar: ViewModifier {
-    /// The visibility of the close button in the presented view.
-    @Environment(\.closeButtonVisibility) var closeButtonVisibility
-    
     @Environment(\.dismiss) var dismiss
     
     /// The visibility of the "save" and "discard" buttons.
@@ -32,6 +29,9 @@ struct FeatureFormToolbar: ViewModifier {
     
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Environment(\.finishEditingError) var finishEditingError
+    
+    /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
+    @Environment(\.isPresented) var isPresented
     
     /// The environment value which declares whether navigation to forms for features associated via utility association form elements is disabled.
     @Environment(\.navigationIsDisabled) var navigationIsDisabled
@@ -41,9 +41,6 @@ struct FeatureFormToolbar: ViewModifier {
     
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
-    
-    /// The feature form currently visible in the Navigation Stack.
-    @Environment(\.presentedForm) var presentedForm
     
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Environment(\.setAlertContinuation) var setAlertContinuation
@@ -88,15 +85,15 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if closeButtonVisibility != .hidden {
+                if let isPresented {
                     ToolbarItem(placement: .topBarTrailing) {
                         XButton(.dismiss) {
                             if hasEdits {
                                 setAlertContinuation?(false) {
-                                    presentedForm?.wrappedValue = nil
+                                    isPresented.wrappedValue = false
                                 }
                             } else {
-                                presentedForm?.wrappedValue = nil
+                                isPresented.wrappedValue = false
                             }
                         }
                     }

@@ -18,9 +18,9 @@ public extension FeatureFormView /* Deprecated */ {
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
-    /// - Attention: Deprecated at 200.7.
-    @available(*, deprecated, message: "Use init(featureForm:) instead.")
+    /// - Attention: Deprecated at 200.8.
+    @available(*, deprecated, message: "Use init(root:isPresented:) instead.")
     init(featureForm: FeatureForm) {
-        self.init(featureForm: .constant(featureForm))
+        self.init(root: featureForm, isPresented: nil)
     }
 }

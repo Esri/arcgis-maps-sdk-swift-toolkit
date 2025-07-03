@@ -35,9 +35,6 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
-    /// The feature form currently visible in the Navigation Stack.
-    @Entry var presentedForm: Binding<FeatureForm?>?
-    
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
     
