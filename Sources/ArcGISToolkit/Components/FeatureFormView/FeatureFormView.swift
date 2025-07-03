@@ -332,7 +332,7 @@ public extension FeatureFormView {
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     /// - Attention: Deprecated at 200.8.
-    @available(*, deprecated, message: "Use init(root:isPresented:) instead.")
+    @available(*, deprecated, message: "Use 'init(root:isPresented:)' instead.")
     init(featureForm: FeatureForm) {
         self.deprecatedInitializerWasUsed = true
         self.isPresented = nil
