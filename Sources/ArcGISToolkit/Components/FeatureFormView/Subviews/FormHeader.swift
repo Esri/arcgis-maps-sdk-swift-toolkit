@@ -1,4 +1,4 @@
-// Copyright 2025 Esri
+// Copyright 2023 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+import SwiftUI
 
-public extension FeatureFormView /* Deprecated */ {
-    /// Initializes a form view.
-    /// - Parameters:
-    ///   - featureForm: The feature form defining the editing experience.
-    /// - Attention: Deprecated at 200.8.
-    @available(*, deprecated, message: "Use init(root:isPresented:) instead.")
-    init(featureForm: FeatureForm) {
-        self.init(root: featureForm, isPresented: nil)
+/// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
+struct FormHeader: View /* Deprecated */ {
+    /// The title defined for the form.
+    let title: String
+    
+    var body: some View {
+        Text(title)
+            .font(.title)
+            .fontWeight(.bold)
     }
 }

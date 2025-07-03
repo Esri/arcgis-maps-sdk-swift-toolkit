@@ -30,6 +30,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Environment(\.finishEditingError) var finishEditingError
     
+    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
+    @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
+    
     /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
     @Environment(\.isPresented) var isPresented
     
@@ -98,7 +101,7 @@ struct FeatureFormToolbar: ViewModifier {
                         }
                     }
                 }
-                if hasEdits, editingButtonsVisibility != .hidden {
+                if !deprecatedInitializerWasUsed, hasEdits, editingButtonsVisibility != .hidden {
                     ToolbarItem(placement: .bottomBar) {
                         FormFooter(
                             featureForm: featureForm,

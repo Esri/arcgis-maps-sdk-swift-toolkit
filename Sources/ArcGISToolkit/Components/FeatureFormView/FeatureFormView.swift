@@ -15,6 +15,8 @@
 import ArcGIS
 import SwiftUI
 
+internal import os
+
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
@@ -76,6 +78,9 @@ public struct FeatureFormView: View {
     /// A binding to a Boolean value that determines whether the view is presented.
     private let isPresented: Binding<Bool>?
     
+    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
+    private let deprecatedInitializerWasUsed: Bool
+    
     /// The root feature form.
     private let rootFeatureForm: FeatureForm?
     
@@ -116,6 +121,7 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
+        self.deprecatedInitializerWasUsed = false
         self.isPresented = isPresented
         self.presentedForm = root
         self.rootFeatureForm = root
@@ -256,6 +262,7 @@ public struct FeatureFormView: View {
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.formChangedAction, formChangedAction)
+            .environment(\.formDeprecatedInitializerWasUsed, deprecatedInitializerWasUsed)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.navigationPath, $navigationPath)
@@ -319,6 +326,31 @@ public extension FeatureFormView {
         var copy = self
         copy.onFormEditingEventAction = action
         return copy
+    }
+    
+    /// Initializes a form view.
+    /// - Parameters:
+    ///   - featureForm: The feature form defining the editing experience.
+    /// - Attention: Deprecated at 200.8.
+    @available(*, deprecated, message: "Use init(root:isPresented:) instead.")
+    init(featureForm: FeatureForm) {
+        self.deprecatedInitializerWasUsed = true
+        self.isPresented = nil
+        self.presentedForm = featureForm
+        self.rootFeatureForm = featureForm
+        
+        if featureForm.elements.contains(where: { element in
+            element is UtilityAssociationsFormElement
+        }) {
+            Logger.featureFormView.log(
+                level: .error,
+                """
+                UtilityAssociationsFormElement is not supported with this 
+                FeatureFormView initializer. Please use init(root:isPresented:)
+                instead.
+                """
+            )
+        }
     }
 }
 
@@ -410,5 +442,12 @@ extension FeatureFormView {
             bundle: .toolkitModule,
             comment: "A label indicating the feature form has validation errors."
         )
+    }
+}
+
+extension Logger {
+    /// A logger for the offline manager.
+    static var featureFormView: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormView")
     }
 }
