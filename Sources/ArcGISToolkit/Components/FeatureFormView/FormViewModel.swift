@@ -86,15 +86,16 @@ import SwiftUI
         }
     }
     
-    /// Updates the value of a field in the feature associated with the ``FieldFormElement``.
-    /// Expressions are then evaluated when the update is not suppressed.
-    /// - Parameters:
-    ///   - element: The ``FieldFormElement`` to update.
-    ///   - value: The new value of the element.
+    /// Updates the value of a field in the feature associated with the given
+    /// field form element to the given value. Expressions are then evaluated
+    /// when the update is not suppressed.
     ///
-    /// The update is suppressed when the provided value matches the element's current value. This can
-    /// happen when edits are discarded and the element receives the original value and attempts to send
-    /// it back to core.
+    /// The update is suppressed when the provided value matches the element's
+    /// current value. This can happen when edits are discarded and the element
+    /// receives the original value and attempts to send it back to core.
+    /// - Parameters:
+    ///   - element: The field form element to update.
+    ///   - value: The new value of the element.
     func updateValueAndEvaluateExpressions(_ element: FieldFormElement, _ value: (any Sendable)?) {
         if element.input is ComboBoxFormInput || element.input is RadioButtonsFormInput {
             guard element.formattedValue != (value as? CodedValue)?.name else { return }
