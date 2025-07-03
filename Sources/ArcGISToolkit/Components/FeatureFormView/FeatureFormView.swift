@@ -82,6 +82,9 @@ public struct FeatureFormView: View {
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
     
+    /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
+    var onFeatureFormChanged: ((FeatureForm) -> Void)?
+    
     /// A Boolean which declares whether navigation to forms for features associated via utility association form
     /// elements is disabled.
     var navigationIsDisabled = false
@@ -298,6 +301,17 @@ public extension FeatureFormView {
         return copy
     }
     
+    /// Sets a closure to perform when a new feature form is shown in the view.
+    ///
+    /// This can happen when navigating through the associations in a `UtilityAssociationsFormElement`.
+    /// - Parameter action: The closure to perform when the new feature form is shown.
+    /// - Since: 200.8
+    func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
+        var copy = self
+        copy.onFeatureFormChanged = action
+        return copy
+    }
+    
     /// Sets a closure to perform when a form editing event occurs.
     /// - Parameter action: The closure to perform when the form editing event occurs.
     /// - Since: 200.8
@@ -344,6 +358,7 @@ extension FeatureFormView {
             if featureForm.feature.globalID != presentedForm.feature.globalID {
                 presentedForm = featureForm
                 validationErrorVisibilityInternal = .automatic
+                onFeatureFormChanged?(featureForm)
             }
         }
     }
