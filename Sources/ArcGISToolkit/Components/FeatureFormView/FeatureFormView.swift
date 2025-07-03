@@ -329,8 +329,14 @@ public extension FeatureFormView {
     }
     
     /// Initializes a form view.
-    /// - Parameters:
-    ///   - featureForm: The feature form defining the editing experience.
+    ///
+    /// - Important: This modifier has been deprecated and replaced with a new version that supports
+    /// UtilityAssociationsFormElement. UtilityAssociationsFormElements will not render when this modifier
+    /// is used. The replacement modifier also provides a few quality-of-life improvements like built-in
+    /// "Save" and "Discard" buttons that appear when the user has unsaved edits, and automatic (but
+    /// override-able) management of validation error visibility.
+    ///
+    /// - Parameter featureForm: The feature form defining the editing experience.
     /// - Attention: Deprecated at 200.8.
     @available(*, deprecated, message: "Use 'init(root:isPresented:)' instead.")
     init(featureForm: FeatureForm) {
