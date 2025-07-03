@@ -85,4 +85,34 @@ import SwiftUI
             _ = try? await featureForm.evaluateExpressions()
         }
     }
+    
+    /// Updates the value of a field in the feature associated with the ``FieldFormElement``.
+    /// Expressions are then evaluated when the update is not suppressed.
+    /// - Parameters:
+    ///   - element: The ``FieldFormElement`` to update.
+    ///   - value: The new value of the element.
+    ///
+    /// The update is suppressed when the provided value matches the element's current value. This can
+    /// happen when edits are discarded and the element receives the original value and attempts to send
+    /// it back to core.
+    func updateValueAndEvaluateExpressions(_ element: FieldFormElement, _ value: (any Sendable)?) {
+        if element.input is ComboBoxFormInput || element.input is RadioButtonsFormInput {
+            guard element.formattedValue != (value as? CodedValue)?.name else { return }
+            element.updateValue((value as? CodedValue)?.code)
+        } else if element.input is DateTimePickerFormInput {
+            guard element.value as? Date != value as? Date else { return }
+            element.updateValue(value)
+        } else if element.input is SwitchFormInput {
+            guard let isOn = value as? Bool,
+                  let switchInput = element.input as? SwitchFormInput,
+                  (isOn && element.formattedValue == switchInput.offValue.name)
+                    || (!isOn && element.formattedValue == switchInput.onValue.name) else { return }
+            element.updateValue(isOn ? switchInput.onValue.code : switchInput.offValue.code)
+        } else if element.input.supportsKeyboardInput {
+            guard let stringValue = value as? String,
+                  element.formattedValue != stringValue else { return }
+            element.convertAndUpdateValue(stringValue)
+        }
+        evaluateExpressions()
+    }
 }

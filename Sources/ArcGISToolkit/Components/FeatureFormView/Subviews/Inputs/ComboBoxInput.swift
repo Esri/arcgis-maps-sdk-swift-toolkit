@@ -91,7 +91,7 @@ struct ComboBoxInput: View {
                 XButton(.clear) {
                     model.focusedElement = element
                     defer { model.focusedElement = nil }
-                    updateValue(nil)
+                    model.updateValueAndEvaluateExpressions(element, nil)
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             } else {
@@ -173,7 +173,7 @@ extension ComboBoxInput {
                                 label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
                                 selected: selectedValue.isNoValue
                             ) {
-                                updateValue(nil)
+                                model.updateValueAndEvaluateExpressions(element, nil)
                             }
                             .italic()
                             .foregroundStyle(.secondary)
@@ -181,7 +181,7 @@ extension ComboBoxInput {
                     }
                     ForEach(matchingValues, id: \.self) { codedValue in
                         makePickerRow(label: codedValue.name, selected: selectedValue.codedValue == codedValue) {
-                            updateValue(codedValue.code)
+                            model.updateValueAndEvaluateExpressions(element, codedValue)
                         }
                     }
                     if let unsupportedValue = selectedValue.unsupportedValue {
@@ -231,11 +231,6 @@ extension ComboBoxInput {
 #endif
             }
         }
-    }
-    
-    private func updateValue(_ value: (any Sendable)?) {
-        element.updateValue(value)
-        model.evaluateExpressions()
     }
 }
 

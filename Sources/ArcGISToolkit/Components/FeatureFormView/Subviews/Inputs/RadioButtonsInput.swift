@@ -96,8 +96,7 @@ struct RadioButtonsInput: View {
                 }
             }
             .onChange(of: selectedValue) {
-                element.updateValue(selectedValue?.code)
-                model.evaluateExpressions()
+                model.updateValueAndEvaluateExpressions(element, selectedValue)
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 value = newValue

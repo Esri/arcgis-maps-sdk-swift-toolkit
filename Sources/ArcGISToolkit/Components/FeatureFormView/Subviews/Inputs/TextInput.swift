@@ -44,14 +44,12 @@ struct TextInput: View {
     /// The element the input belongs to.
     private let element: FieldFormElement
     
-    /// Creates a view for text input spanning multiple lines.
+    /// Creates a view for text based input.
     /// - Parameters:
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
         precondition(
-            element.input is TextAreaFormInput
-            || element.input is TextBoxFormInput
-            || element.input is BarcodeScannerFormInput,
+            element.input.supportsKeyboardInput,
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
         )
         self.element = element
@@ -60,8 +58,7 @@ struct TextInput: View {
     var body: some View {
         textWriter
             .onChange(of: text) {
-                element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
+                model.updateValueAndEvaluateExpressions(element, text)
             }
             .onTapGesture {
                 if element.isMultiline {
@@ -237,8 +234,7 @@ private extension TextInput {
 #endif
             }
             RepresentedUITextView(initialText: text) { text in
-                element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
+                model.updateValueAndEvaluateExpressions(element, text)
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }

@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
 
 import ArcGIS
 
-extension FormElement {
-    /// The id of the element.
-    public var id: ObjectIdentifier {
-        ObjectIdentifier(self)
+extension FormInput {
+    /// A Boolean value indicating whether keyboards can be used with this input.
+    var supportsKeyboardInput: Bool {
+        self is BarcodeScannerFormInput
+        || self is TextAreaFormInput
+        || self is TextBoxFormInput
     }
 }
