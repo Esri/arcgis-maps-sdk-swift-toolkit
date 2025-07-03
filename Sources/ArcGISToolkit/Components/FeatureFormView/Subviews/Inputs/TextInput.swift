@@ -49,7 +49,7 @@ struct TextInput: View {
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
         precondition(
-            element.input.supportsKeyboardInput,
+            element.input.supportsKeyboard,
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
         )
         self.element = element

@@ -16,7 +16,7 @@ import ArcGIS
 
 extension FormInput {
     /// A Boolean value indicating whether keyboards can be used with this input.
-    var supportsKeyboardInput: Bool {
+    var supportsKeyboard: Bool {
         self is BarcodeScannerFormInput
         || self is TextAreaFormInput
         || self is TextBoxFormInput

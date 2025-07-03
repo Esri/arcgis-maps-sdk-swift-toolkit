@@ -109,7 +109,7 @@ import SwiftUI
                   (isOn && element.formattedValue == switchInput.offValue.name)
                     || (!isOn && element.formattedValue == switchInput.onValue.name) else { return }
             element.updateValue(isOn ? switchInput.onValue.code : switchInput.offValue.code)
-        } else if element.input.supportsKeyboardInput {
+        } else if element.input.supportsKeyboard {
             guard let stringValue = value as? String,
                   element.formattedValue != stringValue else { return }
             element.convertAndUpdateValue(stringValue)
