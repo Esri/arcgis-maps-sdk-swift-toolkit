@@ -35,7 +35,7 @@ struct FeatureFormTestView: View {
     @State private var map: Map?
     
     /// The string for the test search bar.
-    @State private var searchTerm: String = ""
+    @State private var searchTerm = ""
     
     /// The current test case.
     @State private var testCase: TestCase?
