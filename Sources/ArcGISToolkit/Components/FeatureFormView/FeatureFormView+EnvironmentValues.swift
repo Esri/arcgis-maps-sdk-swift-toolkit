@@ -27,7 +27,7 @@ extension EnvironmentValues /* FeatureFormView */ {
     
     /// The environment value which declares whether navigation to forms for features associated via utility association form
     /// elements is disabled.
-    @Entry var navigationIsDisabled: Bool = false
+    @Entry var navigationIsDisabled = false
     
     /// The navigation path for the navigation stack presenting this view.
     @Entry var navigationPath: Binding<NavigationPath>?
