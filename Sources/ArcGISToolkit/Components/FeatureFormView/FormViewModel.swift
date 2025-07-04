@@ -97,22 +97,28 @@ import SwiftUI
     ///   - element: The field form element to update.
     ///   - value: The new value of the element.
     func updateValueAndEvaluateExpressions(_ element: FieldFormElement, _ value: (any Sendable)?) {
-        if element.input is ComboBoxFormInput || element.input is RadioButtonsFormInput {
-            guard element.formattedValue != (value as? CodedValue)?.name else { return }
+        switch element.input {
+        case is ComboBoxFormInput,
+            is RadioButtonsFormInput where element.formattedValue != (value as? CodedValue)?.name:
             element.updateValue((value as? CodedValue)?.code)
-        } else if element.input is DateTimePickerFormInput {
-            guard element.value as? Date != value as? Date else { return }
+        case is DateTimePickerFormInput where element.value as? Date != value as? Date:
             element.updateValue(value)
-        } else if element.input is SwitchFormInput {
-            guard let isOn = value as? Bool,
-                  let switchInput = element.input as? SwitchFormInput,
-                  (isOn && element.formattedValue == switchInput.offValue.name)
-                    || (!isOn && element.formattedValue == switchInput.onValue.name) else { return }
-            element.updateValue(isOn ? switchInput.onValue.code : switchInput.offValue.code)
-        } else if element.input.supportsKeyboard {
-            guard let stringValue = value as? String,
-                  element.formattedValue != stringValue else { return }
-            element.convertAndUpdateValue(stringValue)
+        case let switchInput as SwitchFormInput:
+            if let isOn = value as? Bool,
+               (isOn && element.formattedValue == switchInput.offValue.name)
+                || (!isOn && element.formattedValue == switchInput.onValue.name) {
+                element.updateValue(isOn ? switchInput.onValue.code : switchInput.offValue.code)
+            } else {
+                return
+            }
+        default:
+            if element.input.supportsKeyboard,
+               let stringValue = value as? String,
+               element.formattedValue != stringValue {
+                element.convertAndUpdateValue(stringValue)
+            } else {
+                return
+            }
         }
         evaluateExpressions()
     }
