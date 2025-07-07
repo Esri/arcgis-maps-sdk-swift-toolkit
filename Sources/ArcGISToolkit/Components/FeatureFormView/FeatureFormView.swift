@@ -352,6 +352,7 @@ extension FeatureFormView {
         { featureForm in
             if let presentedForm = presentedForm.wrappedValue {
                 if featureForm.feature.globalID != presentedForm.feature.globalID {
+                    featureForm.feature.refresh()
                     self.presentedForm.wrappedValue = featureForm
                     validationErrorVisibilityInternal = .automatic
                 }
