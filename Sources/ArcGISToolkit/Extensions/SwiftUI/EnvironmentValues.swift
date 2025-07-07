@@ -15,6 +15,9 @@
 import SwiftUI
 
 extension EnvironmentValues {
+    /// The visibility of the close button in the presented view.
+    @Entry var closeButtonVisibility: Visibility = .automatic
+    
     /// A Boolean value indicating whether this environment has a compact horizontal size class and
     /// a regular vertical size class.
     var isPortraitOrientation: Bool {

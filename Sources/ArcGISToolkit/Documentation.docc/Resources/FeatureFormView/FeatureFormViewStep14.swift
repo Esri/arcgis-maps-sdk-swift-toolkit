@@ -11,13 +11,10 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @State private var detent: FloatingPanelDetent = .full
     
     @State private var identifyScreenPoint: CGPoint?
     
     @State private var map = makeMap()
-    
-    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
     
     @StateObject private var model = Model()
     
@@ -36,26 +33,27 @@ struct FeatureFormExampleView: View {
                         }
                     }
                     .task(id: identifyScreenPoint) {
-                        .task(id: identifyScreenPoint) {
-                            if let feature = await identifyFeature(with: mapViewProxy) {
-                                model.state = .editing(FeatureForm(feature: feature))
-                            }
-                        }
-                    .ignoresSafeArea(.keyboard)
-                    .floatingPanel(
-                        selectedDetent: $detent,
-                        horizontalAlignment: .leading,
-                        isPresented: model.formIsPresented
-                    ) {
-                        if let featureForm = model.featureForm {
-                            FeatureFormView(featureForm: featureForm)
-                                .validationErrors(validationErrorVisibility)
-                                .padding(.horizontal)
-                                .padding(.top, 16)
+                        if let feature = await identifyFeature(with: mapViewProxy) {
+                            model.state = .editing(FeatureForm(feature: feature))
                         }
                     }
-                    .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
-                        if !formIsPresented { validationErrorVisibility = .automatic }
+                    .ignoresSafeArea(.keyboard)
+                    .sheet(isPresented: model.formIsPresented) {
+                        if let featureForm = model.featureForm {
+                            FeatureFormView(featureForm: featureForm)
+                        }
+                    }
+                    .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
+                        Button("Discard edits", role: .destructive) {
+                            model.discardEdits()
+                        }
+                        if case let .cancellationPending(featureForm) = model.state {
+                            Button("Continue editing", role: .cancel) {
+                                model.state = .editing(featureForm)
+                            }
+                        }
+                    } message: {
+                        Text("Updates to this feature will be lost.")
                     }
             }
         }

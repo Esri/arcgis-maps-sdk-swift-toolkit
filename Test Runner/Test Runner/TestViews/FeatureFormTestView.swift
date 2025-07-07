@@ -19,70 +19,138 @@ import SwiftUI
 struct FeatureFormTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
-    
-    /// The `Map` displayed in the `MapView`.
-    @State private var map: Map?
-    
-    /// A Boolean value indicating whether or not the form is displayed.
-    @State private var isPresented = false
+    /// A message describing an error during test view setup.
+    @State private var alertError: String?
     
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
     
+    /// The list of identify layer results.
+    @State private var identifyLayerResults = [IdentifyLayerResult]()
+    
+    /// A Boolean value indicating whether the initial draw of the map view completed.
+    @State private var initialDrawCompleted = false
+    
+    /// The `Map` displayed in the `MapView`.
+    @State private var map: Map?
+    
+    /// The string for the test search bar.
+    @State private var searchTerm = ""
+    
     /// The current test case.
     @State private var testCase: TestCase?
+    
+    /// The test setup task to run once was the map has finished its initial draw.
+    @State private var testSetupTask: Task<Void, Never>?
     
     var body: some View {
         Group {
             if let map, let testCase {
                 makeMapView(map, testCase)
+                    .task {
+                        if let credentialInfo = testCase.credentialInfo {
+                            await addCredential(credentialInfo)
+                        }
+                    }
             } else {
-                testCaseSelector
+                testCaseList
             }
         }
+        .navigationBarBackButtonHidden(featureForm != nil)
     }
 }
 
 private extension FeatureFormTestView {
+    /// Adds a credential for the given credential info.
+    func addCredential(_ info: TestCase.CredentialInfo) async {
+        do {
+            let credential = try await TokenCredential.credential(
+                for: info.portal,
+                username: info.username,
+                password: info.password
+            )
+            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+        } catch {
+            alertError = error.localizedDescription
+        }
+    }
+    
     /// Make the main test UI.
     /// - Parameters:
     ///   - map: The map under test.
     ///   - testCase: The test definition.
     func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
-        MapView(map: map)
-            .onAttributionBarHeightChanged {
-                attributionBarHeight = $0
-            }
-            .task {
-                try? await map.load()
-                let featureLayer = map.operationalLayers.first as? FeatureLayer
-                let parameters = QueryParameters()
-                parameters.addObjectID(testCase.objectID)
-                let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
-                guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
-                try? await feature.load()
-                featureLayer?.selectFeature(feature)
-                featureForm = FeatureForm(feature: feature)
-                isPresented = true
-            }
-            .ignoresSafeArea(.keyboard)
-            .floatingPanel(
-                attributionBarHeight: attributionBarHeight,
-                selectedDetent: .constant(.full),
-                horizontalAlignment: .leading,
-                isPresented: $isPresented
-            ) {
-                FeatureFormView(featureForm: featureForm!)
-                    .padding()
-            }
-            .navigationBarBackButtonHidden(isPresented)
+        MapViewReader { mapView in
+            MapView(map: map)
+                .onDrawStatusChanged { drawStatus in
+                    if !initialDrawCompleted, drawStatus == .completed {
+                        initialDrawCompleted = true
+                        testSetupTask = Task {
+                            await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
+                        }
+                    }
+                }
+                .alert(
+                    "Error",
+                    isPresented: Binding {
+                        alertError != nil
+                    } set: { _ in },
+                    actions: { },
+                    message: { Text(alertError ?? "Unknown error") }
+                )
+                .ignoresSafeArea(.keyboard)
+                .task {
+                    do {
+                        try await map.load()
+                    } catch {
+                        alertError = error.localizedDescription
+                    }
+                }
+                .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
+                    FeatureFormView(featureForm: $featureForm)
+                }
+        }
     }
     
-    /// Test case selection UI.
-    var testCaseSelector: some View {
-        ScrollView {
+    func selectObjectID(_ objectID: Int, on map: Map, for layerName: String) async {
+        let featureLayer: FeatureLayer?
+        if !layerName.isEmpty {
+            // This could be expanded to find any operational layer OR operational layer sublayer
+            // Currently, searching for the layer in the first operational layer's sublayerContents
+            // is the only requirement. This is the case for the Utility Network Association test cases.
+            featureLayer = map.operationalLayers.first?.subLayerContents.first(where: { layer in
+                layer.name == layerName
+            }) as? FeatureLayer
+        } else {
+            featureLayer = map.operationalLayers.first as? FeatureLayer
+        }
+        guard let featureLayer else {
+            alertError = "Can't resolve layer"
+            return
+        }
+        let parameters = QueryParameters()
+        parameters.addObjectID(objectID)
+        do {
+            let result = try await featureLayer.featureTable?.queryFeatures(using: parameters)
+            guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else {
+                alertError = "No match for feature \(objectID.formatted()) found."
+                return
+            }
+            try await feature.load()
+            featureLayer.selectFeature(feature)
+            featureForm = FeatureForm(feature: feature)
+        } catch {
+            alertError = error.localizedDescription
+        }
+    }
+    
+    /// The list of test cases.
+    var testCaseList: some View {
+        List {
+            Section {
+                TextField("Search", text: $searchTerm, prompt: Text("Search"))
+            }
+            let cases = searchTerm.isEmpty ? cases : cases.filter { $0.id.localizedStandardContains(searchTerm) }
             ForEach(cases) { testCase in
                 Button(testCase.id) {
                     self.testCase = testCase
@@ -93,20 +161,24 @@ private extension FeatureFormTestView {
         }
     }
     
-    /// A Boolean value indicating whether the form controls should be shown directly in the form's
-    ///  presenting container.
-    var useControlsInForm: Bool {
-        verticalSizeClass == .compact ||
-        UIDevice.current.userInterfaceIdiom == .mac ||
-        UIDevice.current.userInterfaceIdiom == .pad
-    }
-    
     /// Test conditions for a Form View.
     struct TestCase: Identifiable {
+        /// Storing credential info allows for lazily initialization of token credentials, as opposed to each
+        /// time the test cases are created.
+        struct CredentialInfo {
+            let portal: URL
+            let username: String
+            let password: String
+        }
+        
+        /// Optional ArcGIS credential info for the test data.
+        let credentialInfo: CredentialInfo?
         /// The name of the test case.
         let id: String
         /// The object ID of the feature being tested.
         let objectID: Int
+        /// The name of the layer to identify.
+        let layerName: String
         /// The test data location.
         let url: URL
         
@@ -114,10 +186,20 @@ private extension FeatureFormTestView {
         /// - Parameters:
         ///   - name: The name of the test case.
         ///   - objectID: The object ID of the feature being tested.
+        ///   - layerName: The name of the layer to identify.
         ///   - portalID: The portal ID of the test data.
-        init(_ name: String, objectID: Int, portalID: String) {
+        ///   - credentialInfo: Optional ArcGIS credential info for the test data.
+        init(
+            _ name: String,
+            objectID: Int,
+            layerName: String = "",
+            portalID: String,
+            credentialInfo: CredentialInfo? = nil
+        ) {
+            self.credentialInfo = credentialInfo
             self.id = name
             self.objectID = objectID
+            self.layerName = layerName
             self.url = .init(
                 string: String("https://arcgis.com/home/item.html?id=\(portalID)")
             )!
@@ -156,7 +238,30 @@ private extension FeatureFormTestView {
         .init("testCase_10_1", objectID: 1, portalID: .testCase10),
         .init("testCase_10_2", objectID: 1, portalID: .testCase10),
         .init("testCase_11_1", objectID: 2, portalID: .testCase11),
+        .init("testCase_12_1", objectID: 5050, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_3", objectID: 2, layerName: "Structure Boundary", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_4", objectID: 2584, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_5", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
     ]}
+}
+
+private extension ArcGISFeature {
+    var displayName: String {
+        if let objectID {
+            return "Object ID: \(objectID.formatted(.number.grouping(.never)))"
+        } else {
+            return "Object ID: N/A"
+        }
+    }
+    
+    var objectID: Int64? {
+        if let id = attributes["objectid"] as? Int64 {
+            return id
+        } else {
+            print(type(of: attributes["objectid"]!))
+            return nil
+        }
+    }
 }
 
 private extension String {
@@ -165,6 +270,7 @@ private extension String {
     static let dateMapID = "ec09090060664cbda8d814e017337837"
     static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
     static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
+    static let napervilleElectricUtilityNetwork = "471eb0bf37074b1fbb972b1da70fb310"
     static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
     static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
     static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
@@ -172,4 +278,20 @@ private extension String {
     static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
     static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
     static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
+}
+
+private extension FeatureFormTestView.TestCase.CredentialInfo {
+    static var sampleServer7Viewer01: Self {
+        .init(
+            portal: .sampleServer7Portal,
+            username: "viewer01",
+            password: "I68VGU^nMurF"
+        )
+    }
+}
+
+private extension URL {
+    static var sampleServer7Portal: Self {
+        .init(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!
+    }
 }

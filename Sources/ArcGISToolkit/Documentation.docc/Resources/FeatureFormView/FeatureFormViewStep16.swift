@@ -11,13 +11,9 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @State private var detent: FloatingPanelDetent = .full
-    
     @State private var identifyScreenPoint: CGPoint?
     
     @State private var map = makeMap()
-    
-    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
     
     @StateObject private var model = Model()
     
@@ -41,20 +37,10 @@ struct FeatureFormExampleView: View {
                         }
                     }
                     .ignoresSafeArea(.keyboard)
-                    .floatingPanel(
-                        selectedDetent: $detent,
-                        horizontalAlignment: .leading,
-                        isPresented: model.formIsPresented
-                    ) {
+                    .sheet(isPresented: model.formIsPresented) {
                         if let featureForm = model.featureForm {
                             FeatureFormView(featureForm: featureForm)
-                                .validationErrors(validationErrorVisibility)
-                                .padding(.horizontal)
-                                .padding(.top, 16)
                         }
-                    }
-                    .onChange(of: model.formIsPresented.wrappedValue) { formIsPresented in
-                        if !formIsPresented { validationErrorVisibility = .automatic }
                     }
                     .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
                         Button("Discard edits", role: .destructive) {
@@ -68,19 +54,18 @@ struct FeatureFormExampleView: View {
                     } message: {
                         Text("Updates to this feature will be lost.")
                     }
-                    .navigationBarBackButtonHidden(model.formIsPresented.wrappedValue)
+                    .alert(
+                        "The form wasn't submitted",
+                        isPresented: model.alertIsPresented
+                    ) { } message: {
+                        if case let .generalError(_, errorMessage) = model.state {
+                            errorMessage
+                        }
+                    }
                     .toolbar {
                         if model.formIsPresented.wrappedValue {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button("Cancel", role: .cancel) {
-                                    guard case let .editing(featureForm) = model.state else { return }
-                                    model.state = .cancellationPending(featureForm)
-                                }
-                                .disabled(model.formControlsAreDisabled)
-                            }
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Submit") {
-                                    validationErrorVisibility = .visible
                                     Task {
                                         await model.submitEdits()
                                     }
