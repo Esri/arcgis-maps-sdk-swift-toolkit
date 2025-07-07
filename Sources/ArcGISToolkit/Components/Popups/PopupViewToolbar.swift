@@ -27,7 +27,7 @@ private struct PopupViewToolbar: ViewModifier {
     @Environment(\.popupCloseButtonVisibility) private var closeButtonVisibility
     
     /// A binding to a Boolean value that determines whether a popup view is presented.
-    @Environment(\.popupIsPresented) private var isPresented
+    @Environment(\.isPresented) private var isPresented
     
     func body(content: Content) -> some View {
         content

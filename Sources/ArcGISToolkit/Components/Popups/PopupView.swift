@@ -87,7 +87,7 @@ public struct PopupView: View {
             EmbeddedPopupView(popup: popup)
         }
         .environment(\.popupCloseButtonVisibility, closeButtonVisibility)
-        .environment(\.popupIsPresented, isPresented)
+        .environment(\.isPresented, isPresented)
         .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
             guard let wrappedPopup else { return }
             onPopupChanged?(wrappedPopup.popup)
@@ -98,9 +98,6 @@ public struct PopupView: View {
 extension EnvironmentValues {
     /// The visibility of the popup view's close button.
     @Entry var popupCloseButtonVisibility: Visibility = .automatic
-    
-    /// A binding to a Boolean value that determines whether a popup view is presented.
-    @Entry var popupIsPresented: Binding<Bool>?
 }
 
 public extension PopupView {
