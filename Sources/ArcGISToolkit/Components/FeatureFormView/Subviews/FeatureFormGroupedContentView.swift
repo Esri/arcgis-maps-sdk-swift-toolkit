@@ -22,7 +22,7 @@ struct FeatureFormGroupedContentView<Content: View>: View {
         VStack(alignment: .leading) {
             ForEach(content.enumerated().map({ ($0.offset, $0.element) }), id: \.0) { (offset, content) in
                 content
-                if offset+1 != self.content.count {
+                if offset + 1 != self.content.count {
                     Divider()
                 }
             }
