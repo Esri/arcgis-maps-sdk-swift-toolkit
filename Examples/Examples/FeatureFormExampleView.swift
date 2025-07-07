@@ -51,7 +51,7 @@ struct FeatureFormExampleView: View {
                 }
                 .ignoresSafeArea(.keyboard)
                 .sheet(isPresented: featureFormViewIsPresented) {
-                    FeatureFormView(featureForm: $featureForm)
+                    FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
                         .onFormEditingEvent { editingEvent in
                             if case .savedEdits = editingEvent,
                                let table = featureForm?.feature.table as? ServiceFeatureTable,
