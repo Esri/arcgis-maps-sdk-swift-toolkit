@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 import Observation
 
 @Observable
@@ -105,6 +106,7 @@ class InternalFeatureFormViewModel {
     /// - Parameters:
     ///   - element: The field form element to update.
     ///   - value: The new value of the element.
+    @MainActor
     func updateValueAndEvaluateExpressions(_ element: FieldFormElement, _ value: (any Sendable)?) {
         switch element.input {
         case is ComboBoxFormInput,

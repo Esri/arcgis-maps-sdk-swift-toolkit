@@ -96,7 +96,7 @@ struct RadioButtonsInput: View {
                 }
             }
             .onChange(of: selectedValue) {
-                model.updateValueAndEvaluateExpressions(element, selectedValue)
+                internalFeatureFormViewModel.updateValueAndEvaluateExpressions(element, selectedValue)
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 value = newValue

@@ -56,7 +56,7 @@ struct DateTimeInput: View {
                 isEditing = internalFeatureFormViewModel.focusedElement == element
             }
             .onChange(of: date) {
-                model.updateValueAndEvaluateExpressions(element, date)
+                internalFeatureFormViewModel.updateValueAndEvaluateExpressions(element, date)
                 formattedValue = element.formattedValue
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
