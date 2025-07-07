@@ -39,7 +39,7 @@ struct FeatureFormExampleView: View {
                     .ignoresSafeArea(.keyboard)
                     .sheet(isPresented: model.formIsPresented) {
                         if let featureForm = model.featureForm {
-                            FeatureFormView(featureForm: featureForm)
+                            FeatureFormView(root: featureForm, isPresented: model.formIsPresented)
                         }
                     }
                     .alert("Discard edits", isPresented: model.cancelConfirmationIsPresented) {
@@ -180,7 +180,10 @@ private class Model: ObservableObject {
         Binding {
             guard case .idle = self.state else { return true }
             return false
-        } set: { _ in
+        } set: { newIsPresented in
+            if !newIsPresented {
+                self.state = .idle
+            }
         }
     }
     

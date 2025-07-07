@@ -19,6 +19,9 @@ struct InternalFeatureFormView: View {
     /// The environment value to access the closure to call when the presented feature form changes.
     @Environment(\.formChangedAction) var formChangedAction
     
+    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
+    @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
+    
     /// The view model for the form.
     @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
     
@@ -32,6 +35,10 @@ struct InternalFeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
+                    if deprecatedInitializerWasUsed, !internalFeatureFormViewModel.title.isEmpty {
+                        FormHeader(title: internalFeatureFormViewModel.title)
+                        Divider()
+                    }
                     ForEach(internalFeatureFormViewModel.visibleElements, id: \.self) { element in
                         makeElement(element)
                     }
@@ -62,8 +69,14 @@ struct InternalFeatureFormView: View {
             .onTitleChange(of: internalFeatureFormViewModel.featureForm) { newTitle in
                 internalFeatureFormViewModel.title = newTitle
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(internalFeatureFormViewModel.title)
+            .navigationBarTitleDisplayMode(
+                .inline,
+                isApplied: !deprecatedInitializerWasUsed
+            )
+            .navigationTitle(
+                internalFeatureFormViewModel.title,
+                isApplied: !deprecatedInitializerWasUsed
+            )
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
@@ -101,7 +114,9 @@ extension InternalFeatureFormView {
         case let element as TextFormElement:
             makeTextElement(element)
         case let element as UtilityAssociationsFormElement:
-            makeUtilityAssociationsFormElement(element)
+            if !deprecatedInitializerWasUsed {
+                makeUtilityAssociationsFormElement(element)
+            }
         default:
             EmptyView()
         }

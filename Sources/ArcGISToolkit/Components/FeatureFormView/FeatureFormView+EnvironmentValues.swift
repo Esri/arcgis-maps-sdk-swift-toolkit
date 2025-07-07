@@ -25,6 +25,9 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// The environment value to access the closure to call when the presented feature form changes.
     @Entry var formChangedAction: ((FeatureForm) -> Void)?
     
+    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
+    @Entry var formDeprecatedInitializerWasUsed = false
+    
     /// The environment value which declares whether navigation to forms for features associated via utility association form
     /// elements is disabled.
     @Entry var navigationIsDisabled = false
@@ -34,9 +37,6 @@ extension EnvironmentValues /* FeatureFormView */ {
     
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
-    
-    /// The feature form currently visible in the Navigation Stack.
-    @Entry var presentedForm: Binding<FeatureForm?>?
     
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
