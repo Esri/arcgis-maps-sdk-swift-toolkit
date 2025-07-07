@@ -394,6 +394,7 @@ extension FeatureFormView {
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
             if featureForm.feature.globalID != presentedForm.feature.globalID {
+                featureForm.feature.refresh()
                 presentedForm = featureForm
                 validationErrorVisibilityInternal = .automatic
                 onFeatureFormChanged?(featureForm)
