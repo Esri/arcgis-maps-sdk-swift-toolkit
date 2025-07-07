@@ -14,12 +14,20 @@
 
 import SwiftUI
 
-struct NavigationLayerTestViews: View {
-    var body: some View {
-        List {
-            NavigationLink("NavigationLayer Test Case 1", destination: NavigationLayerTestCase1View())
-            NavigationLink("NavigationLayer Test Case 2", destination: NavigationLayerTestCase2View())
-            NavigationLink("NavigationLayer Test Case 3", destination: NavigationLayerTestCase3View())
+extension View {
+    /// Conditionally configures the title display mode for this view.
+    /// - Parameters:
+    ///   - displayMode: The style to use for displaying the title.
+    ///   - isApplied: A Boolean value indicating whether the display mode is applied to the view or not.
+    @ViewBuilder
+    func navigationBarTitleDisplayMode(
+        _ displayMode: NavigationBarItem.TitleDisplayMode,
+        isApplied: Bool
+    ) -> some View {
+        if isApplied {
+            self.navigationBarTitleDisplayMode(displayMode)
+        } else {
+            self
         }
     }
 }

@@ -59,7 +59,7 @@ extension View {
     func navigationTitle<T, S>(
         _ title: T,
         subtitle: S
-    )-> some View where T: StringProtocol, S: StringProtocol {
+    ) -> some View where T: StringProtocol, S: StringProtocol {
 #if swift(>=6.2) && !os(visionOS)
         if #available(iOS 26.0, *) {
             self.navigationTitle(title)
@@ -67,12 +67,25 @@ extension View {
         } else {
             self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
         }
-#elseif targetEnvironment(macCatalyst)
-        self.navigationTitle(title)
-            .navigationSubtitle(subtitle)
 #else
         self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
 #endif
+    }
+    
+    /// Conditionally configures the view’s title for purposes of navigation, using a string.
+    /// - Parameters:
+    ///   - title: The string to display.
+    ///   - isApplied: A Boolean value indicating whether the title is applied to the view or not.
+    @ViewBuilder
+    func navigationTitle<S>(
+        _ title: S,
+        isApplied: Bool
+    ) -> some View where S : StringProtocol {
+        if isApplied {
+            self.navigationTitle(title)
+        } else {
+            self
+        }
     }
 }
 

@@ -97,7 +97,7 @@ extension EmbeddedPopupView {
                 Group {
                     switch popupElement {
                     case let popupElement as AttachmentsPopupElement:
-                        AttachmentsFeatureElementView(featureElement: popupElement)
+                        AttachmentsFeatureElementView(popupElement: popupElement)
                     case let popupElement as FieldsPopupElement:
                         FieldsPopupElementView(popupElement: popupElement)
                     case let popupElement as MediaPopupElement:

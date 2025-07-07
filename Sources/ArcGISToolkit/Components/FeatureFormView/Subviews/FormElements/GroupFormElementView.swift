@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// Displays a group form element and manages the visibility of the elements within the group.
-struct GroupView<Content>: View where Content: View {
+struct GroupFormElementView<Content>: View where Content: View {
     /// A Boolean value indicating whether the group is expanded or collapsed.
     @State private var isExpanded = false
     
@@ -75,7 +75,7 @@ struct GroupView<Content>: View where Content: View {
     }
 }
 
-extension GroupView {
+extension GroupFormElementView {
     /// A view displaying a label and description of a `GroupFormElement`.
     struct Header: View {
         let element: GroupFormElement

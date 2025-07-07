@@ -20,7 +20,7 @@ import SwiftUI
 /// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
     
     /// A Boolean value indicating whether the initial element value was received.
     @State private var didReceiveInitialValue = false
@@ -90,7 +90,7 @@ struct SwitchInput: View {
             .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
                 if didReceiveInitialValue {
-                    model.focusedElement = element
+                    internalFeatureFormViewModel.focusedElement = element
                 } else {
                     didReceiveInitialValue = true
                 }

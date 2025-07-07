@@ -15,7 +15,7 @@
 import SwiftUI
 
 /// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
-struct FormHeader: View {
+struct FormHeader: View /* Deprecated */ {
     /// The title defined for the form.
     let title: String
     

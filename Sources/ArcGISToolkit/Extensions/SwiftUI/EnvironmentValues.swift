@@ -15,6 +15,9 @@
 import SwiftUI
 
 extension EnvironmentValues {
+    /// A binding to a Boolean value controlling whether a view is presented.
+    @Entry var isPresented: Binding<Bool>?
+    
     /// A Boolean value indicating whether this environment has a compact horizontal size class and
     /// a regular vertical size class.
     var isPortraitOrientation: Bool {
