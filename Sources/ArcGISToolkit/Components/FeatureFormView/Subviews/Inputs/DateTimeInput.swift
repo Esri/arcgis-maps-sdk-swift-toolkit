@@ -58,8 +58,8 @@ struct DateTimeInput: View {
             .onChange(of: date) {
                 guard date != element.value as? Date else { return }
                 element.updateValue(date)
-                internalFeatureFormViewModel.evaluateExpressions()
                 formattedValue = element.formattedValue
+                internalFeatureFormViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 if newFormattedValue.isEmpty {
