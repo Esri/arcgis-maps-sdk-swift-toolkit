@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"content" = "content";
+"Content" = "Content";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"visible content" = "visible content";
+"Visible Content" = "Visible Content";
 
 /* World (Level of Detail) */
 "World" = "World";
