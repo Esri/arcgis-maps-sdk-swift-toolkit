@@ -60,6 +60,17 @@ extension LocationButton {
             autoPanOptions.filter { $0 != .off }
         }
         
+        /// The context menu auto-pan mode options.
+        /// The context menu options will be in the order the user specifies
+        /// except the off option will be first.
+        var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
+            return if autoPanOptions.contains(.off) {
+                [.off] + nonOffAutoPanOptions
+            } else {
+                autoPanOptions
+            }
+        }
+        
         /// A Boolean value indicating if we cycle through the auto pan modes on tap.
         var tapBehavior: TapBehavior = .cycleThroughAutoPanModes
         
@@ -80,8 +91,6 @@ extension LocationButton {
             self.locationDisplay = locationDisplay
             self.autoPanMode = locationDisplay.autoPanMode
             self.autoPanOptions = autoPanOptions.unique()
-//            let nonOffAutoPanOptions = autoPanOptions.filter { $0 != .off }
-//            lastSelectedAutoPanMode = nonOffAutoPanOptions.first ?? .off
             lastSelectedAutoPanMode = autoPanOptions.first ?? .off
         }
         
@@ -259,19 +268,7 @@ public struct LocationButton: View {
         // status of the location display is started.
         if !model.nonOffAutoPanOptions.isEmpty && model.status == .started {
             Section("Autopan") {
-                // Show auto-pan off button at the top of the menu.
-                if model.autoPanOptions.contains(.off) {
-                    Button {
-                        model.select(autoPanMode: .off)
-                    } label: {
-                        Label(
-                            LocationDisplay.AutoPanMode.off.pickerText,
-                            systemImage: LocationDisplay.AutoPanMode.off.imageSystemName
-                        )
-                    }
-                }
-                // Show the rest of the auto-pan options.
-                ForEach(model.nonOffAutoPanOptions, id: \.self) { autoPanMode in
+                ForEach(model.contextMenuAutoPanOptions, id: \.self) { autoPanMode in
                     Button {
                         model.select(autoPanMode: autoPanMode)
                     } label: {
