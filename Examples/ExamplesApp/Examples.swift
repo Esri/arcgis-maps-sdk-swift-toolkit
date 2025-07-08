@@ -79,6 +79,7 @@ struct Examples: View {
             .example("Feature Form", content: FeatureFormExampleView()),
             .example("Floating Panel", content: FloatingPanelExampleView()),
             .example("Floor Filter", content: FloorFilterExampleView()),
+            .example("Location Button", content: LocationButtonExampleView()),
             .example("Overview Map", content: OverviewMapExampleView()),
             .example("Popup", content: PopupExampleView()),
             .example("Scalebar", content: ScalebarExampleView()),
@@ -88,40 +89,6 @@ struct Examples: View {
     }
 }
 
-extension ExampleList {
-    @available(macCatalyst, unavailable)
-    static let augmentedReality = Self(
-        name: "Augmented Reality",
-        examples: [
-            AnyExample("Flyover", content: FlyoverExampleView()),
-            AnyExample("Tabletop", content: TableTopExampleView()),
-            AnyExample("World Scale", content: WorldScaleExampleView())
-        ]
-    )
-    
-    static let geoview = Self(
-        name: "GeoView",
-        examples: [
-            AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
-            AnyExample("Bookmarks", content: BookmarksExampleView()),
-            AnyExample("Compass", content: CompassExampleView()),
-            AnyExample("Feature Form", content: FeatureFormExampleView()),
-            AnyExample("Floor Filter", content: FloorFilterExampleView()),
-            AnyExample("Location Button", content: LocationButtonExampleView()),
-            AnyExample("Overview Map", content: OverviewMapExampleView()),
-            AnyExample("Popup", content: PopupExampleView()),
-            AnyExample("Scalebar", content: ScalebarExampleView()),
-            AnyExample("Search", content: SearchExampleView()),
-            AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
-        ]
-    )
-    
-    static let views = Self(
-        name: "Views",
-        examples: [
-            AnyExample("Floating Panel", content: FloatingPanelExampleView())
-        ]
-    )
 #if os(iOS) && !targetEnvironment(macCatalyst)
 extension Examples.ListItem {
     static var augmentedRealityCategory: Self {
