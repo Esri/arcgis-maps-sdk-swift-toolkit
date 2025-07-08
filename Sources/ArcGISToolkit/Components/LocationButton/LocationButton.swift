@@ -50,39 +50,58 @@ extension LocationButton {
         
         /// The last selected autopan mode by the user.
         /// This is used when not cycling through auto pan on tap.
-        var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
+        private(set) var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
         
         /// The auto pan options that the user can choose from the context menu of the button.
         let autoPanOptions: Array<LocationDisplay.AutoPanMode>
+        
+        /// The auto-pan options that are not "off".
+        var nonOffAutoPanOptions: Array<LocationDisplay.AutoPanMode> {
+            autoPanOptions.filter { $0 != .off }
+        }
         
         /// A Boolean value indicating if we cycle through the auto pan modes on tap.
         var tapBehavior: TapBehavior = .cycleThroughAutoPanModes
         
         /// The next auto pan mode to be used when cycling through auto pan modes.
-        var nextCycledAutoPanMode: LocationDisplay.AutoPanMode {
+        private var nextCycledAutoPanMode: LocationDisplay.AutoPanMode {
             guard let index = autoPanOptions.firstIndex(of: autoPanMode) else { return .off }
             let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
             return autoPanOptions[nextIndex]
         }
+        
+//        /// Creates a location button model with a location display.
+//        /// - Parameter locationDisplay: The location display that the button will control.
+//        /// - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
+//        init(
+//            locationDisplay: LocationDisplay,
+//            autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+//        ) {
+//            self.locationDisplay = locationDisplay
+//            self.autoPanMode = locationDisplay.autoPanMode
+//            self.autoPanOptions = LocationDisplay.AutoPanMode.orderedOptions.filter { autoPanOptions.contains($0) }
+//            if autoPanOptions.isEmpty || (autoPanOptions.count == 1 && autoPanOptions.first == .off) {
+//                lastSelectedAutoPanMode = .off
+//            } else {
+//                lastSelectedAutoPanMode = self.autoPanOptions
+//                    .filter { $0 != .off }
+//                    .first
+//                ?? .recenter
+//            }
+//        }
         
         /// Creates a location button model with a location display.
         /// - Parameter locationDisplay: The location display that the button will control.
         /// - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
         init(
             locationDisplay: LocationDisplay,
-            autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+            autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
         ) {
             self.locationDisplay = locationDisplay
             self.autoPanMode = locationDisplay.autoPanMode
-            self.autoPanOptions = LocationDisplay.AutoPanMode.orderedOptions.filter { autoPanOptions.contains($0) }
-            if autoPanOptions.isEmpty || (autoPanOptions.count == 1 && autoPanOptions.first == .off) {
-                lastSelectedAutoPanMode = .off
-            } else {
-                lastSelectedAutoPanMode = self.autoPanOptions
-                    .filter { $0 != .off }
-                    .first
-                ?? .recenter
-            }
+            self.autoPanOptions = autoPanOptions.unique() // LocationDisplay.AutoPanMode.orderedOptions.filter { autoPanOptions.contains($0) }
+            let nonOffAutoPanOptions = autoPanOptions.filter { $0 != .off }
+            lastSelectedAutoPanMode = nonOffAutoPanOptions.first ?? .off
         }
         
         /// Observe the status of the location display datasource.
@@ -120,7 +139,7 @@ extension LocationButton {
             case .stopped, .failedToStart:
                 .start
             case .started:
-                if autoPanOptions.isEmpty {
+                if nonOffAutoPanOptions.isEmpty {
                     // If there were no options specified then set it to off
                     // if the status is started.
                     .stop
@@ -173,7 +192,9 @@ extension LocationButton {
             case .autoPanOff:
                 locationDisplay.autoPanMode = .off
             case .autoPanCycle:
-                locationDisplay.autoPanMode = nextCycledAutoPanMode
+                // Need to use the select method here so that last selected mode
+                // gets set.
+                select(autoPanMode: nextCycledAutoPanMode)
             case .none:
                 return
             }
@@ -213,7 +234,7 @@ public struct LocationButton: View {
     /// - Parameter autoPanOptions: The auto pan options that are available for the user to choose.
     public init(
         locationDisplay: LocationDisplay,
-        autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+        autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
     ) {
         _model = .init(wrappedValue: .init(locationDisplay: locationDisplay, autoPanOptions: autoPanOptions))
     }
@@ -255,15 +276,23 @@ public struct LocationButton: View {
     private func contextMenuContent() -> some View {
         // Only show context menu if autopan options are not empty and the
         // status of the location display is started.
-        if !model.autoPanOptions.isEmpty && model.status == .started {
-            if model.autoPanOptions.count > 1 {
-                Section("Autopan") {
-                    ForEach(model.autoPanOptions, id: \.self) { autoPanMode in
-                        Button {
-                            model.select(autoPanMode: autoPanMode)
-                        } label: {
-                            Label(autoPanMode.pickerText, systemImage: autoPanMode.imageSystemName)
-                        }
+        if !model.nonOffAutoPanOptions.isEmpty && model.status == .started {
+            Section("Autopan") {
+                if model.autoPanOptions.contains(.off) {
+                    Button {
+                        model.select(autoPanMode: .off)
+                    } label: {
+                        Label(
+                            LocationDisplay.AutoPanMode.off.pickerText,
+                            systemImage: LocationDisplay.AutoPanMode.off.imageSystemName
+                        )
+                    }
+                }
+                ForEach(model.nonOffAutoPanOptions, id: \.self) { autoPanMode in
+                    Button {
+                        model.select(autoPanMode: autoPanMode)
+                    } label: {
+                        Label(autoPanMode.pickerText, systemImage: autoPanMode.imageSystemName)
                     }
                 }
             }
@@ -298,11 +327,11 @@ extension LocationButton {
         case toggleLastSelectedAutoPanMode
     }
     
-    /// Sets the tap behavior on the location button.
-    public func tapBehavior(_ tapBehavior: TapBehavior) -> LocationButton {
-        model.tapBehavior = tapBehavior
-        return self
-    }
+//    /// Sets the tap behavior on the location button.
+//    public func tapBehavior(_ tapBehavior: TapBehavior) -> LocationButton {
+//        model.tapBehavior = tapBehavior
+//        return self
+//    }
 }
 
 private extension LocationDisplay.AutoPanMode {
@@ -339,6 +368,14 @@ private extension LocationDisplay.AutoPanMode {
         @unknown default:
             fatalError()
         }
+    }
+}
+
+private extension Sequence where Iterator.Element: Hashable {
+    /// Returns the unique values of the sequence with the order preserved.
+    func unique() -> [Iterator.Element] {
+        var seen: Set<Iterator.Element> = []
+        return filter { seen.insert($0).inserted }
     }
 }
 
