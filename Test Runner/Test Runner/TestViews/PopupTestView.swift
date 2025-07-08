@@ -41,7 +41,7 @@ struct PopupTestView: View {
                 .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
             }
             .sheet(isPresented: .init(optionalValue: $popup)) {
-                PopupView(popup: popup!, isPresented: .init(optionalValue: $popup))
+                PopupView(root: popup!, isPresented: .init(optionalValue: $popup))
                     .onPopupChanged { popup in
                         // Clears the current popup selection.
                         if let feature = selectedPopup?.geoElement as? Feature,
