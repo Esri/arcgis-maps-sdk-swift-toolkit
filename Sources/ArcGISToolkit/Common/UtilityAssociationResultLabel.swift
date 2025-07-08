@@ -39,6 +39,8 @@ struct UtilityAssociationResultLabel: View {
             Spacer()
             
             result.fractionAlongEdge
+                .font(.caption2)
+                .foregroundStyle(.secondary)
         }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("Association Result")
