@@ -126,9 +126,13 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "Containment Visible: %@";
+/* A label indicating a utility association's 
+containment is not visible. */
+"content" = "content";
+
+/* A label indicating a utility association's 
+containment is visible. */
+"content visible" = "content visible";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
